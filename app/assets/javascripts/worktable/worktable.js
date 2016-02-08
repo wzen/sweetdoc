@@ -27,7 +27,7 @@ $(function() {
       return Paging.initPaging();
     };
     if (loadWorktableFromCache) {
-      Common.showModalFlashMessage('Loading cache', true, false);
+      Common.showModalFlashMessage('Loading cache');
       Common.createdMainContainerIfNeeded(PageValue.getPageNum());
       WorktableCommon.initMainContainer();
       Common.initResize(WorktableCommon.resizeEvent);

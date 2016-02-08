@@ -718,7 +718,13 @@ EventConfig = (function() {
         $(this).append($(commonSelectOptions));
       }
       if (itemSelectOptions.length > 0) {
-        return $(this).append($(itemSelectOptions));
+        $(this).append($(itemSelectOptions));
+        return $(this).find('option').off('mouseenter.itemselect').on('mouseenter.itemselect', function(e) {
+          e.preventDefault();
+          id = $(e).val().split(EventConfig.EVENT_ITEM_SEPERATOR)[0];
+          WorktableCommon.clearSelectedBorder();
+          return WorktableCommon.setSelectedBorder($("#" + id), 'timeline');
+        });
       }
     });
   };

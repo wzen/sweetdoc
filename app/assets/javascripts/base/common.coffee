@@ -205,6 +205,10 @@ class Common
 
   # 画面スケールの設定
   @applyViewScale = (isViewResize = false) ->
+    if window.isWorkTable && !window.previewRunning
+      window.mainWrapper.css({transform: '', width: "", height: ""})
+      return
+
     worktableScale = 1.0
     if window.isWorkTable
       worktableScale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale())
@@ -621,7 +625,7 @@ class Common
   # @param [Integer] type モーダルビュータイプ
   # @param [Function] prepareShowFunc 表示前処理
   @showModalView = (type, enableOverlayClose = true, prepareShowFunc = null, prepareShowFuncParams = {}) ->
-    _showModalView.call(@, type, prepareShowFunc, prepareShowFuncParams, ->
+    _showModalView.call(@, type, prepareShowFunc, prepareShowFuncParams, false, ->
       $("body").append( '<div id="modal-overlay"></div>' )
       $("#modal-overlay").show()
       # センタリング
@@ -639,9 +643,9 @@ class Common
     )
 
   # メッセージモーダル表示
-  @showModalFlashMessage = (message, immediately = false, enableOverlayClose = true) ->
+  @showModalFlashMessage = (message, isModalFlush = false, immediately = true, enableOverlayClose = false) ->
     type = Constant.ModalViewType.MESSAGE
-    _showModalView.call(@, type, null, {}, ->
+    _showModalView.call(@, type, null, isModalFlush, {}, ->
       $("body").append( '<div id="modal-overlay"></div>' )
       $("#modal-overlay").show()
       # センタリング
@@ -666,8 +670,8 @@ class Common
   # モーダルビュー表示
   # @param [Integer] type モーダルビュータイプ
   # @param [Function] prepareShowFunc 表示前処理
-  _showModalView = (type, prepareShowFunc = null, prepareShowFuncParams = {}, showFunc = null) ->
-    if window.modalRun? && window.modalRun
+  _showModalView = (type, prepareShowFunc, prepareShowFuncParams, isModalFlush, showFunc = null) ->
+    if !isModalFlush && window.modalRun? && window.modalRun
       # 処理中は反応なし
       return
 
@@ -697,6 +701,8 @@ class Common
     # 表示内容読み込み済みの場合はサーバアクセスなし
     if !emt? || emt.length == 0
       # サーバから表示内容読み込み
+      # ローディング表示
+      @showModalFlashMessage('Please Wait', true)
       $.ajax(
         {
           url: "/modal_view/show"
@@ -705,8 +711,9 @@ class Common
             type: type
           }
           dataType: "json"
-          success: (data)->
+          success: (data) ->
             if data.resultSuccess
+              Common.hideModalView(true)
               $('body').append(data.modalHtml)
               emt = $('body').children(".modal-content.#{type}")
               emt.hide()
@@ -715,11 +722,13 @@ class Common
                   _show.call(self)
                 )
               else
-                _show.call(self)
                 console.log('/modal_view/show server error')
+                Common.hideModalView(true)
+                _show.call(self)
                 Common.ajaxError(data)
                 window.modalRun = false
           error: (data) ->
+            Common.hideModalView(true)
             console.log('/modal_view/show ajax error')
             Common.ajaxError(data)
             window.modalRun = false

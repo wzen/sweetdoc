@@ -81,7 +81,7 @@ class Project
     # Createボタンイベント
     $('.create_button', modalEmt).off('click').on('click', ->
       Common.hideModalView(true)
-      Common.showModalFlashMessage('Creating...', true, false)
+      Common.showModalFlashMessage('Creating...')
 
       # プロジェクト新規作成
       projectName = $('.project_name').val()
@@ -131,7 +131,7 @@ class Project
     # Openボタンイベント
     $('.open_button', modalEmt).off('click').on('click', ->
       Common.hideModalView(true)
-      Common.showModalFlashMessage('Loading...', true, false)
+      Common.showModalFlashMessage('Loading...')
 
       # プロジェクト選択
       user_pagevalue_id = $('.project_select', modalEmt).val()

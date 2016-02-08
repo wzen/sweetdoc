@@ -638,6 +638,12 @@ class EventConfig
         $(@).append($(commonSelectOptions))
       if itemSelectOptions.length > 0
         $(@).append($(itemSelectOptions))
+        $(@).find('option').off('mouseenter.itemselect').on('mouseenter.itemselect', (e) ->
+          e.preventDefault()
+          id = $(e).val().split(EventConfig.EVENT_ITEM_SEPERATOR)[0]
+          WorktableCommon.clearSelectedBorder()
+          WorktableCommon.setSelectedBorder($("##{id}"), 'timeline')
+        )
     )
 
   # イベントハンドラー設定

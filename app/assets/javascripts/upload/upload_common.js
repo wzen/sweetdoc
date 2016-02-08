@@ -20,8 +20,8 @@ UploadCommon = (function() {
         return $(this).val('');
       }
     });
-    $('.upload_button').off('click');
-    return $('.upload_button').on('click', function() {
+    return $('.upload_button').off('click').on('click', function() {
+      Common.showModalFlashMessage('Updating...');
       upload.upload(root);
       return false;
     });

@@ -22,8 +22,8 @@ class UploadCommon
     )
 
     # Updateイベント
-    $('.upload_button').off('click')
-    $('.upload_button').on('click', ->
+    $('.upload_button').off('click').on('click', ->
+      Common.showModalFlashMessage('Updating...')
       upload.upload(root)
       return false
     )
