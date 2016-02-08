@@ -27,6 +27,7 @@ $(function() {
       return Paging.initPaging();
     };
     if (loadWorktableFromCache) {
+      Common.showModalFlashMessage('Loading cache', true, false);
       Common.createdMainContainerIfNeeded(PageValue.getPageNum());
       WorktableCommon.initMainContainer();
       Common.initResize(WorktableCommon.resizeEvent);
@@ -35,6 +36,7 @@ $(function() {
         WorktableCommon.createCommonEventInstancesIfNeeded();
         _callback.call(this);
         Navbar.switchWorktableNavbarWhenProjectCreated(true);
+        Common.hideModalView();
         return window.initDone = true;
       });
       return Timeline.refreshAllTimeline();

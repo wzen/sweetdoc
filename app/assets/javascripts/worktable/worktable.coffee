@@ -37,6 +37,9 @@ $ ->
       Paging.initPaging()
 
     if loadWorktableFromCache
+      # メッセージ表示
+      Common.showModalFlashMessage('Loading cache', true, false)
+
       # キャッシュが存在する場合
       # Mainコンテナ作成
       Common.createdMainContainerIfNeeded(PageValue.getPageNum())
@@ -51,6 +54,8 @@ $ ->
         _callback.call(@)
         # ナビバーをプロジェクト作成後状態に
         Navbar.switchWorktableNavbarWhenProjectCreated(true)
+        # モーダルを削除
+        Common.hideModalView()
         # 初期化終了
         window.initDone = true
       )
