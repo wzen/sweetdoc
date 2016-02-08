@@ -13,8 +13,7 @@ UploadCommon = (function() {
     }
     $('.caption_markup', root).markItUp(mySettings);
     upload.prepareUploadTagEvent(root);
-    $('.select_tag_input', root).off('keypress');
-    $('.select_tag_input', root).on('keypress', function(e) {
+    $('.select_tag_input', root).off('keypress').on('keypress', function(e) {
       if (e.keyCode === Constant.KeyboardKeyCode.ENTER) {
         upload.addUploadSelectTag(root, $(this).val());
         return $(this).val('');

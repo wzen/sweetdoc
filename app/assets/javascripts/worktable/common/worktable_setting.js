@@ -52,8 +52,7 @@ WorktableSetting = (function() {
       gridValue = (gridValue != null) && gridValue === 'true';
       gridStepDiv = $("." + this.GRID_STEP_DIV_CLASS_NAME, root);
       grid.prop('checked', gridValue ? 'checked' : false);
-      grid.off('click');
-      grid.on('click', (function(_this) {
+      grid.off('click').on('click', (function(_this) {
         return function() {
           gridValue = PageValue.getSettingPageValue(_this.PageValueKey.GRID);
           if (gridValue != null) {

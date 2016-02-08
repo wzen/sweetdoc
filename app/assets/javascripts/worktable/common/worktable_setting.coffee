@@ -36,8 +36,7 @@ class WorktableSetting
       gridStepDiv = $(".#{@GRID_STEP_DIV_CLASS_NAME}", root)
 
       grid.prop('checked', if gridValue then 'checked' else false)
-      grid.off('click')
-      grid.on('click', =>
+      grid.off('click').on('click', =>
         gridValue = PageValue.getSettingPageValue(@PageValueKey.GRID)
         if gridValue?
           gridValue = gridValue == 'true'

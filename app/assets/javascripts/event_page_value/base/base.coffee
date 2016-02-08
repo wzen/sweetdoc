@@ -116,7 +116,7 @@ class EventPageValueBase
 
       # 選択イベントタイプ
       selectItemValue = "#{eventConfig[@PageValueKey.ID]}#{EventConfig.EVENT_ITEM_SEPERATOR}#{eventConfig[@PageValueKey.CLASS_DIST_TOKEN]}"
-      $('.te_item_select', eventConfig.emt).val(selectItemValue)
+      eventConfig.constructor.setSelectItemValue($('.dropdown:first', eventConfig.emt), selectItemValue)
 
       # 選択メソッドタイプ
       actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@classdisttoken', eventConfig[@PageValueKey.CLASS_DIST_TOKEN])

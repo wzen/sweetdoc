@@ -13,8 +13,7 @@ class UploadCommon
     upload.prepareUploadTagEvent(root)
 
     # Inputイベント
-    $('.select_tag_input', root).off('keypress')
-    $('.select_tag_input', root).on('keypress', (e) ->
+    $('.select_tag_input', root).off('keypress').on('keypress', (e) ->
       if e.keyCode == Constant.KeyboardKeyCode.ENTER
         # Enterキーを押した場合、選択タグに追加
         upload.addUploadSelectTag(root, $(@).val())

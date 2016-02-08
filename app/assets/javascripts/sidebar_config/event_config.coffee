@@ -32,7 +32,7 @@ class EventConfig
   # @param [Object] e 選択オブジェクト
   selectItem: (e = null) ->
     if e?
-      value = $(e).val()
+      value =  $(e).children('input:first').val()
 
       # デフォルト選択時
       if value == ""
@@ -603,8 +603,6 @@ class EventConfig
   # アイテム選択メニューを更新
   @updateSelectItemMenu = ->
     # 作成されたアイテムの一覧を取得
-    teItemSelects = $('#event-config .te_item_select')
-    teItemSelect = teItemSelects[0]
     itemSelectOptions = ''
     commonSelectOptions = ''
     items = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix())
@@ -612,39 +610,38 @@ class EventConfig
       id = item.value.id
       name = item.value.name
       classDistToken = item.value.classDistToken
-      option = """
-            <option value='#{id}#{EventConfig.EVENT_ITEM_SEPERATOR}#{classDistToken}'>
-              #{name}
-            </option>
-          """
       if window.instanceMap[id] instanceof ItemBase
         # アイテム
+        option = """
+            <li class='item'><a href='#'>#{name}</a><input type='hidden' value='#{id}#{EventConfig.EVENT_ITEM_SEPERATOR}#{classDistToken}' /></li>
+            """
         itemSelectOptions += option
       else
         # 共通イベント
+        option = """
+            <li><a href='#'>#{name}</a><input type='hidden' value='#{id}#{EventConfig.EVENT_ITEM_SEPERATOR}#{classDistToken}' /></li>
+            """
         commonSelectOptions += option
 
-    commonOptgroupClassName = 'common_optgroup_class_name'
     if commonSelectOptions.length > 0
-      commonSelectOptions = "<optgroup class='#{commonOptgroupClassName}' label='#{I18n.t("config.select_opt_group.common")}'>" + commonSelectOptions + '</optgroup>'
-    itemOptgroupClassName = 'item_optgroup_class_name'
+      commonSelectOptions = "<li class='dropdown-header'>#{I18n.t("config.select_opt_group.common")}</li>" + commonSelectOptions
     if itemSelectOptions.length > 0
-      itemSelectOptions = "<optgroup class='#{itemOptgroupClassName}' label='#{I18n.t("config.select_opt_group.item")}'>" + itemSelectOptions + '</optgroup>'
+      itemSelectOptions = "<li class='dropdown-header'>#{I18n.t("config.select_opt_group.item")}</li>" + itemSelectOptions
     # メニューを入れ替え
+    teItemSelects = $('#event-config .te_item_select')
     teItemSelects.each( ->
-      $(@).find(".#{commonOptgroupClassName}").remove()
-      $(@).find(".#{itemOptgroupClassName}").remove()
-      if commonSelectOptions.length > 0
-        $(@).append($(commonSelectOptions))
-      if itemSelectOptions.length > 0
-        $(@).append($(itemSelectOptions))
-        $(@).find('option').off('mouseenter.itemselect').on('mouseenter.itemselect', (e) ->
-          e.preventDefault()
-          id = $(e).val().split(EventConfig.EVENT_ITEM_SEPERATOR)[0]
-          WorktableCommon.clearSelectedBorder()
-          WorktableCommon.setSelectedBorder($("##{id}"), 'timeline')
-        )
+      $(@).empty()
+      $(@).append($(commonSelectOptions))
+      $(@).append($(itemSelectOptions))
     )
+    teItemSelects.find('li.item').off('mouseenter').on('mouseenter', (e) ->
+      id = $(@).children('input:first').val().split(EventConfig.EVENT_ITEM_SEPERATOR)[0]
+      WorktableCommon.clearSelectedBorder()
+      WorktableCommon.setSelectedBorder($("##{id}"), 'timeline')
+    ).off('mouseleave').on('mouseleave', (e) ->
+      WorktableCommon.clearSelectedBorder()
+    )
+    teItemSelects.find('.te_item_select:first').height($('#event-config').height())
 
   # イベントハンドラー設定
   # @param [Integer] distId イベント番号
@@ -686,7 +683,10 @@ class EventConfig
           $('.update_event_after', emt).attr('disabled', true)
 
         # 選択メニューイベント
-        $('.te_item_select', emt).off('change').on('change', (e) ->
+        $('.te_item_select', emt).find('li:not(".dropdown-header")').off('click').on('click', (e) ->
+          e.preventDefault()
+          value = $(@).children('input:first').val()
+          EventConfig.setSelectItemValue($(@).closest('.dropdown'), value)
           config.clearError()
           config.selectItem(@)
         )
@@ -721,3 +721,11 @@ class EventConfig
         $(root).find(".#{openClassName}").show()
       else
         $(root).find(".#{openClassName}").hide()
+
+  @setSelectItemValue = (dropDownRoot, value) ->
+    li = $.grep(dropDownRoot.find('.te_item_select li'), (n, i) ->
+      $(n).children('input:first').val() == value
+    )
+    name = $(li).children('a:first').html()
+    dropDownRoot.find('.btn-primary:first').text(name)
+    dropDownRoot.children('input:first').val(value)

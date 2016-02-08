@@ -196,7 +196,7 @@ div.scroll_background, div.scroll_inside {
     height: 100%;
   }
   .sidebar-config {
-    overflow: hidden;
+    overflow: auto;
   }
   .config {
     margin: 0 0 30px 0;
@@ -706,6 +706,7 @@ div.css_item_base {
 }
 
 div#event-config {
+  height: 100%;
 
   div.event_temp {
     display: none;
@@ -1004,5 +1005,11 @@ div#nav {
     #menu_sidebar_toggle_li {
       display: none;
     }
+  }
+}
+
+.dropdown {
+  .te_item_select {
+    overflow: auto;
   }
 }

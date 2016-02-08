@@ -23,8 +23,7 @@ Indicator = (function() {
     if (rootEmt != null) {
       temp = $('.indicator_overlay_temp').clone(true).attr('class', 'indicator_overlay').show();
       rootEmt.append(temp);
-      $('.indicator_overlay', rootEmt).off('click');
-      return $('.indicator_overlay', rootEmt).on('click', function() {
+      return $('.indicator_overlay', rootEmt).off('click').on('click', function() {
         return false;
       });
     }

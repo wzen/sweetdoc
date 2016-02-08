@@ -41,7 +41,7 @@ EventConfig = (function() {
       e = null;
     }
     if (e != null) {
-      value = $(e).val();
+      value = $(e).children('input:first').val();
       if (value === "") {
         $(".config.te_div", this.emt).hide();
         return;
@@ -685,9 +685,7 @@ EventConfig = (function() {
   };
 
   EventConfig.updateSelectItemMenu = function() {
-    var classDistToken, commonOptgroupClassName, commonSelectOptions, id, item, itemOptgroupClassName, itemSelectOptions, items, k, name, option, teItemSelect, teItemSelects;
-    teItemSelects = $('#event-config .te_item_select');
-    teItemSelect = teItemSelects[0];
+    var classDistToken, commonSelectOptions, id, item, itemSelectOptions, items, k, name, option, teItemSelects;
     itemSelectOptions = '';
     commonSelectOptions = '';
     items = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
@@ -696,37 +694,34 @@ EventConfig = (function() {
       id = item.value.id;
       name = item.value.name;
       classDistToken = item.value.classDistToken;
-      option = "<option value='" + id + EventConfig.EVENT_ITEM_SEPERATOR + classDistToken + "'>\n  " + name + "\n</option>";
       if (window.instanceMap[id] instanceof ItemBase) {
+        option = "<li class='item'><a href='#'>" + name + "</a><input type='hidden' value='" + id + EventConfig.EVENT_ITEM_SEPERATOR + classDistToken + "' /></li>";
         itemSelectOptions += option;
       } else {
+        option = "<li><a href='#'>" + name + "</a><input type='hidden' value='" + id + EventConfig.EVENT_ITEM_SEPERATOR + classDistToken + "' /></li>";
         commonSelectOptions += option;
       }
     }
-    commonOptgroupClassName = 'common_optgroup_class_name';
     if (commonSelectOptions.length > 0) {
-      commonSelectOptions = ("<optgroup class='" + commonOptgroupClassName + "' label='" + (I18n.t("config.select_opt_group.common")) + "'>") + commonSelectOptions + '</optgroup>';
+      commonSelectOptions = ("<li class='dropdown-header'>" + (I18n.t("config.select_opt_group.common")) + "</li>") + commonSelectOptions;
     }
-    itemOptgroupClassName = 'item_optgroup_class_name';
     if (itemSelectOptions.length > 0) {
-      itemSelectOptions = ("<optgroup class='" + itemOptgroupClassName + "' label='" + (I18n.t("config.select_opt_group.item")) + "'>") + itemSelectOptions + '</optgroup>';
+      itemSelectOptions = ("<li class='dropdown-header'>" + (I18n.t("config.select_opt_group.item")) + "</li>") + itemSelectOptions;
     }
-    return teItemSelects.each(function() {
-      $(this).find("." + commonOptgroupClassName).remove();
-      $(this).find("." + itemOptgroupClassName).remove();
-      if (commonSelectOptions.length > 0) {
-        $(this).append($(commonSelectOptions));
-      }
-      if (itemSelectOptions.length > 0) {
-        $(this).append($(itemSelectOptions));
-        return $(this).find('option').off('mouseenter.itemselect').on('mouseenter.itemselect', function(e) {
-          e.preventDefault();
-          id = $(e).val().split(EventConfig.EVENT_ITEM_SEPERATOR)[0];
-          WorktableCommon.clearSelectedBorder();
-          return WorktableCommon.setSelectedBorder($("#" + id), 'timeline');
-        });
-      }
+    teItemSelects = $('#event-config .te_item_select');
+    teItemSelects.each(function() {
+      $(this).empty();
+      $(this).append($(commonSelectOptions));
+      return $(this).append($(itemSelectOptions));
     });
+    teItemSelects.find('li.item').off('mouseenter').on('mouseenter', function(e) {
+      id = $(this).children('input:first').val().split(EventConfig.EVENT_ITEM_SEPERATOR)[0];
+      WorktableCommon.clearSelectedBorder();
+      return WorktableCommon.setSelectedBorder($("#" + id), 'timeline');
+    }).off('mouseleave').on('mouseleave', function(e) {
+      return WorktableCommon.clearSelectedBorder();
+    });
+    return teItemSelects.find('.te_item_select:first').height($('#event-config').height());
   };
 
   EventConfig.setupTimelineEventHandler = function(distId, teNum) {
@@ -763,7 +758,11 @@ EventConfig = (function() {
           } else {
             $('.update_event_after', emt).attr('disabled', true);
           }
-          $('.te_item_select', emt).off('change').on('change', function(e) {
+          $('.te_item_select', emt).find('li:not(".dropdown-header")').off('click').on('click', function(e) {
+            var value;
+            e.preventDefault();
+            value = $(this).children('input:first').val();
+            EventConfig.setSelectItemValue($(this).closest('.dropdown'), value);
             config.clearError();
             return config.selectItem(this);
           });
@@ -805,6 +804,16 @@ EventConfig = (function() {
         $(root).find("." + openClassName).hide();
       }
     }
+  };
+
+  EventConfig.setSelectItemValue = function(dropDownRoot, value) {
+    var li, name;
+    li = $.grep(dropDownRoot.find('.te_item_select li'), function(n, i) {
+      return $(n).children('input:first').val() === value;
+    });
+    name = $(li).children('a:first').html();
+    dropDownRoot.find('.btn-primary:first').text(name);
+    return dropDownRoot.children('input:first').val(value);
   };
 
   return EventConfig;

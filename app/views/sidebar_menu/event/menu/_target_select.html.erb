@@ -4,9 +4,14 @@
     <div class="forms">
       <!-- イベント対象一覧 -->
       <!-- ワークスペース読み込み時に設定 -->
-      <select class="form-control te_item_select" name="te_item_select">
-        <option value=""><%= I18n.t('config.event.target_select.default') %></option>
-      </select>
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><%= I18n.t('config.event.target_select.default') %>
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu te_item_select">
+        </ul>
+        <input type="hidden" value="" />
+      </div>
     </div>
   </div>
 </div>

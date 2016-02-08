@@ -14,8 +14,7 @@ class Indicator
     if rootEmt?
       temp = $('.indicator_overlay_temp').clone(true).attr('class', 'indicator_overlay').show()
       rootEmt.append(temp)
-      $('.indicator_overlay', rootEmt).off('click')
-      $('.indicator_overlay', rootEmt).on('click', ->
+      $('.indicator_overlay', rootEmt).off('click').on('click', ->
         return false;
       )
 
