@@ -314,8 +314,9 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.initKeyEvent = function() {
-    $(window).off('keydown');
-    return $(window).on('keydown', function(e) {
+    return $({
+      window: !'input, textarea'
+    }).off('keydown').on('keydown', function(e) {
       var isMac;
       isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
       if ((isMac && e.metaKey) || (!isMac && e.ctrlKey)) {

@@ -276,8 +276,7 @@ class WorktableCommon
 
   # キーイベント初期化
   @initKeyEvent = ->
-    $(window).off('keydown')
-    $(window).on('keydown', (e)->
+    $(window:not('input, textarea')).off('keydown').on('keydown', (e)->
       isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
       if (isMac && e.metaKey) ||  (!isMac && e.ctrlKey)
         if e.keyCode == Constant.KeyboardKeyCode.Z
