@@ -2,7 +2,7 @@
 var Common;
 
 Common = (function() {
-  var constant;
+  var _showModalView, constant;
 
   function Common() {}
 
@@ -771,7 +771,6 @@ Common = (function() {
   };
 
   Common.showModalView = function(type, enableOverlayClose, prepareShowFunc, prepareShowFuncParams) {
-    var _show, allEmt, emt, self;
     if (enableOverlayClose == null) {
       enableOverlayClose = true;
     }
@@ -780,6 +779,68 @@ Common = (function() {
     }
     if (prepareShowFuncParams == null) {
       prepareShowFuncParams = {};
+    }
+    return _showModalView.call(this, type, prepareShowFunc, prepareShowFuncParams, function() {
+      var emt;
+      $("body").append('<div id="modal-overlay"></div>');
+      $("#modal-overlay").show();
+      Common.modalCentering.call(this, type);
+      emt = $('body').children(".modal-content." + type);
+      emt.css('max-height', $(window).height() * Constant.ModalView.HEIGHT_RATE);
+      emt.fadeIn('fast', function() {
+        return window.modalRun = false;
+      });
+      return $("#modal-overlay,#modal-close").unbind().click(function() {
+        if (enableOverlayClose) {
+          return Common.hideModalView();
+        }
+      });
+    });
+  };
+
+  Common.showModalFlashMessage = function(message, immediately, enableOverlayClose) {
+    var type;
+    if (immediately == null) {
+      immediately = false;
+    }
+    if (enableOverlayClose == null) {
+      enableOverlayClose = true;
+    }
+    type = Constant.ModalViewType.MESSAGE;
+    return _showModalView.call(this, type, null, {}, function() {
+      var emt;
+      $("body").append('<div id="modal-overlay"></div>');
+      $("#modal-overlay").show();
+      Common.modalCentering.call(this, type);
+      emt = $('body').children(".modal-content." + type);
+      emt.find('.loading_message').html(message);
+      emt.css('max-height', $(window).height() * Constant.ModalView.HEIGHT_RATE);
+      if (immediately) {
+        emt.show();
+        window.modalRun = false;
+      } else {
+        emt.fadeIn('fast', function() {
+          return window.modalRun = false;
+        });
+      }
+      return $("#modal-overlay,#modal-close").unbind().click(function() {
+        if (enableOverlayClose) {
+          return Common.hideModalView();
+        }
+      });
+    });
+  };
+
+  _showModalView = function(type, prepareShowFunc, prepareShowFuncParams, showFunc) {
+    var _show, allEmt, emt, self;
+    if (prepareShowFunc == null) {
+      prepareShowFunc = null;
+    }
+    if (prepareShowFuncParams == null) {
+      prepareShowFuncParams = {};
+    }
+    if (showFunc == null) {
+      showFunc = null;
     }
     if ((window.modalRun != null) && window.modalRun) {
       return;
@@ -800,18 +861,9 @@ Common = (function() {
       return false;
     }
     _show = function() {
-      $("body").append('<div id="modal-overlay"></div>');
-      $("#modal-overlay").show();
-      Common.modalCentering.call(this, type);
-      emt.css('max-height', $(window).height() * Constant.ModalView.HEIGHT_RATE);
-      emt.fadeIn('fast', function() {
-        return window.modalRun = false;
-      });
-      return $("#modal-overlay,#modal-close").unbind().click(function() {
-        if (enableOverlayClose) {
-          return Common.hideModalView();
-        }
-      });
+      if (showFunc != null) {
+        return showFunc();
+      }
     };
     if ((emt == null) || emt.length === 0) {
       return $.ajax({

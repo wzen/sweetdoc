@@ -373,6 +373,7 @@ class Const
     ITEM_TEXT_EDITING = 'item_text_editing'
     NOTICE_LOGIN = 'notice_login'
     ABOUT = 'about'
+    MESSAGE = 'message'
   end
 
   class Paging

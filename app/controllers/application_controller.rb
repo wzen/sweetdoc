@@ -127,7 +127,7 @@ class ApplicationController < ActionController::Base
 
     locale = params[:locale] || locale_from_accept_language || locale_from_ip
     if locale.blank?
-      locale = 'en'
+      locale = 'ja'
     end
     I18n.locale = (I18n::available_locales.include? locale.to_sym) ? locale.to_sym : I18n.default_locale
   end

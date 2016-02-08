@@ -621,6 +621,52 @@ class Common
   # @param [Integer] type モーダルビュータイプ
   # @param [Function] prepareShowFunc 表示前処理
   @showModalView = (type, enableOverlayClose = true, prepareShowFunc = null, prepareShowFuncParams = {}) ->
+    _showModalView.call(@, type, prepareShowFunc, prepareShowFuncParams, ->
+      $("body").append( '<div id="modal-overlay"></div>' )
+      $("#modal-overlay").show()
+      # センタリング
+      Common.modalCentering.call(@, type)
+      emt = $('body').children(".modal-content.#{type}")
+      # ビューの高さ
+      emt.css('max-height', $(window).height() * Constant.ModalView.HEIGHT_RATE)
+      emt.fadeIn('fast', ->
+        window.modalRun = false
+      )
+      $("#modal-overlay,#modal-close").unbind().click( ->
+        if enableOverlayClose
+          Common.hideModalView()
+      )
+    )
+
+  # メッセージモーダル表示
+  @showModalFlashMessage = (message, immediately = false, enableOverlayClose = true) ->
+    type = Constant.ModalViewType.MESSAGE
+    _showModalView.call(@, type, null, {}, ->
+      $("body").append( '<div id="modal-overlay"></div>' )
+      $("#modal-overlay").show()
+      # センタリング
+      Common.modalCentering.call(@, type)
+      emt = $('body').children(".modal-content.#{type}")
+      emt.find('.loading_message').html(message)
+      # ビューの高さ
+      emt.css('max-height', $(window).height() * Constant.ModalView.HEIGHT_RATE)
+      if immediately
+        emt.show()
+        window.modalRun = false
+      else
+        emt.fadeIn('fast', ->
+          window.modalRun = false
+        )
+      $("#modal-overlay,#modal-close").unbind().click( ->
+        if enableOverlayClose
+          Common.hideModalView()
+      )
+    )
+
+  # モーダルビュー表示
+  # @param [Integer] type モーダルビュータイプ
+  # @param [Function] prepareShowFunc 表示前処理
+  _showModalView = (type, prepareShowFunc = null, prepareShowFuncParams = {}, showFunc = null) ->
     if window.modalRun? && window.modalRun
       # 処理中は反応なし
       return
@@ -645,19 +691,8 @@ class Common
 
     # 表示
     _show = ->
-      $("body").append( '<div id="modal-overlay"></div>' )
-      $("#modal-overlay").show()
-      # センタリング
-      Common.modalCentering.call(@, type)
-      # ビューの高さ
-      emt.css('max-height', $(window).height() * Constant.ModalView.HEIGHT_RATE)
-      emt.fadeIn('fast', ->
-        window.modalRun = false
-      )
-      $("#modal-overlay,#modal-close").unbind().click( ->
-        if enableOverlayClose
-          Common.hideModalView()
-      )
+      if showFunc?
+        showFunc()
 
     # 表示内容読み込み済みの場合はサーバアクセスなし
     if !emt? || emt.length == 0

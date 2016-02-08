@@ -282,6 +282,43 @@
       }
     }
   }
+
+  &.message {
+    width: 150px;
+    height: 150px;
+    position: relative;
+    background-color: transparent;
+    box-shadow: none !important;
+    border: none !important;
+    background: none !important;
+    .background_wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      .background {
+        width: 100px;
+        height: 100px;
+        background-image: image-url('spin/modal-flashmessage.gif');
+        background-repeat: no-repeat;
+        background-size: 100px, 100px;
+      }
+    }
+    .message_wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      line-height: 150px;
+      z-index: 1;
+      .loading_message {
+        font-size: 12px;
+      }
+    }
+  }
 }
 
 #modal-overlay{

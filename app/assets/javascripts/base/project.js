@@ -104,6 +104,8 @@ Project = (function() {
     });
     $('.create_button', modalEmt).off('click').on('click', function() {
       var height, projectName, width;
+      Common.hideModalView(true);
+      Common.showModalFlashMessage('Creating...', true, false);
       projectName = $('.project_name').val();
       width = $('#screen_wrapper').width();
       height = Project.calcOriginalViewHeight();
@@ -138,6 +140,8 @@ Project = (function() {
     });
     $('.open_button', modalEmt).off('click').on('click', function() {
       var user_pagevalue_id;
+      Common.hideModalView(true);
+      Common.showModalFlashMessage('Loading...', true, false);
       user_pagevalue_id = $('.project_select', modalEmt).val();
       return ServerStorage.load(user_pagevalue_id, function(data) {
         var sectionClass;

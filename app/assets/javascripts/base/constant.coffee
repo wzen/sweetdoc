@@ -120,6 +120,7 @@ class Constant
     @ITEM_IMAGE_UPLOAD = constant.ModalViewType.ITEM_IMAGE_UPLOAD
     @ITEM_TEXT_EDITING = constant.ModalViewType.ITEM_TEXT_EDITING
     @NOTICE_LOGIN = constant.ModalViewType.NOTICE_LOGIN
+    @MESSAGE = constant.ModalViewType.MESSAGE
 
   # ページング
   class @Paging

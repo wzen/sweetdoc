@@ -184,6 +184,8 @@ Constant = (function() {
 
     ModalViewType.NOTICE_LOGIN = constant.ModalViewType.NOTICE_LOGIN;
 
+    ModalViewType.MESSAGE = constant.ModalViewType.MESSAGE;
+
     return ModalViewType;
 
   })();
