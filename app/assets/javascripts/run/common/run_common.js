@@ -153,7 +153,7 @@ RunCommon = (function() {
         }
       };
     })(this));
-    return $('#contents').find('textarea.embed').off('click.close').on('click', function(e) {
+    return share.find('textarea, input').off('click.close').on('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
       return $(this).select();

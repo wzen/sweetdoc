@@ -51,6 +51,7 @@
     <orderEntry type="library" scope="PROVIDED" name="erubis (v2.7.0, RVM: ruby-2.2.3 [global] (1)) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="execjs (v2.6.0, RVM: ruby-2.2.3 [global] (1)) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="faraday (v0.9.2, RVM: ruby-2.2.3 [global] (1)) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="geoip (v1.6.1, RVM: ruby-2.2.3 [global] (1)) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="gon (v6.0.1, RVM: ruby-2.2.3 [global] (1)) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="hashie (v3.4.3, RVM: ruby-2.2.3 [global] (1)) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="hike (v1.2.3, RVM: ruby-2.2.3 [global] (1)) [gem]" level="application" />

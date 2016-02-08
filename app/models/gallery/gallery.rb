@@ -442,9 +442,10 @@ class Gallery < ActiveRecord::Base
       show_options[Const::Gallery::Key::SHOW_CHAPTER_NUM] = ret['show_chapter_num']
 
       message = I18n.t('message.database.item_state.load.success')
+      string_link = self.string_link(access_token, hostname, ret['title'])
       embed_link = self.embed_link(gpd, access_token, hostname)
 
-      return pagevalues, message, ret['title'], ret['caption'], gpd[Const::Project::Key::SCREEN_SIZE], creator, item_js_list, gallery_view_count, gallery_bookmark_count, show_options, embed_link
+      return pagevalues, message, ret['title'], ret['caption'], gpd[Const::Project::Key::SCREEN_SIZE], creator, item_js_list, gallery_view_count, gallery_bookmark_count, show_options, string_link, embed_link
     end
   end
 
@@ -797,6 +798,14 @@ class Gallery < ActiveRecord::Base
     SQL
     ret_sql = ActiveRecord::Base.connection.select_all(sql)
     return ret_sql.to_hash
+  end
+
+  def self.string_link(access_token, hostname, title)
+    href = "http://#{hostname}/gallery/detail/#{access_token}"
+    link = """
+    <a href='#{href}'>#{title}</a>
+    """.strip
+    return link
   end
 
   def self.embed_link(gpd, access_token, hostname)

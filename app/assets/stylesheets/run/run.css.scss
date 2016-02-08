@@ -507,6 +507,14 @@ div.share_info {
     div.label {
       font-size: 14px;
     }
+    .link_wrapper {
+      input {
+        display: block;
+        color: black;
+        font-size: 12px;
+        width: 100%;
+      }
+    }
     textarea.embed {
       color: black;
       font-size: 12px;

@@ -122,7 +122,7 @@ class RunCommon
       if share.is(':visible')
         share.fadeOut('200')
     )
-    $('#contents').find('textarea.embed').off('click.close').on('click', (e) ->
+    share.find('textarea, input').off('click.close').on('click', (e) ->
       e.preventDefault()
       e.stopPropagation()
       $(@).select()
