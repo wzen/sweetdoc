@@ -634,12 +634,16 @@ class EventConfig
       $(@).append($(commonSelectOptions))
       $(@).append($(itemSelectOptions))
     )
-    teItemSelects.find('li.item').off('mouseenter').on('mouseenter', (e) ->
-      id = $(@).children('input:first').val().split(EventConfig.EVENT_ITEM_SEPERATOR)[0]
+    teItemSelects.find('li').off('mouseenter').on('mouseenter', (e) ->
       WorktableCommon.clearSelectedBorder()
-      WorktableCommon.setSelectedBorder($("##{id}"), 'timeline')
+      if $(@).hasClass('item')
+        id = $(@).children('input:first').val().split(EventConfig.EVENT_ITEM_SEPERATOR)[0]
+        WorktableCommon.setSelectedBorder($("##{id}"), 'timeline')
     ).off('mouseleave').on('mouseleave', (e) ->
       WorktableCommon.clearSelectedBorder()
+    )
+    teItemSelects.closest('.dropdown').off('hide.bs.dropdown.my').on('hide.bs.dropdown.my', ->
+      EventConfig.setSelectedItemBorder($(@))
     )
     teItemSelects.find('.te_item_select:first').height($('#event-config').height())
 
@@ -729,3 +733,11 @@ class EventConfig
     name = $(li).children('a:first').html()
     dropDownRoot.find('.btn-primary:first').text(name)
     dropDownRoot.children('input:first').val(value)
+    @setSelectedItemBorder(dropDownRoot)
+
+  @setSelectedItemBorder = (dropDownRoot) ->
+    # 選択枠
+    value = $(dropDownRoot).children('input:first').val()
+    id = value.split(EventConfig.EVENT_ITEM_SEPERATOR)[0]
+    WorktableCommon.clearSelectedBorder()
+    WorktableCommon.setSelectedBorder($("##{id}"), "timeline")

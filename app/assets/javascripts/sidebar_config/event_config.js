@@ -714,12 +714,17 @@ EventConfig = (function() {
       $(this).append($(commonSelectOptions));
       return $(this).append($(itemSelectOptions));
     });
-    teItemSelects.find('li.item').off('mouseenter').on('mouseenter', function(e) {
-      id = $(this).children('input:first').val().split(EventConfig.EVENT_ITEM_SEPERATOR)[0];
+    teItemSelects.find('li').off('mouseenter').on('mouseenter', function(e) {
       WorktableCommon.clearSelectedBorder();
-      return WorktableCommon.setSelectedBorder($("#" + id), 'timeline');
+      if ($(this).hasClass('item')) {
+        id = $(this).children('input:first').val().split(EventConfig.EVENT_ITEM_SEPERATOR)[0];
+        return WorktableCommon.setSelectedBorder($("#" + id), 'timeline');
+      }
     }).off('mouseleave').on('mouseleave', function(e) {
       return WorktableCommon.clearSelectedBorder();
+    });
+    teItemSelects.closest('.dropdown').off('hide.bs.dropdown.my').on('hide.bs.dropdown.my', function() {
+      return EventConfig.setSelectedItemBorder($(this));
     });
     return teItemSelects.find('.te_item_select:first').height($('#event-config').height());
   };
@@ -813,7 +818,16 @@ EventConfig = (function() {
     });
     name = $(li).children('a:first').html();
     dropDownRoot.find('.btn-primary:first').text(name);
-    return dropDownRoot.children('input:first').val(value);
+    dropDownRoot.children('input:first').val(value);
+    return this.setSelectedItemBorder(dropDownRoot);
+  };
+
+  EventConfig.setSelectedItemBorder = function(dropDownRoot) {
+    var id, value;
+    value = $(dropDownRoot).children('input:first').val();
+    id = value.split(EventConfig.EVENT_ITEM_SEPERATOR)[0];
+    WorktableCommon.clearSelectedBorder();
+    return WorktableCommon.setSelectedBorder($("#" + id), "timeline");
   };
 
   return EventConfig;

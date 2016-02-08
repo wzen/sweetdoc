@@ -132,9 +132,6 @@ class Timeline
       if $(e).is('.ui-sortable-helper')
         # ドラッグの場合はクリック反応なし
         return
-      # 選択枠切り替え
-      WorktableCommon.clearSelectedBorder()
-      WorktableCommon.setSelectedBorder(e, "timeline")
       # コンフィグを開く
       _initEventConfig.call(@, e)
 
