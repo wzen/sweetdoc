@@ -63,6 +63,8 @@ class FloatView
     $('.float_view_fixed_temp', screenWrapper).clone(true).attr('class', 'float_view fixed').appendTo(screenWrapper)
     root = $('.float_view.fixed:first', screenWrapper)
     root.find('.close_button').off('click').on('click', (e) =>
+      e.preventDefault()
+      e.stopPropagation()
       if closeFunc?
         closeFunc()
       FloatView.hideWithCloseButtonView()
@@ -100,12 +102,16 @@ class FloatView
     $('.float_view_pointing_controller_temp', screenWrapper).clone(true).attr('class', 'float_view pointing_controller').appendTo(screenWrapper)
     root = $('.float_view.pointing_controller:first', screenWrapper)
     root.find('.clear_button').off('click').on('click', (e) =>
+      e.preventDefault()
+      e.stopPropagation()
       # 描画を削除
       pointintObj.clearDraw()
       # コントローラー非表示
       FloatView.hidePointingController()
     )
     root.find('.apply_button').off('click').on('click', (e) =>
+      e.preventDefault()
+      e.stopPropagation()
       # 描画を適用
       pointintObj.applyDraw()
       # 画面上のポイントアイテムを削除

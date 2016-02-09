@@ -31,6 +31,7 @@ EventConfig = (function() {
     if (teNum == null) {
       teNum = 1;
     }
+    WorktableCommon.clearSelectedBorder();
     this.updateSelectItemMenu();
     return this.setupTimelineEventHandler(distId, teNum);
   };
@@ -200,12 +201,14 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.applyAction = function() {
+    Common.showModalFlashMessage('Please Wait');
     return this.stopPreview((function(_this) {
       return function() {
         if (_this.writeToEventPageValue()) {
           LocalStorage.saveAllPageValues();
           FloatView.show('Applied', FloatView.Type.APPLY, 3.0);
-          return Timeline.addEvent();
+          Timeline.addEvent();
+          return Common.hideModalView(true);
         }
       };
     })(this));

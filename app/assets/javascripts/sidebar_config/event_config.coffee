@@ -23,6 +23,8 @@ class EventConfig
 
   # イベントコンフィグ表示前初期化
   @initEventConfig: (distId, teNum = 1) ->
+    # 選択枠削除
+    WorktableCommon.clearSelectedBorder()
     # アイテム選択メニュー更新
     @updateSelectItemMenu()
     # イベントハンドラの設定
@@ -195,6 +197,7 @@ class EventConfig
     return true
 
   applyAction: ->
+    Common.showModalFlashMessage('Please Wait')
     # プレビュー停止
     @stopPreview( =>
       # 入力値書き込み
@@ -207,7 +210,7 @@ class EventConfig
         FloatView.show('Applied', FloatView.Type.APPLY, 3.0)
         # イベントを更新
         Timeline.addEvent()
-        #Timeline.refreshAllTimeline()
+        Common.hideModalView(true)
     )
 
   # プレビュー開始

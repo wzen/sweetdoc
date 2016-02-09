@@ -92,6 +92,8 @@ FloatView = (function() {
     root = $('.float_view.fixed:first', screenWrapper);
     root.find('.close_button').off('click').on('click', (function(_this) {
       return function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         if (closeFunc != null) {
           closeFunc();
         }
@@ -132,12 +134,16 @@ FloatView = (function() {
     root = $('.float_view.pointing_controller:first', screenWrapper);
     root.find('.clear_button').off('click').on('click', (function(_this) {
       return function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         pointintObj.clearDraw();
         return FloatView.hidePointingController();
       };
     })(this));
     root.find('.apply_button').off('click').on('click', (function(_this) {
       return function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         pointintObj.applyDraw();
         pointintObj.getJQueryElement().remove();
         return FloatView.hideWithCloseButtonView();
