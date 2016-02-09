@@ -572,6 +572,7 @@ RunCommon = (function() {
     window.eventAction = null;
     window.runPage = true;
     window.initDone = false;
+    Common.showModalFlashMessage('Getting ready');
     CommonVar.initVarWhenLoadedView();
     CommonVar.initCommonVar();
     if (useLocalStorate) {
@@ -588,6 +589,7 @@ RunCommon = (function() {
     RunCommon.initMainContainer();
     return Common.loadJsFromInstancePageValue(function() {
       RunCommon.initEventAction();
+      Common.hideModalView();
       return window.initDone = true;
     });
   };

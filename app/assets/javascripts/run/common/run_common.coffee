@@ -504,6 +504,9 @@ class RunCommon
     window.runPage = true
     window.initDone = false
 
+    # メッセージ
+    Common.showModalFlashMessage('Getting ready')
+
     # 変数初期化
     CommonVar.initVarWhenLoadedView()
     CommonVar.initCommonVar()
@@ -529,6 +532,8 @@ class RunCommon
     Common.loadJsFromInstancePageValue(->
       # イベント初期化
       RunCommon.initEventAction()
+      # メッセージ非表示
+      Common.hideModalView()
       # 初期化終了
       window.initDone = true
     )
