@@ -824,7 +824,7 @@ Common = (function() {
       $("#modal-overlay").show();
       Common.modalCentering.call(this, type);
       emt = $('body').children(".modal-content." + type);
-      emt.find('.loading_message').html(message);
+      emt.find('.message_contents').html(message);
       emt.css('max-height', $(window).height() * Constant.ModalView.HEIGHT_RATE);
       if (immediately) {
         emt.show();
