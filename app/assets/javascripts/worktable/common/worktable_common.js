@@ -280,7 +280,7 @@ WorktableCommon = (function() {
             }
           });
         }
-        Common.updateWorktableScrollContentsFromPageValue();
+        WorktableCommon.initScrollContentsPosition();
         ScreenEvent.PrivateClass.resetNowScale;
         return PageValue.removeAllFootprint();
       } else {
@@ -364,7 +364,7 @@ WorktableCommon = (function() {
     if (position != null) {
       return Common.updateScrollContentsPosition(position.top, position.left);
     } else {
-      return Common.updateScrollContentsPosition(0, 0);
+      return Common.resetScrollContentsPositionToCenter();
     }
   };
 
@@ -405,12 +405,13 @@ WorktableCommon = (function() {
     window.scrollInsideWrapper.height(window.scrollViewSize);
     window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
     window.scrollContents.off('scroll').on('scroll', function(e) {
-      var left, scrollContentsSize, top;
+      var hoverItem, left, scrollContentsSize, top;
       e.preventDefault();
       scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
       top = window.scrollContents.scrollTop() + scrollContentsSize.height * 0.5;
       left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5;
-      if (jQuery(":hover")[jQuery(':hover').length - 1] === window.scrollInside.get(0)) {
+      hoverItem = jQuery(":hover")[jQuery(':hover').length - 1];
+      if (hoverItem === window.scrollInside.get(0) || $(hoverItem).closest('.scroll_inside')[0] === window.scrollInside.get(0)) {
         FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION);
         return Common.saveDisplayPosition(top, left, false, function() {
           return FloatView.hide();

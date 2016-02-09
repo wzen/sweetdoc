@@ -301,7 +301,7 @@ WorktableSetting = (function() {
             top: top,
             left: left
           });
-          Common.updateWorktableScrollContentsFromPageValue();
+          WorktableCommon.initScrollContentsPosition();
           return LocalStorage.saveGeneralPageValue();
         }
       });

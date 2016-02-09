@@ -492,6 +492,16 @@ Common = (function() {
     }
   };
 
+  Common.resetScrollContentsPositionToCenter = function(withUpdateScreenEventVar) {
+    var left, top;
+    if (withUpdateScreenEventVar == null) {
+      withUpdateScreenEventVar = true;
+    }
+    top = window.scrollInsideWrapper.height() * 0.5;
+    left = window.scrollInsideWrapper.width() * 0.5;
+    return this.updateScrollContentsPosition(top, left, true, withUpdateScreenEventVar);
+  };
+
   Common.saveDisplayPosition = function(top, left, immediate, callback) {
     var _save;
     if (immediate == null) {
@@ -555,13 +565,10 @@ Common = (function() {
     var position;
     position = PageValue.getWorktableScrollContentsPosition();
     if (position == null) {
-      position = {
-        top: window.scrollInsideWrapper.height() * 0.5,
-        left: window.scrollInsideWrapper.width() * 0.5
-      };
-      PageValue.setWorktableDisplayPosition(position.top, position.left);
+      return this.resetScrollContentsPositionToCenter();
+    } else {
+      return this.updateScrollContentsPosition(position.top, position.left);
     }
-    return this.updateScrollContentsPosition(position.top, position.left);
   };
 
   Common.sanitaizeEncode = function(str) {

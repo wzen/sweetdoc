@@ -206,6 +206,7 @@ class Common
   # 画面スケールの設定
   @applyViewScale = (isViewResize = false) ->
     if window.isWorkTable && !window.previewRunning
+      # FIXME: Worktableの倍率にする
       window.mainWrapper.css({transform: '', width: "", height: ""})
       return
 
@@ -372,6 +373,12 @@ class Common
           callback()
       )
 
+  # スクロール位置を中心に初期化
+  @resetScrollContentsPositionToCenter: (withUpdateScreenEventVar = true) ->
+    top = window.scrollInsideWrapper.height() * 0.5
+    left = window.scrollInsideWrapper.width() * 0.5
+    @updateScrollContentsPosition(top, left, true, withUpdateScreenEventVar)
+
   @saveDisplayPosition = (top, left, immediate = true, callback = null) ->
     _save = ->
       if ScreenEvent?
@@ -415,9 +422,10 @@ class Common
   @updateWorktableScrollContentsFromPageValue: ->
     position = PageValue.getWorktableScrollContentsPosition()
     if !position?
-      position = {top: window.scrollInsideWrapper.height() * 0.5, left: window.scrollInsideWrapper.width() * 0.5}
-      PageValue.setWorktableDisplayPosition(position.top, position.left)
-    @updateScrollContentsPosition(position.top, position.left)
+      # 値が存在しない場合は中心で初期化
+      @resetScrollContentsPositionToCenter()
+    else
+      @updateScrollContentsPosition(position.top, position.left)
 
   # サニタイズ エンコード
   # @property [String] str 対象文字列

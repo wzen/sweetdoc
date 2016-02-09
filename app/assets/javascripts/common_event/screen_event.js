@@ -14,7 +14,7 @@ ScreenEvent = (function(superClass) {
   ScreenEvent.instance = {};
 
   ScreenEvent.PrivateClass = (function(superClass1) {
-    var _convertCenterCoodToSize, _drawKeepDispRect, _getScale, _overlay, _setScale;
+    var _convertCenterCoodToSize, _drawKeepDispRect, _getInitConfigScale, _getScale, _overlay, _setScale;
 
     extend(PrivateClass, superClass1);
 
@@ -53,8 +53,8 @@ ScreenEvent = (function(superClass) {
       this.initConfigY = 0;
       this.initConfigScale = 1.0;
       if (window.scrollContents != null) {
-        this.initConfigX = window.scrollInside.height() * 0.5;
-        this.initConfigY = window.scrollInside.width() * 0.5;
+        this.initConfigX = window.scrollInsideWrapper.height() * 0.5;
+        this.initConfigY = window.scrollInsideWrapper.width() * 0.5;
       }
       this.nowX = null;
       this.nowY = null;
@@ -68,7 +68,7 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.prototype.initPreview = function() {
-      return this._scale = this.initConfigScale;
+      return this._scale = _getInitConfigScale.call(this);
     };
 
     PrivateClass.prototype.refresh = function(show, callback) {
@@ -78,7 +78,9 @@ ScreenEvent = (function(superClass) {
       if (callback == null) {
         callback = null;
       }
-      Common.updateWorktableScrollContentsFromPageValue();
+      if (window.isWorkTable) {
+        WorktableCommon.initScrollContentsPosition();
+      }
       _setScale.call(this, 1.0);
       $('#preview_position_overlay').remove();
       $('.keep_mag_base').remove();
@@ -168,8 +170,8 @@ ScreenEvent = (function(superClass) {
     PrivateClass.prototype.setMiniumObject = function(obj) {
       PrivateClass.__super__.setMiniumObject.call(this, obj);
       if (!window.isWorkTable && !this._initDone) {
-        _setScale.call(this, this.initConfigScale);
-        this.nowScale = this.initConfigScale;
+        _setScale.call(this, _getInitConfigScale.call(this));
+        this.nowScale = _getInitConfigScale.call(this);
         Common.updateScrollContentsPosition(this.initConfigY, this.initConfigX);
         return this._initDone = true;
       }
@@ -177,7 +179,7 @@ ScreenEvent = (function(superClass) {
 
     PrivateClass.prototype.getNowScale = function() {
       if (this._scale == null) {
-        this._scale = this.initConfigScale;
+        this._scale = _getInitConfigScale.call(this);
       }
       return this._scale;
     };
@@ -314,6 +316,13 @@ ScreenEvent = (function(superClass) {
 
     _getScale = function() {
       return this._scale;
+    };
+
+    _getInitConfigScale = function() {
+      if (window.isWorkTable && !window.previewRunning) {
+        return 1.0;
+      }
+      return this.initConfigScale;
     };
 
     return PrivateClass;

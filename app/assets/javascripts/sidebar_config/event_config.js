@@ -36,7 +36,7 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.selectItem = function(e) {
-    var actionClassName, objId, splitValues, vEmt, value;
+    var actionClassName, dropdown, objId, splitValues, vEmt, value;
     if (e == null) {
       e = null;
     }
@@ -46,6 +46,9 @@ EventConfig = (function() {
         $(".config.te_div", this.emt).hide();
         return;
       }
+      dropdown = $(e).closest('.dropdown');
+      dropdown.find('li').off('mouseleave.dropdown');
+      EventConfig.setSelectItemValue(dropdown, value);
       splitValues = value.split(EventConfig.EVENT_ITEM_SEPERATOR);
       objId = splitValues[0];
       this[EventPageValueBase.PageValueKey.ID] = objId;
@@ -714,14 +717,17 @@ EventConfig = (function() {
       $(this).append($(commonSelectOptions));
       return $(this).append($(itemSelectOptions));
     });
-    teItemSelects.find('li').off('mouseenter').on('mouseenter', function(e) {
-      WorktableCommon.clearSelectedBorder();
-      if ($(this).hasClass('item')) {
-        id = $(this).children('input:first').val().split(EventConfig.EVENT_ITEM_SEPERATOR)[0];
-        return WorktableCommon.setSelectedBorder($("#" + id), 'timeline');
-      }
-    }).off('mouseleave').on('mouseleave', function(e) {
-      return WorktableCommon.clearSelectedBorder();
+    teItemSelects.closest('.dropdown').off('show.bs.dropdown.my').on('show.bs.dropdown.my', function(e) {
+      return $(this).find('li').off('mouseenter.dropdown').on('mouseenter.dropdown', function(e) {
+        WorktableCommon.clearSelectedBorder();
+        if ($(this).hasClass('item')) {
+          id = $(this).children('input:first').val().split(EventConfig.EVENT_ITEM_SEPERATOR)[0];
+          return WorktableCommon.setSelectedBorder($("#" + id), 'timeline');
+        }
+      }).off('mouseleave.dropdown').on('mouseleave.dropdown', function(e) {
+        e.preventDefault();
+        return WorktableCommon.clearSelectedBorder();
+      });
     });
     teItemSelects.closest('.dropdown').off('hide.bs.dropdown.my').on('hide.bs.dropdown.my', function() {
       return EventConfig.setSelectedItemBorder($(this));
@@ -764,10 +770,7 @@ EventConfig = (function() {
             $('.update_event_after', emt).attr('disabled', true);
           }
           $('.te_item_select', emt).find('li:not(".dropdown-header")').off('click').on('click', function(e) {
-            var value;
             e.preventDefault();
-            value = $(this).children('input:first').val();
-            EventConfig.setSelectItemValue($(this).closest('.dropdown'), value);
             config.clearError();
             return config.selectItem(this);
           });

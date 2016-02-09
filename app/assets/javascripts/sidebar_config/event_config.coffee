@@ -32,14 +32,16 @@ class EventConfig
   # @param [Object] e 選択オブジェクト
   selectItem: (e = null) ->
     if e?
-      value =  $(e).children('input:first').val()
-
+      value = $(e).children('input:first').val()
       # デフォルト選択時
       if value == ""
         # 非表示にする
         $(".config.te_div", @emt).hide()
         return
-
+      dropdown = $(e).closest('.dropdown')
+      # マウスオーバーイベントを無効にする
+      dropdown.find('li').off('mouseleave.dropdown')
+      EventConfig.setSelectItemValue(dropdown, value)
       splitValues = value.split(EventConfig.EVENT_ITEM_SEPERATOR)
       objId = splitValues[0]
       @[EventPageValueBase.PageValueKey.ID] = objId
@@ -634,14 +636,20 @@ class EventConfig
       $(@).append($(commonSelectOptions))
       $(@).append($(itemSelectOptions))
     )
-    teItemSelects.find('li').off('mouseenter').on('mouseenter', (e) ->
-      WorktableCommon.clearSelectedBorder()
-      if $(@).hasClass('item')
-        id = $(@).children('input:first').val().split(EventConfig.EVENT_ITEM_SEPERATOR)[0]
-        WorktableCommon.setSelectedBorder($("##{id}"), 'timeline')
-    ).off('mouseleave').on('mouseleave', (e) ->
-      WorktableCommon.clearSelectedBorder()
+    # リスト表示時イベント
+    teItemSelects.closest('.dropdown').off('show.bs.dropdown.my').on('show.bs.dropdown.my', (e) ->
+      # アイテムリスト マウスオーバー
+      $(@).find('li').off('mouseenter.dropdown').on('mouseenter.dropdown', (e) ->
+        WorktableCommon.clearSelectedBorder()
+        if $(@).hasClass('item')
+          id = $(@).children('input:first').val().split(EventConfig.EVENT_ITEM_SEPERATOR)[0]
+          WorktableCommon.setSelectedBorder($("##{id}"), 'timeline')
+      ).off('mouseleave.dropdown').on('mouseleave.dropdown', (e) ->
+        e.preventDefault()
+        WorktableCommon.clearSelectedBorder()
+      )
     )
+    # リスト非表示時イベント
     teItemSelects.closest('.dropdown').off('hide.bs.dropdown.my').on('hide.bs.dropdown.my', ->
       EventConfig.setSelectedItemBorder($(@))
     )
@@ -689,8 +697,6 @@ class EventConfig
         # 選択メニューイベント
         $('.te_item_select', emt).find('li:not(".dropdown-header")').off('click').on('click', (e) ->
           e.preventDefault()
-          value = $(@).children('input:first').val()
-          EventConfig.setSelectItemValue($(@).closest('.dropdown'), value)
           config.clearError()
           config.selectItem(@)
         )

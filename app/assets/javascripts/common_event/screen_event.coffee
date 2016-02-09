@@ -36,8 +36,8 @@ class ScreenEvent extends CommonEvent
       @initConfigY = 0
       @initConfigScale = 1.0
       if window.scrollContents?
-        @initConfigX = window.scrollInside.height() * 0.5
-        @initConfigY = window.scrollInside.width() * 0.5
+        @initConfigX = window.scrollInsideWrapper.height() * 0.5
+        @initConfigY = window.scrollInsideWrapper.width() * 0.5
       @nowX = null
       @nowY = null
       @nowScale = null
@@ -50,11 +50,12 @@ class ScreenEvent extends CommonEvent
 
     initPreview: ->
       # initConfigの値を適用
-      @_scale = @initConfigScale
+      @_scale = _getInitConfigScale.call(@)
 
     # 変更を戻して再表示
     refresh: (show = true, callback = null) ->
-      Common.updateWorktableScrollContentsFromPageValue()
+      if window.isWorkTable
+        WorktableCommon.initScrollContentsPosition()
       _setScale.call(@, 1.0)
       # オーバーレイ削除
       $('#preview_position_overlay').remove()
@@ -132,14 +133,14 @@ class ScreenEvent extends CommonEvent
     setMiniumObject: (obj) ->
       super(obj)
       if !window.isWorkTable && !@_initDone
-        _setScale.call(@, @initConfigScale)
-        @nowScale = @initConfigScale
+        _setScale.call(@, _getInitConfigScale.call(@))
+        @nowScale = _getInitConfigScale.call(@)
         Common.updateScrollContentsPosition(@initConfigY, @initConfigX)
         @_initDone = true
 
     getNowScale: ->
       if !@_scale?
-        @_scale = @initConfigScale
+        @_scale = _getInitConfigScale.call(@)
       return @_scale
 
     getNowProgressScale: ->
@@ -249,6 +250,11 @@ class ScreenEvent extends CommonEvent
 
     _getScale = ->
       return @_scale
+
+    _getInitConfigScale = ->
+      if window.isWorkTable && !window.previewRunning
+        return 1.0
+      return @initConfigScale
 
   @CLASS_DIST_TOKEN = @PrivateClass.CLASS_DIST_TOKEN
 

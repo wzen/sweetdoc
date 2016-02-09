@@ -257,7 +257,7 @@ class WorktableSetting
           $('.display_position_x', rootEmt).val(left)
           $('.display_position_y', rootEmt).val(top)
           PageValue.setGeneralPageValue(PageValue.Key.worktableDisplayPosition(), {top: top, left: left})
-          Common.updateWorktableScrollContentsFromPageValue()
+          WorktableCommon.initScrollContentsPosition()
           LocalStorage.saveGeneralPageValue()
       )
 

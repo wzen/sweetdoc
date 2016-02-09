@@ -246,7 +246,7 @@ class WorktableCommon
           )
 
         # アイテムフォーカスしてる場合があるので表示位置を戻す
-        Common.updateWorktableScrollContentsFromPageValue()
+        WorktableCommon.initScrollContentsPosition()
         # 倍率を戻す
         ScreenEvent.PrivateClass.resetNowScale
         # Footprint履歴削除
@@ -322,7 +322,8 @@ class WorktableCommon
     if position?
       Common.updateScrollContentsPosition(position.top, position.left)
     else
-      Common.updateScrollContentsPosition(0, 0)
+      # 中心
+      Common.resetScrollContentsPositionToCenter()
 
   # 画面サイズ設定
   @resizeMainContainerEvent = ->
@@ -365,7 +366,8 @@ class WorktableCommon
       scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
       top = window.scrollContents.scrollTop() + scrollContentsSize.height * 0.5
       left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5
-      if jQuery(":hover")[jQuery(':hover').length - 1] == window.scrollInside.get(0)
+      hoverItem = jQuery(":hover")[jQuery(':hover').length - 1]
+      if hoverItem == window.scrollInside.get(0) || $(hoverItem).closest('.scroll_inside')[0] == window.scrollInside.get(0)
         # 手動スクロールした場合のみメッセージ & 画面位置更新
         FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION)
         Common.saveDisplayPosition(top, left, false, ->
