@@ -50,11 +50,13 @@ ItemPreviewCommon = (function() {
     window.scrollInsideWrapper.height(window.scrollViewSize);
     window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
     window.scrollContents.off('scroll').on('scroll', function(e) {
-      var left, top;
+      var hoverItem, left, top;
       e.preventDefault();
+      e.stopPropagation();
       top = window.scrollContents.scrollTop();
       left = window.scrollContents.scrollLeft();
-      if (jQuery(":hover")[jQuery(':hover').length - 1] === window.scrollInside.get(0)) {
+      hoverItem = jQuery(":hover")[jQuery(':hover').length - 1];
+      if (hoverItem === window.scrollInside.get(0) || $(hoverItem).closest('.scroll_inside')[0] === window.scrollInside.get(0)) {
         FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION);
         return Common.saveDisplayPosition(top, left, false, function() {
           return FloatView.hide();

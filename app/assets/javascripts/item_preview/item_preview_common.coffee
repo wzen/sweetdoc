@@ -42,9 +42,11 @@ class ItemPreviewCommon
     # スクロールイベント設定
     window.scrollContents.off('scroll').on('scroll', (e) ->
       e.preventDefault()
+      e.stopPropagation()
       top = window.scrollContents.scrollTop()
       left = window.scrollContents.scrollLeft()
-      if jQuery(":hover")[jQuery(':hover').length - 1] == window.scrollInside.get(0)
+      hoverItem = jQuery(":hover")[jQuery(':hover').length - 1]
+      if hoverItem == window.scrollInside.get(0) || $(hoverItem).closest('.scroll_inside')[0] == window.scrollInside.get(0)
         # 手動スクロールした場合のみメッセージ表示
         FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION)
         Common.saveDisplayPosition(top, left, false, ->

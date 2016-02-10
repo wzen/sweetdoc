@@ -407,6 +407,7 @@ WorktableCommon = (function() {
     window.scrollContents.off('scroll').on('scroll', function(e) {
       var hoverItem, left, scrollContentsSize, top;
       e.preventDefault();
+      e.stopPropagation();
       scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
       top = window.scrollContents.scrollTop() + scrollContentsSize.height * 0.5;
       left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5;

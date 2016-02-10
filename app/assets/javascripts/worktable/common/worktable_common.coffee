@@ -363,6 +363,7 @@ class WorktableCommon
     # スクロールイベント設定
     window.scrollContents.off('scroll').on('scroll', (e) ->
       e.preventDefault()
+      e.stopPropagation()
       scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
       top = window.scrollContents.scrollTop() + scrollContentsSize.height * 0.5
       left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5
