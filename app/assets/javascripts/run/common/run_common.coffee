@@ -166,7 +166,11 @@ class RunCommon
 
     window.scrollHandleWrapper.off('scroll').on('scroll', (e) ->
       e.preventDefault()
+      e.stopPropagation()
 
+      hoverItem = jQuery(":hover")[jQuery(':hover').length - 1]
+      if hoverItem != window.scrollHandle.get(0)
+        return
       if !RunCommon.enabledScroll()
         return
 

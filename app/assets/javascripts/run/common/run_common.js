@@ -195,8 +195,13 @@ RunCommon = (function() {
     lastTop = window.scrollHandleWrapper.scrollTop();
     stopTimer = null;
     return window.scrollHandleWrapper.off('scroll').on('scroll', function(e) {
-      var distX, distY, x, y;
+      var distX, distY, hoverItem, x, y;
       e.preventDefault();
+      e.stopPropagation();
+      hoverItem = jQuery(":hover")[jQuery(':hover').length - 1];
+      if (hoverItem !== window.scrollHandle.get(0)) {
+        return;
+      }
       if (!RunCommon.enabledScroll()) {
         return;
       }

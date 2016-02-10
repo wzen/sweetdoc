@@ -124,7 +124,6 @@ class ServerStorage
                 # リサイズイベント
                 Common.initResize(WorktableCommon.resizeEvent)
                 WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
-                  Timeline.refreshAllTimeline()
                   PageValue.updatePageCount()
                   PageValue.updateForkCount()
                   Paging.initPaging()
@@ -133,6 +132,7 @@ class ServerStorage
                   if callback?
                     callback(data)
                 )
+                Timeline.refreshAllTimeline()
               )
             )
 

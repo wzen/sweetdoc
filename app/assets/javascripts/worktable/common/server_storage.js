@@ -151,8 +151,7 @@ ServerStorage = (function() {
                 Common.createdMainContainerIfNeeded(PageValue.getPageNum());
                 WorktableCommon.initMainContainer();
                 Common.initResize(WorktableCommon.resizeEvent);
-                return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
-                  Timeline.refreshAllTimeline();
+                WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
                   PageValue.updatePageCount();
                   PageValue.updateForkCount();
                   Paging.initPaging();
@@ -162,6 +161,7 @@ ServerStorage = (function() {
                     return callback(data);
                   }
                 });
+                return Timeline.refreshAllTimeline();
               };
             })(this));
           });

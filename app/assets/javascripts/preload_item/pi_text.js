@@ -898,16 +898,24 @@ PreloadItemText = (function(superClass) {
       return context.shadowBlur = 4;
     };
     _drawArc = function() {
-      var diff;
+      var diff, r;
       context.beginPath();
       context.translate(canvasWidth * 0.5, canvasHeight * 0.5);
       diff = 10.0;
       if (width > height) {
         context.scale(canvasWidth / canvasHeight, 1);
-        context.arc(0, 0, height * 0.5 - diff, 0, Math.PI * 2);
+        r = height * 0.5 - diff;
+        if (r < 0) {
+          r = 0;
+        }
+        context.arc(0, 0, r, 0, Math.PI * 2);
       } else {
         context.scale(1, canvasHeight / canvasWidth);
-        context.arc(0, 0, width * 0.5 - diff, 0, Math.PI * 2);
+        r = width * 0.5 - diff;
+        if (r < 0) {
+          r = 0;
+        }
+        context.arc(0, 0, r, 0, Math.PI * 2);
       }
       context.fill();
       return context.stroke();
@@ -917,7 +925,7 @@ PreloadItemText = (function(superClass) {
       return context.fillRect(x, y, width, height);
     };
     _drawBArc = function() {
-      var diff, l, per, results, results1, sum;
+      var diff, l, per, r, results, results1, sum;
       diff = 10.0;
       context.translate(canvasWidth * 0.5, canvasHeight * 0.5);
       per = Math.PI * 2 / 100;
@@ -930,7 +938,11 @@ PreloadItemText = (function(superClass) {
           context.beginPath();
           l = ((2 * Math.abs(Math.cos(x))) + 1) * per;
           y = x + l;
-          context.arc(0, 0, height * 0.5 - diff, x, y);
+          r = height * 0.5 - diff;
+          if (r < 0) {
+            r = 0;
+          }
+          context.arc(0, 0, r, x, y);
           context.fill();
           context.stroke();
           sum += l;
@@ -950,7 +962,11 @@ PreloadItemText = (function(superClass) {
           context.beginPath();
           l = ((2 * Math.abs(Math.sin(x))) + 1) * per;
           y = x + l;
-          context.arc(0, 0, width * 0.5 - diff, x, y);
+          r = width * 0.5 - diff;
+          if (r < 0) {
+            r = 0;
+          }
+          context.arc(0, 0, r, x, y);
           context.fill();
           context.stroke();
           sum += l;
