@@ -347,12 +347,15 @@ class Page
     if window.runDebug
       console.log('Page initItemDrawingInPage')
 
-    waitDraw = false
     # アイテムインスタンス取得(無い場合は作成 & 初期化もする)
     objs = Common.itemInstancesInPage(PageValue.getPageNum(), true, true)
+    if objs.length == 0
+      if callback?
+        callback()
+      return
+    finishCount = 0
     for obj in objs
       #if obj.visible
-      waitDraw = true
       # 初期表示
       obj.refreshIfItemNotExist(obj.visible, =>
         if obj.firstFocus
@@ -361,12 +364,11 @@ class Page
           Common.focusToTarget(obj.getJQueryElement(), ->
             window.disabledEventHandler = false
           , true)
-        if callback?
-          callback()
+        finishCount += 1
+        if finishCount >= objs.length
+          if callback?
+            callback()
       )
-    if !waitDraw
-      if callback?
-        callback()
 
   # 全てのチャプターをリセット
   resetAllChapters: ->

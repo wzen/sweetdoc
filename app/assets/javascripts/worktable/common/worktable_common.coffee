@@ -362,18 +362,17 @@ class WorktableCommon
     window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1))
     # スクロールイベント設定
     window.scrollContents.off('scroll').on('scroll', (e) ->
+      if window.skipScrollEvent? && window.skipScrollEvent
+        return
       e.preventDefault()
       e.stopPropagation()
       scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
       top = window.scrollContents.scrollTop() + scrollContentsSize.height * 0.5
       left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5
-      hoverItem = jQuery(":hover")[jQuery(':hover').length - 1]
-      if hoverItem == window.scrollInside.get(0) || $(hoverItem).closest('.scroll_inside')[0] == window.scrollInside.get(0)
-        # 手動スクロールした場合のみメッセージ & 画面位置更新
-        FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION)
-        Common.saveDisplayPosition(top, left, false, ->
-          FloatView.hide()
-        )
+      FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION)
+      Common.saveDisplayPosition(top, left, false, ->
+        FloatView.hide()
+      )
     )
     # ドロップダウン
     $('.dropdown-toggle').dropdown()

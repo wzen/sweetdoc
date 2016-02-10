@@ -405,19 +405,19 @@ WorktableCommon = (function() {
     window.scrollInsideWrapper.height(window.scrollViewSize);
     window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
     window.scrollContents.off('scroll').on('scroll', function(e) {
-      var hoverItem, left, scrollContentsSize, top;
+      var left, scrollContentsSize, top;
+      if ((window.skipScrollEvent != null) && window.skipScrollEvent) {
+        return;
+      }
       e.preventDefault();
       e.stopPropagation();
       scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
       top = window.scrollContents.scrollTop() + scrollContentsSize.height * 0.5;
       left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5;
-      hoverItem = jQuery(":hover")[jQuery(':hover').length - 1];
-      if (hoverItem === window.scrollInside.get(0) || $(hoverItem).closest('.scroll_inside')[0] === window.scrollInside.get(0)) {
-        FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION);
-        return Common.saveDisplayPosition(top, left, false, function() {
-          return FloatView.hide();
-        });
-      }
+      FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION);
+      return Common.saveDisplayPosition(top, left, false, function() {
+        return FloatView.hide();
+      });
     });
     $('.dropdown-toggle').dropdown();
     Navbar.initWorktableNavbar();

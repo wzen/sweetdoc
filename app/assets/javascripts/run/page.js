@@ -391,19 +391,25 @@ Page = (function() {
   };
 
   Page.prototype.initItemDrawingInPage = function(callback) {
-    var j, len, obj, objs, waitDraw;
+    var finishCount, j, len, obj, objs, results;
     if (callback == null) {
       callback = null;
     }
     if (window.runDebug) {
       console.log('Page initItemDrawingInPage');
     }
-    waitDraw = false;
     objs = Common.itemInstancesInPage(PageValue.getPageNum(), true, true);
+    if (objs.length === 0) {
+      if (callback != null) {
+        callback();
+      }
+      return;
+    }
+    finishCount = 0;
+    results = [];
     for (j = 0, len = objs.length; j < len; j++) {
       obj = objs[j];
-      waitDraw = true;
-      obj.refreshIfItemNotExist(obj.visible, (function(_this) {
+      results.push(obj.refreshIfItemNotExist(obj.visible, (function(_this) {
         return function() {
           if (obj.firstFocus) {
             window.disabledEventHandler = true;
@@ -411,17 +417,16 @@ Page = (function() {
               return window.disabledEventHandler = false;
             }, true);
           }
-          if (callback != null) {
-            return callback();
+          finishCount += 1;
+          if (finishCount >= objs.length) {
+            if (callback != null) {
+              return callback();
+            }
           }
         };
-      })(this));
+      })(this)));
     }
-    if (!waitDraw) {
-      if (callback != null) {
-        return callback();
-      }
-    }
+    return results;
   };
 
   Page.prototype.resetAllChapters = function() {

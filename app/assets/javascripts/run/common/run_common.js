@@ -185,8 +185,10 @@ RunCommon = (function() {
   };
 
   RunCommon.initHandleScrollPoint = function() {
+    window.skipScrollEvent = true;
     window.scrollHandleWrapper.scrollLeft(window.scrollHandle.width() * 0.5);
-    return window.scrollHandleWrapper.scrollTop(window.scrollHandle.height() * 0.5);
+    window.scrollHandleWrapper.scrollTop(window.scrollHandle.height() * 0.5);
+    return window.skipScrollEvent = false;
   };
 
   RunCommon.setupScrollEvent = function() {
@@ -195,13 +197,12 @@ RunCommon = (function() {
     lastTop = window.scrollHandleWrapper.scrollTop();
     stopTimer = null;
     return window.scrollHandleWrapper.off('scroll').on('scroll', function(e) {
-      var distX, distY, hoverItem, x, y;
-      e.preventDefault();
-      e.stopPropagation();
-      hoverItem = jQuery(":hover")[jQuery(':hover').length - 1];
-      if (hoverItem !== window.scrollHandle.get(0)) {
+      var distX, distY, x, y;
+      if ((window.skipScrollEvent != null) && window.skipScrollEvent) {
         return;
       }
+      e.preventDefault();
+      e.stopPropagation();
       if (!RunCommon.enabledScroll()) {
         return;
       }

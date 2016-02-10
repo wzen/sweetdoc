@@ -155,8 +155,10 @@ class RunCommon
 
   # Handleスクロール位置の初期化
   @initHandleScrollPoint = ->
+    window.skipScrollEvent = true
     window.scrollHandleWrapper.scrollLeft(window.scrollHandle.width() * 0.5)
     window.scrollHandleWrapper.scrollTop(window.scrollHandle.height() * 0.5)
+    window.skipScrollEvent = false
 
   # スクロールイベントの初期化
   @setupScrollEvent = ->
@@ -165,12 +167,11 @@ class RunCommon
     stopTimer = null
 
     window.scrollHandleWrapper.off('scroll').on('scroll', (e) ->
+      if window.skipScrollEvent? && window.skipScrollEvent
+        return
       e.preventDefault()
       e.stopPropagation()
 
-      hoverItem = jQuery(":hover")[jQuery(':hover').length - 1]
-      if hoverItem != window.scrollHandle.get(0)
-        return
       if !RunCommon.enabledScroll()
         return
 

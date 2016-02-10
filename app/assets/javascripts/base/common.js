@@ -468,6 +468,7 @@ Common = (function() {
     if (callback == null) {
       callback = null;
     }
+    window.skipScrollEvent = true;
     if (withUpdateScreenEventVar) {
       Common.saveDisplayPosition(top, left, true);
     }
@@ -477,6 +478,7 @@ Common = (function() {
     if (immediate) {
       window.scrollContents.scrollTop(top);
       window.scrollContents.scrollLeft(left);
+      window.skipScrollEvent = false;
       if (callback != null) {
         return callback();
       }
@@ -485,6 +487,7 @@ Common = (function() {
         scrollTop: top,
         scrollLeft: left
       }, 500, function() {
+        window.skipScrollEvent = false;
         if (callback != null) {
           return callback();
         }

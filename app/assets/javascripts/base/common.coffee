@@ -351,6 +351,7 @@ class Common
   # @param [Float] top Y中央値
   # @param [Float] left X中央値
   @updateScrollContentsPosition: (top, left, immediate = true, withUpdateScreenEventVar = true, callback = null) ->
+    window.skipScrollEvent = true
     if withUpdateScreenEventVar
       Common.saveDisplayPosition(top, left, true)
 
@@ -360,6 +361,7 @@ class Common
     if immediate
       window.scrollContents.scrollTop(top)
       window.scrollContents.scrollLeft(left)
+      window.skipScrollEvent = false
       if callback?
         callback()
     else
@@ -369,6 +371,7 @@ class Common
           scrollLeft: left
         }
       , 500, ->
+        window.skipScrollEvent = false
         if callback?
           callback()
       )
