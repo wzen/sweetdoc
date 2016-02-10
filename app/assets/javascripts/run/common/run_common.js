@@ -66,7 +66,7 @@ RunCommon = (function() {
     scrollInsideCover.height(window.scrollViewSize);
     scrollHandle.width(window.scrollViewSize);
     scrollHandle.height(window.scrollViewSize);
-    this.initHandleScrollPoint();
+    this.initHandleScrollView();
     return Common.initScrollContentsPosition();
   };
 
@@ -184,10 +184,11 @@ RunCommon = (function() {
     return window.eventAction.start();
   };
 
-  RunCommon.initHandleScrollPoint = function() {
+  RunCommon.initHandleScrollView = function() {
     window.skipScrollEvent = true;
     window.scrollHandleWrapper.scrollLeft(window.scrollHandle.width() * 0.5);
-    return window.scrollHandleWrapper.scrollTop(window.scrollHandle.height() * 0.5);
+    window.scrollHandleWrapper.scrollTop(window.scrollHandle.height() * 0.5);
+    return this.setupScrollEvent();
   };
 
   RunCommon.setupScrollEvent = function() {
@@ -213,7 +214,7 @@ RunCommon = (function() {
       }
       stopTimer = setTimeout((function(_this) {
         return function() {
-          RunCommon.initHandleScrollPoint();
+          RunCommon.initHandleScrollView();
           lastLeft = $(_this).scrollLeft();
           lastTop = $(_this).scrollTop();
           clearTimeout(stopTimer);
@@ -401,9 +402,8 @@ RunCommon = (function() {
   RunCommon.initMainContainer = function() {
     CommonVar.runCommonVar();
     this.initView();
-    this.initHandleScrollPoint();
+    this.initHandleScrollView();
     Common.initResize(this.resizeEvent);
-    this.setupScrollEvent();
     Navbar.initRunNavbar();
     Common.applyEnvironmentFromPagevalue();
     return RunCommon.updateMainViewSize();

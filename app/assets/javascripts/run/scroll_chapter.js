@@ -13,7 +13,7 @@ ScrollChapter = (function(superClass) {
   ScrollChapter.prototype.willChapter = function() {
     ScrollChapter.__super__.willChapter.call(this);
     this.enableScrollHandleViewEvent();
-    RunCommon.initHandleScrollPoint();
+    RunCommon.initHandleScrollView();
     return this.showGuide(true);
   };
 

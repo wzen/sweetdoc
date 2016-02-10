@@ -5,7 +5,7 @@ class ScrollChapter extends Chapter
     super()
     @enableScrollHandleViewEvent()
     # スクロール位置初期化
-    RunCommon.initHandleScrollPoint()
+    RunCommon.initHandleScrollView()
     # ガイド表示
     @showGuide(true)
 

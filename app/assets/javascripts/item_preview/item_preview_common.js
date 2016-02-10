@@ -85,8 +85,7 @@ ItemPreviewCommon = (function() {
     }
     CommonVar.runCommonVar();
     RunCommon.initView();
-    RunCommon.initHandleScrollPoint();
-    RunCommon.setupScrollEvent();
+    RunCommon.initHandleScrollView();
     Common.applyEnvironmentFromPagevalue();
     $('#project_wrapper').removeAttr('style');
     if (callback != null) {

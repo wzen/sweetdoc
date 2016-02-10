@@ -37,7 +37,7 @@ class RunCommon
     scrollInsideCover.height(window.scrollViewSize)
     scrollHandle.width(window.scrollViewSize)
     scrollHandle.height(window.scrollViewSize)
-    @initHandleScrollPoint()
+    @initHandleScrollView()
     Common.initScrollContentsPosition()
 
   # Mainビューのサイズ更新
@@ -153,11 +153,14 @@ class RunCommon
     window.eventAction = new EventAction(pageList, PageValue.getPageNum() - 1)
     window.eventAction.start()
 
-  # Handleスクロール位置の初期化
-  @initHandleScrollPoint = ->
+  # Handleスクロールビューの初期化
+  @initHandleScrollView = ->
+    # スクロール位置初期化
     window.skipScrollEvent = true
     window.scrollHandleWrapper.scrollLeft(window.scrollHandle.width() * 0.5)
     window.scrollHandleWrapper.scrollTop(window.scrollHandle.height() * 0.5)
+    # スクロールイベント設定
+    @setupScrollEvent()
 
   # スクロールイベントの初期化
   @setupScrollEvent = ->
@@ -181,7 +184,7 @@ class RunCommon
       if stopTimer != null
         clearTimeout(stopTimer)
       stopTimer = setTimeout( =>
-        RunCommon.initHandleScrollPoint()
+        RunCommon.initHandleScrollView()
         lastLeft = $(@).scrollLeft()
         lastTop = $(@).scrollTop()
         clearTimeout(stopTimer)
@@ -358,9 +361,8 @@ class RunCommon
   @initMainContainer = ->
     CommonVar.runCommonVar()
     @initView()
-    @initHandleScrollPoint()
+    @initHandleScrollView()
     Common.initResize(@resizeEvent)
-    @setupScrollEvent()
     Navbar.initRunNavbar()
     Common.applyEnvironmentFromPagevalue()
     RunCommon.updateMainViewSize()

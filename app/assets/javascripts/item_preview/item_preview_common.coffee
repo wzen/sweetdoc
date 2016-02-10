@@ -72,8 +72,7 @@ class ItemPreviewCommon
   @initMainContainerAsRun = (callback = null) ->
     CommonVar.runCommonVar()
     RunCommon.initView()
-    RunCommon.initHandleScrollPoint()
-    RunCommon.setupScrollEvent()
+    RunCommon.initHandleScrollView()
     Common.applyEnvironmentFromPagevalue()
     # ProjectWrapperの幅、高さは親に合わせる
     $('#project_wrapper').removeAttr('style')
