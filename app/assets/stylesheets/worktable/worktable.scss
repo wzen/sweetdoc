@@ -995,6 +995,11 @@ div#nav {
   #header_items_select_menu, #header_items_motion_check {
     display: none;
   }
+  #header_items_motion_check {
+    > a {
+      padding: 7px 10px 7px !important;
+    }
+  }
   .navbar-right {
     .last_update_time_li {
       display: none;
@@ -1004,6 +1009,10 @@ div#nav {
     }
     #menu_sidebar_toggle_li {
       display: none;
+      > a {
+        padding-top: 9px !important;
+        padding-bottom: 9px !important;
+      }
     }
   }
 }

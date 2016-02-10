@@ -63,7 +63,7 @@
                         <% end %>
                     </ul>
                 </li>
-                <li id="header_items_motion_check"><a onclick="MotionCheckCommon.run()"><%= t('header_menu.motion_check.title') %></a></li>
+
                 <li id="header_etc_select_menu">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#header_etc_select_menu">
                         <%= t('header_menu.etc.etc') %>
@@ -94,7 +94,8 @@
                   <ul class="dropdown-menu <%= Const::Paging::NAV_SELECT_ROOT_CLASS %>" role="menu">
                   </ul>
               </li>
-              <li id="menu_sidebar_toggle_li"><a id="menu_sidebar_toggle"><%= image_tag("nav/sidebar.png", size:'20x20') %></a></li>
+              <li id="header_items_motion_check"><a onclick="MotionCheckCommon.run()"><%= image_tag("nav/motion_check.png", size:'36x36') %></a></li>
+              <li id="menu_sidebar_toggle_li"><a id="menu_sidebar_toggle"><%= image_tag("nav/sidebar.png", size:'32x32') %></a></li>
               <li>
                 <%= render 'base/user/login_user' %>
               </li>
