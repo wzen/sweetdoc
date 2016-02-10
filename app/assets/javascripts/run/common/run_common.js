@@ -187,8 +187,7 @@ RunCommon = (function() {
   RunCommon.initHandleScrollPoint = function() {
     window.skipScrollEvent = true;
     window.scrollHandleWrapper.scrollLeft(window.scrollHandle.width() * 0.5);
-    window.scrollHandleWrapper.scrollTop(window.scrollHandle.height() * 0.5);
-    return window.skipScrollEvent = false;
+    return window.scrollHandleWrapper.scrollTop(window.scrollHandle.height() * 0.5);
   };
 
   RunCommon.setupScrollEvent = function() {
@@ -199,6 +198,7 @@ RunCommon = (function() {
     return window.scrollHandleWrapper.off('scroll').on('scroll', function(e) {
       var distX, distY, x, y;
       if ((window.skipScrollEvent != null) && window.skipScrollEvent) {
+        window.skipScrollEvent = false;
         return;
       }
       e.preventDefault();

@@ -407,6 +407,10 @@ WorktableCommon = (function() {
     window.scrollContents.off('scroll').on('scroll', function(e) {
       var left, scrollContentsSize, top;
       if ((window.skipScrollEvent != null) && window.skipScrollEvent) {
+        window.skipScrollEvent = false;
+        return;
+      }
+      if ((window.skipScrollEventByAnimation != null) && window.skipScrollEventByAnimation) {
         return;
       }
       e.preventDefault();

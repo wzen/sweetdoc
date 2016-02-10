@@ -158,7 +158,6 @@ class RunCommon
     window.skipScrollEvent = true
     window.scrollHandleWrapper.scrollLeft(window.scrollHandle.width() * 0.5)
     window.scrollHandleWrapper.scrollTop(window.scrollHandle.height() * 0.5)
-    window.skipScrollEvent = false
 
   # スクロールイベントの初期化
   @setupScrollEvent = ->
@@ -168,6 +167,7 @@ class RunCommon
 
     window.scrollHandleWrapper.off('scroll').on('scroll', (e) ->
       if window.skipScrollEvent? && window.skipScrollEvent
+        window.skipScrollEvent = false
         return
       e.preventDefault()
       e.stopPropagation()

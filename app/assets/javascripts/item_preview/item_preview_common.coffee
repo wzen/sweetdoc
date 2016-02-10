@@ -42,6 +42,9 @@ class ItemPreviewCommon
     # スクロールイベント設定
     window.scrollContents.off('scroll').on('scroll', (e) ->
       if window.skipScrollEvent? && window.skipScrollEvent
+        window.skipScrollEvent = false
+        return
+      if window.skipScrollEventByAnimation? && window.skipScrollEventByAnimation
         return
       e.preventDefault()
       e.stopPropagation()

@@ -468,7 +468,6 @@ Common = (function() {
     if (callback == null) {
       callback = null;
     }
-    window.skipScrollEvent = true;
     if (withUpdateScreenEventVar) {
       Common.saveDisplayPosition(top, left, true);
     }
@@ -476,18 +475,19 @@ Common = (function() {
     top -= scrollContentsSize.height * 0.5;
     left -= scrollContentsSize.width * 0.5;
     if (immediate) {
+      window.skipScrollEvent = true;
       window.scrollContents.scrollTop(top);
       window.scrollContents.scrollLeft(left);
-      window.skipScrollEvent = false;
       if (callback != null) {
         return callback();
       }
     } else {
+      window.skipScrollEventByAnimation = true;
       return window.scrollContents.animate({
         scrollTop: top,
         scrollLeft: left
       }, 500, function() {
-        window.skipScrollEvent = false;
+        window.skipScrollEventByAnimation = false;
         if (callback != null) {
           return callback();
         }
