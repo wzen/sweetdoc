@@ -37,10 +37,7 @@ Handwrite = (function() {
         var _calcCanvasLoc, _saveLastLoc;
         _calcCanvasLoc = function(e) {
           var worktableScale, x, y;
-          worktableScale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale());
-          if (!worktableScale) {
-            worktableScale = 1.0;
-          }
+          worktableScale = WorktableCommon.getWorktableViewScale();
           x = (e.x || e.clientX) / worktableScale;
           y = (e.y || e.clientY) / worktableScale;
           return _windowToCanvas(drawingCanvas, x, y);

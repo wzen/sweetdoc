@@ -114,6 +114,10 @@ WorktableSetting = (function() {
         root = $("#" + WorktableSetting.ROOT_ID_NAME);
         stepInput = $("." + this.GRID_STEP_CLASS_NAME, root);
         step = stepInput.val();
+        if ((step == null) || step.length === 0) {
+          stepInput.val(this.STEP_DEFAULT_VALUE);
+          step = this.STEP_DEFAULT_VALUE;
+        }
         step = parseInt(step);
         min = parseInt(stepInput.attr('min'));
         max = parseInt(stepInput.attr('max'));
@@ -271,8 +275,8 @@ WorktableSetting = (function() {
     function PositionAndScale() {}
 
     PositionAndScale.initConfig = function() {
-      var leftMax, leftMin, position, rootEmt, topMax, topMin, worktableScale;
-      rootEmt = $("#" + this.ROOT_ID_NAME);
+      var leftMax, leftMin, max, meterElement, min, position, rootEmt, topMax, topMin, v, valueElement, worktableScale;
+      rootEmt = $("#" + WorktableSetting.ROOT_ID_NAME);
       position = PageValue.getWorktableScrollContentsPosition();
       $('.display_position_x', rootEmt).val(parseInt(position.left));
       $('.display_position_y', rootEmt).val(parseInt(position.top));
@@ -305,28 +309,43 @@ WorktableSetting = (function() {
           return LocalStorage.saveGeneralPageValue();
         }
       });
-      worktableScale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale());
-      if (!worktableScale) {
-        worktableScale = 1.0;
+      min = 0.1;
+      max = 5.0;
+      worktableScale = WorktableCommon.getWorktableViewScale();
+      meterElement = $(".scale_meter:first", rootEmt);
+      valueElement = meterElement.prev('input:first');
+      v = worktableScale * 100 + '%';
+      valueElement.val(v);
+      valueElement.html(v);
+      try {
+        meterElement.slider('destroy');
+      } catch (_error) {
+
       }
-      $('.scale', rootEmt).val(worktableScale);
-      $('.scale', rootEmt).off('keypress focusout').on('keypress focusout', function(e) {
-        if ((e.type === 'keypress' && e.keyCode === Constant.KeyboardKeyCode.ENTER) || e.type === 'focusout') {
-          worktableScale = $('.scale', rootEmt).val();
-          if (worktableScale < 1) {
-            worktableScale = 1;
-          } else if (worktableScale > 5) {
-            worktableScale = 5;
-          }
-          $('.scale', rootEmt).val(worktableScale);
-          PageValue.setGeneralPageValue(PageValue.Key.worktableScale(), worktableScale);
-          Common.applyViewScale();
-          return LocalStorage.saveGeneralPageValue();
-        }
+      meterElement.slider({
+        min: min,
+        max: max,
+        step: 0.1,
+        value: worktableScale,
+        slide: (function(_this) {
+          return function(event, ui) {
+            valueElement.val(ui.value);
+            valueElement.html(ui.value);
+            if (window.scaleSliderTimer != null) {
+              clearTimeout(window.scaleSliderTimer);
+              window.scaleSliderTimer = null;
+            }
+            return window.scaleSliderTimer = setTimeout(function() {
+              WorktableCommon.setWorktableViewScale(ui.value);
+              Common.applyViewScale();
+              return LocalStorage.saveGeneralPageValue();
+            }, 50);
+          };
+        })(this)
       });
       $('.display_position_left_limit', rootEmt).html("(" + leftMin + " 〜 " + leftMax + ")");
       $('.display_position_top_limit', rootEmt).html("(" + topMin + " 〜 " + topMax + ")");
-      return $('.display_position_scale_limit', rootEmt).html("(1 〜 5)");
+      return $('.display_position_scale_limit', rootEmt).html("(10% 〜 500%)");
     };
 
     return PositionAndScale;

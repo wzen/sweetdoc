@@ -66,7 +66,7 @@ class RunCommon
       scaleFromViewRate = heightRate
     if scaleFromViewRate == 0.0
       scaleFromViewRate = 0.01
-    Common.scaleFromViewRate = scaleFromViewRate
+    window.runScaleFromViewRate = scaleFromViewRate
     updatedProjectScreenSize.width = projectScreenSize.width * scaleFromViewRate
     updatedProjectScreenSize.height = projectScreenSize.height * scaleFromViewRate
     $('#project_wrapper').css({width: updatedProjectScreenSize.width, height: updatedProjectScreenSize.height})

@@ -98,15 +98,16 @@ class WorktableSetting
         root = $("##{WorktableSetting.ROOT_ID_NAME}")
         stepInput = $(".#{@GRID_STEP_CLASS_NAME}", root)
         step = stepInput.val()
+        if !step? || step.length == 0
+          stepInput.val(@STEP_DEFAULT_VALUE)
+          step = @STEP_DEFAULT_VALUE
         step = parseInt(step)
         min = parseInt(stepInput.attr('min'))
         max = parseInt(stepInput.attr('max'))
         if step < min || step > max
           return
-
         stepx = step
         stepy = step
-
         top = window.scrollContents.scrollTop() - @GRIDVIEW_SIZE * 0.5
         top -= top % stepy
         if top < 0
@@ -231,7 +232,7 @@ class WorktableSetting
   class @PositionAndScale
     # コンフィグ初期化
     @initConfig = ->
-      rootEmt = $("##{@ROOT_ID_NAME}")
+      rootEmt = $("##{WorktableSetting.ROOT_ID_NAME}")
       # 画面座標
       position = PageValue.getWorktableScrollContentsPosition()
       $('.display_position_x', rootEmt).val(parseInt(position.left))
@@ -261,27 +262,38 @@ class WorktableSetting
           LocalStorage.saveGeneralPageValue()
       )
 
-      # Zoom (1〜5)
-      worktableScale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale())
-      if !worktableScale
-        worktableScale = 1.0
-      $('.scale', rootEmt).val(worktableScale)
-      $('.scale', rootEmt).off('keypress focusout').on('keypress focusout', (e) ->
-        if (e.type == 'keypress' && e.keyCode == Constant.KeyboardKeyCode.ENTER) || e.type == 'focusout'
-          # Zoom実行
-          worktableScale = $('.scale', rootEmt).val()
-          if worktableScale < 1
-            worktableScale = 1
-          else if worktableScale > 5
-            worktableScale = 5
+      # Zoom (0.1 〜 5.0)
+      min = 0.1
+      max = 5.0
+      worktableScale = WorktableCommon.getWorktableViewScale()
+      meterElement = $(".scale_meter:first", rootEmt)
+      valueElement = meterElement.prev('input:first')
+      v = worktableScale * 100 + '%'
+      valueElement.val(v)
+      valueElement.html(v)
+      try
+        meterElement.slider('destroy')
+      catch #例外は握りつぶす
+      meterElement.slider({
+        min: min,
+        max: max,
+        step: 0.1,
+        value: worktableScale
+        slide: (event, ui) =>
+          valueElement.val(ui.value)
+          valueElement.html(ui.value)
 
-          $('.scale', rootEmt).val(worktableScale)
-          PageValue.setGeneralPageValue(PageValue.Key.worktableScale(), worktableScale)
-          Common.applyViewScale()
-          LocalStorage.saveGeneralPageValue()
-      )
+          if window.scaleSliderTimer?
+            clearTimeout(window.scaleSliderTimer)
+            window.scaleSliderTimer = null
+          window.scaleSliderTimer = setTimeout( =>
+            WorktableCommon.setWorktableViewScale(ui.value)
+            Common.applyViewScale()
+            LocalStorage.saveGeneralPageValue()
+          , 50)
+      })
 
       # limit
       $('.display_position_left_limit', rootEmt).html("(#{leftMin} 〜 #{leftMax})")
       $('.display_position_top_limit', rootEmt).html("(#{topMin} 〜 #{topMax})")
-      $('.display_position_scale_limit', rootEmt).html("(1 〜 5)")
+      $('.display_position_scale_limit', rootEmt).html("(10% 〜 500%)")

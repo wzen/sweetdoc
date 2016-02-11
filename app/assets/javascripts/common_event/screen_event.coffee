@@ -56,12 +56,17 @@ class ScreenEvent extends CommonEvent
     refresh: (show = true, callback = null) ->
       if window.isWorkTable
         WorktableCommon.initScrollContentsPosition()
-      _setScale.call(@, 1.0)
+      s = null
+      if window.isWorkTable
+        s = WorktableCommon.getWorktableViewScale()
+      else
+        s = 1.0
+      _setScale.call(@, s)
       # オーバーレイ削除
       $('#preview_position_overlay').remove()
       $('.keep_mag_base').remove()
       # 倍率を戻す
-      @_scale = 1.0
+      @_scale = s
       if callback?
         callback()
 
@@ -85,7 +90,7 @@ class ScreenEvent extends CommonEvent
         @_progressY = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY)
         @_progressScale = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ)
         if @_keepDispMag
-          _setScale.call(@, 1.0)
+          _setScale.call(@, WorktableCommon.getWorktableViewScale())
           _overlay.call(@, @_progressX, @_progressY, @_progressScale)
         else
           _setScale.call(@, @_progressScale)
@@ -98,10 +103,10 @@ class ScreenEvent extends CommonEvent
       @_progressScale = (parseFloat(@_specificMethodValues.afterZ) - @nowScale) * (opt.progress / opt.progressMax) + @nowScale
       @_progressX = ((parseFloat(@_specificMethodValues.afterX) - @nowX) * (opt.progress / opt.progressMax)) + @nowX
       @_progressY = ((parseFloat(@_specificMethodValues.afterY) - @nowY) * (opt.progress / opt.progressMax)) + @nowY
-      if opt.isPreview
+      if window.isWorkTable && opt.isPreview
         _overlay.call(@, @_progressX, @_progressY, @_progressScale)
         if @_keepDispMag
-          _setScale.call(@, 1.0)
+          _setScale.call(@, WorktableCommon.getWorktableViewScale())
 
       if !@_keepDispMag
         _setScale.call(@, @_progressScale)
@@ -185,7 +190,12 @@ class ScreenEvent extends CommonEvent
     @resetNowScale = ->
       if ScreenEvent.hasInstanceCache()
         se = new ScreenEvent()
-        se.scale = 1.0
+        s = null
+        if window.isWorkTable
+          s = WorktableCommon.getWorktableViewScale()
+        else
+          s = 1.0
+        se.scale = s
 
     _overlay = (x, y, scale) ->
       _drawOverlay = (context, x, y, width, height, scale) ->
@@ -202,7 +212,7 @@ class ScreenEvent extends CommonEvent
         context.beginPath();
         context.rect(0, 0, width, height);
         # 枠を作成
-        size = _convertCenterCoodToSize.call(@, x, y, Common.scaleFromViewRate)
+        size = _convertCenterCoodToSize.call(@, x, y, WorktableCommon.getWorktableViewScale())
         w = size.width / scale
         h = size.height / scale
         top = y - h / 2.0
@@ -211,7 +221,7 @@ class ScreenEvent extends CommonEvent
         context.fill()
         context.restore()
 
-      if @_keepDispMag && scale > Common.scaleFromViewRate
+      if @_keepDispMag && scale > WorktableCommon.getWorktableViewScale()
         overlay = $('#preview_position_overlay')
         if !overlay? || overlay.length == 0
           # オーバーレイを被せる
@@ -226,15 +236,6 @@ class ScreenEvent extends CommonEvent
       else
         # オーバーレイ削除
         $('#preview_position_overlay').remove()
-
-    _drawKeepDispRect = (x, y, scale) ->
-      $('.keep_mag_base').remove()
-
-      if scale > Common.scaleFromViewRate
-        size = _convertCenterCoodToSize.call(@, x, y, scale)
-        style = "position:absolute;top:#{size.top}px;left:#{size.left}px;width:#{size.width}px;height:#{size.height}px;"
-        emt = $("<div class='keep_mag_base' style='#{style}'></div>")
-        window.scrollInside.append(emt)
 
     _convertCenterCoodToSize = (x, y, scale) ->
       screenSize = Common.getScreenSize()
@@ -253,7 +254,7 @@ class ScreenEvent extends CommonEvent
 
     _getInitConfigScale = ->
       if window.isWorkTable && !window.previewRunning
-        return 1.0
+        return WorktableCommon.getWorktableViewScale()
       return @initConfigScale
 
   @CLASS_DIST_TOKEN = @PrivateClass.CLASS_DIST_TOKEN

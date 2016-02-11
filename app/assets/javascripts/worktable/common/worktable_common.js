@@ -482,6 +482,19 @@ WorktableCommon = (function() {
     })(this));
   };
 
+  WorktableCommon.getWorktableViewScale = function() {
+    var scale;
+    scale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale());
+    if (scale == null) {
+      scale = 1.0;
+    }
+    return parseFloat(scale);
+  };
+
+  WorktableCommon.setWorktableViewScale = function(scale) {
+    return PageValue.setGeneralPageValue(PageValue.Key.worktableScale(), scale);
+  };
+
   WorktableCommon.setupContextMenu = function(element, contextSelector, menu) {
     return Common.setupContextMenu(element, contextSelector, {
       menu: menu,

@@ -1,7 +1,5 @@
 # アプリ内の共通メソッドクラス
 class Common
-  @scaleFromViewRate = 1.0
-
   constant = gon.const
   # @property [String] MAIN_TEMP_ID mainコンテンツテンプレート
   @MAIN_TEMP_ID = constant.ElementAttribute.MAIN_TEMP_ID
@@ -206,15 +204,16 @@ class Common
   # 画面スケールの設定
   @applyViewScale = (isViewResize = false) ->
     if window.isWorkTable && !window.previewRunning
-      # FIXME: Worktableの倍率にする
-      window.mainWrapper.css({transform: '', width: "", height: ""})
+      scale = WorktableCommon.getWorktableViewScale()
+      updateMainWrapperPercent = 100 / scale
+      window.mainWrapper.css({transform: "scale(#{scale}, #{scale})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
       return
 
-    worktableScale = 1.0
-    if window.isWorkTable
-      worktableScale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale())
-      if !worktableScale?
-        worktableScale = 1.0
+    scaleFromViewRate = window.runScaleFromViewRate
+    if window.isWorkTable && window.previewRunning
+      # プレビューではプロジェクトのビューは縮めないため、倍率は1.0固定
+      scaleFromViewRate = 1.0
+
     seScale = 1.0
     if ScreenEvent.hasInstanceCache()
       se = new ScreenEvent()
@@ -222,8 +221,8 @@ class Common
         seScale = se.getNowProgressScale()
       else
         seScale = se.getNowScale()
-    scale = worktableScale * Common.scaleFromViewRate * seScale
-    updateMainWrapperPercent = 100 / Common.scaleFromViewRate
+    scale = scaleFromViewRate * seScale
+    updateMainWrapperPercent = 100 / scaleFromViewRate
     window.mainWrapper.css({transform: "scale(#{scale}, #{scale})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
 
   # Canvasサイズ更新
@@ -410,8 +409,8 @@ class Common
     if ScreenEvent.hasInstanceCache()
       se = new ScreenEvent()
       scale = se.getNowScale()
-      if se._keepDispMag? && se._keepDispMag
-        scale = 1.0
+      if window.isWorkTable && se._keepDispMag? && se._keepDispMag
+        scale = WorktableCommon.getWorktableViewScale()
     return {
       width: window.scrollContents.width() / scale
       height: window.scrollContents.height() / scale

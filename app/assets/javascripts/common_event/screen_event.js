@@ -14,7 +14,7 @@ ScreenEvent = (function(superClass) {
   ScreenEvent.instance = {};
 
   ScreenEvent.PrivateClass = (function(superClass1) {
-    var _convertCenterCoodToSize, _drawKeepDispRect, _getInitConfigScale, _getScale, _overlay, _setScale;
+    var _convertCenterCoodToSize, _getInitConfigScale, _getScale, _overlay, _setScale;
 
     extend(PrivateClass, superClass1);
 
@@ -72,6 +72,7 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.prototype.refresh = function(show, callback) {
+      var s;
       if (show == null) {
         show = true;
       }
@@ -81,10 +82,16 @@ ScreenEvent = (function(superClass) {
       if (window.isWorkTable) {
         WorktableCommon.initScrollContentsPosition();
       }
-      _setScale.call(this, 1.0);
+      s = null;
+      if (window.isWorkTable) {
+        s = WorktableCommon.getWorktableViewScale();
+      } else {
+        s = 1.0;
+      }
+      _setScale.call(this, s);
       $('#preview_position_overlay').remove();
       $('.keep_mag_base').remove();
-      this._scale = 1.0;
+      this._scale = s;
       if (callback != null) {
         return callback();
       }
@@ -113,7 +120,7 @@ ScreenEvent = (function(superClass) {
         this._progressY = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY);
         this._progressScale = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ);
         if (this._keepDispMag) {
-          _setScale.call(this, 1.0);
+          _setScale.call(this, WorktableCommon.getWorktableViewScale());
           return _overlay.call(this, this._progressX, this._progressY, this._progressScale);
         } else {
           _setScale.call(this, this._progressScale);
@@ -129,10 +136,10 @@ ScreenEvent = (function(superClass) {
       this._progressScale = (parseFloat(this._specificMethodValues.afterZ) - this.nowScale) * (opt.progress / opt.progressMax) + this.nowScale;
       this._progressX = ((parseFloat(this._specificMethodValues.afterX) - this.nowX) * (opt.progress / opt.progressMax)) + this.nowX;
       this._progressY = ((parseFloat(this._specificMethodValues.afterY) - this.nowY) * (opt.progress / opt.progressMax)) + this.nowY;
-      if (opt.isPreview) {
+      if (window.isWorkTable && opt.isPreview) {
         _overlay.call(this, this._progressX, this._progressY, this._progressScale);
         if (this._keepDispMag) {
-          _setScale.call(this, 1.0);
+          _setScale.call(this, WorktableCommon.getWorktableViewScale());
         }
       }
       if (!this._keepDispMag) {
@@ -235,10 +242,16 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.resetNowScale = function() {
-      var se;
+      var s, se;
       if (ScreenEvent.hasInstanceCache()) {
         se = new ScreenEvent();
-        return se.scale = 1.0;
+        s = null;
+        if (window.isWorkTable) {
+          s = WorktableCommon.getWorktableViewScale();
+        } else {
+          s = 1.0;
+        }
+        return se.scale = s;
       }
     };
 
@@ -258,7 +271,7 @@ ScreenEvent = (function(superClass) {
         context.fillStyle = "rgba(33, 33, 33, 0.5)";
         context.beginPath();
         context.rect(0, 0, width, height);
-        size = _convertCenterCoodToSize.call(this, x, y, Common.scaleFromViewRate);
+        size = _convertCenterCoodToSize.call(this, x, y, WorktableCommon.getWorktableViewScale());
         w = size.width / scale;
         h = size.height / scale;
         top = y - h / 2.0;
@@ -267,7 +280,7 @@ ScreenEvent = (function(superClass) {
         context.fill();
         return context.restore();
       };
-      if (this._keepDispMag && scale > Common.scaleFromViewRate) {
+      if (this._keepDispMag && scale > WorktableCommon.getWorktableViewScale()) {
         overlay = $('#preview_position_overlay');
         if ((overlay == null) || overlay.length === 0) {
           w = $(window.drawingCanvas).attr('width');
@@ -280,17 +293,6 @@ ScreenEvent = (function(superClass) {
         return _drawOverlay.call(this, canvasContext, x, y, overlay.width(), overlay.height(), scale);
       } else {
         return $('#preview_position_overlay').remove();
-      }
-    };
-
-    _drawKeepDispRect = function(x, y, scale) {
-      var emt, size, style;
-      $('.keep_mag_base').remove();
-      if (scale > Common.scaleFromViewRate) {
-        size = _convertCenterCoodToSize.call(this, x, y, scale);
-        style = "position:absolute;top:" + size.top + "px;left:" + size.left + "px;width:" + size.width + "px;height:" + size.height + "px;";
-        emt = $("<div class='keep_mag_base' style='" + style + "'></div>");
-        return window.scrollInside.append(emt);
       }
     };
 
@@ -320,7 +322,7 @@ ScreenEvent = (function(superClass) {
 
     _getInitConfigScale = function() {
       if (window.isWorkTable && !window.previewRunning) {
-        return 1.0;
+        return WorktableCommon.getWorktableViewScale();
       }
       return this.initConfigScale;
     };

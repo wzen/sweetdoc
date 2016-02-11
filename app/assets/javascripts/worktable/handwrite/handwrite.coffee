@@ -31,9 +31,7 @@ class Handwrite
       # @param [Array] e ウィンドウ座標
       # @return [Array] Canvas座標
       _calcCanvasLoc = (e) =>
-        worktableScale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale())
-        if !worktableScale
-          worktableScale = 1.0
+        worktableScale = WorktableCommon.getWorktableViewScale()
         x = (e.x || e.clientX) / worktableScale
         y = (e.y || e.clientY) / worktableScale
         return _windowToCanvas(drawingCanvas, x, y)

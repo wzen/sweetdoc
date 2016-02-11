@@ -24,10 +24,13 @@
       </div>
       <div class="configBox">
         <div class="settingedit-headliner"><%= I18n.t('config.worktable_setting.zoom') %></div>
-        <div style="display:table">
+        <div class="forms">
           <!-- Scale -->
-          <div>
-            Scale: <input type="number" class="scale" value="">
+          <div class="meter">
+            Scale: <input type="text" class="slider-value" value="0" readonly="">
+            <div class="scale_meter slider ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
+              <a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+            </div>
           </div>
           <div>
             <div class="display_position_scale_limit" style="float: right">

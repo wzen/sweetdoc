@@ -6,8 +6,6 @@ Common = (function() {
 
   function Common() {}
 
-  Common.scaleFromViewRate = 1.0;
-
   constant = gon["const"];
 
   Common.MAIN_TEMP_ID = constant.ElementAttribute.MAIN_TEMP_ID;
@@ -246,24 +244,23 @@ Common = (function() {
   };
 
   Common.applyViewScale = function(isViewResize) {
-    var scale, se, seScale, updateMainWrapperPercent, worktableScale;
+    var scale, scaleFromViewRate, se, seScale, updateMainWrapperPercent;
     if (isViewResize == null) {
       isViewResize = false;
     }
     if (window.isWorkTable && !window.previewRunning) {
+      scale = WorktableCommon.getWorktableViewScale();
+      updateMainWrapperPercent = 100 / scale;
       window.mainWrapper.css({
-        transform: '',
-        width: "",
-        height: ""
+        transform: "scale(" + scale + ", " + scale + ")",
+        width: updateMainWrapperPercent + "%",
+        height: updateMainWrapperPercent + "%"
       });
       return;
     }
-    worktableScale = 1.0;
-    if (window.isWorkTable) {
-      worktableScale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale());
-      if (worktableScale == null) {
-        worktableScale = 1.0;
-      }
+    scaleFromViewRate = window.runScaleFromViewRate;
+    if (window.isWorkTable && window.previewRunning) {
+      scaleFromViewRate = 1.0;
     }
     seScale = 1.0;
     if (ScreenEvent.hasInstanceCache()) {
@@ -274,8 +271,8 @@ Common = (function() {
         seScale = se.getNowScale();
       }
     }
-    scale = worktableScale * Common.scaleFromViewRate * seScale;
-    updateMainWrapperPercent = 100 / Common.scaleFromViewRate;
+    scale = scaleFromViewRate * seScale;
+    updateMainWrapperPercent = 100 / scaleFromViewRate;
     return window.mainWrapper.css({
       transform: "scale(" + scale + ", " + scale + ")",
       width: updateMainWrapperPercent + "%",
@@ -548,8 +545,8 @@ Common = (function() {
     if (ScreenEvent.hasInstanceCache()) {
       se = new ScreenEvent();
       scale = se.getNowScale();
-      if ((se._keepDispMag != null) && se._keepDispMag) {
-        scale = 1.0;
+      if (window.isWorkTable && (se._keepDispMag != null) && se._keepDispMag) {
+        scale = WorktableCommon.getWorktableViewScale();
       }
     }
     return {

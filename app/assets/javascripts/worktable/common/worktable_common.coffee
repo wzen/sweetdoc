@@ -451,6 +451,17 @@ class WorktableCommon
       $('#timeline').hide()
     )
 
+  # ワークテーブルの画面倍率を取得
+  @getWorktableViewScale = ->
+    scale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale())
+    if !scale?
+      scale = 1.0
+    return parseFloat(scale)
+
+  # ワークテーブルの画面倍率を設定
+  @setWorktableViewScale = (scale) ->
+    PageValue.setGeneralPageValue(PageValue.Key.worktableScale(), scale)
+
   # コンテキストメニュー初期化
   # @param [String] elementID HTML要素ID
   # @param [String] contextSelector
