@@ -214,6 +214,14 @@ Sidebar = (function() {
     }
   };
 
+  Sidebar.resizeConfigHeight = function() {
+    var contentsHeight, padding, tabHeight;
+    contentsHeight = $('#contents').height();
+    tabHeight = 39;
+    padding = 5;
+    return $('#myTabContent').height(contentsHeight - tabHeight - padding * 2);
+  };
+
   return Sidebar;
 
 })();

@@ -215,8 +215,7 @@ div.scroll_background, div.scroll_inside {
       position:relative;
       margin:0 auto;
       overflow:hidden;
-      padding:5px;
-      height:50px;
+      height:39px;
 
       .nav-tabs {
         position:absolute;
@@ -235,6 +234,19 @@ div.scroll_background, div.scroll_inside {
         cursor:-webkit-grab;
         color:#efefef;
         vertical-align:middle;
+      }
+    }
+    #myTabContent {
+      .tab-pane {
+        height: 100%;
+        > div {
+          height: 100%;
+          padding-top: 10px;
+          padding-bottom: 10px;
+        }
+        .configBox {
+          margin-bottom: 10px;
+        }
       }
     }
   }

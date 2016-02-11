@@ -130,9 +130,6 @@ class Sidebar
         $('.scroller-left', root).hide();
 
     reAdjust();
-#    $(window).on('resize', (e) ->
-#      reAdjust()
-#    )
     $('.scroller-right', root).off('click').on('click', ->
       $('.scroller-left', root).fadeIn('fast');
       $('.scroller-right', root).fadeOut('fast');
@@ -175,3 +172,9 @@ class Sidebar
         )
     else
       $('#sidebar .cover_touch_overlay').remove()
+
+  @resizeConfigHeight = ->
+    contentsHeight = $('#contents').height()
+    tabHeight = 39
+    padding = 5
+    $('#myTabContent').height(contentsHeight - tabHeight - padding * 2)

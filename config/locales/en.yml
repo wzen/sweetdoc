@@ -76,6 +76,10 @@ en:
     edit: "Edit"
     preview: "Preview"
   config:
+    tab:
+      beginning_event_state: "Beginning State"
+      worktable_setting: "Worktable Setting"
+      item_state: "Item State"
     state:
       page_num: "Page number"
       page_select_option: 'Page'

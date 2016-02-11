@@ -330,6 +330,7 @@ class WorktableCommon
     @updateMainViewSize()
     Common.updateCanvasSize()
     Common.updateScrollContentsFromScreenEventVar()
+    Sidebar.resizeConfigHeight()
 
   # ウィンドウリサイズイベント
   @resizeEvent = ->
@@ -395,6 +396,8 @@ class WorktableCommon
     Common.applyEnvironmentFromPagevalue()
     # Mainビュー高さ設定
     @updateMainViewSize()
+    # コンフィグ高さ設定
+    Sidebar.resizeConfigHeight()
     # 共通設定
     WorktableSetting.initConfig()
     # 選択アイテム初期化

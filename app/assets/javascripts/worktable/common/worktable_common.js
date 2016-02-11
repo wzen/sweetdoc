@@ -371,7 +371,8 @@ WorktableCommon = (function() {
   WorktableCommon.resizeMainContainerEvent = function() {
     this.updateMainViewSize();
     Common.updateCanvasSize();
-    return Common.updateScrollContentsFromScreenEventVar();
+    Common.updateScrollContentsFromScreenEventVar();
+    return Sidebar.resizeConfigHeight();
   };
 
   WorktableCommon.resizeEvent = function() {
@@ -436,6 +437,7 @@ WorktableCommon = (function() {
     })(this));
     Common.applyEnvironmentFromPagevalue();
     this.updateMainViewSize();
+    Sidebar.resizeConfigHeight();
     WorktableSetting.initConfig();
     return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
   };

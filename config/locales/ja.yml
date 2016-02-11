@@ -53,6 +53,10 @@ ja:
     edit: "編集"
     preview: "プレビュー"
   config:
+    tab:
+      beginning_event_state: "イベント開始状態"
+      worktable_setting: "Worktable設定"
+      item_state: "アイテム状態"
     state:
       page_num: "ページ番号"
       page_select_option: 'ページ'
