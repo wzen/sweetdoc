@@ -14,15 +14,10 @@ gem 'sass-rails', '~> 4.0.3'
 gem 'libv8', '3.16.14.7'
 gem 'therubyracer', '0.12.1'
 
-gem 'less-rails', '2.7.0'
-gem 'twitter-bootstrap-rails', '3.2.2'
-
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '2.7.2'
 # Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails', '4.1.0'
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer',  platforms: :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails', '3.1.4'
@@ -70,8 +65,6 @@ group :development, :test do
   gem 'rails-erd', github: 'paulwittmann/rails-erd', branch: 'mavericks'
 end
 
-# memcacheクライアント
-#gem 'dalli', '2.7.4'
 # Redisクライアント
 gem 'redis', '3.2.2'
 gem 'redis-rails', '4.0.0'
@@ -102,9 +95,6 @@ gem 'turnout'
 
 # 環境変数管理
 gem 'dotenv-rails'
-
-#gem "facets", require: false
-#gem 'fastimage'
 
 # Use HBase
 #normalgem 'massive_record'

@@ -124,6 +124,59 @@ Sidebar = (function() {
     })(this));
   };
 
+  Sidebar.openStateConfig = function() {
+    var getLeftPosi, reAdjust, root, scrollBarWidths, widthOfHidden, widthOfList;
+    root = $('#tab-config');
+    scrollBarWidths = 40;
+    this.openConfigSidebar();
+    widthOfList = function() {
+      var itemsWidth;
+      itemsWidth = 0;
+      $('.nav-tabs li', root).each(function() {
+        var itemWidth;
+        itemWidth = $(this).outerWidth();
+        return itemsWidth += itemWidth;
+      });
+      return itemsWidth;
+    };
+    widthOfHidden = function() {
+      return (($('.tab-nav-tabs-wrapper', root).outerWidth()) - widthOfList() - getLeftPosi()) - scrollBarWidths;
+    };
+    getLeftPosi = function() {
+      return $('.nav-tabs', root).position().left;
+    };
+    reAdjust = function() {
+      if (($('.tab-nav-tabs-wrapper', root).outerWidth()) < widthOfList()) {
+        $('.scroller-right', root).show();
+      } else {
+        $('.scroller-right', root).hide();
+      }
+      if (getLeftPosi() < 0) {
+        return $('.scroller-left', root).show();
+      } else {
+        $('.item', root).animate({
+          left: "-=" + getLeftPosi() + "px"
+        }, 'fast');
+        return $('.scroller-left', root).hide();
+      }
+    };
+    reAdjust();
+    $('.scroller-right', root).off('click').on('click', function() {
+      $('.scroller-left', root).fadeIn('fast');
+      $('.scroller-right', root).fadeOut('fast');
+      return $('.nav-tabs', root).animate({
+        left: "+=" + widthOfHidden() + "px"
+      }, 'fast');
+    });
+    return $('.scroller-left', root).off('click').on('click', function() {
+      $('.scroller-right', root).fadeIn('fast');
+      $('.scroller-left', root).fadeOut('fast');
+      return $('.nav-tabs', root).animate({
+        left: "-=" + getLeftPosi() + "px"
+      }, 'fast');
+    });
+  };
+
   Sidebar.initItemEditConfig = function(obj, callback) {
     if (callback == null) {
       callback = null;

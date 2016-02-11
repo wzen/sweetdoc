@@ -88,7 +88,7 @@ class Navbar
         StateConfig.initConfig()
         WorktableSetting.initConfig()
         ItemStateConfig.initConfig()
-        Sidebar.openConfigSidebar()
+        Sidebar.openStateConfig()
     )
 
   @switchWorktableNavbarWhenProjectCreated = (flg) ->

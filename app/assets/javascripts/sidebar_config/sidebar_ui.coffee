@@ -97,6 +97,53 @@ class Sidebar
       @openConfigSidebar(target)
     )
 
+  # 状態メニュー表示
+  @openStateConfig = ->
+    root = $('#tab-config')
+    scrollBarWidths = 40;
+    @openConfigSidebar()
+
+    widthOfList = ->
+      itemsWidth = 0
+      $('.nav-tabs li', root).each( ->
+        itemWidth = $(@).outerWidth();
+        itemsWidth+=itemWidth
+      )
+      return itemsWidth
+
+    widthOfHidden = ->
+      return (($('.tab-nav-tabs-wrapper', root).outerWidth())-widthOfList()-getLeftPosi())-scrollBarWidths
+
+    getLeftPosi = ->
+      return $('.nav-tabs', root).position().left
+
+    reAdjust = ->
+      if ($('.tab-nav-tabs-wrapper', root).outerWidth()) < widthOfList()
+        $('.scroller-right', root).show()
+      else
+        $('.scroller-right', root).hide()
+
+      if getLeftPosi()<0
+        $('.scroller-left', root).show()
+      else
+        $('.item', root).animate({left:"-="+getLeftPosi()+"px"},'fast')
+        $('.scroller-left', root).hide();
+
+    reAdjust();
+#    $(window).on('resize', (e) ->
+#      reAdjust()
+#    )
+    $('.scroller-right', root).off('click').on('click', ->
+      $('.scroller-left', root).fadeIn('fast');
+      $('.scroller-right', root).fadeOut('fast');
+      $('.nav-tabs', root).animate({left:"+="+widthOfHidden()+"px"},'fast')
+    )
+    $('.scroller-left', root).off('click').on('click', ->
+      $('.scroller-right', root).fadeIn('fast');
+      $('.scroller-left', root).fadeOut('fast');
+      $('.nav-tabs', root).animate({left:"-="+getLeftPosi()+"px"},'fast')
+    )
+
   # アイテム編集メニュー初期化
   @initItemEditConfig = (obj, callback = null) ->
     # カラーピッカー値を初期化
@@ -128,5 +175,3 @@ class Sidebar
         )
     else
       $('#sidebar .cover_touch_overlay').remove()
-
-

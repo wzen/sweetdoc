@@ -17,5 +17,6 @@ Rails.application.config.assets.precompile = [
 ]
 
 Rails.application.config.assets.precompile += %w(markitup/skins/markitup/*.png markitup/sets/html/*.png)
+Rails.application.config.assets.precompile += %w(*.eot *.svg *.ttf *.woff)
 
 #Rails.application.config.assets.prefix = '/assets'

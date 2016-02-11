@@ -103,7 +103,7 @@ Navbar = (function() {
         StateConfig.initConfig();
         WorktableSetting.initConfig();
         ItemStateConfig.initConfig();
-        return Sidebar.openConfigSidebar();
+        return Sidebar.openStateConfig();
       }
     });
   };

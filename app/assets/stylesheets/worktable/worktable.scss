@@ -195,6 +195,49 @@ div.scroll_background, div.scroll_inside {
   #sidebar-wrapper {
     height: 100%;
   }
+  #tab-config {
+    .scroller {
+      text-align:center;
+      cursor:pointer;
+      display:none;
+      padding:7px;
+      padding-top:11px;
+      white-space:no-wrap;
+      vertical-align:middle;
+    }
+    .scroller-right{
+      float:right;
+    }
+    .scroller-left {
+      float:left;
+    }
+    .tab-nav-tabs-wrapper {
+      position:relative;
+      margin:0 auto;
+      overflow:hidden;
+      padding:5px;
+      height:50px;
+
+      .nav-tabs {
+        position:absolute;
+        left:0px;
+        top:0px;
+        min-width:3000px;
+        margin-left:12px;
+        margin-top:0px;
+      }
+
+      .nav-tabs li{
+        display:table-cell;
+        position:relative;
+        text-align:center;
+        cursor:grab;
+        cursor:-webkit-grab;
+        color:#efefef;
+        vertical-align:middle;
+      }
+    }
+  }
   .sidebar-config {
     overflow: auto;
   }
