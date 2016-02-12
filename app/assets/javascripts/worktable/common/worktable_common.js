@@ -351,14 +351,14 @@ WorktableCommon = (function() {
     var borderWidth, scrollContentsSize, timelineTopPadding;
     borderWidth = 5;
     timelineTopPadding = 5;
+    $('#main').height($('#contents').height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2));
+    $('#sidebar').height($('#contents').height() - (borderWidth * 2));
     scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
     if (scrollContentsSize != null) {
-      $('#main').height($('#contents').height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2));
-      window.scrollContentsSize = {
+      return window.scrollContentsSize = {
         width: scrollContentsSize.width,
         height: scrollContentsSize.height
       };
-      return $('#sidebar').height($('#contents').height() - (borderWidth * 2));
     }
   };
 
