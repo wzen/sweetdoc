@@ -203,33 +203,36 @@ class Common
 
   # 画面スケールの設定
   @applyViewScale = (isViewResize = false) ->
+    updateMainWrapperPercent = null
+    scale = null
     if window.isWorkTable && !window.previewRunning
+      # ワークテーブルの倍率に設定
       scale = WorktableCommon.getWorktableViewScale()
       updateMainWrapperPercent = 100 / scale
-      window.mainWrapper.css({transform: "scale(#{scale}, #{scale})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
-      return
+    else
+      scaleFromViewRate = window.runScaleFromViewRate
+      if window.isWorkTable && window.previewRunning
+        # プレビューではプロジェクトのビューは縮めないため、倍率は1.0固定
+        scaleFromViewRate = 1.0
 
-    scaleFromViewRate = window.runScaleFromViewRate
-    if window.isWorkTable && window.previewRunning
-      # プレビューではプロジェクトのビューは縮めないため、倍率は1.0固定
-      scaleFromViewRate = 1.0
-
-    seScale = 1.0
-    if ScreenEvent.hasInstanceCache()
-      se = new ScreenEvent()
-      if isViewResize
-        seScale = se.getNowProgressScale()
-      else
-        seScale = se.getNowScale()
-    scale = scaleFromViewRate * seScale
-    updateMainWrapperPercent = 100 / scaleFromViewRate
+      seScale = 1.0
+      if ScreenEvent.hasInstanceCache()
+        se = new ScreenEvent()
+        if isViewResize
+          seScale = se.getNowProgressScale()
+        else
+          seScale = se.getNowScale()
+      scale = scaleFromViewRate * seScale
+      updateMainWrapperPercent = 100 / scaleFromViewRate
+    # キャンパスサイズ更新
+    @updateCanvasSize(updateMainWrapperPercent)
     window.mainWrapper.css({transform: "scale(#{scale}, #{scale})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
 
   # Canvasサイズ更新
-  @updateCanvasSize = ->
+  @updateCanvasSize = (mainWrapperViewPercent = 100) ->
     if window.drawingCanvas?
-      $(window.drawingCanvas).attr('width', $('#pages').width())
-      $(window.drawingCanvas).attr('height', $('#pages').height())
+      $(window.drawingCanvas).attr('width', $('#pages').width() * mainWrapperViewPercent * 0.01)
+      $(window.drawingCanvas).attr('height', $('#pages').height() * mainWrapperViewPercent * 0.01)
 
   # リサイズイベント設定
   @initResize = (resizeEvent = null) ->

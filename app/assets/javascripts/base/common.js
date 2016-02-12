@@ -248,31 +248,29 @@ Common = (function() {
     if (isViewResize == null) {
       isViewResize = false;
     }
+    updateMainWrapperPercent = null;
+    scale = null;
     if (window.isWorkTable && !window.previewRunning) {
       scale = WorktableCommon.getWorktableViewScale();
       updateMainWrapperPercent = 100 / scale;
-      window.mainWrapper.css({
-        transform: "scale(" + scale + ", " + scale + ")",
-        width: updateMainWrapperPercent + "%",
-        height: updateMainWrapperPercent + "%"
-      });
-      return;
-    }
-    scaleFromViewRate = window.runScaleFromViewRate;
-    if (window.isWorkTable && window.previewRunning) {
-      scaleFromViewRate = 1.0;
-    }
-    seScale = 1.0;
-    if (ScreenEvent.hasInstanceCache()) {
-      se = new ScreenEvent();
-      if (isViewResize) {
-        seScale = se.getNowProgressScale();
-      } else {
-        seScale = se.getNowScale();
+    } else {
+      scaleFromViewRate = window.runScaleFromViewRate;
+      if (window.isWorkTable && window.previewRunning) {
+        scaleFromViewRate = 1.0;
       }
+      seScale = 1.0;
+      if (ScreenEvent.hasInstanceCache()) {
+        se = new ScreenEvent();
+        if (isViewResize) {
+          seScale = se.getNowProgressScale();
+        } else {
+          seScale = se.getNowScale();
+        }
+      }
+      scale = scaleFromViewRate * seScale;
+      updateMainWrapperPercent = 100 / scaleFromViewRate;
     }
-    scale = scaleFromViewRate * seScale;
-    updateMainWrapperPercent = 100 / scaleFromViewRate;
+    this.updateCanvasSize(updateMainWrapperPercent);
     return window.mainWrapper.css({
       transform: "scale(" + scale + ", " + scale + ")",
       width: updateMainWrapperPercent + "%",
@@ -280,10 +278,13 @@ Common = (function() {
     });
   };
 
-  Common.updateCanvasSize = function() {
+  Common.updateCanvasSize = function(mainWrapperViewPercent) {
+    if (mainWrapperViewPercent == null) {
+      mainWrapperViewPercent = 100;
+    }
     if (window.drawingCanvas != null) {
-      $(window.drawingCanvas).attr('width', $('#pages').width());
-      return $(window.drawingCanvas).attr('height', $('#pages').height());
+      $(window.drawingCanvas).attr('width', $('#pages').width() * mainWrapperViewPercent * 0.01);
+      return $(window.drawingCanvas).attr('height', $('#pages').height() * mainWrapperViewPercent * 0.01);
     }
   };
 

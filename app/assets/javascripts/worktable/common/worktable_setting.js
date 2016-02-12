@@ -276,6 +276,9 @@ WorktableSetting = (function() {
 
     PositionAndScale.initConfig = function() {
       var center, leftMax, leftMin, max, meterElement, min, position, rootEmt, topMax, topMin, v, valueElement, worktableScale;
+      if (Common.getScreenSize() == null) {
+        return;
+      }
       rootEmt = $("#" + WorktableSetting.ROOT_ID_NAME);
       position = PageValue.getWorktableScrollContentsPosition();
       center = WorktableCommon.calcScrollCenterPosition(position.top, position.left);

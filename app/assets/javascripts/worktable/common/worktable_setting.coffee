@@ -232,6 +232,9 @@ class WorktableSetting
   class @PositionAndScale
     # コンフィグ初期化
     @initConfig = ->
+      if !Common.getScreenSize()?
+        return
+
       rootEmt = $("##{WorktableSetting.ROOT_ID_NAME}")
       # 画面座標
       position = PageValue.getWorktableScrollContentsPosition()
