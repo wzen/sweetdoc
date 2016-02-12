@@ -22,18 +22,6 @@
                     <%= content[Const::Gallery::Key::TITLE] %>
                 <% end %>
             </div>
-            <div class="caption_wrapper">
-                <% if !content[Const::Gallery::Key::CAPTION].nil? %>
-                    <%== content[Const::Gallery::Key::CAPTION] %>
-                <% end %>
-            </div>
-            <div class="tags_wrapper">
-                <% if !content[Const::Gallery::Key::TAGS].nil? %>
-                    <% content[Const::Gallery::Key::TAGS].each do |tag| %>
-                        <%= tag.name %>
-                    <% end %>
-                <% end %>
-            </div>
           </div>
           <a class="detail_link" href="<%= "/gallery/detail/#{content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]}" %>" ></a>
         </div>
