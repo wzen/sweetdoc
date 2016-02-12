@@ -51,6 +51,8 @@ $ ->
       WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
         # 共通イベントのインスタンス作成
         WorktableCommon.createCommonEventInstancesIfNeeded()
+        # スクロール位置更新
+        WorktableCommon.initScrollContentsPosition()
         _callback.call(@)
         # ナビバーをプロジェクト作成後状態に
         Navbar.switchWorktableNavbarWhenProjectCreated(true)

@@ -392,20 +392,22 @@ Project = (function() {
           scrollWrapper = modalEmt.find('.am_scroll_wrapper:first');
           scrollContents = scrollWrapper.children('div:first');
           scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
-          scrollWrapper.animate({
-            scrollLeft: scrollContentsSize.width
-          }, 200);
-          _initEditInput.call(_this);
-          return _loadEditInput($(e.target), function(project) {
-            var inputWrapper;
-            inputWrapper = modalEmt.find('.am_input_wrapper:first');
-            inputWrapper.find('.project_name:first').val(project.title);
-            inputWrapper.find('.display_size_input_width:first').val(project.screen_width);
-            inputWrapper.find('.display_size_input_height:first').val(project.screen_height);
-            inputWrapper.find("." + Constant.Project.Key.PROJECT_ID + ":first").val(project.id);
-            _settingEditInputEvent.call(_this);
-            return inputWrapper.show();
-          });
+          if (scrollContentsSize != null) {
+            scrollWrapper.animate({
+              scrollLeft: scrollContentsSize.width
+            }, 200);
+            _initEditInput.call(_this);
+            return _loadEditInput($(e.target), function(project) {
+              var inputWrapper;
+              inputWrapper = modalEmt.find('.am_input_wrapper:first');
+              inputWrapper.find('.project_name:first').val(project.title);
+              inputWrapper.find('.display_size_input_width:first').val(project.screen_width);
+              inputWrapper.find('.display_size_input_height:first').val(project.screen_height);
+              inputWrapper.find("." + Constant.Project.Key.PROJECT_ID + ":first").val(project.id);
+              _settingEditInputEvent.call(_this);
+              return inputWrapper.show();
+            });
+          }
         });
         modalEmt.find('.am_row .remove_button').off('click').on('click', function(e) {
           var deletedProjectId;

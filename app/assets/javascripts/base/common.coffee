@@ -194,6 +194,7 @@ class Common
 
   # スクロール位置初期化
   @initScrollContentsPosition = ->
+    # スクリーンイベントのインスタンスが作成されている場合のみ
     if window.isWorkTable
       WorktableCommon.initScrollContentsPosition()
     else
@@ -341,21 +342,25 @@ class Common
 
     # col-xs-9 → 75% padding → 15px
     scrollContentsSize = @scrollContentsSizeUnderScreenEventScale()
-    diff = {top: 0, left: 0}
-    if $(target).get(0).offsetParent?
-      diff =
-        top: (scrollContents.scrollTop() + (scrollContentsSize.height - $(target).height()) * 0.5) - $(target).get(0).offsetTop
-        left: (scrollContents.scrollLeft() + (scrollContentsSize.width - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
-#      if window.runDebug
-#        console.log('$(target).get(0).offsetTop:' + $(target).get(0).offsetTop)
-#        console.log('$(target).get(0).offsetLeft:' + $(target).get(0).offsetLeft)
+    if scrollContentsSize?
+      diff = {top: 0, left: 0}
+      if $(target).get(0).offsetParent?
+        diff =
+          top: (scrollContents.scrollTop() + (scrollContentsSize.height - $(target).height()) * 0.5) - $(target).get(0).offsetTop
+          left: (scrollContents.scrollLeft() + (scrollContentsSize.width - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
+  #      if window.runDebug
+  #        console.log('$(target).get(0).offsetTop:' + $(target).get(0).offsetTop)
+  #        console.log('$(target).get(0).offsetLeft:' + $(target).get(0).offsetLeft)
 
-#    if window.runDebug
-#      console.log('focusToTarget diff')
-#      console.log(diff)
-    top = scrollContents.scrollTop() + (scrollContentsSize.height * 0.5) - diff.top
-    left = scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5) - diff.left
-    @updateScrollContentsPosition(top, left, immediate, withUpdatePageValue, callback)
+  #    if window.runDebug
+  #      console.log('focusToTarget diff')
+  #      console.log(diff)
+      top = scrollContents.scrollTop() + (scrollContentsSize.height * 0.5) - diff.top
+      left = scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5) - diff.left
+      @updateScrollContentsPosition(top, left, immediate, withUpdatePageValue, callback)
+    else
+      if callback?
+        callback()
 
   # スクロール位置の更新
   # @param [Float] top Y中央値
@@ -365,32 +370,36 @@ class Common
       @saveDisplayPosition(top, left, true)
 
     scrollContentsSize = @scrollContentsSizeUnderScreenEventScale()
-    top -= scrollContentsSize.height * 0.5
-    left -= scrollContentsSize.width * 0.5
-    if top <= 0 && left <= 0
-      # 不正なスクロールを防止
-      if window.runDebug
-        console.log('Invalid ScrollValue')
-      return
+    if scrollContentsSize?
+      top -= scrollContentsSize.height * 0.5
+      left -= scrollContentsSize.width * 0.5
+      if top <= 0 && left <= 0
+        # 不正なスクロールを防止
+        if window.runDebug
+          console.log('Invalid ScrollValue')
+        return
 
-    if immediate
-      window.skipScrollEvent = true
-      window.scrollContents.scrollTop(top)
-      window.scrollContents.scrollLeft(left)
-      if callback?
-        callback()
-    else
-      window.skipScrollEventByAnimation = true
-      window.scrollContents.animate(
-        {
-          scrollTop: top
-          scrollLeft: left
-        }
-      , 500, ->
-        window.skipScrollEventByAnimation = false
+      if immediate
+        window.skipScrollEvent = true
+        window.scrollContents.scrollTop(top)
+        window.scrollContents.scrollLeft(left)
         if callback?
           callback()
-      )
+      else
+        window.skipScrollEventByAnimation = true
+        window.scrollContents.animate(
+          {
+            scrollTop: top
+            scrollLeft: left
+          }
+        , 500, ->
+          window.skipScrollEventByAnimation = false
+          if callback?
+            callback()
+        )
+    else
+      if callback?
+        callback()
 
   # スクロール位置を再設定
   @adjustScrollContentsPosition: ->
@@ -429,11 +438,12 @@ class Common
       , 500)
 
   @scrollContentsSizeUnderScreenEventScale = ->
-    scale = 1.0
-    if ScreenEvent.hasInstanceCache()
-      se = new ScreenEvent()
-      scale = se.getNowScale()
+    if !ScreenEvent.hasInstanceCache()
+      # ScreenEventが作成されていない場合はNULL
+      return null
 
+    se = new ScreenEvent()
+    scale = se.getNowScale()
     if window.runDebug
       console.log('scrollContentsSizeUnderScreenEventScale:' + scale)
     return {

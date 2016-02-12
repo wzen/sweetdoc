@@ -54,14 +54,15 @@ class ScreenEvent extends CommonEvent
 
     # 変更を戻して再表示
     refresh: (show = true, callback = null) ->
-      if window.isWorkTable
-        WorktableCommon.initScrollContentsPosition()
       s = null
       if window.isWorkTable
         s = WorktableCommon.getWorktableViewScale()
       else
         s = 1.0
       _setScale.call(@, s)
+      if window.isWorkTable
+        # スクロール位置更新
+        WorktableCommon.initScrollContentsPosition()
       # オーバーレイ削除
       $('#preview_position_overlay').remove()
       $('.keep_mag_base').remove()
@@ -79,7 +80,8 @@ class ScreenEvent extends CommonEvent
           _setScale.call(@, @nowScale)
           size = _convertCenterCoodToSize.call(@, @nowX, @nowY, @nowScale)
           scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
-          Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
+          if scrollContentsSize?
+            Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 
     # イベント後の表示状態にする
     updateEventAfter: ->
@@ -96,7 +98,8 @@ class ScreenEvent extends CommonEvent
           _setScale.call(@, @_progressScale)
           size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
           scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
-          Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
+          if scrollContentsSize?
+            Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 
     # 画面移動イベント
     changeScreenPosition: (opt) =>
@@ -112,7 +115,8 @@ class ScreenEvent extends CommonEvent
         _setScale.call(@, @_progressScale)
         size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
         scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
-        Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
+        if scrollContentsSize?
+          Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 
     # プレビューを停止
     # @param [Function] callback コールバック

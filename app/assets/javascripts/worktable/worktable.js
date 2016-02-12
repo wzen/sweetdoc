@@ -34,6 +34,7 @@ $(function() {
       PageValue.adjustInstanceAndEventOnPage();
       WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
         WorktableCommon.createCommonEventInstancesIfNeeded();
+        WorktableCommon.initScrollContentsPosition();
         _callback.call(this);
         Navbar.switchWorktableNavbarWhenProjectCreated(true);
         Common.hideModalView();

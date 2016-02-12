@@ -362,19 +362,20 @@ class Project
         scrollWrapper = modalEmt.find('.am_scroll_wrapper:first')
         scrollContents = scrollWrapper.children('div:first')
         scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
-        scrollWrapper.animate({scrollLeft: scrollContentsSize.width}, 200)
-        # プロジェクト情報初期化
-        _initEditInput.call(@)
-        # プロジェクト情報読み込み
-        _loadEditInput($(e.target), (project) =>
-          inputWrapper = modalEmt.find('.am_input_wrapper:first')
-          inputWrapper.find('.project_name:first').val(project.title)
-          inputWrapper.find('.display_size_input_width:first').val(project.screen_width)
-          inputWrapper.find('.display_size_input_height:first').val(project.screen_height)
-          inputWrapper.find(".#{Constant.Project.Key.PROJECT_ID}:first").val(project.id)
-          _settingEditInputEvent.call(@)
-          inputWrapper.show()
-        )
+        if scrollContentsSize?
+          scrollWrapper.animate({scrollLeft: scrollContentsSize.width}, 200)
+          # プロジェクト情報初期化
+          _initEditInput.call(@)
+          # プロジェクト情報読み込み
+          _loadEditInput($(e.target), (project) =>
+            inputWrapper = modalEmt.find('.am_input_wrapper:first')
+            inputWrapper.find('.project_name:first').val(project.title)
+            inputWrapper.find('.display_size_input_width:first').val(project.screen_width)
+            inputWrapper.find('.display_size_input_height:first').val(project.screen_height)
+            inputWrapper.find(".#{Constant.Project.Key.PROJECT_ID}:first").val(project.id)
+            _settingEditInputEvent.call(@)
+            inputWrapper.show()
+          )
       )
       modalEmt.find('.am_row .remove_button').off('click').on('click', (e) =>
         # 削除確認

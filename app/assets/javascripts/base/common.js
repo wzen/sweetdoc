@@ -442,19 +442,25 @@ Common = (function() {
       return;
     }
     scrollContentsSize = this.scrollContentsSizeUnderScreenEventScale();
-    diff = {
-      top: 0,
-      left: 0
-    };
-    if ($(target).get(0).offsetParent != null) {
+    if (scrollContentsSize != null) {
       diff = {
-        top: (scrollContents.scrollTop() + (scrollContentsSize.height - $(target).height()) * 0.5) - $(target).get(0).offsetTop,
-        left: (scrollContents.scrollLeft() + (scrollContentsSize.width - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
+        top: 0,
+        left: 0
       };
+      if ($(target).get(0).offsetParent != null) {
+        diff = {
+          top: (scrollContents.scrollTop() + (scrollContentsSize.height - $(target).height()) * 0.5) - $(target).get(0).offsetTop,
+          left: (scrollContents.scrollLeft() + (scrollContentsSize.width - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
+        };
+      }
+      top = scrollContents.scrollTop() + (scrollContentsSize.height * 0.5) - diff.top;
+      left = scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5) - diff.left;
+      return this.updateScrollContentsPosition(top, left, immediate, withUpdatePageValue, callback);
+    } else {
+      if (callback != null) {
+        return callback();
+      }
     }
-    top = scrollContents.scrollTop() + (scrollContentsSize.height * 0.5) - diff.top;
-    left = scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5) - diff.left;
-    return this.updateScrollContentsPosition(top, left, immediate, withUpdatePageValue, callback);
   };
 
   Common.updateScrollContentsPosition = function(top, left, immediate, withUpdateScreenEventVar, callback) {
@@ -472,32 +478,38 @@ Common = (function() {
       this.saveDisplayPosition(top, left, true);
     }
     scrollContentsSize = this.scrollContentsSizeUnderScreenEventScale();
-    top -= scrollContentsSize.height * 0.5;
-    left -= scrollContentsSize.width * 0.5;
-    if (top <= 0 && left <= 0) {
-      if (window.runDebug) {
-        console.log('Invalid ScrollValue');
+    if (scrollContentsSize != null) {
+      top -= scrollContentsSize.height * 0.5;
+      left -= scrollContentsSize.width * 0.5;
+      if (top <= 0 && left <= 0) {
+        if (window.runDebug) {
+          console.log('Invalid ScrollValue');
+        }
+        return;
       }
-      return;
-    }
-    if (immediate) {
-      window.skipScrollEvent = true;
-      window.scrollContents.scrollTop(top);
-      window.scrollContents.scrollLeft(left);
-      if (callback != null) {
-        return callback();
-      }
-    } else {
-      window.skipScrollEventByAnimation = true;
-      return window.scrollContents.animate({
-        scrollTop: top,
-        scrollLeft: left
-      }, 500, function() {
-        window.skipScrollEventByAnimation = false;
+      if (immediate) {
+        window.skipScrollEvent = true;
+        window.scrollContents.scrollTop(top);
+        window.scrollContents.scrollLeft(left);
         if (callback != null) {
           return callback();
         }
-      });
+      } else {
+        window.skipScrollEventByAnimation = true;
+        return window.scrollContents.animate({
+          scrollTop: top,
+          scrollLeft: left
+        }, 500, function() {
+          window.skipScrollEventByAnimation = false;
+          if (callback != null) {
+            return callback();
+          }
+        });
+      }
+    } else {
+      if (callback != null) {
+        return callback();
+      }
     }
   };
 
@@ -559,11 +571,11 @@ Common = (function() {
 
   Common.scrollContentsSizeUnderScreenEventScale = function() {
     var scale, se;
-    scale = 1.0;
-    if (ScreenEvent.hasInstanceCache()) {
-      se = new ScreenEvent();
-      scale = se.getNowScale();
+    if (!ScreenEvent.hasInstanceCache()) {
+      return null;
     }
+    se = new ScreenEvent();
+    scale = se.getNowScale();
     if (window.runDebug) {
       console.log('scrollContentsSizeUnderScreenEventScale:' + scale);
     }

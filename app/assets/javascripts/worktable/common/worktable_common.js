@@ -86,13 +86,15 @@ WorktableCommon = (function() {
         instance.name = instance.name + ' (Copy)';
       }
       scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
-      instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (scrollContentsSize.width - instance.itemSize.w) / 2.0);
-      instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (scrollContentsSize.height - instance.itemSize.h) / 2.0);
-      if (instance.drawAndMakeConfigs != null) {
-        instance.drawAndMakeConfigs();
+      if (scrollContentsSize != null) {
+        instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (scrollContentsSize.width - instance.itemSize.w) / 2.0);
+        instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (scrollContentsSize.height - instance.itemSize.h) / 2.0);
+        if (instance.drawAndMakeConfigs != null) {
+          instance.drawAndMakeConfigs();
+        }
+        instance.setItemAllPropToPageValue();
+        return LocalStorage.saveAllPageValues();
       }
-      instance.setItemAllPropToPageValue();
-      return LocalStorage.saveAllPageValues();
     }
   };
 
@@ -350,12 +352,14 @@ WorktableCommon = (function() {
     borderWidth = 5;
     timelineTopPadding = 5;
     scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
-    $('#main').height($('#contents').height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2));
-    window.scrollContentsSize = {
-      width: scrollContentsSize.width,
-      height: scrollContentsSize.height
-    };
-    return $('#sidebar').height($('#contents').height() - (borderWidth * 2));
+    if (scrollContentsSize != null) {
+      $('#main').height($('#contents').height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2));
+      window.scrollContentsSize = {
+        width: scrollContentsSize.width,
+        height: scrollContentsSize.height
+      };
+      return $('#sidebar').height($('#contents').height() - (borderWidth * 2));
+    }
   };
 
   WorktableCommon.initScrollContentsPosition = function() {
@@ -417,18 +421,20 @@ WorktableCommon = (function() {
       e.preventDefault();
       e.stopPropagation();
       scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
-      top = window.scrollContents.scrollTop() + scrollContentsSize.height * 0.5;
-      left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5;
-      centerPosition = WorktableCommon.calcScrollCenterPosition(top, left);
-      if (centerPosition != null) {
-        FloatView.show(FloatView.scrollMessage(centerPosition.top, centerPosition.left), FloatView.Type.DISPLAY_POSITION);
-      }
-      return Common.saveDisplayPosition(top, left, false, function() {
-        FloatView.hide();
-        if (Sidebar.isOpenedConfigSidebar()) {
-          return WorktableSetting.PositionAndScale.initConfig();
+      if (scrollContentsSize != null) {
+        top = window.scrollContents.scrollTop() + scrollContentsSize.height * 0.5;
+        left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5;
+        centerPosition = WorktableCommon.calcScrollCenterPosition(top, left);
+        if (centerPosition != null) {
+          FloatView.show(FloatView.scrollMessage(centerPosition.top.toFixed(1), centerPosition.left.toFixed(1)), FloatView.Type.DISPLAY_POSITION);
         }
-      });
+        return Common.saveDisplayPosition(top, left, false, function() {
+          FloatView.hide();
+          if (Sidebar.isOpenedConfigSidebar()) {
+            return WorktableSetting.PositionAndScale.initConfig();
+          }
+        });
+      }
     });
     $('.dropdown-toggle').dropdown();
     Navbar.initWorktableNavbar();
