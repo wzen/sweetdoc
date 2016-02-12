@@ -127,12 +127,7 @@ class FloatView
   @scrollMessage = (top, left) ->
     if !window.initDone
       return ''
-    screenSize = Common.getScreenSize()
-    if screenSize?
-      t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - top
-      l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - left
-      return "X: #{l}  Y:#{t}"
-    return ''
+    return "X: #{left}  Y:#{top}"
 
   @displayPositionMessage = ->
     return 'Preview'

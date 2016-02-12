@@ -466,7 +466,7 @@ Common = (function() {
       callback = null;
     }
     if (withUpdateScreenEventVar) {
-      Common.saveDisplayPosition(top, left, true);
+      this.saveDisplayPosition(top, left, true);
     }
     scrollContentsSize = this.scrollContentsSizeUnderScreenEventScale();
     top -= scrollContentsSize.height * 0.5;
@@ -490,6 +490,15 @@ Common = (function() {
         }
       });
     }
+  };
+
+  Common.adjustScrollContentsPosition = function() {
+    var left, se, top;
+    this.applyViewScale();
+    se = new ScreenEvent();
+    top = se.nowY;
+    left = se.nowX;
+    return this.updateScrollContentsPosition(top, left);
   };
 
   Common.resetScrollContentsPositionToCenter = function(withUpdateScreenEventVar) {
@@ -545,9 +554,6 @@ Common = (function() {
     if (ScreenEvent.hasInstanceCache()) {
       se = new ScreenEvent();
       scale = se.getNowScale();
-      if (window.isWorkTable && (se._keepDispMag != null) && se._keepDispMag) {
-        scale = WorktableCommon.getWorktableViewScale();
-      }
     }
     return {
       width: window.scrollContents.width() / scale,

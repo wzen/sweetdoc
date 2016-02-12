@@ -275,17 +275,18 @@ WorktableSetting = (function() {
     function PositionAndScale() {}
 
     PositionAndScale.initConfig = function() {
-      var leftMax, leftMin, max, meterElement, min, position, rootEmt, topMax, topMin, v, valueElement, worktableScale;
+      var center, leftMax, leftMin, max, meterElement, min, position, rootEmt, topMax, topMin, v, valueElement, worktableScale;
       rootEmt = $("#" + WorktableSetting.ROOT_ID_NAME);
       position = PageValue.getWorktableScrollContentsPosition();
-      $('.display_position_x', rootEmt).val(parseInt(position.left));
-      $('.display_position_y', rootEmt).val(parseInt(position.top));
+      center = WorktableCommon.calcScrollCenterPosition(position.top, position.left);
+      $('.display_position_x', rootEmt).val(parseInt(center.left));
+      $('.display_position_y', rootEmt).val(parseInt(center.top));
       leftMin = -window.scrollInsideWrapper.width() * 0.5;
       leftMax = window.scrollInsideWrapper.width() * 0.5;
       topMin = -window.scrollInsideWrapper.height() * 0.5;
       topMax = window.scrollInsideWrapper.height() * 0.5;
       $('.display_position_x, .display_position_y', rootEmt).off('keypress focusout').on('keypress focusout', function(e) {
-        var left, top;
+        var left, p, top;
         if ((e.type === 'keypress' && e.keyCode === Constant.KeyboardKeyCode.ENTER) || e.type === 'focusout') {
           left = $('.display_position_x', rootEmt).val();
           top = $('.display_position_y', rootEmt).val();
@@ -301,9 +302,10 @@ WorktableSetting = (function() {
           }
           $('.display_position_x', rootEmt).val(left);
           $('.display_position_y', rootEmt).val(top);
+          p = WorktableCommon.calcScrollTopLeftPosition(top, left);
           PageValue.setGeneralPageValue(PageValue.Key.worktableDisplayPosition(), {
-            top: top,
-            left: left
+            top: p.top,
+            left: p.left
           });
           WorktableCommon.initScrollContentsPosition();
           return LocalStorage.saveGeneralPageValue();
@@ -337,9 +339,9 @@ WorktableSetting = (function() {
             }
             return window.scaleSliderTimer = setTimeout(function() {
               WorktableCommon.setWorktableViewScale(ui.value);
-              Common.applyViewScale();
+              Common.adjustScrollContentsPosition();
               return LocalStorage.saveGeneralPageValue();
-            }, 50);
+            }, 100);
           };
         })(this)
       });

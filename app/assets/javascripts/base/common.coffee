@@ -350,9 +350,8 @@ class Common
   # @param [Float] top Y中央値
   # @param [Float] left X中央値
   @updateScrollContentsPosition: (top, left, immediate = true, withUpdateScreenEventVar = true, callback = null) ->
-
     if withUpdateScreenEventVar
-      Common.saveDisplayPosition(top, left, true)
+      @saveDisplayPosition(top, left, true)
 
     scrollContentsSize = @scrollContentsSizeUnderScreenEventScale()
     top -= scrollContentsSize.height * 0.5
@@ -375,6 +374,14 @@ class Common
         if callback?
           callback()
       )
+
+  # スクロール位置を再設定
+  @adjustScrollContentsPosition: ->
+    @applyViewScale()
+    se = new ScreenEvent()
+    top = se.nowY
+    left = se.nowX
+    @updateScrollContentsPosition(top, left)
 
   # スクロール位置を中心に初期化
   @resetScrollContentsPositionToCenter: (withUpdateScreenEventVar = true) ->
@@ -409,8 +416,6 @@ class Common
     if ScreenEvent.hasInstanceCache()
       se = new ScreenEvent()
       scale = se.getNowScale()
-      if window.isWorkTable && se._keepDispMag? && se._keepDispMag
-        scale = WorktableCommon.getWorktableViewScale()
     return {
       width: window.scrollContents.width() / scale
       height: window.scrollContents.height() / scale

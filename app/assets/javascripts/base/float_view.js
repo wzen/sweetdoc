@@ -157,17 +157,10 @@ FloatView = (function() {
   };
 
   FloatView.scrollMessage = function(top, left) {
-    var l, screenSize, t;
     if (!window.initDone) {
       return '';
     }
-    screenSize = Common.getScreenSize();
-    if (screenSize != null) {
-      t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - top;
-      l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - left;
-      return "X: " + l + "  Y:" + t;
-    }
-    return '';
+    return "X: " + left + "  Y:" + top;
   };
 
   FloatView.displayPositionMessage = function() {

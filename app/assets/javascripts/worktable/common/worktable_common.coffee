@@ -373,9 +373,13 @@ class WorktableCommon
       scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
       top = window.scrollContents.scrollTop() + scrollContentsSize.height * 0.5
       left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5
-      FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION)
+      centerPosition = WorktableCommon.calcScrollCenterPosition(top, left)
+      if centerPosition?
+        FloatView.show(FloatView.scrollMessage(centerPosition.top, centerPosition.left), FloatView.Type.DISPLAY_POSITION)
       Common.saveDisplayPosition(top, left, false, ->
         FloatView.hide()
+        if Sidebar.isOpenedConfigSidebar()
+          WorktableSetting.PositionAndScale.initConfig()
       )
     )
     # ドロップダウン
@@ -402,6 +406,26 @@ class WorktableCommon
     WorktableSetting.initConfig()
     # 選択アイテム初期化
     WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
+
+  # 左上座標から中心座標を計算
+  @calcScrollCenterPosition = (top, left) ->
+    screenSize = Common.getScreenSize()
+    if screenSize?
+      t = top - (window.scrollInsideWrapper.height() + screenSize.height) * 0.5
+      l = left - (window.scrollInsideWrapper.width() + screenSize.width) * 0.5
+      return {top: t, left: l}
+    else
+      return null
+
+  # 中心座標から左上座標を計算
+  @calcScrollTopLeftPosition = (top, left) ->
+    screenSize = Common.getScreenSize()
+    if screenSize?
+      t = top + (window.scrollInsideWrapper.height() + screenSize.height) * 0.5
+      l = left + (window.scrollInsideWrapper.width() + screenSize.width) * 0.5
+      return {top: t, left: l}
+    else
+      return null
 
   # Mainコンテナのコンテキストメニューを設定
   @setMainContainerContext: ->
@@ -456,6 +480,7 @@ class WorktableCommon
     scale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale())
     if !scale?
       scale = 1.0
+      @setWorktableViewScale(scale)
     return parseFloat(scale)
 
   # ワークテーブルの画面倍率を設定
