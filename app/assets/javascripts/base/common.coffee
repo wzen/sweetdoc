@@ -346,8 +346,16 @@ class Common
       diff =
         top: (scrollContents.scrollTop() + (scrollContentsSize.height - $(target).height()) * 0.5) - $(target).get(0).offsetTop
         left: (scrollContents.scrollLeft() + (scrollContentsSize.width - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
+#      if window.runDebug
+#        console.log('$(target).get(0).offsetTop:' + $(target).get(0).offsetTop)
+#        console.log('$(target).get(0).offsetLeft:' + $(target).get(0).offsetLeft)
 
-    @updateScrollContentsPosition(scrollContents.scrollTop() + (scrollContentsSize.height * 0.5) - diff.top, scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5) - diff.left, immediate, withUpdatePageValue, callback)
+#    if window.runDebug
+#      console.log('focusToTarget diff')
+#      console.log(diff)
+    top = scrollContents.scrollTop() + (scrollContentsSize.height * 0.5) - diff.top
+    left = scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5) - diff.left
+    @updateScrollContentsPosition(top, left, immediate, withUpdatePageValue, callback)
 
   # スクロール位置の更新
   # @param [Float] top Y中央値
@@ -359,6 +367,12 @@ class Common
     scrollContentsSize = @scrollContentsSizeUnderScreenEventScale()
     top -= scrollContentsSize.height * 0.5
     left -= scrollContentsSize.width * 0.5
+    if top <= 0 && left <= 0
+      # 不正なスクロールを防止
+      if window.runDebug
+        console.log('Invalid ScrollValue')
+      return
+
     if immediate
       window.skipScrollEvent = true
       window.scrollContents.scrollTop(top)
@@ -419,6 +433,9 @@ class Common
     if ScreenEvent.hasInstanceCache()
       se = new ScreenEvent()
       scale = se.getNowScale()
+
+    if window.runDebug
+      console.log('scrollContentsSizeUnderScreenEventScale:' + scale)
     return {
       width: window.scrollContents.width() / scale
       height: window.scrollContents.height() / scale

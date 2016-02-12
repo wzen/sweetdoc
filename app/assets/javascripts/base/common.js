@@ -428,7 +428,7 @@ Common = (function() {
   };
 
   Common.focusToTarget = function(target, callback, immediate, withUpdatePageValue) {
-    var diff, scrollContentsSize;
+    var diff, left, scrollContentsSize, top;
     if (callback == null) {
       callback = null;
     }
@@ -452,7 +452,9 @@ Common = (function() {
         left: (scrollContents.scrollLeft() + (scrollContentsSize.width - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
       };
     }
-    return this.updateScrollContentsPosition(scrollContents.scrollTop() + (scrollContentsSize.height * 0.5) - diff.top, scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5) - diff.left, immediate, withUpdatePageValue, callback);
+    top = scrollContents.scrollTop() + (scrollContentsSize.height * 0.5) - diff.top;
+    left = scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5) - diff.left;
+    return this.updateScrollContentsPosition(top, left, immediate, withUpdatePageValue, callback);
   };
 
   Common.updateScrollContentsPosition = function(top, left, immediate, withUpdateScreenEventVar, callback) {
@@ -472,6 +474,12 @@ Common = (function() {
     scrollContentsSize = this.scrollContentsSizeUnderScreenEventScale();
     top -= scrollContentsSize.height * 0.5;
     left -= scrollContentsSize.width * 0.5;
+    if (top <= 0 && left <= 0) {
+      if (window.runDebug) {
+        console.log('Invalid ScrollValue');
+      }
+      return;
+    }
     if (immediate) {
       window.skipScrollEvent = true;
       window.scrollContents.scrollTop(top);
@@ -555,6 +563,9 @@ Common = (function() {
     if (ScreenEvent.hasInstanceCache()) {
       se = new ScreenEvent();
       scale = se.getNowScale();
+    }
+    if (window.runDebug) {
+      console.log('scrollContentsSizeUnderScreenEventScale:' + scale);
     }
     return {
       width: window.scrollContents.width() / scale,
