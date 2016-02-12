@@ -60,9 +60,6 @@ class ScreenEvent extends CommonEvent
       else
         s = 1.0
       _setScale.call(@, s)
-      if window.isWorkTable
-        # スクロール位置更新
-        WorktableCommon.initScrollContentsPosition()
       # オーバーレイ削除
       $('#preview_position_overlay').remove()
       $('.keep_mag_base').remove()
@@ -141,10 +138,15 @@ class ScreenEvent extends CommonEvent
 
     setMiniumObject: (obj) ->
       super(obj)
-      if !window.isWorkTable && !@_initDone
-        _setScale.call(@, _getInitConfigScale.call(@))
-        @nowScale = _getInitConfigScale.call(@)
-        Common.updateScrollContentsPosition(@initConfigY, @initConfigX)
+      if !@_initDone
+        if !window.isWorkTable
+          _setScale.call(@, _getInitConfigScale.call(@))
+          @nowScale = _getInitConfigScale.call(@)
+          Common.updateScrollContentsPosition(@initConfigY, @initConfigX)
+        else
+          # スクロール位置更新
+          WorktableCommon.initScrollContentsPosition()
+          WorktableCommon.updateMainViewSize()
         @_initDone = true
 
     getNowScale: ->

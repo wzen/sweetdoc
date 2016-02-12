@@ -649,13 +649,13 @@ div.css_item_base {
 
 #main.draw_mode, #main.draw_pointing {
   .canvas_container {
-    cursor: image_url('base/drag_cursor24.png'), wait !important;
+    cursor: image_url('base/drag_cursor24.png') 5 5, wait !important;
   }
 }
 
 #main.click_pointing {
   .item {
-    cursor: image_url('base/drag_cursor24.png'), wait !important;
+    cursor: image_url('base/drag_cursor24.png') 5 5, wait !important;
   }
 }
 

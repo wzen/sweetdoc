@@ -86,9 +86,6 @@ ScreenEvent = (function(superClass) {
         s = 1.0;
       }
       _setScale.call(this, s);
-      if (window.isWorkTable) {
-        WorktableCommon.initScrollContentsPosition();
-      }
       $('#preview_position_overlay').remove();
       $('.keep_mag_base').remove();
       this._scale = s;
@@ -182,10 +179,15 @@ ScreenEvent = (function(superClass) {
 
     PrivateClass.prototype.setMiniumObject = function(obj) {
       PrivateClass.__super__.setMiniumObject.call(this, obj);
-      if (!window.isWorkTable && !this._initDone) {
-        _setScale.call(this, _getInitConfigScale.call(this));
-        this.nowScale = _getInitConfigScale.call(this);
-        Common.updateScrollContentsPosition(this.initConfigY, this.initConfigX);
+      if (!this._initDone) {
+        if (!window.isWorkTable) {
+          _setScale.call(this, _getInitConfigScale.call(this));
+          this.nowScale = _getInitConfigScale.call(this);
+          Common.updateScrollContentsPosition(this.initConfigY, this.initConfigX);
+        } else {
+          WorktableCommon.initScrollContentsPosition();
+          WorktableCommon.updateMainViewSize();
+        }
         return this._initDone = true;
       }
     };
