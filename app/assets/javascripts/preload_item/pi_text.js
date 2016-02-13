@@ -1009,24 +1009,29 @@ PreloadItemText = (function(superClass) {
     };
     _drawShout = (function(_this) {
       return function() {
-        var addDeg, beginX, beginY, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, endX, endY, i, k, num, punkLineMax, punkLineMin, radiusX, radiusY, random, ref;
+        var addDeg, beginX, beginY, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, endX, endY, i, k, num, punkLineMax, punkLineMin, radiusX, radiusY, random, ref, s;
         num = 18;
         radiusX = width / 2;
         radiusY = height / 2;
         cx = x + width / 2;
         cy = y + height / 2;
-        punkLineMax = 30;
-        punkLineMin = 20;
+        if (_this.drawHorizontal) {
+          s = _this.itemSize.h;
+        } else {
+          s = _this.itemSize.w;
+        }
+        punkLineMax = s * 0.2;
+        punkLineMin = s * 0.1;
         deg = 0;
         addDeg = 360 / num;
         context.beginPath();
         context.lineJoin = 'round';
         context.lineCap = 'round';
+        if (_this.balloonRandomIntValue == null) {
+          _this.balloonRandomIntValue = _getRandomInt.call(_this, punkLineMax, punkLineMin);
+        }
         for (i = k = 0, ref = num - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
           deg += addDeg;
-          if (_this.balloonRandomIntValue == null) {
-            _this.balloonRandomIntValue = _getRandomInt.call(_this, punkLineMax, punkLineMin);
-          }
           random = _this.balloonRandomIntValue;
           beginX = PreloadItemText.getCircumPos.x(deg, radiusX, cx);
           beginY = PreloadItemText.getCircumPos.y(deg, radiusY, cy);
@@ -1048,25 +1053,30 @@ PreloadItemText = (function(superClass) {
     })(this);
     _drawThink = (function(_this) {
       return function() {
-        var addDeg, beginX, beginY, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, diff, endX, endY, i, k, num, punkLineMax, punkLineMin, radiusX, radiusY, random, ref;
+        var addDeg, beginX, beginY, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, diff, endX, endY, i, k, num, punkLineMax, punkLineMin, radiusX, radiusY, random, ref, s;
         num = 8;
-        diff = 20.0;
-        radiusX = (width - diff) / 2;
-        radiusY = (height - diff) / 2;
         cx = x + width / 2;
         cy = y + height / 2;
-        punkLineMax = 30;
-        punkLineMin = 20;
+        if (_this.drawHorizontal) {
+          s = _this.itemSize.h;
+        } else {
+          s = _this.itemSize.w;
+        }
+        punkLineMax = s * 0.3;
+        punkLineMin = s * 0.1;
+        diff = punkLineMin + (punkLineMax - punkLineMin) * 0.6;
+        radiusX = (width - diff) / 2;
+        radiusY = (height - diff) / 2;
         deg = 0;
         addDeg = 360 / num;
         context.beginPath();
         context.lineJoin = 'round';
         context.lineCap = 'round';
+        if (_this.balloonRandomIntValue == null) {
+          _this.balloonRandomIntValue = _getRandomInt.call(_this, punkLineMax, punkLineMin);
+        }
         for (i = k = 0, ref = num - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
           deg += addDeg;
-          if (_this.balloonRandomIntValue == null) {
-            _this.balloonRandomIntValue = _getRandomInt.call(_this, punkLineMax, punkLineMin);
-          }
           random = _this.balloonRandomIntValue;
           beginX = PreloadItemText.getCircumPos.x(deg, radiusX, cx);
           beginY = PreloadItemText.getCircumPos.y(deg, radiusY, cy);
@@ -1206,7 +1216,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _drawText = function(context, text, x, y, width, height, fontSize, writingLength) {
-    var _calcHorizontalColumnHeightMax, _calcHorizontalColumnHeightSum, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _setTextAlpha, _writeLength, c, char, column, engDiff, h, heightDiff, heightLine, heightMax, hl, i, idx, j, k, len, len1, line, measure, n, p, q, ref, ref1, ref2, ref3, ref4, s, sizeSum, w, widthLine, widthMax, wl, wordSum, wordWidth, ww;
+    var _calcHorizontalColumnHeightMax, _calcHorizontalColumnHeightSum, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _setTextAlpha, _writeLength, c, char, column, engDiff, h, heightDiff, heightLine, heightMax, hl, i, idx, j, k, len, len1, line, measure, n, p, q, ref, ref1, ref2, ref3, ref4, sizeSum, t, w, widthLine, widthMax, wl, wordSum, wordWidth, ww;
     if (writingLength == null) {
       writingLength = text.length;
     }
@@ -1384,7 +1394,7 @@ PreloadItemText = (function(superClass) {
         context.beginPath();
         hl = 0;
         ref4 = column[j].split('');
-        for (idx = s = 0, len1 = ref4.length; s < len1; idx = ++s) {
+        for (idx = t = 0, len1 = ref4.length; t < len1; idx = ++t) {
           c = ref4[idx];
           measure = _calcWordMeasure.call(this, c, fontSize, this.fontFamily);
           _setTextAlpha.call(this, context, idx + wordSum + 1, writingLength);

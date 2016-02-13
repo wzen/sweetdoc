@@ -784,18 +784,22 @@ class PreloadItemText extends CanvasItemBase
       radiusY = height / 2
       cx = x + width / 2
       cy = y + height / 2
-      punkLineMax = 30
-      punkLineMin = 20
+      if @drawHorizontal
+        s = @itemSize.h
+      else
+        s = @itemSize.w
+      punkLineMax = s * 0.2
+      punkLineMin = s * 0.1
       deg = 0
       addDeg = 360 / num
       # 共通設定
       context.beginPath()
       context.lineJoin = 'round'
       context.lineCap = 'round'
+      if !@balloonRandomIntValue?
+        @balloonRandomIntValue = _getRandomInt.call(@, punkLineMax, punkLineMin)
       for i in [0..(num - 1)]
         deg += addDeg
-        if !@balloonRandomIntValue?
-          @balloonRandomIntValue = _getRandomInt.call(@, punkLineMax, punkLineMin)
         random = @balloonRandomIntValue
         # 始点・終点
         beginX = PreloadItemText.getCircumPos.x(deg, radiusX, cx)
@@ -820,24 +824,27 @@ class PreloadItemText extends CanvasItemBase
     _drawThink = =>
       # 考え中
       num = 8
-      diff = 20.0
-      radiusX = (width - diff) / 2
-      radiusY = (height - diff) / 2
       cx = x + (width) / 2
       cy = y + (height) / 2
-      punkLineMax = 30
-      punkLineMin = 20
+      if @drawHorizontal
+        s = @itemSize.h
+      else
+        s = @itemSize.w
+      punkLineMax = s * 0.3
+      punkLineMin = s * 0.1
+      diff = punkLineMin + (punkLineMax - punkLineMin) * 0.6
+      radiusX = (width - diff) / 2
+      radiusY = (height - diff) / 2
       deg = 0
       addDeg = 360 / num
       # 共通設定
       context.beginPath()
       context.lineJoin = 'round'
       context.lineCap = 'round'
-
+      if !@balloonRandomIntValue?
+        @balloonRandomIntValue = _getRandomInt.call(@, punkLineMax, punkLineMin)
       for i in [0..(num - 1)]
         deg += addDeg
-        if !@balloonRandomIntValue?
-          @balloonRandomIntValue = _getRandomInt.call(@, punkLineMax, punkLineMin)
         random = @balloonRandomIntValue
         # 始点・終点
         beginX = PreloadItemText.getCircumPos.x(deg, radiusX, cx)
