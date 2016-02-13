@@ -107,6 +107,10 @@ class Const
     X = 88
     # @property [Int] V vボタン
     V = 86
+    # @property [Int] PLUS plusボタン
+    PLUS = 186
+    # @property [Int] MINUS minusボタン
+    MINUS = 189
   end
 
   class ElementAttribute

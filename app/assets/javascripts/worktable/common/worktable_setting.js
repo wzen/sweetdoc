@@ -319,7 +319,7 @@ WorktableSetting = (function() {
       worktableScale = WorktableCommon.getWorktableViewScale();
       meterElement = $(".scale_meter:first", rootEmt);
       valueElement = meterElement.prev('input:first');
-      v = worktableScale * 100 + '%';
+      v = parseInt(worktableScale * 100) + '%';
       valueElement.val(v);
       valueElement.html(v);
       try {
@@ -341,9 +341,7 @@ WorktableSetting = (function() {
               window.scaleSliderTimer = null;
             }
             return window.scaleSliderTimer = setTimeout(function() {
-              WorktableCommon.setWorktableViewScale(ui.value);
-              Common.adjustScrollContentsPosition();
-              return LocalStorage.saveGeneralPageValue();
+              return WorktableCommon.setWorktableViewScale(ui.value, true);
             }, 100);
           };
         })(this)

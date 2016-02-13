@@ -143,6 +143,10 @@ Constant = (function() {
 
     KeyboardKeyCode.V = constant.KeyboardKeyCode.V;
 
+    KeyboardKeyCode.PLUS = constant.KeyboardKeyCode.PLUS;
+
+    KeyboardKeyCode.MINUS = constant.KeyboardKeyCode.MINUS;
+
     return KeyboardKeyCode;
 
   })();

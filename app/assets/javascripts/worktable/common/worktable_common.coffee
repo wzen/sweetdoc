@@ -153,7 +153,6 @@ class WorktableCommon
   # モードチェンジ
   # @param [Mode] afterMode 変更後画面モード
   @changeMode = (afterMode, pn = PageValue.getPageNum()) ->
-
     # 画面Zindex変更
     if afterMode == Constant.Mode.NOT_SELECT
       #$(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT, pn))
@@ -277,9 +276,14 @@ class WorktableCommon
 
   # キーイベント初期化
   @initKeyEvent = ->
-    $(window:not('input, textarea')).off('keydown').on('keydown', (e)->
+    $(window).off('keydown').on('keydown', (e)->
+      target = $(e.target)
+      if target.prop('tagName') == 'INPUT' || target.prop('tagName') == 'TEXTAREA'
+        return
       isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
       if (isMac && e.metaKey) ||  (!isMac && e.ctrlKey)
+        if window.debug
+          console.log(e)
         if e.keyCode == Constant.KeyboardKeyCode.Z
           e.preventDefault()
           if e.shiftKey
@@ -302,10 +306,24 @@ class WorktableCommon
           e.preventDefault()
           # 貼り付け
           WorktableCommon.pasteItem()
-          # キャッシュ保存
-          LocalStorage.saveAllPageValues()
           # 履歴保存
           OperationHistory.add()
+        else if e.shiftKey && e.keyCode == Constant.KeyboardKeyCode.PLUS
+          e.preventDefault()
+          # ズームイン
+          step = 0.1
+          updatedScale = WorktableCommon.getWorktableViewScale() + step
+          WorktableCommon.setWorktableViewScale(updatedScale, true)
+          if Sidebar.isOpenedConfigSidebar()
+            WorktableSetting.PositionAndScale.initConfig()
+        else if e.keyCode == Constant.KeyboardKeyCode.MINUS
+          e.preventDefault()
+          # ズームアウト
+          step = 0.1
+          updatedScale = WorktableCommon.getWorktableViewScale() - step
+          WorktableCommon.setWorktableViewScale(updatedScale, true)
+          if Sidebar.isOpenedConfigSidebar()
+            WorktableSetting.PositionAndScale.initConfig()
     )
 
   # Mainビューの高さ更新
@@ -487,8 +505,13 @@ class WorktableCommon
     return parseFloat(scale)
 
   # ワークテーブルの画面倍率を設定
-  @setWorktableViewScale = (scale) ->
+  @setWorktableViewScale = (scale, withViewStateUpdate = false) ->
     PageValue.setGeneralPageValue(PageValue.Key.worktableScale(), scale)
+    if withViewStateUpdate
+      # スクロール位置修正
+      Common.adjustScrollContentsPosition()
+      # キャッシュ保存
+      LocalStorage.saveGeneralPageValue()
 
   # コンテキストメニュー初期化
   # @param [String] elementID HTML要素ID

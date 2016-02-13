@@ -34,21 +34,17 @@ class WorktableSetting
       gridValue = PageValue.getSettingPageValue(@PageValueKey.GRID)
       gridValue = gridValue? && gridValue == 'true'
       gridStepDiv = $(".#{@GRID_STEP_DIV_CLASS_NAME}", root)
-
       grid.prop('checked', if gridValue then 'checked' else false)
       grid.off('click').on('click', =>
         gridValue = PageValue.getSettingPageValue(@PageValueKey.GRID)
         if gridValue?
           gridValue = gridValue == 'true'
-
         # グリッド間隔の有効無効を切り替え
         if !gridValue
           gridStepDiv.show()
         else
           gridStepDiv.hide()
-
         @drawGrid(!gridValue)
-
         gridValue = PageValue.getSettingPageValue(@PageValueKey.GRID)
         grid.prop("checked",gridValue == 'true')
       )
@@ -77,7 +73,6 @@ class WorktableSetting
             PageValue.setSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID_STEP, step)
             self.drawGrid(true)
       )
-
       # 描画
       @drawGrid(gridValue)
 
@@ -273,7 +268,7 @@ class WorktableSetting
       worktableScale = WorktableCommon.getWorktableViewScale()
       meterElement = $(".scale_meter:first", rootEmt)
       valueElement = meterElement.prev('input:first')
-      v = worktableScale * 100 + '%'
+      v = parseInt(worktableScale * 100) + '%'
       valueElement.val(v)
       valueElement.html(v)
       try
@@ -287,14 +282,11 @@ class WorktableSetting
         slide: (event, ui) =>
           valueElement.val(ui.value)
           valueElement.html(ui.value)
-
           if window.scaleSliderTimer?
             clearTimeout(window.scaleSliderTimer)
             window.scaleSliderTimer = null
           window.scaleSliderTimer = setTimeout( =>
-            WorktableCommon.setWorktableViewScale(ui.value)
-            Common.adjustScrollContentsPosition()
-            LocalStorage.saveGeneralPageValue()
+            WorktableCommon.setWorktableViewScale(ui.value, true)
           , 100)
       })
 

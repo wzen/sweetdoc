@@ -316,12 +316,17 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.initKeyEvent = function() {
-    return $({
-      window: !'input, textarea'
-    }).off('keydown').on('keydown', function(e) {
-      var isMac;
+    return $(window).off('keydown').on('keydown', function(e) {
+      var isMac, step, target, updatedScale;
+      target = $(e.target);
+      if (target.prop('tagName') === 'INPUT' || target.prop('tagName') === 'TEXTAREA') {
+        return;
+      }
       isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
       if ((isMac && e.metaKey) || (!isMac && e.ctrlKey)) {
+        if (window.debug) {
+          console.log(e);
+        }
         if (e.keyCode === Constant.KeyboardKeyCode.Z) {
           e.preventDefault();
           if (e.shiftKey) {
@@ -340,8 +345,23 @@ WorktableCommon = (function() {
         } else if (e.keyCode === Constant.KeyboardKeyCode.V) {
           e.preventDefault();
           WorktableCommon.pasteItem();
-          LocalStorage.saveAllPageValues();
           return OperationHistory.add();
+        } else if (e.shiftKey && e.keyCode === Constant.KeyboardKeyCode.PLUS) {
+          e.preventDefault();
+          step = 0.1;
+          updatedScale = WorktableCommon.getWorktableViewScale() + step;
+          WorktableCommon.setWorktableViewScale(updatedScale, true);
+          if (Sidebar.isOpenedConfigSidebar()) {
+            return WorktableSetting.PositionAndScale.initConfig();
+          }
+        } else if (e.keyCode === Constant.KeyboardKeyCode.MINUS) {
+          e.preventDefault();
+          step = 0.1;
+          updatedScale = WorktableCommon.getWorktableViewScale() - step;
+          WorktableCommon.setWorktableViewScale(updatedScale, true);
+          if (Sidebar.isOpenedConfigSidebar()) {
+            return WorktableSetting.PositionAndScale.initConfig();
+          }
         }
       }
     });
@@ -534,8 +554,15 @@ WorktableCommon = (function() {
     return parseFloat(scale);
   };
 
-  WorktableCommon.setWorktableViewScale = function(scale) {
-    return PageValue.setGeneralPageValue(PageValue.Key.worktableScale(), scale);
+  WorktableCommon.setWorktableViewScale = function(scale, withViewStateUpdate) {
+    if (withViewStateUpdate == null) {
+      withViewStateUpdate = false;
+    }
+    PageValue.setGeneralPageValue(PageValue.Key.worktableScale(), scale);
+    if (withViewStateUpdate) {
+      Common.adjustScrollContentsPosition();
+      return LocalStorage.saveGeneralPageValue();
+    }
   };
 
   WorktableCommon.setupContextMenu = function(element, contextSelector, menu) {
