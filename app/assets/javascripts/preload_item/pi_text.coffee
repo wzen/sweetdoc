@@ -273,6 +273,7 @@ class PreloadItemText extends CanvasItemBase
     @originalItemSize = null
     @freeHandItemSize = null
     @freeHandDrawPaths = null
+    @freeHandTextOffset = {top: 0, left: 0}
     @_freeHandDrawPadding = 5
     @_fontMeatureCache = {}
     @_fixedTextAlpha = null
@@ -366,6 +367,8 @@ class PreloadItemText extends CanvasItemBase
             @itemSize.y = window.scrollContents.scrollTop()  + minY - @_freeHandDrawPadding
             @itemSize.w = maxX - minX + @_freeHandDrawPadding * 2
             @itemSize.h = maxY - minY + @_freeHandDrawPadding * 2
+            @freeHandTextOffset.left = (@originalItemSize.x + @originalItemSize.w * 0.5) - (@itemSize.x + @itemSize.w * 0.5)
+            @freeHandTextOffset.top = (@originalItemSize.y + @originalItemSize.h * 0.5) - (@itemSize.y + @itemSize.h * 0.5)
             @getJQueryElement().remove()
             @createItemElement( =>
               @freeHandItemSize = $.extend({}, @itemSize)
@@ -391,6 +394,7 @@ class PreloadItemText extends CanvasItemBase
               # アイテムのイベント設定
               @setupItemEvents()
           )
+        @freeHandTextOffset = {top: 0, left: 0}
 
     super(varName, value)
 
@@ -1057,6 +1061,9 @@ class PreloadItemText extends CanvasItemBase
     if @drawHorizontal == @constructor.WriteDirectionType.HORIZONTAL
       heightLine = y + (height - _calcHorizontalColumnHeightSum.call(@, column, fontSize)) * 0.5
       widthMax = _calcHorizontalColumnWidthMax.call(@, context, column)
+      if @balloonType == @constructor.BalloonType.FREE
+        x += @freeHandTextOffset.left
+        heightLine += @freeHandTextOffset.top
       for j in [0..(column.length - 1)]
         heightLine += _calcHorizontalColumnHeightMax.call(@, column[j], fontSize)
         w = x
@@ -1077,6 +1084,9 @@ class PreloadItemText extends CanvasItemBase
     else
       widthLine = x + (width + wordWidth * column.length) * 0.5
       heightMax = _calcVerticalColumnHeightMax.call(@, column, fontSize)
+      if @balloonType == @constructor.BalloonType.FREE
+        widthLine += @freeHandTextOffset.left
+        y += @freeHandTextOffset.top
       for j in [0..(column.length - 1)]
         widthLine -= wordWidth
         h = y

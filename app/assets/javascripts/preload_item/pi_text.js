@@ -380,6 +380,10 @@ PreloadItemText = (function(superClass) {
     this.originalItemSize = null;
     this.freeHandItemSize = null;
     this.freeHandDrawPaths = null;
+    this.freeHandTextOffset = {
+      top: 0,
+      left: 0
+    };
     this._freeHandDrawPadding = 5;
     this._fontMeatureCache = {};
     this._fixedTextAlpha = null;
@@ -491,6 +495,8 @@ PreloadItemText = (function(superClass) {
               _this.itemSize.y = window.scrollContents.scrollTop() + minY - _this._freeHandDrawPadding;
               _this.itemSize.w = maxX - minX + _this._freeHandDrawPadding * 2;
               _this.itemSize.h = maxY - minY + _this._freeHandDrawPadding * 2;
+              _this.freeHandTextOffset.left = (_this.originalItemSize.x + _this.originalItemSize.w * 0.5) - (_this.itemSize.x + _this.itemSize.w * 0.5);
+              _this.freeHandTextOffset.top = (_this.originalItemSize.y + _this.originalItemSize.h * 0.5) - (_this.itemSize.y + _this.itemSize.h * 0.5);
               _this.getJQueryElement().remove();
               _this.createItemElement(function() {
                 _this.freeHandItemSize = $.extend({}, _this.itemSize);
@@ -519,6 +525,10 @@ PreloadItemText = (function(superClass) {
             };
           })(this));
         }
+        this.freeHandTextOffset = {
+          top: 0,
+          left: 0
+        };
       }
     }
     return PreloadItemText.__super__.changeInstanceVarByConfig.call(this, varName, value);
@@ -1359,6 +1369,10 @@ PreloadItemText = (function(superClass) {
     if (this.drawHorizontal === this.constructor.WriteDirectionType.HORIZONTAL) {
       heightLine = y + (height - _calcHorizontalColumnHeightSum.call(this, column, fontSize)) * 0.5;
       widthMax = _calcHorizontalColumnWidthMax.call(this, context, column);
+      if (this.balloonType === this.constructor.BalloonType.FREE) {
+        x += this.freeHandTextOffset.left;
+        heightLine += this.freeHandTextOffset.top;
+      }
       for (j = n = 0, ref1 = column.length - 1; 0 <= ref1 ? n <= ref1 : n >= ref1; j = 0 <= ref1 ? ++n : --n) {
         heightLine += _calcHorizontalColumnHeightMax.call(this, column[j], fontSize);
         w = x;
@@ -1383,6 +1397,10 @@ PreloadItemText = (function(superClass) {
     } else {
       widthLine = x + (width + wordWidth * column.length) * 0.5;
       heightMax = _calcVerticalColumnHeightMax.call(this, column, fontSize);
+      if (this.balloonType === this.constructor.BalloonType.FREE) {
+        widthLine += this.freeHandTextOffset.left;
+        y += this.freeHandTextOffset.top;
+      }
       for (j = q = 0, ref3 = column.length - 1; 0 <= ref3 ? q <= ref3 : q >= ref3; j = 0 <= ref3 ? ++q : --q) {
         widthLine -= wordWidth;
         h = y;
