@@ -143,6 +143,14 @@ Constant = (function() {
 
     KeyboardKeyCode.V = constant.KeyboardKeyCode.V;
 
+    KeyboardKeyCode.PLUS = constant.KeyboardKeyCode.PLUS;
+
+    KeyboardKeyCode.SEMICOLON = constant.KeyboardKeyCode.SEMICOLON;
+
+    KeyboardKeyCode.MINUS = constant.KeyboardKeyCode.MINUS;
+
+    KeyboardKeyCode.F_MINUS = constant.KeyboardKeyCode.F_MINUS;
+
     return KeyboardKeyCode;
 
   })();

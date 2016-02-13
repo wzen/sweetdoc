@@ -97,6 +97,14 @@ class Constant
     @X = constant.KeyboardKeyCode.X
     # @property [Int] V vボタン
     @V = constant.KeyboardKeyCode.V
+    # @property [Int] PLUS plusボタン
+    @PLUS = constant.KeyboardKeyCode.PLUS
+    # @property [Int] SEMICOLON セミコロン
+    @SEMICOLON = constant.KeyboardKeyCode.SEMICOLON
+    # @property [Int] MINUS minusボタン
+    @MINUS = constant.KeyboardKeyCode.MINUS
+    # @property [Int] F_MINUS minusボタン(Firefox)
+    @F_MINUS = constant.KeyboardKeyCode.F_MINUS
 
   # 共通イベントタイプ
   class @CommonActionEventChangeType
