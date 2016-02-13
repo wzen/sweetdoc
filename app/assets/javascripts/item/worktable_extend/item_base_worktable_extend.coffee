@@ -175,7 +175,7 @@ itemBaseWorktableExtend =
       containment: scrollInside
       resize: (event, ui) =>
         if @resize?
-          @resize()
+          @resize(ui.size, ui.originalSize)
       stop: (event, ui) =>
         if @resizeComplete?
           @resizeComplete()
@@ -198,7 +198,6 @@ itemBaseWorktableExtend =
 
   # ドラッグ中イベント
   drag: (position) ->
-    element = $('#' + @id)
     scale = WorktableCommon.getWorktableViewScale()
     position.left /= scale
     position.top /= scale
@@ -209,9 +208,19 @@ itemBaseWorktableExtend =
       console.log("drag: itemSize: #{JSON.stringify(@itemSize)}")
 
   # リサイズ時のイベント
-  resize: ->
-    element = $('#' + @id)
-    @updateItemSize(element.width(), element.height())
+  resize: (size, originalSize) ->
+    scale = WorktableCommon.getWorktableViewScale()
+    diff = {
+      width: (size.width - originalSize.width) / scale
+      height: (size.height - originalSize.height) / scale
+    }
+    size.width = originalSize.width + diff.width
+    size.height = originalSize.height + diff.height
+    @updateItemSize(size.width, size.height)
+    if window.debug
+      console.log("resize: size:")
+      console.log(size)
+      console.log("resize: itemSize: #{JSON.stringify(@itemSize)}")
 
   # ドラッグ完了時イベント
   dragComplete: ->

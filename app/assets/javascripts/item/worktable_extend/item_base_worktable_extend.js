@@ -219,7 +219,7 @@ itemBaseWorktableExtend = {
       resize: (function(_this) {
         return function(event, ui) {
           if (_this.resize != null) {
-            return _this.resize();
+            return _this.resize(ui.size, ui.originalSize);
           }
         };
       })(this),
@@ -247,8 +247,7 @@ itemBaseWorktableExtend = {
     return this.setupDragAndResizeEvent();
   },
   drag: function(position) {
-    var element, scale;
-    element = $('#' + this.id);
+    var scale;
     scale = WorktableCommon.getWorktableViewScale();
     position.left /= scale;
     position.top /= scale;
@@ -259,10 +258,21 @@ itemBaseWorktableExtend = {
       return console.log("drag: itemSize: " + (JSON.stringify(this.itemSize)));
     }
   },
-  resize: function() {
-    var element;
-    element = $('#' + this.id);
-    return this.updateItemSize(element.width(), element.height());
+  resize: function(size, originalSize) {
+    var diff, scale;
+    scale = WorktableCommon.getWorktableViewScale();
+    diff = {
+      width: (size.width - originalSize.width) / scale,
+      height: (size.height - originalSize.height) / scale
+    };
+    size.width = originalSize.width + diff.width;
+    size.height = originalSize.height + diff.height;
+    this.updateItemSize(size.width, size.height);
+    if (window.debug) {
+      console.log("resize: size:");
+      console.log(size);
+      return console.log("resize: itemSize: " + (JSON.stringify(this.itemSize)));
+    }
   },
   dragComplete: function() {
     return this.saveObj();
