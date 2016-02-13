@@ -202,7 +202,7 @@ itemBaseWorktableExtend = {
       drag: (function(_this) {
         return function(event, ui) {
           if (_this.drag != null) {
-            return _this.drag();
+            return _this.drag(ui.position);
           }
         };
       })(this),
@@ -246,11 +246,16 @@ itemBaseWorktableExtend = {
     this.setupClickEvent();
     return this.setupDragAndResizeEvent();
   },
-  drag: function() {
-    var element;
+  drag: function(position) {
+    var element, scale;
     element = $('#' + this.id);
-    this.updateItemPosition(element.position().left, element.position().top);
+    scale = WorktableCommon.getWorktableViewScale();
+    position.left /= scale;
+    position.top /= scale;
+    this.updateItemPosition(position.left, position.top);
     if (window.debug) {
+      console.log("drag: position:");
+      console.log(position);
       return console.log("drag: itemSize: " + (JSON.stringify(this.itemSize)));
     }
   },
