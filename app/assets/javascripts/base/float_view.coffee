@@ -11,6 +11,7 @@ class FloatView
     @APPLY = 'apply'
     @POINTING_CLICK =  'pointing_click'
     @POINTING_DRAG =  'pointing_drag'
+    @SCALE = 'scale'
 
   @show = (message, type, showSeconds = -1) ->
     if !window.initDone

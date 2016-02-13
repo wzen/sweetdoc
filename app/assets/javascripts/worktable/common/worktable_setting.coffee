@@ -280,8 +280,9 @@ class WorktableSetting
         step: 0.1,
         value: worktableScale
         slide: (event, ui) =>
-          valueElement.val(ui.value)
-          valueElement.html(ui.value)
+          v = parseInt(ui.value * 100) + '%'
+          valueElement.val(v)
+          valueElement.html(v)
           if window.scaleSliderTimer?
             clearTimeout(window.scaleSliderTimer)
             window.scaleSliderTimer = null

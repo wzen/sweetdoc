@@ -508,6 +508,7 @@ class WorktableCommon
   @setWorktableViewScale = (scale, withViewStateUpdate = false) ->
     PageValue.setGeneralPageValue(PageValue.Key.worktableScale(), scale)
     if withViewStateUpdate
+      FloatView.show('View scale : ' + parseInt(scale * 100) + '%', FloatView.Type.SCALE, 1.0)
       # スクロール位置修正
       Common.adjustScrollContentsPosition()
       # キャッシュ保存

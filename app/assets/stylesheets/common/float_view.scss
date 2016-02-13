@@ -85,6 +85,15 @@ div.float_view {
       color: #FF9800;
     }
   }
+  &.scale {
+    .icon {
+      background-image: image_url('float_view/floatview_scale64.png');
+      background-repeat: no-repeat;
+    }
+    .message {
+      color: #3F51B5;
+    }
+  }
 
   .wrapper {
     height:50px;

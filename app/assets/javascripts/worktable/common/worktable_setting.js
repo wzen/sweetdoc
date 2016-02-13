@@ -334,8 +334,9 @@ WorktableSetting = (function() {
         value: worktableScale,
         slide: (function(_this) {
           return function(event, ui) {
-            valueElement.val(ui.value);
-            valueElement.html(ui.value);
+            v = parseInt(ui.value * 100) + '%';
+            valueElement.val(v);
+            valueElement.html(v);
             if (window.scaleSliderTimer != null) {
               clearTimeout(window.scaleSliderTimer);
               window.scaleSliderTimer = null;

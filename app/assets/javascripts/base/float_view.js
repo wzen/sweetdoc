@@ -25,6 +25,8 @@ FloatView = (function() {
 
     Type.POINTING_DRAG = 'pointing_drag';
 
+    Type.SCALE = 'scale';
+
     return Type;
 
   })();

@@ -560,6 +560,7 @@ WorktableCommon = (function() {
     }
     PageValue.setGeneralPageValue(PageValue.Key.worktableScale(), scale);
     if (withViewStateUpdate) {
+      FloatView.show('View scale : ' + parseInt(scale * 100) + '%', FloatView.Type.SCALE, 1.0);
       Common.adjustScrollContentsPosition();
       return LocalStorage.saveGeneralPageValue();
     }
