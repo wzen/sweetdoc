@@ -301,7 +301,7 @@ class PreloadItemText extends CanvasItemBase
     super(show, =>
       _settingTextDbclickEvent.call(@)
       if callback?
-        callback()
+        callback(@)
     )
 
   changeInstanceVarByConfig: (varName, value)->

@@ -418,7 +418,7 @@ PreloadItemText = (function(superClass) {
       return function() {
         _settingTextDbclickEvent.call(_this);
         if (callback != null) {
-          return callback();
+          return callback(_this);
         }
       };
     })(this));

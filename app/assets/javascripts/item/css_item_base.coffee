@@ -102,7 +102,7 @@ class CssItemBase extends ItemBase
       @applyDesignChange(false, false)
     super(show, =>
       if callback?
-        callback()
+        callback(@)
     )
 
   # デザイン反映

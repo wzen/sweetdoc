@@ -75,7 +75,7 @@ class PreloadItemImage extends ItemBase
         @refresh(show, callback)
       else
         if callback?
-          callback()
+          callback(@)
     , false)
 
   # アイテム削除 ※コールバックは無くていい

@@ -202,20 +202,16 @@ class Common
         se = new ScreenEvent()
         @updateScrollContentsPosition(se.initConfigY, se.initConfigX)
 
-  # 画面スケールの設定
-  @applyViewScale = (isViewResize = false) ->
-    updateMainWrapperPercent = null
-    scale = null
+  # 画面スケールの取得
+  @getViewScale = (isViewResize = false)->
     if window.isWorkTable && !window.previewRunning
-      # ワークテーブルの倍率に設定
-      scale = WorktableCommon.getWorktableViewScale()
-      updateMainWrapperPercent = 100 / scale
+      # ワークテーブルの倍率
+      return WorktableCommon.getWorktableViewScale()
     else
       scaleFromViewRate = window.runScaleFromViewRate
       if window.isWorkTable && window.previewRunning
         # プレビューではプロジェクトのビューは縮めないため、倍率は1.0固定
         scaleFromViewRate = 1.0
-
       seScale = 1.0
       if ScreenEvent.hasInstanceCache()
         se = new ScreenEvent()
@@ -223,17 +219,23 @@ class Common
           seScale = se.getNowProgressScale()
         else
           seScale = se.getNowScale()
-      scale = scaleFromViewRate * seScale
-      updateMainWrapperPercent = 100 / scaleFromViewRate
+      # プロジェクトビューの倍率 x 画面内の倍率
+      return scaleFromViewRate * seScale
+
+  # 画面スケール適用
+  @applyViewScale = (isViewResize = false) ->
+    scale = @getViewScale(isViewResize)
+    updateMainWrapperPercent = 100 / scale
     # キャンパスサイズ更新
-    @updateCanvasSize(updateMainWrapperPercent)
+    @updateCanvasSize()
     window.mainWrapper.css({transform: "scale(#{scale}, #{scale})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
 
   # Canvasサイズ更新
-  @updateCanvasSize = (mainWrapperViewPercent = 100) ->
+  @updateCanvasSize = (isViewResize = false) ->
     if window.drawingCanvas?
-      $(window.drawingCanvas).attr('width', $('#pages').width() * mainWrapperViewPercent * 0.01)
-      $(window.drawingCanvas).attr('height', $('#pages').height() * mainWrapperViewPercent * 0.01)
+      scale = @getViewScale(isViewResize)
+      $(window.drawingCanvas).attr('width', $('#pages').width() / scale)
+      $(window.drawingCanvas).attr('height', $('#pages').height() / scale)
 
   # リサイズイベント設定
   @initResize = (resizeEvent = null) ->

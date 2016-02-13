@@ -410,7 +410,7 @@ Page = (function() {
     for (j = 0, len = objs.length; j < len; j++) {
       obj = objs[j];
       results.push(obj.refreshIfItemNotExist(obj.visible, (function(_this) {
-        return function() {
+        return function(obj) {
           if (obj.firstFocus) {
             window.disabledEventHandler = true;
             Common.focusToTarget(obj.getJQueryElement(), function() {

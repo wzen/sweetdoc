@@ -66,7 +66,7 @@ class ScreenEvent extends CommonEvent
       # 倍率を戻す
       @_scale = s
       if callback?
-        callback()
+        callback(@)
 
     # イベント前の表示状態にする
     updateEventBefore: ->

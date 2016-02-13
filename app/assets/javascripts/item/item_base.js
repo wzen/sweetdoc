@@ -169,7 +169,7 @@ ItemBase = (function(superClass) {
           return _this.refresh(show, callback);
         } else {
           if (callback != null) {
-            return callback();
+            return callback(_this);
           }
         }
       };
@@ -190,7 +190,7 @@ ItemBase = (function(superClass) {
       return this.refresh(show, callback);
     } else {
       if (callback != null) {
-        return callback();
+        return callback(this);
       }
     }
   };

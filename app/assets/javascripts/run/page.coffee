@@ -357,7 +357,7 @@ class Page
     for obj in objs
       #if obj.visible
       # 初期表示
-      obj.refreshIfItemNotExist(obj.visible, =>
+      obj.refreshIfItemNotExist(obj.visible, (obj) =>
         if obj.firstFocus
           # 初期フォーカス
           window.disabledEventHandler = true

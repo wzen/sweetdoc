@@ -96,7 +96,7 @@ PreloadItemImage = (function(superClass) {
           return _this.refresh(show, callback);
         } else {
           if (callback != null) {
-            return callback();
+            return callback(_this);
           }
         }
       };

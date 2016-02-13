@@ -90,7 +90,7 @@ ScreenEvent = (function(superClass) {
       $('.keep_mag_base').remove();
       this._scale = s;
       if (callback != null) {
-        return callback();
+        return callback(this);
       }
     };
 

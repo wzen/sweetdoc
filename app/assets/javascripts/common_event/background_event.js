@@ -73,7 +73,7 @@ BackgroundEvent = (function(superClass) {
       }
       window.scrollInside.css('backgroundColor', '');
       if (callback != null) {
-        return callback();
+        return callback(this);
       }
     };
 

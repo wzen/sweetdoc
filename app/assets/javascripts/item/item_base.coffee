@@ -145,7 +145,7 @@ class ItemBase extends ItemEventBase
         @refresh(show, callback)
       else
         if callback?
-          callback()
+          callback(@)
     )
 
   # 画面表示がない場合描画処理
@@ -158,7 +158,7 @@ class ItemBase extends ItemEventBase
       @refresh(show, callback)
     else
       if callback?
-        callback()
+        callback(@)
 
   # CSSに反映
   applyDesignChange: (doStyleSave = true) ->

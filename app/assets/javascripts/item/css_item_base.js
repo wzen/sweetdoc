@@ -120,7 +120,7 @@ CssItemBase = (function(superClass) {
     return CssItemBase.__super__.refresh.call(this, show, (function(_this) {
       return function() {
         if (callback != null) {
-          return callback();
+          return callback(_this);
         }
       };
     })(this));

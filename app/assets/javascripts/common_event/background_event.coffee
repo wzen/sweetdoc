@@ -56,7 +56,7 @@ class BackgroundEvent extends CommonEvent
     refresh: (show = true, callback = null) ->
       window.scrollInside.css('backgroundColor', '')
       if callback?
-        callback()
+        callback(@)
 
     # イベント前の表示状態にする
     updateEventBefore: ->
