@@ -653,7 +653,7 @@ class PreloadItemText extends CanvasItemBase
     context = canvas.getContext('2d')
     context.fillStyle = "rgba(#{@textColor.r},#{@textColor.g},#{@textColor.b}, 0.3)"
 
-  _drawTextAndBalloonToCanvas = (text, writingLength) ->
+  _drawTextAndBalloonToCanvas = (text, writingLength = text.length) ->
     if !text?
       return
     canvas = document.getElementById(@canvasElementId())
@@ -1046,7 +1046,7 @@ class PreloadItemText extends CanvasItemBase
     text = text.replace("{br}", "\n", "gm")
     for i in [0..(text.length - 1)]
       char = text.charAt(i)
-      if @rowWordLength <= column[line].length || char == "\n"
+      if (@rowWordLength? && @rowWordLength <= column[line].length) || char == "\n"
         line += 1
         column[line] = ''
         if char == "\n"
@@ -1290,7 +1290,7 @@ class PreloadItemText extends CanvasItemBase
     text = text.replace("{br}", "\n", "gm")
     for i in [0..(text.length - 1)]
       char = text.charAt(i)
-      if (@rowWordLength? && @rowWordLength <= column[line].length) || char == "\n" || (@drawHorizontal == @constructor.WriteDirectionType.HORIZONTAL && nContext.measureText(column[line] + char).width > width) || (@drawHorizontal == @constructor.WriteDirectionType.VERTICAL && _calcVerticalColumnHeight.call(@, column[line] + char, fontSize) > height)
+      if char == "\n" || (@drawHorizontal == @constructor.WriteDirectionType.HORIZONTAL && nContext.measureText(column[line] + char).width > width) || (@drawHorizontal == @constructor.WriteDirectionType.VERTICAL && _calcVerticalColumnHeight.call(@, column[line] + char, fontSize) > height)
         if char != "\n" && !@showBalloon
           return column[line].length
         line += 1

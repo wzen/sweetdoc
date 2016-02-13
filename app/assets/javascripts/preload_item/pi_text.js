@@ -864,6 +864,9 @@ PreloadItemText = (function(superClass) {
 
   _drawTextAndBalloonToCanvas = function(text, writingLength) {
     var canvas, context;
+    if (writingLength == null) {
+      writingLength = text.length;
+    }
     if (text == null) {
       return;
     }
@@ -1342,7 +1345,7 @@ PreloadItemText = (function(superClass) {
     text = text.replace("{br}", "\n", "gm");
     for (i = k = 0, ref = text.length - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
       char = text.charAt(i);
-      if (this.rowWordLength <= column[line].length || char === "\n") {
+      if (((this.rowWordLength != null) && this.rowWordLength <= column[line].length) || char === "\n") {
         line += 1;
         column[line] = '';
         if (char === "\n") {
@@ -1619,7 +1622,7 @@ PreloadItemText = (function(superClass) {
     text = text.replace("{br}", "\n", "gm");
     for (i = k = 0, ref = text.length - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
       char = text.charAt(i);
-      if (((this.rowWordLength != null) && this.rowWordLength <= column[line].length) || char === "\n" || (this.drawHorizontal === this.constructor.WriteDirectionType.HORIZONTAL && nContext.measureText(column[line] + char).width > width) || (this.drawHorizontal === this.constructor.WriteDirectionType.VERTICAL && _calcVerticalColumnHeight.call(this, column[line] + char, fontSize) > height)) {
+      if (char === "\n" || (this.drawHorizontal === this.constructor.WriteDirectionType.HORIZONTAL && nContext.measureText(column[line] + char).width > width) || (this.drawHorizontal === this.constructor.WriteDirectionType.VERTICAL && _calcVerticalColumnHeight.call(this, column[line] + char, fontSize) > height)) {
         if (char !== "\n" && !this.showBalloon) {
           return column[line].length;
         }
