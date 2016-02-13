@@ -61,7 +61,7 @@ EventBase = (function(superClass) {
       ref = this.constructor.actionPropertiesModifiableVars();
       for (varName in ref) {
         value = ref[varName];
-        this.changeInstanceVarByConfig(varName, value["default"]);
+        this[varName] = value["default"];
       }
     }
   }

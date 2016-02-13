@@ -29,7 +29,9 @@ class EventBase extends Extend
     # modifiables変数の初期化
     if @constructor.actionProperties? && @constructor.actionPropertiesModifiableVars()?
       for varName, value of @constructor.actionPropertiesModifiableVars()
-        @changeInstanceVarByConfig(varName, value.default)
+        @[varName] = value.default
+        # ⇣ コンフィグから変更するわけでないので
+        #@changeInstanceVarByConfig(varName, value.default)
 
   # インスタンス値セッター
   changeInstanceVarByConfig: (varName, value) ->

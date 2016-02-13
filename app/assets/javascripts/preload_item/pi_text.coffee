@@ -263,6 +263,7 @@ class PreloadItemText extends CanvasItemBase
     @fontFamily = 'Times New Roman'
     @fontSize = null
     @isFixedFontSize = false
+    @rowWordLength = null
     @showBalloon = false
     @balloonValue = {}
     @balloonType = null
@@ -275,6 +276,7 @@ class PreloadItemText extends CanvasItemBase
     @_freeHandDrawPadding = 5
     @_fontMeatureCache = {}
     @_fixedTextAlpha = null
+    @_defaultWorkWidth = {}
 
   # アイテム描画
   # @param [Boolean] show 要素作成後に表示するか
@@ -315,10 +317,14 @@ class PreloadItemText extends CanvasItemBase
       @itemSize.h = w
     else if varName == 'showBalloon' && @showBalloon != value && !@isFixedFontSize
       # FontSizeを撮り直す
-      @fontSize = null
+      canvas = document.getElementById(@canvasElementId())
+      @showBalloon = value
+      @fontSize = _calcFontSizeAbout.call(@, @inputText, canvas.width, canvas.height, @isFixedFontSize, @drawHorizontal)
     else if varName == 'isFixedFontSize' || varName == 'fixedFontSize'
       # FontSizeを撮り直す
-      @fontSize = null
+      canvas = document.getElementById(@canvasElementId())
+      @[varName] = value
+      @fontSize = _calcFontSizeAbout.call(@, @inputText, canvas.width, canvas.height, @isFixedFontSize, @drawHorizontal)
     else if varName == 'balloonType' && @balloonType? && @balloonType != value
       if value == @constructor.BalloonType.FREE
         # パスを消去して新規作成する
@@ -961,93 +967,86 @@ class PreloadItemText extends CanvasItemBase
     context.fill()
     context.stroke()
 
+  _calcHorizontalColumnWidth = (context, columnText) ->
+    sum = 0
+    for char in columnText.split('')
+      sum += context.measureText(char).width
+    return sum
+
+  _calcHorizontalColumnWidthMax = (context, columns) ->
+    ret = 0
+    for c in columns
+      r = _calcHorizontalColumnWidth.call(@, context, c)
+      if ret < r
+        ret = r
+    return ret
+
+  _calcVerticalColumnHeight = (columnText, fontSize) ->
+    ret = 0
+    for c in columnText.split('')
+      measure = _calcWordMeasure.call(@, c, fontSize, @fontFamily)
+      if PreloadItemText.isJapanease(c)
+        ret += _defaultWorkWidth.call(@, fontSize, @fontFamily)
+      else
+        ret += measure.height
+    return ret
+
+  _calcHorizontalColumnHeightMax = (columnText, fontSize) ->
+    ret = 0
+    for c in columnText.split('')
+      measure = _calcWordMeasure.call(@, c, fontSize, @fontFamily)
+      r = measure.height
+      if ret < r
+        ret = r
+    return ret
+
+  _calcHorizontalColumnHeightSum = (columns, fontSize) ->
+    sum = 0
+    for c in columns
+      sum += _calcHorizontalColumnHeightMax.call(@, c, fontSize)
+    return sum
+
+  _calcVerticalColumnHeightMax = (columns, fontSize) ->
+    ret = 0
+    for c in columns
+      r = _calcVerticalColumnHeight.call(@, c, fontSize)
+      if ret < r
+        ret = r
+    return ret
+
+  _setTextAlpha = (context, idx, writingLength) ->
+    if @_fixedTextAlpha?
+      context.globalAlpha = @_fixedTextAlpha
+      return
+
+    if writingLength == 0
+      context.globalAlpha = 0
+    else if idx <= writingLength
+      context.globalAlpha = 1
+    else
+      ga = 1 - ((idx - writingLength) / @constructor.WRITE_TEXT_BLUR_LENGTH)
+      if ga < 0
+        ga = 0
+      context.globalAlpha = ga
+
+  _writeLength = (column, writingLength, wordSum) ->
+    v = parseInt(writingLength - wordSum)
+    if v > column.length
+      v = column.length
+    else if v < 0
+      v = 0
+    return v
+
   _drawText = (context, text, x, y, width, height, fontSize, writingLength = text.length) ->
     context.save()
     context.font = "#{fontSize}px #{@fontFamily}"
-    wordWidth = context.measureText('あ').width
-
-    _calcSize = (columnText) ->
-      hasJapanease = false
-      for i in [0..(columnText.length - 1)]
-        if PreloadItemText.isJapanease(columnText.charAt(i))
-          hasJapanease = true
-          break
-      if hasJapanease
-        return context.measureText('あ').width
-      else
-        context.measureText('W').width
-
-    _calcHorizontalColumnWidth = (columnText) ->
-      sum = 0
-      for char in columnText.split('')
-        sum += context.measureText(char).width
-      return sum
-    _calcVerticalColumnHeight = (columnText, fontSize) ->
-      ret = 0
-      for c in columnText.split('')
-        measure = _calcWordMeasure.call(@, c, fontSize, @fontFamily)
-        if PreloadItemText.isJapanease(c)
-          ret += wordWidth
-        else
-          ret += measure.height
-      return ret
-    _calcHorizontalColumnHeightMax = (columnText, fontSize) ->
-      ret = 0
-      for c in columnText.split('')
-        measure = _calcWordMeasure.call(@, c, fontSize, @fontFamily)
-        r = measure.height
-        if ret < r
-          ret = r
-      return ret
-    _calcHorizontalColumnWidthMax = (columns) ->
-      ret = 0
-      for c in columns
-        r = _calcHorizontalColumnWidth.call(@, c)
-        if ret < r
-          ret = r
-      return ret
-    _calcHorizontalColumnHeightSum = (columns, fontSize) ->
-      sum = 0
-      for c in columns
-        sum += _calcHorizontalColumnHeightMax.call(@, c, fontSize)
-      return sum
-    _calcVerticalColumnHeightMax = (columns, fontSize) ->
-      ret = 0
-      for c in columns
-        r = _calcVerticalColumnHeight.call(@, c, fontSize)
-        if ret < r
-          ret = r
-      return ret
-
-    _setTextAlpha = (context, idx, writingLength) ->
-      if @_fixedTextAlpha?
-        context.globalAlpha = @_fixedTextAlpha
-        return
-
-      if writingLength == 0
-        context.globalAlpha = 0
-      else if idx <= writingLength
-        context.globalAlpha = 1
-      else
-        ga = 1 - ((idx - writingLength) / @constructor.WRITE_TEXT_BLUR_LENGTH)
-        if ga < 0
-          ga = 0
-        context.globalAlpha = ga
-
-    _writeLength = (column, writingLength, wordSum) ->
-      v = parseInt(writingLength - wordSum)
-      if v > column.length
-        v = column.length
-      else if v < 0
-        v = 0
-      return v
-
+    wordWidth = _defaultWorkWidth.call(@, fontSize, @fontFamily)
     column = ['']
     line = 0
     text = text.replace("{br}", "\n", "gm")
     for i in [0..(text.length - 1)]
       char = text.charAt(i)
-      if char == "\n" || (@drawHorizontal == @constructor.WriteDirectionType.HORIZONTAL && context.measureText(column[line] + char).width > width) || (@drawHorizontal == @constructor.WriteDirectionType.VERTICAL && _calcVerticalColumnHeight.call(@, column[line] + char, fontSize) > height)
+      if @rowWordLength <= column[line].length || char == "\n"
         line += 1
         column[line] = ''
         if char == "\n"
@@ -1057,17 +1056,17 @@ class PreloadItemText extends CanvasItemBase
     wordSum = 0
     if @drawHorizontal == @constructor.WriteDirectionType.HORIZONTAL
       heightLine = y + (height - _calcHorizontalColumnHeightSum.call(@, column, fontSize)) * 0.5
-      widthMax = _calcHorizontalColumnWidthMax.call(@, column)
+      widthMax = _calcHorizontalColumnWidthMax.call(@, context, column)
       for j in [0..(column.length - 1)]
         heightLine += _calcHorizontalColumnHeightMax.call(@, column[j], fontSize)
         w = x
         if @wordAlign == @constructor.WordAlign.LEFT
           w += (width - widthMax) * 0.5
         else if @wordAlign == @constructor.WordAlign.CENTER
-          w += (width - _calcHorizontalColumnWidth.call(@, column[j])) * 0.5
+          w += (width - _calcHorizontalColumnWidth.call(@, context, column[j])) * 0.5
         else
           # RIGHT
-          w += (width + widthMax) * 0.5 - _calcHorizontalColumnWidth.call(@, column[j])
+          w += (width + widthMax) * 0.5 - _calcHorizontalColumnWidth.call(@, context, column[j])
         context.beginPath()
         wl = 0
         for c, idx in column[j].split('')
@@ -1262,7 +1261,9 @@ class PreloadItemText extends CanvasItemBase
       @inputText = $('.textarea:first', emt).val()
       @drawHorizontal = parseInt($('.drawHorizontal_select:first', emt).val())
       # fontSizeを撮り直す
-      @fontSize = null
+      canvas = document.getElementById(@canvasElementId())
+      @fontSize = _calcFontSizeAbout.call(@, @inputText, canvas.width, canvas.height, @isFixedFontSize, @drawHorizontal)
+      @rowWordLength = _calcRowWordLength.call(@, @inputText, canvas.width, canvas.height, @fontSize, @fontFamily)
       # データ保存
       @saveObj()
       # モードを描画モードに
@@ -1276,6 +1277,43 @@ class PreloadItemText extends CanvasItemBase
     $('.back_button', modalEmt).off('click').on('click', (e) =>
       Common.hideModalView()
     )
+
+  _calcRowWordLength = (text, width, height, fontSize, fontFamily) ->
+    canvas = document.getElementById(@canvasElementId())
+    nCanvas = document.createElement('canvas')
+    nCanvas.width = width
+    nCanvas.height = height
+    nContext = nCanvas.getContext('2d')
+    nContext.font = "#{fontSize}px #{fontFamily}"
+    column = ['']
+    line = 0
+    text = text.replace("{br}", "\n", "gm")
+    for i in [0..(text.length - 1)]
+      char = text.charAt(i)
+      if (@rowWordLength? && @rowWordLength <= column[line].length) || char == "\n" || (@drawHorizontal == @constructor.WriteDirectionType.HORIZONTAL && nContext.measureText(column[line] + char).width > width) || (@drawHorizontal == @constructor.WriteDirectionType.VERTICAL && _calcVerticalColumnHeight.call(@, column[line] + char, fontSize) > height)
+        if char != "\n" && !@showBalloon
+          return column[line].length
+        line += 1
+        column[line] = ''
+        if char == "\n"
+          char = ''
+      column[line] += char
+    return null
+
+  _defaultWorkWidth = (fontSize, fontFamily) ->
+    fontSizeKey = "#{fontSize}"
+    if @_defaultWorkWidth[fontSizeKey]? && @_defaultWorkWidth[fontSizeKey][fontFamily]?
+      return @_defaultWorkWidth[fontSizeKey][fontFamily]
+
+    nCanvas = document.createElement('canvas')
+    nCanvas.width = 500
+    nCanvas.height = 500
+    context = nCanvas.getContext('2d')
+    context.font = "#{fontSize}px #{fontFamily}"
+    wordWidth = context.measureText('あ').width
+    if !@_defaultWorkWidth[fontSizeKey]?
+      @_defaultWorkWidth[fontSizeKey] = {}
+    @_defaultWorkWidth[fontSizeKey][fontFamily] = wordWidth
 
 Common.setClassToMap(PreloadItemText.CLASS_DIST_TOKEN, PreloadItemText)
 
