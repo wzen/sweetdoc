@@ -102,7 +102,7 @@ ScreenEvent = (function(superClass) {
         if (!this._keepDispMag && (this.nowScale != null)) {
           _setScale.call(this, this.nowScale);
           size = _convertCenterCoodToSize.call(this, this.nowX, this.nowY, this.nowScale);
-          scrollContentsSize = Common.scrollContentsSizeUnderViewScale();
+          scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
           if (scrollContentsSize != null) {
             return Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false);
           }
@@ -124,7 +124,7 @@ ScreenEvent = (function(superClass) {
         } else {
           _setScale.call(this, this._progressScale);
           size = _convertCenterCoodToSize.call(this, this._progressX, this._progressY, this._progressScale);
-          scrollContentsSize = Common.scrollContentsSizeUnderViewScale();
+          scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
           if (scrollContentsSize != null) {
             return Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false);
           }
@@ -146,7 +146,7 @@ ScreenEvent = (function(superClass) {
       if (!this._keepDispMag) {
         _setScale.call(this, this._progressScale);
         size = _convertCenterCoodToSize.call(this, this._progressX, this._progressY, this._progressScale);
-        scrollContentsSize = Common.scrollContentsSizeUnderViewScale();
+        scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
         if (scrollContentsSize != null) {
           return Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false);
         }

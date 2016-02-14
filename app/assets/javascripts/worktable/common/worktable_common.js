@@ -85,7 +85,7 @@ WorktableCommon = (function() {
       if ((obj.isCopy != null) && obj.isCopy) {
         instance.name = instance.name + ' (Copy)';
       }
-      scrollContentsSize = Common.scrollContentsSizeUnderViewScale();
+      scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
       if (scrollContentsSize != null) {
         instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (scrollContentsSize.width - instance.itemSize.w) / 2.0);
         instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (scrollContentsSize.height - instance.itemSize.h) / 2.0);
@@ -373,7 +373,7 @@ WorktableCommon = (function() {
     timelineTopPadding = 5;
     $('#main').height($('#contents').height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2));
     $('#sidebar').height($('#contents').height() - (borderWidth * 2));
-    scrollContentsSize = Common.scrollContentsSizeUnderViewScale();
+    scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
     if (scrollContentsSize != null) {
       return window.scrollContentsSize = {
         width: scrollContentsSize.width,
@@ -440,7 +440,7 @@ WorktableCommon = (function() {
       }
       e.preventDefault();
       e.stopPropagation();
-      scrollContentsSize = Common.scrollContentsSizeUnderViewScale();
+      scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
       if (scrollContentsSize != null) {
         top = window.scrollContents.scrollTop() + scrollContentsSize.height * 0.5;
         left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5;
@@ -474,47 +474,26 @@ WorktableCommon = (function() {
     return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
   };
 
-  WorktableCommon.getScreenSizeUnderViewScale = function() {
-    var scale, screenSize;
-    screenSize = Common.getScreenSize();
-    if (screenSize != null) {
-      scale = this.getWorktableViewScale();
-      return {
-        width: screenSize.width / scale,
-        height: screenSize.height / scale
-      };
-    }
-    return null;
-  };
-
   WorktableCommon.calcScrollCenterPosition = function(top, left) {
     var l, screenSize, t;
-    screenSize = this.getScreenSizeUnderViewScale();
-    if (screenSize != null) {
-      t = top - (window.scrollInsideWrapper.height() + screenSize.height) * 0.5;
-      l = left - (window.scrollInsideWrapper.width() + screenSize.width) * 0.5;
-      return {
-        top: t,
-        left: l
-      };
-    } else {
-      return null;
-    }
+    screenSize = Common.getScreenSize();
+    t = top - (window.scrollInsideWrapper.height() + screenSize.height) * 0.5;
+    l = left - (window.scrollInsideWrapper.width() + screenSize.width) * 0.5;
+    return {
+      top: t,
+      left: l
+    };
   };
 
   WorktableCommon.calcScrollTopLeftPosition = function(top, left) {
     var l, screenSize, t;
-    screenSize = this.getScreenSizeUnderViewScale();
-    if (screenSize != null) {
-      t = top + (window.scrollInsideWrapper.height() + screenSize.height) * 0.5;
-      l = left + (window.scrollInsideWrapper.width() + screenSize.width) * 0.5;
-      return {
-        top: t,
-        left: l
-      };
-    } else {
-      return null;
-    }
+    screenSize = Common.getScreenSize();
+    t = top + (window.scrollInsideWrapper.height() + screenSize.height) * 0.5;
+    l = left + (window.scrollInsideWrapper.width() + screenSize.width) * 0.5;
+    return {
+      top: t,
+      left: l
+    };
   };
 
   WorktableCommon.adjustScrollContentsPosition = function() {

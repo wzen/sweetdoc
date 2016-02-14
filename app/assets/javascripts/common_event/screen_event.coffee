@@ -76,7 +76,7 @@ class ScreenEvent extends CommonEvent
         if !@_keepDispMag && @nowScale?
           _setScale.call(@, @nowScale)
           size = _convertCenterCoodToSize.call(@, @nowX, @nowY, @nowScale)
-          scrollContentsSize = Common.scrollContentsSizeUnderViewScale()
+          scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
           if scrollContentsSize?
             Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 
@@ -94,7 +94,7 @@ class ScreenEvent extends CommonEvent
         else
           _setScale.call(@, @_progressScale)
           size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
-          scrollContentsSize = Common.scrollContentsSizeUnderViewScale()
+          scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
           if scrollContentsSize?
             Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 
@@ -111,7 +111,7 @@ class ScreenEvent extends CommonEvent
       if !@_keepDispMag
         _setScale.call(@, @_progressScale)
         size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
-        scrollContentsSize = Common.scrollContentsSizeUnderViewScale()
+        scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
         if scrollContentsSize?
           Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 

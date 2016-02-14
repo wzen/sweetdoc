@@ -361,7 +361,7 @@ class Project
         # 右にスライド
         scrollWrapper = modalEmt.find('.am_scroll_wrapper:first')
         scrollContents = scrollWrapper.children('div:first')
-        scrollContentsSize = Common.scrollContentsSizeUnderViewScale()
+        scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
         if scrollContentsSize?
           scrollWrapper.animate({scrollLeft: scrollContentsSize.width}, 200)
           # プロジェクト情報初期化

@@ -69,7 +69,7 @@ class WorktableCommon
       if obj.isCopy? && obj.isCopy
         instance.name = instance.name + ' (Copy)'
       # 画面中央に貼り付け
-      scrollContentsSize = Common.scrollContentsSizeUnderViewScale()
+      scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
       if scrollContentsSize?
         instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (scrollContentsSize.width - instance.itemSize.w) / 2.0)
         instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (scrollContentsSize.height - instance.itemSize.h) / 2.0)
@@ -332,7 +332,7 @@ class WorktableCommon
     timelineTopPadding = 5
     $('#main').height($('#contents').height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2))
     $('#sidebar').height($('#contents').height() - (borderWidth * 2))
-    scrollContentsSize = Common.scrollContentsSizeUnderViewScale()
+    scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
     if scrollContentsSize?
       window.scrollContentsSize = {width: scrollContentsSize.width, height: scrollContentsSize.height}
 
@@ -390,7 +390,7 @@ class WorktableCommon
         return
       e.preventDefault()
       e.stopPropagation()
-      scrollContentsSize = Common.scrollContentsSizeUnderViewScale()
+      scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
       if scrollContentsSize?
         top = window.scrollContents.scrollTop() + scrollContentsSize.height * 0.5
         left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5
@@ -428,32 +428,19 @@ class WorktableCommon
     # 選択アイテム初期化
     WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
 
-  @getScreenSizeUnderViewScale = ->
-    screenSize = Common.getScreenSize()
-    if screenSize?
-      scale = @getWorktableViewScale()
-      return {width: screenSize.width / scale, height: screenSize.height / scale}
-    return null
-
-  # 左上座標から中心座標を計算
+  # 左上座標から中心座標を計算(例 15000 -> 0)
   @calcScrollCenterPosition = (top, left) ->
-    screenSize = @getScreenSizeUnderViewScale()
-    if screenSize?
-      t = top - (window.scrollInsideWrapper.height() + screenSize.height) * 0.5
-      l = left - (window.scrollInsideWrapper.width() + screenSize.width) * 0.5
-      return {top: t, left: l}
-    else
-      return null
+    screenSize = Common.getScreenSize()
+    t = top - (window.scrollInsideWrapper.height() + screenSize.height) * 0.5
+    l = left - (window.scrollInsideWrapper.width() + screenSize.width) * 0.5
+    return {top: t, left: l}
 
-  # 中心座標から左上座標を計算
+  # 中心座標から左上座標を計算(例 0 -> 15000)
   @calcScrollTopLeftPosition = (top, left) ->
-    screenSize = @getScreenSizeUnderViewScale()
-    if screenSize?
-      t = top + (window.scrollInsideWrapper.height() + screenSize.height) * 0.5
-      l = left + (window.scrollInsideWrapper.width() + screenSize.width) * 0.5
-      return {top: t, left: l}
-    else
-      return null
+    screenSize = Common.getScreenSize()
+    t = top + (window.scrollInsideWrapper.height() + screenSize.height) * 0.5
+    l = left + (window.scrollInsideWrapper.width() + screenSize.width) * 0.5
+    return {top: t, left: l}
 
   # スクロール位置を再設定
   @adjustScrollContentsPosition: ->

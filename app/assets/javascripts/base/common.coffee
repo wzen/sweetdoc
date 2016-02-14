@@ -169,7 +169,12 @@ class Common
         height: $(window).height()
       }
     else
-      return PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
+      p = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
+      if p?
+        return p
+      else
+        console.error('SCREEN_SIZE not defined')
+        return null
 
   # プロジェクト表示サイズ設定
   @initScreenSize = (reset = false) ->
@@ -343,7 +348,7 @@ class Common
       return
 
     # col-xs-9 → 75% padding → 15px
-    scrollContentsSize = @scrollContentsSizeUnderViewScale()
+    scrollContentsSize = @scrollContentsSizeUnderScreenEventScale()
     if scrollContentsSize?
       diff = {top: 0, left: 0}
       if $(target).get(0).offsetParent?
@@ -371,7 +376,7 @@ class Common
     if withUpdateScreenEventVar
       @saveDisplayPosition(top, left, true)
 
-    scrollContentsSize = @scrollContentsSizeUnderViewScale()
+    scrollContentsSize = @scrollContentsSizeUnderScreenEventScale()
     if scrollContentsSize?
       top -= scrollContentsSize.height * 0.5
       left -= scrollContentsSize.width * 0.5
@@ -431,18 +436,19 @@ class Common
         , 0)
       , 500)
 
-  @scrollContentsSizeUnderViewScale = ->
+  @scrollContentsSizeUnderScreenEventScale = ->
     if !ScreenEvent.hasInstanceCache()
       # ScreenEventが作成されていない場合はNULL
       return null
 
-    if window.isWorkTable
-      scale = WorktableCommon.getWorktableViewScale()
-    else
+    if !window.isWorkTable || window.previewRunning
       se = new ScreenEvent()
       scale = se.getNowScale()
-    if window.runDebug
-      console.log('scrollContentsSizeUnderViewScale:' + scale)
+    else
+      # プレビュー以外のWorktableでは1.0にすること
+      scale = 1.0
+    if window.debug
+      console.log('scrollContentsSizeUnderScreenEventScale:' + scale)
     return {
       width: window.scrollContents.width() / scale
       height: window.scrollContents.height() / scale

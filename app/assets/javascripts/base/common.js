@@ -199,13 +199,20 @@ Common = (function() {
   };
 
   Common.getScreenSize = function() {
+    var p;
     if ($('body').hasClass('full_window')) {
       return {
         width: $(window).width(),
         height: $(window).height()
       };
     } else {
-      return PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+      p = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+      if (p != null) {
+        return p;
+      } else {
+        console.error('SCREEN_SIZE not defined');
+        return null;
+      }
     }
   };
 
@@ -448,7 +455,7 @@ Common = (function() {
     if ((target == null) || target.length === 0) {
       return;
     }
-    scrollContentsSize = this.scrollContentsSizeUnderViewScale();
+    scrollContentsSize = this.scrollContentsSizeUnderScreenEventScale();
     if (scrollContentsSize != null) {
       diff = {
         top: 0,
@@ -484,7 +491,7 @@ Common = (function() {
     if (withUpdateScreenEventVar) {
       this.saveDisplayPosition(top, left, true);
     }
-    scrollContentsSize = this.scrollContentsSizeUnderViewScale();
+    scrollContentsSize = this.scrollContentsSizeUnderScreenEventScale();
     if (scrollContentsSize != null) {
       top -= scrollContentsSize.height * 0.5;
       left -= scrollContentsSize.width * 0.5;
@@ -567,19 +574,19 @@ Common = (function() {
     }
   };
 
-  Common.scrollContentsSizeUnderViewScale = function() {
+  Common.scrollContentsSizeUnderScreenEventScale = function() {
     var scale, se;
     if (!ScreenEvent.hasInstanceCache()) {
       return null;
     }
-    if (window.isWorkTable) {
-      scale = WorktableCommon.getWorktableViewScale();
-    } else {
+    if (!window.isWorkTable || window.previewRunning) {
       se = new ScreenEvent();
       scale = se.getNowScale();
+    } else {
+      scale = 1.0;
     }
-    if (window.runDebug) {
-      console.log('scrollContentsSizeUnderViewScale:' + scale);
+    if (window.debug) {
+      console.log('scrollContentsSizeUnderScreenEventScale:' + scale);
     }
     return {
       width: window.scrollContents.width() / scale,
@@ -1313,7 +1320,7 @@ Common = (function() {
   };
 
   Common.colorChangeCacheData = function(beforeColor, afterColor, length, colorType) {
-    var b, bColors, bPer, bp, cColors, g, gPer, gp, i, index, j, l, len, len1, len2, len3, m, o, p, q, r, rPer, ref, ref1, ret, rp, u, val;
+    var b, bColors, bPer, bp, cColors, g, gPer, gp, i, index, j, l, len, len1, len2, len3, m, o, q, r, rPer, ref, ref1, ret, rp, u, val, x;
     if (colorType == null) {
       colorType = 'hex';
     }
@@ -1344,7 +1351,7 @@ Common = (function() {
       bColors = new Array(3);
       if (beforeColor.indexOf('rgb') >= 0) {
         bColors = beforeColor.replace('rgba', '').replace('rgb', '').replace('(', '').replace(')', '').split(',');
-        for (index = p = 0, len2 = bColors.length; p < len2; index = ++p) {
+        for (index = q = 0, len2 = bColors.length; q < len2; index = ++q) {
           val = bColors[index];
           bColors[index] = parseInt(val);
         }
@@ -1354,7 +1361,7 @@ Common = (function() {
         bColors[0] = beforeColor.substring(0, 2);
         bColors[1] = beforeColor.substring(2, 4);
         bColors[2] = beforeColor.substring(4, 6);
-        for (index = q = 0, len3 = bColors.length; q < len3; index = ++q) {
+        for (index = u = 0, len3 = bColors.length; u < len3; index = ++u) {
           val = bColors[index];
           bColors[index] = parseInt(val, 16);
         }
@@ -1365,7 +1372,7 @@ Common = (function() {
       rp = rPer;
       gp = gPer;
       bp = bPer;
-      for (i = u = 0, ref1 = length; 0 <= ref1 ? u <= ref1 : u >= ref1; i = 0 <= ref1 ? ++u : --u) {
+      for (i = x = 0, ref1 = length; 0 <= ref1 ? x <= ref1 : x >= ref1; i = 0 <= ref1 ? ++x : --x) {
         r = parseInt(bColors[0] + rp);
         g = parseInt(bColors[1] + gp);
         b = parseInt(bColors[2] + bp);
