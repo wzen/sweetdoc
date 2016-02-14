@@ -448,7 +448,7 @@ Common = (function() {
     if ((target == null) || target.length === 0) {
       return;
     }
-    scrollContentsSize = this.scrollContentsSizeUnderScreenEventScale();
+    scrollContentsSize = this.scrollContentsSizeUnderViewScale();
     if (scrollContentsSize != null) {
       diff = {
         top: 0,
@@ -484,7 +484,7 @@ Common = (function() {
     if (withUpdateScreenEventVar) {
       this.saveDisplayPosition(top, left, true);
     }
-    scrollContentsSize = this.scrollContentsSizeUnderScreenEventScale();
+    scrollContentsSize = this.scrollContentsSizeUnderViewScale();
     if (scrollContentsSize != null) {
       top -= scrollContentsSize.height * 0.5;
       left -= scrollContentsSize.width * 0.5;
@@ -567,7 +567,7 @@ Common = (function() {
     }
   };
 
-  Common.scrollContentsSizeUnderScreenEventScale = function() {
+  Common.scrollContentsSizeUnderViewScale = function() {
     var scale, se;
     if (!ScreenEvent.hasInstanceCache()) {
       return null;
@@ -579,7 +579,7 @@ Common = (function() {
       scale = se.getNowScale();
     }
     if (window.runDebug) {
-      console.log('scrollContentsSizeUnderScreenEventScale:' + scale);
+      console.log('scrollContentsSizeUnderViewScale:' + scale);
     }
     return {
       width: window.scrollContents.width() / scale,

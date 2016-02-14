@@ -343,7 +343,7 @@ class Common
       return
 
     # col-xs-9 → 75% padding → 15px
-    scrollContentsSize = @scrollContentsSizeUnderScreenEventScale()
+    scrollContentsSize = @scrollContentsSizeUnderViewScale()
     if scrollContentsSize?
       diff = {top: 0, left: 0}
       if $(target).get(0).offsetParent?
@@ -371,7 +371,7 @@ class Common
     if withUpdateScreenEventVar
       @saveDisplayPosition(top, left, true)
 
-    scrollContentsSize = @scrollContentsSizeUnderScreenEventScale()
+    scrollContentsSize = @scrollContentsSizeUnderViewScale()
     if scrollContentsSize?
       top -= scrollContentsSize.height * 0.5
       left -= scrollContentsSize.width * 0.5
@@ -431,7 +431,7 @@ class Common
         , 0)
       , 500)
 
-  @scrollContentsSizeUnderScreenEventScale = ->
+  @scrollContentsSizeUnderViewScale = ->
     if !ScreenEvent.hasInstanceCache()
       # ScreenEventが作成されていない場合はNULL
       return null
@@ -442,7 +442,7 @@ class Common
       se = new ScreenEvent()
       scale = se.getNowScale()
     if window.runDebug
-      console.log('scrollContentsSizeUnderScreenEventScale:' + scale)
+      console.log('scrollContentsSizeUnderViewScale:' + scale)
     return {
       width: window.scrollContents.width() / scale
       height: window.scrollContents.height() / scale

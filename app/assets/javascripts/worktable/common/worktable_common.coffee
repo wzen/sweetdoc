@@ -69,7 +69,7 @@ class WorktableCommon
       if obj.isCopy? && obj.isCopy
         instance.name = instance.name + ' (Copy)'
       # 画面中央に貼り付け
-      scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
+      scrollContentsSize = Common.scrollContentsSizeUnderViewScale()
       if scrollContentsSize?
         instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (scrollContentsSize.width - instance.itemSize.w) / 2.0)
         instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (scrollContentsSize.height - instance.itemSize.h) / 2.0)
@@ -332,7 +332,7 @@ class WorktableCommon
     timelineTopPadding = 5
     $('#main').height($('#contents').height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2))
     $('#sidebar').height($('#contents').height() - (borderWidth * 2))
-    scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
+    scrollContentsSize = Common.scrollContentsSizeUnderViewScale()
     if scrollContentsSize?
       window.scrollContentsSize = {width: scrollContentsSize.width, height: scrollContentsSize.height}
 
@@ -390,7 +390,7 @@ class WorktableCommon
         return
       e.preventDefault()
       e.stopPropagation()
-      scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
+      scrollContentsSize = Common.scrollContentsSizeUnderViewScale()
       if scrollContentsSize?
         top = window.scrollContents.scrollTop() + scrollContentsSize.height * 0.5
         left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5

@@ -391,7 +391,7 @@ Project = (function() {
           var scrollContents, scrollContentsSize, scrollWrapper;
           scrollWrapper = modalEmt.find('.am_scroll_wrapper:first');
           scrollContents = scrollWrapper.children('div:first');
-          scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
+          scrollContentsSize = Common.scrollContentsSizeUnderViewScale();
           if (scrollContentsSize != null) {
             scrollWrapper.animate({
               scrollLeft: scrollContentsSize.width
