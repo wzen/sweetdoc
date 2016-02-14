@@ -489,7 +489,7 @@ WorktableCommon = (function() {
 
   WorktableCommon.calcScrollCenterPosition = function(top, left) {
     var l, screenSize, t;
-    screenSize = Common.getScreenSize();
+    screenSize = this.getScreenSizeUnderViewScale();
     if (screenSize != null) {
       t = top - (window.scrollInsideWrapper.height() + screenSize.height) * 0.5;
       l = left - (window.scrollInsideWrapper.width() + screenSize.width) * 0.5;
@@ -504,7 +504,7 @@ WorktableCommon = (function() {
 
   WorktableCommon.calcScrollTopLeftPosition = function(top, left) {
     var l, screenSize, t;
-    screenSize = Common.getScreenSize();
+    screenSize = this.getScreenSizeUnderViewScale();
     if (screenSize != null) {
       t = top + (window.scrollInsideWrapper.height() + screenSize.height) * 0.5;
       l = left + (window.scrollInsideWrapper.width() + screenSize.width) * 0.5;

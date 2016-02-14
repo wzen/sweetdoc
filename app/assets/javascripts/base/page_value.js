@@ -724,7 +724,7 @@ PageValue = (function() {
           left: 0
         };
       }
-      screenSize = WorktableCommon.getScreenSizeUnderViewScale();
+      screenSize = Common.getScreenSize();
       if (screenSize == null) {
         screenSize = {
           width: window.mainWrapper.width(),
@@ -750,7 +750,7 @@ PageValue = (function() {
     if (window.debug) {
       console.log('setWorktableDisplayPosition top:' + top + ' left:' + left);
     }
-    screenSize = WorktableCommon.getScreenSizeUnderViewScale();
+    screenSize = Common.getScreenSize();
     if (screenSize == null) {
       screenSize = {
         width: window.mainWrapper.width(),

@@ -288,6 +288,10 @@ class WorktableSetting
             window.scaleSliderTimer = null
           window.scaleSliderTimer = setTimeout( =>
             WorktableCommon.setWorktableViewScale(ui.value, true)
+            position = PageValue.getWorktableScrollContentsPosition()
+            center = WorktableCommon.calcScrollCenterPosition(position.top, position.left)
+            $('.display_position_x', rootEmt).val(parseInt(center.left))
+            $('.display_position_y', rootEmt).val(parseInt(center.top))
           , 100)
       })
 

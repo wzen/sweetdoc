@@ -577,7 +577,7 @@ class PageValue
       position = @getGeneralPageValue(key)
       if !position?
         position = {top: 0, left: 0}
-      screenSize = WorktableCommon.getScreenSizeUnderViewScale()
+      screenSize = Common.getScreenSize()
       if !screenSize?
         screenSize = {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
       t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - position.top
@@ -594,7 +594,7 @@ class PageValue
   @setWorktableScrollContentsPosition = (top, left) ->
     if window.debug
       console.log('setWorktableDisplayPosition top:' + top + ' left:' + left)
-    screenSize = WorktableCommon.getScreenSizeUnderViewScale()
+    screenSize = Common.getScreenSize()
     if !screenSize?
       screenSize = {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
     t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - top

@@ -437,7 +437,7 @@ class WorktableCommon
 
   # 左上座標から中心座標を計算
   @calcScrollCenterPosition = (top, left) ->
-    screenSize = Common.getScreenSize()
+    screenSize = @getScreenSizeUnderViewScale()
     if screenSize?
       t = top - (window.scrollInsideWrapper.height() + screenSize.height) * 0.5
       l = left - (window.scrollInsideWrapper.width() + screenSize.width) * 0.5
@@ -447,7 +447,7 @@ class WorktableCommon
 
   # 中心座標から左上座標を計算
   @calcScrollTopLeftPosition = (top, left) ->
-    screenSize = Common.getScreenSize()
+    screenSize = @getScreenSizeUnderViewScale()
     if screenSize?
       t = top + (window.scrollInsideWrapper.height() + screenSize.height) * 0.5
       l = left + (window.scrollInsideWrapper.width() + screenSize.width) * 0.5

@@ -342,7 +342,11 @@ WorktableSetting = (function() {
               window.scaleSliderTimer = null;
             }
             return window.scaleSliderTimer = setTimeout(function() {
-              return WorktableCommon.setWorktableViewScale(ui.value, true);
+              WorktableCommon.setWorktableViewScale(ui.value, true);
+              position = PageValue.getWorktableScrollContentsPosition();
+              center = WorktableCommon.calcScrollCenterPosition(position.top, position.left);
+              $('.display_position_x', rootEmt).val(parseInt(center.left));
+              return $('.display_position_y', rootEmt).val(parseInt(center.top));
             }, 100);
           };
         })(this)
