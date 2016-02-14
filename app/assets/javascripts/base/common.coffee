@@ -173,8 +173,8 @@ class Common
       if p?
         return p
       else
-        console.error('SCREEN_SIZE not defined')
-        return null
+        #console.error('SCREEN_SIZE not defined')
+        return {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
 
   # プロジェクト表示サイズ設定
   @initScreenSize = (reset = false) ->
@@ -376,37 +376,32 @@ class Common
     if withUpdateScreenEventVar
       @saveDisplayPosition(top, left, true)
 
-    scrollContentsSize = @scrollContentsSizeUnderScreenEventScale()
-    if scrollContentsSize?
-      top -= scrollContentsSize.height * 0.5
-      left -= scrollContentsSize.width * 0.5
-      if top <= 0 && left <= 0
-        # 不正なスクロールを防止
-        if window.runDebug
-          console.log('Invalid ScrollValue')
-        return
+    top -= window.scrollContents.height() * 0.5
+    left -= window.scrollContents.width() * 0.5
+    if top <= 0 && left <= 0
+      # 不正なスクロールを防止
+      if window.runDebug
+        console.log('Invalid ScrollValue')
+      return
 
-      if immediate
-        window.skipScrollEvent = true
-        window.scrollContents.scrollTop(top)
-        window.scrollContents.scrollLeft(left)
-        if callback?
-          callback()
-      else
-        window.skipScrollEventByAnimation = true
-        window.scrollContents.animate(
-          {
-            scrollTop: top
-            scrollLeft: left
-          }
-        , 500, ->
-          window.skipScrollEventByAnimation = false
-          if callback?
-            callback()
-        )
-    else
+    if immediate
+      window.skipScrollEvent = true
+      window.scrollContents.scrollTop(top)
+      window.scrollContents.scrollLeft(left)
       if callback?
         callback()
+    else
+      window.skipScrollEventByAnimation = true
+      window.scrollContents.animate(
+        {
+          scrollTop: top
+          scrollLeft: left
+        }
+      , 500, ->
+        window.skipScrollEventByAnimation = false
+        if callback?
+          callback()
+      )
 
   # スクロール位置を中心に初期化
   @resetScrollContentsPositionToCenter: (withUpdateScreenEventVar = true) ->

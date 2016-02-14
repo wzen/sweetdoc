@@ -725,18 +725,15 @@ PageValue = (function() {
         };
       }
       screenSize = Common.getScreenSize();
-      if (screenSize != null) {
-        t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - position.top;
-        l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - position.left;
-        if (window.debug) {
-          console.log('getWorktableScrollContentsPosition top:' + t + ' left:' + l);
-        }
-        return {
-          top: t,
-          left: l
-        };
+      t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - position.top;
+      l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - position.left;
+      if (window.debug) {
+        console.log('getWorktableScrollContentsPosition top:' + t + ' left:' + l);
       }
-      return null;
+      return {
+        top: t,
+        left: l
+      };
     } else {
       return null;
     }
@@ -748,15 +745,13 @@ PageValue = (function() {
       console.log('setWorktableDisplayPosition top:' + top + ' left:' + left);
     }
     screenSize = Common.getScreenSize();
-    if (screenSize != null) {
-      t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - top;
-      l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - left;
-      key = this.Key.worktableDisplayPosition();
-      return this.setGeneralPageValue(key, {
-        top: t,
-        left: l
-      });
-    }
+    t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - top;
+    l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - left;
+    key = this.Key.worktableDisplayPosition();
+    return this.setGeneralPageValue(key, {
+      top: t,
+      left: l
+    });
   };
 
   PageValue.removeEventPageValue = function(eNum) {

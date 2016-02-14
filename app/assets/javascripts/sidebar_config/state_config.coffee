@@ -21,8 +21,9 @@ class StateConfig
       # ScreenEvent
       emt = $("##{@ROOT_ID_NAME} .configBox.screen_event")
       se = new ScreenEvent()
-      $('.initConfigX:first', emt).val(se.initConfigX)
-      $('.initConfigY:first', emt).val(se.initConfigY)
+      center = WorktableCommon.calcScrollCenterPosition(se.initConfigY, se.initConfigX)
+      $('.initConfigX:first', emt).val(center.left)
+      $('.initConfigY:first', emt).val(center.top)
       $('.initConfigScale:first', emt).val(se.initConfigScale)
       $('input', emt).off('change').on('change', (e) =>
         se = new ScreenEvent()
@@ -31,16 +32,17 @@ class StateConfig
       )
 
       _updateConfigInput = (emt, pointingSize) ->
-        x = pointingSize.x + pointingSize.w / 2.0
-        y = pointingSize.y + pointingSize.h / 2.0
+        x =  pointingSize.x + pointingSize.w * 0.5
+        y = pointingSize.y + pointingSize.h * 0.5
         z = null
         screenSize = Common.getScreenSize()
         if pointingSize.w > pointingSize.h
           z = screenSize.width / pointingSize.w
         else
           z = screenSize.height / pointingSize.h
-        emt.find('.initConfigX:first').val(x)
-        emt.find('.initConfigY:first').val(y)
+        center = WorktableCommon.calcScrollCenterPosition(y, x)
+        emt.find('.initConfigX:first').val(center.left)
+        emt.find('.initConfigY:first').val(center.top)
         emt.find('.initConfigScale:first').val(z)
         se = new ScreenEvent()
         se.initConfigX = x
@@ -50,6 +52,9 @@ class StateConfig
 
       emt.find('.event_pointing:first').eventDragPointingRect({
         applyDrawCallback: (pointingSize) =>
+          if window.debug
+            console.log('applyDrawCallback')
+            console.log(pointingSize)
           _updateConfigInput.call(@, emt, pointingSize)
       })
 

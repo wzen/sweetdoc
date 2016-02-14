@@ -578,13 +578,11 @@ class PageValue
       if !position?
         position = {top: 0, left: 0}
       screenSize = Common.getScreenSize()
-      if screenSize?
-        t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - position.top
-        l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - position.left
-        if window.debug
-          console.log('getWorktableScrollContentsPosition top:' + t + ' left:' + l)
-        return {top: t, left: l}
-      return null
+      t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - position.top
+      l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - position.left
+      if window.debug
+        console.log('getWorktableScrollContentsPosition top:' + t + ' left:' + l)
+      return {top: t, left: l}
     else
       return null
 
@@ -595,12 +593,11 @@ class PageValue
     if window.debug
       console.log('setWorktableDisplayPosition top:' + top + ' left:' + left)
     screenSize = Common.getScreenSize()
-    if screenSize?
-      t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - top
-      l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - left
-      # 中央位置からの差を設定
-      key = @Key.worktableDisplayPosition()
-      @setGeneralPageValue(key, {top: t, left: l})
+    t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - top
+    l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - left
+    # 中央位置からの差を設定
+    key = @Key.worktableDisplayPosition()
+    @setGeneralPageValue(key, {top: t, left: l})
 
   # 対象イベントを削除する
   # @param [Integer] eNum 削除するイベント番号

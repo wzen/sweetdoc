@@ -210,8 +210,10 @@ Common = (function() {
       if (p != null) {
         return p;
       } else {
-        console.error('SCREEN_SIZE not defined');
-        return null;
+        return {
+          width: window.mainWrapper.width(),
+          height: window.mainWrapper.height()
+        };
       }
     }
   };
@@ -478,7 +480,6 @@ Common = (function() {
   };
 
   Common.updateScrollContentsPosition = function(top, left, immediate, withUpdateScreenEventVar, callback) {
-    var scrollContentsSize;
     if (immediate == null) {
       immediate = true;
     }
@@ -491,39 +492,32 @@ Common = (function() {
     if (withUpdateScreenEventVar) {
       this.saveDisplayPosition(top, left, true);
     }
-    scrollContentsSize = this.scrollContentsSizeUnderScreenEventScale();
-    if (scrollContentsSize != null) {
-      top -= scrollContentsSize.height * 0.5;
-      left -= scrollContentsSize.width * 0.5;
-      if (top <= 0 && left <= 0) {
-        if (window.runDebug) {
-          console.log('Invalid ScrollValue');
-        }
-        return;
+    top -= window.scrollContents.height() * 0.5;
+    left -= window.scrollContents.width() * 0.5;
+    if (top <= 0 && left <= 0) {
+      if (window.runDebug) {
+        console.log('Invalid ScrollValue');
       }
-      if (immediate) {
-        window.skipScrollEvent = true;
-        window.scrollContents.scrollTop(top);
-        window.scrollContents.scrollLeft(left);
-        if (callback != null) {
-          return callback();
-        }
-      } else {
-        window.skipScrollEventByAnimation = true;
-        return window.scrollContents.animate({
-          scrollTop: top,
-          scrollLeft: left
-        }, 500, function() {
-          window.skipScrollEventByAnimation = false;
-          if (callback != null) {
-            return callback();
-          }
-        });
-      }
-    } else {
+      return;
+    }
+    if (immediate) {
+      window.skipScrollEvent = true;
+      window.scrollContents.scrollTop(top);
+      window.scrollContents.scrollLeft(left);
       if (callback != null) {
         return callback();
       }
+    } else {
+      window.skipScrollEventByAnimation = true;
+      return window.scrollContents.animate({
+        scrollTop: top,
+        scrollLeft: left
+      }, 500, function() {
+        window.skipScrollEventByAnimation = false;
+        if (callback != null) {
+          return callback();
+        }
+      });
     }
   };
 
