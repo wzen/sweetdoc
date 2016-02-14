@@ -75,7 +75,7 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.pasteItem = function() {
-    var instance, obj, scrollContentsSize;
+    var instance, obj;
     if (window.copiedInstance != null) {
       instance = new (Common.getClassFromMap(window.copiedInstance.classDistToken))();
       window.instanceMap[instance.id] = instance;
@@ -85,16 +85,13 @@ WorktableCommon = (function() {
       if ((obj.isCopy != null) && obj.isCopy) {
         instance.name = instance.name + ' (Copy)';
       }
-      scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
-      if (scrollContentsSize != null) {
-        instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (scrollContentsSize.width - instance.itemSize.w) / 2.0);
-        instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (scrollContentsSize.height - instance.itemSize.h) / 2.0);
-        if (instance.drawAndMakeConfigs != null) {
-          instance.drawAndMakeConfigs();
-        }
-        instance.setItemAllPropToPageValue();
-        return LocalStorage.saveAllPageValues();
+      instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (window.scrollContents.width() - instance.itemSize.w) * 0.5);
+      instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (window.scrollContents.height() - instance.itemSize.h) * 0.5);
+      if (instance.drawAndMakeConfigs != null) {
+        instance.drawAndMakeConfigs();
       }
+      instance.setItemAllPropToPageValue();
+      return LocalStorage.saveAllPageValues();
     }
   };
 
@@ -368,18 +365,15 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.updateMainViewSize = function() {
-    var borderWidth, scrollContentsSize, timelineTopPadding;
+    var borderWidth, timelineTopPadding;
     borderWidth = 5;
     timelineTopPadding = 5;
     $('#main').height($('#contents').height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2));
     $('#sidebar').height($('#contents').height() - (borderWidth * 2));
-    scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
-    if (scrollContentsSize != null) {
-      return window.scrollContentsSize = {
-        width: scrollContentsSize.width,
-        height: scrollContentsSize.height
-      };
-    }
+    return window.scrollContentsSize = {
+      width: window.scrollContents.width(),
+      height: window.scrollContents.height()
+    };
   };
 
   WorktableCommon.initScrollContentsPosition = function() {
@@ -430,7 +424,7 @@ WorktableCommon = (function() {
     window.scrollInsideWrapper.height(window.scrollViewSize);
     window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
     window.scrollContents.off('scroll').on('scroll', function(e) {
-      var centerPosition, left, scrollContentsSize, top;
+      var centerPosition, left, top;
       if ((window.skipScrollEvent != null) && window.skipScrollEvent) {
         window.skipScrollEvent = false;
         return;
@@ -440,21 +434,18 @@ WorktableCommon = (function() {
       }
       e.preventDefault();
       e.stopPropagation();
-      scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
-      if (scrollContentsSize != null) {
-        top = window.scrollContents.scrollTop() + scrollContentsSize.height * 0.5;
-        left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5;
-        centerPosition = WorktableCommon.calcScrollCenterPosition(top, left);
-        if (centerPosition != null) {
-          FloatView.show(FloatView.scrollMessage(centerPosition.top.toFixed(1), centerPosition.left.toFixed(1)), FloatView.Type.DISPLAY_POSITION);
-        }
-        return Common.saveDisplayPosition(top, left, false, function() {
-          FloatView.hide();
-          if (Sidebar.isOpenedConfigSidebar()) {
-            return WorktableSetting.PositionAndScale.initConfig();
-          }
-        });
+      top = window.scrollContents.scrollTop() + window.scrollContents.height() * 0.5;
+      left = window.scrollContents.scrollLeft() + window.scrollContents.width() * 0.5;
+      centerPosition = WorktableCommon.calcScrollCenterPosition(top, left);
+      if (centerPosition != null) {
+        FloatView.show(FloatView.scrollMessage(centerPosition.top.toFixed(1), centerPosition.left.toFixed(1)), FloatView.Type.DISPLAY_POSITION);
       }
+      return Common.saveDisplayPosition(top, left, false, function() {
+        FloatView.hide();
+        if (Sidebar.isOpenedConfigSidebar()) {
+          return WorktableSetting.PositionAndScale.initConfig();
+        }
+      });
     });
     $('.dropdown-toggle').dropdown();
     Navbar.initWorktableNavbar();

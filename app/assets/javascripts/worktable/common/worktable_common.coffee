@@ -69,14 +69,12 @@ class WorktableCommon
       if obj.isCopy? && obj.isCopy
         instance.name = instance.name + ' (Copy)'
       # 画面中央に貼り付け
-      scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
-      if scrollContentsSize?
-        instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (scrollContentsSize.width - instance.itemSize.w) / 2.0)
-        instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (scrollContentsSize.height - instance.itemSize.h) / 2.0)
-        if instance.drawAndMakeConfigs?
-          instance.drawAndMakeConfigs()
-        instance.setItemAllPropToPageValue()
-        LocalStorage.saveAllPageValues()
+      instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (window.scrollContents.width() - instance.itemSize.w) * 0.5)
+      instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (window.scrollContents.height() - instance.itemSize.h) * 0.5)
+      if instance.drawAndMakeConfigs?
+        instance.drawAndMakeConfigs()
+      instance.setItemAllPropToPageValue()
+      LocalStorage.saveAllPageValues()
 
   # アイテムを最前面に移動
   # @param [Integer] objId 対象オブジェクトID
@@ -332,9 +330,7 @@ class WorktableCommon
     timelineTopPadding = 5
     $('#main').height($('#contents').height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2))
     $('#sidebar').height($('#contents').height() - (borderWidth * 2))
-    scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
-    if scrollContentsSize?
-      window.scrollContentsSize = {width: scrollContentsSize.width, height: scrollContentsSize.height}
+    window.scrollContentsSize = {width: window.scrollContents.width(), height: window.scrollContents.height()}
 
   # スクロール位置初期化
   @initScrollContentsPosition = ->
@@ -390,18 +386,16 @@ class WorktableCommon
         return
       e.preventDefault()
       e.stopPropagation()
-      scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
-      if scrollContentsSize?
-        top = window.scrollContents.scrollTop() + scrollContentsSize.height * 0.5
-        left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5
-        centerPosition = WorktableCommon.calcScrollCenterPosition(top, left)
-        if centerPosition?
-          FloatView.show(FloatView.scrollMessage(centerPosition.top.toFixed(1), centerPosition.left.toFixed(1)), FloatView.Type.DISPLAY_POSITION)
-        Common.saveDisplayPosition(top, left, false, ->
-          FloatView.hide()
-          if Sidebar.isOpenedConfigSidebar()
-            WorktableSetting.PositionAndScale.initConfig()
-        )
+      top = window.scrollContents.scrollTop() + window.scrollContents.height() * 0.5
+      left = window.scrollContents.scrollLeft() + window.scrollContents.width() * 0.5
+      centerPosition = WorktableCommon.calcScrollCenterPosition(top, left)
+      if centerPosition?
+        FloatView.show(FloatView.scrollMessage(centerPosition.top.toFixed(1), centerPosition.left.toFixed(1)), FloatView.Type.DISPLAY_POSITION)
+      Common.saveDisplayPosition(top, left, false, ->
+        FloatView.hide()
+        if Sidebar.isOpenedConfigSidebar()
+          WorktableSetting.PositionAndScale.initConfig()
+      )
     )
     # ドロップダウン
     $('.dropdown-toggle').dropdown()
