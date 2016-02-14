@@ -724,7 +724,7 @@ PageValue = (function() {
           left: 0
         };
       }
-      screenSize = this.getGeneralPageValue(this.Key.SCREEN_SIZE);
+      screenSize = WorktableCommon.getScreenSizeUnderViewScale();
       if (screenSize == null) {
         screenSize = {
           width: window.mainWrapper.width(),
@@ -733,6 +733,9 @@ PageValue = (function() {
       }
       t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - position.top;
       l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - position.left;
+      if (window.debug) {
+        console.log('getWorktableScrollContentsPosition top:' + t + ' left:' + l);
+      }
       return {
         top: t,
         left: l
@@ -742,9 +745,12 @@ PageValue = (function() {
     }
   };
 
-  PageValue.setWorktableDisplayPosition = function(top, left) {
+  PageValue.setWorktableScrollContentsPosition = function(top, left) {
     var key, l, screenSize, t;
-    screenSize = this.getGeneralPageValue(this.Key.SCREEN_SIZE);
+    if (window.debug) {
+      console.log('setWorktableDisplayPosition top:' + top + ' left:' + left);
+    }
+    screenSize = WorktableCommon.getScreenSizeUnderViewScale();
     if (screenSize == null) {
       screenSize = {
         width: window.mainWrapper.width(),

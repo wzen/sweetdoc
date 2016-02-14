@@ -474,6 +474,19 @@ WorktableCommon = (function() {
     return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
   };
 
+  WorktableCommon.getScreenSizeUnderViewScale = function() {
+    var scale, screenSize;
+    screenSize = Common.getScreenSize();
+    if (screenSize != null) {
+      scale = this.getWorktableViewScale();
+      return {
+        width: screenSize.width / scale,
+        height: screenSize.height / scale
+      };
+    }
+    return null;
+  };
+
   WorktableCommon.calcScrollCenterPosition = function(top, left) {
     var l, screenSize, t;
     screenSize = Common.getScreenSize();
@@ -502,6 +515,17 @@ WorktableCommon = (function() {
     } else {
       return null;
     }
+  };
+
+  WorktableCommon.adjustScrollContentsPosition = function() {
+    var p;
+    Common.applyViewScale();
+    p = PageValue.getWorktableScrollContentsPosition();
+    if (window.debug) {
+      console.log('adjustScrollContentsPosition');
+      console.log(p);
+    }
+    return Common.updateScrollContentsPosition(p.top, p.left);
   };
 
   WorktableCommon.setMainContainerContext = function() {
@@ -561,7 +585,7 @@ WorktableCommon = (function() {
     PageValue.setGeneralPageValue(PageValue.Key.worktableScale(), scale);
     if (withViewStateUpdate) {
       FloatView.show('View scale : ' + parseInt(scale * 100) + '%', FloatView.Type.SCALE, 1.0);
-      Common.adjustScrollContentsPosition();
+      this.adjustScrollContentsPosition();
       return LocalStorage.saveGeneralPageValue();
     }
   };

@@ -577,11 +577,13 @@ class PageValue
       position = @getGeneralPageValue(key)
       if !position?
         position = {top: 0, left: 0}
-      screenSize = @getGeneralPageValue(@Key.SCREEN_SIZE)
+      screenSize = WorktableCommon.getScreenSizeUnderViewScale()
       if !screenSize?
         screenSize = {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
       t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - position.top
       l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - position.left
+      if window.debug
+        console.log('getWorktableScrollContentsPosition top:' + t + ' left:' + l)
       return {top: t, left: l}
     else
       return null
@@ -589,8 +591,10 @@ class PageValue
   # ワークテーブル画面表示位置を設定する
   # @param [Float] top ScrollViewのY座標
   # @param [Float] left ScrollViewのX座標
-  @setWorktableDisplayPosition = (top, left) ->
-    screenSize = @getGeneralPageValue(@Key.SCREEN_SIZE)
+  @setWorktableScrollContentsPosition = (top, left) ->
+    if window.debug
+      console.log('setWorktableDisplayPosition top:' + top + ' left:' + left)
+    screenSize = WorktableCommon.getScreenSizeUnderViewScale()
     if !screenSize?
       screenSize = {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
     t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - top

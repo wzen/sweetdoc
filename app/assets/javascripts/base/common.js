@@ -520,15 +520,6 @@ Common = (function() {
     }
   };
 
-  Common.adjustScrollContentsPosition = function() {
-    var left, se, top;
-    this.applyViewScale();
-    se = new ScreenEvent();
-    top = se.nowY;
-    left = se.nowX;
-    return this.updateScrollContentsPosition(top, left);
-  };
-
   Common.resetScrollContentsPositionToCenter = function(withUpdateScreenEventVar) {
     var left, top;
     if (withUpdateScreenEventVar == null) {
@@ -552,7 +543,7 @@ Common = (function() {
         ScreenEvent.PrivateClass.setNowXAndY(left, top);
       }
       if (window.isWorkTable) {
-        PageValue.setWorktableDisplayPosition(top, left);
+        PageValue.setWorktableScrollContentsPosition(top, left);
       }
       LocalStorage.saveAllPageValues();
       if (callback != null) {
@@ -581,8 +572,12 @@ Common = (function() {
     if (!ScreenEvent.hasInstanceCache()) {
       return null;
     }
-    se = new ScreenEvent();
-    scale = se.getNowScale();
+    if (window.isWorkTable) {
+      scale = WorktableCommon.getWorktableViewScale();
+    } else {
+      se = new ScreenEvent();
+      scale = se.getNowScale();
+    }
     if (window.runDebug) {
       console.log('scrollContentsSizeUnderScreenEventScale:' + scale);
     }

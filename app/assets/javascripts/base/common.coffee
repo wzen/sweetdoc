@@ -403,14 +403,6 @@ class Common
       if callback?
         callback()
 
-  # スクロール位置を再設定
-  @adjustScrollContentsPosition: ->
-    @applyViewScale()
-    se = new ScreenEvent()
-    top = se.nowY
-    left = se.nowX
-    @updateScrollContentsPosition(top, left)
-
   # スクロール位置を中心に初期化
   @resetScrollContentsPositionToCenter: (withUpdateScreenEventVar = true) ->
     top = window.scrollInsideWrapper.height() * 0.5
@@ -422,7 +414,7 @@ class Common
       if ScreenEvent?
         ScreenEvent.PrivateClass.setNowXAndY(left, top)
       if window.isWorkTable
-        PageValue.setWorktableDisplayPosition(top, left)
+        PageValue.setWorktableScrollContentsPosition(top, left)
       LocalStorage.saveAllPageValues()
       if callback?
         callback()
@@ -444,8 +436,11 @@ class Common
       # ScreenEventが作成されていない場合はNULL
       return null
 
-    se = new ScreenEvent()
-    scale = se.getNowScale()
+    if window.isWorkTable
+      scale = WorktableCommon.getWorktableViewScale()
+    else
+      se = new ScreenEvent()
+      scale = se.getNowScale()
     if window.runDebug
       console.log('scrollContentsSizeUnderScreenEventScale:' + scale)
     return {

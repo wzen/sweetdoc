@@ -247,7 +247,7 @@ class WorktableCommon
 
         # アイテムフォーカスしてる場合があるので表示位置を戻す
         WorktableCommon.initScrollContentsPosition()
-        # 倍率を戻す
+        # イベントで変更された倍率を戻す
         ScreenEvent.PrivateClass.resetNowScale
         # Footprint履歴削除
         PageValue.removeAllFootprint()
@@ -428,6 +428,13 @@ class WorktableCommon
     # 選択アイテム初期化
     WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
 
+  @getScreenSizeUnderViewScale = ->
+    screenSize = Common.getScreenSize()
+    if screenSize?
+      scale = @getWorktableViewScale()
+      return {width: screenSize.width / scale, height: screenSize.height / scale}
+    return null
+
   # 左上座標から中心座標を計算
   @calcScrollCenterPosition = (top, left) ->
     screenSize = Common.getScreenSize()
@@ -447,6 +454,15 @@ class WorktableCommon
       return {top: t, left: l}
     else
       return null
+
+  # スクロール位置を再設定
+  @adjustScrollContentsPosition: ->
+    Common.applyViewScale()
+    p =  PageValue.getWorktableScrollContentsPosition()
+    if window.debug
+      console.log('adjustScrollContentsPosition')
+      console.log(p)
+    Common.updateScrollContentsPosition(p.top, p.left)
 
   # Mainコンテナのコンテキストメニューを設定
   @setMainContainerContext: ->
@@ -510,7 +526,7 @@ class WorktableCommon
     if withViewStateUpdate
       FloatView.show('View scale : ' + parseInt(scale * 100) + '%', FloatView.Type.SCALE, 1.0)
       # スクロール位置修正
-      Common.adjustScrollContentsPosition()
+      @adjustScrollContentsPosition()
       # キャッシュ保存
       LocalStorage.saveGeneralPageValue()
 
