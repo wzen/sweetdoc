@@ -370,6 +370,11 @@ EventBase = (function(superClass) {
       return;
     } else if (this.stepValue >= ePoint) {
       this.stepValue = ePoint;
+      this.execMethod({
+        isPreview: isPreview,
+        progress: this.stepValue - sPoint,
+        progressMax: this.progressMax()
+      });
       if (!this._isFinishedEvent) {
         this.finishEvent();
         if (!isPreview) {

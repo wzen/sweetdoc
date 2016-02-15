@@ -454,9 +454,9 @@ class PreloadItemText extends CanvasItemBase
     width = null
     height = null
     if @showAnimationType == @constructor.ShowAnimationType.POPUP
-      timemax = 15
-      step1 = 0.5
-      step2 = 0.7
+      timemax = 8
+      step1 = 0.6
+      step2 = 0.8
       step3 = 1
       if @_time / timemax <= step1
         progressPercent = @_time / (timemax * step1)
@@ -528,7 +528,7 @@ class PreloadItemText extends CanvasItemBase
     height = null
     fontSize = null
     if @showAnimationType == @constructor.ShowAnimationType.POPUP
-      timemax = 15
+      timemax = 8
       step1 = 0.2
       step2 = 0.5
       step3 = 1

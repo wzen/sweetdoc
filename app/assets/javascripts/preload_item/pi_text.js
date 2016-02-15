@@ -607,9 +607,9 @@ PreloadItemText = (function(superClass) {
     width = null;
     height = null;
     if (this.showAnimationType === this.constructor.ShowAnimationType.POPUP) {
-      timemax = 15;
-      step1 = 0.5;
-      step2 = 0.7;
+      timemax = 8;
+      step1 = 0.6;
+      step2 = 0.8;
       step3 = 1;
       if (this._time / timemax <= step1) {
         progressPercent = this._time / (timemax * step1);
@@ -710,7 +710,7 @@ PreloadItemText = (function(superClass) {
     height = null;
     fontSize = null;
     if (this.showAnimationType === this.constructor.ShowAnimationType.POPUP) {
-      timemax = 15;
+      timemax = 8;
       step1 = 0.2;
       step2 = 0.5;
       step3 = 1;
