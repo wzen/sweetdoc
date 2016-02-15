@@ -476,6 +476,8 @@ class PreloadItemText extends CanvasItemBase
         @_time2 = @_time
       else if  @_time / timemax <= step3
         progressPercent = (@_time - @_time2) / (timemax * (step3 - step2))
+        if progressPercent > 1
+          progressPercent = 1
         x = @_step2.x - @_step2.x * progressPercent
         y = @_step2.y - @_step2.y * progressPercent
         width = @_step2.w + (@itemSize.w - @_step2.w) * progressPercent
@@ -550,6 +552,8 @@ class PreloadItemText extends CanvasItemBase
         @_time2 = @_time
       else if  @_time / timemax <= step3
         progressPercent = (@_time - @_time2) / (timemax * (step3 - step2))
+        if progressPercent > 1
+          progressPercent = 1
         x = @_step2.x + (@itemSize.w * 0.5 - @_step2.x) * progressPercent
         y = @_step2.y + (@itemSize.h * 0.5 - @_step2.y) * progressPercent
         width = @_step2.w - @_step2.w * progressPercent

@@ -342,6 +342,7 @@ EventBase = (function(superClass) {
     }
     if (isPreview) {
       this.stepValue += 1;
+      this.forward = true;
     } else {
       plusX = 0;
       plusY = 0;
@@ -362,6 +363,7 @@ EventBase = (function(superClass) {
         plusY = -plusY;
       }
       this.stepValue += plusX + plusY;
+      this.forward = plusX + plusY >= 0;
     }
     sPoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
     ePoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) + 1;
@@ -373,7 +375,8 @@ EventBase = (function(superClass) {
       this.execMethod({
         isPreview: isPreview,
         progress: this.stepValue - sPoint,
-        progressMax: this.progressMax()
+        progressMax: this.progressMax(),
+        forward: this.forward
       });
       if (!this._isFinishedEvent) {
         this.finishEvent();
@@ -388,7 +391,8 @@ EventBase = (function(superClass) {
     return this.execMethod({
       isPreview: isPreview,
       progress: this.stepValue - sPoint,
-      progressMax: this.progressMax()
+      progressMax: this.progressMax(),
+      forward: this.forward
     });
   };
 
@@ -422,7 +426,8 @@ EventBase = (function(superClass) {
           _this.execMethod({
             isPreview: isPreview,
             progress: _this.stepValue,
-            progressMax: progressMax
+            progressMax: progressMax,
+            forward: true
           });
           _this.stepValue += 1;
           if (progressMax < _this.stepValue) {

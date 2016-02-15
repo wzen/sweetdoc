@@ -270,6 +270,8 @@ class EventBase extends Extend
     if isPreview
       # プレビュー時は1ずつ実行
       @stepValue += 1
+      # 進行方向は+
+      @forward = true
     else
       # スクロール値更新
       #if window.debug
@@ -293,6 +295,7 @@ class EventBase extends Extend
           plusY = -plusY
 
       @stepValue += plusX + plusY
+      @forward = plusX + plusY >= 0
 
     sPoint = parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
     ePoint = parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) + 1
@@ -308,6 +311,7 @@ class EventBase extends Extend
         isPreview: isPreview
         progress: @stepValue - sPoint
         progressMax: @progressMax()
+        forward: @forward
       })
       if !@_isFinishedEvent
         # 終了イベント
@@ -324,6 +328,7 @@ class EventBase extends Extend
       isPreview: isPreview
       progress: @stepValue - sPoint
       progressMax: @progressMax()
+      forward: @forward
     })
 
   # スクロールの長さを取得
@@ -357,6 +362,7 @@ class EventBase extends Extend
           isPreview: isPreview
           progress: @stepValue
           progressMax: progressMax
+          forward: true
         })
         @stepValue += 1
         if progressMax < @stepValue
