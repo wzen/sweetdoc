@@ -49,13 +49,9 @@ ScreenEvent = (function(superClass) {
       this.changeScreenPosition = bind(this.changeScreenPosition, this);
       PrivateClass.__super__.constructor.call(this);
       this.name = 'Screen';
-      this.initConfigX = 0;
-      this.initConfigY = 0;
+      this.initConfigX = null;
+      this.initConfigY = null;
       this.initConfigScale = 1.0;
-      if (window.scrollContents != null) {
-        this.initConfigX = window.scrollInsideWrapper.height() * 0.5;
-        this.initConfigY = window.scrollInsideWrapper.width() * 0.5;
-      }
       this.nowX = null;
       this.nowY = null;
       this.nowScale = null;
@@ -183,7 +179,9 @@ ScreenEvent = (function(superClass) {
         if (!window.isWorkTable) {
           _setScale.call(this, _getInitConfigScale.call(this));
           this.nowScale = _getInitConfigScale.call(this);
-          Common.updateScrollContentsPosition(this.initConfigY, this.initConfigX);
+          if ((this.initConfigY != null) && (this.initConfigX != null)) {
+            Common.updateScrollContentsPosition(this.initConfigY, this.initConfigX);
+          }
         } else {
           WorktableCommon.initScrollContentsPosition();
           WorktableCommon.updateMainViewSize();
@@ -205,6 +203,10 @@ ScreenEvent = (function(superClass) {
       } else {
         return this.getNowScale();
       }
+    };
+
+    PrivateClass.prototype.hasInitConfig = function() {
+      return (this.initConfigX != null) && (this.initConfigY != null);
     };
 
     PrivateClass.initSpecificConfig = function(specificRoot) {

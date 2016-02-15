@@ -18,18 +18,27 @@ class StateConfig
       )
 
     do =>
-      # ScreenEvent
+      # Screen
       emt = $("##{@ROOT_ID_NAME} .configBox.screen_event")
       se = new ScreenEvent()
-      center = WorktableCommon.calcScrollCenterPosition(se.initConfigY, se.initConfigX)
-      $('.initConfigX:first', emt).val(center.left)
-      $('.initConfigY:first', emt).val(center.top)
-      $('.initConfigScale:first', emt).val(se.initConfigScale)
-      $('input', emt).off('change').on('change', (e) =>
-        se = new ScreenEvent()
-        se[$(e.target).attr('class')] = $(e.target).val()
-        se.setItemAllPropToPageValue()
-      )
+      if se.hasInitConfig()
+        center = WorktableCommon.calcScrollCenterPosition(se.initConfigY, se.initConfigX)
+
+        $('.initConfigX:first', emt).attr('disabled', '').removeClass('empty').val(center.left)
+        $('.initConfigY:first', emt).attr('disabled', '').removeClass('empty').val(center.top)
+        $('.initConfigScale:first', emt).attr('disabled', '').removeClass('empty').val(se.initConfigScale)
+        $('.clear_pointing:first', emt).show()
+        $('input', emt).off('change').on('change', (e) =>
+          se = new ScreenEvent()
+          target = e.target
+          se[$(target).attr('class')] = WorktableCommon.calcScrollTopLeftPosition($(target).val())
+          se.setItemAllPropToPageValue()
+        )
+      else
+        $('.initConfigX:first', emt).attr('disabled', 'disabled').addClass('empty').val('')
+        $('.initConfigY:first', emt).attr('disabled', 'disabled').addClass('empty').val('')
+        $('.initConfigScale:first', emt).attr('disabled', 'disabled').addClass('empty').val('')
+        $('.clear_pointing:first', emt).hide()
 
       _updateConfigInput = (emt, pointingSize) ->
         x =  pointingSize.x + pointingSize.w * 0.5
@@ -41,9 +50,11 @@ class StateConfig
         else
           z = screenSize.height / pointingSize.h
         center = WorktableCommon.calcScrollCenterPosition(y, x)
-        emt.find('.initConfigX:first').val(center.left)
-        emt.find('.initConfigY:first').val(center.top)
-        emt.find('.initConfigScale:first').val(z)
+
+        $('.initConfigX:first', emt).attr('disabled', '').removeClass('empty').val(center.left)
+        $('.initConfigY:first', emt).attr('disabled', '').removeClass('empty').val(center.top)
+        $('.initConfigScale:first', emt).attr('disabled', '').removeClass('empty').val(z)
+        $('.clear_pointing:first', emt).show()
         se = new ScreenEvent()
         se.initConfigX = x
         se.initConfigY = y
@@ -58,3 +69,14 @@ class StateConfig
           _updateConfigInput.call(@, emt, pointingSize)
       })
 
+  @clearScreenConfig: ->
+    emt = $("##{@ROOT_ID_NAME} .configBox.screen_event")
+    $('.initConfigX:first', emt).attr('disabled', 'disabled').addClass('empty').val('')
+    $('.initConfigY:first', emt).attr('disabled', 'disabled').addClass('empty').val('')
+    $('.initConfigScale:first', emt).attr('disabled', 'disabled').addClass('empty').val('')
+    $('.clear_pointing:first', emt).hide()
+    se = new ScreenEvent()
+    se.initConfigX = null
+    se.initConfigY = null
+    se.initConfigScale = 1.0
+    se.setItemAllPropToPageValue()

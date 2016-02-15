@@ -8,6 +8,10 @@ a {
   cursor: pointer;
 }
 
+input.empty:disabled {
+  background-color: gray;
+}
+
 #screen_wrapper {
   position: relative;
   width: 100%;

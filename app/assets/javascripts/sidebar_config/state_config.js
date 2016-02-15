@@ -27,15 +27,25 @@ StateConfig = (function() {
         var _updateConfigInput, center, emt, se;
         emt = $("#" + _this.ROOT_ID_NAME + " .configBox.screen_event");
         se = new ScreenEvent();
-        center = WorktableCommon.calcScrollCenterPosition(se.initConfigY, se.initConfigX);
-        $('.initConfigX:first', emt).val(center.left);
-        $('.initConfigY:first', emt).val(center.top);
-        $('.initConfigScale:first', emt).val(se.initConfigScale);
-        $('input', emt).off('change').on('change', function(e) {
-          se = new ScreenEvent();
-          se[$(e.target).attr('class')] = $(e.target).val();
-          return se.setItemAllPropToPageValue();
-        });
+        if (se.hasInitConfig()) {
+          center = WorktableCommon.calcScrollCenterPosition(se.initConfigY, se.initConfigX);
+          $('.initConfigX:first', emt).attr('disabled', '').removeClass('empty').val(center.left);
+          $('.initConfigY:first', emt).attr('disabled', '').removeClass('empty').val(center.top);
+          $('.initConfigScale:first', emt).attr('disabled', '').removeClass('empty').val(se.initConfigScale);
+          $('.clear_pointing:first', emt).show();
+          $('input', emt).off('change').on('change', function(e) {
+            var target;
+            se = new ScreenEvent();
+            target = e.target;
+            se[$(target).attr('class')] = WorktableCommon.calcScrollTopLeftPosition($(target).val());
+            return se.setItemAllPropToPageValue();
+          });
+        } else {
+          $('.initConfigX:first', emt).attr('disabled', 'disabled').addClass('empty').val('');
+          $('.initConfigY:first', emt).attr('disabled', 'disabled').addClass('empty').val('');
+          $('.initConfigScale:first', emt).attr('disabled', 'disabled').addClass('empty').val('');
+          $('.clear_pointing:first', emt).hide();
+        }
         _updateConfigInput = function(emt, pointingSize) {
           var screenSize, x, y, z;
           x = pointingSize.x + pointingSize.w * 0.5;
@@ -48,9 +58,10 @@ StateConfig = (function() {
             z = screenSize.height / pointingSize.h;
           }
           center = WorktableCommon.calcScrollCenterPosition(y, x);
-          emt.find('.initConfigX:first').val(center.left);
-          emt.find('.initConfigY:first').val(center.top);
-          emt.find('.initConfigScale:first').val(z);
+          $('.initConfigX:first', emt).attr('disabled', '').removeClass('empty').val(center.left);
+          $('.initConfigY:first', emt).attr('disabled', '').removeClass('empty').val(center.top);
+          $('.initConfigScale:first', emt).attr('disabled', '').removeClass('empty').val(z);
+          $('.clear_pointing:first', emt).show();
           se = new ScreenEvent();
           se.initConfigX = x;
           se.initConfigY = y;
@@ -68,6 +79,20 @@ StateConfig = (function() {
         });
       };
     })(this)();
+  };
+
+  StateConfig.clearScreenConfig = function() {
+    var emt, se;
+    emt = $("#" + this.ROOT_ID_NAME + " .configBox.screen_event");
+    $('.initConfigX:first', emt).attr('disabled', 'disabled').addClass('empty').val('');
+    $('.initConfigY:first', emt).attr('disabled', 'disabled').addClass('empty').val('');
+    $('.initConfigScale:first', emt).attr('disabled', 'disabled').addClass('empty').val('');
+    $('.clear_pointing:first', emt).hide();
+    se = new ScreenEvent();
+    se.initConfigX = null;
+    se.initConfigY = null;
+    se.initConfigScale = 1.0;
+    return se.setItemAllPropToPageValue();
   };
 
   return StateConfig;

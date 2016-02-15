@@ -32,12 +32,9 @@ class ScreenEvent extends CommonEvent
     constructor: ->
       super()
       @name = 'Screen'
-      @initConfigX = 0
-      @initConfigY = 0
+      @initConfigX = null
+      @initConfigY = null
       @initConfigScale = 1.0
-      if window.scrollContents?
-        @initConfigX = window.scrollInsideWrapper.height() * 0.5
-        @initConfigY = window.scrollInsideWrapper.width() * 0.5
       @nowX = null
       @nowY = null
       @nowScale = null
@@ -142,7 +139,8 @@ class ScreenEvent extends CommonEvent
         if !window.isWorkTable
           _setScale.call(@, _getInitConfigScale.call(@))
           @nowScale = _getInitConfigScale.call(@)
-          Common.updateScrollContentsPosition(@initConfigY, @initConfigX)
+          if @initConfigY? && @initConfigX?
+            Common.updateScrollContentsPosition(@initConfigY, @initConfigX)
         else
           # スクロール位置更新
           WorktableCommon.initScrollContentsPosition()
@@ -160,6 +158,9 @@ class ScreenEvent extends CommonEvent
       else
         # 動作中でない場合はnowScaleを返却
         @getNowScale()
+
+    hasInitConfig: ->
+      return @initConfigX? && @initConfigY?
 
     # 独自コンフィグのイベント初期化
     @initSpecificConfig = (specificRoot) ->
