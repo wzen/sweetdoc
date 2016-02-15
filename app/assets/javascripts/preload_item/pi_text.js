@@ -639,6 +639,9 @@ PreloadItemText = (function(superClass) {
         this._time2 = this._time;
       } else if (this._time / timemax <= step3) {
         progressPercent = (this._time - this._time2) / (timemax * (step3 - step2));
+        if (progressPercent > 1) {
+          progressPercent = 1;
+        }
         x = this._step2.x - this._step2.x * progressPercent;
         y = this._step2.y - this._step2.y * progressPercent;
         width = this._step2.w + (this.itemSize.w - this._step2.w) * progressPercent;
@@ -742,6 +745,9 @@ PreloadItemText = (function(superClass) {
         this._time2 = this._time;
       } else if (this._time / timemax <= step3) {
         progressPercent = (this._time - this._time2) / (timemax * (step3 - step2));
+        if (progressPercent > 1) {
+          progressPercent = 1;
+        }
         x = this._step2.x + (this.itemSize.w * 0.5 - this._step2.x) * progressPercent;
         y = this._step2.y + (this.itemSize.h * 0.5 - this._step2.y) * progressPercent;
         width = this._step2.w - this._step2.w * progressPercent;
@@ -1604,13 +1610,17 @@ PreloadItemText = (function(superClass) {
     directionSelect.val('');
     $('.create_button', modalEmt).off('click').on('click', (function(_this) {
       return function(e) {
-        var canvas, emt;
+        var canvas, emt, fontSize, sb;
         emt = $(e.target).closest('.modal-content');
         _this.inputText = $('.textarea:first', emt).val();
         _this.drawHorizontal = parseInt($('.drawHorizontal_select:first', emt).val());
         canvas = document.getElementById(_this.canvasElementId());
+        sb = _this.showBalloon;
+        _this.showBalloon = false;
+        fontSize = _calcFontSizeAbout.call(_this, _this.inputText, canvas.width, canvas.height, _this.isFixedFontSize, _this.drawHorizontal);
+        _this.rowWordLength = _calcRowWordLength.call(_this, _this.inputText, canvas.width, canvas.height, fontSize, _this.fontFamily);
+        _this.showBalloon = sb;
         _this.fontSize = _calcFontSizeAbout.call(_this, _this.inputText, canvas.width, canvas.height, _this.isFixedFontSize, _this.drawHorizontal);
-        _this.rowWordLength = _calcRowWordLength.call(_this, _this.inputText, canvas.width, canvas.height, _this.fontSize, _this.fontFamily);
         _this.saveObj();
         return Navbar.setModeDraw(_this.classDistToken, function() {
           WorktableCommon.changeMode(Constant.Mode.DRAW);

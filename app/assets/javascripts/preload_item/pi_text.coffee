@@ -1274,10 +1274,14 @@ class PreloadItemText extends CanvasItemBase
       emt = $(e.target).closest('.modal-content')
       @inputText = $('.textarea:first', emt).val()
       @drawHorizontal = parseInt($('.drawHorizontal_select:first', emt).val())
-      # fontSizeを撮り直す
+      # 吹き出し無し状態のfontSizeと行数を撮り直す
       canvas = document.getElementById(@canvasElementId())
+      sb = @showBalloon
+      @showBalloon = false
+      fontSize = _calcFontSizeAbout.call(@, @inputText, canvas.width, canvas.height, @isFixedFontSize, @drawHorizontal)
+      @rowWordLength = _calcRowWordLength.call(@, @inputText, canvas.width, canvas.height, fontSize, @fontFamily)
+      @showBalloon = sb
       @fontSize = _calcFontSizeAbout.call(@, @inputText, canvas.width, canvas.height, @isFixedFontSize, @drawHorizontal)
-      @rowWordLength = _calcRowWordLength.call(@, @inputText, canvas.width, canvas.height, @fontSize, @fontFamily)
       # データ保存
       @saveObj()
       # モードを描画モードに
