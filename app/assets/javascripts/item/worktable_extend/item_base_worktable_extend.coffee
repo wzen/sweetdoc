@@ -287,20 +287,21 @@ itemBaseWorktableExtend =
       )
 
       # アイテム位置の変更
-      x = @getJQueryElement().position().left
-      y = @getJQueryElement().position().top
-      w = @getJQueryElement().width()
-      h = @getJQueryElement().height()
-      $('.item_position_x:first', designConfigRoot).val(x)
-      $('.item_position_y:first', designConfigRoot).val(y)
-      $('.item_width:first', designConfigRoot).val(w)
-      $('.item_height:first', designConfigRoot).val(h)
+      p = WorktableCommon.calcItemCenterPositionInWorktable(@itemSize)
+      $('.item_position_x:first', designConfigRoot).val(p.left)
+      $('.item_position_y:first', designConfigRoot).val(p.top)
+      $('.item_width:first', designConfigRoot).val(@itemSize.w)
+      $('.item_height:first', designConfigRoot).val(@itemSize.h)
       $('.item_position_x:first, .item_position_y:first, .item_width:first, .item_height:first', designConfigRoot).off('change').on('change', =>
+        centerPosition = {x: $('.item_position_x:first', designConfigRoot).val(), y: $('.item_position_y:first', designConfigRoot).val()}
+        w = parseInt($('.item_width:first', designConfigRoot).val())
+        h = parseInt($('.item_height:first', designConfigRoot).val())
+        p = WorktableCommon.calcItemScrollContentsPosition(centerPosition, w, h)
         itemSize = {
-          x: parseInt($('.item_position_x:first', designConfigRoot).val())
-          y: parseInt($('.item_position_y:first', designConfigRoot).val())
-          w: parseInt($('.item_width:first', designConfigRoot).val())
-          h: parseInt($('.item_height:first', designConfigRoot).val())
+          x: parseInt(p.left)
+          y: parseInt(p.top)
+          w: w
+          h: h
         }
         @updatePositionAndItemSize(itemSize)
       )

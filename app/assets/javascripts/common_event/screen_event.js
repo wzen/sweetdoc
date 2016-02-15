@@ -212,9 +212,9 @@ ScreenEvent = (function(superClass) {
     PrivateClass.initSpecificConfig = function(specificRoot) {
       var _updateConfigInput, emt;
       _updateConfigInput = function(emt, pointingSize) {
-        var screenSize, x, y, z;
-        x = pointingSize.x + pointingSize.w / 2.0;
-        y = pointingSize.y + pointingSize.h / 2.0;
+        var center, screenSize, x, y, z;
+        x = pointingSize.x + pointingSize.w * 0.5;
+        y = pointingSize.y + pointingSize.h * 0.5;
         z = null;
         screenSize = Common.getScreenSize();
         if (pointingSize.w > pointingSize.h) {
@@ -222,8 +222,9 @@ ScreenEvent = (function(superClass) {
         } else {
           z = screenSize.height / pointingSize.h;
         }
-        emt.find('.afterX:first').val(x);
-        emt.find('.afterY:first').val(y);
+        center = WorktableCommon.calcScrollCenterPosition(y, x);
+        emt.find('.afterX:first').val(center.left);
+        emt.find('.afterY:first').val(center.top);
         return emt.find('.afterZ:first').val(z);
       };
       emt = specificRoot['changeScreenPosition'];

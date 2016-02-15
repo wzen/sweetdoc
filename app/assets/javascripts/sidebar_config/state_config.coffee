@@ -50,7 +50,6 @@ class StateConfig
         else
           z = screenSize.height / pointingSize.h
         center = WorktableCommon.calcScrollCenterPosition(y, x)
-
         $('.initConfigX:first', emt).attr('disabled', '').removeClass('empty').val(center.left)
         $('.initConfigY:first', emt).attr('disabled', '').removeClass('empty').val(center.top)
         $('.initConfigScale:first', emt).attr('disabled', '').removeClass('empty').val(z)

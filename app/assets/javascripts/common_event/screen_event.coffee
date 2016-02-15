@@ -165,16 +165,17 @@ class ScreenEvent extends CommonEvent
     # 独自コンフィグのイベント初期化
     @initSpecificConfig = (specificRoot) ->
       _updateConfigInput = (emt, pointingSize) ->
-        x = pointingSize.x + pointingSize.w / 2.0
-        y = pointingSize.y + pointingSize.h / 2.0
+        x =  pointingSize.x + pointingSize.w * 0.5
+        y = pointingSize.y + pointingSize.h * 0.5
         z = null
         screenSize = Common.getScreenSize()
         if pointingSize.w > pointingSize.h
           z = screenSize.width / pointingSize.w
         else
           z = screenSize.height / pointingSize.h
-        emt.find('.afterX:first').val(x)
-        emt.find('.afterY:first').val(y)
+        center = WorktableCommon.calcScrollCenterPosition(y, x)
+        emt.find('.afterX:first').val(center.left)
+        emt.find('.afterY:first').val(center.top)
         emt.find('.afterZ:first').val(z)
 
       emt = specificRoot['changeScreenPosition']

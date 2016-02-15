@@ -436,6 +436,22 @@ class WorktableCommon
     l = left + (window.scrollInsideWrapper.width() + screenSize.width) * 0.5
     return {top: t, left: l}
 
+  # アイテムの中心座標(Worktable中心が0の場合)を計算
+  @calcItemCenterPositionInWorktable = (itemSize) ->
+    p =  PageValue.getWorktableScrollContentsPosition()
+    cp = @calcScrollCenterPosition(p.top, p.left)
+    itemCenterPosition = {x: itemSize.x + itemSize.w * 0.5, y: itemSize.y + itemSize.h * 0.5}
+    diff = {x: p.left - itemCenterPosition.x, y: p.top - itemCenterPosition.y}
+    return {top: cp.top - diff.y, left: cp.left - diff.x}
+
+  # アイテムの中心座標から実座標を計算(calcItemCenterPositionInWorktableの逆)
+  @calcItemScrollContentsPosition = (centerPosition, itemWidth, itemHeight) ->
+    p =  PageValue.getWorktableScrollContentsPosition()
+    cp = @calcScrollCenterPosition(p.top, p.left)
+    diff = {x:  cp.left - centerPosition.x, y: cp.top - centerPosition.y}
+    itemCenterPosition = {x: p.left - diff.x, y: p.top - diff.y}
+    return {left: itemCenterPosition.x - itemWidth * 0.5, top: itemCenterPosition.y - itemHeight * 0.5}
+
   # スクロール位置を再設定
   @adjustScrollContentsPosition: ->
     Common.applyViewScale()
