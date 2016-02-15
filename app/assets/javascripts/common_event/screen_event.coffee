@@ -73,17 +73,16 @@ class ScreenEvent extends CommonEvent
         if !@_keepDispMag && @nowScale?
           _setScale.call(@, @nowScale)
           size = _convertCenterCoodToSize.call(@, @nowX, @nowY, @nowScale)
-          scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
-          if scrollContentsSize?
-            Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
+          Common.updateScrollContentsPosition(size.top + window.scrollContents.height() * 0.5, size.left + window.scrollContents.width() * 0.5, true, false)
 
     # イベント後の表示状態にする
     updateEventAfter: ->
       super()
       methodName = @getEventMethodName()
       if methodName == 'changeScreenPosition'
-        @_progressX = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX)
-        @_progressY = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY)
+        p = Common.calcScrollTopLeftPosition(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY, @_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX)
+        @_progressX = parseFloat(p.left)
+        @_progressY = parseFloat(p.top)
         @_progressScale = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ)
         if @_keepDispMag
           _setScale.call(@, WorktableCommon.getWorktableViewScale())
@@ -91,15 +90,17 @@ class ScreenEvent extends CommonEvent
         else
           _setScale.call(@, @_progressScale)
           size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
-          scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
-          if scrollContentsSize?
-            Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
+          Common.updateScrollContentsPosition(size.top + window.scrollContents.height() * 0.5, size.left + window.scrollContents.width() * 0.5, true, false)
+#          scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
+#          if scrollContentsSize?
+#            Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 
     # 画面移動イベント
     changeScreenPosition: (opt) =>
+      p = Common.calcScrollTopLeftPosition(@_specificMethodValues.afterY, @_specificMethodValues.afterX)
       @_progressScale = (parseFloat(@_specificMethodValues.afterZ) - @nowScale) * (opt.progress / opt.progressMax) + @nowScale
-      @_progressX = ((parseFloat(@_specificMethodValues.afterX) - @nowX) * (opt.progress / opt.progressMax)) + @nowX
-      @_progressY = ((parseFloat(@_specificMethodValues.afterY) - @nowY) * (opt.progress / opt.progressMax)) + @nowY
+      @_progressX = ((parseFloat(p.left) - @nowX) * (opt.progress / opt.progressMax)) + @nowX
+      @_progressY = ((parseFloat(p.top) - @nowY) * (opt.progress / opt.progressMax)) + @nowY
       if window.isWorkTable && opt.isPreview
         _overlay.call(@, @_progressX, @_progressY, @_progressScale)
         if @_keepDispMag
@@ -108,9 +109,7 @@ class ScreenEvent extends CommonEvent
       if !@_keepDispMag
         _setScale.call(@, @_progressScale)
         size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
-        scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
-        if scrollContentsSize?
-          Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
+        Common.updateScrollContentsPosition(size.top + window.scrollContents.height() * 0.5, size.left + window.scrollContents.width() * 0.5, true, false)
 
     # プレビューを停止
     # @param [Function] callback コールバック
@@ -173,7 +172,7 @@ class ScreenEvent extends CommonEvent
           z = screenSize.width / pointingSize.w
         else
           z = screenSize.height / pointingSize.h
-        center = WorktableCommon.calcScrollCenterPosition(y, x)
+        center = Common.calcScrollCenterPosition(y, x)
         emt.find('.afterX:first').val(center.left)
         emt.find('.afterY:first').val(center.top)
         emt.find('.afterZ:first').val(z)

@@ -340,7 +340,7 @@ itemBaseWorktableExtend = {
           focusEmt.trigger('change');
           return _this.saveObj();
         });
-        p = WorktableCommon.calcItemCenterPositionInWorktable(_this.itemSize);
+        p = Common.calcItemCenterPositionInWorktable(_this.itemSize);
         $('.item_position_x:first', designConfigRoot).val(p.left);
         $('.item_position_y:first', designConfigRoot).val(p.top);
         $('.item_width:first', designConfigRoot).val(_this.itemSize.w);
@@ -353,7 +353,7 @@ itemBaseWorktableExtend = {
           };
           w = parseInt($('.item_width:first', designConfigRoot).val());
           h = parseInt($('.item_height:first', designConfigRoot).val());
-          p = WorktableCommon.calcItemScrollContentsPosition(centerPosition, w, h);
+          p = Common.calcItemScrollContentsPosition(centerPosition, w, h);
           itemSize = {
             x: parseInt(p.left),
             y: parseInt(p.top),

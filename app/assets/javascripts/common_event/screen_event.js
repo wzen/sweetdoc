@@ -91,28 +91,26 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.prototype.updateEventBefore = function() {
-      var methodName, scrollContentsSize, size;
+      var methodName, size;
       PrivateClass.__super__.updateEventBefore.call(this);
       methodName = this.getEventMethodName();
       if (methodName === 'changeScreenPosition') {
         if (!this._keepDispMag && (this.nowScale != null)) {
           _setScale.call(this, this.nowScale);
           size = _convertCenterCoodToSize.call(this, this.nowX, this.nowY, this.nowScale);
-          scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
-          if (scrollContentsSize != null) {
-            return Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false);
-          }
+          return Common.updateScrollContentsPosition(size.top + window.scrollContents.height() * 0.5, size.left + window.scrollContents.width() * 0.5, true, false);
         }
       }
     };
 
     PrivateClass.prototype.updateEventAfter = function() {
-      var methodName, scrollContentsSize, size;
+      var methodName, p, size;
       PrivateClass.__super__.updateEventAfter.call(this);
       methodName = this.getEventMethodName();
       if (methodName === 'changeScreenPosition') {
-        this._progressX = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX);
-        this._progressY = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY);
+        p = Common.calcScrollTopLeftPosition(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY, this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX);
+        this._progressX = parseFloat(p.left);
+        this._progressY = parseFloat(p.top);
         this._progressScale = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ);
         if (this._keepDispMag) {
           _setScale.call(this, WorktableCommon.getWorktableViewScale());
@@ -120,19 +118,17 @@ ScreenEvent = (function(superClass) {
         } else {
           _setScale.call(this, this._progressScale);
           size = _convertCenterCoodToSize.call(this, this._progressX, this._progressY, this._progressScale);
-          scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
-          if (scrollContentsSize != null) {
-            return Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false);
-          }
+          return Common.updateScrollContentsPosition(size.top + window.scrollContents.height() * 0.5, size.left + window.scrollContents.width() * 0.5, true, false);
         }
       }
     };
 
     PrivateClass.prototype.changeScreenPosition = function(opt) {
-      var scrollContentsSize, size;
+      var p, size;
+      p = Common.calcScrollTopLeftPosition(this._specificMethodValues.afterY, this._specificMethodValues.afterX);
       this._progressScale = (parseFloat(this._specificMethodValues.afterZ) - this.nowScale) * (opt.progress / opt.progressMax) + this.nowScale;
-      this._progressX = ((parseFloat(this._specificMethodValues.afterX) - this.nowX) * (opt.progress / opt.progressMax)) + this.nowX;
-      this._progressY = ((parseFloat(this._specificMethodValues.afterY) - this.nowY) * (opt.progress / opt.progressMax)) + this.nowY;
+      this._progressX = ((parseFloat(p.left) - this.nowX) * (opt.progress / opt.progressMax)) + this.nowX;
+      this._progressY = ((parseFloat(p.top) - this.nowY) * (opt.progress / opt.progressMax)) + this.nowY;
       if (window.isWorkTable && opt.isPreview) {
         _overlay.call(this, this._progressX, this._progressY, this._progressScale);
         if (this._keepDispMag) {
@@ -142,10 +138,7 @@ ScreenEvent = (function(superClass) {
       if (!this._keepDispMag) {
         _setScale.call(this, this._progressScale);
         size = _convertCenterCoodToSize.call(this, this._progressX, this._progressY, this._progressScale);
-        scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
-        if (scrollContentsSize != null) {
-          return Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false);
-        }
+        return Common.updateScrollContentsPosition(size.top + window.scrollContents.height() * 0.5, size.left + window.scrollContents.width() * 0.5, true, false);
       }
     };
 
@@ -222,7 +215,7 @@ ScreenEvent = (function(superClass) {
         } else {
           z = screenSize.height / pointingSize.h;
         }
-        center = WorktableCommon.calcScrollCenterPosition(y, x);
+        center = Common.calcScrollCenterPosition(y, x);
         emt.find('.afterX:first').val(center.left);
         emt.find('.afterY:first').val(center.top);
         return emt.find('.afterZ:first').val(z);

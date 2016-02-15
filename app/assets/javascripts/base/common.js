@@ -252,6 +252,64 @@ Common = (function() {
     }
   };
 
+  Common.calcScrollCenterPosition = function(top, left) {
+    var l, screenSize, t;
+    screenSize = this.getScreenSize();
+    t = top - (window.scrollInsideWrapper.height() + screenSize.height) * 0.5;
+    l = left - (window.scrollInsideWrapper.width() + screenSize.width) * 0.5;
+    return {
+      top: t,
+      left: l
+    };
+  };
+
+  Common.calcScrollTopLeftPosition = function(top, left) {
+    var l, screenSize, t;
+    screenSize = this.getScreenSize();
+    t = top + (window.scrollInsideWrapper.height() + screenSize.height) * 0.5;
+    l = left + (window.scrollInsideWrapper.width() + screenSize.width) * 0.5;
+    return {
+      top: t,
+      left: l
+    };
+  };
+
+  Common.calcItemCenterPositionInWorktable = function(itemSize) {
+    var cp, diff, itemCenterPosition, p;
+    p = PageValue.getWorktableScrollContentsPosition();
+    cp = this.calcScrollCenterPosition(p.top, p.left);
+    itemCenterPosition = {
+      x: itemSize.x + itemSize.w * 0.5,
+      y: itemSize.y + itemSize.h * 0.5
+    };
+    diff = {
+      x: p.left - itemCenterPosition.x,
+      y: p.top - itemCenterPosition.y
+    };
+    return {
+      top: cp.top - diff.y,
+      left: cp.left - diff.x
+    };
+  };
+
+  Common.calcItemScrollContentsPosition = function(centerPosition, itemWidth, itemHeight) {
+    var cp, diff, itemCenterPosition, p;
+    p = PageValue.getWorktableScrollContentsPosition();
+    cp = this.calcScrollCenterPosition(p.top, p.left);
+    diff = {
+      x: cp.left - centerPosition.x,
+      y: cp.top - centerPosition.y
+    };
+    itemCenterPosition = {
+      x: p.left - diff.x,
+      y: p.top - diff.y
+    };
+    return {
+      left: itemCenterPosition.x - itemWidth * 0.5,
+      top: itemCenterPosition.y - itemHeight * 0.5
+    };
+  };
+
   Common.getViewScale = function(isViewResize) {
     var scaleFromViewRate, se, seScale;
     if (isViewResize == null) {
@@ -1319,7 +1377,7 @@ Common = (function() {
   };
 
   Common.colorChangeCacheData = function(beforeColor, afterColor, length, colorType) {
-    var b, bColors, bPer, bp, cColors, g, gPer, gp, i, index, j, l, len, len1, len2, len3, m, o, q, r, rPer, ref, ref1, ret, rp, u, val, x;
+    var b, bColors, bPer, bp, cColors, g, gPer, gp, i, index, j, len, len1, len2, len3, m, o, q, r, rPer, ref, ref1, ret, rp, u, val, x, y;
     if (colorType == null) {
       colorType = 'hex';
     }
@@ -1337,20 +1395,20 @@ Common = (function() {
       cColors[0] = afterColor.substring(0, 2);
       cColors[1] = afterColor.substring(2, 4);
       cColors[2] = afterColor.substring(4, 6);
-      for (index = l = 0, len1 = cColors.length; l < len1; index = ++l) {
+      for (index = m = 0, len1 = cColors.length; m < len1; index = ++m) {
         val = cColors[index];
         cColors[index] = parseInt(val, 16);
       }
     }
     if (beforeColor === 'transparent') {
-      for (i = m = 0, ref = length; 0 <= ref ? m <= ref : m >= ref; i = 0 <= ref ? ++m : --m) {
+      for (i = q = 0, ref = length; 0 <= ref ? q <= ref : q >= ref; i = 0 <= ref ? ++q : --q) {
         ret[i] = "rgba(" + cColors[0] + "," + cColors[1] + "," + cColors[2] + ", " + (i / length) + ")";
       }
     } else {
       bColors = new Array(3);
       if (beforeColor.indexOf('rgb') >= 0) {
         bColors = beforeColor.replace('rgba', '').replace('rgb', '').replace('(', '').replace(')', '').split(',');
-        for (index = q = 0, len2 = bColors.length; q < len2; index = ++q) {
+        for (index = u = 0, len2 = bColors.length; u < len2; index = ++u) {
           val = bColors[index];
           bColors[index] = parseInt(val);
         }
@@ -1360,7 +1418,7 @@ Common = (function() {
         bColors[0] = beforeColor.substring(0, 2);
         bColors[1] = beforeColor.substring(2, 4);
         bColors[2] = beforeColor.substring(4, 6);
-        for (index = u = 0, len3 = bColors.length; u < len3; index = ++u) {
+        for (index = x = 0, len3 = bColors.length; x < len3; index = ++x) {
           val = bColors[index];
           bColors[index] = parseInt(val, 16);
         }
@@ -1371,7 +1429,7 @@ Common = (function() {
       rp = rPer;
       gp = gPer;
       bp = bPer;
-      for (i = x = 0, ref1 = length; 0 <= ref1 ? x <= ref1 : x >= ref1; i = 0 <= ref1 ? ++x : --x) {
+      for (i = y = 0, ref1 = length; 0 <= ref1 ? y <= ref1 : y >= ref1; i = 0 <= ref1 ? ++y : --y) {
         r = parseInt(bColors[0] + rp);
         g = parseInt(bColors[1] + gp);
         b = parseInt(bColors[2] + bp);

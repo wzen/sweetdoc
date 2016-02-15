@@ -388,7 +388,7 @@ class WorktableCommon
       e.stopPropagation()
       top = window.scrollContents.scrollTop() + window.scrollContents.height() * 0.5
       left = window.scrollContents.scrollLeft() + window.scrollContents.width() * 0.5
-      centerPosition = WorktableCommon.calcScrollCenterPosition(top, left)
+      centerPosition = Common.calcScrollCenterPosition(top, left)
       if centerPosition?
         FloatView.show(FloatView.scrollMessage(centerPosition.top.toFixed(1), centerPosition.left.toFixed(1)), FloatView.Type.DISPLAY_POSITION)
       Common.saveDisplayPosition(top, left, false, ->
@@ -421,36 +421,6 @@ class WorktableCommon
     WorktableSetting.initConfig()
     # 選択アイテム初期化
     WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
-
-  # 左上座標から中心座標を計算(例 15000 -> 0)
-  @calcScrollCenterPosition = (top, left) ->
-    screenSize = Common.getScreenSize()
-    t = top - (window.scrollInsideWrapper.height() + screenSize.height) * 0.5
-    l = left - (window.scrollInsideWrapper.width() + screenSize.width) * 0.5
-    return {top: t, left: l}
-
-  # 中心座標から左上座標を計算(例 0 -> 15000)
-  @calcScrollTopLeftPosition = (top, left) ->
-    screenSize = Common.getScreenSize()
-    t = top + (window.scrollInsideWrapper.height() + screenSize.height) * 0.5
-    l = left + (window.scrollInsideWrapper.width() + screenSize.width) * 0.5
-    return {top: t, left: l}
-
-  # アイテムの中心座標(Worktable中心が0の場合)を計算
-  @calcItemCenterPositionInWorktable = (itemSize) ->
-    p =  PageValue.getWorktableScrollContentsPosition()
-    cp = @calcScrollCenterPosition(p.top, p.left)
-    itemCenterPosition = {x: itemSize.x + itemSize.w * 0.5, y: itemSize.y + itemSize.h * 0.5}
-    diff = {x: p.left - itemCenterPosition.x, y: p.top - itemCenterPosition.y}
-    return {top: cp.top - diff.y, left: cp.left - diff.x}
-
-  # アイテムの中心座標から実座標を計算(calcItemCenterPositionInWorktableの逆)
-  @calcItemScrollContentsPosition = (centerPosition, itemWidth, itemHeight) ->
-    p =  PageValue.getWorktableScrollContentsPosition()
-    cp = @calcScrollCenterPosition(p.top, p.left)
-    diff = {x:  cp.left - centerPosition.x, y: cp.top - centerPosition.y}
-    itemCenterPosition = {x: p.left - diff.x, y: p.top - diff.y}
-    return {left: itemCenterPosition.x - itemWidth * 0.5, top: itemCenterPosition.y - itemHeight * 0.5}
 
   # スクロール位置を再設定
   @adjustScrollContentsPosition: ->

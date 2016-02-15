@@ -233,7 +233,7 @@ class WorktableSetting
       rootEmt = $("##{WorktableSetting.ROOT_ID_NAME}")
       # 画面座標
       position = PageValue.getWorktableScrollContentsPosition()
-      center = WorktableCommon.calcScrollCenterPosition(position.top, position.left)
+      center = Common.calcScrollCenterPosition(position.top, position.left)
       $('.display_position_x', rootEmt).val(parseInt(center.left))
       $('.display_position_y', rootEmt).val(parseInt(center.top))
       leftMin = -window.scrollInsideWrapper.width() * 0.5
@@ -256,7 +256,7 @@ class WorktableSetting
             top = topMax
           $('.display_position_x', rootEmt).val(left)
           $('.display_position_y', rootEmt).val(top)
-          p = WorktableCommon.calcScrollTopLeftPosition(top, left)
+          p = Common.calcScrollTopLeftPosition(top, left)
           PageValue.setGeneralPageValue(PageValue.Key.worktableDisplayPosition(), {top: p.top, left: p.left})
           WorktableCommon.initScrollContentsPosition()
           LocalStorage.saveGeneralPageValue()
@@ -289,7 +289,7 @@ class WorktableSetting
           window.scaleSliderTimer = setTimeout( =>
             WorktableCommon.setWorktableViewScale(ui.value, true)
             position = PageValue.getWorktableScrollContentsPosition()
-            center = WorktableCommon.calcScrollCenterPosition(position.top, position.left)
+            center = Common.calcScrollCenterPosition(position.top, position.left)
             $('.display_position_x', rootEmt).val(parseInt(center.left))
             $('.display_position_y', rootEmt).val(parseInt(center.top))
           , 100)

@@ -207,6 +207,36 @@ class Common
         se = new ScreenEvent()
         @updateScrollContentsPosition(se.initConfigY, se.initConfigX)
 
+  # 左上座標から中心座標を計算(例 15000 -> 0)
+  @calcScrollCenterPosition = (top, left) ->
+    screenSize = @getScreenSize()
+    t = top - (window.scrollInsideWrapper.height() + screenSize.height) * 0.5
+    l = left - (window.scrollInsideWrapper.width() + screenSize.width) * 0.5
+    return {top: t, left: l}
+
+  # 中心座標から左上座標を計算(例 0 -> 15000)
+  @calcScrollTopLeftPosition = (top, left) ->
+    screenSize = @getScreenSize()
+    t = top + (window.scrollInsideWrapper.height() + screenSize.height) * 0.5
+    l = left + (window.scrollInsideWrapper.width() + screenSize.width) * 0.5
+    return {top: t, left: l}
+
+  # アイテムの中心座標(Worktable中心が0の場合)を計算
+  @calcItemCenterPositionInWorktable = (itemSize) ->
+    p =  PageValue.getWorktableScrollContentsPosition()
+    cp = @calcScrollCenterPosition(p.top, p.left)
+    itemCenterPosition = {x: itemSize.x + itemSize.w * 0.5, y: itemSize.y + itemSize.h * 0.5}
+    diff = {x: p.left - itemCenterPosition.x, y: p.top - itemCenterPosition.y}
+    return {top: cp.top - diff.y, left: cp.left - diff.x}
+
+  # アイテムの中心座標から実座標を計算(calcItemCenterPositionInWorktableの逆)
+  @calcItemScrollContentsPosition = (centerPosition, itemWidth, itemHeight) ->
+    p =  PageValue.getWorktableScrollContentsPosition()
+    cp = @calcScrollCenterPosition(p.top, p.left)
+    diff = {x:  cp.left - centerPosition.x, y: cp.top - centerPosition.y}
+    itemCenterPosition = {x: p.left - diff.x, y: p.top - diff.y}
+    return {left: itemCenterPosition.x - itemWidth * 0.5, top: itemCenterPosition.y - itemHeight * 0.5}
+
   # 画面スケールの取得
   @getViewScale = (isViewResize = false)->
     if window.isWorkTable && !window.previewRunning

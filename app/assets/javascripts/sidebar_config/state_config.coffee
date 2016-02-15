@@ -22,7 +22,7 @@ class StateConfig
       emt = $("##{@ROOT_ID_NAME} .configBox.screen_event")
       se = new ScreenEvent()
       if se.hasInitConfig()
-        center = WorktableCommon.calcScrollCenterPosition(se.initConfigY, se.initConfigX)
+        center = Common.calcScrollCenterPosition(se.initConfigY, se.initConfigX)
 
         $('.initConfigX:first', emt).attr('disabled', '').removeClass('empty').val(center.left)
         $('.initConfigY:first', emt).attr('disabled', '').removeClass('empty').val(center.top)
@@ -31,7 +31,7 @@ class StateConfig
         $('input', emt).off('change').on('change', (e) =>
           se = new ScreenEvent()
           target = e.target
-          se[$(target).attr('class')] = WorktableCommon.calcScrollTopLeftPosition($(target).val())
+          se[$(target).attr('class')] = Common.calcScrollTopLeftPosition($(target).val())
           se.setItemAllPropToPageValue()
         )
       else
@@ -49,7 +49,7 @@ class StateConfig
           z = screenSize.width / pointingSize.w
         else
           z = screenSize.height / pointingSize.h
-        center = WorktableCommon.calcScrollCenterPosition(y, x)
+        center = Common.calcScrollCenterPosition(y, x)
         $('.initConfigX:first', emt).attr('disabled', '').removeClass('empty').val(center.left)
         $('.initConfigY:first', emt).attr('disabled', '').removeClass('empty').val(center.top)
         $('.initConfigScale:first', emt).attr('disabled', '').removeClass('empty').val(z)

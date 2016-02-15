@@ -96,7 +96,7 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.floatItem = function(objId) {
-    var a, b, drawedItems, i, item, itemObjId, j, len, m, maxZIndex, sorted, targetZIndex, w;
+    var a, b, drawedItems, i, item, itemObjId, j, l, len, maxZIndex, sorted, targetZIndex, w;
     drawedItems = window.scrollInside.find('.item');
     sorted = [];
     drawedItems.each(function() {
@@ -119,8 +119,8 @@ WorktableCommon = (function() {
     }
     targetZIndex = parseInt($("#" + objId).css('z-index'));
     i = parseInt(window.scrollInsideWrapper.css('z-index'));
-    for (m = 0, len = sorted.length; m < len; m++) {
-      item = sorted[m];
+    for (l = 0, len = sorted.length; l < len; l++) {
+      item = sorted[l];
       itemObjId = $(item).attr('id');
       if (objId !== itemObjId) {
         item.css('z-index', i);
@@ -134,7 +134,7 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.rearItem = function(objId) {
-    var a, b, drawedItems, i, item, itemObjId, j, len, m, minZIndex, sorted, targetZIndex, w;
+    var a, b, drawedItems, i, item, itemObjId, j, l, len, minZIndex, sorted, targetZIndex, w;
     drawedItems = window.scrollInside.find('.item');
     sorted = [];
     drawedItems.each(function() {
@@ -157,8 +157,8 @@ WorktableCommon = (function() {
     }
     targetZIndex = parseInt($("#" + objId).css('z-index'));
     i = parseInt(window.scrollInsideWrapper.css('z-index')) + 1;
-    for (m = 0, len = sorted.length; m < len; m++) {
-      item = sorted[m];
+    for (l = 0, len = sorted.length; l < len; l++) {
+      item = sorted[l];
       itemObjId = $(item).attr('id');
       if (objId !== itemObjId) {
         item.css('z-index', i);
@@ -182,7 +182,7 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.changeMode = function(afterMode, pn) {
-    var item, items, len, m, results;
+    var item, items, l, len, results;
     if (pn == null) {
       pn = PageValue.getPageNum();
     }
@@ -209,8 +209,8 @@ WorktableCommon = (function() {
       window.mode = afterMode;
       items = Common.itemInstancesInPage();
       results = [];
-      for (m = 0, len = items.length; m < len; m++) {
-        item = items[m];
+      for (l = 0, len = items.length; l < len; l++) {
+        item = items[l];
         if (item.changeMode != null) {
           results.push(item.changeMode(afterMode));
         } else {
@@ -263,12 +263,12 @@ WorktableCommon = (function() {
       callback = null;
     }
     return this.stopAllEventPreview(function(noRunningPreview) {
-      var callbackCount, item, items, len, m;
+      var callbackCount, item, items, l, len;
       if (window.worktableItemsChangedState || !noRunningPreview) {
         items = Common.instancesInPage(pn);
         callbackCount = 0;
-        for (m = 0, len = items.length; m < len; m++) {
-          item = items[m];
+        for (l = 0, len = items.length; l < len; l++) {
+          item = items[l];
           item.refreshFromInstancePageValue(true, function() {
             callbackCount += 1;
             if (callbackCount >= items.length) {
@@ -436,7 +436,7 @@ WorktableCommon = (function() {
       e.stopPropagation();
       top = window.scrollContents.scrollTop() + window.scrollContents.height() * 0.5;
       left = window.scrollContents.scrollLeft() + window.scrollContents.width() * 0.5;
-      centerPosition = WorktableCommon.calcScrollCenterPosition(top, left);
+      centerPosition = Common.calcScrollCenterPosition(top, left);
       if (centerPosition != null) {
         FloatView.show(FloatView.scrollMessage(centerPosition.top.toFixed(1), centerPosition.left.toFixed(1)), FloatView.Type.DISPLAY_POSITION);
       }
@@ -463,64 +463,6 @@ WorktableCommon = (function() {
     Sidebar.resizeConfigHeight();
     WorktableSetting.initConfig();
     return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
-  };
-
-  WorktableCommon.calcScrollCenterPosition = function(top, left) {
-    var l, screenSize, t;
-    screenSize = Common.getScreenSize();
-    t = top - (window.scrollInsideWrapper.height() + screenSize.height) * 0.5;
-    l = left - (window.scrollInsideWrapper.width() + screenSize.width) * 0.5;
-    return {
-      top: t,
-      left: l
-    };
-  };
-
-  WorktableCommon.calcScrollTopLeftPosition = function(top, left) {
-    var l, screenSize, t;
-    screenSize = Common.getScreenSize();
-    t = top + (window.scrollInsideWrapper.height() + screenSize.height) * 0.5;
-    l = left + (window.scrollInsideWrapper.width() + screenSize.width) * 0.5;
-    return {
-      top: t,
-      left: l
-    };
-  };
-
-  WorktableCommon.calcItemCenterPositionInWorktable = function(itemSize) {
-    var cp, diff, itemCenterPosition, p;
-    p = PageValue.getWorktableScrollContentsPosition();
-    cp = this.calcScrollCenterPosition(p.top, p.left);
-    itemCenterPosition = {
-      x: itemSize.x + itemSize.w * 0.5,
-      y: itemSize.y + itemSize.h * 0.5
-    };
-    diff = {
-      x: p.left - itemCenterPosition.x,
-      y: p.top - itemCenterPosition.y
-    };
-    return {
-      top: cp.top - diff.y,
-      left: cp.left - diff.x
-    };
-  };
-
-  WorktableCommon.calcItemScrollContentsPosition = function(centerPosition, itemWidth, itemHeight) {
-    var cp, diff, itemCenterPosition, p;
-    p = PageValue.getWorktableScrollContentsPosition();
-    cp = this.calcScrollCenterPosition(p.top, p.left);
-    diff = {
-      x: cp.left - centerPosition.x,
-      y: cp.top - centerPosition.y
-    };
-    itemCenterPosition = {
-      x: p.left - diff.x,
-      y: p.top - diff.y
-    };
-    return {
-      left: itemCenterPosition.x - itemWidth * 0.5,
-      top: itemCenterPosition.y - itemHeight * 0.5
-    };
   };
 
   WorktableCommon.adjustScrollContentsPosition = function() {
@@ -600,10 +542,10 @@ WorktableCommon = (function() {
     return Common.setupContextMenu(element, contextSelector, {
       menu: menu,
       select: function(event, ui) {
-        var len, m, results, value;
+        var l, len, results, value;
         results = [];
-        for (m = 0, len = menu.length; m < len; m++) {
-          value = menu[m];
+        for (l = 0, len = menu.length; l < len; l++) {
+          value = menu[l];
           if (value.cmd === ui.cmd) {
             results.push(value.func(event, ui));
           } else {
@@ -685,10 +627,10 @@ WorktableCommon = (function() {
       pageNum = PageValue.getPageNum();
     }
     return Common.loadJsFromInstancePageValue(function() {
-      var item, items, len, m;
+      var item, items, l, len;
       items = Common.itemInstancesInPage(pageNum, true, true);
-      for (m = 0, len = items.length; m < len; m++) {
-        item = items[m];
+      for (l = 0, len = items.length; l < len; l++) {
+        item = items[l];
         if (item.drawAndMakeConfigs != null) {
           item.drawAndMakeConfigs();
         }
@@ -707,7 +649,7 @@ WorktableCommon = (function() {
     finishTeNum = parseInt(finishTeNum);
     finishFn = parseInt(finishFn);
     _trace = function(forkNum) {
-      var changeForkNum, idx, len, m, result, ret, routes, te, tes;
+      var changeForkNum, idx, l, len, result, ret, routes, te, tes;
       routes = [];
       tes = PageValue.getEventPageValueSortedListByNum(forkNum);
       if (tes.length === 0) {
@@ -716,7 +658,7 @@ WorktableCommon = (function() {
           routes: []
         };
       }
-      for (idx = m = 0, len = tes.length; m < len; idx = ++m) {
+      for (idx = l = 0, len = tes.length; l < len; idx = ++l) {
         te = tes[idx];
         changeForkNum = te[EventPageValueBase.PageValueKey.CHANGE_FORKNUM];
         if ((changeForkNum != null) && changeForkNum !== forkNum) {
@@ -803,11 +745,11 @@ WorktableCommon = (function() {
     window.worktableItemsChangedState = true;
     return this.updateAllEventsToBefore(keepDispMag, (function(_this) {
       return function() {
-        var focusTargetItem, idx, item, len, m, te;
+        var focusTargetItem, idx, item, l, len, te;
         PageValue.removeAllFootprint();
         teNum = parseInt(teNum);
         focusTargetItem = null;
-        for (idx = m = 0, len = tes.length; m < len; idx = ++m) {
+        for (idx = l = 0, len = tes.length; l < len; idx = ++l) {
           te = tes[idx];
           item = window.instanceMap[te.id];
           if (item != null) {
@@ -843,7 +785,7 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.updateAllEventsToBefore = function(keepDispMag, callback) {
-    var _updateEventBefore, forkNum, i, m, ref, self, tesArray;
+    var _updateEventBefore, forkNum, i, l, ref, self, tesArray;
     if (callback == null) {
       callback = null;
     }
@@ -852,16 +794,16 @@ WorktableCommon = (function() {
     tesArray.push(PageValue.getEventPageValueSortedListByNum(PageValue.Key.EF_MASTER_FORKNUM));
     forkNum = PageValue.getForkNum();
     if (forkNum > 0) {
-      for (i = m = 1, ref = forkNum; 1 <= ref ? m <= ref : m >= ref; i = 1 <= ref ? ++m : --m) {
+      for (i = l = 1, ref = forkNum; 1 <= ref ? l <= ref : l >= ref; i = 1 <= ref ? ++l : --l) {
         tesArray.push(PageValue.getEventPageValueSortedListByNum(i));
       }
     }
     _updateEventBefore = function() {
-      var idx, item, len, n, o, ref1, results, te, tes;
+      var idx, item, len, m, n, ref1, results, te, tes;
       results = [];
-      for (n = 0, len = tesArray.length; n < len; n++) {
-        tes = tesArray[n];
-        for (idx = o = ref1 = tes.length - 1; o >= 0; idx = o += -1) {
+      for (m = 0, len = tesArray.length; m < len; m++) {
+        tes = tesArray[m];
+        for (idx = n = ref1 = tes.length - 1; n >= 0; idx = n += -1) {
           te = tes[idx];
           item = window.instanceMap[te.id];
           if (item != null) {
