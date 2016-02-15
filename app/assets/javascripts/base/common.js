@@ -393,10 +393,7 @@ Common = (function() {
       instance = instances[key];
       value = instance.value;
       if (withCreateInstance) {
-        obj = Common.getInstanceFromMap(value.id, value.classDistToken);
-        if (withInitFromPageValue) {
-          obj.setMiniumObject(value);
-        }
+        obj = Common.getInstanceFromMap(value.id, value.classDistToken, withInitFromPageValue);
       } else {
         obj = window.instanceMap[value.id];
       }
@@ -654,16 +651,22 @@ Common = (function() {
     }
   };
 
-  Common.getInstanceFromMap = function(id, classDistToken) {
+  Common.getInstanceFromMap = function(id, classDistToken, withInitFromPagevalue) {
+    if (withInitFromPagevalue == null) {
+      withInitFromPagevalue = true;
+    }
     if (typeof id !== "string") {
       id = String(id);
     }
-    Common.setInstanceFromMap(id, classDistToken);
+    Common.setInstanceFromMap(id, classDistToken, withInitFromPagevalue);
     return window.instanceMap[id];
   };
 
-  Common.setInstanceFromMap = function(id, classDistToken) {
+  Common.setInstanceFromMap = function(id, classDistToken, withInitFromPagevalue) {
     var instance, obj;
+    if (withInitFromPagevalue == null) {
+      withInitFromPagevalue = true;
+    }
     if (typeof id !== "string") {
       id = String(id);
     }
@@ -673,9 +676,11 @@ Common = (function() {
     if (window.instanceMap[id] == null) {
       instance = new (Common.getClassFromMap(classDistToken))();
       instance.id = id;
-      obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(id));
-      if (obj) {
-        instance.setMiniumObject(obj);
+      if (withInitFromPagevalue) {
+        obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(id));
+        if (obj) {
+          instance.setMiniumObject(obj);
+        }
       }
       return window.instanceMap[id] = instance;
     }

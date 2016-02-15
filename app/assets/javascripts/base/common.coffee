@@ -308,9 +308,7 @@ class Common
     for key, instance of instances
       value = instance.value
       if withCreateInstance
-        obj = Common.getInstanceFromMap(value.id, value.classDistToken)
-        if withInitFromPageValue
-          obj.setMiniumObject(value)
+        obj = Common.getInstanceFromMap(value.id, value.classDistToken, withInitFromPageValue)
       else
         obj = window.instanceMap[value.id]
       ret.push(obj)
@@ -516,16 +514,16 @@ class Common
   # @param [Integer] id イベントID
   # @param [Integer] classDistToken
   # @return [Object] インスタンス
-  @getInstanceFromMap = (id, classDistToken) ->
+  @getInstanceFromMap = (id, classDistToken, withInitFromPagevalue = true) ->
     if typeof id != "string"
       id = String(id)
-    Common.setInstanceFromMap(id, classDistToken)
+    Common.setInstanceFromMap(id, classDistToken, withInitFromPagevalue)
     return window.instanceMap[id]
 
-  # インスタンス設定(上書きはしない)
+  # インスタンス設定(既に存在する場合は上書きはしない)
   # @param [Integer] id イベントID
   # @param [Integer] classDistToken
-  @setInstanceFromMap = (id, classDistToken) ->
+  @setInstanceFromMap = (id, classDistToken, withInitFromPagevalue = true) ->
     if typeof id != "string"
       id = String(id)
 
@@ -535,10 +533,11 @@ class Common
       # インスタンスを保存する
       instance = new (Common.getClassFromMap(classDistToken))()
       instance.id = id
-      # インスタンス値が存在する場合、初期化
-      obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(id))
-      if obj
-        instance.setMiniumObject(obj)
+      if withInitFromPagevalue
+        # インスタンス値が存在する場合、初期化
+        obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(id))
+        if obj
+          instance.setMiniumObject(obj)
       window.instanceMap[id] = instance
 
   # 生成したインスタンスの中からアイテムのみ取得
