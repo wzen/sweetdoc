@@ -8,6 +8,7 @@ class UploadItem extends UploadBase
 
     # 保存処理
     _saveGallery = ->
+      Common.showModalFlashMessage('Updating...')
       fd = new FormData(document.getElementById('upload_form'))
       tags = $.map($('.select_tag a', root), (n) -> $(n).html())
       if tags?

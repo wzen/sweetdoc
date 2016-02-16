@@ -20,7 +20,6 @@ UploadCommon = (function() {
       }
     });
     return $('.upload_button').off('click').on('click', function() {
-      Common.showModalFlashMessage('Updating...');
       upload.upload(root);
       return false;
     });
@@ -29,9 +28,13 @@ UploadCommon = (function() {
   UploadCommon.makeCapture = function(canvas) {
     var height, png, root, width;
     root = $('#upload_wrapper');
-    png = canvas.toDataURL('image/png');
-    $(".capture", root).attr('src', png);
-    $("input[name='" + Constant.Gallery.Key.THUMBNAIL_IMG + "']", root).val(png.replace(/^.*,/, ''));
+    try {
+      png = canvas.toDataURL('image/png');
+      $(".capture", root).attr('src', png);
+      $("input[name='" + Constant.Gallery.Key.THUMBNAIL_IMG + "']", root).val(png.replace(/^.*,/, ''));
+    } catch (_error) {
+      $(".capture", root).attr('src', '');
+    }
     $("input[name='" + Constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE + "']", root).val('image/png');
     width = parseInt($(canvas).attr('width'));
     height = parseInt($(canvas).attr('height'));

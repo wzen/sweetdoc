@@ -22,7 +22,6 @@ class UploadCommon
 
     # Updateイベント
     $('.upload_button').off('click').on('click', ->
-      Common.showModalFlashMessage('Updating...')
       upload.upload(root)
       return false
     )
@@ -30,9 +29,12 @@ class UploadCommon
   # 前画面のキャプチャ作成
   @makeCapture = (canvas) ->
     root = $('#upload_wrapper')
-    png = canvas.toDataURL('image/png')
-    $(".capture", root).attr('src', png)
-    $("input[name='#{Constant.Gallery.Key.THUMBNAIL_IMG}']", root).val(png.replace(/^.*,/, ''))
+    try
+      png = canvas.toDataURL('image/png')
+      $(".capture", root).attr('src', png)
+      $("input[name='#{Constant.Gallery.Key.THUMBNAIL_IMG}']", root).val(png.replace(/^.*,/, ''))
+    catch
+      $(".capture", root).attr('src', '')
     $("input[name='#{Constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE}']", root).val('image/png')
     width = parseInt($(canvas).attr('width'))
     height = parseInt($(canvas).attr('height'))

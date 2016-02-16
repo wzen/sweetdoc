@@ -21,6 +21,7 @@ UploadContents = (function(superClass) {
     }
     _saveGallery = function() {
       var fd, tags;
+      Common.showModalFlashMessage('Updating...');
       fd = new FormData(document.getElementById('upload_form'));
       tags = $.map($('.select_tag a', root), function(n) {
         return $(n).html();
