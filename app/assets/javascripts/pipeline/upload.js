@@ -12,6 +12,16 @@
 //= require ../../../../vendor/assets/html2canvas/html2canvas_custom.min
 //= require markitup/sets/html/set
 //= require base/constant
+//= require base/common
+//= require base/common_var
+//= require base/page_value
+//= require base/extend
+//= require base/event_base/event_base
+//= require base/event_base/common_event_base
+//= require base/event_base/item_event_base
+//= require base/local_storage
+//= require base/float_view
+//= require base/config_menu
 //= require upload/upload_base
 //= require upload/upload_contents
 //= require upload/upload_item

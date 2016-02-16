@@ -71,7 +71,7 @@ class Gallery < ActiveRecord::Base
         pgm = ProjectGalleryMap.new({user_project_map_id: upm.id, gallery_id: g.id})
         pgm.save!
 
-        # Pagevalueレコード取得
+        # Pagevalueレコード取得(UserPagevaluesテーブルの最新データ)
         sql = <<-"SQL"
           SELECT gp.data as g_pagevalue_data, ip.data as i_pagevalue_data, ep.data as e_pagevalue_data, gpp.page_num as page_num
           FROM user_pagevalues up
@@ -85,6 +85,14 @@ class Gallery < ActiveRecord::Base
             up.user_project_map_id = #{upm.id}
           AND
             up.del_flg = 0
+          AND
+            up.updated_at = (
+              SELECT MAX(up2.updated_at)
+              FROM user_pagevalues up2
+              WHERE up2.user_project_map_id = #{upm.id}
+              AND up2.del_flg = 0
+            )
+
         SQL
         ret = ActiveRecord::Base.connection.select_all(sql).to_hash
         ret.each do |record|
