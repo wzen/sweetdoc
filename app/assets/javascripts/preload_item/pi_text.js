@@ -838,41 +838,55 @@ PreloadItemText = (function(superClass) {
   };
 
   PreloadItemText.prototype.writeText = function(opt) {
-    var _write, canvas, context;
-    if (this._writeTextTimer != null) {
-      clearTimeout(this._writeTextTimer);
-      this._writeTextTimer = null;
-    }
+    var _write, canvas, context, writeBlurLength, writeLength;
     this.showWithAnimation = this.showWithAnimation__after;
     this.showAnimationType = this.showAnimationType__after;
     this._forward = opt.forward;
     if (this.showWithAnimation && (this._animationFlg['startOpenAnimation'] == null)) {
       this.startOpenAnimation((function(_this) {
         return function() {
-          return _this.writeText(opt);
+          _this._animationFlg['startOpenAnimation'] = true;
+          return _this.resetProgress();
         };
       })(this));
-      this._animationFlg['startOpenAnimation'] = true;
     } else {
-      canvas = document.getElementById(this.canvasElementId());
-      context = canvas.getContext('2d');
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      this._fixedTextAlpha = null;
-      this._alphaDiff = 0;
       if ((this.inputText != null) && this.inputText.length > 0) {
-        _write = function() {
-          _setTextStyle.call(this);
-          _drawTextAndBalloonToCanvas.call(this, this.inputText, this.inputText.length * opt.progress / opt.progressMax);
-          this._alphaDiff += 1;
-          if (this._alphaDiff <= this.constructor.WRITE_TEXT_BLUR_LENGTH) {
-            return this._writeTextTimer = setTimeout((function(_this) {
-              return function() {
-                return _write.call(_this);
-              };
-            })(this), 100);
+        if ((this._writeTextRunning == null) || !this._writeTextRunning) {
+          this._fixedTextAlpha = null;
+          writeLength = this.inputText.length * opt.progress / opt.progressMax;
+          if (this._beforeWriteLength == null) {
+            this._beforeWriteLength = 0;
           }
-        };
-        _write.call(this);
+          writeBlurLength = parseInt(writeLength) - parseInt(this._beforeWriteLength);
+          if (Math.abs(writeBlurLength) > 0) {
+            this._writeTextRunning = true;
+            this._beforeWriteLength = writeLength;
+            canvas = document.getElementById(this.canvasElementId());
+            context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            this._writeBlurLength = Math.abs(writeBlurLength);
+            this._alphaDiff = 0;
+            _write = function() {
+              _setTextStyle.call(this);
+              _drawTextAndBalloonToCanvas.call(this, this.inputText, writeLength);
+              this._alphaDiff += this._writeBlurLength / 5;
+              if (this._alphaDiff <= this._writeBlurLength) {
+                if (this._writeTextTimer != null) {
+                  clearTimeout(this._writeTextTimer);
+                  this._writeTextTimer = null;
+                }
+                return this._writeTextTimer = setTimeout((function(_this) {
+                  return function() {
+                    return _write.call(_this);
+                  };
+                })(this), 10);
+              } else {
+                return this._writeTextRunning = false;
+              }
+            };
+            _write.call(this);
+          }
+        }
       }
     }
     if (opt.progress >= opt.progressMax && this.showWithAnimation && (this._animationFlg['startCloseAnimation'] == null)) {
@@ -1340,7 +1354,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _setTextAlpha = function(context, idx, writingLength) {
-    var bLength, diff, ga, methodName;
+    var ga, methodName;
     methodName = this.getEventMethodName();
     if (methodName === 'changeText') {
       if (this._fixedTextAlpha != null) {
@@ -1348,38 +1362,37 @@ PreloadItemText = (function(superClass) {
       }
     } else if (methodName === 'writeText') {
       if (this._forward) {
-        if (writingLength === 0) {
-          return context.globalAlpha = 0;
-        } else if (idx <= writingLength) {
-          return context.globalAlpha = 1;
-        } else if (idx - writingLength >= this.constructor.WRITE_TEXT_BLUR_LENGTH) {
-          return context.globalAlpha = 0;
+        ga = null;
+        if (writingLength === 0 || idx > writingLength) {
+          ga = 0;
+        } else if (idx <= writingLength - this._writeBlurLength) {
+          ga = 1;
         } else {
-          diff = (idx - writingLength) / this.constructor.WRITE_TEXT_BLUR_LENGTH;
-          ga = 1 - diff;
-          ga += diff * (this._alphaDiff / this.constructor.WRITE_TEXT_BLUR_LENGTH);
+          ga = this._alphaDiff / this._writeBlurLength + ((writingLength - idx) / this._writeBlurLength);
           if (ga < 0) {
             ga = 0;
           }
-          return context.globalAlpha = ga;
+          if (ga > 1) {
+            ga = 1;
+          }
         }
+        return context.globalAlpha = ga;
       } else {
-        bLength = parseInt(this.constructor.WRITE_TEXT_BLUR_LENGTH * 0.5);
-        if (writingLength === 0) {
-          return context.globalAlpha = 0;
-        } else if (idx <= writingLength - bLength) {
-          return context.globalAlpha = 1;
-        } else if (writingLength < idx) {
-          return context.globalAlpha = 0;
+        ga = null;
+        if (writingLength === 0 || idx > writingLength + this._writeBlurLength) {
+          ga = 0;
+        } else if (idx <= writingLength) {
+          ga = 1;
         } else {
-          diff = (writingLength - idx) / bLength;
-          ga = diff;
-          ga -= diff * (this._alphaDiff / bLength);
+          ga = 1 - (this._alphaDiff / this._writeBlurLength + ((idx - writingLength) / this._writeBlurLength));
           if (ga < 0) {
             ga = 0;
           }
-          return context.globalAlpha = ga;
+          if (ga > 1) {
+            ga = 1;
+          }
         }
+        return context.globalAlpha = ga;
       }
     }
   };

@@ -631,33 +631,45 @@ class PreloadItemText extends CanvasItemBase
       @_animationFlg['startCloseAnimation'] = true
 
   writeText: (opt) ->
-    if @_writeTextTimer?
-      clearTimeout(@_writeTextTimer)
-      @_writeTextTimer = null
     @showWithAnimation = @showWithAnimation__after
     @showAnimationType = @showAnimationType__after
     @_forward = opt.forward
     if @showWithAnimation && !@_animationFlg['startOpenAnimation']?
       @startOpenAnimation( =>
-        @writeText(opt)
+        #@writeText(opt)
+        @_animationFlg['startOpenAnimation'] = true
+        @resetProgress()
       )
-      @_animationFlg['startOpenAnimation'] = true
     else
-      canvas = document.getElementById(@canvasElementId())
-      context = canvas.getContext('2d')
-      context.clearRect(0, 0, canvas.width, canvas.height)
-      @_fixedTextAlpha = null
-      @_alphaDiff = 0
       if @inputText? && @inputText.length > 0
-        _write = ->
-          _setTextStyle.call(@)
-          _drawTextAndBalloonToCanvas.call(@ , @inputText, (@inputText.length * opt.progress / opt.progressMax))
-          @_alphaDiff += 1
-          if @_alphaDiff <= @constructor.WRITE_TEXT_BLUR_LENGTH
-            @_writeTextTimer = setTimeout( =>
-              _write.call(@)
-            , 100)
-        _write.call(@)
+        if !@_writeTextRunning? || !@_writeTextRunning
+          @_fixedTextAlpha = null
+          writeLength = @inputText.length * opt.progress / opt.progressMax
+          if !@_beforeWriteLength?
+            @_beforeWriteLength = 0
+          writeBlurLength = parseInt(writeLength) - parseInt(@_beforeWriteLength)
+          if Math.abs(writeBlurLength) > 0
+            @_writeTextRunning = true
+            @_beforeWriteLength = writeLength
+            canvas = document.getElementById(@canvasElementId())
+            context = canvas.getContext('2d')
+            context.clearRect(0, 0, canvas.width, canvas.height)
+            @_writeBlurLength = Math.abs(writeBlurLength)
+            @_alphaDiff = 0
+            _write = ->
+              _setTextStyle.call(@)
+              _drawTextAndBalloonToCanvas.call(@ , @inputText, writeLength)
+              @_alphaDiff += @_writeBlurLength / 5
+              if @_alphaDiff <= @_writeBlurLength
+                if @_writeTextTimer?
+                  clearTimeout(@_writeTextTimer)
+                  @_writeTextTimer = null
+                @_writeTextTimer = setTimeout( =>
+                  _write.call(@)
+                , 10)
+              else
+                @_writeTextRunning = false
+            _write.call(@)
 
     if opt.progress >= opt.progressMax && @showWithAnimation && !@_animationFlg['startCloseAnimation']?
       if @_writeTextTimer?
@@ -1038,40 +1050,39 @@ class PreloadItemText extends CanvasItemBase
     return ret
 
   _setTextAlpha = (context, idx, writingLength) ->
+    #writingLength = parseInt(writingLength)
     methodName = @getEventMethodName()
     if methodName == 'changeText'
       if @_fixedTextAlpha?
         context.globalAlpha = @_fixedTextAlpha
     else if methodName == 'writeText'
       if @_forward
-        if writingLength == 0
-          context.globalAlpha = 0
-        else if idx <= writingLength
-          context.globalAlpha = 1
-        else if idx - writingLength >= @constructor.WRITE_TEXT_BLUR_LENGTH
-          context.globalAlpha = 0
+        ga = null
+        if writingLength == 0 || idx > writingLength
+          ga = 0
+        else if idx <= writingLength - @_writeBlurLength
+          ga = 1
         else
-          diff = (idx - writingLength) / @constructor.WRITE_TEXT_BLUR_LENGTH
-          ga = 1 - diff
-          ga += diff * (@_alphaDiff / @constructor.WRITE_TEXT_BLUR_LENGTH)
+          ga = @_alphaDiff / @_writeBlurLength + ((writingLength - idx) / @_writeBlurLength)
           if ga < 0
             ga = 0
-          context.globalAlpha = ga
+          if ga > 1
+            ga = 1
+        #console.log('ga:' + ga + ' _alphaDiff:' + @_alphaDiff + ' _writeBlurLength:' + @_writeBlurLength + ' idx:' + idx)
+        context.globalAlpha = ga
       else
-        bLength = parseInt(@constructor.WRITE_TEXT_BLUR_LENGTH * 0.5)
-        if writingLength == 0
-          context.globalAlpha = 0
-        else if idx <= writingLength - bLength
-          context.globalAlpha = 1
-        else if writingLength < idx
-          context.globalAlpha = 0
+        ga = null
+        if writingLength == 0 || idx > writingLength + @_writeBlurLength
+          ga = 0
+        else if idx <= writingLength
+          ga = 1
         else
-          diff = (writingLength - idx) / bLength
-          ga = diff
-          ga -= diff * (@_alphaDiff / bLength)
+          ga = 1 - (@_alphaDiff / @_writeBlurLength + ((idx - writingLength) / @_writeBlurLength))
           if ga < 0
             ga = 0
-          context.globalAlpha = ga
+          if ga > 1
+            ga = 1
+        context.globalAlpha = ga
 
   _writeLength = (column, writingLength, wordSum) ->
     v = parseInt(writingLength - wordSum)
