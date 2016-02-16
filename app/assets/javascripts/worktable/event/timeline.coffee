@@ -134,6 +134,8 @@ class Timeline
         return
       # コンフィグを開く
       _initEventConfig.call(@, e)
+      # 選択枠
+      WorktableCommon.setSelectedBorder($(e), 'timeline')
 
     # タイムライン削除
     _deleteTimeline = (target) ->

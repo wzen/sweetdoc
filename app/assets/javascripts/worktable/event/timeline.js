@@ -137,7 +137,8 @@ Timeline = (function() {
       if ($(e).is('.ui-sortable-helper')) {
         return;
       }
-      return _initEventConfig.call(this, e);
+      _initEventConfig.call(this, e);
+      return WorktableCommon.setSelectedBorder($(e), 'timeline');
     };
     _deleteTimeline = function(target) {
       var eNum;
