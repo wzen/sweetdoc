@@ -6,10 +6,10 @@ class PageValueStateController < ApplicationController
     user_id = current_or_guest_user.id
     page_count = params.require(Const::ServerStorage::Key::PAGE_COUNT).to_i
     project_id = params.require(Const::ServerStorage::Key::PROJECT_ID).to_i
-    g_page_values = params.require(Const::ServerStorage::Key::GENERAL_PAGE_VALUE)
-    i_page_values = params.require(Const::ServerStorage::Key::INSTANCE_PAGE_VALUE)
-    e_page_values = params.require(Const::ServerStorage::Key::EVENT_PAGE_VALUE)
-    s_page_values = params.require(Const::ServerStorage::Key::SETTING_PAGE_VALUE)
+    g_page_values = params.fetch(Const::ServerStorage::Key::GENERAL_PAGE_VALUE, {})
+    i_page_values = params.fetch(Const::ServerStorage::Key::INSTANCE_PAGE_VALUE, {})
+    e_page_values = params.fetch(Const::ServerStorage::Key::EVENT_PAGE_VALUE, {})
+    s_page_values = params.fetch(Const::ServerStorage::Key::SETTING_PAGE_VALUE, {})
     new_record = params.fetch(Const::ServerStorage::Key::NEW_RECORD, false)
     @result_success, @message, @last_save_time, @updated_user_pagevalue_id = PageValueState.save_state(user_id, project_id, page_count, g_page_values, i_page_values, e_page_values, s_page_values, new_record)
     rescue => e
