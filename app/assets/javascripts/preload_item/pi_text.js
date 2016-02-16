@@ -845,6 +845,7 @@ PreloadItemText = (function(superClass) {
     }
     this.showWithAnimation = this.showWithAnimation__after;
     this.showAnimationType = this.showAnimationType__after;
+    this._forward = opt.forward;
     if (this.showWithAnimation && (this._animationFlg['startOpenAnimation'] == null)) {
       this.startOpenAnimation((function(_this) {
         return function() {
@@ -1339,27 +1340,46 @@ PreloadItemText = (function(superClass) {
   };
 
   _setTextAlpha = function(context, idx, writingLength) {
-    var diff, ga, methodName;
+    var bLength, diff, ga, methodName;
     methodName = this.getEventMethodName();
     if (methodName === 'changeText') {
       if (this._fixedTextAlpha != null) {
         return context.globalAlpha = this._fixedTextAlpha;
       }
     } else if (methodName === 'writeText') {
-      if (writingLength === 0) {
-        return context.globalAlpha = 0;
-      } else if (idx <= writingLength) {
-        return context.globalAlpha = 1;
-      } else if (idx - writingLength >= this.constructor.WRITE_TEXT_BLUR_LENGTH) {
-        return context.globalAlpha = 0;
-      } else {
-        diff = (idx - writingLength) / this.constructor.WRITE_TEXT_BLUR_LENGTH;
-        ga = 1 - diff;
-        ga += diff * (this._alphaDiff / this.constructor.WRITE_TEXT_BLUR_LENGTH);
-        if (ga < 0) {
-          ga = 0;
+      if (this._forward) {
+        if (writingLength === 0) {
+          return context.globalAlpha = 0;
+        } else if (idx <= writingLength) {
+          return context.globalAlpha = 1;
+        } else if (idx - writingLength >= this.constructor.WRITE_TEXT_BLUR_LENGTH) {
+          return context.globalAlpha = 0;
+        } else {
+          diff = (idx - writingLength) / this.constructor.WRITE_TEXT_BLUR_LENGTH;
+          ga = 1 - diff;
+          ga += diff * (this._alphaDiff / this.constructor.WRITE_TEXT_BLUR_LENGTH);
+          if (ga < 0) {
+            ga = 0;
+          }
+          return context.globalAlpha = ga;
         }
-        return context.globalAlpha = ga;
+      } else {
+        bLength = parseInt(this.constructor.WRITE_TEXT_BLUR_LENGTH * 0.5);
+        if (writingLength === 0) {
+          return context.globalAlpha = 0;
+        } else if (idx <= writingLength - bLength) {
+          return context.globalAlpha = 1;
+        } else if (writingLength < idx) {
+          return context.globalAlpha = 0;
+        } else {
+          diff = (writingLength - idx) / bLength;
+          ga = diff;
+          ga -= diff * (this._alphaDiff / bLength);
+          if (ga < 0) {
+            ga = 0;
+          }
+          return context.globalAlpha = ga;
+        }
       }
     }
   };

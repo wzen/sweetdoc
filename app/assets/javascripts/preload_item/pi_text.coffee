@@ -636,6 +636,7 @@ class PreloadItemText extends CanvasItemBase
       @_writeTextTimer = null
     @showWithAnimation = @showWithAnimation__after
     @showAnimationType = @showAnimationType__after
+    @_forward = opt.forward
     if @showWithAnimation && !@_animationFlg['startOpenAnimation']?
       @startOpenAnimation( =>
         @writeText(opt)
@@ -1042,19 +1043,35 @@ class PreloadItemText extends CanvasItemBase
       if @_fixedTextAlpha?
         context.globalAlpha = @_fixedTextAlpha
     else if methodName == 'writeText'
-      if writingLength == 0
-        context.globalAlpha = 0
-      else if idx <= writingLength
-        context.globalAlpha = 1
-      else if idx - writingLength >= @constructor.WRITE_TEXT_BLUR_LENGTH
-        context.globalAlpha  = 0
+      if @_forward
+        if writingLength == 0
+          context.globalAlpha = 0
+        else if idx <= writingLength
+          context.globalAlpha = 1
+        else if idx - writingLength >= @constructor.WRITE_TEXT_BLUR_LENGTH
+          context.globalAlpha = 0
+        else
+          diff = (idx - writingLength) / @constructor.WRITE_TEXT_BLUR_LENGTH
+          ga = 1 - diff
+          ga += diff * (@_alphaDiff / @constructor.WRITE_TEXT_BLUR_LENGTH)
+          if ga < 0
+            ga = 0
+          context.globalAlpha = ga
       else
-        diff = ((idx - writingLength) / @constructor.WRITE_TEXT_BLUR_LENGTH)
-        ga = 1 - diff
-        ga += diff * (@_alphaDiff / @constructor.WRITE_TEXT_BLUR_LENGTH)
-        if ga < 0
-          ga = 0
-        context.globalAlpha = ga
+        bLength = parseInt(@constructor.WRITE_TEXT_BLUR_LENGTH * 0.5)
+        if writingLength == 0
+          context.globalAlpha = 0
+        else if idx <= writingLength - bLength
+          context.globalAlpha = 1
+        else if writingLength < idx
+          context.globalAlpha = 0
+        else
+          diff = (writingLength - idx) / bLength
+          ga = diff
+          ga -= diff * (@_alphaDiff / bLength)
+          if ga < 0
+            ga = 0
+          context.globalAlpha = ga
 
   _writeLength = (column, writingLength, wordSum) ->
     v = parseInt(writingLength - wordSum)
