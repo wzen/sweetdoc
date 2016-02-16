@@ -14,7 +14,7 @@ PreloadItemText = (function(superClass) {
 
   PreloadItemText.NO_TEXT = 'Blank text';
 
-  PreloadItemText.WRITE_TEXT_BLUR_LENGTH = 3;
+  PreloadItemText.WRITE_TEXT_BLUR_LENGTH = 5;
 
   constant = gon["const"];
 
@@ -838,7 +838,11 @@ PreloadItemText = (function(superClass) {
   };
 
   PreloadItemText.prototype.writeText = function(opt) {
-    var canvas, context;
+    var _write, canvas, context;
+    if (this._writeTextTimer != null) {
+      clearTimeout(this._writeTextTimer);
+      this._writeTextTimer = null;
+    }
     this.showWithAnimation = this.showWithAnimation__after;
     this.showAnimationType = this.showAnimationType__after;
     if (this.showWithAnimation && (this._animationFlg['startOpenAnimation'] == null)) {
@@ -853,12 +857,28 @@ PreloadItemText = (function(superClass) {
       context = canvas.getContext('2d');
       context.clearRect(0, 0, canvas.width, canvas.height);
       this._fixedTextAlpha = null;
+      this._alphaDiff = 0;
       if ((this.inputText != null) && this.inputText.length > 0) {
-        _setTextStyle.call(this);
-        _drawTextAndBalloonToCanvas.call(this, this.inputText, this.inputText.length * opt.progress / opt.progressMax);
+        _write = function() {
+          _setTextStyle.call(this);
+          _drawTextAndBalloonToCanvas.call(this, this.inputText, this.inputText.length * opt.progress / opt.progressMax);
+          this._alphaDiff += 1;
+          if (this._alphaDiff <= this.constructor.WRITE_TEXT_BLUR_LENGTH) {
+            return this._writeTextTimer = setTimeout((function(_this) {
+              return function() {
+                return _write.call(_this);
+              };
+            })(this), 100);
+          }
+        };
+        _write.call(this);
       }
     }
     if (opt.progress >= opt.progressMax && this.showWithAnimation && (this._animationFlg['startCloseAnimation'] == null)) {
+      if (this._writeTextTimer != null) {
+        clearTimeout(this._writeTextTimer);
+        this._writeTextTimer = null;
+      }
       this.startCloseAnimation();
       return this._animationFlg['startCloseAnimation'] = true;
     }
@@ -1319,21 +1339,28 @@ PreloadItemText = (function(superClass) {
   };
 
   _setTextAlpha = function(context, idx, writingLength) {
-    var ga;
-    if (this._fixedTextAlpha != null) {
-      context.globalAlpha = this._fixedTextAlpha;
-      return;
-    }
-    if (writingLength === 0) {
-      return context.globalAlpha = 0;
-    } else if (idx <= writingLength) {
-      return context.globalAlpha = 1;
-    } else {
-      ga = 1 - ((idx - writingLength) / this.constructor.WRITE_TEXT_BLUR_LENGTH);
-      if (ga < 0) {
-        ga = 0;
+    var diff, ga, methodName;
+    methodName = this.getEventMethodName();
+    if (methodName === 'changeText') {
+      if (this._fixedTextAlpha != null) {
+        return context.globalAlpha = this._fixedTextAlpha;
       }
-      return context.globalAlpha = ga;
+    } else if (methodName === 'writeText') {
+      if (writingLength === 0) {
+        return context.globalAlpha = 0;
+      } else if (idx <= writingLength) {
+        return context.globalAlpha = 1;
+      } else if (idx - writingLength >= this.constructor.WRITE_TEXT_BLUR_LENGTH) {
+        return context.globalAlpha = 0;
+      } else {
+        diff = (idx - writingLength) / this.constructor.WRITE_TEXT_BLUR_LENGTH;
+        ga = 1 - diff;
+        ga += diff * (this._alphaDiff / this.constructor.WRITE_TEXT_BLUR_LENGTH);
+        if (ga < 0) {
+          ga = 0;
+        }
+        return context.globalAlpha = ga;
+      }
     }
   };
 
