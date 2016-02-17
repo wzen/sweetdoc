@@ -248,6 +248,8 @@ Common = (function() {
       if (ScreenEvent.hasInstanceCache()) {
         se = new ScreenEvent();
         return this.updateScrollContentsPosition(se.initConfigY, se.initConfigX);
+      } else {
+        return this.resetScrollContentsPositionToCenter();
       }
     }
   };
@@ -581,8 +583,8 @@ Common = (function() {
     if (withUpdateScreenEventVar == null) {
       withUpdateScreenEventVar = true;
     }
-    top = window.scrollInsideWrapper.height() * 0.5;
-    left = window.scrollInsideWrapper.width() * 0.5;
+    top = (window.scrollInsideWrapper.height() + window.scrollContents.height()) * 0.5;
+    left = (window.scrollInsideWrapper.width() + window.scrollContents.width()) * 0.5;
     return this.updateScrollContentsPosition(top, left, true, withUpdateScreenEventVar);
   };
 

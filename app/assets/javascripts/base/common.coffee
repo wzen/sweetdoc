@@ -206,6 +206,9 @@ class Common
       if ScreenEvent.hasInstanceCache()
         se = new ScreenEvent()
         @updateScrollContentsPosition(se.initConfigY, se.initConfigX)
+      else
+        # 画面中央にセット
+        @resetScrollContentsPositionToCenter()
 
   # 左上座標から中心座標を計算(例 15000 -> 0)
   @calcScrollCenterPosition = (top, left) ->
@@ -433,8 +436,8 @@ class Common
 
   # スクロール位置を中心に初期化
   @resetScrollContentsPositionToCenter: (withUpdateScreenEventVar = true) ->
-    top = window.scrollInsideWrapper.height() * 0.5
-    left = window.scrollInsideWrapper.width() * 0.5
+    top = (window.scrollInsideWrapper.height() + window.scrollContents.height()) * 0.5
+    left = (window.scrollInsideWrapper.width() + window.scrollContents.width()) * 0.5
     @updateScrollContentsPosition(top, left, true, withUpdateScreenEventVar)
 
   @saveDisplayPosition = (top, left, immediate = true, callback = null) ->
