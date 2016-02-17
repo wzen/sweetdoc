@@ -143,10 +143,10 @@ class Common
     Common.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME))
     # 画面サイズ設定
     @initScreenSize()
-    # スクロール位置設定
-    @initScrollContentsPosition()
     # スケール設定
     @applyViewScale()
+    # スクロール位置設定
+    @initScrollContentsPosition()
 
   # 環境の反映をリセット
   @resetEnvironment = ->
@@ -199,16 +199,27 @@ class Common
 
   # スクロール位置初期化
   @initScrollContentsPosition = ->
-    # スクリーンイベントのインスタンスが作成されている場合のみ
-    if window.isWorkTable
-      WorktableCommon.initScrollContentsPosition()
+    updateByInitConfig = false
+    if !window.isWorkTable && ScreenEvent.hasInstanceCache()
+      se = new ScreenEvent()
+      if se.hasInitConfig()
+        updateByInitConfig = true
+    if updateByInitConfig
+      # Run & ScreenEventのinitConfigが設定されている場合
+      se = new ScreenEvent()
+      @updateScrollContentsPosition(se.initConfigY, se.initConfigX)
     else
-      if ScreenEvent.hasInstanceCache()
-        se = new ScreenEvent()
-        @updateScrollContentsPosition(se.initConfigY, se.initConfigX)
-      else
-        # 画面中央にセット
-        @resetScrollContentsPositionToCenter()
+      @initScrollContentsPositionByWorktableConfig()
+
+  # Worktableの設定を使用してスクロール位置初期化
+  @initScrollContentsPositionByWorktableConfig = ->
+    position = PageValue.getWorktableScrollContentsPosition()
+    if position?
+      # Worktableの画面中央にセット
+      @updateScrollContentsPosition(position.top, position.left)
+    else
+      # デフォルトの画面中央にセット
+      @resetScrollContentsPositionToCenter()
 
   # 左上座標から中心座標を計算(例 15000 -> 0)
   @calcScrollCenterPosition = (top, left) ->
@@ -355,13 +366,16 @@ class Common
 
   # 最初にフォーカスするアイテムオブジェクトを取得
   @firstFocusItemObj = (pn = PageValue.getPageNum()) ->
-    objs = @itemInstancesInPage(pn)
-    obj = null
-    for o in objs
-      if o.visible && o.firstFocus
-        obj = o
-        return obj
-    return obj
+    # 暫定でアイテムはデフォルトでフォーカスしない
+    return true
+    # NOTE: ⇣処理は残しておく
+#    objs = @itemInstancesInPage(pn)
+#    obj = null
+#    for o in objs
+#      if o.visible && o.firstFocus
+#        obj = o
+#        return obj
+#    return obj
 
   # アイテム用のテンプレートHTMLをwrap
   @wrapCreateItemElement = (item, contents) ->
@@ -440,6 +454,15 @@ class Common
     left = (window.scrollInsideWrapper.width() + window.scrollContents.width()) * 0.5
     @updateScrollContentsPosition(top, left, true, withUpdateScreenEventVar)
 
+  # ワークテーブルの画面倍率を取得
+  @getWorktableViewScale = ->
+    scale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale())
+    if !scale?
+      scale = 1.0
+      if window.isWorkTable
+        WorktableCommon.setWorktableViewScale(scale)
+    return parseFloat(scale)
+
   @saveDisplayPosition = (top, left, immediate = true, callback = null) ->
     _save = ->
       if ScreenEvent?
@@ -484,15 +507,6 @@ class Common
   @updateScrollContentsFromScreenEventVar: ->
     se = new ScreenEvent()
     @updateScrollContentsPosition(se.nowY, se.nowX)
-
-  # ワークテーブル画面位置をPageValueから初期化
-  @updateWorktableScrollContentsFromPageValue: ->
-    position = PageValue.getWorktableScrollContentsPosition()
-    if !position?
-      # 値が存在しない場合は中心で初期化
-      @resetScrollContentsPositionToCenter()
-    else
-      @updateScrollContentsPosition(position.top, position.left)
 
   # サニタイズ エンコード
   # @property [String] str 対象文字列

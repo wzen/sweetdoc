@@ -180,8 +180,8 @@ Common = (function() {
   Common.applyEnvironmentFromPagevalue = function() {
     Common.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME));
     this.initScreenSize();
-    this.initScrollContentsPosition();
-    return this.applyViewScale();
+    this.applyViewScale();
+    return this.initScrollContentsPosition();
   };
 
   Common.resetEnvironment = function() {
@@ -241,16 +241,29 @@ Common = (function() {
   };
 
   Common.initScrollContentsPosition = function() {
-    var se;
-    if (window.isWorkTable) {
-      return WorktableCommon.initScrollContentsPosition();
-    } else {
-      if (ScreenEvent.hasInstanceCache()) {
-        se = new ScreenEvent();
-        return this.updateScrollContentsPosition(se.initConfigY, se.initConfigX);
-      } else {
-        return this.resetScrollContentsPositionToCenter();
+    var se, updateByInitConfig;
+    updateByInitConfig = false;
+    if (!window.isWorkTable && ScreenEvent.hasInstanceCache()) {
+      se = new ScreenEvent();
+      if (se.hasInitConfig()) {
+        updateByInitConfig = true;
       }
+    }
+    if (updateByInitConfig) {
+      se = new ScreenEvent();
+      return this.updateScrollContentsPosition(se.initConfigY, se.initConfigX);
+    } else {
+      return this.initScrollContentsPositionByWorktableConfig();
+    }
+  };
+
+  Common.initScrollContentsPositionByWorktableConfig = function() {
+    var position;
+    position = PageValue.getWorktableScrollContentsPosition();
+    if (position != null) {
+      return this.updateScrollContentsPosition(position.top, position.left);
+    } else {
+      return this.resetScrollContentsPositionToCenter();
     }
   };
 
@@ -478,20 +491,10 @@ Common = (function() {
   };
 
   Common.firstFocusItemObj = function(pn) {
-    var j, len, o, obj, objs;
     if (pn == null) {
       pn = PageValue.getPageNum();
     }
-    objs = this.itemInstancesInPage(pn);
-    obj = null;
-    for (j = 0, len = objs.length; j < len; j++) {
-      o = objs[j];
-      if (o.visible && o.firstFocus) {
-        obj = o;
-        return obj;
-      }
-    }
-    return obj;
+    return true;
   };
 
   Common.wrapCreateItemElement = function(item, contents) {
@@ -588,6 +591,18 @@ Common = (function() {
     return this.updateScrollContentsPosition(top, left, true, withUpdateScreenEventVar);
   };
 
+  Common.getWorktableViewScale = function() {
+    var scale;
+    scale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale());
+    if (scale == null) {
+      scale = 1.0;
+      if (window.isWorkTable) {
+        WorktableCommon.setWorktableViewScale(scale);
+      }
+    }
+    return parseFloat(scale);
+  };
+
   Common.saveDisplayPosition = function(top, left, immediate, callback) {
     var _save;
     if (immediate == null) {
@@ -649,16 +664,6 @@ Common = (function() {
     var se;
     se = new ScreenEvent();
     return this.updateScrollContentsPosition(se.nowY, se.nowX);
-  };
-
-  Common.updateWorktableScrollContentsFromPageValue = function() {
-    var position;
-    position = PageValue.getWorktableScrollContentsPosition();
-    if (position == null) {
-      return this.resetScrollContentsPositionToCenter();
-    } else {
-      return this.updateScrollContentsPosition(position.top, position.left);
-    }
   };
 
   Common.sanitaizeEncode = function(str) {

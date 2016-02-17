@@ -377,13 +377,7 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.initScrollContentsPosition = function() {
-    var position;
-    position = PageValue.getWorktableScrollContentsPosition();
-    if (position != null) {
-      return Common.updateScrollContentsPosition(position.top, position.left);
-    } else {
-      return Common.resetScrollContentsPositionToCenter();
-    }
+    return Common.initScrollContentsPositionByWorktableConfig();
   };
 
   WorktableCommon.resizeMainContainerEvent = function() {
@@ -517,13 +511,7 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.getWorktableViewScale = function() {
-    var scale;
-    scale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale());
-    if (scale == null) {
-      scale = 1.0;
-      this.setWorktableViewScale(scale);
-    }
-    return parseFloat(scale);
+    return Common.getWorktableViewScale();
   };
 
   WorktableCommon.setWorktableViewScale = function(scale, withViewStateUpdate) {

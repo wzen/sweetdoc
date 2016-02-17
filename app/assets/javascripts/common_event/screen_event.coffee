@@ -31,10 +31,11 @@ class ScreenEvent extends CommonEvent
 
     constructor: ->
       super()
+      @_defaultInitScale = Common.getWorktableViewScale()
       @name = 'Screen'
       @initConfigX = null
       @initConfigY = null
-      @initConfigScale = 1.0
+      @initConfigScale = @_defaultInitScale
       @nowX = null
       @nowY = null
       @nowScale = null
@@ -55,7 +56,7 @@ class ScreenEvent extends CommonEvent
       if window.isWorkTable
         s = WorktableCommon.getWorktableViewScale()
       else
-        s = 1.0
+        s = @_defaultInitScale
       _setScale.call(@, s)
       # オーバーレイ削除
       $('#preview_position_overlay').remove()
@@ -138,8 +139,9 @@ class ScreenEvent extends CommonEvent
         if !window.isWorkTable
           _setScale.call(@, _getInitConfigScale.call(@))
           @nowScale = _getInitConfigScale.call(@)
-          if @initConfigY? && @initConfigX?
-            Common.updateScrollContentsPosition(@initConfigY, @initConfigX)
+          # スクロール位置設定
+          Common.initScrollContentsPosition()
+          RunCommon.updateMainViewSize()
         else
           # スクロール位置更新
           WorktableCommon.initScrollContentsPosition()
@@ -201,7 +203,7 @@ class ScreenEvent extends CommonEvent
         if window.isWorkTable
           s = WorktableCommon.getWorktableViewScale()
         else
-          s = 1.0
+          s = @_defaultInitScale
         se.scale = s
 
     _overlay = (x, y, scale) ->

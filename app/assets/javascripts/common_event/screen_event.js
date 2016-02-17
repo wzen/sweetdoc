@@ -48,10 +48,11 @@ ScreenEvent = (function(superClass) {
     function PrivateClass() {
       this.changeScreenPosition = bind(this.changeScreenPosition, this);
       PrivateClass.__super__.constructor.call(this);
+      this._defaultInitScale = Common.getWorktableViewScale();
       this.name = 'Screen';
       this.initConfigX = null;
       this.initConfigY = null;
-      this.initConfigScale = 1.0;
+      this.initConfigScale = this._defaultInitScale;
       this.nowX = null;
       this.nowY = null;
       this.nowScale = null;
@@ -79,7 +80,7 @@ ScreenEvent = (function(superClass) {
       if (window.isWorkTable) {
         s = WorktableCommon.getWorktableViewScale();
       } else {
-        s = 1.0;
+        s = this._defaultInitScale;
       }
       _setScale.call(this, s);
       $('#preview_position_overlay').remove();
@@ -172,9 +173,8 @@ ScreenEvent = (function(superClass) {
         if (!window.isWorkTable) {
           _setScale.call(this, _getInitConfigScale.call(this));
           this.nowScale = _getInitConfigScale.call(this);
-          if ((this.initConfigY != null) && (this.initConfigX != null)) {
-            Common.updateScrollContentsPosition(this.initConfigY, this.initConfigX);
-          }
+          Common.initScrollContentsPosition();
+          RunCommon.updateMainViewSize();
         } else {
           WorktableCommon.initScrollContentsPosition();
           WorktableCommon.updateMainViewSize();
@@ -253,7 +253,7 @@ ScreenEvent = (function(superClass) {
         if (window.isWorkTable) {
           s = WorktableCommon.getWorktableViewScale();
         } else {
-          s = 1.0;
+          s = this._defaultInitScale;
         }
         return se.scale = s;
       }

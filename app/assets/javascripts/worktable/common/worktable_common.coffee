@@ -334,12 +334,7 @@ class WorktableCommon
 
   # スクロール位置初期化
   @initScrollContentsPosition = ->
-    position = PageValue.getWorktableScrollContentsPosition()
-    if position?
-      Common.updateScrollContentsPosition(position.top, position.left)
-    else
-      # 中心
-      Common.resetScrollContentsPositionToCenter()
+    Common.initScrollContentsPositionByWorktableConfig()
 
   # 画面サイズ設定
   @resizeMainContainerEvent = ->
@@ -481,11 +476,7 @@ class WorktableCommon
 
   # ワークテーブルの画面倍率を取得
   @getWorktableViewScale = ->
-    scale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale())
-    if !scale?
-      scale = 1.0
-      @setWorktableViewScale(scale)
-    return parseFloat(scale)
+    return Common.getWorktableViewScale()
 
   # ワークテーブルの画面倍率を設定
   @setWorktableViewScale = (scale, withViewStateUpdate = false) ->

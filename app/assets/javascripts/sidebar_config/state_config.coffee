@@ -77,5 +77,5 @@ class StateConfig
     se = new ScreenEvent()
     se.initConfigX = null
     se.initConfigY = null
-    se.initConfigScale = 1.0
+    se.initConfigScale = se._defaultInitScale
     se.setItemAllPropToPageValue()
