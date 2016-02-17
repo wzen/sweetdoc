@@ -6,13 +6,21 @@
    grid_size_classname, thumbnail_style = Gallery.grid_contents_size_and_style(t_width, t_height)
 %>
 
-<div class="grid_contents_wrapper <%= grid_size_classname %>" style="display: none">
+<div class="grid_contents_wrapper border <%= grid_size_classname %>" style="display: none">
     <div class="grid_img_wrapper">
         <div class="loading_wrapper" style="display:none">
             <img class="loading" />
         </div>
         <div class="thumbnail_img_wrapper">
+          <% if content[Const::Gallery::Key::THUMBNAIL_IMG].present? %>
             <%= image_tag(thumbnail_gallery_path(content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]), class: 'thumbnail_img', style: thumbnail_style)%>
+          <% else %>
+            <div style="display: table;width: 100%;height: 100%">
+              <div style="display: table-cell;vertical-align: middle;text-align: center">
+                <%= image_tag '/images/gallery/image_notfound.png', size: '64x64' %>
+              </div>
+            </div>
+          <% end %>
         </div>
         <div class="hover_overlay">
           <%= render 'run/fullscreen/fullscreen_button', access_token: content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN], screen_size_width: content[Const::Gallery::Key::SCREEN_SIZE_WIDTH], screen_size_height: content[Const::Gallery::Key::SCREEN_SIZE_HEIGHT] %>

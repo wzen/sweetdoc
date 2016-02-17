@@ -110,11 +110,15 @@ class GalleryController < ApplicationController
   end
 
   def thumbnail
-    g = Gallery.find_by(access_token: params[:access_token], del_flg: false)
-    if g.blank? || g.thumbnail_img.blank?
-      ActionController::Base.helpers.asset_path('image_notfound.png')
-    else
-      send_data(g.thumbnail_img, type: g.thumbnail_img_contents_type, disposition: :inline)
+    begin
+      g = Gallery.find_by(access_token: params[:access_token], del_flg: false)
+      if g.blank? || g.thumbnail_img.blank?
+        send_file(Rails.root.join("public", 'images/gallery/image_notfound.png'), type: 'image/png', disposition: :inline)
+      else
+        send_data(g.thumbnail_img, type: g.thumbnail_img_contents_type, disposition: :inline)
+      end
+    rescue => e
+      p e
     end
   end
 
