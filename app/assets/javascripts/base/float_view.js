@@ -128,12 +128,10 @@ FloatView = (function() {
     }
     screenWrapper = $('#screen_wrapper');
     root = $(".float_view.pointing_controller:first", screenWrapper);
-    if (root.length > 0) {
-      root.show();
-      return;
+    if (root.length === 0) {
+      $('.float_view_pointing_controller_temp', screenWrapper).clone(true).attr('class', 'float_view pointing_controller').appendTo(screenWrapper);
+      root = $('.float_view.pointing_controller:first', screenWrapper);
     }
-    $('.float_view_pointing_controller_temp', screenWrapper).clone(true).attr('class', 'float_view pointing_controller').appendTo(screenWrapper);
-    root = $('.float_view.pointing_controller:first', screenWrapper);
     root.find('.clear_button').off('click').on('click', (function(_this) {
       return function(e) {
         e.preventDefault();

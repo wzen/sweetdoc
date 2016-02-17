@@ -838,7 +838,7 @@ PreloadItemText = (function(superClass) {
   };
 
   PreloadItemText.prototype.writeText = function(opt) {
-    var _write, canvas, context, writeBlurLength, writeLength;
+    var _write, adjustProgress, canvas, context, writeBlurLength, writeLength;
     this.showWithAnimation = this.showWithAnimation__after;
     this.showAnimationType = this.showAnimationType__after;
     this._forward = opt.forward;
@@ -853,7 +853,8 @@ PreloadItemText = (function(superClass) {
       if ((this.inputText != null) && this.inputText.length > 0) {
         if ((this._writeTextRunning == null) || !this._writeTextRunning) {
           this._fixedTextAlpha = null;
-          writeLength = this.inputText.length * opt.progress / opt.progressMax;
+          adjustProgress = opt.progressMax / this.inputText.length;
+          writeLength = this.inputText.length * (opt.progress + adjustProgress * 0.5) / opt.progressMax;
           if (this._beforeWriteLength == null) {
             this._beforeWriteLength = 0;
           }

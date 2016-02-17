@@ -644,7 +644,8 @@ class PreloadItemText extends CanvasItemBase
       if @inputText? && @inputText.length > 0
         if !@_writeTextRunning? || !@_writeTextRunning
           @_fixedTextAlpha = null
-          writeLength = @inputText.length * opt.progress / opt.progressMax
+          adjustProgress = opt.progressMax / @inputText.length
+          writeLength =  @inputText.length * (opt.progress + adjustProgress * 0.5) / opt.progressMax
           if !@_beforeWriteLength?
             @_beforeWriteLength = 0
           writeBlurLength = parseInt(writeLength) - parseInt(@_beforeWriteLength)

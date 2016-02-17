@@ -95,13 +95,11 @@ class FloatView
 
     screenWrapper = $('#screen_wrapper')
     root = $(".float_view.pointing_controller:first", screenWrapper)
-    if root.length > 0
-      # 既に表示されている場合はshow
-      root.show()
-      return
-
-    $('.float_view_pointing_controller_temp', screenWrapper).clone(true).attr('class', 'float_view pointing_controller').appendTo(screenWrapper)
-    root = $('.float_view.pointing_controller:first', screenWrapper)
+    if root.length == 0
+      # ビュー作成
+      $('.float_view_pointing_controller_temp', screenWrapper).clone(true).attr('class', 'float_view pointing_controller').appendTo(screenWrapper)
+      root = $('.float_view.pointing_controller:first', screenWrapper)
+    # イベント設定
     root.find('.clear_button').off('click').on('click', (e) =>
       e.preventDefault()
       e.stopPropagation()
