@@ -2,6 +2,7 @@ constant = gon.const
 serverenv = gon.serverenv
 locale = gon.locale
 userLogined = gon.user_logined
+isMobileAccess = gon.is_mobile_access
 
 # アプリ共通定数
 class Constant

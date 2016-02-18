@@ -438,15 +438,30 @@ class Common
         callback()
     else
       window.skipScrollEventByAnimation = true
-      window.scrollContents.animate(
-        {
-          scrollTop: top
-          scrollLeft: left
-        }
-      , 500, ->
-        window.skipScrollEventByAnimation = false
-        if callback?
-          callback()
+      nowTop = window.scrollContents.scrollTop()
+      nowLeft = window.scrollContents.scrollLeft()
+      per = 20
+      if isMobileAccess
+        per = 15
+      perTop = (top - nowTop) / per
+      perLeft = (left - nowLeft) / per
+      count = 1
+      _loop = ->
+        window.scrollContents.scrollTop(nowTop + perTop * count)
+        window.scrollContents.scrollLeft(nowLeft + perLeft * count)
+        count += 1
+        if count > per
+          window.scrollContents.scrollTop(top)
+          window.scrollContents.scrollLeft(left)
+          window.skipScrollEventByAnimation = false
+          if callback?
+            callback()
+        else
+          requestAnimationFrame( =>
+            _loop.call(@)
+          )
+      requestAnimationFrame( =>
+        _loop.call(@)
       )
 
   # スクロール位置を中心に初期化

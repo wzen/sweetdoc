@@ -21,8 +21,7 @@ class GalleryController < ApplicationController
   end
 
   def detail
-    ua = request.env["HTTP_USER_AGENT"]
-    if ua.include?('Mobile') || ua.include?('Android')
+    if mobile_access?
       # スマートフォンは全画面で表示
       redirect_to action: 'full_window'
     else

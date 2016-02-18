@@ -534,6 +534,7 @@ Common = (function() {
   };
 
   Common.updateScrollContentsPosition = function(top, left, immediate, withUpdateScreenEventVar, callback) {
+    var _loop, count, nowLeft, nowTop, per, perLeft, perTop;
     if (immediate == null) {
       immediate = true;
     }
@@ -563,15 +564,39 @@ Common = (function() {
       }
     } else {
       window.skipScrollEventByAnimation = true;
-      return window.scrollContents.animate({
-        scrollTop: top,
-        scrollLeft: left
-      }, 500, function() {
-        window.skipScrollEventByAnimation = false;
-        if (callback != null) {
-          return callback();
+      nowTop = window.scrollContents.scrollTop();
+      nowLeft = window.scrollContents.scrollLeft();
+      per = 20;
+      if (isMobileAccess) {
+        per = 15;
+      }
+      perTop = (top - nowTop) / per;
+      perLeft = (left - nowLeft) / per;
+      count = 1;
+      _loop = function() {
+        window.scrollContents.scrollTop(nowTop + perTop * count);
+        window.scrollContents.scrollLeft(nowLeft + perLeft * count);
+        count += 1;
+        if (count > per) {
+          window.scrollContents.scrollTop(top);
+          window.scrollContents.scrollLeft(left);
+          window.skipScrollEventByAnimation = false;
+          if (callback != null) {
+            return callback();
+          }
+        } else {
+          return requestAnimationFrame((function(_this) {
+            return function() {
+              return _loop.call(_this);
+            };
+          })(this));
         }
-      });
+      };
+      return requestAnimationFrame((function(_this) {
+        return function() {
+          return _loop.call(_this);
+        };
+      })(this));
     }
   };
 

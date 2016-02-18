@@ -18,6 +18,7 @@ class ApplicationController < ActionController::Base
     gon.serverenv  = ENV
     gon.locale = I18n.locale
     gon.user_logined = user_signed_in?
+    gon.is_mobile_access = mobile_access?
   end
 
   def const_values(const_class, obj)
@@ -188,6 +189,11 @@ class ApplicationController < ActionController::Base
         u.save
       end
     end
+  end
+
+  def mobile_access?
+    ua = request.env["HTTP_USER_AGENT"]
+    return ua.include?('Mobile') || ua.include?('Android')
   end
 
   private
