@@ -878,14 +878,22 @@ PreloadItemText = (function(superClass) {
                 }
                 return this._writeTextTimer = setTimeout((function(_this) {
                   return function() {
-                    return _write.call(_this);
+                    return requestAnimationFrame(function() {
+                      if (_this._animationFlg['startCloseAnimation'] == null) {
+                        return _write.call(_this);
+                      }
+                    });
                   };
                 })(this), 10);
               } else {
                 return this._writeTextRunning = false;
               }
             };
-            _write.call(this);
+            requestAnimationFrame((function(_this) {
+              return function() {
+                return _write.call(_this);
+              };
+            })(this));
           }
         }
       }

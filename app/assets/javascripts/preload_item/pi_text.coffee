@@ -666,11 +666,16 @@ class PreloadItemText extends CanvasItemBase
                   clearTimeout(@_writeTextTimer)
                   @_writeTextTimer = null
                 @_writeTextTimer = setTimeout( =>
-                  _write.call(@)
+                  requestAnimationFrame( =>
+                    if !@_animationFlg['startCloseAnimation']?
+                      _write.call(@)
+                  )
                 , 10)
               else
                 @_writeTextRunning = false
-            _write.call(@)
+            requestAnimationFrame( =>
+              _write.call(@)
+            )
 
     if opt.progress >= opt.progressMax && @showWithAnimation && !@_animationFlg['startCloseAnimation']?
       if @_writeTextTimer?
