@@ -52,7 +52,10 @@ LocalStorage = (function() {
   };
 
   LocalStorage.isOverWorktableSaveTimeLimit = function() {
-    var diffTime, key, lstorage, saveTime, time;
+    var diffTime, key, saveTime, time;
+    if (typeof localStorage === "undefined" || localStorage === null) {
+      return true;
+    }
     key = '';
     time = 0;
     if ((window.isItemPreview != null) && window.isItemPreview) {
@@ -66,8 +69,7 @@ LocalStorage = (function() {
       time = this.RUN_SAVETIME;
     }
     if (key !== '') {
-      lstorage = localStorage;
-      saveTime = lstorage.getItem(key);
+      saveTime = localStorage.getItem(key);
       if (saveTime == null) {
         return true;
       }
@@ -172,62 +174,62 @@ LocalStorage = (function() {
   };
 
   LocalStorage.clearWorktable = function() {
-    var lstorage;
-    lstorage = localStorage;
-    lstorage.removeItem(this.Key.WORKTABLE_GENERAL_PAGEVALUES);
-    lstorage.removeItem(this.Key.WORKTABLE_INSTANCE_PAGEVALUES);
-    lstorage.removeItem(this.Key.WORKTABLE_EVENT_PAGEVALUES);
-    lstorage.removeItem(this.Key.WORKTABLE_SETTING_PAGEVALUES);
-    return lstorage.removeItem(this.Key.WORKTABLE_SAVETIME);
+    if (typeof localStorage !== "undefined" && localStorage !== null) {
+      localStorage.removeItem(this.Key.WORKTABLE_GENERAL_PAGEVALUES);
+      localStorage.removeItem(this.Key.WORKTABLE_INSTANCE_PAGEVALUES);
+      localStorage.removeItem(this.Key.WORKTABLE_EVENT_PAGEVALUES);
+      localStorage.removeItem(this.Key.WORKTABLE_SETTING_PAGEVALUES);
+      return localStorage.removeItem(this.Key.WORKTABLE_SAVETIME);
+    }
   };
 
   LocalStorage.clearWorktableWithoutSetting = function() {
-    var lstorage;
-    lstorage = localStorage;
-    lstorage.removeItem(this.Key.WORKTABLE_GENERAL_PAGEVALUES);
-    lstorage.removeItem(this.Key.WORKTABLE_INSTANCE_PAGEVALUES);
-    lstorage.removeItem(this.Key.WORKTABLE_EVENT_PAGEVALUES);
-    return lstorage.removeItem(this.Key.WORKTABLE_SAVETIME);
+    if (typeof localStorage !== "undefined" && localStorage !== null) {
+      localStorage.removeItem(this.Key.WORKTABLE_GENERAL_PAGEVALUES);
+      localStorage.removeItem(this.Key.WORKTABLE_INSTANCE_PAGEVALUES);
+      localStorage.removeItem(this.Key.WORKTABLE_EVENT_PAGEVALUES);
+      return localStorage.removeItem(this.Key.WORKTABLE_SAVETIME);
+    }
   };
 
   LocalStorage.clearWorktableWithoutGeneralAndSetting = function() {
-    var lstorage;
-    lstorage = localStorage;
-    lstorage.removeItem(this.Key.WORKTABLE_INSTANCE_PAGEVALUES);
-    lstorage.removeItem(this.Key.WORKTABLE_EVENT_PAGEVALUES);
-    return lstorage.removeItem(this.Key.WORKTABLE_SAVETIME);
+    if (typeof localStorage !== "undefined" && localStorage !== null) {
+      localStorage.removeItem(this.Key.WORKTABLE_INSTANCE_PAGEVALUES);
+      localStorage.removeItem(this.Key.WORKTABLE_EVENT_PAGEVALUES);
+      return localStorage.removeItem(this.Key.WORKTABLE_SAVETIME);
+    }
   };
 
   LocalStorage.clearRun = function() {
-    var lstorage;
-    lstorage = localStorage;
-    lstorage.removeItem(this.Key.RUN_GENERAL_PAGEVALUES);
-    lstorage.removeItem(this.Key.RUN_INSTANCE_PAGEVALUES);
-    lstorage.removeItem(this.Key.RUN_EVENT_PAGEVALUES);
-    lstorage.removeItem(this.Key.RUN_SETTING_PAGEVALUES);
-    lstorage.removeItem(this.Key.RUN_FOOTPRINT_PAGE_VALUES);
-    return lstorage.removeItem(this.Key.RUN_SAVETIME);
+    if (typeof localStorage !== "undefined" && localStorage !== null) {
+      localStorage.removeItem(this.Key.RUN_GENERAL_PAGEVALUES);
+      localStorage.removeItem(this.Key.RUN_INSTANCE_PAGEVALUES);
+      localStorage.removeItem(this.Key.RUN_EVENT_PAGEVALUES);
+      localStorage.removeItem(this.Key.RUN_SETTING_PAGEVALUES);
+      localStorage.removeItem(this.Key.RUN_FOOTPRINT_PAGE_VALUES);
+      return localStorage.removeItem(this.Key.RUN_SAVETIME);
+    }
   };
 
   LocalStorage.saveGeneralPageValue = function() {
-    var h, key, lstorage;
+    var h, key;
     key = this.generalKey();
-    if (key !== '') {
-      lstorage = localStorage;
+    if (key !== '' && (typeof localStorage !== "undefined" && localStorage !== null)) {
       h = PageValue.getGeneralPageValue(PageValue.Key.G_PREFIX);
-      lstorage.setItem(key, JSON.stringify(h));
-      return lstorage.setItem(this.savetimeKey(), $.now());
+      localStorage.setItem(key, JSON.stringify(h));
+      return localStorage.setItem(this.savetimeKey(), $.now());
     }
   };
 
   LocalStorage.loadGeneralValue = function() {
-    var l, lstorage;
-    lstorage = localStorage;
-    l = lstorage.getItem(this.generalKey());
-    if (l != null) {
-      return JSON.parse(l);
-    } else {
-      return null;
+    var l;
+    if (typeof localStorage !== "undefined" && localStorage !== null) {
+      l = localStorage.getItem(this.generalKey());
+      if (l != null) {
+        return JSON.parse(l);
+      } else {
+        return null;
+      }
     }
   };
 
@@ -240,108 +242,111 @@ LocalStorage = (function() {
   };
 
   LocalStorage.saveInstancePageValue = function() {
-    var h, key, lstorage;
+    var h, key;
     key = this.instanceKey();
     if (key !== '') {
-      lstorage = localStorage;
-      h = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX);
-      lstorage.setItem(key, JSON.stringify(h));
-      return lstorage.setItem(this.savetimeKey(), $.now());
+      if (typeof localStorage !== "undefined" && localStorage !== null) {
+        h = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX);
+        localStorage.setItem(key, JSON.stringify(h));
+        return localStorage.setItem(this.savetimeKey(), $.now());
+      }
     }
   };
 
   LocalStorage.loadInstancePageValue = function() {
-    var h, l, lstorage;
-    lstorage = localStorage;
-    l = lstorage.getItem(this.instanceKey());
-    if (l != null) {
-      h = JSON.parse(l);
-      return PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, h);
+    var h, l;
+    if (typeof localStorage !== "undefined" && localStorage !== null) {
+      l = localStorage.getItem(this.instanceKey());
+      if (l != null) {
+        h = JSON.parse(l);
+        return PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, h);
+      }
     }
   };
 
   LocalStorage.saveEventPageValue = function() {
-    var h, key, lstorage;
+    var h, key;
     key = this.eventKey();
-    if (key !== '') {
-      lstorage = localStorage;
+    if (key !== '' && (typeof localStorage !== "undefined" && localStorage !== null)) {
       h = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT);
-      lstorage.setItem(key, JSON.stringify(h));
-      return lstorage.setItem(this.savetimeKey(), $.now());
+      localStorage.setItem(key, JSON.stringify(h));
+      return localStorage.setItem(this.savetimeKey(), $.now());
     }
   };
 
   LocalStorage.loadEventPageValue = function() {
-    var h, l, lstorage;
-    lstorage = localStorage;
-    l = lstorage.getItem(this.eventKey());
-    if (l != null) {
-      h = JSON.parse(l);
-      return PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT, h);
+    var h, l;
+    if (typeof localStorage !== "undefined" && localStorage !== null) {
+      l = localStorage.getItem(this.eventKey());
+      if (l != null) {
+        h = JSON.parse(l);
+        return PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT, h);
+      }
     }
   };
 
   LocalStorage.saveSettingPageValue = function() {
-    var h, key, lstorage;
+    var h, key;
     key = this.settingKey();
-    if (key !== '') {
-      lstorage = localStorage;
+    if (key !== '' && (typeof localStorage !== "undefined" && localStorage !== null)) {
       h = PageValue.getSettingPageValue(PageValue.Key.ST_PREFIX);
-      return lstorage.setItem(key, JSON.stringify(h));
+      return localStorage.setItem(key, JSON.stringify(h));
     }
   };
 
   LocalStorage.loadSettingPageValue = function() {
-    var h, l, lstorage;
-    lstorage = localStorage;
-    l = lstorage.getItem(this.settingKey());
-    if (l != null) {
-      h = JSON.parse(l);
-      return PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, h);
+    var h, l;
+    if (typeof localStorage !== "undefined" && localStorage !== null) {
+      l = localStorage.getItem(this.settingKey());
+      if (l != null) {
+        h = JSON.parse(l);
+        return PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, h);
+      }
     }
   };
 
   LocalStorage.saveFootprintPageValue = function() {
-    var h, key, lstorage;
+    var h, key;
     key = this.footprintKey();
-    if (key !== '') {
-      lstorage = localStorage;
+    if (key !== '' && (typeof localStorage !== "undefined" && localStorage !== null)) {
       h = PageValue.getFootprintPageValue(PageValue.Key.F_PREFIX);
-      return lstorage.setItem(key, JSON.stringify(h));
+      return localStorage.setItem(key, JSON.stringify(h));
     }
   };
 
   LocalStorage.loadCommonFootprintPageValue = function() {
-    var h, k, l, lstorage, ret, v;
-    lstorage = localStorage;
-    l = lstorage.getItem(this.footprintKey());
-    if (l != null) {
-      h = JSON.parse(l);
-      ret = {};
-      for (k in h) {
-        v = h[k];
-        if (k.indexOf(PageValue.Key.P_PREFIX) < 0) {
-          ret[k] = v;
+    var h, k, l, ret, v;
+    if (typeof localStorage !== "undefined" && localStorage !== null) {
+      l = localStorage.getItem(this.footprintKey());
+      if (l != null) {
+        h = JSON.parse(l);
+        ret = {};
+        for (k in h) {
+          v = h[k];
+          if (k.indexOf(PageValue.Key.P_PREFIX) < 0) {
+            ret[k] = v;
+          }
         }
+        return PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, ret);
       }
-      return PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, ret);
     }
   };
 
   LocalStorage.loadPagingFootprintPageValue = function(pageNum) {
-    var h, k, l, lstorage, ret, v;
-    lstorage = localStorage;
-    l = lstorage.getItem(this.footprintKey());
-    if (l != null) {
-      h = JSON.parse(l);
-      ret = {};
-      for (k in h) {
-        v = h[k];
-        if (k.indexOf(PageValue.Key.P_PREFIX) >= 0 && parseInt(k.replace(PageValue.Key.P_PREFIX, '')) === pageNum) {
-          ret[k] = v;
+    var h, k, l, ret, v;
+    if (typeof localStorage !== "undefined" && localStorage !== null) {
+      l = localStorage.getItem(this.footprintKey());
+      if (l != null) {
+        h = JSON.parse(l);
+        ret = {};
+        for (k in h) {
+          v = h[k];
+          if (k.indexOf(PageValue.Key.P_PREFIX) >= 0 && parseInt(k.replace(PageValue.Key.P_PREFIX, '')) === pageNum) {
+            ret[k] = v;
+          }
         }
+        return PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, ret);
       }
-      return PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, ret);
     }
   };
 

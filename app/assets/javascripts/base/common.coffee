@@ -16,10 +16,11 @@ class Common
         localStorage.removeItem('test')
       catch e
         return false
-    if !File
-      return false
-    if !window.URL
-      return false
+     # ⇣ 現在使用していないためコメントアウト 後に対応させる
+#    if !File
+#      return false
+#    if !window.URL
+#      return false
     return true
 
   # 変数の型チェック

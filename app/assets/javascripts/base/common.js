@@ -24,12 +24,6 @@ Common = (function() {
         return false;
       }
     }
-    if (!File) {
-      return false;
-    }
-    if (!window.URL) {
-      return false;
-    }
     return true;
   };
 
