@@ -5,7 +5,8 @@ $ ->
 
   # ブラウザ対応チェック
   if !Common.checkBlowserEnvironment()
-    alert('ブラウザ非対応です。')
+    Common.showModalView(Constant.ModalViewType.ENVIRONMENT_NOT_SUPPORT, false)
+    alert('This browser is not under support.')
     return
 
   # 変数初期化

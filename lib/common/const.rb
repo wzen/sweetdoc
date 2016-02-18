@@ -382,6 +382,7 @@ class Const
     NOTICE_LOGIN = 'notice_login'
     ABOUT = 'about'
     MESSAGE = 'message'
+    ENVIRONMENT_NOT_SUPPORT = 'environment_not_support'
   end
 
   class Paging

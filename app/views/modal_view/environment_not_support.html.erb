@@ -1,0 +1,14 @@
+<div class="modal-content <%= Const::ModalViewType::ENVIRONMENT_NOT_SUPPORT %>">
+  <div class="content">
+    <div>
+      <%= I18n.t('modal.environment_not_support') %>
+    </div>
+    <!-- 対応するブラウザリスト -->
+
+    <div class="button_wrapper">
+      <div>
+        <button class="back_button" value="Back to MainPage"><%= I18n.t('modal.button.back') %></button>
+      </div>
+    </div>
+  </div>
+</div>

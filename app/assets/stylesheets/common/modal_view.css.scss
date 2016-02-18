@@ -283,6 +283,19 @@
     }
   }
 
+  &.environment_not_support {
+    text-align: center;
+    .button_wrapper {
+      display: table;
+      width: 100%;
+      text-align: center;
+      margin-top: 15px;
+      > div {
+        display: table-cell;
+      }
+    }
+  }
+
   &.message {
     width: 150px;
     height: 150px;

@@ -194,6 +194,8 @@ Constant = (function() {
 
     ModalViewType.MESSAGE = constant.ModalViewType.MESSAGE;
 
+    ModalViewType.ENVIRONMENT_NOT_SUPPORT = constant.ModalViewType.ENVIRONMENT_NOT_SUPPORT;
+
     return ModalViewType;
 
   })();

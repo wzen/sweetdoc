@@ -5,7 +5,7 @@ $(function() {
     window.isItemPreview = false;
     window.initDone = false;
     if (!Common.checkBlowserEnvironment()) {
-      alert('ブラウザ非対応です。');
+      Common.showModalView(Constant.ModalViewType.ENVIRONMENT_NOT_SUPPORT, false);
       return;
     }
     $.ajaxSetup({

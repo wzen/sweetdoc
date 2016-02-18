@@ -129,6 +129,7 @@ class Constant
     @ITEM_TEXT_EDITING = constant.ModalViewType.ITEM_TEXT_EDITING
     @NOTICE_LOGIN = constant.ModalViewType.NOTICE_LOGIN
     @MESSAGE = constant.ModalViewType.MESSAGE
+    @ENVIRONMENT_NOT_SUPPORT = constant.ModalViewType.ENVIRONMENT_NOT_SUPPORT
 
   # ページング
   class @Paging
