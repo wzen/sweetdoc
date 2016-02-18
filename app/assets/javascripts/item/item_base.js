@@ -142,36 +142,38 @@ ItemBase = (function(superClass) {
     if (callback == null) {
       callback = null;
     }
-    if (window.runDebug) {
-      console.log('ItemBase refresh id:' + this.id);
-    }
-    if ((this.refreshing != null) && this.refreshing) {
-      this.refreshStack = true;
-      if (window.debug) {
-        console.log('add stack');
-      }
-      return;
-    }
-    this.refreshing = true;
-    this.removeItemElement();
-    return this.createItemElement((function(_this) {
+    return requestAnimationFrame((function(_this) {
       return function() {
-        _this.itemDraw(show);
-        if (_this.setupItemEvents != null) {
-          _this.setupItemEvents();
+        if (window.runDebug) {
+          console.log('ItemBase refresh id:' + _this.id);
         }
-        _this.refreshing = false;
-        if ((_this.refreshStack != null) && _this.refreshStack) {
-          _this.refreshStack = false;
+        if ((_this.refreshing != null) && _this.refreshing) {
+          _this.refreshStack = true;
           if (window.debug) {
-            console.log('stack redraw');
+            console.log('add stack');
           }
-          return _this.refresh(show, callback);
-        } else {
-          if (callback != null) {
-            return callback(_this);
-          }
+          return;
         }
+        _this.refreshing = true;
+        _this.removeItemElement();
+        return _this.createItemElement(function() {
+          _this.itemDraw(show);
+          if (_this.setupItemEvents != null) {
+            _this.setupItemEvents();
+          }
+          _this.refreshing = false;
+          if ((_this.refreshStack != null) && _this.refreshStack) {
+            _this.refreshStack = false;
+            if (window.debug) {
+              console.log('stack redraw');
+            }
+            return _this.refresh(show, callback);
+          } else {
+            if (callback != null) {
+              return callback(_this);
+            }
+          }
+        });
       };
     })(this));
   };

@@ -118,34 +118,36 @@ class ItemBase extends ItemEventBase
   # @param [boolean] show 要素作成後に描画を表示するか
   # @param [Function] callback コールバック
   refresh: (show = true, callback = null) ->
-    if window.runDebug
-      console.log('ItemBase refresh id:' + @id)
-
-    if @refreshing? && @refreshing
-      # createItemElementが重い時のため
-      # 描画中はスタックに登録
-      @refreshStack = true
-      if window.debug
-        console.log('add stack')
-      return
-
-    @refreshing = true
-    @removeItemElement()
-    @createItemElement( =>
-      @itemDraw(show)
-      if @setupItemEvents?
-        # アイテムのイベント設定
-        @setupItemEvents()
-      @refreshing = false
-      if @refreshStack? && @refreshStack
-        # スタックが存在する場合再度描画
-        @refreshStack = false
+    requestAnimationFrame( =>
+      if window.runDebug
+        console.log('ItemBase refresh id:' + @id)
+  
+      if @refreshing? && @refreshing
+        # createItemElementが重い時のため
+        # 描画中はスタックに登録
+        @refreshStack = true
         if window.debug
-          console.log('stack redraw')
-        @refresh(show, callback)
-      else
-        if callback?
-          callback(@)
+          console.log('add stack')
+        return
+
+      @refreshing = true
+      @removeItemElement()
+      @createItemElement( =>
+        @itemDraw(show)
+        if @setupItemEvents?
+          # アイテムのイベント設定
+          @setupItemEvents()
+        @refreshing = false
+        if @refreshStack? && @refreshStack
+          # スタックが存在する場合再度描画
+          @refreshStack = false
+          if window.debug
+            console.log('stack redraw')
+          @refresh(show, callback)
+        else
+          if callback?
+            callback(@)
+      )
     )
 
   # 画面表示がない場合描画処理
