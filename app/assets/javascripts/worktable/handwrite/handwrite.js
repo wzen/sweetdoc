@@ -48,6 +48,8 @@ Handwrite = (function() {
         };
         drawingCanvas.onmousedown = function(e) {
           var loc;
+          e.preventDefault();
+          e.stopPropagation();
           if (e.which === 1) {
             _this.zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1;
             loc = _calcCanvasLoc.call(_this, e);
@@ -61,6 +63,8 @@ Handwrite = (function() {
         };
         drawingCanvas.onmousemove = function(e) {
           var loc;
+          e.preventDefault();
+          e.stopPropagation();
           if (e.which === 1) {
             loc = _calcCanvasLoc.call(_this, e);
             if (_this.click && Math.abs(loc.x - lastX) + Math.abs(loc.y - lastY) >= MOVE_FREQUENCY) {
@@ -73,6 +77,8 @@ Handwrite = (function() {
           }
         };
         return drawingCanvas.onmouseup = function(e) {
+          e.preventDefault();
+          e.stopPropagation();
           if (e.which === 1) {
             if (_this.drag && _this.isDrawMode(_this)) {
               e.preventDefault();

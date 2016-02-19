@@ -45,6 +45,8 @@ class Handwrite
       # マウスダウンイベント
       # @param [Array] e ウィンドウ座標
       drawingCanvas.onmousedown = (e) =>
+        e.preventDefault()
+        e.stopPropagation()
         if e.which == 1 #左クリック
           @zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1
           loc = _calcCanvasLoc.call(@, e)
@@ -57,6 +59,8 @@ class Handwrite
       # マウスドラッグイベント
       # @param [Array] e ウィンドウ座標
       drawingCanvas.onmousemove = (e) =>
+        e.preventDefault()
+        e.stopPropagation()
         if e.which == 1 #左クリック
           loc = _calcCanvasLoc.call(@, e)
           if @click &&
@@ -69,13 +73,14 @@ class Handwrite
       # マウスアップイベント
       # @param [Array] e ウィンドウ座標
       drawingCanvas.onmouseup = (e) =>
+        e.preventDefault()
+        e.stopPropagation()
         if e.which == 1 #左クリック
           if @drag && @isDrawMode(@)
             e.preventDefault()
             @mouseUpDrawing()
         @drag = false
         @click = false
-
 
   # マウスダウン時の描画イベント
   # @param [Array] loc Canvas座標

@@ -778,7 +778,9 @@ EventConfig = (function() {
             return config.selectItem(this);
           });
           return $(window.drawingCanvas).one('click.setupTimelineEventHandler', function(e) {
-            return WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging();
+            if (window.eventPointingMode === Constant.EventInputPointingMode.NOT_SELECT) {
+              return WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging();
+            }
           });
         });
       };

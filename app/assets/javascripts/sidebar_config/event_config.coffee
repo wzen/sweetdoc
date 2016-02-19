@@ -704,8 +704,9 @@ class EventConfig
           config.selectItem(@)
         )
         $(window.drawingCanvas).one('click.setupTimelineEventHandler', (e) =>
-          # メイン画面クリックで全アイテム再描画
-          WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging()
+          if window.eventPointingMode == Constant.EventInputPointingMode.NOT_SELECT
+            # メイン画面クリックで全アイテム再描画
+            WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging()
         )
       )
     )
