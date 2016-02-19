@@ -45,10 +45,11 @@ class StateConfig
         y = pointingSize.y + pointingSize.h * 0.5
         z = null
         screenSize = Common.getScreenSize()
+        scale = WorktableCommon.getWorktableViewScale()
         if pointingSize.w > pointingSize.h
-          z = screenSize.width / pointingSize.w
+          z = screenSize.width / pointingSize.w * scale
         else
-          z = screenSize.height / pointingSize.h
+          z = screenSize.height / pointingSize.h * scale
         center = Common.calcScrollCenterPosition(y, x)
         $('.initConfigX:first', emt).attr('disabled', '').removeClass('empty').val(center.left)
         $('.initConfigY:first', emt).attr('disabled', '').removeClass('empty').val(center.top)

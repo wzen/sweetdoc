@@ -47,15 +47,16 @@ StateConfig = (function() {
           $('.clear_pointing:first', emt).hide();
         }
         _updateConfigInput = function(emt, pointingSize) {
-          var screenSize, x, y, z;
+          var scale, screenSize, x, y, z;
           x = pointingSize.x + pointingSize.w * 0.5;
           y = pointingSize.y + pointingSize.h * 0.5;
           z = null;
           screenSize = Common.getScreenSize();
+          scale = WorktableCommon.getWorktableViewScale();
           if (pointingSize.w > pointingSize.h) {
-            z = screenSize.width / pointingSize.w;
+            z = screenSize.width / pointingSize.w * scale;
           } else {
-            z = screenSize.height / pointingSize.h;
+            z = screenSize.height / pointingSize.h * scale;
           }
           center = Common.calcScrollCenterPosition(y, x);
           $('.initConfigX:first', emt).attr('disabled', '').removeClass('empty').val(center.left);

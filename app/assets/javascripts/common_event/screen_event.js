@@ -205,15 +205,16 @@ ScreenEvent = (function(superClass) {
     PrivateClass.initSpecificConfig = function(specificRoot) {
       var _updateConfigInput, emt, x, y, z;
       _updateConfigInput = function(emt, pointingSize) {
-        var center, screenSize, x, y, z;
+        var center, scale, screenSize, x, y, z;
         x = pointingSize.x + pointingSize.w * 0.5;
         y = pointingSize.y + pointingSize.h * 0.5;
         z = null;
         screenSize = Common.getScreenSize();
+        scale = WorktableCommon.getWorktableViewScale();
         if (pointingSize.w > pointingSize.h) {
-          z = screenSize.width / pointingSize.w;
+          z = screenSize.width / pointingSize.w * scale;
         } else {
-          z = screenSize.height / pointingSize.h;
+          z = screenSize.height / pointingSize.h * scale;
         }
         center = Common.calcScrollCenterPosition(y, x);
         emt.find('.afterX:first').removeClass('empty').val(center.left);
