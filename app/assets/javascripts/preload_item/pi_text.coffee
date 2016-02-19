@@ -652,9 +652,6 @@ class PreloadItemText extends CanvasItemBase
           if Math.abs(writeBlurLength) > 0
             @_writeTextRunning = true
             @_beforeWriteLength = writeLength
-            canvas = document.getElementById(@canvasElementId())
-            context = canvas.getContext('2d')
-            context.clearRect(0, 0, canvas.width, canvas.height)
             @_writeBlurLength = Math.abs(writeBlurLength)
             @_alphaDiff = 0
             _write = ->
@@ -714,6 +711,16 @@ class PreloadItemText extends CanvasItemBase
     if width <= 0 || height <= 0
       # サイズが無い場合は描画無し
       return
+
+    # キャッシュ参照
+    if @_drawBalloonPathCacle? &&
+      @_drawBalloonPathCacle[x]? &&
+      @_drawBalloonPathCacle[x][y]? &&
+      @_drawBalloonPathCacle[x][y][width]? &&
+      @_drawBalloonPathCacle[x][y][width][height]? &&
+      @_drawBalloonPathCacle[x][y][width][height][@balloonType]
+        context.putImageData(@_drawBalloonPathCacle[x][y][width][height][@balloonType], 0, 0)
+        return
 
     _balloonStyle = (context) ->
       context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.95)"
@@ -802,7 +809,6 @@ class PreloadItemText extends CanvasItemBase
           x = y
 
     _drawBRect = ->
-      context.save()
       # 四角 破線
       dashLength = 5
       context.beginPath()
@@ -822,7 +828,6 @@ class PreloadItemText extends CanvasItemBase
       _draw.call(@, x, height, x, y)
       context.fillRect(x, y, width, height);
       context.stroke();
-      context.restore()
 
     _drawShout = =>
       # 叫び
@@ -934,6 +939,18 @@ class PreloadItemText extends CanvasItemBase
       _drawThink.call(@)
     else if @balloonType == @constructor.BalloonType.FREE
       _drawFreeHand.call(@)
+    # キャッシュ保存
+    if !@_drawBalloonPathCacle?
+      @_drawBalloonPathCacle = {}
+    if !@_drawBalloonPathCacle[x]?
+      @_drawBalloonPathCacle[x] = {}
+    if !@_drawBalloonPathCacle[x][y]?
+      @_drawBalloonPathCacle[x][y] = {}
+    if !@_drawBalloonPathCacle[x][y][width]?
+      @_drawBalloonPathCacle[x][y][width] = {}
+    if !@_drawBalloonPathCacle[x][y][width][height]?
+      @_drawBalloonPathCacle[x][y][width][height] = {}
+    @_drawBalloonPathCacle[x][y][width][height][@balloonType] = context.getImageData(0, 0, width, height)
     context.restore()
 
   _adjustFreeHandPath = (drawPaths) ->

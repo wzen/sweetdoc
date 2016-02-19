@@ -838,7 +838,7 @@ PreloadItemText = (function(superClass) {
   };
 
   PreloadItemText.prototype.writeText = function(opt) {
-    var _write, adjustProgress, canvas, context, writeBlurLength, writeLength;
+    var _write, adjustProgress, writeBlurLength, writeLength;
     this.showWithAnimation = this.showWithAnimation__after;
     this.showAnimationType = this.showAnimationType__after;
     this._forward = opt.forward;
@@ -862,9 +862,6 @@ PreloadItemText = (function(superClass) {
           if (Math.abs(writeBlurLength) > 0) {
             this._writeTextRunning = true;
             this._beforeWriteLength = writeLength;
-            canvas = document.getElementById(this.canvasElementId());
-            context = canvas.getContext('2d');
-            context.clearRect(0, 0, canvas.width, canvas.height);
             this._writeBlurLength = Math.abs(writeBlurLength);
             this._alphaDiff = 0;
             _write = function() {
@@ -956,6 +953,10 @@ PreloadItemText = (function(superClass) {
       return;
     }
     if (width <= 0 || height <= 0) {
+      return;
+    }
+    if ((this._drawBalloonPathCacle != null) && (this._drawBalloonPathCacle[x] != null) && (this._drawBalloonPathCacle[x][y] != null) && (this._drawBalloonPathCacle[x][y][width] != null) && (this._drawBalloonPathCacle[x][y][width][height] != null) && this._drawBalloonPathCacle[x][y][width][height][this.balloonType]) {
+      context.putImageData(this._drawBalloonPathCacle[x][y][width][height][this.balloonType], 0, 0);
       return;
     }
     _balloonStyle = function(context) {
@@ -1050,7 +1051,6 @@ PreloadItemText = (function(superClass) {
     };
     _drawBRect = function() {
       var _draw, dashLength;
-      context.save();
       dashLength = 5;
       context.beginPath();
       _draw = function(sx, sy, ex, ey) {
@@ -1073,8 +1073,7 @@ PreloadItemText = (function(superClass) {
       _draw.call(this, width, height, x, height);
       _draw.call(this, x, height, x, y);
       context.fillRect(x, y, width, height);
-      context.stroke();
-      return context.restore();
+      return context.stroke();
     };
     _drawShout = (function(_this) {
       return function() {
@@ -1190,6 +1189,22 @@ PreloadItemText = (function(superClass) {
     } else if (this.balloonType === this.constructor.BalloonType.FREE) {
       _drawFreeHand.call(this);
     }
+    if (this._drawBalloonPathCacle == null) {
+      this._drawBalloonPathCacle = {};
+    }
+    if (this._drawBalloonPathCacle[x] == null) {
+      this._drawBalloonPathCacle[x] = {};
+    }
+    if (this._drawBalloonPathCacle[x][y] == null) {
+      this._drawBalloonPathCacle[x][y] = {};
+    }
+    if (this._drawBalloonPathCacle[x][y][width] == null) {
+      this._drawBalloonPathCacle[x][y][width] = {};
+    }
+    if (this._drawBalloonPathCacle[x][y][width][height] == null) {
+      this._drawBalloonPathCacle[x][y][width][height] = {};
+    }
+    this._drawBalloonPathCacle[x][y][width][height][this.balloonType] = context.getImageData(0, 0, width, height);
     return context.restore();
   };
 
