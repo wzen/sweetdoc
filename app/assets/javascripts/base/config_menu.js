@@ -108,6 +108,7 @@ ConfigMenu = (function() {
     emt = $(".value_forms ." + valueClassName, eventConfigObj.emt);
     if (emt.length > 0) {
       eventConfigObj.initEventVarModifyConfig(itemObjClass);
+      eventConfigObj.initEventSpecificConfig(itemObjClass);
       if (successCallback != null) {
         successCallback();
       }

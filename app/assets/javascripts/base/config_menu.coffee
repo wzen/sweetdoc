@@ -70,6 +70,7 @@ class ConfigMenu
     if emt.length > 0
       # 変数編集コンフィグの初期化
       eventConfigObj.initEventVarModifyConfig(itemObjClass)
+      eventConfigObj.initEventSpecificConfig(itemObjClass)
       if successCallback?
         successCallback()
       return

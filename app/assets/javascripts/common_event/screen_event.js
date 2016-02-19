@@ -203,7 +203,7 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.initSpecificConfig = function(specificRoot) {
-      var _updateConfigInput, emt;
+      var _updateConfigInput, emt, x, y, z;
       _updateConfigInput = function(emt, pointingSize) {
         var center, screenSize, x, y, z;
         x = pointingSize.x + pointingSize.w * 0.5;
@@ -216,18 +216,30 @@ ScreenEvent = (function(superClass) {
           z = screenSize.height / pointingSize.h;
         }
         center = Common.calcScrollCenterPosition(y, x);
-        emt.find('.afterX:first').val(center.left);
-        emt.find('.afterY:first').val(center.top);
-        return emt.find('.afterZ:first').val(z);
+        emt.find('.afterX:first').removeClass('empty').val(center.left);
+        emt.find('.afterY:first').removeClass('empty').val(center.top);
+        return emt.find('.afterZ:first').removeClass('empty').val(z);
       };
       emt = specificRoot['changeScreenPosition'];
-      return emt.find('.event_pointing:first').eventDragPointingRect({
+      emt.find('.event_pointing:first').eventDragPointingRect({
         applyDrawCallback: (function(_this) {
           return function(pointingSize) {
             return _updateConfigInput.call(_this, emt, pointingSize);
           };
         })(this)
       });
+      x = emt.find('.afterX:first');
+      if (x.val().length === 0) {
+        x.attr('disabled', 'disabled').addClass('empty');
+      }
+      y = emt.find('.afterY:first');
+      if (y.val().length === 0) {
+        y.attr('disabled', 'disabled').addClass('empty');
+      }
+      z = emt.find('.afterZ:first');
+      if (z.val().length === 0) {
+        return z.attr('disabled', 'disabled').addClass('empty');
+      }
     };
 
     PrivateClass.setNowXAndY = function(x, y) {

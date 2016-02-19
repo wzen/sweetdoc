@@ -175,15 +175,24 @@ class ScreenEvent extends CommonEvent
         else
           z = screenSize.height / pointingSize.h
         center = Common.calcScrollCenterPosition(y, x)
-        emt.find('.afterX:first').val(center.left)
-        emt.find('.afterY:first').val(center.top)
-        emt.find('.afterZ:first').val(z)
+        emt.find('.afterX:first').removeClass('empty').val(center.left)
+        emt.find('.afterY:first').removeClass('empty').val(center.top)
+        emt.find('.afterZ:first').removeClass('empty').val(z)
 
       emt = specificRoot['changeScreenPosition']
       emt.find('.event_pointing:first').eventDragPointingRect({
         applyDrawCallback: (pointingSize) =>
           _updateConfigInput.call(@, emt, pointingSize)
       })
+      x = emt.find('.afterX:first')
+      if x.val().length == 0
+        x.attr('disabled', 'disabled').addClass('empty')
+      y = emt.find('.afterY:first')
+      if y.val().length == 0
+        y.attr('disabled', 'disabled').addClass('empty')
+      z = emt.find('.afterZ:first')
+      if z.val().length == 0
+        z.attr('disabled', 'disabled').addClass('empty')
 
     @setNowXAndY = (x, y) ->
       if ScreenEvent.hasInstanceCache()
