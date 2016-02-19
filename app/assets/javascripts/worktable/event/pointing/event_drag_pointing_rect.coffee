@@ -26,9 +26,9 @@ class EventDragPointingRect
     # マウスダウン時の描画イベント
     # @param [Array] loc Canvas座標
     mouseDownDrawing: (callback = null) ->
-      @saveDrawingSurface()
       # アイテム削除
       @removeItemElement()
+      @saveDrawingSurface()
       if callback?
         callback()
 
@@ -68,7 +68,6 @@ class EventDragPointingRect
 
       @refresh(true, =>
         @getJQueryElement().addClass('drag_pointing')
-        @setupDragAndResizeEvent()
         # コントローラ表示
         FloatView.showPointingController(@)
         if callback?

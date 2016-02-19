@@ -46,8 +46,8 @@ EventDragPointingRect = (function() {
       if (callback == null) {
         callback = null;
       }
-      this.saveDrawingSurface();
       this.removeItemElement();
+      this.saveDrawingSurface();
       if (callback != null) {
         return callback();
       }
@@ -106,7 +106,6 @@ EventDragPointingRect = (function() {
       return this.refresh(true, (function(_this) {
         return function() {
           _this.getJQueryElement().addClass('drag_pointing');
-          _this.setupDragAndResizeEvent();
           FloatView.showPointingController(_this);
           if (callback != null) {
             return callback();
