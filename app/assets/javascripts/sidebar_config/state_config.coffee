@@ -45,7 +45,7 @@ class StateConfig
         y = pointingSize.y + pointingSize.h * 0.5
         z = null
         screenSize = Common.getScreenSize()
-        scale = WorktableCommon.getWorktableViewScale()
+        scale = 1.0
         if pointingSize.w > pointingSize.h
           z = screenSize.width / pointingSize.w * scale
         else

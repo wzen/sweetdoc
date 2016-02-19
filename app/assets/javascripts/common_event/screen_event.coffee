@@ -74,7 +74,8 @@ class ScreenEvent extends CommonEvent
         if !@_keepDispMag && @nowScale?
           _setScale.call(@, @nowScale)
           size = _convertCenterCoodToSize.call(@, @nowX, @nowY, @nowScale)
-          Common.updateScrollContentsPosition(size.top + window.scrollContents.height() * 0.5, size.left + window.scrollContents.width() * 0.5, true, false)
+          scrollContentsSize = Common.scrollContentsSizeUnderScale()
+          Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 
     # イベント後の表示状態にする
     updateEventAfter: ->
@@ -91,7 +92,8 @@ class ScreenEvent extends CommonEvent
         else
           _setScale.call(@, @_progressScale)
           size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
-          Common.updateScrollContentsPosition(size.top + window.scrollContents.height() * 0.5, size.left + window.scrollContents.width() * 0.5, true, false)
+          scrollContentsSize = Common.scrollContentsSizeUnderScale()
+          Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 #          scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
 #          if scrollContentsSize?
 #            Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
@@ -110,7 +112,8 @@ class ScreenEvent extends CommonEvent
       if !@_keepDispMag
         _setScale.call(@, @_progressScale)
         size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
-        Common.updateScrollContentsPosition(size.top + window.scrollContents.height() * 0.5, size.left + window.scrollContents.width() * 0.5, true, false)
+        scrollContentsSize = Common.scrollContentsSizeUnderScale()
+        Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 
     # プレビューを停止
     # @param [Function] callback コールバック
@@ -170,7 +173,7 @@ class ScreenEvent extends CommonEvent
         y = pointingSize.y + pointingSize.h * 0.5
         z = null
         screenSize = Common.getScreenSize()
-        scale = WorktableCommon.getWorktableViewScale()
+        scale = 1.0
         if pointingSize.w > pointingSize.h
           z = screenSize.width / pointingSize.w * scale
         else

@@ -275,10 +275,22 @@ class Common
   # 画面スケール適用
   @applyViewScale = (isViewResize = false) ->
     scale = @getViewScale(isViewResize)
-    updateMainWrapperPercent = 100 / scale
+    if window.isWorkTable
+      updateMainWrapperPercent = 100 / scale
+    else
+      updateMainWrapperPercent = 100
     # キャンパスサイズ更新
     @updateCanvasSize()
     window.mainWrapper.css({transform: "scale(#{scale}, #{scale})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
+
+  @scrollContentsSizeUnderScale = ->
+    scale = @getViewScale()
+    if window.isWorkTable
+      scale = 1.0
+    return {
+      width: window.scrollContents.width() / scale
+      height: window.scrollContents.height() / scale
+    }
 
   # Canvasサイズ更新
   @updateCanvasSize = (isViewResize = false) ->
@@ -422,8 +434,9 @@ class Common
     if withUpdateScreenEventVar
       @saveDisplayPosition(top, left, true)
 
-    top -= window.scrollContents.height() * 0.5
-    left -= window.scrollContents.width() * 0.5
+    scrollContentsSize = @scrollContentsSizeUnderScale()
+    top -= scrollContentsSize.height * 0.5
+    left -= scrollContentsSize.width * 0.5
     if top <= 0 && left <= 0
       # 不正なスクロールを防止
       if window.runDebug
@@ -466,8 +479,9 @@ class Common
 
   # スクロール位置を中心に初期化
   @resetScrollContentsPositionToCenter: (withUpdateScreenEventVar = true) ->
-    top = (window.scrollInsideWrapper.height() + window.scrollContents.height()) * 0.5
-    left = (window.scrollInsideWrapper.width() + window.scrollContents.width()) * 0.5
+    scrollContentsSize = @scrollContentsSizeUnderScale()
+    top = (window.scrollInsideWrapper.height() + scrollContentsSize.height) * 0.5
+    left = (window.scrollInsideWrapper.width() + scrollContentsSize.width) * 0.5
     @updateScrollContentsPosition(top, left, true, withUpdateScreenEventVar)
 
   # ワークテーブルの画面倍率を取得

@@ -69,8 +69,9 @@ class WorktableCommon
       if obj.isCopy? && obj.isCopy
         instance.name = instance.name + ' (Copy)'
       # 画面中央に貼り付け
-      instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (window.scrollContents.width() - instance.itemSize.w) * 0.5)
-      instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (window.scrollContents.height() - instance.itemSize.h) * 0.5)
+      scrollContentsSize = Common.scrollContentsSizeUnderScale()
+      instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (scrollContentsSize.width - instance.itemSize.w) * 0.5)
+      instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (scrollContentsSize.height - instance.itemSize.h) * 0.5)
       if instance.drawAndMakeConfigs?
         instance.drawAndMakeConfigs()
       instance.setItemAllPropToPageValue()
@@ -330,7 +331,8 @@ class WorktableCommon
     timelineTopPadding = 5
     $('#main').height($('#contents').height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2))
     $('#sidebar').height($('#contents').height() - (borderWidth * 2))
-    window.scrollContentsSize = {width: window.scrollContents.width(), height: window.scrollContents.height()}
+    scrollContentsSize = Common.scrollContentsSizeUnderScale()
+    window.scrollContentsSize = {width: scrollContentsSize.width, height: scrollContentsSize.height}
 
   # スクロール位置初期化
   @initScrollContentsPosition = ->
@@ -381,8 +383,9 @@ class WorktableCommon
         return
       e.preventDefault()
       e.stopPropagation()
-      top = window.scrollContents.scrollTop() + window.scrollContents.height() * 0.5
-      left = window.scrollContents.scrollLeft() + window.scrollContents.width() * 0.5
+      scrollContentsSize = Common.scrollContentsSizeUnderScale()
+      top = window.scrollContents.scrollTop() + scrollContentsSize.height * 0.5
+      left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5
       centerPosition = Common.calcScrollCenterPosition(top, left)
       if centerPosition?
         FloatView.show(FloatView.scrollMessage(centerPosition.top.toFixed(1), centerPosition.left.toFixed(1)), FloatView.Type.DISPLAY_POSITION)

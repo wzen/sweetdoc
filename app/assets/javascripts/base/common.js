@@ -350,13 +350,29 @@ Common = (function() {
       isViewResize = false;
     }
     scale = this.getViewScale(isViewResize);
-    updateMainWrapperPercent = 100 / scale;
+    if (window.isWorkTable) {
+      updateMainWrapperPercent = 100 / scale;
+    } else {
+      updateMainWrapperPercent = 100;
+    }
     this.updateCanvasSize();
     return window.mainWrapper.css({
       transform: "scale(" + scale + ", " + scale + ")",
       width: updateMainWrapperPercent + "%",
       height: updateMainWrapperPercent + "%"
     });
+  };
+
+  Common.scrollContentsSizeUnderScale = function() {
+    var scale;
+    scale = this.getViewScale();
+    if (window.isWorkTable) {
+      scale = 1.0;
+    }
+    return {
+      width: window.scrollContents.width() / scale,
+      height: window.scrollContents.height() / scale
+    };
   };
 
   Common.updateCanvasSize = function(isViewResize) {
@@ -534,7 +550,7 @@ Common = (function() {
   };
 
   Common.updateScrollContentsPosition = function(top, left, immediate, withUpdateScreenEventVar, callback) {
-    var _loop, count, nowLeft, nowTop, per, perLeft, perTop;
+    var _loop, count, nowLeft, nowTop, per, perLeft, perTop, scrollContentsSize;
     if (immediate == null) {
       immediate = true;
     }
@@ -547,8 +563,9 @@ Common = (function() {
     if (withUpdateScreenEventVar) {
       this.saveDisplayPosition(top, left, true);
     }
-    top -= window.scrollContents.height() * 0.5;
-    left -= window.scrollContents.width() * 0.5;
+    scrollContentsSize = this.scrollContentsSizeUnderScale();
+    top -= scrollContentsSize.height * 0.5;
+    left -= scrollContentsSize.width * 0.5;
     if (top <= 0 && left <= 0) {
       if (window.runDebug) {
         console.log('Invalid ScrollValue');
@@ -601,12 +618,13 @@ Common = (function() {
   };
 
   Common.resetScrollContentsPositionToCenter = function(withUpdateScreenEventVar) {
-    var left, top;
+    var left, scrollContentsSize, top;
     if (withUpdateScreenEventVar == null) {
       withUpdateScreenEventVar = true;
     }
-    top = (window.scrollInsideWrapper.height() + window.scrollContents.height()) * 0.5;
-    left = (window.scrollInsideWrapper.width() + window.scrollContents.width()) * 0.5;
+    scrollContentsSize = this.scrollContentsSizeUnderScale();
+    top = (window.scrollInsideWrapper.height() + scrollContentsSize.height) * 0.5;
+    left = (window.scrollInsideWrapper.width() + scrollContentsSize.width) * 0.5;
     return this.updateScrollContentsPosition(top, left, true, withUpdateScreenEventVar);
   };
 

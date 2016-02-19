@@ -75,7 +75,7 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.pasteItem = function() {
-    var instance, obj;
+    var instance, obj, scrollContentsSize;
     if (window.copiedInstance != null) {
       instance = new (Common.getClassFromMap(window.copiedInstance.classDistToken))();
       window.instanceMap[instance.id] = instance;
@@ -85,8 +85,9 @@ WorktableCommon = (function() {
       if ((obj.isCopy != null) && obj.isCopy) {
         instance.name = instance.name + ' (Copy)';
       }
-      instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (window.scrollContents.width() - instance.itemSize.w) * 0.5);
-      instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (window.scrollContents.height() - instance.itemSize.h) * 0.5);
+      scrollContentsSize = Common.scrollContentsSizeUnderScale();
+      instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (scrollContentsSize.width - instance.itemSize.w) * 0.5);
+      instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (scrollContentsSize.height - instance.itemSize.h) * 0.5);
       if (instance.drawAndMakeConfigs != null) {
         instance.drawAndMakeConfigs();
       }
@@ -365,14 +366,15 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.updateMainViewSize = function() {
-    var borderWidth, timelineTopPadding;
+    var borderWidth, scrollContentsSize, timelineTopPadding;
     borderWidth = 5;
     timelineTopPadding = 5;
     $('#main').height($('#contents').height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2));
     $('#sidebar').height($('#contents').height() - (borderWidth * 2));
+    scrollContentsSize = Common.scrollContentsSizeUnderScale();
     return window.scrollContentsSize = {
-      width: window.scrollContents.width(),
-      height: window.scrollContents.height()
+      width: scrollContentsSize.width,
+      height: scrollContentsSize.height
     };
   };
 
@@ -418,7 +420,7 @@ WorktableCommon = (function() {
     window.scrollInsideWrapper.height(window.scrollViewSize);
     window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
     window.scrollContents.off('scroll').on('scroll', function(e) {
-      var centerPosition, left, top;
+      var centerPosition, left, scrollContentsSize, top;
       if ((window.skipScrollEvent != null) && window.skipScrollEvent) {
         window.skipScrollEvent = false;
         return;
@@ -428,8 +430,9 @@ WorktableCommon = (function() {
       }
       e.preventDefault();
       e.stopPropagation();
-      top = window.scrollContents.scrollTop() + window.scrollContents.height() * 0.5;
-      left = window.scrollContents.scrollLeft() + window.scrollContents.width() * 0.5;
+      scrollContentsSize = Common.scrollContentsSizeUnderScale();
+      top = window.scrollContents.scrollTop() + scrollContentsSize.height * 0.5;
+      left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5;
       centerPosition = Common.calcScrollCenterPosition(top, left);
       if (centerPosition != null) {
         FloatView.show(FloatView.scrollMessage(centerPosition.top.toFixed(1), centerPosition.left.toFixed(1)), FloatView.Type.DISPLAY_POSITION);
