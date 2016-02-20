@@ -170,11 +170,10 @@ class ScreenEvent extends CommonEvent
         y = pointingSize.y + pointingSize.h * 0.5
         z = null
         screenSize = Common.getScreenSize()
-        scale = 1.0
         if pointingSize.w > pointingSize.h
-          z = screenSize.width / pointingSize.w * scale
+          z = screenSize.width / pointingSize.w
         else
-          z = screenSize.height / pointingSize.h * scale
+          z = screenSize.height / pointingSize.h
         center = Common.calcScrollCenterPosition(y, x)
         emt.find('.afterX:first').removeClass('empty').val(center.left)
         emt.find('.afterY:first').removeClass('empty').val(center.top)
