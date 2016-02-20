@@ -220,8 +220,9 @@ class Page
       console.log('Page rewindAllChapters')
 
     for i in [(@getForkChapterList().length - 1)..0] by -1
-      chapter = @getForkChapterList()[i]
-      chapter.resetAllEvents()
+      @setChapterIndex(i)
+      @resetChapter(i)
+      @thisChapter().willChapter()
     @setChapterIndex(0)
     RunCommon.setChapterNum(@thisChapterNum())
     @finishedAllChapters = false

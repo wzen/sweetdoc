@@ -232,13 +232,14 @@ Page = (function() {
   };
 
   Page.prototype.rewindAllChapters = function() {
-    var chapter, i, j, ref;
+    var i, j, ref;
     if (window.runDebug) {
       console.log('Page rewindAllChapters');
     }
     for (i = j = ref = this.getForkChapterList().length - 1; j >= 0; i = j += -1) {
-      chapter = this.getForkChapterList()[i];
-      chapter.resetAllEvents();
+      this.setChapterIndex(i);
+      this.resetChapter(i);
+      this.thisChapter().willChapter();
     }
     this.setChapterIndex(0);
     RunCommon.setChapterNum(this.thisChapterNum());
