@@ -83,10 +83,10 @@ class Chapter
     if window.runDebug
       console.log('Chapter resetAllEvents')
 
-    @eventObjList.forEach((e) =>
+    for e, idx in @eventObjList
+      e.initEvent(@eventList[idx])
       e.updateEventBefore()
       e.resetProgress()
-    )
 
   # チャプターのイベントを実行後にする
   forwardAllEvents: ->
@@ -94,10 +94,10 @@ class Chapter
       console.log('Chapter forwardAllEvents')
 
     # とりあえずフォーカスはなし
-    @eventObjList.forEach((e) =>
+    for e, idx in @eventObjList
+      e.initEvent(@eventList[idx])
       e.updateEventAfter()
       e.didChapter()
-    )
 
   # ガイド表示
   # @param [Boolean] calledByWillChapter チャプター開始時に呼ばれたか

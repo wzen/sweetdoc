@@ -604,6 +604,7 @@ class PreloadItemText extends CanvasItemBase
     context.clearRect(0, 0, canvas.width, canvas.height)
     @_animationFlg = {}
 
+
   @isJapanease = (c) ->
     return c.charCodeAt(0) >= 256
 
@@ -637,12 +638,11 @@ class PreloadItemText extends CanvasItemBase
     @_forward = opt.forward
     if @showWithAnimation && !@_animationFlg['startOpenAnimation']?
       @startOpenAnimation( =>
-        #@writeText(opt)
         @_animationFlg['startOpenAnimation'] = true
         @resetProgress()
       )
     else
-      if @inputText? && @inputText.length > 0
+      if opt.progress < opt.progressMax && @inputText? && @inputText.length > 0
         if !@_writeTextRunning? || !@_writeTextRunning
           @_fixedTextAlpha = null
           adjustProgress = opt.progressMax / @inputText.length
@@ -679,6 +679,7 @@ class PreloadItemText extends CanvasItemBase
       if @_writeTextTimer?
         clearTimeout(@_writeTextTimer)
         @_writeTextTimer = null
+      @_writeTextRunning = false
       @startCloseAnimation()
       @_animationFlg['startCloseAnimation'] = true
 

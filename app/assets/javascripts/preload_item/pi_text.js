@@ -850,7 +850,7 @@ PreloadItemText = (function(superClass) {
         };
       })(this));
     } else {
-      if ((this.inputText != null) && this.inputText.length > 0) {
+      if (opt.progress < opt.progressMax && (this.inputText != null) && this.inputText.length > 0) {
         if ((this._writeTextRunning == null) || !this._writeTextRunning) {
           this._fixedTextAlpha = null;
           adjustProgress = opt.progressMax / this.inputText.length;
@@ -900,6 +900,7 @@ PreloadItemText = (function(superClass) {
         clearTimeout(this._writeTextTimer);
         this._writeTextTimer = null;
       }
+      this._writeTextRunning = false;
       this.startCloseAnimation();
       return this._animationFlg['startCloseAnimation'] = true;
     }
