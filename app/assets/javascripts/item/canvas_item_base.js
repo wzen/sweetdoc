@@ -52,6 +52,9 @@ CanvasItemBase = (function(superClass) {
       show = true;
     }
     CanvasItemBase.__super__.itemDraw.call(this, show);
+    if (!show) {
+      this.removeItemElement();
+    }
     this.initCanvas();
     return this.saveNewDrawingSurface();
   };

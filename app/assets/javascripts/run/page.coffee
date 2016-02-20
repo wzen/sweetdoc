@@ -175,59 +175,63 @@ class Page
       console.log('Page rewindChapter')
     # 全ガイド非表示
     @hideAllGuide()
-    @resetChapter(@getChapterIndex())
-    if !@thisChapter().doMoveChapter
-      if @getChapterIndex() > 0
-        @addChapterIndex(-1)
-        @resetChapter(@getChapterIndex())
-        RunCommon.setChapterNum(@thisChapterNum())
-      else
-        oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum())
-        lastForkObj = RunCommon.getLastObjestFromStack(window.eventAction.thisPageNum())
-        if oneBeforeForkObj && oneBeforeForkObj.forkNum != lastForkObj.forkNum
-          # 最後のフォークオブジェクトを削除
-          RunCommon.popLastForkNumInStack(window.eventAction.thisPageNum())
-          # フォーク番号変更
-          nfn = oneBeforeForkObj.forkNum
-          RunCommon.setForkNum(nfn)
-          # チャプター番号をフォーク以前に変更
-          @setChapterIndex(lastForkObj.changedChapterIndex)
-          # チャプターリセット
-          @resetChapter(@getChapterIndex(), true)
-          # チャプター番号設定
+    @resetChapter(@getChapterIndex(), false, =>
+      if !@thisChapter().doMoveChapter
+        if @getChapterIndex() > 0
+          @addChapterIndex(-1)
+          @resetChapter(@getChapterIndex())
           RunCommon.setChapterNum(@thisChapterNum())
-          # チャプター最大値設定
-          RunCommon.setChapterMax(@getForkChapterList().length)
         else
-          # ページ戻し
-          window.eventAction.rewindPage()
-          return
+          oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum())
+          lastForkObj = RunCommon.getLastObjestFromStack(window.eventAction.thisPageNum())
+          if oneBeforeForkObj && oneBeforeForkObj.forkNum != lastForkObj.forkNum
+            # 最後のフォークオブジェクトを削除
+            RunCommon.popLastForkNumInStack(window.eventAction.thisPageNum())
+            # フォーク番号変更
+            nfn = oneBeforeForkObj.forkNum
+            RunCommon.setForkNum(nfn)
+            # チャプター番号をフォーク以前に変更
+            @setChapterIndex(lastForkObj.changedChapterIndex)
+            # チャプターリセット
+            @resetChapter(@getChapterIndex(), true)
+            # チャプター番号設定
+            RunCommon.setChapterNum(@thisChapterNum())
+            # チャプター最大値設定
+            RunCommon.setChapterMax(@getForkChapterList().length)
+          else
+            # ページ戻し
+            window.eventAction.rewindPage()
+            return
 
-    # チャプター前処理
-    @thisChapter().willChapter()
+      # チャプター前処理
+      @thisChapter().willChapter()
+    )
 
   # チャプターの内容をリセット
-  resetChapter: (chapterIndex = @getChapterIndex(), takeStateCapture = false) ->
+  resetChapter: (chapterIndex = @getChapterIndex(), takeStateCapture = false, callback = null) ->
     if window.runDebug
       console.log('Page resetChapter')
     @finishedAllChapters = false
     @finishedScrollDistSum = 0
-    @getForkChapterList()[chapterIndex].resetAllEvents(takeStateCapture)
+    @getForkChapterList()[chapterIndex].resetAllEvents(takeStateCapture, callback)
 
   # 全てのチャプターを戻す
   rewindAllChapters: ->
     if window.runDebug
       console.log('Page rewindAllChapters')
 
+    count = 0
     for i in [(@getForkChapterList().length - 1)..0] by -1
       @setChapterIndex(i)
-      @resetChapter(i)
-      @thisChapter().willChapter()
-    @setChapterIndex(0)
-    RunCommon.setChapterNum(@thisChapterNum())
-    @finishedAllChapters = false
-    @finishedScrollDistSum = 0
-    @start()
+      @resetChapter(i, false, =>
+        count += 1
+        if count >= @getForkChapterList().length
+          @setChapterIndex(0)
+          RunCommon.setChapterNum(@thisChapterNum())
+          @finishedAllChapters = false
+          @finishedScrollDistSum = 0
+          @start()
+      )
 
   # スクロールイベントをハンドル
   # @param [Int] x X軸の動作値

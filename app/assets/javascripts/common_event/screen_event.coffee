@@ -53,16 +53,16 @@ class ScreenEvent extends CommonEvent
     # 変更を戻して再表示
     refresh: (show = true, callback = null) ->
       s = null
+      # 倍率を戻す
       if window.isWorkTable
-        s = WorktableCommon.getWorktableViewScale()
+        _setScale.call(@, WorktableCommon.getWorktableViewScale())
+      else if !@nowScale?
+        _setScale.call(@, @_defaultInitScale)
       else
-        s = @_defaultInitScale
-      _setScale.call(@, s)
+        _setScale.call(@, @nowScale)
       # オーバーレイ削除
       $('#preview_position_overlay').remove()
       $('.keep_mag_base').remove()
-      # 倍率を戻す
-      @_scale = s
       if callback?
         callback(@)
 

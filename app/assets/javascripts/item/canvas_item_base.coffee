@@ -52,6 +52,9 @@ class CanvasItemBase extends ItemBase
   # @param [Boolean] show 要素作成後に表示するか
   itemDraw: (show = true) ->
     super(show)
+    if !show
+      # 描画を削除
+      @removeItemElement()
     # キャンパスに対する初期化
     @initCanvas()
     # 空の画面状態を保存
@@ -59,14 +62,14 @@ class CanvasItemBase extends ItemBase
 
   # 描画時のキャンパスの画面を保存
   saveNewDrawingSurface : ->
-    canvas = document.getElementById(@canvasElementId());
+    canvas = document.getElementById(@canvasElementId())
     if canvas?
       context = canvas.getContext('2d');
       @_newDrawingSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height)
 
   # 描画済みの新規キャンパスの画面を保存
   saveNewDrawedSurface : ->
-    canvas = document.getElementById(@canvasElementId());
+    canvas = document.getElementById(@canvasElementId())
     if canvas?
       context = canvas.getContext('2d');
       @_newDrawedSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height)
@@ -74,7 +77,7 @@ class CanvasItemBase extends ItemBase
   # 保存した画面を新規キャンパスの全画面に再設定
   restoreAllNewDrawingSurface : ->
     if @_newDrawingSurfaceImageData?
-      canvas = document.getElementById(@canvasElementId());
+      canvas = document.getElementById(@canvasElementId())
       if canvas?
         context = canvas.getContext('2d');
         context.putImageData(@_newDrawingSurfaceImageData, 0, 0)

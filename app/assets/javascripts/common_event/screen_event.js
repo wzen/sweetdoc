@@ -78,14 +78,14 @@ ScreenEvent = (function(superClass) {
       }
       s = null;
       if (window.isWorkTable) {
-        s = WorktableCommon.getWorktableViewScale();
+        _setScale.call(this, WorktableCommon.getWorktableViewScale());
+      } else if (this.nowScale == null) {
+        _setScale.call(this, this._defaultInitScale);
       } else {
-        s = this._defaultInitScale;
+        _setScale.call(this, this.nowScale);
       }
-      _setScale.call(this, s);
       $('#preview_position_overlay').remove();
       $('.keep_mag_base').remove();
-      this._scale = s;
       if (callback != null) {
         return callback(this);
       }

@@ -395,15 +395,17 @@ PreloadItemText = (function(superClass) {
       show = true;
     }
     PreloadItemText.__super__.itemDraw.call(this, show);
-    if (this.inputText != null) {
-      _setTextStyle.call(this);
-    } else {
-      _setNoTextStyle.call(this);
-    }
-    if (this.inputText != null) {
-      return _drawTextAndBalloonToCanvas.call(this, this.inputText);
-    } else {
-      return _drawTextAndBalloonToCanvas.call(this, this.constructor.NO_TEXT);
+    if (show) {
+      if (this.inputText != null) {
+        _setTextStyle.call(this);
+      } else {
+        _setNoTextStyle.call(this);
+      }
+      if (this.inputText != null) {
+        return _drawTextAndBalloonToCanvas.call(this, this.inputText);
+      } else {
+        return _drawTextAndBalloonToCanvas.call(this, this.constructor.NO_TEXT);
+      }
     }
   };
 
@@ -796,12 +798,8 @@ PreloadItemText = (function(superClass) {
   };
 
   PreloadItemText.prototype.willChapter = function() {
-    var canvas, context;
-    PreloadItemText.__super__.willChapter.call(this);
-    canvas = document.getElementById(this.canvasElementId());
-    context = canvas.getContext('2d');
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    return this._animationFlg = {};
+    this._animationFlg = {};
+    return PreloadItemText.__super__.willChapter.call(this);
   };
 
   PreloadItemText.isJapanease = function(c) {

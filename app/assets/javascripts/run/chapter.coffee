@@ -79,14 +79,22 @@ class Chapter
     window.scrollHandleWrapper.css('pointer-events', '')
 
   # チャプターのイベントをリセットする
-  resetAllEvents: (takeStateCapture = false) ->
+  resetAllEvents: (takeStateCapture = false, callback = null) ->
     if window.runDebug
       console.log('Chapter resetAllEvents')
 
+    # 描画を戻す
+    count = 0
     for e, idx in @eventObjList
       e.initEvent(@eventList[idx])
       e.updateEventBefore()
       e.resetProgress()
+      e.refresh(e.visible, =>
+        count += 1
+        if count >= @eventObjList.length
+          if callback?
+            callback()
+      )
 
   # チャプターのイベントを実行後にする
   forwardAllEvents: ->
@@ -97,6 +105,8 @@ class Chapter
     for e, idx in @eventObjList
       e.initEvent(@eventList[idx])
       e.updateEventAfter()
+      # FIXME: 状態を後に戻す(現状didChapterにしておく)
+      #e.refresh()
       e.didChapter()
 
   # ガイド表示

@@ -185,67 +185,81 @@ Page = (function() {
   };
 
   Page.prototype.rewindChapter = function() {
-    var lastForkObj, nfn, oneBeforeForkObj;
     if (window.runDebug) {
       console.log('Page rewindChapter');
     }
     this.hideAllGuide();
-    this.resetChapter(this.getChapterIndex());
-    if (!this.thisChapter().doMoveChapter) {
-      if (this.getChapterIndex() > 0) {
-        this.addChapterIndex(-1);
-        this.resetChapter(this.getChapterIndex());
-        RunCommon.setChapterNum(this.thisChapterNum());
-      } else {
-        oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum());
-        lastForkObj = RunCommon.getLastObjestFromStack(window.eventAction.thisPageNum());
-        if (oneBeforeForkObj && oneBeforeForkObj.forkNum !== lastForkObj.forkNum) {
-          RunCommon.popLastForkNumInStack(window.eventAction.thisPageNum());
-          nfn = oneBeforeForkObj.forkNum;
-          RunCommon.setForkNum(nfn);
-          this.setChapterIndex(lastForkObj.changedChapterIndex);
-          this.resetChapter(this.getChapterIndex(), true);
-          RunCommon.setChapterNum(this.thisChapterNum());
-          RunCommon.setChapterMax(this.getForkChapterList().length);
-        } else {
-          window.eventAction.rewindPage();
-          return;
+    return this.resetChapter(this.getChapterIndex(), false, (function(_this) {
+      return function() {
+        var lastForkObj, nfn, oneBeforeForkObj;
+        if (!_this.thisChapter().doMoveChapter) {
+          if (_this.getChapterIndex() > 0) {
+            _this.addChapterIndex(-1);
+            _this.resetChapter(_this.getChapterIndex());
+            RunCommon.setChapterNum(_this.thisChapterNum());
+          } else {
+            oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum());
+            lastForkObj = RunCommon.getLastObjestFromStack(window.eventAction.thisPageNum());
+            if (oneBeforeForkObj && oneBeforeForkObj.forkNum !== lastForkObj.forkNum) {
+              RunCommon.popLastForkNumInStack(window.eventAction.thisPageNum());
+              nfn = oneBeforeForkObj.forkNum;
+              RunCommon.setForkNum(nfn);
+              _this.setChapterIndex(lastForkObj.changedChapterIndex);
+              _this.resetChapter(_this.getChapterIndex(), true);
+              RunCommon.setChapterNum(_this.thisChapterNum());
+              RunCommon.setChapterMax(_this.getForkChapterList().length);
+            } else {
+              window.eventAction.rewindPage();
+              return;
+            }
+          }
         }
-      }
-    }
-    return this.thisChapter().willChapter();
+        return _this.thisChapter().willChapter();
+      };
+    })(this));
   };
 
-  Page.prototype.resetChapter = function(chapterIndex, takeStateCapture) {
+  Page.prototype.resetChapter = function(chapterIndex, takeStateCapture, callback) {
     if (chapterIndex == null) {
       chapterIndex = this.getChapterIndex();
     }
     if (takeStateCapture == null) {
       takeStateCapture = false;
     }
+    if (callback == null) {
+      callback = null;
+    }
     if (window.runDebug) {
       console.log('Page resetChapter');
     }
     this.finishedAllChapters = false;
     this.finishedScrollDistSum = 0;
-    return this.getForkChapterList()[chapterIndex].resetAllEvents(takeStateCapture);
+    return this.getForkChapterList()[chapterIndex].resetAllEvents(takeStateCapture, callback);
   };
 
   Page.prototype.rewindAllChapters = function() {
-    var i, j, ref;
+    var count, i, j, ref, results;
     if (window.runDebug) {
       console.log('Page rewindAllChapters');
     }
+    count = 0;
+    results = [];
     for (i = j = ref = this.getForkChapterList().length - 1; j >= 0; i = j += -1) {
       this.setChapterIndex(i);
-      this.resetChapter(i);
-      this.thisChapter().willChapter();
+      results.push(this.resetChapter(i, false, (function(_this) {
+        return function() {
+          count += 1;
+          if (count >= _this.getForkChapterList().length) {
+            _this.setChapterIndex(0);
+            RunCommon.setChapterNum(_this.thisChapterNum());
+            _this.finishedAllChapters = false;
+            _this.finishedScrollDistSum = 0;
+            return _this.start();
+          }
+        };
+      })(this)));
     }
-    this.setChapterIndex(0);
-    RunCommon.setChapterNum(this.thisChapterNum());
-    this.finishedAllChapters = false;
-    this.finishedScrollDistSum = 0;
-    return this.start();
+    return results;
   };
 
   Page.prototype.handleScrollEvent = function(x, y) {

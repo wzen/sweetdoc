@@ -85,21 +85,35 @@ Chapter = (function() {
     return window.scrollHandleWrapper.css('pointer-events', '');
   };
 
-  Chapter.prototype.resetAllEvents = function(takeStateCapture) {
-    var e, i, idx, len, ref, results;
+  Chapter.prototype.resetAllEvents = function(takeStateCapture, callback) {
+    var count, e, i, idx, len, ref, results;
     if (takeStateCapture == null) {
       takeStateCapture = false;
+    }
+    if (callback == null) {
+      callback = null;
     }
     if (window.runDebug) {
       console.log('Chapter resetAllEvents');
     }
+    count = 0;
     ref = this.eventObjList;
     results = [];
     for (idx = i = 0, len = ref.length; i < len; idx = ++i) {
       e = ref[idx];
       e.initEvent(this.eventList[idx]);
       e.updateEventBefore();
-      results.push(e.resetProgress());
+      e.resetProgress();
+      results.push(e.refresh(e.visible, (function(_this) {
+        return function() {
+          count += 1;
+          if (count >= _this.eventObjList.length) {
+            if (callback != null) {
+              return callback();
+            }
+          }
+        };
+      })(this)));
     }
     return results;
   };

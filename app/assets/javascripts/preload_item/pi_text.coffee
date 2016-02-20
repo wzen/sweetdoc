@@ -284,16 +284,17 @@ class PreloadItemText extends CanvasItemBase
   # @param [Boolean] show 要素作成後に表示するか
   itemDraw: (show = true) ->
     super(show)
-    # スタイル設定
-    if @inputText?
-      _setTextStyle.call(@)
-    else
-      _setNoTextStyle.call(@)
-    # 文字配置 & フォント設定
-    if @inputText?
-      _drawTextAndBalloonToCanvas.call(@ , @inputText)
-    else
-      _drawTextAndBalloonToCanvas.call(@ , @constructor.NO_TEXT)
+    if show
+      # スタイル設定
+      if @inputText?
+        _setTextStyle.call(@)
+      else
+        _setNoTextStyle.call(@)
+      # 文字配置 & フォント設定
+      if @inputText?
+        _drawTextAndBalloonToCanvas.call(@ , @inputText)
+      else
+        _drawTextAndBalloonToCanvas.call(@ , @constructor.NO_TEXT)
 
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか
@@ -597,13 +598,8 @@ class PreloadItemText extends CanvasItemBase
         callback()
 
   willChapter: ->
-    super()
-    # アニメーションで表示させるためCanvasを一旦消去
-    canvas = document.getElementById(@canvasElementId())
-    context = canvas.getContext('2d')
-    context.clearRect(0, 0, canvas.width, canvas.height)
     @_animationFlg = {}
-
+    super()
 
   @isJapanease = (c) ->
     return c.charCodeAt(0) >= 256
