@@ -350,7 +350,7 @@ Common = (function() {
       isViewResize = false;
     }
     scale = this.getViewScale(isViewResize);
-    if (window.isWorkTable) {
+    if (window.isWorkTable || scale <= 1.0) {
       updateMainWrapperPercent = 100 / scale;
     } else {
       updateMainWrapperPercent = 100;
@@ -363,9 +363,12 @@ Common = (function() {
     });
   };
 
-  Common.scrollContentsSizeUnderScale = function() {
+  Common.scrollContentsSizeUnderScale = function(isViewResize) {
     var scale;
-    scale = this.getViewScale();
+    if (isViewResize == null) {
+      isViewResize = false;
+    }
+    scale = this.getViewScale(isViewResize);
     if (window.isWorkTable) {
       scale = 1.0;
     }

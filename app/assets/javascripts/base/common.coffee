@@ -275,7 +275,7 @@ class Common
   # 画面スケール適用
   @applyViewScale = (isViewResize = false) ->
     scale = @getViewScale(isViewResize)
-    if window.isWorkTable
+    if window.isWorkTable || scale <= 1.0
       updateMainWrapperPercent = 100 / scale
     else
       updateMainWrapperPercent = 100
@@ -283,8 +283,8 @@ class Common
     @updateCanvasSize()
     window.mainWrapper.css({transform: "scale(#{scale}, #{scale})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
 
-  @scrollContentsSizeUnderScale = ->
-    scale = @getViewScale()
+  @scrollContentsSizeUnderScale = (isViewResize = false) ->
+    scale = @getViewScale(isViewResize)
     if window.isWorkTable
       scale = 1.0
     return {
