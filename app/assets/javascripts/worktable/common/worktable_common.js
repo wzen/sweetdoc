@@ -366,16 +366,11 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.updateMainViewSize = function() {
-    var borderWidth, scrollContentsSize, timelineTopPadding;
+    var borderWidth, timelineTopPadding;
     borderWidth = 5;
     timelineTopPadding = 5;
     $('#main').height($('#contents').height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2));
-    $('#sidebar').height($('#contents').height() - (borderWidth * 2));
-    scrollContentsSize = Common.scrollContentsSizeUnderScale();
-    return window.scrollContentsSize = {
-      width: scrollContentsSize.width,
-      height: scrollContentsSize.height
-    };
+    return $('#sidebar').height($('#contents').height() - (borderWidth * 2));
   };
 
   WorktableCommon.initScrollContentsPosition = function() {

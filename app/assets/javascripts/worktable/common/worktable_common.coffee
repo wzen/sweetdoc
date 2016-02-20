@@ -331,8 +331,6 @@ class WorktableCommon
     timelineTopPadding = 5
     $('#main').height($('#contents').height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2))
     $('#sidebar').height($('#contents').height() - (borderWidth * 2))
-    scrollContentsSize = Common.scrollContentsSizeUnderScale()
-    window.scrollContentsSize = {width: scrollContentsSize.width, height: scrollContentsSize.height}
 
   # スクロール位置初期化
   @initScrollContentsPosition = ->

@@ -94,9 +94,6 @@ class ScreenEvent extends CommonEvent
           size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
           scrollContentsSize = Common.scrollContentsSizeUnderScale()
           Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
-#          scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
-#          if scrollContentsSize?
-#            Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 
     # 画面移動イベント
     changeScreenPosition: (opt) =>
