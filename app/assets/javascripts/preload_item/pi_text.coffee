@@ -260,7 +260,8 @@ class PreloadItemText extends CanvasItemBase
       @_moveLoc = {x:cood.x, y:cood.y}
     @inputText = null
     @drawHorizontal =  @constructor.WriteDirectionType.HORIZONTAL
-    @fontFamily = 'Times New Roman'
+    #@fontFamily = 'Times New Roman'
+    @fontFamily = 'HGP行書体'
     @fontSize = null
     @isFixedFontSize = false
     @rowWordLength = null

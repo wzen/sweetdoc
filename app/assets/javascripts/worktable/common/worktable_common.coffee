@@ -451,6 +451,9 @@ class WorktableCommon
       $('#pages .section').remove()
       # 環境をリセット
       Common.resetEnvironment()
+      # コンフィグ設定初期化
+      WorktableSetting.clear()
+      StateConfig.clearScreenConfig()
       # 変数初期化
       CommonVar.initVarWhenLoadedView()
       CommonVar.initCommonVar()

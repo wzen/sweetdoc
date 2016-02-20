@@ -10,6 +10,11 @@ class WorktableSetting
     @IdleSaveTimer.initConfig()
     @PositionAndScale.initConfig()
 
+  @clear: ->
+    @Grid.clear()
+    @IdleSaveTimer.clear()
+    @PositionAndScale.clear()
+
   # グリッド線
   class @Grid
     @GRID_CLASS_NAME = constant.Setting.GRID_CLASS_NAME
@@ -75,6 +80,16 @@ class WorktableSetting
       )
       # 描画
       @drawGrid(gridValue)
+
+    # 初期化
+    @clear: ->
+      root = $("##{WorktableSetting.ROOT_ID_NAME}")
+      grid = $(".#{@GRID_CLASS_NAME}", root)
+      grid.prop('checked', false)
+      gridStepValue = @STEP_DEFAULT_VALUE
+      gridStep = $(".#{@GRID_STEP_CLASS_NAME}", root)
+      gridStep.val(gridStepValue)
+      @drawGrid(false)
 
     # グリッド線描画
     # @param [Boolean] doDraw 描画するか
@@ -172,20 +187,16 @@ class WorktableSetting
         PageValue.setSettingPageValue(@PageValueKey.AUTOSAVE, enableValue)
       enableValue = enableValue? && enableValue == 'true'
       autosaveTimeDiv = $(".#{@AUTOSAVE_TIME_DIV_CLASS_NAME}", root)
-
       enable.prop('checked', if enableValue then 'checked' else false)
-      enable.off('click')
-      enable.on('click', =>
+      enable.off('click').on('click', =>
         enableValue = PageValue.getSettingPageValue(@PageValueKey.AUTOSAVE)
         if enableValue?
           enableValue = enableValue == 'true'
-
         # グリッド間隔の有効無効を切り替え
         if !enableValue
           autosaveTimeDiv.show()
         else
           autosaveTimeDiv.hide()
-
         PageValue.setSettingPageValue(@PageValueKey.AUTOSAVE, !enableValue)
       )
 
@@ -213,6 +224,14 @@ class WorktableSetting
             step = parseInt(step)
             PageValue.setSettingPageValue(WorktableSetting.IdleSaveTimer.PageValueKey.AUTOSAVE_TIME, step)
       )
+
+    # 初期化
+    @clear: ->
+      root = $("##{WorktableSetting.ROOT_ID_NAME}")
+      # Autosave表示
+      enable = $(".#{@AUTOSAVE_CLASS_NAME}", root)
+      enable.prop('checked', true)
+      PageValue.setSettingPageValue(@PageValueKey.AUTOSAVE, true)
 
     @isEnabled: ->
       enableValue = PageValue.getSettingPageValue(@PageValueKey.AUTOSAVE)
@@ -294,8 +313,12 @@ class WorktableSetting
             $('.display_position_y', rootEmt).val(parseInt(center.top))
           , 100)
       })
-
       # limit
       $('.display_position_left_limit', rootEmt).html("(#{leftMin} 〜 #{leftMax})")
       $('.display_position_top_limit', rootEmt).html("(#{topMin} 〜 #{topMax})")
       $('.display_position_scale_limit', rootEmt).html("(10% 〜 500%)")
+
+    @clear = ->
+      WorktableCommon.setWorktableViewScale(1.0)
+      WorktableCommon.initScrollContentsPosition()
+      LocalStorage.saveGeneralPageValue()

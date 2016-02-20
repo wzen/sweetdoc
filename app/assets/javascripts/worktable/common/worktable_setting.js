@@ -16,6 +16,12 @@ WorktableSetting = (function() {
     return this.PositionAndScale.initConfig();
   };
 
+  WorktableSetting.clear = function() {
+    this.Grid.clear();
+    this.IdleSaveTimer.clear();
+    return this.PositionAndScale.clear();
+  };
+
   WorktableSetting.Grid = (function() {
     function Grid() {}
 
@@ -96,6 +102,17 @@ WorktableSetting = (function() {
         }
       });
       return this.drawGrid(gridValue);
+    };
+
+    Grid.clear = function() {
+      var grid, gridStep, gridStepValue, root;
+      root = $("#" + WorktableSetting.ROOT_ID_NAME);
+      grid = $("." + this.GRID_CLASS_NAME, root);
+      grid.prop('checked', false);
+      gridStepValue = this.STEP_DEFAULT_VALUE;
+      gridStep = $("." + this.GRID_STEP_CLASS_NAME, root);
+      gridStep.val(gridStepValue);
+      return this.drawGrid(false);
     };
 
     Grid.drawGrid = function(doDraw) {
@@ -209,8 +226,7 @@ WorktableSetting = (function() {
       enableValue = (enableValue != null) && enableValue === 'true';
       autosaveTimeDiv = $("." + this.AUTOSAVE_TIME_DIV_CLASS_NAME, root);
       enable.prop('checked', enableValue ? 'checked' : false);
-      enable.off('click');
-      enable.on('click', (function(_this) {
+      enable.off('click').on('click', (function(_this) {
         return function() {
           enableValue = PageValue.getSettingPageValue(_this.PageValueKey.AUTOSAVE);
           if (enableValue != null) {
@@ -251,6 +267,14 @@ WorktableSetting = (function() {
           }
         }
       });
+    };
+
+    IdleSaveTimer.clear = function() {
+      var enable, root;
+      root = $("#" + WorktableSetting.ROOT_ID_NAME);
+      enable = $("." + this.AUTOSAVE_CLASS_NAME, root);
+      enable.prop('checked', true);
+      return PageValue.setSettingPageValue(this.PageValueKey.AUTOSAVE, true);
     };
 
     IdleSaveTimer.isEnabled = function() {
@@ -354,6 +378,12 @@ WorktableSetting = (function() {
       $('.display_position_left_limit', rootEmt).html("(" + leftMin + " 〜 " + leftMax + ")");
       $('.display_position_top_limit', rootEmt).html("(" + topMin + " 〜 " + topMax + ")");
       return $('.display_position_scale_limit', rootEmt).html("(10% 〜 500%)");
+    };
+
+    PositionAndScale.clear = function() {
+      WorktableCommon.setWorktableViewScale(1.0);
+      WorktableCommon.initScrollContentsPosition();
+      return LocalStorage.saveGeneralPageValue();
     };
 
     return PositionAndScale;

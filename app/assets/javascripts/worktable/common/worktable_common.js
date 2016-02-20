@@ -492,6 +492,8 @@ WorktableCommon = (function() {
       return function() {
         $('#pages .section').remove();
         Common.resetEnvironment();
+        WorktableSetting.clear();
+        StateConfig.clearScreenConfig();
         CommonVar.initVarWhenLoadedView();
         CommonVar.initCommonVar();
         Common.createdMainContainerIfNeeded(PageValue.getPageNum());

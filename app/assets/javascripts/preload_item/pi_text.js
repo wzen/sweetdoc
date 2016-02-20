@@ -367,7 +367,7 @@ PreloadItemText = (function(superClass) {
     }
     this.inputText = null;
     this.drawHorizontal = this.constructor.WriteDirectionType.HORIZONTAL;
-    this.fontFamily = 'Times New Roman';
+    this.fontFamily = 'HGP行書体';
     this.fontSize = null;
     this.isFixedFontSize = false;
     this.rowWordLength = null;

@@ -82,18 +82,23 @@ StateConfig = (function() {
     })(this)();
   };
 
-  StateConfig.clearScreenConfig = function() {
+  StateConfig.clearScreenConfig = function(withInitParams) {
     var emt, se;
+    if (withInitParams == null) {
+      withInitParams = false;
+    }
     emt = $("#" + this.ROOT_ID_NAME + " .configBox.screen_event");
     $('.initConfigX:first', emt).attr('disabled', 'disabled').addClass('empty').val('');
     $('.initConfigY:first', emt).attr('disabled', 'disabled').addClass('empty').val('');
     $('.initConfigScale:first', emt).attr('disabled', 'disabled').addClass('empty').val('');
     $('.clear_pointing:first', emt).hide();
-    se = new ScreenEvent();
-    se.initConfigX = null;
-    se.initConfigY = null;
-    se.initConfigScale = se._defaultInitScale;
-    return se.setItemAllPropToPageValue();
+    if (withInitParams) {
+      se = new ScreenEvent();
+      se.initConfigX = null;
+      se.initConfigY = null;
+      se.initConfigScale = se._defaultInitScale;
+      return se.setItemAllPropToPageValue();
+    }
   };
 
   return StateConfig;
