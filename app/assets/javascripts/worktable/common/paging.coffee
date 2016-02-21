@@ -180,7 +180,7 @@ class Paging
       # 新規コンテナ初期化
       WorktableCommon.initMainContainer()
       PageValue.adjustInstanceAndEventOnPage()
-      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
+      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( =>
         # フォーク内容反映
         Paging.selectFork(selectedForkNum, =>
           # ページ変更後のモード設定

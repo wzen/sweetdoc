@@ -172,31 +172,29 @@ Paging = (function() {
         WorktableCommon.initMainContainer();
         PageValue.adjustInstanceAndEventOnPage();
         return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
-          return Paging.selectFork(selectedForkNum, (function(_this) {
-            return function() {
-              var className, newSection, oldSection;
-              WorktableCommon.changeMode(window.mode, selectedPageNum);
-              Timeline.refreshAllTimeline();
-              className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', selectedPageNum);
-              newSection = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
-              newSection.show();
-              className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
-              oldSection = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
-              oldSection.hide();
-              if (window.debug) {
-                console.log('[selectPage] deleted pageNum:' + beforePageNum);
-              }
-              Common.removeAllItem(beforePageNum);
-              if (created) {
-                OperationHistory.add(true);
-              }
-              LocalStorage.saveAllPageValues();
-              _this.createPageSelectMenu();
-              if (callback != null) {
-                return callback();
-              }
-            };
-          })(this));
+          return Paging.selectFork(selectedForkNum, function() {
+            var className, newSection, oldSection;
+            WorktableCommon.changeMode(window.mode, selectedPageNum);
+            Timeline.refreshAllTimeline();
+            className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', selectedPageNum);
+            newSection = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+            newSection.show();
+            className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
+            oldSection = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+            oldSection.hide();
+            if (window.debug) {
+              console.log('[selectPage] deleted pageNum:' + beforePageNum);
+            }
+            Common.removeAllItem(beforePageNum);
+            if (created) {
+              OperationHistory.add(true);
+            }
+            LocalStorage.saveAllPageValues();
+            _this.createPageSelectMenu();
+            if (callback != null) {
+              return callback();
+            }
+          });
         });
       };
     })(this));
