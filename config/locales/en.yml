@@ -50,8 +50,10 @@ en:
     page:
       page: 'Page'
       add_page: 'Add page'
+      delete_page: 'Remove page'
       fork: 'Fork'
       add_fork: 'Add fork'
+      delete_fork: 'Remove fork'
       master: 'Base'
     etc:
       etc: "Etc"
@@ -145,6 +147,8 @@ en:
       update_gallery: "Upload"
       delete_node: "This contents (w/subtree) will delete."
       delete_project: "This project will delete."
+      delete_event: "This event will delete."
+      delete_page: "This page will delete."
     database:
       item_state:
         save:

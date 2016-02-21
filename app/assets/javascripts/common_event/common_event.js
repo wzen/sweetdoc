@@ -95,9 +95,11 @@ CommonEvent = (function() {
   };
 
   CommonEvent.deleteInstanceOnPage = function(pageNum) {
-    if (this.instance[pageNum] != null) {
-      return delete this.instance[pageNum];
+    var i, p, ref, ref1;
+    for (p = i = ref = pageNum, ref1 = PageValue.getPageCount(); ref <= ref1 ? i < ref1 : i > ref1; p = ref <= ref1 ? ++i : --i) {
+      this.instance[p] = this.instance[p + 1];
     }
+    return delete this.instance[PageValue.getPageCount()];
   };
 
   CommonEvent.CLASS_DIST_TOKEN = CommonEvent.PrivateClass.CLASS_DIST_TOKEN;

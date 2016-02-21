@@ -221,6 +221,8 @@ Constant = (function() {
 
     Paging.NAV_MENU_ADDPAGE_CLASS = 'paging-new';
 
+    Paging.NAV_MENU_DELETEPAGE_CLASS = 'paging-delete';
+
     Paging.NAV_MENU_ADDFORK_CLASS = 'fork-new';
 
     Paging.PRELOAD_PAGEVALUE_NUM = 0;

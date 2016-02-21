@@ -15,6 +15,7 @@ class Paging
     divider = "<li class='divider'></li>"
     newPageMenu = "<li><a class='#{Constant.Paging.NAV_MENU_ADDPAGE_CLASS} menu-item'>#{I18n.t('header_menu.page.add_page')}</a></li>"
     newForkMenu = "<li><a class='#{Constant.Paging.NAV_MENU_ADDFORK_CLASS} menu-item'>#{I18n.t('header_menu.page.add_fork')}</a></li>"
+    deletePageMenu = "<li><a class='#{Constant.Paging.NAV_MENU_DELETEPAGE_CLASS} menu-item'>#{I18n.t('header_menu.page.delete_page')}</a></li>"
     pageMenu = ''
     for i in [1..pageCount]
       navPageClass = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', i)
@@ -34,7 +35,9 @@ class Paging
             <li #{subActive}><a class='#{navPageClass} #{navForkClass} menu-item '>#{navForkName}</a></li>
           """
       subMenu += divider + newForkMenu
-
+      if i > 1
+        # ページ１以外は削除メニュー追加
+        subMenu += divider + deletePageMenu
       pageMenu += """
             <li class="dropdown-submenu">
                 <a>#{navPageName}</a>
@@ -76,6 +79,10 @@ class Paging
     )
     selectRoot.find(".#{Constant.Paging.NAV_MENU_ADDFORK_CLASS}", root).off('click').on('click', =>
       @createNewFork()
+    )
+    selectRoot.find(".#{Constant.Paging.NAV_MENU_DELETEPAGE_CLASS}", root).off('click').on('click', =>
+      if window.confirm(I18n.t('message.dialog.delete_page'))
+        @removePage()
     )
 
   # 表示ページ切り替え
@@ -265,18 +272,15 @@ class Paging
         callback()
       return
 
-    _removePage = (pageNum)->
+    _removePage = (pageNum) ->
       # ページを削除
-      className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
-      $("#pages .#{className}").remove()
-      WorktableCommon.removeCommonEventInstances(pageNum)
-      PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(pageNum), {})
-      PageValue.setEventPageValue(PageValue.Key.eventPageRoot(pageNum), {})
-      PageValue.setFootprintPageValue(PageValue.Key.footprintPageRoot(pageNum), {})
-      PageValue.setGeneralPageValue(PageValue.Key.generalPagePrefix(pageNum), {})
-      LocalStorage.saveAllPageValues()
-      if callback?
-        callback()
+      WorktableCommon.removePage(pageNum, =>
+        LocalStorage.saveAllPageValues()
+        # 選択メニューの更新
+        @createPageSelectMenu()
+        if callback?
+          callback()
+      )
 
     if pageNum == PageValue.getPageNum()
       # 現在のページの場合は前ページに変更

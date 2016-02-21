@@ -342,6 +342,34 @@ class PageValue
       # 自動保存実行
       ServerStorage.startSaveIdleTimer()
 
+  # 汎用値を削除
+  @removeGeneralPageValueOnPage = (pageNum) ->
+    # 後ページのデータをずらす
+    for p in [pageNum...@getPageCount()]
+      @setGeneralPageValue(@Key.generalPagePrefix(p), @getGeneralPageValue(@Key.generalPagePrefix(p + 1)))
+    @setGeneralPageValue(@Key.generalPagePrefix(@getPageCount()), {})
+
+  # インスタンス値を削除
+  @removeInstancePageValueOnPage = (pageNum) ->
+    # 後ページのデータをずらす
+    for p in [pageNum...@getPageCount()]
+      @setInstancePageValue(@Key.instancePagePrefix(p), @getInstancePageValue(@Key.instancePagePrefix(p + 1)))
+    @setInstancePageValue(@Key.instancePagePrefix(@getPageCount()), {})
+
+  # イベントの値を削除
+  @removeEventPageValueOnPage = (pageNum) ->
+    # 後ページのデータをずらす
+    for p in [pageNum...@getPageCount()]
+      @setEventPageValue(@Key.eventPageRoot(p), @getEventPageValue(@Key.eventPageRoot(p + 1)))
+    @setEventPageValue(@Key.eventPageRoot(@getPageCount()), {})
+
+  # 足跡を削除
+  @removeFootprintPageValueOnPage = (pageNum) ->
+    # 後ページのデータをずらす
+    for p in [pageNum...@getPageCount()]
+      @setFootprintPageValue(@Key.footprintPageRoot(p), @getFootprintPageValue(@Key.footprintPageRoot(p + 1)))
+    @setFootprintPageValue(@Key.footprintPageRoot(@getPageCount()), {})
+
   # インスタンス値を削除
   # @param [Integer] objId オブジェクトID
   @removeInstancePageValue = (objId) ->

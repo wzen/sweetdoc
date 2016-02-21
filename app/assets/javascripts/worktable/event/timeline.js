@@ -110,7 +110,10 @@ Timeline = (function() {
                 te_num = $(target).find('input.te_num').val();
                 return WorktableCommon.runPreview(te_num);
               case "delete":
-                return _deleteTimeline.call(_this, target);
+                if (window.confirm(I18n.t('message.dialog.delete_event'))) {
+                  return _deleteTimeline.call(_this, target);
+                }
+                break;
             }
           };
         })(this)

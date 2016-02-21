@@ -59,8 +59,11 @@ class CommonEvent
     for k, v of @instance
       delete @instance[k]
   @deleteInstanceOnPage: (pageNum) ->
-    if @instance[pageNum]?
-      delete @instance[pageNum]
+    # 後ページのデータをずらす
+    for p in [pageNum...PageValue.getPageCount()]
+      @instance[p] = @instance[p + 1]
+    # 末尾ページのデータを削除
+    delete @instance[PageValue.getPageCount()]
 
   # TODO: サブクラスで定義必須
   # @abstract

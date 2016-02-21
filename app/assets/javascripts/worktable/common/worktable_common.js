@@ -402,6 +402,35 @@ WorktableCommon = (function() {
     return OperationHistory.add();
   };
 
+  WorktableCommon.removePage = function(pageNum, callback) {
+    var afterSection, afterSectionClass, beforeSection, beforeSectionClass, className, l, p, ref, ref1, root;
+    if (callback == null) {
+      callback = null;
+    }
+    root = $("#" + Constant.Paging.ROOT_ID);
+    afterSectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageCount());
+    afterSection = $("." + afterSectionClass + ":first", root);
+    for (p = l = ref = PageValue.getPageCount() - 1, ref1 = pageNum; l >= ref1; p = l += -1) {
+      beforeSectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', p);
+      beforeSection = $("." + beforeSectionClass + ":first", root);
+      afterSection.removeClass(afterSectionClass).addClass(beforeSectionClass);
+      afterSection.css('z-index', Common.plusPagingZindex(0, p));
+      afterSection = beforeSection;
+    }
+    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
+    $("#pages ." + className).remove();
+    this.removeCommonEventInstances(pageNum);
+    PageValue.removeGeneralPageValueOnPage(pageNum);
+    PageValue.removeInstancePageValueOnPage(pageNum);
+    PageValue.removeEventPageValueOnPage(pageNum);
+    PageValue.removeFootprintPageValueOnPage(pageNum);
+    PageValue.setPageNum(PageValue.getPageCount() - 1);
+    PageValue.adjustInstanceAndEventOnPage();
+    if (callback != null) {
+      return callback();
+    }
+  };
+
 
   /* デバッグ */
 

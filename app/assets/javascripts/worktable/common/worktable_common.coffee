@@ -359,6 +359,36 @@ class WorktableCommon
     LocalStorage.saveAllPageValues()
     OperationHistory.add()
 
+  # ページ削除
+  @removePage = (pageNum, callback = null) ->
+    # ページHTMLを削除
+    root = $("##{Constant.Paging.ROOT_ID}")
+    afterSectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageCount())
+    afterSection = $(".#{afterSectionClass}:first", root)
+    for p in [(PageValue.getPageCount() - 1)..pageNum] by -1
+      # ページをずらす
+      beforeSectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', p)
+      beforeSection = $(".#{beforeSectionClass}:first", root)
+      afterSection.removeClass(afterSectionClass).addClass(beforeSectionClass)
+      afterSection.css('z-index', Common.plusPagingZindex(0, p))
+      afterSection = beforeSection
+    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
+    $("#pages .#{className}").remove()
+
+    # 共通イベントのデータを削除
+    @removeCommonEventInstances(pageNum)
+    # PageValueを削除
+    PageValue.removeGeneralPageValueOnPage(pageNum)
+    PageValue.removeInstancePageValueOnPage(pageNum)
+    PageValue.removeEventPageValueOnPage(pageNum)
+    PageValue.removeFootprintPageValueOnPage(pageNum)
+    # ページ総数を減らす
+    PageValue.setPageNum(PageValue.getPageCount() - 1)
+    # PageValue調整
+    PageValue.adjustInstanceAndEventOnPage()
+    if callback?
+      callback()
+
   ### デバッグ ###
   @runDebug = ->
 

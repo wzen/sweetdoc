@@ -100,7 +100,8 @@ class Timeline
                 te_num = $(target).find('input.te_num').val()
                 WorktableCommon.runPreview(te_num)
               when "delete"
-                _deleteTimeline.call(@, target)
+                if window.confirm(I18n.t('message.dialog.delete_event'))
+                  _deleteTimeline.call(@, target)
               else
                 return
         }

@@ -9,7 +9,7 @@ Paging = (function() {
   };
 
   Paging.createPageSelectMenu = function() {
-    var active, divider, forkCount, forkNum, i, j, k, l, name, navForkClass, navForkName, navPageClass, navPageName, newForkMenu, newPageMenu, nowMenuName, pageCount, pageMenu, ref, ref1, root, selectRoot, self, subActive, subMenu;
+    var active, deletePageMenu, divider, forkCount, forkNum, i, j, k, l, name, navForkClass, navForkName, navPageClass, navPageName, newForkMenu, newPageMenu, nowMenuName, pageCount, pageMenu, ref, ref1, root, selectRoot, self, subActive, subMenu;
     self = this;
     pageCount = PageValue.getPageCount();
     root = $("#" + Constant.Paging.NAV_ROOT_ID);
@@ -17,6 +17,7 @@ Paging = (function() {
     divider = "<li class='divider'></li>";
     newPageMenu = "<li><a class='" + Constant.Paging.NAV_MENU_ADDPAGE_CLASS + " menu-item'>" + (I18n.t('header_menu.page.add_page')) + "</a></li>";
     newForkMenu = "<li><a class='" + Constant.Paging.NAV_MENU_ADDFORK_CLASS + " menu-item'>" + (I18n.t('header_menu.page.add_fork')) + "</a></li>";
+    deletePageMenu = "<li><a class='" + Constant.Paging.NAV_MENU_DELETEPAGE_CLASS + " menu-item'>" + (I18n.t('header_menu.page.delete_page')) + "</a></li>";
     pageMenu = '';
     for (i = k = 1, ref = pageCount; 1 <= ref ? k <= ref : k >= ref; i = 1 <= ref ? ++k : --k) {
       navPageClass = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', i);
@@ -34,6 +35,9 @@ Paging = (function() {
         }
       }
       subMenu += divider + newForkMenu;
+      if (i > 1) {
+        subMenu += divider + deletePageMenu;
+      }
       pageMenu += "<li class=\"dropdown-submenu\">\n    <a>" + navPageName + "</a>\n    <ul class=\"dropdown-menu\">\n        " + subMenu + "\n    </ul>\n</li>";
     }
     pageMenu += divider + newPageMenu;
@@ -68,9 +72,16 @@ Paging = (function() {
         return _this.createNewPage();
       };
     })(this));
-    return selectRoot.find("." + Constant.Paging.NAV_MENU_ADDFORK_CLASS, root).off('click').on('click', (function(_this) {
+    selectRoot.find("." + Constant.Paging.NAV_MENU_ADDFORK_CLASS, root).off('click').on('click', (function(_this) {
       return function() {
         return _this.createNewFork();
+      };
+    })(this));
+    return selectRoot.find("." + Constant.Paging.NAV_MENU_DELETEPAGE_CLASS, root).off('click').on('click', (function(_this) {
+      return function() {
+        if (window.confirm(I18n.t('message.dialog.delete_page'))) {
+          return _this.removePage();
+        }
       };
     })(this));
   };
@@ -251,18 +262,15 @@ Paging = (function() {
       return;
     }
     _removePage = function(pageNum) {
-      var className;
-      className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
-      $("#pages ." + className).remove();
-      WorktableCommon.removeCommonEventInstances(pageNum);
-      PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(pageNum), {});
-      PageValue.setEventPageValue(PageValue.Key.eventPageRoot(pageNum), {});
-      PageValue.setFootprintPageValue(PageValue.Key.footprintPageRoot(pageNum), {});
-      PageValue.setGeneralPageValue(PageValue.Key.generalPagePrefix(pageNum), {});
-      LocalStorage.saveAllPageValues();
-      if (callback != null) {
-        return callback();
-      }
+      return WorktableCommon.removePage(pageNum, (function(_this) {
+        return function() {
+          LocalStorage.saveAllPageValues();
+          _this.createPageSelectMenu();
+          if (callback != null) {
+            return callback();
+          }
+        };
+      })(this));
     };
     if (pageNum === PageValue.getPageNum()) {
       return this.selectPage(pageNum - 1, PageValue.Key.EF_MASTER_FORKNUM, (function(_this) {
