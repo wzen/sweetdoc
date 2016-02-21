@@ -104,8 +104,7 @@ RunCommon = (function() {
 
   RunCommon.resizeMainContainerEvent = function() {
     this.updateMainViewSize();
-    Common.updateCanvasSize();
-    return Common.updateScrollContentsFromScreenEventVar();
+    return Common.updateCanvasSize();
   };
 
   RunCommon.resizeEvent = function() {

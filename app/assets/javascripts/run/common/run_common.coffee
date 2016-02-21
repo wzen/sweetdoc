@@ -77,7 +77,8 @@ class RunCommon
   @resizeMainContainerEvent = ->
     @updateMainViewSize()
     Common.updateCanvasSize()
-    Common.updateScrollContentsFromScreenEventVar()
+    # FIXME: ⇣ フォーカス後にリサイズするとずれるため一旦コメントアウト
+    #Common.updateScrollContentsFromScreenEventVar()
 
   # ウィンドウリサイズイベント
   @resizeEvent = ->

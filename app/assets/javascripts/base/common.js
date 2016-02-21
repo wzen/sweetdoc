@@ -517,7 +517,7 @@ Common = (function() {
   };
 
   Common.focusToTarget = function(target, callback, immediate, withUpdatePageValue) {
-    var diff, left, scrollContentsSize, top;
+    var diff, left, s, scrollContentsSize, top, viewScaleDiff;
     if (callback == null) {
       callback = null;
     }
@@ -536,10 +536,17 @@ Common = (function() {
         top: 0,
         left: 0
       };
+      s = this.scrollContentsSizeUnderScale();
+      viewScaleDiff = {
+        top: s.height * 0.5 * (1 - window.runScaleFromViewRate),
+        left: s.width * 0.5 * (1 - window.runScaleFromViewRate)
+      };
+      console.log('viewScaleDiff');
+      console.log(viewScaleDiff);
       if ($(target).get(0).offsetParent != null) {
         diff = {
-          top: (scrollContents.scrollTop() + (scrollContentsSize.height - $(target).height()) * 0.5) - $(target).get(0).offsetTop,
-          left: (scrollContents.scrollLeft() + (scrollContentsSize.width - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
+          top: (scrollContents.scrollTop() + (scrollContentsSize.height - $(target).height()) * 0.5) - $(target).get(0).offsetTop - viewScaleDiff.top,
+          left: (scrollContents.scrollLeft() + (scrollContentsSize.width - $(target).width()) * 0.5) - $(target).get(0).offsetLeft - viewScaleDiff.left
         };
       }
       top = scrollContents.scrollTop() + (scrollContentsSize.height * 0.5) - diff.top;

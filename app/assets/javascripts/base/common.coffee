@@ -409,17 +409,32 @@ class Common
     scrollContentsSize = @scrollContentsSizeUnderScreenEventScale()
     if scrollContentsSize?
       diff = {top: 0, left: 0}
+      # MainView縮小時のDiff
+      s = @scrollContentsSizeUnderScale()
+      viewScaleDiff = {
+        top: s.height * 0.5 * (1 - window.runScaleFromViewRate)
+        left: s.width * 0.5 * (1 - window.runScaleFromViewRate)
+      }
+      console.log('viewScaleDiff')
+      console.log(viewScaleDiff)
       if $(target).get(0).offsetParent?
         diff =
-          top: (scrollContents.scrollTop() + (scrollContentsSize.height - $(target).height()) * 0.5) - $(target).get(0).offsetTop
-          left: (scrollContents.scrollLeft() + (scrollContentsSize.width - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
-  #      if window.runDebug
-  #        console.log('$(target).get(0).offsetTop:' + $(target).get(0).offsetTop)
-  #        console.log('$(target).get(0).offsetLeft:' + $(target).get(0).offsetLeft)
+          top: (scrollContents.scrollTop() + (scrollContentsSize.height - $(target).height()) * 0.5) - $(target).get(0).offsetTop - viewScaleDiff.top
+          left: (scrollContents.scrollLeft() + (scrollContentsSize.width - $(target).width()) * 0.5) - $(target).get(0).offsetLeft - viewScaleDiff.left
+#        if window.runDebug
+#          console.log('window.runScaleFromViewRate:' + window.runScaleFromViewRate)
+#          console.log('original scrollContents.scrollTop():' + scrollContents.scrollTop())
+#          console.log('original scrollContents.scrollLeft():' + scrollContents.scrollLeft())
+#          console.log('original scrollContents.width():' + scrollContents.width())
+#          console.log('original scrollContents.height():' + scrollContents.height())
+#          console.log('$(target).get(0).offsetTop:' + $(target).get(0).offsetTop)
+#          console.log('$(target).get(0).offsetLeft:' + $(target).get(0).offsetLeft)
+#          console.log('$(target).width():' + $(target).width())
+#          console.log('$(target).height():' + $(target).height())
 
-  #    if window.runDebug
-  #      console.log('focusToTarget diff')
-  #      console.log(diff)
+#      if window.runDebug
+#        console.log('focusToTarget diff')
+#        console.log(diff)
       top = scrollContents.scrollTop() + (scrollContentsSize.height * 0.5) - diff.top
       left = scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5) - diff.left
       @updateScrollContentsPosition(top, left, immediate, withUpdatePageValue, callback)
