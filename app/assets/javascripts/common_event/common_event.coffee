@@ -58,6 +58,9 @@ class CommonEvent
   @deleteAllInstance: ->
     for k, v of @instance
       delete @instance[k]
+  @deleteInstanceOnPage: (pageNum) ->
+    if @instance[pageNum]?
+      delete @instance[pageNum]
 
   # TODO: サブクラスで定義必須
   # @abstract

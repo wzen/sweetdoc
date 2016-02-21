@@ -130,7 +130,7 @@ Project = (function() {
         screenHeight: height
       });
       return Project.create(projectName, width, height, function(data) {
-        WorktableCommon.createCommonEventInstancesIfNeeded();
+        WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded();
         Navbar.setLastUpdateTime(data.updated_at);
         Navbar.switchWorktableNavbarWhenProjectCreated(true);
         window.initDone = true;
@@ -145,7 +145,7 @@ Project = (function() {
       user_pagevalue_id = $('.project_select', modalEmt).val();
       return ServerStorage.load(user_pagevalue_id, function(data) {
         var sectionClass;
-        WorktableCommon.createCommonEventInstancesIfNeeded();
+        WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded();
         Navbar.setLastUpdateTime(data.updated_at);
         sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
         $('#pages .section:first').attr('class', sectionClass + " section");

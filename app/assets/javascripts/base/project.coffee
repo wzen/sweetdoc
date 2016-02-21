@@ -115,7 +115,7 @@ class Project
       # プロジェクト作成リクエスト
       Project.create(projectName, width, height, (data) ->
         # 共通イベントのインスタンス作成
-        WorktableCommon.createCommonEventInstancesIfNeeded()
+        WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded()
         # 更新日時設定
         Navbar.setLastUpdateTime(data.updated_at)
         # ナビバーをプロジェクト作成後状態に
@@ -137,7 +137,7 @@ class Project
       user_pagevalue_id = $('.project_select', modalEmt).val()
       ServerStorage.load(user_pagevalue_id, (data) ->
         # 共通イベントのインスタンス作成
-        WorktableCommon.createCommonEventInstancesIfNeeded()
+        WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded()
         # 最新更新日時設定
         Navbar.setLastUpdateTime(data.updated_at)
         # ページ変更処理

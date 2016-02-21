@@ -409,6 +409,9 @@ class WorktableCommon
     )
     # 環境設定
     Common.applyEnvironmentFromPagevalue()
+    # コンフィグ設定初期化
+    WorktableSetting.clear()
+    StateConfig.clearScreenConfig()
     # Mainビュー高さ設定
     @updateMainViewSize()
     # コンフィグ高さ設定
@@ -451,9 +454,6 @@ class WorktableCommon
       $('#pages .section').remove()
       # 環境をリセット
       Common.resetEnvironment()
-      # コンフィグ設定初期化
-      WorktableSetting.clear()
-      StateConfig.clearScreenConfig()
       # 変数初期化
       CommonVar.initVarWhenLoadedView()
       CommonVar.initCommonVar()
@@ -537,13 +537,19 @@ class WorktableCommon
       callback()
 
   # 共通イベントインスタンス作成
-  @createCommonEventInstancesIfNeeded = (pn = PageValue.getPageNum()) ->
+  @createCommonEventInstancesOnThisPageIfNeeded = ->
     for clsToken, cls of window.classMap
       if cls.prototype instanceof CommonEvent
         instance = new (Common.getClassFromMap(cls.CLASS_DIST_TOKEN))()
         if !window.instanceMap[instance.id]?
           Common.setInstanceFromMap(instance.id, instance.constructor.CLASS_DIST_TOKEN)
           instance.setItemAllPropToPageValue()
+
+  # 共通イベントのページインスタンス削除
+  @removeCommonEventInstances = (pn = PageValue.getPageNum()) ->
+    for clsToken, cls of window.classMap
+      if cls.prototype instanceof CommonEvent
+        cls.deleteInstanceOnPage(pn)
 
   # PageValueから全てのインスタンスを作成
   # @param [Function] callback コールバック

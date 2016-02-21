@@ -94,6 +94,12 @@ CommonEvent = (function() {
     return results;
   };
 
+  CommonEvent.deleteInstanceOnPage = function(pageNum) {
+    if (this.instance[pageNum] != null) {
+      return delete this.instance[pageNum];
+    }
+  };
+
   CommonEvent.CLASS_DIST_TOKEN = CommonEvent.PrivateClass.CLASS_DIST_TOKEN;
 
   return CommonEvent;

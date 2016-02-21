@@ -381,7 +381,11 @@ WorktableSetting = (function() {
     };
 
     PositionAndScale.clear = function() {
-      WorktableCommon.setWorktableViewScale(1.0);
+      var scale;
+      scale = WorktableCommon.getWorktableViewScale();
+      if (scale != null) {
+        WorktableCommon.setWorktableViewScale(scale);
+      }
       WorktableCommon.initScrollContentsPosition();
       return LocalStorage.saveGeneralPageValue();
     };

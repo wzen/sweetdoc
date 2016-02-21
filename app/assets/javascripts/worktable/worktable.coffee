@@ -50,7 +50,7 @@ $ ->
       PageValue.adjustInstanceAndEventOnPage()
       WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
         # 共通イベントのインスタンス作成
-        WorktableCommon.createCommonEventInstancesIfNeeded()
+        WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded()
         # スクロール位置更新
         WorktableCommon.initScrollContentsPosition()
         _callback.call(@)

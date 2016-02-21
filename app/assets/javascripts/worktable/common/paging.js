@@ -45,8 +45,7 @@ Paging = (function() {
       nowMenuName += " - (" + name + ")";
     }
     $("." + Constant.Paging.NAV_SELECTED_CLASS, root).html(nowMenuName);
-    selectRoot.find(".menu-item").off('click');
-    selectRoot.find(".menu-item").on('click', function() {
+    selectRoot.find(".menu-item").off('click').on('click', function() {
       var classList, forkPrefix, pageNum, pagePrefix;
       pagePrefix = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', '');
       forkPrefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '');
@@ -64,14 +63,16 @@ Paging = (function() {
         return self.selectPage(pageNum, forkNum);
       }
     });
-    selectRoot.find("." + Constant.Paging.NAV_MENU_ADDPAGE_CLASS, root).off('click');
-    selectRoot.find("." + Constant.Paging.NAV_MENU_ADDPAGE_CLASS, root).on('click', function() {
-      return self.createNewPage();
-    });
-    selectRoot.find("." + Constant.Paging.NAV_MENU_ADDFORK_CLASS, root).off('click');
-    return selectRoot.find("." + Constant.Paging.NAV_MENU_ADDFORK_CLASS, root).on('click', function() {
-      return self.createNewFork();
-    });
+    selectRoot.find("." + Constant.Paging.NAV_MENU_ADDPAGE_CLASS, root).off('click').on('click', (function(_this) {
+      return function() {
+        return _this.createNewPage();
+      };
+    })(this));
+    return selectRoot.find("." + Constant.Paging.NAV_MENU_ADDFORK_CLASS, root).off('click').on('click', (function(_this) {
+      return function() {
+        return _this.createNewFork();
+      };
+    })(this));
   };
 
   Paging.switchSectionDisplay = function(pageNum) {
@@ -83,122 +84,136 @@ Paging = (function() {
   };
 
   Paging.createNewPage = function() {
-    var self;
-    self = this;
-    return WorktableCommon.stopAllEventPreview(function() {
-      var beforePageNum, created;
-      beforePageNum = PageValue.getPageNum();
-      if (window.debug) {
-        console.log('[createNewPage] beforePageNum:' + beforePageNum);
-      }
-      Sidebar.closeSidebar();
-      LocalStorage.clearWorktableWithoutSetting();
-      EventConfig.removeAllConfig();
-      created = Common.createdMainContainerIfNeeded(PageValue.getPageCount() + 1);
-      PageValue.setPageNum(PageValue.getPageCount() + 1);
-      WorktableCommon.initMainContainer();
-      PageValue.adjustInstanceAndEventOnPage();
-      return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
-        var className, newSection, oldSection;
-        WorktableCommon.createCommonEventInstancesIfNeeded();
-        WorktableCommon.changeMode(window.mode);
-        Timeline.refreshAllTimeline();
-        className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
-        newSection = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
-        newSection.show();
-        className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
-        oldSection = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
-        oldSection.hide();
-        Common.removeAllItem(beforePageNum);
-        PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
-        PageValue.updatePageCount();
-        if (created) {
-          OperationHistory.add(true);
+    return WorktableCommon.stopAllEventPreview((function(_this) {
+      return function() {
+        var beforePageNum, created;
+        beforePageNum = PageValue.getPageNum();
+        if (window.debug) {
+          console.log('[createNewPage] beforePageNum:' + beforePageNum);
         }
-        LocalStorage.saveAllPageValues();
-        return self.createPageSelectMenu();
-      });
-    });
-  };
-
-  Paging.selectPage = function(selectedPageNum, selectedForkNum) {
-    var self;
-    if (selectedForkNum == null) {
-      selectedForkNum = PageValue.Key.EF_MASTER_FORKNUM;
-    }
-    self = this;
-    if (selectedPageNum === PageValue.getPageNum()) {
-      if (selectedForkNum === PageValue.getForkNum()) {
-        return;
-      } else {
-        this.selectFork(selectedForkNum, function() {
-          Timeline.refreshAllTimeline();
-          LocalStorage.saveAllPageValues();
-          return self.createPageSelectMenu();
-        });
-        return;
-      }
-    }
-    return WorktableCommon.stopAllEventPreview(function() {
-      var beforePageNum, created, pageCount;
-      if (window.debug) {
-        console.log('[selectPage] selectedNum:' + selectedPageNum);
-      }
-      if (selectedPageNum <= 0) {
-        return;
-      }
-      pageCount = PageValue.getPageCount();
-      if (selectedPageNum < 0 || selectedPageNum > pageCount) {
-        return;
-      }
-      beforePageNum = PageValue.getPageNum();
-      if (window.debug) {
-        console.log('[selectPage] beforePageNum:' + beforePageNum);
-      }
-      Sidebar.closeSidebar();
-      LocalStorage.clearWorktableWithoutSetting();
-      EventConfig.removeAllConfig();
-      created = Common.createdMainContainerIfNeeded(selectedPageNum, beforePageNum > selectedPageNum);
-      PageValue.setPageNum(selectedPageNum);
-      WorktableCommon.initMainContainer();
-      PageValue.adjustInstanceAndEventOnPage();
-      return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
-        return Paging.selectFork(selectedForkNum, function() {
+        Sidebar.closeSidebar();
+        LocalStorage.clearWorktableWithoutSetting();
+        EventConfig.removeAllConfig();
+        created = Common.createdMainContainerIfNeeded(PageValue.getPageCount() + 1);
+        PageValue.setPageNum(PageValue.getPageCount() + 1);
+        WorktableCommon.initMainContainer();
+        PageValue.adjustInstanceAndEventOnPage();
+        return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
           var className, newSection, oldSection;
-          WorktableCommon.changeMode(window.mode, selectedPageNum);
+          WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded();
+          WorktableCommon.changeMode(window.mode);
           Timeline.refreshAllTimeline();
-          className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', selectedPageNum);
+          className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
           newSection = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
           newSection.show();
           className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
           oldSection = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
           oldSection.hide();
-          if (window.debug) {
-            console.log('[selectPage] deleted pageNum:' + beforePageNum);
-          }
           Common.removeAllItem(beforePageNum);
+          PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
+          PageValue.updatePageCount();
+          WorktableCommon.initScrollContentsPosition();
           if (created) {
             OperationHistory.add(true);
           }
           LocalStorage.saveAllPageValues();
-          return self.createPageSelectMenu();
+          return _this.createPageSelectMenu();
         });
-      });
-    });
+      };
+    })(this));
+  };
+
+  Paging.selectPage = function(selectedPageNum, selectedForkNum, callback) {
+    if (selectedForkNum == null) {
+      selectedForkNum = PageValue.Key.EF_MASTER_FORKNUM;
+    }
+    if (callback == null) {
+      callback = null;
+    }
+    if (selectedPageNum === PageValue.getPageNum()) {
+      if (selectedForkNum === PageValue.getForkNum()) {
+        return;
+      } else {
+        this.selectFork(selectedForkNum, (function(_this) {
+          return function() {
+            Timeline.refreshAllTimeline();
+            LocalStorage.saveAllPageValues();
+            _this.createPageSelectMenu();
+            if (callback != null) {
+              return callback();
+            }
+          };
+        })(this));
+        return;
+      }
+    }
+    return WorktableCommon.stopAllEventPreview((function(_this) {
+      return function() {
+        var beforePageNum, created, pageCount;
+        if (window.debug) {
+          console.log('[selectPage] selectedNum:' + selectedPageNum);
+        }
+        if (selectedPageNum <= 0) {
+          return;
+        }
+        pageCount = PageValue.getPageCount();
+        if (selectedPageNum < 0 || selectedPageNum > pageCount) {
+          return;
+        }
+        beforePageNum = PageValue.getPageNum();
+        if (window.debug) {
+          console.log('[selectPage] beforePageNum:' + beforePageNum);
+        }
+        Sidebar.closeSidebar();
+        LocalStorage.clearWorktableWithoutSetting();
+        EventConfig.removeAllConfig();
+        created = Common.createdMainContainerIfNeeded(selectedPageNum, beforePageNum > selectedPageNum);
+        PageValue.setPageNum(selectedPageNum);
+        WorktableCommon.initMainContainer();
+        PageValue.adjustInstanceAndEventOnPage();
+        return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
+          return Paging.selectFork(selectedForkNum, (function(_this) {
+            return function() {
+              var className, newSection, oldSection;
+              WorktableCommon.changeMode(window.mode, selectedPageNum);
+              Timeline.refreshAllTimeline();
+              className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', selectedPageNum);
+              newSection = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+              newSection.show();
+              className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
+              oldSection = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+              oldSection.hide();
+              if (window.debug) {
+                console.log('[selectPage] deleted pageNum:' + beforePageNum);
+              }
+              Common.removeAllItem(beforePageNum);
+              if (created) {
+                OperationHistory.add(true);
+              }
+              LocalStorage.saveAllPageValues();
+              _this.createPageSelectMenu();
+              if (callback != null) {
+                return callback();
+              }
+            };
+          })(this));
+        });
+      };
+    })(this));
   };
 
   Paging.createNewFork = function() {
-    var self;
-    self = this;
-    return WorktableCommon.stopAllEventPreview(function() {
-      PageValue.setForkNum(PageValue.getForkCount() + 1);
-      PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
-      PageValue.updateForkCount();
-      OperationHistory.add(true);
-      LocalStorage.saveAllPageValues();
-      self.createPageSelectMenu();
-      return Timeline.refreshAllTimeline();
-    });
+    return WorktableCommon.stopAllEventPreview((function(_this) {
+      return function() {
+        PageValue.setForkNum(PageValue.getForkCount() + 1);
+        PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
+        PageValue.updateForkCount();
+        OperationHistory.add(true);
+        LocalStorage.saveAllPageValues();
+        _this.createPageSelectMenu();
+        return Timeline.refreshAllTimeline();
+      };
+    })(this));
   };
 
   Paging.selectFork = function(selectedForkNum, callback) {
@@ -224,6 +239,42 @@ Paging = (function() {
         });
       }
     });
+  };
+
+  Paging.removePage = function(pageNum, callback) {
+    var _removePage;
+    if (callback == null) {
+      callback = null;
+    }
+    if (pageNum <= 1) {
+      if (callback != null) {
+        callback();
+      }
+      return;
+    }
+    _removePage = function(pageNum) {
+      var className;
+      className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
+      $("#pages ." + className).remove();
+      WorktableCommon.removeCommonEventInstances(pageNum);
+      PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(pageNum), {});
+      PageValue.setEventPageValue(PageValue.Key.eventPageRoot(pageNum), {});
+      PageValue.setFootprintPageValue(PageValue.Key.footprintPageRoot(pageNum), {});
+      PageValue.setGeneralPageValue(PageValue.Key.generalPagePrefix(pageNum), {});
+      LocalStorage.saveAllPageValues();
+      if (callback != null) {
+        return callback();
+      }
+    };
+    if (pageNum === PageValue.getPageNum()) {
+      return this.selectPage(pageNum - 1, PageValue.Key.EF_MASTER_FORKNUM, (function(_this) {
+        return function() {
+          return _removePage.call(_this);
+        };
+      })(this));
+    } else {
+      return _removePage.call(this);
+    }
   };
 
   return Paging;

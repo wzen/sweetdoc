@@ -319,6 +319,8 @@ class WorktableSetting
       $('.display_position_scale_limit', rootEmt).html("(10% 〜 500%)")
 
     @clear = ->
-      WorktableCommon.setWorktableViewScale(1.0)
+      scale = WorktableCommon.getWorktableViewScale()
+      if scale?
+        WorktableCommon.setWorktableViewScale(scale)
       WorktableCommon.initScrollContentsPosition()
       LocalStorage.saveGeneralPageValue()

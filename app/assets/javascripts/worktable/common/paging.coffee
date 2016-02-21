@@ -7,7 +7,6 @@ class Paging
   # 選択メニュー作成
   @createPageSelectMenu: ->
     self = @
-
     pageCount = PageValue.getPageCount()
     root = $("##{Constant.Paging.NAV_ROOT_ID}")
     selectRoot = $(".#{Constant.Paging.NAV_SELECT_ROOT_CLASS}", root)
@@ -56,8 +55,7 @@ class Paging
     $(".#{Constant.Paging.NAV_SELECTED_CLASS}", root).html(nowMenuName)
 
     # イベント設定
-    selectRoot.find(".menu-item").off('click')
-    selectRoot.find(".menu-item").on('click', ->
+    selectRoot.find(".menu-item").off('click').on('click', ->
       pagePrefix = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', '')
       forkPrefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '')
       pageNum = null
@@ -73,13 +71,11 @@ class Paging
         self.selectPage(pageNum, forkNum)
     )
 
-    selectRoot.find(".#{Constant.Paging.NAV_MENU_ADDPAGE_CLASS}", root).off('click')
-    selectRoot.find(".#{Constant.Paging.NAV_MENU_ADDPAGE_CLASS}", root).on('click', ->
-      self.createNewPage()
+    selectRoot.find(".#{Constant.Paging.NAV_MENU_ADDPAGE_CLASS}", root).off('click').on('click', =>
+      @createNewPage()
     )
-    selectRoot.find(".#{Constant.Paging.NAV_MENU_ADDFORK_CLASS}", root).off('click')
-    selectRoot.find(".#{Constant.Paging.NAV_MENU_ADDFORK_CLASS}", root).on('click', ->
-      self.createNewFork()
+    selectRoot.find(".#{Constant.Paging.NAV_MENU_ADDFORK_CLASS}", root).off('click').on('click', =>
+      @createNewFork()
     )
 
   # 表示ページ切り替え
@@ -92,10 +88,8 @@ class Paging
 
   # ページ追加作成
   @createNewPage: ->
-    self = @
-
     # プレビュー停止
-    WorktableCommon.stopAllEventPreview( ->
+    WorktableCommon.stopAllEventPreview( =>
       beforePageNum = PageValue.getPageNum()
       if window.debug
         console.log('[createNewPage] beforePageNum:' + beforePageNum)
@@ -112,9 +106,9 @@ class Paging
       # 新規コンテナ初期化
       WorktableCommon.initMainContainer()
       PageValue.adjustInstanceAndEventOnPage()
-      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
+      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( =>
         # 共通イベントのインスタンス作成
-        WorktableCommon.createCommonEventInstancesIfNeeded()
+        WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded()
         # 作成ページのモード設定
         WorktableCommon.changeMode(window.mode)
         # タイムライン更新
@@ -130,39 +124,41 @@ class Paging
         # ページ総数 & フォーク総数の更新
         PageValue.setEventPageValue(PageValue.Key.eventCount(), 0)
         PageValue.updatePageCount()
+        # 表示位置を戻す
+        WorktableCommon.initScrollContentsPosition()
         if created
           # 履歴に画面初期時状態を保存
           OperationHistory.add(true)
         # キャッシュ保存
         LocalStorage.saveAllPageValues()
         # 選択メニューの更新
-        self.createPageSelectMenu()
+        @createPageSelectMenu()
       )
     )
 
   # ページ選択
   # @param [Integer] selectedNum 選択ページ番号
   # @param [Integer] selectedNum 選択フォーク番号
-  @selectPage: (selectedPageNum, selectedForkNum = PageValue.Key.EF_MASTER_FORKNUM) ->
-    self = @
-
+  @selectPage: (selectedPageNum, selectedForkNum = PageValue.Key.EF_MASTER_FORKNUM, callback = null) ->
     if selectedPageNum == PageValue.getPageNum()
       if selectedForkNum == PageValue.getForkNum()
         # 同じページ & 同じフォークの場合は変更しない
         return
       else
-        @selectFork(selectedForkNum, ->
+        @selectFork(selectedForkNum, =>
           # タイムライン更新
           Timeline.refreshAllTimeline()
           # キャッシュ保存
           LocalStorage.saveAllPageValues()
           # 選択メニューの更新
-          self.createPageSelectMenu()
+          @createPageSelectMenu()
+          if callback?
+            callback()
         )
         return
 
     # プレビュー停止
-    WorktableCommon.stopAllEventPreview( ->
+    WorktableCommon.stopAllEventPreview( =>
       if window.debug
         console.log('[selectPage] selectedNum:' + selectedPageNum)
       if selectedPageNum <= 0
@@ -186,7 +182,7 @@ class Paging
       PageValue.adjustInstanceAndEventOnPage()
       WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
         # フォーク内容反映
-        Paging.selectFork(selectedForkNum, ->
+        Paging.selectFork(selectedForkNum, =>
           # ページ変更後のモード設定
           WorktableCommon.changeMode(window.mode, selectedPageNum)
           # タイムライン更新
@@ -208,17 +204,17 @@ class Paging
           # キャッシュ保存
           LocalStorage.saveAllPageValues()
           # 選択メニューの更新
-          self.createPageSelectMenu()
+          @createPageSelectMenu()
+          if callback?
+            callback()
         )
       )
     )
 
   # フォーク追加作成
   @createNewFork: ->
-    self = @
-
     # プレビュー停止
-    WorktableCommon.stopAllEventPreview( ->
+    WorktableCommon.stopAllEventPreview( =>
       # フォーク番号更新
       PageValue.setForkNum(PageValue.getForkCount() + 1)
       # フォーク総数更新
@@ -229,7 +225,7 @@ class Paging
       # キャッシュ保存
       LocalStorage.saveAllPageValues()
       # 選択メニューの更新
-      self.createPageSelectMenu()
+      @createPageSelectMenu()
       # タイムライン更新
       Timeline.refreshAllTimeline()
     )
@@ -261,3 +257,31 @@ class Paging
             callback()
         )
     )
+
+  @removePage: (pageNum, callback = null) ->
+    if pageNum <= 1
+      # 1ページ目は消去しない
+      if callback?
+        callback()
+      return
+
+    _removePage = (pageNum)->
+      # ページを削除
+      className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
+      $("#pages .#{className}").remove()
+      WorktableCommon.removeCommonEventInstances(pageNum)
+      PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(pageNum), {})
+      PageValue.setEventPageValue(PageValue.Key.eventPageRoot(pageNum), {})
+      PageValue.setFootprintPageValue(PageValue.Key.footprintPageRoot(pageNum), {})
+      PageValue.setGeneralPageValue(PageValue.Key.generalPagePrefix(pageNum), {})
+      LocalStorage.saveAllPageValues()
+      if callback?
+        callback()
+
+    if pageNum == PageValue.getPageNum()
+      # 現在のページの場合は前ページに変更
+      @selectPage(pageNum - 1, PageValue.Key.EF_MASTER_FORKNUM, =>
+        _removePage.call(@)
+      )
+    else
+      _removePage.call(@)

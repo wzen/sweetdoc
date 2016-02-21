@@ -451,6 +451,8 @@ WorktableCommon = (function() {
       };
     })(this));
     Common.applyEnvironmentFromPagevalue();
+    WorktableSetting.clear();
+    StateConfig.clearScreenConfig();
     this.updateMainViewSize();
     Sidebar.resizeConfigHeight();
     WorktableSetting.initConfig();
@@ -492,8 +494,6 @@ WorktableCommon = (function() {
       return function() {
         $('#pages .section').remove();
         Common.resetEnvironment();
-        WorktableSetting.clear();
-        StateConfig.clearScreenConfig();
         CommonVar.initVarWhenLoadedView();
         CommonVar.initCommonVar();
         Common.createdMainContainerIfNeeded(PageValue.getPageNum());
@@ -583,11 +583,8 @@ WorktableCommon = (function() {
     }
   };
 
-  WorktableCommon.createCommonEventInstancesIfNeeded = function(pn) {
+  WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded = function() {
     var cls, clsToken, instance, ref, results;
-    if (pn == null) {
-      pn = PageValue.getPageNum();
-    }
     ref = window.classMap;
     results = [];
     for (clsToken in ref) {
@@ -600,6 +597,24 @@ WorktableCommon = (function() {
         } else {
           results.push(void 0);
         }
+      } else {
+        results.push(void 0);
+      }
+    }
+    return results;
+  };
+
+  WorktableCommon.removeCommonEventInstances = function(pn) {
+    var cls, clsToken, ref, results;
+    if (pn == null) {
+      pn = PageValue.getPageNum();
+    }
+    ref = window.classMap;
+    results = [];
+    for (clsToken in ref) {
+      cls = ref[clsToken];
+      if (cls.prototype instanceof CommonEvent) {
+        results.push(cls.deleteInstanceOnPage(pn));
       } else {
         results.push(void 0);
       }

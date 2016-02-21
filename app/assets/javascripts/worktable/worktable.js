@@ -33,7 +33,7 @@ $(function() {
       Common.initResize(WorktableCommon.resizeEvent);
       PageValue.adjustInstanceAndEventOnPage();
       WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
-        WorktableCommon.createCommonEventInstancesIfNeeded();
+        WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded();
         WorktableCommon.initScrollContentsPosition();
         _callback.call(this);
         Navbar.switchWorktableNavbarWhenProjectCreated(true);
