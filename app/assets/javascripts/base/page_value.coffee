@@ -634,7 +634,6 @@ class PageValue
   # Footprintに保存
   @saveToFootprint: (targetObjId, isChangeBefore, eventDistNum, pageNum = PageValue.getPageNum()) ->
     @saveInstanceObjectToFootprint(targetObjId, isChangeBefore, eventDistNum, pageNum)
-    #@saveCommonStateToFootprint(isChangeBefore, eventDistNum, pageNum)
 
   # インスタンスの変数値を保存
   @saveInstanceObjectToFootprint: (targetObjId, isChangeBefore, eventDistNum, pageNum = PageValue.getPageNum()) ->

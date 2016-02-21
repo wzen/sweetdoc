@@ -195,8 +195,10 @@ Page = (function() {
         if (!_this.thisChapter().doMoveChapter) {
           if (_this.getChapterIndex() > 0) {
             _this.addChapterIndex(-1);
-            _this.resetChapter(_this.getChapterIndex());
-            RunCommon.setChapterNum(_this.thisChapterNum());
+            return _this.resetChapter(_this.getChapterIndex(), false, function() {
+              RunCommon.setChapterNum(_this.thisChapterNum());
+              return _this.thisChapter().willChapter();
+            });
           } else {
             oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum());
             lastForkObj = RunCommon.getLastObjestFromStack(window.eventAction.thisPageNum());
@@ -205,16 +207,18 @@ Page = (function() {
               nfn = oneBeforeForkObj.forkNum;
               RunCommon.setForkNum(nfn);
               _this.setChapterIndex(lastForkObj.changedChapterIndex);
-              _this.resetChapter(_this.getChapterIndex(), true);
-              RunCommon.setChapterNum(_this.thisChapterNum());
-              RunCommon.setChapterMax(_this.getForkChapterList().length);
+              return _this.resetChapter(_this.getChapterIndex(), true, function() {
+                RunCommon.setChapterNum(_this.thisChapterNum());
+                RunCommon.setChapterMax(_this.getForkChapterList().length);
+                return _this.thisChapter().willChapter();
+              });
             } else {
               window.eventAction.rewindPage();
-              return;
             }
           }
+        } else {
+          return _this.thisChapter().willChapter();
         }
-        return _this.thisChapter().willChapter();
       };
     })(this));
   };

@@ -303,7 +303,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.willChapter = function() {
-    PageValue.saveToFootprint(this.id, true, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
+    this.saveToFootprint(this.id, true, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
     this.setModifyBeforeAndAfterVar();
     return this.resetProgress();
   };
@@ -316,7 +316,7 @@ EventBase = (function(superClass) {
         delete this[k];
       }
     }
-    return PageValue.saveToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
+    return this.saveToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
   };
 
   EventBase.prototype.execMethod = function(opt) {
@@ -500,6 +500,9 @@ EventBase = (function(superClass) {
       console.log('EventBase updateEventBefore id:' + this.id);
     }
     this.setMiniumObject(this.getMinimumObjectEventBefore());
+    if (this._event[EventPageValueBase.PageValueKey.DO_FOCUS] && this instanceof ScreenEvent.PrivateClass === false) {
+      Common.focusToTarget(this.getJQueryElement(), null, true);
+    }
     return this.resetProgress();
   };
 
@@ -516,7 +519,7 @@ EventBase = (function(superClass) {
       this.stepValue = this.scrollLength();
     }
     this.updateInstanceParamByStep(null, true);
-    return PageValue.saveToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
+    return this.saveToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
   };
 
   EventBase.prototype.updateInstanceParamByStep = function(progressValue, immediate) {
@@ -783,6 +786,13 @@ EventBase = (function(superClass) {
       modifiableRoot = this.actionProperties[this.ActionPropertiesKey.MODIFIABLE_VARS];
     }
     return _actionPropertiesModifiableVars.call(this, modifiableRoot, ret);
+  };
+
+  EventBase.prototype.saveToFootprint = function(targetObjId, isChangeBefore, eventDistNum, pageNum) {
+    if (pageNum == null) {
+      pageNum = PageValue.getPageNum();
+    }
+    return PageValue.saveToFootprint(targetObjId, isChangeBefore, eventDistNum);
   };
 
   return EventBase;

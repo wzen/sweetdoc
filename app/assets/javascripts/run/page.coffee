@@ -179,8 +179,11 @@ class Page
       if !@thisChapter().doMoveChapter
         if @getChapterIndex() > 0
           @addChapterIndex(-1)
-          @resetChapter(@getChapterIndex())
-          RunCommon.setChapterNum(@thisChapterNum())
+          @resetChapter(@getChapterIndex(), false, =>
+            RunCommon.setChapterNum(@thisChapterNum())
+            # チャプター前処理
+            @thisChapter().willChapter()
+          )
         else
           oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum())
           lastForkObj = RunCommon.getLastObjestFromStack(window.eventAction.thisPageNum())
@@ -193,18 +196,21 @@ class Page
             # チャプター番号をフォーク以前に変更
             @setChapterIndex(lastForkObj.changedChapterIndex)
             # チャプターリセット
-            @resetChapter(@getChapterIndex(), true)
-            # チャプター番号設定
-            RunCommon.setChapterNum(@thisChapterNum())
-            # チャプター最大値設定
-            RunCommon.setChapterMax(@getForkChapterList().length)
+            @resetChapter(@getChapterIndex(), true, =>
+              # チャプター番号設定
+              RunCommon.setChapterNum(@thisChapterNum())
+              # チャプター最大値設定
+              RunCommon.setChapterMax(@getForkChapterList().length)
+              # チャプター前処理
+              @thisChapter().willChapter()
+            )
           else
             # ページ戻し
             window.eventAction.rewindPage()
             return
-
-      # チャプター前処理
-      @thisChapter().willChapter()
+      else
+        # チャプター前処理
+        @thisChapter().willChapter()
     )
 
   # チャプターの内容をリセット

@@ -234,7 +234,7 @@ class EventBase extends Extend
   # チャプター開始前イベント
   willChapter: ->
     # インスタンスの状態を保存
-    PageValue.saveToFootprint(@id, true, @_event[EventPageValueBase.PageValueKey.DIST_ID])
+    @saveToFootprint(@id, true, @_event[EventPageValueBase.PageValueKey.DIST_ID])
     # イベント前後の変数の設定
     @setModifyBeforeAndAfterVar()
     # ステータス値初期化
@@ -247,7 +247,7 @@ class EventBase extends Extend
       if k.lastIndexOf('__Cache') >= 0
         delete @[k]
     # インスタンスの状態を保存
-    PageValue.saveToFootprint(@id, false, @_event[EventPageValueBase.PageValueKey.DIST_ID])
+    @saveToFootprint(@id, false, @_event[EventPageValueBase.PageValueKey.DIST_ID])
 
   # メソッド実行
   execMethod: (opt) ->
@@ -429,6 +429,9 @@ class EventBase extends Extend
 
     # インスタンスを戻す
     @setMiniumObject(@getMinimumObjectEventBefore())
+    if @_event[EventPageValueBase.PageValueKey.DO_FOCUS] && @ instanceof ScreenEvent.PrivateClass == false
+      # フォーカスを戻す
+      Common.focusToTarget(@getJQueryElement(), null, true)
     @resetProgress()
 
   # イベント後の表示状態にする
@@ -445,7 +448,7 @@ class EventBase extends Extend
       @stepValue = @scrollLength()
     @updateInstanceParamByStep(null, true)
     # インスタンスの状態を保存
-    PageValue.saveToFootprint(@id, false, @_event[EventPageValueBase.PageValueKey.DIST_ID])
+    @saveToFootprint(@id, false, @_event[EventPageValueBase.PageValueKey.DIST_ID])
 
   # ステップ実行によるアイテム状態更新
   updateInstanceParamByStep: (progressValue, immediate = false)->
@@ -623,3 +626,10 @@ class EventBase extends Extend
 
     return _actionPropertiesModifiableVars.call(@, modifiableRoot, ret)
 
+  saveToFootprint: (targetObjId, isChangeBefore, eventDistNum, pageNum = PageValue.getPageNum()) ->
+    PageValue.saveToFootprint(targetObjId, isChangeBefore, eventDistNum)
+#    if @_event[EventPageValueBase.PageValueKey.DO_FOCUS] && @ instanceof ScreenEvent.PrivateClass == false
+#      # フォーカスされる場合はスクロール位置も保存
+#      se = new ScreenEvent()
+#      if se?
+#        PageValue.saveToFootprint(se.id, isChangeBefore, eventDistNum)
