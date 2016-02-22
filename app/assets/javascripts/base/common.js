@@ -1105,8 +1105,8 @@ Common = (function() {
       emt = $('body').children(".modal-content." + type);
     }
     if (emt != null) {
-      w = $(window).width();
-      h = $(window).height();
+      w = $('#main').width();
+      h = $('#main').height();
       callback = null;
       width = emt.outerWidth();
       height = emt.outerHeight();
