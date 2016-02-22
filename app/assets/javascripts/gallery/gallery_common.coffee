@@ -26,6 +26,7 @@ class GalleryCommon
     })
     # 描画後イベント
     grid.on('layoutComplete', =>
+      # 描画実行
       @showAllGrid()
     )
     # 描画実行
@@ -42,7 +43,7 @@ class GalleryCommon
 
   # グリッド表示
   @showAllGrid = ->
-    $('#grid_wrapper').find('.grid_contents_wrapper:hidden').show()
+    $('#grid_wrapper').find('.grid_contents_wrapper').css('opacity', '')
 
   @showWithFullScreen = ->
     e = event

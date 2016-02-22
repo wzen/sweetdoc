@@ -1,86 +1,88 @@
-<%= form_tag('', method: :post, id: 'upload_form') do  %>
-    <div id="upload_wrapper">
-        <div class="left">
-            <div class="capture_wrapper">
-                <img class="capture" src="" >
-            </div>
-        </div>
-        <div class="right">
-            <div class="input_wrapper">
-                <div class="title_wrapper">
-                    <div>
-                        <label><%= I18n.t('upload_confirm.title') %></label>
-                    </div>
-                    <div>
-                        <input name="<%= Const::Gallery::Key::TITLE %>" required>
-                    </div>
-                </div>
+<div id="main">
+  <%= form_tag('', method: :post, id: 'upload_form') do  %>
+      <div id="upload_wrapper">
+          <div class="left">
+              <div class="capture_wrapper">
+                  <img class="capture" src="" >
+              </div>
+          </div>
+          <div class="right">
+              <div class="input_wrapper">
+                  <div class="title_wrapper">
+                      <div>
+                          <label><%= I18n.t('upload_confirm.title') %></label>
+                      </div>
+                      <div>
+                          <input name="<%= Const::Gallery::Key::TITLE %>" required>
+                      </div>
+                  </div>
 
-                <div class="caption">
-                    <div class="caption_label_warpper">
-                        <label><%= I18n.t('upload_confirm.caption') %></label>
-                    </div>
-                    <div>
-                        <textarea class="caption_markup" name="<%= Const::Gallery::Key::CAPTION %>"></textarea>
-                    </div>
-                </div>
-                <div class="select_tag_wrapper">
-                    <div class="select_tag_label"><%= I18n.t('upload_confirm.tags') %></div>
-                    <div class="select_tag_table">
-                        <div class="select_tag tagcloud" style="float: left">
-                            <ul>
-                            </ul>
-                        </div>
-                        <div class="select_tag_input_wrapper">
-                            <input class="select_tag_input" name="<%= Const::Gallery::Key::TAGS %>" value="" >
-                        </div>
-                    </div>
-                </div>
+                  <div class="caption">
+                      <div class="caption_label_warpper">
+                          <label><%= I18n.t('upload_confirm.caption') %></label>
+                      </div>
+                      <div>
+                          <textarea class="caption_markup" name="<%= Const::Gallery::Key::CAPTION %>"></textarea>
+                      </div>
+                  </div>
+                  <div class="select_tag_wrapper">
+                      <div class="select_tag_label"><%= I18n.t('upload_confirm.tags') %></div>
+                      <div class="select_tag_table">
+                          <div class="select_tag tagcloud" style="float: left">
+                              <ul>
+                              </ul>
+                          </div>
+                          <div class="select_tag_input_wrapper">
+                              <input class="select_tag_input" name="<%= Const::Gallery::Key::TAGS %>" value="" >
+                          </div>
+                      </div>
+                  </div>
 
-                <div class="popular_tag_wrapper">
-                    <div class="popular_tag_label"><%= I18n.t('upload_confirm.popular_tags') %></div>
-                    <div class="popular_tag tagcloud">
-                        <ul>
-                            <li><a href="#">tag1</a></li>
-                            <li><a href="#">tag2</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="recommend_tag_wrapper">
-                    <div class="recommend_tag_label"><%= I18n.t('upload_confirm.recommend_tags') %></div>
-                    <div class="recommend_tag tagcloud">
-                        <ul>
-                            <li><a href="#">tag3</a></li>
-                            <li><a href="#">tag4</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="option_wrapper">
-                    <div class="form-item">
-                        <%= check_box_tag Const::Gallery::Key::SHOW_GUIDE, true, true %>
-                        <%= label_tag I18n.t('upload_confirm.show_guide') %>
-                    </div>
-                    <div class="form-item">
-                        <%= check_box_tag Const::Gallery::Key::SHOW_PAGE_NUM %>
-                        <%= label_tag I18n.t('upload_confirm.show_page_num') %>
-                    </div>
-                    <div class="form-item">
-                        <%= check_box_tag Const::Gallery::Key::SHOW_CHAPTER_NUM %>
-                        <%= label_tag I18n.t('upload_confirm.show_chapter_num') %>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <input name="<%= Const::Gallery::Key::PROJECT_ID %>" type="hidden" value="<%= @project_id %>">
-        <input name="<%= Const::Gallery::Key::PAGE_MAX %>" type="hidden" value="<%= @page_max %>">
-        <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG %>" type="hidden" value="">
-        <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_CONTENTSTYPE %>" type="hidden" value="">
-        <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_WIDTH %>" type="hidden" value="">
-        <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_HEIGHT %>" type="hidden" value="">
-    </div>
-    <div class="button_wrapper">
-        <div>
-            <button class="upload_button" value="Upload">Upload</button>
-        </div>
-    </div>
-<% end %>
+                  <div class="popular_tag_wrapper">
+                      <div class="popular_tag_label"><%= I18n.t('upload_confirm.popular_tags') %></div>
+                      <div class="popular_tag tagcloud">
+                          <ul>
+                              <li><a href="#">tag1</a></li>
+                              <li><a href="#">tag2</a></li>
+                          </ul>
+                      </div>
+                  </div>
+                  <div class="recommend_tag_wrapper">
+                      <div class="recommend_tag_label"><%= I18n.t('upload_confirm.recommend_tags') %></div>
+                      <div class="recommend_tag tagcloud">
+                          <ul>
+                              <li><a href="#">tag3</a></li>
+                              <li><a href="#">tag4</a></li>
+                          </ul>
+                      </div>
+                  </div>
+                  <div class="option_wrapper">
+                      <div class="form-item">
+                          <%= check_box_tag Const::Gallery::Key::SHOW_GUIDE, true, true %>
+                          <%= label_tag I18n.t('upload_confirm.show_guide') %>
+                      </div>
+                      <div class="form-item">
+                          <%= check_box_tag Const::Gallery::Key::SHOW_PAGE_NUM %>
+                          <%= label_tag I18n.t('upload_confirm.show_page_num') %>
+                      </div>
+                      <div class="form-item">
+                          <%= check_box_tag Const::Gallery::Key::SHOW_CHAPTER_NUM %>
+                          <%= label_tag I18n.t('upload_confirm.show_chapter_num') %>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <input name="<%= Const::Gallery::Key::PROJECT_ID %>" type="hidden" value="<%= @project_id %>">
+          <input name="<%= Const::Gallery::Key::PAGE_MAX %>" type="hidden" value="<%= @page_max %>">
+          <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG %>" type="hidden" value="">
+          <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_CONTENTSTYPE %>" type="hidden" value="">
+          <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_WIDTH %>" type="hidden" value="">
+          <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_HEIGHT %>" type="hidden" value="">
+      </div>
+      <div class="button_wrapper">
+          <div>
+              <button class="upload_button" value="Upload">Upload</button>
+          </div>
+      </div>
+  <% end %>
+</div>

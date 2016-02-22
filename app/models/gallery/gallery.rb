@@ -578,6 +578,7 @@ class Gallery < ActiveRecord::Base
       g.access_token as #{Const::Gallery::Key::GALLERY_ACCESS_TOKEN},
       g.title as #{Const::Gallery::Key::TITLE},
       g.caption as #{Const::Gallery::Key::CAPTION},
+      g.thumbnail_img as #{Const::Gallery::Key::THUMBNAIL_IMG},
       g.thumbnail_img_width as #{Const::Gallery::Key::THUMBNAIL_IMG_WIDTH},
       g.thumbnail_img_height as #{Const::Gallery::Key::THUMBNAIL_IMG_HEIGHT},
       g.screen_width as #{Const::Gallery::Key::SCREEN_SIZE_WIDTH},

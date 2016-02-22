@@ -46,7 +46,7 @@ GalleryCommon = (function() {
   GalleryCommon.resizeMainContainerEvent = function() {};
 
   GalleryCommon.showAllGrid = function() {
-    return $('#grid_wrapper').find('.grid_contents_wrapper:hidden').show();
+    return $('#grid_wrapper').find('.grid_contents_wrapper').css('opacity', '');
   };
 
   GalleryCommon.showWithFullScreen = function() {
