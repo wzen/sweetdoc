@@ -234,3 +234,12 @@ div.float_view {
     }
   }
 }
+
+#main.fullscreen {
+  div.float_view {
+    .icon_wrapper {
+      float: none !important;
+      margin-right: 0px !important;
+    }
+  }
+}

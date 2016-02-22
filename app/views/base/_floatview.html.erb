@@ -1,43 +1,57 @@
-<div class="float_view_temp">
-  <div class='wrapper clearfix'>
-    <div class="icon_wrapper">
-      <div class="icon"></div>
-    </div>
-    <div class="contents_wrapper">
-      <div class="message_wrapper">
-        <div class="message"></div>
-      </div>
-    </div>
-  </div>
-</div>
+<%
+  is_run = false if is_run.nil?
+%>
 
-<div class="float_view_fixed_temp">
-  <div class='wrapper clearfix'>
-    <div class="icon_wrapper">
-      <div class="icon"></div>
-    </div>
-    <div class="contents_wrapper">
-      <div class="message_wrapper">
-        <div class="message"></div>
-      </div>
-    </div>
-    <div class="close_button_wrapper">
-      <div class="close_button"></div>
-    </div>
-  </div>
-</div>
-
-<div class="float_view_pointing_controller_temp">
-  <div class='wrapper clearfix'>
-    <div class="contents">
-      <div class="button_wrapper clearfix">
-        <div class="clear_button_wrapper">
-          <div class="clear_button"></div>
+<% if is_run %>
+    <div class="float_view_temp">
+      <div class='wrapper'>
+        <div class="icon_wrapper">
+          <div class="icon"></div>
         </div>
-        <div class="apply_button_wrapper">
-          <div class="apply_button"></div>
+      </div>
+    </div>
+<% else %>
+  <div class="float_view_temp">
+    <div class='wrapper clearfix'>
+      <div class="icon_wrapper">
+        <div class="icon"></div>
+      </div>
+      <div class="contents_wrapper">
+        <div class="message_wrapper">
+          <div class="message"></div>
         </div>
       </div>
     </div>
   </div>
-</div>
+
+  <div class="float_view_fixed_temp">
+    <div class='wrapper clearfix'>
+      <div class="icon_wrapper">
+        <div class="icon"></div>
+      </div>
+      <div class="contents_wrapper">
+        <div class="message_wrapper">
+          <div class="message"></div>
+        </div>
+      </div>
+      <div class="close_button_wrapper">
+        <div class="close_button"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="float_view_pointing_controller_temp">
+    <div class='wrapper clearfix'>
+      <div class="contents">
+        <div class="button_wrapper clearfix">
+          <div class="clear_button_wrapper">
+            <div class="clear_button"></div>
+          </div>
+          <div class="apply_button_wrapper">
+            <div class="apply_button"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
