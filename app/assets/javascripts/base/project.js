@@ -130,9 +130,6 @@ Project = (function() {
         screenHeight: height
       });
       return Project.create(projectName, width, height, function(data) {
-        WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded();
-        Navbar.setLastUpdateTime(data.updated_at);
-        Navbar.switchWorktableNavbarWhenProjectCreated(true);
         window.initDone = true;
         Common.hideModalView();
         return FloatView.show('Project created', FloatView.Type.APPLY, 3.0);
@@ -140,25 +137,9 @@ Project = (function() {
     });
     $('.open_button', modalEmt).off('click').on('click', function() {
       var user_pagevalue_id;
-      Common.hideModalView(true);
-      Common.showModalFlashMessage('Loading...');
       user_pagevalue_id = $('.project_select', modalEmt).val();
-      return ServerStorage.load(user_pagevalue_id, function(data) {
-        var sectionClass;
-        WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded();
-        Navbar.setLastUpdateTime(data.updated_at);
-        sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
-        $('#pages .section:first').attr('class', sectionClass + " section");
-        $('#pages .section:first').css({
-          'backgroundColor': Constant.DEFAULT_BACKGROUNDCOLOR,
-          'z-index': Common.plusPagingZindex(0, PageValue.getPageNum())
-        });
-        $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
-        window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
-        Navbar.switchWorktableNavbarWhenProjectCreated(true);
-        window.initDone = true;
-        Common.hideModalView();
-        return FloatView.show('Project loaded', FloatView.Type.APPLY, 3.0);
+      return Project.load(user_pagevalue_id, function(data) {
+        return window.initDone = true;
       });
     });
     $('.back_button', modalEmt).off('click').on('click', function() {
@@ -220,6 +201,9 @@ Project = (function() {
       success: function(data) {
         if (data.resultSuccess) {
           PageValue.setGeneralPageValue(PageValue.Key.PROJECT_ID, data.project_id);
+          WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded();
+          Navbar.setLastUpdateTime(data.updated_at);
+          Navbar.switchWorktableNavbarWhenProjectCreated(true);
           if (callback != null) {
             return callback(data);
           }
@@ -233,6 +217,46 @@ Project = (function() {
         return Common.ajaxError(data);
       }
     });
+  };
+
+  Project.load = function(user_pagevalue_id, callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    Common.hideModalView(true);
+    Common.showModalFlashMessage('Loading...');
+    return ServerStorage.load(user_pagevalue_id, (function(_this) {
+      return function(data) {
+        Common.createdMainContainerIfNeeded(PageValue.getPageNum());
+        WorktableCommon.initMainContainer();
+        Common.initResize(WorktableCommon.resizeEvent);
+        WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
+          var sectionClass;
+          PageValue.updatePageCount();
+          PageValue.updateForkCount();
+          Paging.initPaging();
+          Common.applyEnvironmentFromPagevalue();
+          WorktableSetting.initConfig();
+          WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded();
+          Navbar.setLastUpdateTime(data.updated_at);
+          sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
+          $('#pages .section:first').attr('class', sectionClass + " section");
+          $('#pages .section:first').css({
+            'backgroundColor': Constant.DEFAULT_BACKGROUNDCOLOR,
+            'z-index': Common.plusPagingZindex(0, PageValue.getPageNum())
+          });
+          $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
+          window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
+          Navbar.switchWorktableNavbarWhenProjectCreated(true);
+          Common.hideModalView();
+          FloatView.show('Project loaded', FloatView.Type.APPLY, 3.0);
+          if (callback != null) {
+            return callback(data);
+          }
+        });
+        return Timeline.refreshAllTimeline();
+      };
+    })(this));
   };
 
   Project.initProjectValue = function(name, width, height) {

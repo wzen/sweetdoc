@@ -214,7 +214,7 @@ class Navbar
         loadEmt.find('li').off('click')
         loadEmt.find('li').on('click', (e) ->
           user_pagevalue_id = $(@).find('.user_pagevalue_id:first').val()
-          ServerStorage.load(user_pagevalue_id)
+          Project.load(user_pagevalue_id)
         )
 
         # ロード済みに変更 & 現在時間を記録

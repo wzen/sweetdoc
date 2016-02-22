@@ -529,7 +529,7 @@ WorktableCommon = (function() {
         CommonVar.initVarWhenLoadedView();
         CommonVar.initCommonVar();
         Common.createdMainContainerIfNeeded(PageValue.getPageNum());
-        WorktableCommon.initMainContainer();
+        _this.initMainContainer();
         $('#main').css('height', '');
         LocalStorage.clearWorktableWithoutSetting();
         PageValue.setPageNum(1);

@@ -249,7 +249,7 @@ Navbar = (function() {
         loadEmt.find('li').on('click', function(e) {
           var user_pagevalue_id;
           user_pagevalue_id = $(this).find('.user_pagevalue_id:first').val();
-          return ServerStorage.load(user_pagevalue_id);
+          return Project.load(user_pagevalue_id);
         });
         loadEmt.find("." + ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG).remove();
         loadEmt.find("." + ServerStorage.ElementAttribute.LOADED_LOCALTIME).remove();

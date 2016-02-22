@@ -496,7 +496,7 @@ class WorktableCommon
       # Mainコンテナ作成
       Common.createdMainContainerIfNeeded(PageValue.getPageNum())
       # コンテナ初期化
-      WorktableCommon.initMainContainer()
+      @initMainContainer()
       # Mainビューの高さを初期化
       $('#main').css('height', '')
       # キャッシュ削除

@@ -148,20 +148,9 @@ ServerStorage = (function() {
                 }
                 PageValue.adjustInstanceAndEventOnPage();
                 LocalStorage.saveAllPageValues();
-                Common.createdMainContainerIfNeeded(PageValue.getPageNum());
-                WorktableCommon.initMainContainer();
-                Common.initResize(WorktableCommon.resizeEvent);
-                WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
-                  PageValue.updatePageCount();
-                  PageValue.updateForkCount();
-                  Paging.initPaging();
-                  Common.applyEnvironmentFromPagevalue();
-                  WorktableSetting.initConfig();
-                  if (callback != null) {
-                    return callback(data);
-                  }
-                });
-                return Timeline.refreshAllTimeline();
+                if (callback != null) {
+                  return callback(data);
+                }
               };
             })(this));
           });

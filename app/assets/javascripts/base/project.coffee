@@ -114,12 +114,6 @@ class Project
 
       # プロジェクト作成リクエスト
       Project.create(projectName, width, height, (data) ->
-        # 共通イベントのインスタンス作成
-        WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded()
-        # 更新日時設定
-        Navbar.setLastUpdateTime(data.updated_at)
-        # ナビバーをプロジェクト作成後状態に
-        Navbar.switchWorktableNavbarWhenProjectCreated(true)
         # 初期化終了
         window.initDone = true
         # モーダルを削除
@@ -130,30 +124,11 @@ class Project
     )
     # Openボタンイベント
     $('.open_button', modalEmt).off('click').on('click', ->
-      Common.hideModalView(true)
-      Common.showModalFlashMessage('Loading...')
-
       # プロジェクト選択
       user_pagevalue_id = $('.project_select', modalEmt).val()
-      ServerStorage.load(user_pagevalue_id, (data) ->
-        # 共通イベントのインスタンス作成
-        WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded()
-        # 最新更新日時設定
-        Navbar.setLastUpdateTime(data.updated_at)
-        # ページ変更処理
-        sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
-        $('#pages .section:first').attr('class', "#{sectionClass} section")
-        $('#pages .section:first').css({'backgroundColor': Constant.DEFAULT_BACKGROUNDCOLOR, 'z-index': Common.plusPagingZindex(0, PageValue.getPageNum())})
-        $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
-        window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1))
-        # ナビバーをプロジェクト作成後状態に
-        Navbar.switchWorktableNavbarWhenProjectCreated(true)
+      Project.load(user_pagevalue_id, (data) ->
         # 初期化終了
         window.initDone = true
-        # モーダルを削除
-        Common.hideModalView()
-        # 通知
-        FloatView.show('Project loaded', FloatView.Type.APPLY, 3.0)
       )
     )
 
@@ -207,6 +182,12 @@ class Project
           if data.resultSuccess
             # PageValue設定
             PageValue.setGeneralPageValue(PageValue.Key.PROJECT_ID, data.project_id)
+            # 共通イベントのインスタンス作成
+            WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded()
+            # 更新日時設定
+            Navbar.setLastUpdateTime(data.updated_at)
+            # ナビバーをプロジェクト作成後状態に
+            Navbar.switchWorktableNavbarWhenProjectCreated(true)
             if callback?
               callback(data)
           else
@@ -216,6 +197,45 @@ class Project
           console.log('project/create ajax error')
           Common.ajaxError(data)
       }
+    )
+
+  # プロジェクト読み込み
+  @load = (user_pagevalue_id, callback = null) ->
+    Common.hideModalView(true)
+    Common.showModalFlashMessage('Loading...')
+    ServerStorage.load(user_pagevalue_id, (data) =>
+      # Mainコンテナ作成
+      Common.createdMainContainerIfNeeded(PageValue.getPageNum())
+      # コンテナ初期化
+      WorktableCommon.initMainContainer()
+      # リサイズイベント
+      Common.initResize(WorktableCommon.resizeEvent)
+      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
+        PageValue.updatePageCount()
+        PageValue.updateForkCount()
+        Paging.initPaging()
+        Common.applyEnvironmentFromPagevalue()
+        WorktableSetting.initConfig()
+        # 共通イベントのインスタンス作成
+        WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded()
+        # 最新更新日時設定
+        Navbar.setLastUpdateTime(data.updated_at)
+        # ページ変更処理
+        sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
+        $('#pages .section:first').attr('class', "#{sectionClass} section")
+        $('#pages .section:first').css({'backgroundColor': Constant.DEFAULT_BACKGROUNDCOLOR, 'z-index': Common.plusPagingZindex(0, PageValue.getPageNum())})
+        $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
+        window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1))
+        # ナビバーをプロジェクト作成後状態に
+        Navbar.switchWorktableNavbarWhenProjectCreated(true)
+        # モーダルを削除
+        Common.hideModalView()
+        # 通知
+        FloatView.show('Project loaded', FloatView.Type.APPLY, 3.0)
+        if callback?
+          callback(data)
+      )
+      Timeline.refreshAllTimeline()
     )
 
   @initProjectValue = (name, width, height) ->

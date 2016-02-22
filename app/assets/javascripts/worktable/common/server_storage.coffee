@@ -117,22 +117,8 @@ class ServerStorage
 
                 PageValue.adjustInstanceAndEventOnPage()
                 LocalStorage.saveAllPageValues()
-                # Mainコンテナ作成
-                Common.createdMainContainerIfNeeded(PageValue.getPageNum())
-                # コンテナ初期化
-                WorktableCommon.initMainContainer()
-                # リサイズイベント
-                Common.initResize(WorktableCommon.resizeEvent)
-                WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
-                  PageValue.updatePageCount()
-                  PageValue.updateForkCount()
-                  Paging.initPaging()
-                  Common.applyEnvironmentFromPagevalue()
-                  WorktableSetting.initConfig()
-                  if callback?
-                    callback(data)
-                )
-                Timeline.refreshAllTimeline()
+                if callback?
+                  callback(data)
               )
             )
 
