@@ -37,6 +37,7 @@ $(function() {
       return Timeline.refreshAllTimeline();
     } else {
       LocalStorage.clearWorktable();
+      Timeline.refreshAllTimeline();
       OperationHistory.add(true);
       Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);
       return Common.initResize();
