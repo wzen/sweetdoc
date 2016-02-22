@@ -27,6 +27,10 @@ FloatView = (function() {
 
     Type.SCALE = 'scale';
 
+    Type.REWIND_CHAPTER = 'rewind_chapter';
+
+    Type.REWIND_ALL_CHAPTER = 'rewind_all_chapter';
+
     return Type;
 
   })();

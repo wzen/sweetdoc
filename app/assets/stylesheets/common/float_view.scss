@@ -94,6 +94,24 @@ div.float_view {
       color: #3F51B5;
     }
   }
+  &.rewind_chapter {
+    .icon {
+      background-image: image_url('float_view/floatview_rewind_chapter.png');
+      background-repeat: no-repeat;
+    }
+    .message {
+      color: #3F51B5;
+    }
+  }
+  &.rewind_all_chapter {
+    .icon {
+      background-image: image_url('float_view/floatview_rewind_all_chapter.png');
+      background-repeat: no-repeat;
+    }
+    .message {
+      color: #3F51B5;
+    }
+  }
 
   .wrapper {
     height:50px;

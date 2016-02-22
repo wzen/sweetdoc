@@ -197,7 +197,8 @@ Page = (function() {
             _this.addChapterIndex(-1);
             return _this.resetChapter(_this.getChapterIndex(), false, function() {
               RunCommon.setChapterNum(_this.thisChapterNum());
-              return _this.thisChapter().willChapter();
+              _this.thisChapter().willChapter();
+              return FloatView.show('Rewind chapter', FloatView.Type.REWIND_CHAPTER, 1.0);
             });
           } else {
             oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum());
@@ -210,14 +211,17 @@ Page = (function() {
               return _this.resetChapter(_this.getChapterIndex(), true, function() {
                 RunCommon.setChapterNum(_this.thisChapterNum());
                 RunCommon.setChapterMax(_this.getForkChapterList().length);
-                return _this.thisChapter().willChapter();
+                _this.thisChapter().willChapter();
+                return FloatView.show('Rewind chapter', FloatView.Type.REWIND_CHAPTER, 1.0);
               });
             } else {
               window.eventAction.rewindPage();
+              FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0);
             }
           }
         } else {
-          return _this.thisChapter().willChapter();
+          _this.thisChapter().willChapter();
+          return FloatView.show('Rewind chapter', FloatView.Type.REWIND_CHAPTER, 1.0);
         }
       };
     })(this));
@@ -258,7 +262,8 @@ Page = (function() {
             RunCommon.setChapterNum(_this.thisChapterNum());
             _this.finishedAllChapters = false;
             _this.finishedScrollDistSum = 0;
-            return _this.start();
+            _this.start();
+            return FloatView.show('Rewind all chapters', FloatView.Type.REWIND_ALL_CHAPTER, 1.0);
           }
         };
       })(this)));

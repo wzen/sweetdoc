@@ -12,6 +12,8 @@ class FloatView
     @POINTING_CLICK =  'pointing_click'
     @POINTING_DRAG =  'pointing_drag'
     @SCALE = 'scale'
+    @REWIND_CHAPTER = 'rewind_chapter'
+    @REWIND_ALL_CHAPTER = 'rewind_all_chapter'
 
   @show = (message, type, showSeconds = -1) ->
     if !window.initDone

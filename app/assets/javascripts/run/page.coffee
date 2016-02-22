@@ -183,6 +183,7 @@ class Page
             RunCommon.setChapterNum(@thisChapterNum())
             # チャプター前処理
             @thisChapter().willChapter()
+            FloatView.show('Rewind chapter', FloatView.Type.REWIND_CHAPTER, 1.0)
           )
         else
           oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum())
@@ -203,14 +204,17 @@ class Page
               RunCommon.setChapterMax(@getForkChapterList().length)
               # チャプター前処理
               @thisChapter().willChapter()
+              FloatView.show('Rewind chapter', FloatView.Type.REWIND_CHAPTER, 1.0)
             )
           else
             # ページ戻し
             window.eventAction.rewindPage()
+            FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0)
             return
       else
         # チャプター前処理
         @thisChapter().willChapter()
+        FloatView.show('Rewind chapter', FloatView.Type.REWIND_CHAPTER, 1.0)
     )
 
   # チャプターの内容をリセット
@@ -237,6 +241,7 @@ class Page
           @finishedAllChapters = false
           @finishedScrollDistSum = 0
           @start()
+          FloatView.show('Rewind all chapters', FloatView.Type.REWIND_ALL_CHAPTER, 1.0)
       )
 
   # スクロールイベントをハンドル
