@@ -16,30 +16,29 @@ cssItemBaseWorktableExtend = {
     return this.drawAndMakeConfigsAndWritePageValue(show, callback);
   },
   setupDesignToolOptionMenu: function() {
-    var btnBgColor, btnGradientStep, btnShadowColor, designConfigRoot, self;
-    self = this;
+    var btnBgColor, btnGradientStep, btnShadowColor, designConfigRoot;
     designConfigRoot = $('#' + this.getDesignConfigId());
-    self.settingGradientSlider('design_slider_gradient', null);
-    self.settingGradientDegSlider('design_slider_gradient_deg', 0, 315);
-    self.settingDesignSlider('design_slider_border_radius', 0, 100);
-    self.settingDesignSlider('design_slider_border_width', 0, 10);
-    self.settingDesignSlider('design_slider_font_size', 0, 30);
-    self.settingDesignSlider('design_slider_shadow_left', -100, 100);
-    self.settingDesignSlider('design_slider_shadow_opacity', 0.0, 1.0, 0.1);
-    self.settingDesignSlider('design_slider_shadow_size', 0, 100);
-    self.settingDesignSlider('design_slider_shadow_top', -100, 100);
-    self.settingDesignSlider('design_slider_shadowinset_left', -100, 100);
-    self.settingDesignSlider('design_slider_shadowinset_opacity', 0.0, 1.0, 0.1);
-    self.settingDesignSlider('design_slider_shadowinset_size', 0, 100);
-    self.settingDesignSlider('design_slider_shadowinset_top', -100, 100);
-    self.settingDesignSlider('design_slider_text_shadow1_left', -100, 100);
-    self.settingDesignSlider('design_slider_text_shadow1_opacity', 0.0, 1.0, 0.1);
-    self.settingDesignSlider('design_slider_text_shadow1_size', 0, 100);
-    self.settingDesignSlider('design_slider_text_shadow1_top', -100, 100);
-    self.settingDesignSlider('design_slider_text_shadow2_left', -100, 100);
-    self.settingDesignSlider('design_slider_text_shadow2_opacity', 0.0, 1.0, 0.1);
-    self.settingDesignSlider('design_slider_text_shadow2_size', 0, 100);
-    self.settingDesignSlider('design_slider_text_shadow2_top', -100, 100);
+    this.settingGradientSlider('design_slider_gradient', null);
+    this.settingGradientDegSlider('design_slider_gradient_deg', 0, 315);
+    this.settingDesignSlider('design_slider_border_radius', 0, 100);
+    this.settingDesignSlider('design_slider_border_width', 0, 10);
+    this.settingDesignSlider('design_slider_font_size', 0, 30);
+    this.settingDesignSlider('design_slider_shadow_left', -100, 100);
+    this.settingDesignSlider('design_slider_shadow_opacity', 0.0, 1.0, 0.1);
+    this.settingDesignSlider('design_slider_shadow_size', 0, 100);
+    this.settingDesignSlider('design_slider_shadow_top', -100, 100);
+    this.settingDesignSlider('design_slider_shadowinset_left', -100, 100);
+    this.settingDesignSlider('design_slider_shadowinset_opacity', 0.0, 1.0, 0.1);
+    this.settingDesignSlider('design_slider_shadowinset_size', 0, 100);
+    this.settingDesignSlider('design_slider_shadowinset_top', -100, 100);
+    this.settingDesignSlider('design_slider_text_shadow1_left', -100, 100);
+    this.settingDesignSlider('design_slider_text_shadow1_opacity', 0.0, 1.0, 0.1);
+    this.settingDesignSlider('design_slider_text_shadow1_size', 0, 100);
+    this.settingDesignSlider('design_slider_text_shadow1_top', -100, 100);
+    this.settingDesignSlider('design_slider_text_shadow2_left', -100, 100);
+    this.settingDesignSlider('design_slider_text_shadow2_opacity', 0.0, 1.0, 0.1);
+    this.settingDesignSlider('design_slider_text_shadow2_size', 0, 100);
+    this.settingDesignSlider('design_slider_text_shadow2_top', -100, 100);
     btnBgColor = $(".design_bg_color1,.design_bg_color2,.design_bg_color3,.design_bg_color4,.design_bg_color5,.design_border_color,.design_font_color", designConfigRoot);
     btnBgColor.each((function(_this) {
       return function(idx, e) {
@@ -50,7 +49,7 @@ cssItemBaseWorktableExtend = {
           var value;
           value = "" + b;
           _this.designs.values[className + "_value"] = value;
-          return self.applyColorChangeByPicker(className, value);
+          return _this.applyColorChangeByPicker(className, value);
         });
       };
     })(this));
@@ -64,7 +63,7 @@ cssItemBaseWorktableExtend = {
           var value;
           value = d.r + "," + d.g + "," + d.b;
           _this.designs.values[className + "_value"] = value;
-          return self.applyColorChangeByPicker(className, value);
+          return _this.applyColorChangeByPicker(className, value);
         });
       };
     })(this));
@@ -78,7 +77,7 @@ cssItemBaseWorktableExtend = {
           _this.designs.flags["design_bg_color" + i + "_moz_flag"] = i <= stepValue - 1;
           _this.designs.flags["design_bg_color" + i + "_webkit_flag"] = i <= stepValue - 1;
         }
-        return self.applyGradientStepChange(e.currentTarget);
+        return _this.applyGradientStepChange(e.currentTarget);
       };
     })(this)).each((function(_this) {
       return function(idx, e) {

@@ -5,30 +5,32 @@ UploadBase = (function() {
   function UploadBase() {}
 
   UploadBase.prototype.prepareUploadTagEvent = function(root) {
-    var self, tags;
-    self = this;
+    var tags;
     tags = $('.popular_tag a, .recommend_tag a', root);
-    tags.off('click');
-    tags.on('click', function() {
-      return self.addUploadSelectTag(root, $(this).html());
-    });
-    tags.off('mouseenter');
-    tags.on('mouseenter', function(e) {
-      var li;
-      li = this.closest('li');
-      $(li).append($("<div class='add_pop pop' style='display:none'><p>Add tag(click)</p></div>"));
-      $('.add_pop', li).css({
-        top: $(li).height(),
-        left: $(li).width()
-      });
-      return $('.add_pop', li).show();
-    });
-    tags.off('mouseleave');
-    return tags.on('mouseleave', function(e) {
-      var ul;
-      ul = this.closest('ul');
-      return $('.add_pop', ul).remove();
-    });
+    tags.off('click').on('click', (function(_this) {
+      return function(e) {
+        return _this.addUploadSelectTag(root, $(e.target).html());
+      };
+    })(this));
+    tags.off('mouseenter').on('mouseenter', (function(_this) {
+      return function(e) {
+        var li;
+        li = $(e.target).closest('li');
+        $(li).append($("<div class='add_pop pop' style='display:none'><p>Add tag(click)</p></div>"));
+        $('.add_pop', li).css({
+          top: $(li).height(),
+          left: $(li).width()
+        });
+        return $('.add_pop', li).show();
+      };
+    })(this));
+    return tags.off('mouseleave').on('mouseleave', (function(_this) {
+      return function(e) {
+        var ul;
+        ul = $(e.target).closest('ul');
+        return $('.add_pop', ul).remove();
+      };
+    })(this));
   };
 
   UploadBase.prototype.addUploadSelectTag = function(root, tagname) {

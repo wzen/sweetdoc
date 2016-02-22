@@ -51,7 +51,7 @@ WorktableSetting = (function() {
     })();
 
     Grid.initConfig = function() {
-      var grid, gridStep, gridStepDiv, gridStepValue, gridValue, root, self;
+      var grid, gridStep, gridStepDiv, gridStepValue, gridValue, root;
       root = $("#" + WorktableSetting.ROOT_ID_NAME);
       grid = $("." + this.GRID_CLASS_NAME, root);
       gridValue = PageValue.getSettingPageValue(this.PageValueKey.GRID);
@@ -85,22 +85,23 @@ WorktableSetting = (function() {
       }
       gridStep = $("." + this.GRID_STEP_CLASS_NAME, root);
       gridStep.val(gridStepValue);
-      self = this;
-      gridStep.change(function() {
-        var step, value;
-        value = PageValue.getSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID);
-        if (value != null) {
-          value = value === 'true';
-        }
-        if (value) {
-          step = $(this).val();
-          if (step != null) {
-            step = parseInt(step);
-            PageValue.setSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID_STEP, step);
-            return self.drawGrid(true);
+      gridStep.change((function(_this) {
+        return function(e) {
+          var step, value;
+          value = PageValue.getSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID);
+          if (value != null) {
+            value = value === 'true';
           }
-        }
-      });
+          if (value) {
+            step = $(e.target).val();
+            if (step != null) {
+              step = parseInt(step);
+              PageValue.setSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID_STEP, step);
+              return _this.drawGrid(true);
+            }
+          }
+        };
+      })(this));
       return this.drawGrid(gridValue);
     };
 
@@ -215,7 +216,7 @@ WorktableSetting = (function() {
     })();
 
     IdleSaveTimer.initConfig = function() {
-      var autosaveTime, autosaveTimeDiv, autosaveTimeValue, enable, enableValue, root, self;
+      var autosaveTime, autosaveTimeDiv, autosaveTimeValue, enable, enableValue, root;
       root = $("#" + WorktableSetting.ROOT_ID_NAME);
       enable = $("." + this.AUTOSAVE_CLASS_NAME, root);
       enableValue = PageValue.getSettingPageValue(this.PageValueKey.AUTOSAVE);
@@ -252,21 +253,22 @@ WorktableSetting = (function() {
       }
       autosaveTime = $("." + this.AUTOSAVE_TIME_CLASS_NAME, root);
       autosaveTime.val(autosaveTimeValue);
-      self = this;
-      return autosaveTime.change(function() {
-        var step, value;
-        value = PageValue.getSettingPageValue(WorktableSetting.IdleSaveTimer.PageValueKey.AUTOSAVE);
-        if (value != null) {
-          value = value === 'true';
-        }
-        if (value) {
-          step = $(this).val();
-          if (step != null) {
-            step = parseInt(step);
-            return PageValue.setSettingPageValue(WorktableSetting.IdleSaveTimer.PageValueKey.AUTOSAVE_TIME, step);
+      return autosaveTime.change((function(_this) {
+        return function(e) {
+          var step, value;
+          value = PageValue.getSettingPageValue(WorktableSetting.IdleSaveTimer.PageValueKey.AUTOSAVE);
+          if (value != null) {
+            value = value === 'true';
           }
-        }
-      });
+          if (value) {
+            step = $(e.target).val();
+            if (step != null) {
+              step = parseInt(step);
+              return PageValue.setSettingPageValue(WorktableSetting.IdleSaveTimer.PageValueKey.AUTOSAVE_TIME, step);
+            }
+          }
+        };
+      })(this));
     };
 
     IdleSaveTimer.clear = function() {

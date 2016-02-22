@@ -174,9 +174,8 @@ class ItemBase extends ItemEventBase
     if newCreated
       # 名前を付与
       num = 0
-      self = @
       for k, v of Common.allItemInstances()
-        if self.constructor.NAME_PREFIX == v.constructor.NAME_PREFIX
+        if @constructor.NAME_PREFIX == v.constructor.NAME_PREFIX
           num += 1
       @name = @constructor.NAME_PREFIX + " #{num}"
 

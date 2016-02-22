@@ -13,31 +13,30 @@ cssItemBaseWorktableExtend =
 
   # デザインツールメニュー設定
   setupDesignToolOptionMenu: ->
-    self = @
     designConfigRoot = $('#' + @getDesignConfigId())
 
     # スライダー
-    self.settingGradientSlider('design_slider_gradient', null)
-    self.settingGradientDegSlider('design_slider_gradient_deg', 0, 315)
-    self.settingDesignSlider('design_slider_border_radius', 0, 100)
-    self.settingDesignSlider('design_slider_border_width', 0, 10)
-    self.settingDesignSlider('design_slider_font_size', 0, 30)
-    self.settingDesignSlider('design_slider_shadow_left', -100, 100)
-    self.settingDesignSlider('design_slider_shadow_opacity', 0.0, 1.0, 0.1)
-    self.settingDesignSlider('design_slider_shadow_size', 0, 100)
-    self.settingDesignSlider('design_slider_shadow_top', -100, 100)
-    self.settingDesignSlider('design_slider_shadowinset_left', -100, 100)
-    self.settingDesignSlider('design_slider_shadowinset_opacity', 0.0, 1.0, 0.1)
-    self.settingDesignSlider('design_slider_shadowinset_size', 0, 100)
-    self.settingDesignSlider('design_slider_shadowinset_top', -100, 100)
-    self.settingDesignSlider('design_slider_text_shadow1_left', -100, 100)
-    self.settingDesignSlider('design_slider_text_shadow1_opacity', 0.0, 1.0, 0.1)
-    self.settingDesignSlider('design_slider_text_shadow1_size', 0, 100)
-    self.settingDesignSlider('design_slider_text_shadow1_top', -100, 100)
-    self.settingDesignSlider('design_slider_text_shadow2_left', -100, 100)
-    self.settingDesignSlider('design_slider_text_shadow2_opacity', 0.0, 1.0, 0.1)
-    self.settingDesignSlider('design_slider_text_shadow2_size', 0, 100)
-    self.settingDesignSlider('design_slider_text_shadow2_top', -100, 100)
+    @settingGradientSlider('design_slider_gradient', null)
+    @settingGradientDegSlider('design_slider_gradient_deg', 0, 315)
+    @settingDesignSlider('design_slider_border_radius', 0, 100)
+    @settingDesignSlider('design_slider_border_width', 0, 10)
+    @settingDesignSlider('design_slider_font_size', 0, 30)
+    @settingDesignSlider('design_slider_shadow_left', -100, 100)
+    @settingDesignSlider('design_slider_shadow_opacity', 0.0, 1.0, 0.1)
+    @settingDesignSlider('design_slider_shadow_size', 0, 100)
+    @settingDesignSlider('design_slider_shadow_top', -100, 100)
+    @settingDesignSlider('design_slider_shadowinset_left', -100, 100)
+    @settingDesignSlider('design_slider_shadowinset_opacity', 0.0, 1.0, 0.1)
+    @settingDesignSlider('design_slider_shadowinset_size', 0, 100)
+    @settingDesignSlider('design_slider_shadowinset_top', -100, 100)
+    @settingDesignSlider('design_slider_text_shadow1_left', -100, 100)
+    @settingDesignSlider('design_slider_text_shadow1_opacity', 0.0, 1.0, 0.1)
+    @settingDesignSlider('design_slider_text_shadow1_size', 0, 100)
+    @settingDesignSlider('design_slider_text_shadow1_top', -100, 100)
+    @settingDesignSlider('design_slider_text_shadow2_left', -100, 100)
+    @settingDesignSlider('design_slider_text_shadow2_opacity', 0.0, 1.0, 0.1)
+    @settingDesignSlider('design_slider_text_shadow2_size', 0, 100)
+    @settingDesignSlider('design_slider_text_shadow2_top', -100, 100)
 
     # 背景色
     btnBgColor = $(".design_bg_color1,.design_bg_color2,.design_bg_color3,.design_bg_color4,.design_bg_color5,.design_border_color,.design_font_color", designConfigRoot)
@@ -50,7 +49,7 @@ cssItemBaseWorktableExtend =
         (a, b, d, e) =>
           value = "#{b}"
           @designs.values["#{className}_value"] = value
-          self.applyColorChangeByPicker(className, value)
+          @applyColorChangeByPicker(className, value)
       )
     )
 
@@ -65,7 +64,7 @@ cssItemBaseWorktableExtend =
         (a, b, d) =>
           value = "#{d.r},#{d.g},#{d.b}"
           @designs.values["#{className}_value"] = value
-          self.applyColorChangeByPicker(className, value)
+          @applyColorChangeByPicker(className, value)
       )
     )
 
@@ -77,7 +76,7 @@ cssItemBaseWorktableExtend =
       for i in [2 .. 4]
         @designs.flags["design_bg_color#{i}_moz_flag"] = i <= stepValue - 1
         @designs.flags["design_bg_color#{i}_webkit_flag"] = i <= stepValue - 1
-      self.applyGradientStepChange(e.currentTarget)
+      @applyGradientStepChange(e.currentTarget)
     ).each((idx, e) =>
       stepValue = 2
       for i in [2 .. 4]

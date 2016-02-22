@@ -208,17 +208,16 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.prototype.saveObj = function(newCreated) {
-    var k, num, ref, self, v;
+    var k, num, ref, v;
     if (newCreated == null) {
       newCreated = false;
     }
     if (newCreated) {
       num = 0;
-      self = this;
       ref = Common.allItemInstances();
       for (k in ref) {
         v = ref[k];
-        if (self.constructor.NAME_PREFIX === v.constructor.NAME_PREFIX) {
+        if (this.constructor.NAME_PREFIX === v.constructor.NAME_PREFIX) {
           num += 1;
         }
       }

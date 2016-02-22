@@ -1,25 +1,21 @@
 class UploadBase
   # タグクリックイベント
   prepareUploadTagEvent: (root) ->
-    self = @
     tags = $('.popular_tag a, .recommend_tag a', root)
-    tags.off('click')
-    tags.on('click', ->
+    tags.off('click').on('click', (e) =>
       # 選択タグに追加
-      self.addUploadSelectTag(root, $(@).html())
+      @addUploadSelectTag(root, $(e.target).html())
     )
 
     # マウスオーバーイベント
-    tags.off('mouseenter')
-    tags.on('mouseenter', (e) ->
-      li = @closest('li')
+    tags.off('mouseenter').on('mouseenter', (e) =>
+      li = $(e.target).closest('li')
       $(li).append($("<div class='add_pop pop' style='display:none'><p>Add tag(click)</p></div>"))
       $('.add_pop', li).css({top: $(li).height(), left: $(li).width()})
       $('.add_pop', li).show()
     )
-    tags.off('mouseleave')
-    tags.on('mouseleave', (e) ->
-      ul = @closest('ul')
+    tags.off('mouseleave').on('mouseleave', (e) =>
+      ul = $(e.target).closest('ul')
       $('.add_pop', ul).remove()
     )
 

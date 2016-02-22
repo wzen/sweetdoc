@@ -66,17 +66,16 @@ class WorktableSetting
         gridStepValue = @STEP_DEFAULT_VALUE
       gridStep = $(".#{@GRID_STEP_CLASS_NAME}", root)
       gridStep.val(gridStepValue)
-      self = @
-      gridStep.change( ->
+      gridStep.change( (e) =>
         value = PageValue.getSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID)
         if value?
           value = value == 'true'
         if value
-          step = $(@).val()
+          step = $(e.target).val()
           if step?
             step = parseInt(step)
             PageValue.setSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID_STEP, step)
-            self.drawGrid(true)
+            @drawGrid(true)
       )
       # 描画
       @drawGrid(gridValue)
@@ -213,13 +212,12 @@ class WorktableSetting
         PageValue.setSettingPageValue(@PageValueKey.AUTOSAVE_TIME, autosaveTimeValue)
       autosaveTime = $(".#{@AUTOSAVE_TIME_CLASS_NAME}", root)
       autosaveTime.val(autosaveTimeValue)
-      self = @
-      autosaveTime.change( ->
+      autosaveTime.change( (e) =>
         value = PageValue.getSettingPageValue(WorktableSetting.IdleSaveTimer.PageValueKey.AUTOSAVE)
         if value?
           value = value == 'true'
         if value
-          step = $(@).val()
+          step = $(e.target).val()
           if step?
             step = parseInt(step)
             PageValue.setSettingPageValue(WorktableSetting.IdleSaveTimer.PageValueKey.AUTOSAVE_TIME, step)

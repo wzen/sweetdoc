@@ -55,7 +55,7 @@ GallerySidebar = (function() {
       }
     });
     return $(".wrapper .circle." + GallerySidebar.SEARCH, root).click(function(e) {
-      var popup, self, type;
+      var popup, type;
       type = _type.call(this);
       popup = $("#sidebar_wrapper .sidebar_popup" + type);
       if (popup.is(':visible')) {
@@ -67,9 +67,8 @@ GallerySidebar = (function() {
         return $('.overlay').remove();
       } else {
         $("#sidebar_wrapper .sidebar_popup").hide();
-        self = $(this);
         $('.wrapper .circle', root).filter(function(s) {
-          return $(this).attr('class') !== self.attr('class');
+          return $(this).attr('class') !== $(this).attr('class');
         }).css('opacity', 0.7);
         popup.stop(true, true).fadeIn(200, 'linear');
         $(this).stop().animate({

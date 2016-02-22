@@ -331,8 +331,7 @@ EventConfig = (function() {
   };
 
   _setScrollDirectionEvent = function() {
-    var handler, self;
-    self = 0;
+    var handler;
     handler = $('.handler_div', this.emt);
     return $('.scroll_enabled', handler).off('click').on('click', function(e) {
       var emt;
@@ -347,8 +346,7 @@ EventConfig = (function() {
   };
 
   _setForkSelect = function() {
-    var forkCount, forkNum, handler, i, j, name, ref, selectOptions, self, value;
-    self = 0;
+    var forkCount, forkNum, handler, i, j, name, ref, selectOptions, value;
     handler = $('.handler_div', this.emt);
     $('.enable_fork', handler).off('click').on('click', function(e) {
       return $('.fork_select', handler).parent('div').css('display', $(this).is(':checked') ? 'block' : 'none');

@@ -44,8 +44,7 @@ class GallerySidebar
         $('.overlay').remove()
       else
         $("#sidebar_wrapper .sidebar_popup").hide()
-        self = $(@)
-        $('.wrapper .circle', root).filter((s) -> $(@).attr('class') != self.attr('class')).css('opacity', 0.7)
+        $('.wrapper .circle', root).filter((s) -> $(@).attr('class') != $(@).attr('class')).css('opacity', 0.7)
         popup.stop(true, true).fadeIn(200, 'linear')
         $(@).stop().animate({opacity: 1}, 200, 'linear')
         $('.sidebar_overlay_parent').append('<div class="overlay"></div>')

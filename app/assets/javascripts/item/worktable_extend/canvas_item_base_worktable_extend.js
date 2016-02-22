@@ -36,18 +36,17 @@ canvasItemBaseWorktableExtend = {
     })(this));
   },
   setupDesignToolOptionMenu: function() {
-    var btnBgColor, btnGradientStep, btnShadowColor, designConfigRoot, self;
-    self = this;
+    var btnBgColor, btnGradientStep, btnShadowColor, designConfigRoot;
     designConfigRoot = $('#' + this.getDesignConfigId());
-    self.settingGradientSlider('design_slider_gradient', null);
-    self.settingGradientDegSlider('design_slider_gradient_deg', 0, 315, false);
-    self.settingDesignSlider('design_slider_border_radius', 1, 100);
-    self.settingDesignSlider('design_slider_border_width', 0, 30);
-    self.settingDesignSlider('design_slider_font_size', 0, 30);
-    self.settingDesignSlider('design_slider_shadow_left', -100, 100);
-    self.settingDesignSlider('design_slider_shadow_opacity', 0.0, 1.0, 0.1);
-    self.settingDesignSlider('design_slider_shadow_size', 0, 100);
-    self.settingDesignSlider('design_slider_shadow_top', -100, 100);
+    this.settingGradientSlider('design_slider_gradient', null);
+    this.settingGradientDegSlider('design_slider_gradient_deg', 0, 315, false);
+    this.settingDesignSlider('design_slider_border_radius', 1, 100);
+    this.settingDesignSlider('design_slider_border_width', 0, 30);
+    this.settingDesignSlider('design_slider_font_size', 0, 30);
+    this.settingDesignSlider('design_slider_shadow_left', -100, 100);
+    this.settingDesignSlider('design_slider_shadow_opacity', 0.0, 1.0, 0.1);
+    this.settingDesignSlider('design_slider_shadow_size', 0, 100);
+    this.settingDesignSlider('design_slider_shadow_top', -100, 100);
     btnBgColor = $(".design_bg_color1,.design_bg_color2,.design_bg_color3,.design_bg_color4,.design_bg_color5,.design_border_color,.design_font_color", designConfigRoot);
     btnBgColor.each((function(_this) {
       return function(idx, e) {
@@ -58,7 +57,7 @@ canvasItemBaseWorktableExtend = {
           var value;
           value = "" + b;
           _this.designs.values[className + "_value"] = value;
-          return self.applyColorChangeByPicker(className, value);
+          return _this.applyColorChangeByPicker(className, value);
         });
       };
     })(this));
@@ -72,7 +71,7 @@ canvasItemBaseWorktableExtend = {
           var value;
           value = d.r + "," + d.g + "," + d.b;
           _this.designs.values[className + "_value"] = value;
-          return self.applyColorChangeByPicker(className, value);
+          return _this.applyColorChangeByPicker(className, value);
         });
       };
     })(this));
@@ -85,7 +84,7 @@ canvasItemBaseWorktableExtend = {
         for (i = j = 2; j <= 4; i = ++j) {
           _this.designs.flags["design_bg_color" + i + "_flag"] = i <= stepValue - 1;
         }
-        return self.applyGradientStepChange(e.currentTarget);
+        return _this.applyGradientStepChange(e.currentTarget);
       };
     })(this)).each((function(_this) {
       return function(idx, e) {
@@ -101,7 +100,7 @@ canvasItemBaseWorktableExtend = {
         for (i = l = 2; l <= 4; i = ++l) {
           _this.designs.flags["design_bg_color" + i + "_flag"] = i <= stepValue - 1;
         }
-        return self.applyGradientStepChange(e);
+        return _this.applyGradientStepChange(e);
       };
     })(this));
   },

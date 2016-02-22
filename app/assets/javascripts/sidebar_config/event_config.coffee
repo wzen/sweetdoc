@@ -310,7 +310,6 @@ class EventConfig
     $('.handler_div input[type=radio]:checked', @emt).trigger('click')
 
   _setScrollDirectionEvent = ->
-    self = 0
     handler = $('.handler_div', @emt)
     $('.scroll_enabled', handler).off('click').on('click', (e) ->
       if $(@).is(':checked')
@@ -322,7 +321,6 @@ class EventConfig
     )
 
   _setForkSelect = ->
-    self = 0
     handler = $('.handler_div', @emt)
     $('.enable_fork', handler).off('click').on('click', (e) ->
       $('.fork_select', handler).parent('div').css('display', if $(@).is(':checked') then 'block' else 'none')
