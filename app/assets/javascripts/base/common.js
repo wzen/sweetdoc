@@ -644,9 +644,12 @@ Common = (function() {
     return this.updateScrollContentsPosition(top, left, true, withUpdateScreenEventVar);
   };
 
-  Common.getWorktableViewScale = function() {
+  Common.getWorktableViewScale = function(pn) {
     var scale;
-    scale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale());
+    if (pn == null) {
+      pn = PageValue.getPageNum();
+    }
+    scale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale(pn));
     if (scale == null) {
       scale = 1.0;
       if (window.isWorkTable) {

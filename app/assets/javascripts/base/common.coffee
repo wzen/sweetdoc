@@ -500,8 +500,8 @@ class Common
     @updateScrollContentsPosition(top, left, true, withUpdateScreenEventVar)
 
   # ワークテーブルの画面倍率を取得
-  @getWorktableViewScale = ->
-    scale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale())
+  @getWorktableViewScale = (pn = PageValue.getPageNum()) ->
+    scale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale(pn))
     if !scale?
       scale = 1.0
       if window.isWorkTable

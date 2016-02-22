@@ -440,13 +440,13 @@ class WorktableCommon
     # 環境設定
     Common.applyEnvironmentFromPagevalue()
     # コンフィグ設定初期化
-    WorktableSetting.clear()
     StateConfig.clearScreenConfig()
     # Mainビュー高さ設定
     @updateMainViewSize()
     # コンフィグ高さ設定
     Sidebar.resizeConfigHeight()
     # 共通設定
+    WorktableSetting.clear()
     WorktableSetting.initConfig()
     # 選択アイテム初期化
     WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
@@ -515,8 +515,8 @@ class WorktableCommon
     )
 
   # ワークテーブルの画面倍率を取得
-  @getWorktableViewScale = ->
-    return Common.getWorktableViewScale()
+  @getWorktableViewScale = (pn = PageValue.getPageNum()) ->
+    return Common.getWorktableViewScale(pn)
 
   # ワークテーブルの画面倍率を設定
   @setWorktableViewScale = (scale, withViewStateUpdate = false) ->

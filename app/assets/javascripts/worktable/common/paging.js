@@ -126,6 +126,7 @@ Paging = (function() {
           Common.removeAllItem(beforePageNum);
           PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
           PageValue.updatePageCount();
+          WorktableCommon.setWorktableViewScale(WorktableCommon.getWorktableViewScale(beforePageNum), true);
           WorktableCommon.initScrollContentsPosition();
           if (created) {
             OperationHistory.add(true);

@@ -480,10 +480,10 @@ WorktableCommon = (function() {
       };
     })(this));
     Common.applyEnvironmentFromPagevalue();
-    WorktableSetting.clear();
     StateConfig.clearScreenConfig();
     this.updateMainViewSize();
     Sidebar.resizeConfigHeight();
+    WorktableSetting.clear();
     WorktableSetting.initConfig();
     WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
     PageValue.updatePageCount();
@@ -542,8 +542,11 @@ WorktableCommon = (function() {
     })(this));
   };
 
-  WorktableCommon.getWorktableViewScale = function() {
-    return Common.getWorktableViewScale();
+  WorktableCommon.getWorktableViewScale = function(pn) {
+    if (pn == null) {
+      pn = PageValue.getPageNum();
+    }
+    return Common.getWorktableViewScale(pn);
   };
 
   WorktableCommon.setWorktableViewScale = function(scale, withViewStateUpdate) {

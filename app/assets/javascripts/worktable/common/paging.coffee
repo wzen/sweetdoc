@@ -106,7 +106,6 @@ class Paging
       # WebStorageのアイテム&イベント情報を消去
       LocalStorage.clearWorktableWithoutSetting()
       EventConfig.removeAllConfig()
-
       # Mainコンテナ作成
       created = Common.createdMainContainerIfNeeded(PageValue.getPageCount() + 1)
       # ページ番号更新
@@ -132,6 +131,8 @@ class Paging
         # ページ総数 & フォーク総数の更新
         PageValue.setEventPageValue(PageValue.Key.eventCount(), 0)
         PageValue.updatePageCount()
+        # 画面倍率は作成前ページと同じにする
+        WorktableCommon.setWorktableViewScale(WorktableCommon.getWorktableViewScale(beforePageNum), true)
         # 表示位置を戻す
         WorktableCommon.initScrollContentsPosition()
         if created
