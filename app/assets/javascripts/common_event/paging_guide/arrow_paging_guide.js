@@ -5,6 +5,12 @@ ArrowPagingGuide = (function() {
   ArrowPagingGuide.PAGE_CHANGE_SCROLL_DIST = 50;
 
   function ArrowPagingGuide() {
+    if ($('#main').hasClass('fullscreen')) {
+      this.iconWidth = 30;
+    } else {
+      this.iconWidth = 50;
+    }
+    this.perWidth = this.iconWidth / this.constructor.PAGE_CHANGE_SCROLL_DIST;
     this.finishedScrollDistSum = 0;
     this.stopTimer = null;
     this.intervalTimer = null;
@@ -28,7 +34,7 @@ ArrowPagingGuide = (function() {
         _this.stopTimer = null;
         return _this.intervalTimer = setInterval(function() {
           _this.finishedScrollDistSum -= 3;
-          _this.emt.css('width', _this.finishedScrollDistSum + 'px');
+          _this.emt.css('width', _this.finishedScrollDistSum * _this.perWidth + 'px');
           if (_this.finishedScrollDistSum <= 0) {
             _this.finishedScrollDistSum = 0;
             clearInterval(_this.intervalTimer);
@@ -39,7 +45,7 @@ ArrowPagingGuide = (function() {
       };
     })(this), 200);
     this.finishedScrollDistSum += x + y;
-    this.emt.css('width', this.finishedScrollDistSum + 'px');
+    this.emt.css('width', this.finishedScrollDistSum * this.perWidth + 'px');
     if (this.finishedScrollDistSum > this.constructor.PAGE_CHANGE_SCROLL_DIST) {
       if (this.intervalTimer !== null) {
         clearInterval(this.intervalTimer);

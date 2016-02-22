@@ -1,6 +1,11 @@
 class ArrowPagingGuide
   @PAGE_CHANGE_SCROLL_DIST = 50
   constructor: ->
+    if $('#main').hasClass('fullscreen')
+      @iconWidth = 30
+    else
+      @iconWidth = 50
+    @perWidth = @iconWidth / @constructor.PAGE_CHANGE_SCROLL_DIST
     @finishedScrollDistSum = 0
     @stopTimer = null
     @intervalTimer = null
@@ -25,7 +30,7 @@ class ArrowPagingGuide
       @intervalTimer = setInterval( =>
         # Width短くする
         @finishedScrollDistSum -= 3
-        @emt.css('width', @finishedScrollDistSum + 'px')
+        @emt.css('width', @finishedScrollDistSum * @perWidth + 'px')
         if @finishedScrollDistSum <= 0
           @finishedScrollDistSum = 0
           clearInterval(@intervalTimer)
@@ -34,7 +39,7 @@ class ArrowPagingGuide
       , 10)
     , 200)
     @finishedScrollDistSum += x + y
-    @emt.css('width', @finishedScrollDistSum + 'px')
+    @emt.css('width', @finishedScrollDistSum * @perWidth + 'px')
     #if window.debug
       #console.log('finishedScrollDistSum:' + @finishedScrollDistSum)
     if @finishedScrollDistSum > @constructor.PAGE_CHANGE_SCROLL_DIST

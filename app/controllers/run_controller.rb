@@ -15,7 +15,7 @@ class RunController < ApplicationController
     if loaded_class_dist_tokens.present?
       loaded_class_dist_tokens = JSON.parse(loaded_class_dist_tokens)
     end
-    if Rails.application.routes.recognize_path(request.referer)[:controller] == "gallery"
+    if Rails.application.routes.recognize_path(request.referer, {method: request.post? ? 'POST' : 'GET' })[:controller] == "gallery"
       access_token = params.require(Const::Run::Key::ACCESS_TOKEN)
       load_footprint = params.fetch(Const::Run::Key::LOAD_FOOTPRINT, false)
       @result_success, @pagevalues, @item_js_list = Gallery.paging(user_id, access_token, target_pages, loaded_class_dist_tokens, load_footprint)
