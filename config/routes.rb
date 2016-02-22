@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   # MotionCheck
   get 'motion_check' => 'motion_check#index'
   post 'motion_check' => 'motion_check#index'
+  get 'motion_check/new_window'
   post 'motion_check/new_window'
 
   # PageValueState
