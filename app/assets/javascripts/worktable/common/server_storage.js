@@ -52,9 +52,15 @@ ServerStorage = (function() {
       callback = null;
     }
     if ((window.previewRunning != null) && window.previewRunning) {
+      if (callback != null) {
+        callback();
+      }
       return;
     }
     if ((window.isItemPreview != null) && window.isItemPreview) {
+      if (callback != null) {
+        callback();
+      }
       return;
     }
     window.workingAutoSave = true;
@@ -102,11 +108,17 @@ ServerStorage = (function() {
             return window.workingAutoSave = false;
           } else {
             console.log('/page_value_state/save_state server error');
+            if (callback != null) {
+              callback();
+            }
             return Common.ajaxError(data);
           }
         },
         error: function(data) {
           console.log('/page_value_state/save_state ajax error');
+          if (callback != null) {
+            callback();
+          }
           return Common.ajaxError(data);
         }
       });

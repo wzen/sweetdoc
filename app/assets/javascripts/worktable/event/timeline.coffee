@@ -11,20 +11,17 @@ class Timeline
     )
     if exist
       return
-
     # tempをクローンしてtimeline_eventsに追加
     pEmt = $('#timeline_events')
     newEmt = $('.timeline_event_temp', pEmt).children(':first').clone(true)
     newEmt.find('.te_num').val(teNum)
     distIdPrefix = 'd' + PageValue.getPageNum() + ''
     newEmt.find('.dist_id').val(distIdPrefix + Common.generateId())
-    #$("<input class='te_num' type='hidden' value='#{teNum}' >").appendTo(newEmt)
     pEmt.append(newEmt)
 
   # タイムラインのイベント設定
   @setupTimelineEventConfig = (onlyTail) ->
     te = null
-
     # 設定開始
     _setupTimelineEvent = ->
       ePageValues = PageValue.getEventPageValueSortedListByNum()

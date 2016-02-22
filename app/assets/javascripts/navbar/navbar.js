@@ -22,9 +22,13 @@ Navbar = (function() {
     $('.menu-changeproject', fileMenuEmt).off('click').on('click', function() {
       var _cbk, lastSaveTime, lastSaveTimeStr;
       _cbk = function() {
-        WorktableCommon.resetWorktable();
-        Navbar.switchWorktableNavbarWhenProjectCreated(false);
-        return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);
+        return ServerStorage.save((function(_this) {
+          return function() {
+            WorktableCommon.resetWorktable();
+            Navbar.switchWorktableNavbarWhenProjectCreated(false);
+            return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);
+          };
+        })(this));
       };
       if (Object.keys(window.instanceMap).length > 0 || PageValue.getPageCount() >= 2) {
         lastSaveTimeStr = '';

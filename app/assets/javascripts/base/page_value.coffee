@@ -511,8 +511,10 @@ class PageValue
   # 現在のページ番号を取得
   # @return [Integer] ページ番号
   @getPageNum = ->
-    ret = PageValue.getFootprintPageValue("#{@Key.F_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}")
-    #ret = PageValue.getGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}")
+    if window.isWorkTable
+      ret = PageValue.getGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}")
+    else
+      ret = PageValue.getFootprintPageValue("#{@Key.F_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}")
     if ret?
       ret = parseInt(ret)
     else
@@ -523,8 +525,11 @@ class PageValue
   # 現在のページ番号を設定
   # @param [Integer] num 設定値
   @setPageNum = (num) ->
-    PageValue.setFootprintPageValue("#{@Key.F_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}", parseInt(num))
-    #PageValue.setGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}", parseInt(num))
+    if window.isWorkTable
+      PageValue.setGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}", parseInt(num))
+    else
+      # Run時は操作履歴に保存
+      PageValue.setFootprintPageValue("#{@Key.F_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}", parseInt(num))
 
   # 現在のページ番号を追加
   # @param [Integer] addNum 追加値
@@ -683,7 +688,3 @@ class PageValue
   # 全ての操作履歴を削除
   @removeAllFootprint: ->
     @setFootprintPageValue(@Key.F_PREFIX, {})
-
-  # ページ内の操作履歴を削除
-  @removeAllFootprintOnPage: (pn = @getPageNum()) ->
-    @setFootprintPageValue(@Key.footprintPageRoot(pn), {})

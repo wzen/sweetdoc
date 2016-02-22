@@ -15,11 +15,14 @@ class Navbar
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
     $('.menu-changeproject', fileMenuEmt).off('click').on('click', ->
       _cbk = ->
-        WorktableCommon.resetWorktable()
-        # ナビバーをプロジェクト作成前状態に
-        Navbar.switchWorktableNavbarWhenProjectCreated(false)
-        # 初期モーダル表示
-        Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal)
+        # データを保存
+        ServerStorage.save( =>
+          WorktableCommon.resetWorktable()
+          # ナビバーをプロジェクト作成前状態に
+          Navbar.switchWorktableNavbarWhenProjectCreated(false)
+          # 初期モーダル表示
+          Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal)
+        )
 
       if Object.keys(window.instanceMap).length > 0 || PageValue.getPageCount() >= 2
         lastSaveTimeStr = ''

@@ -282,7 +282,7 @@ WorktableCommon = (function() {
         }
         WorktableCommon.initScrollContentsPosition();
         ScreenEvent.PrivateClass.resetNowScale;
-        return PageValue.removeAllFootprintOnPage();
+        return PageValue.removeAllFootprint();
       } else {
         if (callback != null) {
           return callback();
@@ -781,7 +781,7 @@ WorktableCommon = (function() {
     return this.updateAllEventsToBefore(keepDispMag, (function(_this) {
       return function() {
         var focusTargetItem, idx, item, l, len, te;
-        PageValue.removeAllFootprintOnPage();
+        PageValue.removeAllFootprint();
         teNum = parseInt(teNum);
         focusTargetItem = null;
         for (idx = l = 0, len = tes.length; l < len; idx = ++l) {

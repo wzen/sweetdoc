@@ -24,22 +24,23 @@ class ServerStorage
   @save = (callback = null) ->
     if window.previewRunning? && window.previewRunning
       # プレビュー時は処理しない
+      if callback?
+        callback()
       return
     if window.isItemPreview? && window.isItemPreview
       # アイテムプレビュー画面では処理しない
+      if callback?
+        callback()
       return
 
     window.workingAutoSave = true
-
     data = {}
     data[@Key.PAGE_COUNT] = parseInt(PageValue.getPageCount())
     data[@Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)
-
     generalPagevalues = {}
     generalCommonPagevalues = {}
     general = PageValue.getGeneralPageValue(PageValue.Key.G_PREFIX)
     data[@Key.GENERAL_PAGE_VALUE] = general
-
     instancePagevalues = {}
     instance = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX)
     for k, v of instance
@@ -54,7 +55,6 @@ class ServerStorage
       eventPagevalues[pageNum] = JSON.stringify(v)
     data[@Key.EVENT_PAGE_VALUE] = if Object.keys(eventPagevalues).length > 0 then eventPagevalues else null
     data[@Key.SETTING_PAGE_VALUE] = PageValue.getSettingPageValue(PageValue.Key.ST_PREFIX)
-
     if data[@Key.INSTANCE_PAGE_VALUE]? || data[@Key.EVENT_PAGE_VALUE]? || data[@Key.SETTING_PAGE_VALUE]?
       $.ajax(
         {
@@ -76,9 +76,15 @@ class ServerStorage
               window.workingAutoSave = false
             else
               console.log('/page_value_state/save_state server error')
+              # 保存エラー時にもコールバックは呼ぶ
+              if callback?
+                callback()
               Common.ajaxError(data)
           error: (data) ->
             console.log('/page_value_state/save_state ajax error')
+            # 保存エラー時にもコールバックは呼ぶ
+            if callback?
+              callback()
             Common.ajaxError(data)
         }
       )

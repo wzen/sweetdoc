@@ -96,6 +96,8 @@ Paging = (function() {
   };
 
   Paging.createNewPage = function() {
+    Common.hideModalView(true);
+    Common.showModalFlashMessage('Creating...');
     return WorktableCommon.stopAllEventPreview((function(_this) {
       return function() {
         var beforePageNum, created;
@@ -129,7 +131,8 @@ Paging = (function() {
             OperationHistory.add(true);
           }
           LocalStorage.saveAllPageValues();
-          return _this.createPageSelectMenu();
+          _this.createPageSelectMenu();
+          return Common.hideModalView();
         });
       };
     })(this));
@@ -159,6 +162,8 @@ Paging = (function() {
         return;
       }
     }
+    Common.hideModalView(true);
+    Common.showModalFlashMessage('Changing...');
     return WorktableCommon.stopAllEventPreview((function(_this) {
       return function() {
         var beforePageNum, created, pageCount;
@@ -179,7 +184,7 @@ Paging = (function() {
         Sidebar.closeSidebar();
         LocalStorage.clearWorktableWithoutSetting();
         EventConfig.removeAllConfig();
-        created = Common.createdMainContainerIfNeeded(selectedPageNum, beforePageNum > selectedPageNum);
+        created = Common.createdMainContainerIfNeeded(selectedPageNum, false);
         PageValue.setPageNum(selectedPageNum);
         WorktableCommon.initMainContainer();
         PageValue.adjustInstanceAndEventOnPage();
@@ -203,6 +208,7 @@ Paging = (function() {
             }
             LocalStorage.saveAllPageValues();
             _this.createPageSelectMenu();
+            Common.hideModalView();
             if (callback != null) {
               return callback();
             }

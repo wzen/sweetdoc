@@ -94,6 +94,8 @@ class Paging
 
   # ページ追加作成
   @createNewPage: ->
+    Common.hideModalView(true)
+    Common.showModalFlashMessage('Creating...')
     # プレビュー停止
     WorktableCommon.stopAllEventPreview( =>
       beforePageNum = PageValue.getPageNum()
@@ -139,6 +141,8 @@ class Paging
         LocalStorage.saveAllPageValues()
         # 選択メニューの更新
         @createPageSelectMenu()
+        # モーダルを削除
+        Common.hideModalView()
       )
     )
 
@@ -163,6 +167,9 @@ class Paging
         )
         return
 
+    Common.hideModalView(true)
+    Common.showModalFlashMessage('Changing...')
+
     # プレビュー停止
     WorktableCommon.stopAllEventPreview( =>
       if window.debug
@@ -180,7 +187,7 @@ class Paging
       LocalStorage.clearWorktableWithoutSetting()
       EventConfig.removeAllConfig()
       # Mainコンテナ作成
-      created = Common.createdMainContainerIfNeeded(selectedPageNum, beforePageNum > selectedPageNum)
+      created = Common.createdMainContainerIfNeeded(selectedPageNum, false)
       # ページ番号更新
       PageValue.setPageNum(selectedPageNum)
       # 新規コンテナ初期化
@@ -211,6 +218,8 @@ class Paging
           LocalStorage.saveAllPageValues()
           # 選択メニューの更新
           @createPageSelectMenu()
+          # モーダルを削除
+          Common.hideModalView()
           if callback?
             callback()
         )
