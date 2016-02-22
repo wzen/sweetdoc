@@ -48,24 +48,26 @@ Paging = (function() {
       nowMenuName += " - (" + name + ")";
     }
     $("." + Constant.Paging.NAV_SELECTED_CLASS, root).html(nowMenuName);
-    selectRoot.find(".menu-item").off('click').on('click', function() {
-      var classList, forkPrefix, pageNum, pagePrefix;
-      pagePrefix = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', '');
-      forkPrefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '');
-      pageNum = null;
-      forkNum = PageValue.Key.EF_MASTER_FORKNUM;
-      classList = this.classList;
-      classList.forEach(function(c) {
-        if (c.indexOf(pagePrefix) >= 0) {
-          return pageNum = parseInt(c.replace(pagePrefix, ''));
-        } else if (c.indexOf(forkPrefix) >= 0) {
-          return forkNum = parseInt(c.replace(forkPrefix, ''));
+    selectRoot.find(".menu-item").off('click').on('click', (function(_this) {
+      return function(e) {
+        var classList, forkPrefix, pageNum, pagePrefix;
+        pagePrefix = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', '');
+        forkPrefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '');
+        pageNum = null;
+        forkNum = PageValue.Key.EF_MASTER_FORKNUM;
+        classList = e.target.classList;
+        classList.forEach(function(c) {
+          if (c.indexOf(pagePrefix) >= 0) {
+            return pageNum = parseInt(c.replace(pagePrefix, ''));
+          } else if (c.indexOf(forkPrefix) >= 0) {
+            return forkNum = parseInt(c.replace(forkPrefix, ''));
+          }
+        });
+        if (pageNum != null) {
+          return _this.selectPage(pageNum, forkNum);
         }
-      });
-      if (pageNum != null) {
-        return this.selectPage(pageNum, forkNum);
-      }
-    });
+      };
+    })(this));
     selectRoot.find("." + Constant.Paging.NAV_MENU_ADDPAGE_CLASS, root).off('click').on('click', (function(_this) {
       return function() {
         return _this.createNewPage();
