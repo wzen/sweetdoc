@@ -282,7 +282,7 @@ WorktableCommon = (function() {
         }
         WorktableCommon.initScrollContentsPosition();
         ScreenEvent.PrivateClass.resetNowScale;
-        return PageValue.removeAllFootprint();
+        return PageValue.removeAllFootprintOnPage();
       } else {
         if (callback != null) {
           return callback();
@@ -420,10 +420,10 @@ WorktableCommon = (function() {
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
     $("#pages ." + className).remove();
     this.removeCommonEventInstances(pageNum);
-    PageValue.removeGeneralPageValueOnPage(pageNum);
-    PageValue.removeInstancePageValueOnPage(pageNum);
-    PageValue.removeEventPageValueOnPage(pageNum);
-    PageValue.removeFootprintPageValueOnPage(pageNum);
+    PageValue.removeAndShiftGeneralPageValueOnPage(pageNum);
+    PageValue.removeAndShiftInstancePageValueOnPage(pageNum);
+    PageValue.removeAndShiftEventPageValueOnPage(pageNum);
+    PageValue.removeAndShiftFootprintPageValueOnPage(pageNum);
     PageValue.setPageNum(PageValue.getPageCount() - 1);
     PageValue.adjustInstanceAndEventOnPage();
     if (callback != null) {
@@ -781,7 +781,7 @@ WorktableCommon = (function() {
     return this.updateAllEventsToBefore(keepDispMag, (function(_this) {
       return function() {
         var focusTargetItem, idx, item, l, len, te;
-        PageValue.removeAllFootprint();
+        PageValue.removeAllFootprintOnPage();
         teNum = parseInt(teNum);
         focusTargetItem = null;
         for (idx = l = 0, len = tes.length; l < len; idx = ++l) {

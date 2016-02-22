@@ -249,7 +249,7 @@ class WorktableCommon
         # イベントで変更された倍率を戻す
         ScreenEvent.PrivateClass.resetNowScale
         # Footprint履歴削除
-        PageValue.removeAllFootprint()
+        PageValue.removeAllFootprintOnPage()
       else
         if callback?
           callback()
@@ -378,10 +378,10 @@ class WorktableCommon
     # 共通イベントのデータを削除
     @removeCommonEventInstances(pageNum)
     # PageValueを削除
-    PageValue.removeGeneralPageValueOnPage(pageNum)
-    PageValue.removeInstancePageValueOnPage(pageNum)
-    PageValue.removeEventPageValueOnPage(pageNum)
-    PageValue.removeFootprintPageValueOnPage(pageNum)
+    PageValue.removeAndShiftGeneralPageValueOnPage(pageNum)
+    PageValue.removeAndShiftInstancePageValueOnPage(pageNum)
+    PageValue.removeAndShiftEventPageValueOnPage(pageNum)
+    PageValue.removeAndShiftFootprintPageValueOnPage(pageNum)
     # ページ総数を減らす
     PageValue.setPageNum(PageValue.getPageCount() - 1)
     # PageValue調整
@@ -666,7 +666,7 @@ class WorktableCommon
     # 全ての状態をイベント適応前にする
     @updateAllEventsToBefore(keepDispMag, =>
       # 操作履歴削除
-      PageValue.removeAllFootprint()
+      PageValue.removeAllFootprintOnPage()
       teNum = parseInt(teNum)
       focusTargetItem = null
       for te, idx in tes

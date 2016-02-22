@@ -343,28 +343,28 @@ class PageValue
       ServerStorage.startSaveIdleTimer()
 
   # 汎用値を削除
-  @removeGeneralPageValueOnPage = (pageNum) ->
+  @removeAndShiftGeneralPageValueOnPage = (pageNum) ->
     # 後ページのデータをずらす
     for p in [pageNum...@getPageCount()]
       @setGeneralPageValue(@Key.generalPagePrefix(p), @getGeneralPageValue(@Key.generalPagePrefix(p + 1)))
     @setGeneralPageValue(@Key.generalPagePrefix(@getPageCount()), {})
 
   # インスタンス値を削除
-  @removeInstancePageValueOnPage = (pageNum) ->
+  @removeAndShiftInstancePageValueOnPage = (pageNum) ->
     # 後ページのデータをずらす
     for p in [pageNum...@getPageCount()]
       @setInstancePageValue(@Key.instancePagePrefix(p), @getInstancePageValue(@Key.instancePagePrefix(p + 1)))
     @setInstancePageValue(@Key.instancePagePrefix(@getPageCount()), {})
 
   # イベントの値を削除
-  @removeEventPageValueOnPage = (pageNum) ->
+  @removeAndShiftEventPageValueOnPage = (pageNum) ->
     # 後ページのデータをずらす
     for p in [pageNum...@getPageCount()]
       @setEventPageValue(@Key.eventPageRoot(p), @getEventPageValue(@Key.eventPageRoot(p + 1)))
     @setEventPageValue(@Key.eventPageRoot(@getPageCount()), {})
 
   # 足跡を削除
-  @removeFootprintPageValueOnPage = (pageNum) ->
+  @removeAndShiftFootprintPageValueOnPage = (pageNum) ->
     # 後ページのデータをずらす
     for p in [pageNum...@getPageCount()]
       @setFootprintPageValue(@Key.footprintPageRoot(p), @getFootprintPageValue(@Key.footprintPageRoot(p + 1)))
@@ -683,3 +683,7 @@ class PageValue
   # 全ての操作履歴を削除
   @removeAllFootprint: ->
     @setFootprintPageValue(@Key.F_PREFIX, {})
+
+  # ページ内の操作履歴を削除
+  @removeAllFootprintOnPage: (pn = @getPageNum()) ->
+    @setFootprintPageValue(@Key.footprintPageRoot(pn), {})

@@ -27,7 +27,6 @@ $ ->
     if loadWorktableFromCache
       # メッセージ表示
       Common.showModalFlashMessage('Loading cache')
-
       # キャッシュが存在する場合
       # Mainコンテナ作成
       Common.createdMainContainerIfNeeded(PageValue.getPageNum())

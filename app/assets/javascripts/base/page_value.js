@@ -450,7 +450,7 @@ PageValue = (function() {
     }
   };
 
-  PageValue.removeGeneralPageValueOnPage = function(pageNum) {
+  PageValue.removeAndShiftGeneralPageValueOnPage = function(pageNum) {
     var j, p, ref, ref1;
     for (p = j = ref = pageNum, ref1 = this.getPageCount(); ref <= ref1 ? j < ref1 : j > ref1; p = ref <= ref1 ? ++j : --j) {
       this.setGeneralPageValue(this.Key.generalPagePrefix(p), this.getGeneralPageValue(this.Key.generalPagePrefix(p + 1)));
@@ -458,7 +458,7 @@ PageValue = (function() {
     return this.setGeneralPageValue(this.Key.generalPagePrefix(this.getPageCount()), {});
   };
 
-  PageValue.removeInstancePageValueOnPage = function(pageNum) {
+  PageValue.removeAndShiftInstancePageValueOnPage = function(pageNum) {
     var j, p, ref, ref1;
     for (p = j = ref = pageNum, ref1 = this.getPageCount(); ref <= ref1 ? j < ref1 : j > ref1; p = ref <= ref1 ? ++j : --j) {
       this.setInstancePageValue(this.Key.instancePagePrefix(p), this.getInstancePageValue(this.Key.instancePagePrefix(p + 1)));
@@ -466,7 +466,7 @@ PageValue = (function() {
     return this.setInstancePageValue(this.Key.instancePagePrefix(this.getPageCount()), {});
   };
 
-  PageValue.removeEventPageValueOnPage = function(pageNum) {
+  PageValue.removeAndShiftEventPageValueOnPage = function(pageNum) {
     var j, p, ref, ref1;
     for (p = j = ref = pageNum, ref1 = this.getPageCount(); ref <= ref1 ? j < ref1 : j > ref1; p = ref <= ref1 ? ++j : --j) {
       this.setEventPageValue(this.Key.eventPageRoot(p), this.getEventPageValue(this.Key.eventPageRoot(p + 1)));
@@ -474,7 +474,7 @@ PageValue = (function() {
     return this.setEventPageValue(this.Key.eventPageRoot(this.getPageCount()), {});
   };
 
-  PageValue.removeFootprintPageValueOnPage = function(pageNum) {
+  PageValue.removeAndShiftFootprintPageValueOnPage = function(pageNum) {
     var j, p, ref, ref1;
     for (p = j = ref = pageNum, ref1 = this.getPageCount(); ref <= ref1 ? j < ref1 : j > ref1; p = ref <= ref1 ? ++j : --j) {
       this.setFootprintPageValue(this.Key.footprintPageRoot(p), this.getFootprintPageValue(this.Key.footprintPageRoot(p + 1)));
@@ -861,6 +861,13 @@ PageValue = (function() {
 
   PageValue.removeAllFootprint = function() {
     return this.setFootprintPageValue(this.Key.F_PREFIX, {});
+  };
+
+  PageValue.removeAllFootprintOnPage = function(pn) {
+    if (pn == null) {
+      pn = this.getPageNum();
+    }
+    return this.setFootprintPageValue(this.Key.footprintPageRoot(pn), {});
   };
 
   return PageValue;
