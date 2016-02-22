@@ -231,14 +231,13 @@ class EventPageValueBase
   # スクロールの合計の長さを取得
   # @return [Integer] 取得値
   @getAllScrollLength = ->
-    self = @
     maxTeNum = 0
     ret = null
-    $("##{PageValue.Key.E_ROOT} .#{PageValue.Key.E_SUB_ROOT} .#{PageValue.Key.pageRoot()}").children('div').each((e) ->
-      teNum = parseInt($(@).attr('class'))
+    $("##{PageValue.Key.E_ROOT} .#{PageValue.Key.E_SUB_ROOT} .#{PageValue.Key.pageRoot()}").children('div').each((i, e) =>
+      teNum = parseInt($(e).attr('class'))
       if teNum > maxTeNum
-        start = $(@).find(".#{self.PageValueKey.SCROLL_POINT_START}:first").val()
-        end = $(@).find(".#{self.PageValueKey.SCROLL_POINT_END}:first").val()
+        start = $(e).find(".#{@PageValueKey.SCROLL_POINT_START}:first").val()
+        end = $(e).find(".#{@PageValueKey.SCROLL_POINT_END}:first").val()
         if start? && start != "null" && end? && end != "null"
           maxTeNum = teNum
           ret = end

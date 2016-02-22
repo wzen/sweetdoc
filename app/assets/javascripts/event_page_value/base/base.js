@@ -261,22 +261,23 @@ EventPageValueBase = (function() {
   };
 
   EventPageValueBase.getAllScrollLength = function() {
-    var maxTeNum, ret, self;
-    self = this;
+    var maxTeNum, ret;
     maxTeNum = 0;
     ret = null;
-    $("#" + PageValue.Key.E_ROOT + " ." + PageValue.Key.E_SUB_ROOT + " ." + (PageValue.Key.pageRoot())).children('div').each(function(e) {
-      var end, start, teNum;
-      teNum = parseInt($(this).attr('class'));
-      if (teNum > maxTeNum) {
-        start = $(this).find("." + self.PageValueKey.SCROLL_POINT_START + ":first").val();
-        end = $(this).find("." + self.PageValueKey.SCROLL_POINT_END + ":first").val();
-        if ((start != null) && start !== "null" && (end != null) && end !== "null") {
-          maxTeNum = teNum;
-          return ret = end;
+    $("#" + PageValue.Key.E_ROOT + " ." + PageValue.Key.E_SUB_ROOT + " ." + (PageValue.Key.pageRoot())).children('div').each((function(_this) {
+      return function(i, e) {
+        var end, start, teNum;
+        teNum = parseInt($(e).attr('class'));
+        if (teNum > maxTeNum) {
+          start = $(e).find("." + _this.PageValueKey.SCROLL_POINT_START + ":first").val();
+          end = $(e).find("." + _this.PageValueKey.SCROLL_POINT_END + ":first").val();
+          if ((start != null) && start !== "null" && (end != null) && end !== "null") {
+            maxTeNum = teNum;
+            return ret = end;
+          }
         }
-      }
-    });
+      };
+    })(this));
     if (ret == null) {
       return 0;
     }
