@@ -485,7 +485,10 @@ WorktableCommon = (function() {
     this.updateMainViewSize();
     Sidebar.resizeConfigHeight();
     WorktableSetting.initConfig();
-    return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
+    WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
+    PageValue.updatePageCount();
+    PageValue.updateForkCount();
+    return Paging.initPaging();
   };
 
   WorktableCommon.adjustScrollContentsPosition = function() {

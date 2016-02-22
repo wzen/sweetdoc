@@ -6,7 +6,6 @@ class Paging
 
   # 選択メニュー作成
   @createPageSelectMenu: ->
-    self = @
     pageCount = PageValue.getPageCount()
     root = $("##{Constant.Paging.NAV_ROOT_ID}")
     selectRoot = $(".#{Constant.Paging.NAV_SELECT_ROOT_CLASS}", root)
@@ -71,7 +70,7 @@ class Paging
           forkNum = parseInt(c.replace(forkPrefix, ''))
       )
       if pageNum?
-        self.selectPage(pageNum, forkNum)
+        @selectPage(pageNum, forkNum)
     )
 
     selectRoot.find(".#{Constant.Paging.NAV_MENU_ADDPAGE_CLASS}", root).off('click').on('click', =>

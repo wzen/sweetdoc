@@ -19,23 +19,11 @@ $ ->
     if loadWorktableFromCache
       # キャッシュが存在する場合PageValueに読み込み
       LocalStorage.loadAllPageValues()
-
     # 変数初期化
     CommonVar.initVarWhenLoadedView()
     CommonVar.initCommonVar()
     # ナビバーイベント
     Navbar.initWorktableNavbar()
-
-    _callback = ->
-      # 履歴に画面初期時を状態を保存
-      OperationHistory.add(true)
-      # ページ総数更新
-      PageValue.updatePageCount()
-      # フォーク総数更新
-      PageValue.updateForkCount()
-      # ページング
-      Paging.initPaging()
-
     if loadWorktableFromCache
       # メッセージ表示
       Common.showModalFlashMessage('Loading cache')
@@ -53,7 +41,8 @@ $ ->
         WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded()
         # スクロール位置更新
         WorktableCommon.initScrollContentsPosition()
-        _callback.call(@)
+        # 履歴に画面初期時を状態を保存
+        OperationHistory.add(true)
         # ナビバーをプロジェクト作成後状態に
         Navbar.switchWorktableNavbarWhenProjectCreated(true)
         # モーダルを削除
@@ -65,8 +54,8 @@ $ ->
       Timeline.refreshAllTimeline()
     else
       LocalStorage.clearWorktable()
-      Timeline.refreshAllTimeline()
-      _callback.call(@)
+      # 履歴に画面初期時を状態を保存
+      OperationHistory.add(true)
       # プロジェクトモーダル表示
       Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal)
       # モーダル用にリサイズイベントを設定

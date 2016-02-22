@@ -9,8 +9,7 @@ Paging = (function() {
   };
 
   Paging.createPageSelectMenu = function() {
-    var active, deletePageMenu, divider, forkCount, forkNum, i, j, k, l, name, navForkClass, navForkName, navPageClass, navPageName, newForkMenu, newPageMenu, nowMenuName, pageCount, pageMenu, ref, ref1, root, selectRoot, self, subActive, subMenu;
-    self = this;
+    var active, deletePageMenu, divider, forkCount, forkNum, i, j, k, l, name, navForkClass, navForkName, navPageClass, navPageName, newForkMenu, newPageMenu, nowMenuName, pageCount, pageMenu, ref, ref1, root, selectRoot, subActive, subMenu;
     pageCount = PageValue.getPageCount();
     root = $("#" + Constant.Paging.NAV_ROOT_ID);
     selectRoot = $("." + Constant.Paging.NAV_SELECT_ROOT_CLASS, root);
@@ -64,7 +63,7 @@ Paging = (function() {
         }
       });
       if (pageNum != null) {
-        return self.selectPage(pageNum, forkNum);
+        return this.selectPage(pageNum, forkNum);
       }
     });
     selectRoot.find("." + Constant.Paging.NAV_MENU_ADDPAGE_CLASS, root).off('click').on('click', (function(_this) {

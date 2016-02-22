@@ -450,6 +450,12 @@ class WorktableCommon
     WorktableSetting.initConfig()
     # 選択アイテム初期化
     WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
+    # ページ総数更新
+    PageValue.updatePageCount()
+    # フォーク総数更新
+    PageValue.updateForkCount()
+    # ページング初期化
+    Paging.initPaging()
 
   # スクロール位置を再設定
   @adjustScrollContentsPosition: ->
