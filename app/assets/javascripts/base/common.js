@@ -130,26 +130,29 @@ Common = (function() {
   };
 
   Common.requestAnimationFrame = function() {
-    var callback, geckoVersion, index, originalWebkitRequestAnimationFrame, self, userAgent, wrapper;
+    var callback, geckoVersion, index, originalWebkitRequestAnimationFrame, userAgent, wrapper;
     originalWebkitRequestAnimationFrame = void 0;
     wrapper = void 0;
     callback = void 0;
     geckoVersion = 0;
     userAgent = navigator.userAgent;
     index = 0;
-    self = this;
     if (window.webkitRequestAnimationFrame) {
-      wrapper = function(time) {
-        if (time == null) {
-          time = +new Date();
-        }
-        return self.callback(time);
-      };
+      wrapper = (function(_this) {
+        return function(time) {
+          if (time == null) {
+            time = +new Date();
+          }
+          return _this.callback(time);
+        };
+      })(this);
       originalWebkitRequestAnimationFrame = window.webkitRequestAnimationFrame;
-      window.webkitRequestAnimationFrame = function(callback, element) {
-        self.callback = callback;
-        return originalWebkitRequestAnimationFrame(wrapper, element);
-      };
+      window.webkitRequestAnimationFrame = (function(_this) {
+        return function(callback, element) {
+          _this.callback = callback;
+          return originalWebkitRequestAnimationFrame(wrapper, element);
+        };
+      })(this);
     }
     if (window.mozRequestAnimationFrame) {
       index = userAgent.indexOf('rv:');
@@ -160,15 +163,17 @@ Common = (function() {
         }
       }
     }
-    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback, element) {
-      return window.setTimeout(function() {
-        var finish, start;
-        start = +new Date();
-        callback(start);
-        finish = +new Date();
-        return self.timeout = 1000 / 60 - (finish - start);
-      }, self.timeout);
-    };
+    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || (function(_this) {
+      return function(callback, element) {
+        return window.setTimeout(function() {
+          var finish, start;
+          start = +new Date();
+          callback(start);
+          finish = +new Date();
+          return _this.timeout = 1000 / 60 - (finish - start);
+        }, _this.timeout);
+      };
+    })(this);
   };
 
   Common.applyEnvironmentFromPagevalue = function() {
@@ -1000,7 +1005,7 @@ Common = (function() {
   };
 
   _showModalView = function(type, prepareShowFunc, prepareShowFuncParams, isModalFlush, showFunc) {
-    var _show, allEmt, emt, self;
+    var _show, allEmt, emt;
     if (showFunc == null) {
       showFunc = null;
     }
@@ -1017,7 +1022,6 @@ Common = (function() {
       this.hideModalView(true);
       emt = $('body').children(".modal-content." + type);
     }
-    self = this;
     $(this).blur();
     if ($("#modal-overlay")[0] != null) {
       return false;
@@ -1036,25 +1040,27 @@ Common = (function() {
           type: type
         },
         dataType: "json",
-        success: function(data) {
-          if (data.resultSuccess) {
-            Common.hideModalView(true);
-            $('body').append(data.modalHtml);
-            emt = $('body').children(".modal-content." + type);
-            emt.hide();
-            if (prepareShowFunc != null) {
-              return prepareShowFunc(emt, prepareShowFuncParams, function() {
-                return _show.call(self);
-              });
-            } else {
-              console.log('/modal_view/show server error');
+        success: (function(_this) {
+          return function(data) {
+            if (data.resultSuccess) {
               Common.hideModalView(true);
-              _show.call(self);
-              Common.ajaxError(data);
-              return window.modalRun = false;
+              $('body').append(data.modalHtml);
+              emt = $('body').children(".modal-content." + type);
+              emt.hide();
+              if (prepareShowFunc != null) {
+                return prepareShowFunc(emt, prepareShowFuncParams, function() {
+                  return _show.call(_this);
+                });
+              } else {
+                console.log('/modal_view/show server error');
+                Common.hideModalView(true);
+                _show.call(_this);
+                Common.ajaxError(data);
+                return window.modalRun = false;
+              }
             }
-          }
-        },
+          };
+        })(this),
         error: function(data) {
           Common.hideModalView(true);
           console.log('/modal_view/show ajax error');
@@ -1064,11 +1070,13 @@ Common = (function() {
       });
     } else {
       if (prepareShowFunc != null) {
-        return prepareShowFunc(emt, prepareShowFuncParams, function() {
-          return _show.call(self);
-        });
+        return prepareShowFunc(emt, prepareShowFuncParams, (function(_this) {
+          return function() {
+            return _show.call(_this);
+          };
+        })(this));
       } else {
-        return _show.call(self);
+        return _show.call(this);
       }
     }
   };

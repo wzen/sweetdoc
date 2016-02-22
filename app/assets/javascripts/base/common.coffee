@@ -104,17 +104,16 @@ class Common
     geckoVersion = 0
     userAgent = navigator.userAgent
     index = 0
-    self = @
 
     if window.webkitRequestAnimationFrame
-      wrapper = (time) ->
+      wrapper = (time) =>
         if !time?
           time = +new Date()
-        self.callback(time);
+        @callback(time)
 
       originalWebkitRequestAnimationFrame = window.webkitRequestAnimationFrame
-      window.webkitRequestAnimationFrame = (callback, element) ->
-        self.callback = callback
+      window.webkitRequestAnimationFrame = (callback, element) =>
+        @callback = callback
         originalWebkitRequestAnimationFrame(wrapper, element)
 
     if window.mozRequestAnimationFrame
@@ -130,13 +129,13 @@ class Common
         window.mozRequestAnimationFrame    ||
         window.oRequestAnimationFrame      ||
         window.msRequestAnimationFrame     ||
-        (callback, element) ->
-          window.setTimeout( ->
+        (callback, element) =>
+          window.setTimeout( =>
             start = +new Date()
-            callback(start);
-            finish = +new Date();
-            self.timeout = 1000 / 60 - (finish - start)
-          , self.timeout)
+            callback(start)
+            finish = +new Date()
+            @timeout = 1000 / 60 - (finish - start)
+          , @timeout)
 
   # Pagevalueから環境を反映
   @applyEnvironmentFromPagevalue = ->
@@ -823,7 +822,6 @@ class Common
       @hideModalView(true)
       emt = $('body').children(".modal-content.#{type}")
 
-    self = @
     $(@).blur()
     if $("#modal-overlay")[0]?
       return false
@@ -846,20 +844,20 @@ class Common
             type: type
           }
           dataType: "json"
-          success: (data) ->
+          success: (data) =>
             if data.resultSuccess
               Common.hideModalView(true)
               $('body').append(data.modalHtml)
               emt = $('body').children(".modal-content.#{type}")
               emt.hide()
               if prepareShowFunc?
-                prepareShowFunc(emt, prepareShowFuncParams, ->
-                  _show.call(self)
+                prepareShowFunc(emt, prepareShowFuncParams, =>
+                  _show.call(@)
                 )
               else
                 console.log('/modal_view/show server error')
                 Common.hideModalView(true)
-                _show.call(self)
+                _show.call(@)
                 Common.ajaxError(data)
                 window.modalRun = false
           error: (data) ->
@@ -871,11 +869,11 @@ class Common
       )
     else
       if prepareShowFunc?
-        prepareShowFunc(emt, prepareShowFuncParams, ->
-          _show.call(self)
+        prepareShowFunc(emt, prepareShowFuncParams, =>
+          _show.call(@)
         )
       else
-        _show.call(self)
+        _show.call(@)
 
   # 中央センタリング
   @modalCentering = (type = null, animation = false, b = null, c = null) ->
