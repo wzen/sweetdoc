@@ -149,11 +149,14 @@ Paging = (function() {
       if (selectedForkNum === PageValue.getForkNum()) {
         return;
       } else {
+        Common.hideModalView(true);
+        Common.showModalFlashMessage('Changing...');
         this.selectFork(selectedForkNum, (function(_this) {
           return function() {
             Timeline.refreshAllTimeline();
             LocalStorage.saveAllPageValues();
             _this.createPageSelectMenu();
+            Common.hideModalView();
             if (callback != null) {
               return callback();
             }

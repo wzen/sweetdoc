@@ -155,6 +155,8 @@ class Paging
         # 同じページ & 同じフォークの場合は変更しない
         return
       else
+        Common.hideModalView(true)
+        Common.showModalFlashMessage('Changing...')
         @selectFork(selectedForkNum, =>
           # タイムライン更新
           Timeline.refreshAllTimeline()
@@ -162,6 +164,8 @@ class Paging
           LocalStorage.saveAllPageValues()
           # 選択メニューの更新
           @createPageSelectMenu()
+          # モーダルを削除
+          Common.hideModalView()
           if callback?
             callback()
         )
@@ -169,7 +173,6 @@ class Paging
 
     Common.hideModalView(true)
     Common.showModalFlashMessage('Changing...')
-
     # プレビュー停止
     WorktableCommon.stopAllEventPreview( =>
       if window.debug

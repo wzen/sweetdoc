@@ -522,7 +522,7 @@ Common = (function() {
   };
 
   Common.focusToTarget = function(target, callback, immediate, withUpdatePageValue) {
-    var diff, left, s, scrollContentsSize, top, viewScaleDiff;
+    var diff, left, s, scrollContentsSize, top, viewRate, viewScaleDiff;
     if (callback == null) {
       callback = null;
     }
@@ -542,9 +542,10 @@ Common = (function() {
         left: 0
       };
       s = this.scrollContentsSizeUnderScale();
+      viewRate = window.isWorkTable ? 1.0 : window.runScaleFromViewRate;
       viewScaleDiff = {
-        top: s.height * 0.5 * (1 - window.runScaleFromViewRate),
-        left: s.width * 0.5 * (1 - window.runScaleFromViewRate)
+        top: s.height * 0.5 * (1 - viewRate),
+        left: s.width * 0.5 * (1 - viewRate)
       };
       console.log('viewScaleDiff');
       console.log(viewScaleDiff);

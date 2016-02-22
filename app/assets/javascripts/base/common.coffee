@@ -410,9 +410,10 @@ class Common
       diff = {top: 0, left: 0}
       # MainView縮小時のDiff
       s = @scrollContentsSizeUnderScale()
+      viewRate = if window.isWorkTable then 1.0 else window.runScaleFromViewRate
       viewScaleDiff = {
-        top: s.height * 0.5 * (1 - window.runScaleFromViewRate)
-        left: s.width * 0.5 * (1 - window.runScaleFromViewRate)
+        top: s.height * 0.5 * (1 - viewRate)
+        left: s.width * 0.5 * (1 - viewRate)
       }
       console.log('viewScaleDiff')
       console.log(viewScaleDiff)
