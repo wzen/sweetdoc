@@ -89,6 +89,8 @@ EventAction = (function() {
     if (callback == null) {
       callback = null;
     }
+    Common.hideModalView(true);
+    Common.showModalFlashMessage('Page changing');
     beforePageNum = beforePageIndex + 1;
     afterPageNum = afterPageIndex + 1;
     if (window.debug) {
@@ -133,6 +135,7 @@ EventAction = (function() {
                 if (_this.thisPage().thisChapter() != null) {
                   _this.thisPage().thisChapter().enableEventHandle();
                 }
+                Common.hideModalView();
                 if (callback != null) {
                   return callback();
                 }

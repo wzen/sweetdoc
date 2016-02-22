@@ -166,7 +166,7 @@ Paging = (function() {
       }
     }
     Common.hideModalView(true);
-    Common.showModalFlashMessage('Changing...');
+    Common.showModalFlashMessage('Page changing');
     return WorktableCommon.stopAllEventPreview((function(_this) {
       return function() {
         var beforePageNum, created, pageCount;

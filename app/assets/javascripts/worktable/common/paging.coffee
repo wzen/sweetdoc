@@ -172,7 +172,7 @@ class Paging
         return
 
     Common.hideModalView(true)
-    Common.showModalFlashMessage('Changing...')
+    Common.showModalFlashMessage('Page changing')
     # プレビュー停止
     WorktableCommon.stopAllEventPreview( =>
       if window.debug

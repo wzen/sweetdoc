@@ -81,6 +81,9 @@ class EventAction
   # @param [Integer] afterPageIndex 変更後ページIndex
   # @param [Function] コールバック
   changePaging: (beforePageIndex, afterPageIndex, callback = null) ->
+    Common.hideModalView(true)
+    Common.showModalFlashMessage('Page changing')
+
     beforePageNum = beforePageIndex + 1
     afterPageNum = afterPageIndex + 1
     if window.debug
@@ -131,6 +134,8 @@ class EventAction
             if @thisPage().thisChapter()?
               # イベント反応有効
               @thisPage().thisChapter().enableEventHandle()
+            # モーダルを削除
+            Common.hideModalView()
             # コールバック
             if callback?
               callback()
