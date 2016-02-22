@@ -198,7 +198,7 @@ Page = (function() {
             return _this.resetChapter(_this.getChapterIndex(), false, function() {
               RunCommon.setChapterNum(_this.thisChapterNum());
               _this.thisChapter().willChapter();
-              return FloatView.show('Rewind chapter', FloatView.Type.REWIND_CHAPTER, 1.0);
+              return FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
             });
           } else {
             oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum());
@@ -212,7 +212,7 @@ Page = (function() {
                 RunCommon.setChapterNum(_this.thisChapterNum());
                 RunCommon.setChapterMax(_this.getForkChapterList().length);
                 _this.thisChapter().willChapter();
-                return FloatView.show('Rewind chapter', FloatView.Type.REWIND_CHAPTER, 1.0);
+                return FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
               });
             } else {
               window.eventAction.rewindPage();
@@ -221,7 +221,7 @@ Page = (function() {
           }
         } else {
           _this.thisChapter().willChapter();
-          return FloatView.show('Rewind chapter', FloatView.Type.REWIND_CHAPTER, 1.0);
+          return FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
         }
       };
     })(this));
@@ -263,7 +263,7 @@ Page = (function() {
             _this.finishedAllChapters = false;
             _this.finishedScrollDistSum = 0;
             _this.start();
-            return FloatView.show('Rewind all chapters', FloatView.Type.REWIND_ALL_CHAPTER, 1.0);
+            return FloatView.show('Rewind all events', FloatView.Type.REWIND_ALL_CHAPTER, 1.0);
           }
         };
       })(this)));
@@ -491,7 +491,8 @@ Page = (function() {
     if (nextPageIndex || window.eventAction.hasNextPage()) {
       return this.floatPageScrollHandleCanvas();
     } else {
-      return window.eventAction.finishAllPages();
+      window.eventAction.finishAllPages();
+      return FloatView.show('Finished all', FloatView.Type.FINISH, 3.0);
     }
   };
 

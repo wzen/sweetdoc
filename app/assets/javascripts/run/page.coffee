@@ -183,7 +183,7 @@ class Page
             RunCommon.setChapterNum(@thisChapterNum())
             # チャプター前処理
             @thisChapter().willChapter()
-            FloatView.show('Rewind chapter', FloatView.Type.REWIND_CHAPTER, 1.0)
+            FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0)
           )
         else
           oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum())
@@ -204,7 +204,7 @@ class Page
               RunCommon.setChapterMax(@getForkChapterList().length)
               # チャプター前処理
               @thisChapter().willChapter()
-              FloatView.show('Rewind chapter', FloatView.Type.REWIND_CHAPTER, 1.0)
+              FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0)
             )
           else
             # ページ戻し
@@ -214,7 +214,7 @@ class Page
       else
         # チャプター前処理
         @thisChapter().willChapter()
-        FloatView.show('Rewind chapter', FloatView.Type.REWIND_CHAPTER, 1.0)
+        FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0)
     )
 
   # チャプターの内容をリセット
@@ -241,7 +241,7 @@ class Page
           @finishedAllChapters = false
           @finishedScrollDistSum = 0
           @start()
-          FloatView.show('Rewind all chapters', FloatView.Type.REWIND_ALL_CHAPTER, 1.0)
+          FloatView.show('Rewind all events', FloatView.Type.REWIND_ALL_CHAPTER, 1.0)
       )
 
   # スクロールイベントをハンドル
@@ -412,10 +412,8 @@ class Page
       console.log('Page finishAllChapters')
       if nextPageIndex?
         console.log('nextPageIndex: ' + nextPageIndex)
-
     if nextPageIndex?
       window.eventAction.nextPageIndex = nextPageIndex
-
     @finishedAllChapters = true
     if nextPageIndex || window.eventAction.hasNextPage()
       # ページ移動のためのスクロールイベントを取るようにする
@@ -423,6 +421,7 @@ class Page
     else
       # 全ページ終了の場合
       window.eventAction.finishAllPages()
+      FloatView.show('Finished all', FloatView.Type.FINISH, 3.0)
 
   # 中断
   shutdown: ->

@@ -136,6 +136,7 @@ EventAction = (function() {
                   _this.thisPage().thisChapter().enableEventHandle();
                 }
                 Common.hideModalView();
+                FloatView.show('Next page', FloatView.Type.NEXT_PAGE, 1.0);
                 if (callback != null) {
                   return callback();
                 }

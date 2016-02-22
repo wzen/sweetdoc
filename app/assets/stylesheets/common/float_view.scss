@@ -112,6 +112,24 @@ div.float_view {
       color: #3F51B5;
     }
   }
+  &.next_page {
+    .icon {
+      background-image: image_url('float_view/floatview_next_page.png');
+      background-repeat: no-repeat;
+    }
+    .message {
+      color: #3F51B5;
+    }
+  }
+  &.finish {
+    .icon {
+      background-image: image_url('float_view/floatview_finish.png');
+      background-repeat: no-repeat;
+    }
+    .message {
+      color: #4CAF50;
+    }
+  }
 
   .wrapper {
     height:50px;

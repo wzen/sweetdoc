@@ -136,6 +136,7 @@ class EventAction
               @thisPage().thisChapter().enableEventHandle()
             # モーダルを削除
             Common.hideModalView()
+            FloatView.show('Next page', FloatView.Type.NEXT_PAGE, 1.0)
             # コールバック
             if callback?
               callback()

@@ -31,6 +31,10 @@ FloatView = (function() {
 
     Type.REWIND_ALL_CHAPTER = 'rewind_all_chapter';
 
+    Type.NEXT_PAGE = 'next_page';
+
+    Type.FINISH = 'finish';
+
     return Type;
 
   })();
