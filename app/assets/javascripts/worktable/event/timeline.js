@@ -5,7 +5,7 @@ Timeline = (function() {
   function Timeline() {}
 
   Timeline.createTimelineEvent = function(teNum) {
-    var emts, exist, newEmt, pEmt;
+    var distIdPrefix, emts, exist, newEmt, pEmt;
     emts = $('#timeline_events .timeline_event .te_num');
     exist = false;
     emts.each(function(e) {
@@ -19,7 +19,8 @@ Timeline = (function() {
     pEmt = $('#timeline_events');
     newEmt = $('.timeline_event_temp', pEmt).children(':first').clone(true);
     newEmt.find('.te_num').val(teNum);
-    newEmt.find('.dist_id').val(Common.generateId());
+    distIdPrefix = 'd' + PageValue.getPageNum() + '';
+    newEmt.find('.dist_id').val(distIdPrefix + Common.generateId());
     return pEmt.append(newEmt);
   };
 

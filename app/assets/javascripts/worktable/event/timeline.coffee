@@ -16,7 +16,8 @@ class Timeline
     pEmt = $('#timeline_events')
     newEmt = $('.timeline_event_temp', pEmt).children(':first').clone(true)
     newEmt.find('.te_num').val(teNum)
-    newEmt.find('.dist_id').val(Common.generateId())
+    distIdPrefix = 'd' + PageValue.getPageNum() + ''
+    newEmt.find('.dist_id').val(distIdPrefix + Common.generateId())
     #$("<input class='te_num' type='hidden' value='#{teNum}' >").appendTo(newEmt)
     pEmt.append(newEmt)
 
