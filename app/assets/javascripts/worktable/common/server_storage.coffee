@@ -47,7 +47,6 @@ class ServerStorage
       pageNum = parseInt(k.replace(PageValue.Key.P_PREFIX, ''))
       instancePagevalues[pageNum] = JSON.stringify(v)
     data[@Key.INSTANCE_PAGE_VALUE] = if Object.keys(instancePagevalues).length > 0 then instancePagevalues else null
-
     eventPagevalues = {}
     event = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT)
     for k, v of event
@@ -88,6 +87,9 @@ class ServerStorage
             Common.ajaxError(data)
         }
       )
+    else
+      if callback?
+        callback()
 
   # サーバからアイテムの情報を取得して描画
   # @param [Integer] user_pagevalue_id 取得するUserPageValueのID

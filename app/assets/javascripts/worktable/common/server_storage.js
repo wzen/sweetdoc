@@ -122,6 +122,10 @@ ServerStorage = (function() {
           return Common.ajaxError(data);
         }
       });
+    } else {
+      if (callback != null) {
+        return callback();
+      }
     }
   };
 
