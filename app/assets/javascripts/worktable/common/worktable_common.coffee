@@ -660,50 +660,51 @@ class WorktableCommon
       # 設定が繋がっていない場合は無視
       return
     tes = epr.routes
-
     # 状態変更フラグON
     window.worktableItemsChangedState = true
-    # 全ての状態をイベント適応前にする
-    @updateAllEventsToBefore(keepDispMag, =>
-      # 操作履歴削除
-      PageValue.removeAllFootprint()
-      teNum = parseInt(teNum)
-      focusTargetItem = null
-      for te, idx in tes
-        item = window.instanceMap[te.id]
-        if item?
-          item.initEvent(te, keepDispMag)
-          if item instanceof ItemBase && te[EventPageValueBase.PageValueKey.DO_FOCUS]
-            # アイテムにフォーカス
-            Common.focusToTarget(item.getJQueryElement(), null, true)
-          if idx < tes.length - 1 || fromBlankEventConfig
-            item.willChapter()
-            # イベント後の状態に変更
-            item.updateEventAfter()
-            item.didChapter()
-          else if doRunPreview
-            window.previewRunning = true
-            # プレビュー実行
-            item.preview( =>
-              # プレビューの実行回数超過
-              window.previewRunning = false
-              # ボタン変更「StopPreview」->「Preview」
-              EventConfig.switchPreviewButton(true)
+    # 操作履歴削除
+    PageValue.removeAllFootprint()
+    teNum = parseInt(teNum)
+    focusTargetItem = null
+    # プレビュー実行フラグON
+    if doRunPreview
+      window.previewRunning = true
+    for te, idx in tes
+      item = window.instanceMap[te.id]
+      if item?
+        item.initEvent(te, keepDispMag)
+        if item instanceof ItemBase && te[EventPageValueBase.PageValueKey.DO_FOCUS]
+          # アイテムにフォーカス
+          Common.focusToTarget(item.getJQueryElement(), null, true)
+        if idx < tes.length - 1 || fromBlankEventConfig
+          item.willChapter()
+          # イベント後の状態に変更
+          item.updateEventAfter()
+          item.didChapter()
+        else if doRunPreview
+          # プレビュー実行
+          item.preview( =>
+            # プレビューの実行回数超過
+            window.previewRunning = false
+            # ボタン変更「StopPreview」->「Preview」
+            EventConfig.switchPreviewButton(true)
+            # 全ての状態をイベント適応前にする
+            @updateAllEventsToBefore(keepDispMag, =>
               # アイテム再描画
               @refreshAllItemsFromInstancePageValueIfChanging()
               FloatView.hide()
             )
-            # 状態変更フラグON
-            window.worktableItemsChangedState = true
-            # ボタン変更「Preview」->「StopPreview」
-            EventConfig.switchPreviewButton(false)
-            $(window.drawingCanvas).one('click.runPreview', (e) =>
-              # アイテムを再描画
-              @refreshAllItemsFromInstancePageValueIfChanging()
-            )
-      if callback?
-        callback()
-    )
+          )
+          # 状態変更フラグON
+          window.worktableItemsChangedState = true
+          # ボタン変更「Preview」->「StopPreview」
+          EventConfig.switchPreviewButton(false)
+          $(window.drawingCanvas).one('click.runPreview', (e) =>
+            # アイテムを再描画
+            @refreshAllItemsFromInstancePageValueIfChanging()
+          )
+    if callback?
+      callback()
 
   # 全てのアイテムをイベント適用前に戻す
   # @param [Function] callback コールバック

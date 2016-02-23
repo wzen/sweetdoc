@@ -39,6 +39,7 @@ class ScreenEvent extends CommonEvent
       @nowX = null
       @nowY = null
       @nowScale = null
+      @previewBaseScale = null
       @_initDone = false
 
     # イベントの初期化
@@ -47,8 +48,7 @@ class ScreenEvent extends CommonEvent
       super(event)
 
     initPreview: ->
-      # initConfigの値を適用
-      @_scale = _getInitConfigScale.call(@)
+      @previewBaseScale = @getNowScale()
 
     # 変更を戻して再表示
     refresh: (show = true, callback = null) ->
@@ -122,7 +122,10 @@ class ScreenEvent extends CommonEvent
       super(callback)
 
     willChapter: ->
-      @nowScale = @_scale
+      if window.previewRunning
+        @nowScale = @previewBaseScale
+      else
+        @nowScale = @_scale
       super()
 
     didChapter: ->
@@ -214,6 +217,7 @@ class ScreenEvent extends CommonEvent
         else
           s = @_defaultInitScale
         se.scale = s
+        se.nowScale = null
 
     _overlay = (x, y, scale) ->
       _drawOverlay = (context, x, y, width, height, scale) ->
@@ -224,7 +228,6 @@ class ScreenEvent extends CommonEvent
           context.lineTo(x + w, y);
           context.closePath();
 
-        context.clearRect(0, 0, width, height);
         context.save()
         context.fillStyle = "rgba(33, 33, 33, 0.5)";
         context.beginPath();
@@ -235,6 +238,7 @@ class ScreenEvent extends CommonEvent
         h = size.height / scale
         top = y - h / 2.0
         left = x - w / 2.0
+        context.clearRect(0, 0, width, height);
         _rect.call(@, context, left - window.scrollContents.scrollLeft(), top - window.scrollContents.scrollTop(), w, h)
         context.fill()
         context.restore()

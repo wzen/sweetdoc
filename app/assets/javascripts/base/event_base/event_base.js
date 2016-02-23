@@ -271,7 +271,6 @@ EventBase = (function(superClass) {
         if (_this._runningPreview) {
           _this.updateEventBefore();
           return _this.refresh(_this.visible, function() {
-            _this.initPreview();
             _this.willChapter();
             _this._progress = 0;
             return _this.previewStepDraw();
@@ -536,7 +535,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.updateEventAfter = function() {
-    var actionType;
+    var actionType, progressMax;
     if (this._event == null) {
       return;
     }
@@ -548,6 +547,13 @@ EventBase = (function(superClass) {
       this.stepValue = this.scrollLength();
     }
     this.updateInstanceParamByStep(null, true);
+    progressMax = this.progressMax();
+    this.execMethod({
+      isPreview: false,
+      progress: progressMax,
+      progressMax: progressMax,
+      forward: true
+    });
     return this.saveToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
   };
 

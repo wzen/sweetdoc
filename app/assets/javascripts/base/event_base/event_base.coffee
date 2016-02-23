@@ -126,7 +126,6 @@ class EventBase extends Extend
   preview: (@loopFinishCallback = null) ->
     if window.runDebug
       console.log('EventBase preview id:' + @id)
-
     @stopPreview( =>
       @_runningPreview = true
       @initPreview()
@@ -203,7 +202,6 @@ class EventBase extends Extend
       if @_runningPreview
         @updateEventBefore()
         @refresh(@visible, =>
-          @initPreview()
           @willChapter()
           @_progress = 0
           @previewStepDraw()
@@ -440,10 +438,8 @@ class EventBase extends Extend
     if !@_event?
       # イベントが初期化されていない場合は無視
       return
-
     if window.runDebug
       console.log('EventBase updateEventBefore id:' + @id)
-
     # インスタンスを戻す
     @setMiniumObject(@getMinimumObjectEventBefore())
     if @_event[EventPageValueBase.PageValueKey.DO_FOCUS] && @ instanceof ScreenEvent.PrivateClass == false
@@ -456,14 +452,20 @@ class EventBase extends Extend
     if !@_event?
       # イベントが初期化されていない場合は無視
       return
-
     if window.runDebug
       console.log('EventBase updateEventAfter id:' + @id)
-
     actionType = @getEventActionType()
     if actionType == Constant.ActionType.SCROLL
       @stepValue = @scrollLength()
     @updateInstanceParamByStep(null, true)
+    # 最終ステップでメソッドを実行
+    progressMax = @progressMax()
+    @execMethod({
+        isPreview: false
+        progress: progressMax
+        progressMax: progressMax
+        forward: true
+      })
     # インスタンスの状態を保存
     @saveToFootprint(@id, false, @_event[EventPageValueBase.PageValueKey.DIST_ID])
 

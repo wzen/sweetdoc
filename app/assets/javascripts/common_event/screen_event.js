@@ -56,6 +56,7 @@ ScreenEvent = (function(superClass) {
       this.nowX = null;
       this.nowY = null;
       this.nowScale = null;
+      this.previewBaseScale = null;
       this._initDone = false;
     }
 
@@ -65,7 +66,7 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.prototype.initPreview = function() {
-      return this._scale = _getInitConfigScale.call(this);
+      return this.previewBaseScale = this.getNowScale();
     };
 
     PrivateClass.prototype.refresh = function(show, callback) {
@@ -157,7 +158,11 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.prototype.willChapter = function() {
-      this.nowScale = this._scale;
+      if (window.previewRunning) {
+        this.nowScale = this.previewBaseScale;
+      } else {
+        this.nowScale = this._scale;
+      }
       return PrivateClass.__super__.willChapter.call(this);
     };
 
@@ -270,7 +275,8 @@ ScreenEvent = (function(superClass) {
         } else {
           s = this._defaultInitScale;
         }
-        return se.scale = s;
+        se.scale = s;
+        return se.nowScale = null;
       }
     };
 
@@ -285,7 +291,6 @@ ScreenEvent = (function(superClass) {
           context.lineTo(x + w, y);
           return context.closePath();
         };
-        context.clearRect(0, 0, width, height);
         context.save();
         context.fillStyle = "rgba(33, 33, 33, 0.5)";
         context.beginPath();
@@ -295,6 +300,7 @@ ScreenEvent = (function(superClass) {
         h = size.height / scale;
         top = y - h / 2.0;
         left = x - w / 2.0;
+        context.clearRect(0, 0, width, height);
         _rect.call(this, context, left - window.scrollContents.scrollLeft(), top - window.scrollContents.scrollTop(), w, h);
         context.fill();
         return context.restore();
