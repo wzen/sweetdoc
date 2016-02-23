@@ -15,11 +15,13 @@ class ItemEventBase extends EventBase
   initEventPrepare: ->
 
   # メソッド実行
-  execMethod: (opt) ->
+  execMethod: (opt, callback = null) ->
     super(opt)
     methodName = @getEventMethodName()
     if methodName != EventPageValueBase.NO_METHOD
       (@constructor.prototype[methodName]).call(@, opt)
+      if callback?
+        callback()
     else
       # 再描画してアイテム状態を反映
-      @refresh()
+      @refresh(true, callback)

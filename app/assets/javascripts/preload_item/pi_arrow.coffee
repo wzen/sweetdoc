@@ -139,20 +139,6 @@ class PreloadItemArrow extends CanvasItemBase
       # 描画
       _drawNewCanvas.call(@)
 
-  # イベント前の表示状態にする
-  updateEventBefore: ->
-    super()
-    methodName = @getEventMethodName()
-    if methodName == 'changeDraw'
-      @refresh(false)
-
-  # イベント後の表示状態にする
-  updateEventAfter: ->
-    super()
-    methodName = @getEventMethodName()
-    if methodName == 'changeDraw'
-      @refresh()
-
   # 描画イベント ※アクションイベント
   changeDraw : (opt) ->
     r = opt.progress / opt.progressMax

@@ -79,6 +79,15 @@ EventBase = (function(superClass) {
     }
   };
 
+  EventBase.prototype.isItemVisible = function() {
+    var op;
+    op = this.getJQueryElement().css('opacity');
+    if (op.length > 0) {
+      return parseInt(op) === 1;
+    }
+    return true;
+  };
+
   EventBase.prototype.refreshFromInstancePageValue = function(show, callback) {
     var obj;
     if (show == null) {
@@ -257,10 +266,12 @@ EventBase = (function(superClass) {
       return function() {
         if (_this._runningPreview) {
           _this.updateEventBefore();
-          _this.initPreview();
-          _this.willChapter();
-          _this._progress = 0;
-          return _this.previewStepDraw();
+          return _this.refresh(_this.visible, function() {
+            _this.initPreview();
+            _this.willChapter();
+            _this._progress = 0;
+            return _this.previewStepDraw();
+          });
         }
       };
     })(this), loopDelay);
@@ -319,8 +330,14 @@ EventBase = (function(superClass) {
     return this.saveToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
   };
 
-  EventBase.prototype.execMethod = function(opt) {
-    return this.updateInstanceParamByStep(opt.progress);
+  EventBase.prototype.execMethod = function(opt, callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    this.updateInstanceParamByStep(opt.progress);
+    if (callback != null) {
+      return callback();
+    }
   };
 
   EventBase.prototype.scrollHandlerFunc = function(isPreview, x, y) {
@@ -377,13 +394,16 @@ EventBase = (function(superClass) {
         progress: this.stepValue - sPoint,
         progressMax: this.progressMax(),
         forward: this.forward
-      });
-      if (!this._isFinishedEvent) {
-        this.finishEvent();
-        if (!isPreview) {
-          ScrollGuide.hideGuide();
-        }
-      }
+      }, (function(_this) {
+        return function() {
+          if (!_this._isFinishedEvent) {
+            _this.finishEvent();
+            if (!isPreview) {
+              return ScrollGuide.hideGuide();
+            }
+          }
+        };
+      })(this));
       return;
     }
     this.canForward = this.stepValue < ePoint;
@@ -423,17 +443,18 @@ EventBase = (function(superClass) {
     return this._clickIntervalTimer = setInterval((function(_this) {
       return function() {
         if (!_this._skipEvent) {
-          _this.execMethod({
+          return _this.execMethod({
             isPreview: isPreview,
             progress: _this.stepValue,
             progressMax: progressMax,
             forward: true
+          }, function() {
+            _this.stepValue += 1;
+            if (progressMax < _this.stepValue) {
+              clearInterval(_this._clickIntervalTimer);
+              return _this.finishEvent();
+            }
           });
-          _this.stepValue += 1;
-          if (progressMax < _this.stepValue) {
-            clearInterval(_this._clickIntervalTimer);
-            return _this.finishEvent();
-          }
         }
       };
     })(this), this.constructor.STEP_INTERVAL_DURATION * 1000);

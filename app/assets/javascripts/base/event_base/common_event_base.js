@@ -14,9 +14,18 @@ CommonEventBase = (function(superClass) {
     return CommonEventBase.__super__.initEvent.call(this, event);
   };
 
-  CommonEventBase.prototype.execMethod = function(opt) {
-    CommonEventBase.__super__.execMethod.call(this, opt);
-    return this.constructor.prototype[this.getEventMethodName()].call(this, opt);
+  CommonEventBase.prototype.execMethod = function(opt, callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    return CommonEventBase.__super__.execMethod.call(this, opt, (function(_this) {
+      return function() {
+        _this.constructor.prototype[_this.getEventMethodName()].call(_this, opt);
+        if (callback != null) {
+          return callback();
+        }
+      };
+    })(this));
   };
 
   return CommonEventBase;

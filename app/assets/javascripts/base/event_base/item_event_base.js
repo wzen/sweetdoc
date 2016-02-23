@@ -17,14 +17,20 @@ ItemEventBase = (function(superClass) {
 
   ItemEventBase.prototype.initEventPrepare = function() {};
 
-  ItemEventBase.prototype.execMethod = function(opt) {
+  ItemEventBase.prototype.execMethod = function(opt, callback) {
     var methodName;
+    if (callback == null) {
+      callback = null;
+    }
     ItemEventBase.__super__.execMethod.call(this, opt);
     methodName = this.getEventMethodName();
     if (methodName !== EventPageValueBase.NO_METHOD) {
-      return this.constructor.prototype[methodName].call(this, opt);
+      this.constructor.prototype[methodName].call(this, opt);
+      if (callback != null) {
+        return callback();
+      }
     } else {
-      return this.refresh();
+      return this.refresh(true, callback);
     }
   };
 

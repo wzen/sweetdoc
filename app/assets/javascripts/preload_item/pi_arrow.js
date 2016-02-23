@@ -147,24 +147,6 @@ PreloadItemArrow = (function(superClass) {
     }
   };
 
-  PreloadItemArrow.prototype.updateEventBefore = function() {
-    var methodName;
-    PreloadItemArrow.__super__.updateEventBefore.call(this);
-    methodName = this.getEventMethodName();
-    if (methodName === 'changeDraw') {
-      return this.refresh(false);
-    }
-  };
-
-  PreloadItemArrow.prototype.updateEventAfter = function() {
-    var methodName;
-    PreloadItemArrow.__super__.updateEventAfter.call(this);
-    methodName = this.getEventMethodName();
-    if (methodName === 'changeDraw') {
-      return this.refresh();
-    }
-  };
-
   PreloadItemArrow.prototype.changeDraw = function(opt) {
     var j, len, r, ref;
     r = opt.progress / opt.progressMax;

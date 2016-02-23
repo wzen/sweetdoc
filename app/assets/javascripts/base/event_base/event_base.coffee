@@ -41,6 +41,13 @@ class EventBase extends Extend
   # @abstract
   refresh: (show = true, callback = null) ->
 
+  # 現在の表示状態
+  isItemVisible: ->
+    op = @getJQueryElement().css('opacity')
+    if op.length > 0
+      return parseInt(op) == 1
+    return true
+
   # インスタンス変数で描画
   # データから読み込んで描画する処理に使用
   # @param [Boolean] show 要素作成後に表示するか
@@ -193,10 +200,12 @@ class EventBase extends Extend
     @_previewTimer = setTimeout( =>
       if @_runningPreview
         @updateEventBefore()
-        @initPreview()
-        @willChapter()
-        @_progress = 0
-        @previewStepDraw()
+        @refresh(@visible, =>
+          @initPreview()
+          @willChapter()
+          @_progress = 0
+          @previewStepDraw()
+        )
     , loopDelay)
 
   # プレビューを停止
@@ -250,10 +259,12 @@ class EventBase extends Extend
     @saveToFootprint(@id, false, @_event[EventPageValueBase.PageValueKey.DIST_ID])
 
   # メソッド実行
-  execMethod: (opt) ->
+  execMethod: (opt, callback = null) ->
     # メソッド共通処理
     # アイテム位置&サイズ更新
     @updateInstanceParamByStep(opt.progress)
+    if callback?
+      callback()
 
   # スクロール基底メソッド
   # @param [Integer] x スクロール横座標
@@ -312,12 +323,13 @@ class EventBase extends Extend
         progress: @stepValue - sPoint
         progressMax: @progressMax()
         forward: @forward
-      })
-      if !@_isFinishedEvent
-        # 終了イベント
-        @finishEvent()
-        if !isPreview
-          ScrollGuide.hideGuide()
+      }, =>
+        if !@_isFinishedEvent
+          # 終了イベント
+          @finishEvent()
+          if !isPreview
+            ScrollGuide.hideGuide()
+      )
       return
 
     @canForward = @stepValue < ePoint
@@ -363,12 +375,13 @@ class EventBase extends Extend
           progress: @stepValue
           progressMax: progressMax
           forward: true
-        })
-        @stepValue += 1
-        if progressMax < @stepValue
-          clearInterval(@_clickIntervalTimer)
-          # 終了イベント
-          @finishEvent()
+        }, =>
+          @stepValue += 1
+          if progressMax < @stepValue
+            clearInterval(@_clickIntervalTimer)
+            # 終了イベント
+            @finishEvent()
+        )
     , @constructor.STEP_INTERVAL_DURATION * 1000)
 
   # Step値を戻す
