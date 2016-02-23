@@ -35,6 +35,23 @@ canvasItemBaseWorktableExtend = {
       };
     })(this));
   },
+  resize: function(size, originalSize) {
+    var diff, scale;
+    scale = WorktableCommon.getWorktableViewScale();
+    diff = {
+      width: (size.width - originalSize.width) / scale,
+      height: (size.height - originalSize.height) / scale
+    };
+    size.width = originalSize.width + diff.width;
+    size.height = originalSize.height + diff.height;
+    this.updateItemSize(size.width, size.height);
+    this.refresh();
+    if (window.debug) {
+      console.log("resize: size:");
+      console.log(size);
+      return console.log("resize: itemSize: " + (JSON.stringify(this.itemSize)));
+    }
+  },
   setupDesignToolOptionMenu: function() {
     var btnBgColor, btnGradientStep, btnShadowColor, designConfigRoot;
     designConfigRoot = $('#' + this.getDesignConfigId());

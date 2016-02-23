@@ -360,7 +360,7 @@ itemBaseWorktableExtend = {
             w: w,
             h: h
           };
-          return _this.updatePositionAndItemSize(itemSize);
+          return _this.updatePositionAndItemSize(itemSize, true, true);
         });
         if ((_this.constructor.actionProperties.designConfig != null) && _this.constructor.actionProperties.designConfig) {
           _this.setupDesignToolOptionMenu();

@@ -125,8 +125,7 @@ CanvasItemBase = (function(superClass) {
     drawingContext = drawingCanvas.getContext('2d');
     drawingContext.scale(scaleW, scaleH);
     this.scale.w = scaleW;
-    this.scale.h = scaleH;
-    return this.refresh();
+    return this.scale.h = scaleH;
   };
 
   CanvasItemBase.prototype.originalItemElementSize = function() {

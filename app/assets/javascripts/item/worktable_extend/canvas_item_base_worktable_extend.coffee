@@ -25,6 +25,23 @@ canvasItemBaseWorktableExtend =
         callback()
     )
 
+  # リサイズ時のイベント
+  resize: (size, originalSize) ->
+    scale = WorktableCommon.getWorktableViewScale()
+    diff = {
+      width: (size.width - originalSize.width) / scale
+      height: (size.height - originalSize.height) / scale
+    }
+    size.width = originalSize.width + diff.width
+    size.height = originalSize.height + diff.height
+    @updateItemSize(size.width, size.height)
+    # キャンパスはリサイズ時に再描画する
+    @refresh()
+    if window.debug
+      console.log("resize: size:")
+      console.log(size)
+      console.log("resize: itemSize: #{JSON.stringify(@itemSize)}")
+
   # デザインツールメニュー設定
   setupDesignToolOptionMenu: ->
     designConfigRoot = $('#' + @getDesignConfigId())

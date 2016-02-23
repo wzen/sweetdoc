@@ -291,11 +291,13 @@ class ItemBase extends ItemEventBase
     @designs = PageValue.getInstancePageValue(PageValue.Key.instanceDesignRoot(@id))
 
   # アイテム位置&サイズを更新
-  updatePositionAndItemSize: (itemSize, withSaveObj = true) ->
+  updatePositionAndItemSize: (itemSize, withSaveObj = true, withRefresh = false) ->
     @updateItemPosition(itemSize.x, itemSize.y)
     @updateItemSize(itemSize.w, itemSize.h)
     if withSaveObj
       @saveObj()
+    if withRefresh
+      refresh(@isItemVisible())
 
   updateItemPosition: (x, y) ->
     @getJQueryElement().css({top: y, left: x})
@@ -330,7 +332,7 @@ class ItemBase extends ItemEventBase
         w: originalItemElementSize.w + itemDiff.w
         h: originalItemElementSize.h + itemDiff.h
       }
-      @updatePositionAndItemSize(itemSize, false)
+      @updatePositionAndItemSize(itemSize, false, true)
       return
 
     scrollEnd = parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
@@ -342,7 +344,7 @@ class ItemBase extends ItemEventBase
       w: originalItemElementSize.w + (itemDiff.w * progressPercentage)
       h: originalItemElementSize.h + (itemDiff.h * progressPercentage)
     }
-    @updatePositionAndItemSize(itemSize, false)
+    @updatePositionAndItemSize(itemSize, false, true)
 
   # クリックイベントでアイテム位置&サイズ更新
   updateItemSizeByAnimation: (immediate = false) ->
@@ -362,7 +364,7 @@ class ItemBase extends ItemEventBase
         w: originalItemElementSize.w + itemDiff.w
         h: originalItemElementSize.h + itemDiff.h
       }
-      @updatePositionAndItemSize(itemSize, false)
+      @updatePositionAndItemSize(itemSize, false, true)
       return
 
     eventDuration = @_event[EventPageValueBase.PageValueKey.EVENT_DURATION]
@@ -380,7 +382,7 @@ class ItemBase extends ItemEventBase
         w: originalItemElementSize.w + (perW * count)
         h: originalItemElementSize.h + (perH * count)
       }
-      @updatePositionAndItemSize(itemSize, false)
+      @updatePositionAndItemSize(itemSize, false, true)
       if count >= loopMax
         clearInterval(timer)
         itemSize = {
@@ -389,7 +391,7 @@ class ItemBase extends ItemEventBase
           w: originalItemElementSize.w + itemDiff.w
           h: originalItemElementSize.h + itemDiff.h
         }
-        @updatePositionAndItemSize(itemSize, false)
+        @updatePositionAndItemSize(itemSize, false, true)
       count += 1
     , duration * 1000)
 

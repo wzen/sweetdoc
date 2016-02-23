@@ -413,7 +413,6 @@ class PreloadItemText extends CanvasItemBase
     canvas.attr('height', element.height())
     @itemSize.w = w
     @itemSize.h = h
-    @refresh()
 
   # アニメーション変更前のアイテムサイズ
   # テキストはCanvasの伸縮をさせないため、メソッド上書き

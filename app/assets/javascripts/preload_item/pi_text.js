@@ -551,8 +551,7 @@ PreloadItemText = (function(superClass) {
     canvas.attr('width', element.width());
     canvas.attr('height', element.height());
     this.itemSize.w = w;
-    this.itemSize.h = h;
-    return this.refresh();
+    return this.itemSize.h = h;
   };
 
   PreloadItemText.prototype.originalItemElementSize = function() {

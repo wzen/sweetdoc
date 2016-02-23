@@ -339,14 +339,20 @@ ItemBase = (function(superClass) {
     return this.designs = PageValue.getInstancePageValue(PageValue.Key.instanceDesignRoot(this.id));
   };
 
-  ItemBase.prototype.updatePositionAndItemSize = function(itemSize, withSaveObj) {
+  ItemBase.prototype.updatePositionAndItemSize = function(itemSize, withSaveObj, withRefresh) {
     if (withSaveObj == null) {
       withSaveObj = true;
+    }
+    if (withRefresh == null) {
+      withRefresh = false;
     }
     this.updateItemPosition(itemSize.x, itemSize.y);
     this.updateItemSize(itemSize.w, itemSize.h);
     if (withSaveObj) {
-      return this.saveObj();
+      this.saveObj();
+    }
+    if (withRefresh) {
+      return refresh(this.isItemVisible());
     }
   };
 
@@ -395,7 +401,7 @@ ItemBase = (function(superClass) {
         w: originalItemElementSize.w + itemDiff.w,
         h: originalItemElementSize.h + itemDiff.h
       };
-      this.updatePositionAndItemSize(itemSize, false);
+      this.updatePositionAndItemSize(itemSize, false, true);
       return;
     }
     scrollEnd = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
@@ -407,7 +413,7 @@ ItemBase = (function(superClass) {
       w: originalItemElementSize.w + (itemDiff.w * progressPercentage),
       h: originalItemElementSize.h + (itemDiff.h * progressPercentage)
     };
-    return this.updatePositionAndItemSize(itemSize, false);
+    return this.updatePositionAndItemSize(itemSize, false, true);
   };
 
   ItemBase.prototype.updateItemSizeByAnimation = function(immediate) {
@@ -430,7 +436,7 @@ ItemBase = (function(superClass) {
         w: originalItemElementSize.w + itemDiff.w,
         h: originalItemElementSize.h + itemDiff.h
       };
-      this.updatePositionAndItemSize(itemSize, false);
+      this.updatePositionAndItemSize(itemSize, false, true);
       return;
     }
     eventDuration = this._event[EventPageValueBase.PageValueKey.EVENT_DURATION];
@@ -449,7 +455,7 @@ ItemBase = (function(superClass) {
           w: originalItemElementSize.w + (perW * count),
           h: originalItemElementSize.h + (perH * count)
         };
-        _this.updatePositionAndItemSize(itemSize, false);
+        _this.updatePositionAndItemSize(itemSize, false, true);
         if (count >= loopMax) {
           clearInterval(timer);
           itemSize = {
@@ -458,7 +464,7 @@ ItemBase = (function(superClass) {
             w: originalItemElementSize.w + itemDiff.w,
             h: originalItemElementSize.h + itemDiff.h
           };
-          _this.updatePositionAndItemSize(itemSize, false);
+          _this.updatePositionAndItemSize(itemSize, false, true);
         }
         return count += 1;
       };

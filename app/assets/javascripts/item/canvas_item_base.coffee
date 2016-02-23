@@ -113,7 +113,6 @@ class CanvasItemBase extends ItemBase
     drawingContext.scale(scaleW, scaleH)
     @scale.w = scaleW
     @scale.h = scaleH
-    @refresh()
 
   # アニメーション変更前のアイテムサイズ
   originalItemElementSize: ->

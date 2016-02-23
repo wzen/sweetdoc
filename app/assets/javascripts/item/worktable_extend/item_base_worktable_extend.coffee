@@ -303,7 +303,7 @@ itemBaseWorktableExtend =
           w: w
           h: h
         }
-        @updatePositionAndItemSize(itemSize)
+        @updatePositionAndItemSize(itemSize, true, true)
       )
 
       # デザインコンフィグ
