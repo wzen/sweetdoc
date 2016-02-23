@@ -111,6 +111,7 @@ class PreloadItemButton extends CssItemBase
       }
       methods: {
         defaultClick: {
+          finishWithHand: true
           options: {
             id: 'defaultClick'
             name: 'Default click action'

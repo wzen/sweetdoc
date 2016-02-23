@@ -165,6 +165,7 @@ class PreloadItemText extends CanvasItemBase
     }
     methods : {
       changeText: {
+        finishWithHand: true
         modifiables: {
           inputText: {
             name: "Text"
@@ -207,6 +208,7 @@ class PreloadItemText extends CanvasItemBase
         }
       }
       writeText: {
+        finishWithHand: true
         modifiables: {
           showWithAnimation: {
             name: 'Show with animation'

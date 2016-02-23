@@ -417,6 +417,7 @@ class Const
     MODIFIABLE_VARS = 'modifiables'
     MODIFIABLE_CHILDREN = 'children'
     MODIFIABLE_CHILDREN_OPENVALUE = 'openChildrenValue'
+    FINISH_WITH_HAND = 'finishWithHand'
   end
 
   class Run

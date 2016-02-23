@@ -252,6 +252,7 @@ PreloadItemText = (function(superClass) {
     },
     methods: {
       changeText: {
+        finishWithHand: true,
         modifiables: {
           inputText: {
             name: "Text",
@@ -301,6 +302,7 @@ PreloadItemText = (function(superClass) {
         }
       },
       writeText: {
+        finishWithHand: true,
         modifiables: {
           showWithAnimation: {
             name: 'Show with animation',

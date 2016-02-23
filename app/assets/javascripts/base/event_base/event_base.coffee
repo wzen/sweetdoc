@@ -24,6 +24,7 @@ class EventBase extends Extend
     @MODIFIABLE_VARS = constant.ItemActionPropertiesKey.MODIFIABLE_VARS
     @MODIFIABLE_CHILDREN = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN
     @MODIFIABLE_CHILDREN_OPENVALUE = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE
+    @FINISH_WITH_HAND = constant.ItemActionPropertiesKey.FINISH_WITH_HAND
 
   constructor: ->
     # modifiables変数の初期化
@@ -161,7 +162,8 @@ class EventBase extends Extend
           @scrollHandlerFunc(true)
           @_progress += 1
           if @_progress > @progressMax()
-            @previewLoop()
+            if !@isFinishedWithHand()
+              @finishEvent()
           else
             @previewStepDraw()
         , @constructor.STEP_INTERVAL_DURATION * 1000)
@@ -325,8 +327,9 @@ class EventBase extends Extend
         forward: @forward
       }, =>
         if !@_isFinishedEvent
-          # 終了イベント
-          @finishEvent()
+          if !@isFinishedWithHand()
+            # 終了イベント
+            @finishEvent()
           if !isPreview
             ScrollGuide.hideGuide()
       )
@@ -379,8 +382,9 @@ class EventBase extends Extend
           @stepValue += 1
           if progressMax < @stepValue
             clearInterval(@_clickIntervalTimer)
-            # 終了イベント
-            @finishEvent()
+            if !@isFinishedWithHand()
+              # 終了イベント
+              @finishEvent()
         )
     , @constructor.STEP_INTERVAL_DURATION * 1000)
 
@@ -638,6 +642,13 @@ class EventBase extends Extend
       modifiableRoot = @actionProperties[@ActionPropertiesKey.MODIFIABLE_VARS]
 
     return _actionPropertiesModifiableVars.call(@, modifiableRoot, ret)
+
+  isFinishedWithHand: ->
+    methodName = @getEventMethodName()
+    if methodName? && @constructor.actionProperties.methods? && @constructor.actionProperties.methods[methodName]?
+      m = @constructor.actionProperties.methods[methodName]
+      return m[@constructor.ActionPropertiesKey.FINISH_WITH_HAND]? && m[@constructor.ActionPropertiesKey.FINISH_WITH_HAND]
+    return false
 
   saveToFootprint: (targetObjId, isChangeBefore, eventDistNum, pageNum = PageValue.getPageNum()) ->
     PageValue.saveToFootprint(targetObjId, isChangeBefore, eventDistNum)

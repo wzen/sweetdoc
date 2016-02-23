@@ -51,6 +51,8 @@ EventBase = (function(superClass) {
 
     ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE;
 
+    ActionPropertiesKey.FINISH_WITH_HAND = constant.ItemActionPropertiesKey.FINISH_WITH_HAND;
+
     return ActionPropertiesKey;
 
   })();
@@ -216,7 +218,9 @@ EventBase = (function(superClass) {
             _this.scrollHandlerFunc(true);
             _this._progress += 1;
             if (_this._progress > _this.progressMax()) {
-              return _this.previewLoop();
+              if (!_this.isFinishedWithHand()) {
+                return _this.finishEvent();
+              }
             } else {
               return _this.previewStepDraw();
             }
@@ -397,7 +401,9 @@ EventBase = (function(superClass) {
       }, (function(_this) {
         return function() {
           if (!_this._isFinishedEvent) {
-            _this.finishEvent();
+            if (!_this.isFinishedWithHand()) {
+              _this.finishEvent();
+            }
             if (!isPreview) {
               return ScrollGuide.hideGuide();
             }
@@ -452,7 +458,9 @@ EventBase = (function(superClass) {
             _this.stepValue += 1;
             if (progressMax < _this.stepValue) {
               clearInterval(_this._clickIntervalTimer);
-              return _this.finishEvent();
+              if (!_this.isFinishedWithHand()) {
+                return _this.finishEvent();
+              }
             }
           });
         }
@@ -807,6 +815,16 @@ EventBase = (function(superClass) {
       modifiableRoot = this.actionProperties[this.ActionPropertiesKey.MODIFIABLE_VARS];
     }
     return _actionPropertiesModifiableVars.call(this, modifiableRoot, ret);
+  };
+
+  EventBase.prototype.isFinishedWithHand = function() {
+    var m, methodName;
+    methodName = this.getEventMethodName();
+    if ((methodName != null) && (this.constructor.actionProperties.methods != null) && (this.constructor.actionProperties.methods[methodName] != null)) {
+      m = this.constructor.actionProperties.methods[methodName];
+      return (m[this.constructor.ActionPropertiesKey.FINISH_WITH_HAND] != null) && m[this.constructor.ActionPropertiesKey.FINISH_WITH_HAND];
+    }
+    return false;
   };
 
   EventBase.prototype.saveToFootprint = function(targetObjId, isChangeBefore, eventDistNum, pageNum) {
