@@ -824,7 +824,7 @@ WorktableCommon = (function() {
     return this.updateAllEventsToBefore(keepDispMag, (function(_this) {
       return function() {
         _this.refreshAllItemsFromInstancePageValueIfChanging();
-        FloatView.hide();
+        FloatView.hideWithCloseButtonView();
         if (callback != null) {
           return callback();
         }

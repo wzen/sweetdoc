@@ -702,7 +702,7 @@ class WorktableCommon
     @updateAllEventsToBefore(keepDispMag, =>
       # アイテム再描画
       @refreshAllItemsFromInstancePageValueIfChanging()
-      FloatView.hide()
+      FloatView.hideWithCloseButtonView()
       if callback?
         callback()
     )
