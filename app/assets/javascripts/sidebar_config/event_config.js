@@ -202,19 +202,17 @@ EventConfig = (function() {
 
   EventConfig.prototype.applyAction = function() {
     Common.showModalFlashMessage('Please Wait');
-    return this.stopPreview((function(_this) {
-      return function() {
-        if (_this.writeToEventPageValue()) {
-          LocalStorage.saveAllPageValues();
-          FloatView.show('Applied', FloatView.Type.APPLY, 3.0);
-          Timeline.addEvent();
-          return Common.hideModalView(true);
-        }
-      };
-    })(this));
+    if (this.writeToEventPageValue()) {
+      LocalStorage.saveAllPageValues();
+      FloatView.show('Applied', FloatView.Type.APPLY, 3.0);
+      Timeline.addEvent();
+      return Common.hideModalView(true);
+    }
   };
 
-  EventConfig.prototype.preview = function(keepDispMag) {
+  EventConfig.prototype.preview = function(e) {
+    var keepDispMag;
+    keepDispMag = $(e.target).closest('div').find('.keep_disp_mag').is(':checked');
     if (WorktableCommon.isConnectedEventProgressRoute(this.teNum)) {
       return WorktableCommon.stashEventPageValueForPreview(this.teNum, (function(_this) {
         return function() {
@@ -225,15 +223,18 @@ EventConfig = (function() {
     }
   };
 
-  EventConfig.prototype.stopPreview = function(callback) {
+  EventConfig.prototype.stopPreview = function(e, callback) {
+    var keepDispMag;
     if (callback == null) {
       callback = null;
     }
+    keepDispMag = $(e.target).closest('div').find('.keep_disp_mag').is(':checked');
     return WorktableCommon.stopAllEventPreview(function() {
-      WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging();
-      if (callback != null) {
-        return callback();
-      }
+      return WorktableCommon.stopPreview(keepDispMag, function() {
+        if (callback != null) {
+          return callback();
+        }
+      });
     });
   };
 
@@ -379,10 +380,8 @@ EventConfig = (function() {
       $('.push.button.preview', this.emt).removeAttr('disabled');
       $('.push.button.preview', this.emt).off('click').on('click', (function(_this) {
         return function(e) {
-          var keepDispMag;
           _this.clearError();
-          keepDispMag = $(e.target).closest('div').find('.keep_disp_mag').is(':checked');
-          return _this.preview(keepDispMag);
+          return _this.preview(e);
         };
       })(this));
     } else {
@@ -397,7 +396,7 @@ EventConfig = (function() {
     return $('.push.button.preview_stop', this.emt).off('click').on('click', (function(_this) {
       return function(e) {
         _this.clearError();
-        return _this.stopPreview();
+        return _this.stopPreview(e);
       };
     })(this));
   };

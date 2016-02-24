@@ -190,11 +190,17 @@ div.float_view {
       height: 100%;
       width: 40px;
       margin-left: -40px;
-      .close_button {
+      .table_wrapper {
+        position: relative;
         width: 100%;
         height: 100%;
-        background-image: image_url('float_view/floatview_exit32.png');
-        background-repeat: no-repeat;
+        .close_button {
+          width: 32px;
+          height: 32px;
+          background-image: image_url('float_view/floatview_exit32.png');
+          background-repeat: no-repeat;
+          background-size: 32px 32px;
+        }
       }
     }
   }

@@ -197,24 +197,23 @@ class EventConfig
     return true
 
   applyAction: ->
+    # ※プレビューは停止している状態
     Common.showModalFlashMessage('Please Wait')
-    # プレビュー停止
-    @stopPreview( =>
-      # 入力値書き込み
-      if @writeToEventPageValue()
-        # イベントの色を変更
-        #Timeline.changeTimelineColor(@teNum, @[EventPageValueBase.PageValueKey.ACTIONTYPE])
-        # キャッシュに保存
-        LocalStorage.saveAllPageValues()
-        # 通知
-        FloatView.show('Applied', FloatView.Type.APPLY, 3.0)
-        # イベントを更新
-        Timeline.addEvent()
-        Common.hideModalView(true)
-    )
+    # 入力値書き込み
+    if @writeToEventPageValue()
+      # イベントの色を変更
+      #Timeline.changeTimelineColor(@teNum, @[EventPageValueBase.PageValueKey.ACTIONTYPE])
+      # キャッシュに保存
+      LocalStorage.saveAllPageValues()
+      # 通知
+      FloatView.show('Applied', FloatView.Type.APPLY, 3.0)
+      # イベントを更新
+      Timeline.addEvent()
+      Common.hideModalView(true)
 
   # プレビュー開始
-  preview: (keepDispMag) ->
+  preview: (e) ->
+    keepDispMag = $(e.target).closest('div').find('.keep_disp_mag').is(':checked')
     if WorktableCommon.isConnectedEventProgressRoute(@teNum)
       # 対象のEventPageValueを一時的に退避
       WorktableCommon.stashEventPageValueForPreview(@teNum, =>
@@ -224,11 +223,13 @@ class EventConfig
       )
 
   # プレビュー停止
-  stopPreview: (callback = null) ->
+  stopPreview: (e, callback = null) ->
+    keepDispMag = $(e.target).closest('div').find('.keep_disp_mag').is(':checked')
     WorktableCommon.stopAllEventPreview( ->
-      WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging()
-      if callback?
-        callback()
+      WorktableCommon.stopPreview(keepDispMag, ->
+        if callback?
+          callback()
+      )
     )
 
   # アクションメソッドクラス名を取得
@@ -355,21 +356,18 @@ class EventConfig
       $('.push.button.preview', @emt).removeAttr('disabled')
       $('.push.button.preview', @emt).off('click').on('click', (e) =>
         @clearError()
-        # UIの入力値を初期化
-        keepDispMag = $(e.target).closest('div').find('.keep_disp_mag').is(':checked')
-        @preview(keepDispMag)
+        @preview(e)
       )
     else
       # イベントの設定が接続されていない場合はdisabled
       $('.push.button.preview', @emt).attr('disabled', true)
     $('.push.button.apply', @emt).off('click').on('click', (e) =>
       @clearError()
-      # 入力値を適用する
       @applyAction()
     )
     $('.push.button.preview_stop', @emt).off('click').on('click', (e) =>
       @clearError()
-      @stopPreview()
+      @stopPreview(e)
     )
 
   _setupFromPageValues = ->

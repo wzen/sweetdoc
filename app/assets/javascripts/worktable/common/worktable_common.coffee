@@ -684,27 +684,28 @@ class WorktableCommon
         else if doRunPreview
           # プレビュー実行
           item.preview( =>
-            # プレビューの実行回数超過
-            window.previewRunning = false
-            # ボタン変更「StopPreview」->「Preview」
-            EventConfig.switchPreviewButton(true)
-            # 全ての状態をイベント適応前にする
-            @updateAllEventsToBefore(keepDispMag, =>
-              # アイテム再描画
-              @refreshAllItemsFromInstancePageValueIfChanging()
-              FloatView.hide()
-            )
+            @stopPreview(keepDispMag)
           )
           # 状態変更フラグON
           window.worktableItemsChangedState = true
           # ボタン変更「Preview」->「StopPreview」
           EventConfig.switchPreviewButton(false)
-          $(window.drawingCanvas).one('click.runPreview', (e) =>
-            # アイテムを再描画
-            @refreshAllItemsFromInstancePageValueIfChanging()
-          )
     if callback?
       callback()
+
+  @stopPreview: (keepDispMag, callback = null) ->
+    # プレビューの実行回数超過
+    window.previewRunning = false
+    # ボタン変更「StopPreview」->「Preview」
+    EventConfig.switchPreviewButton(true)
+    # 全ての状態をイベント適応前にする
+    @updateAllEventsToBefore(keepDispMag, =>
+      # アイテム再描画
+      @refreshAllItemsFromInstancePageValueIfChanging()
+      FloatView.hide()
+      if callback?
+        callback()
+    )
 
   # 全てのアイテムをイベント適用前に戻す
   # @param [Function] callback コールバック

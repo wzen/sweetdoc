@@ -135,7 +135,12 @@ class EventBase extends Extend
       @_loopCount = 0
       @_previewTimer = null
       # FloatView表示
-      FloatView.show(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW)
+      FloatView.showWithCloseButton(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW, =>
+        WorktableCommon.stopAllEventPreview( =>
+          if @loopFinishCallback?
+            @loopFinishCallback()
+        )
+      )
       @_progress = 0
       if window.debug
         console.log('start previewStepDraw')

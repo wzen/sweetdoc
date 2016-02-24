@@ -802,27 +802,34 @@ WorktableCommon = (function() {
         } else if (doRunPreview) {
           item.preview((function(_this) {
             return function() {
-              window.previewRunning = false;
-              EventConfig.switchPreviewButton(true);
-              return _this.updateAllEventsToBefore(keepDispMag, function() {
-                _this.refreshAllItemsFromInstancePageValueIfChanging();
-                return FloatView.hide();
-              });
+              return _this.stopPreview(keepDispMag);
             };
           })(this));
           window.worktableItemsChangedState = true;
           EventConfig.switchPreviewButton(false);
-          $(window.drawingCanvas).one('click.runPreview', (function(_this) {
-            return function(e) {
-              return _this.refreshAllItemsFromInstancePageValueIfChanging();
-            };
-          })(this));
         }
       }
     }
     if (callback != null) {
       return callback();
     }
+  };
+
+  WorktableCommon.stopPreview = function(keepDispMag, callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    window.previewRunning = false;
+    EventConfig.switchPreviewButton(true);
+    return this.updateAllEventsToBefore(keepDispMag, (function(_this) {
+      return function() {
+        _this.refreshAllItemsFromInstancePageValueIfChanging();
+        FloatView.hide();
+        if (callback != null) {
+          return callback();
+        }
+      };
+    })(this));
   };
 
   WorktableCommon.updateAllEventsToBefore = function(keepDispMag, callback) {
