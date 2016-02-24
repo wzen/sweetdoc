@@ -191,59 +191,78 @@ RunCommon = (function() {
   };
 
   RunCommon.setupScrollEvent = function() {
-    var lastLeft, lastTop, stopTimer;
+    var lastLeft, lastTop, scrollStack, stopTimer;
     lastLeft = window.scrollHandleWrapper.scrollLeft();
     lastTop = window.scrollHandleWrapper.scrollTop();
     stopTimer = null;
-    return window.scrollHandleWrapper.off('scroll').on('scroll', function(e) {
-      var distX, distY, x, y;
-      if ((window.scrollRunning != null) && window.scrollRunning) {
-        return;
-      }
-      if ((window.skipScrollEvent != null) && window.skipScrollEvent) {
-        window.skipScrollEvent = false;
-        return;
-      }
-      e.preventDefault();
-      e.stopPropagation();
-      if (!RunCommon.enabledScroll()) {
-        return;
-      }
-      x = $(this).scrollLeft();
-      y = $(this).scrollTop();
-      if (stopTimer !== null) {
-        clearTimeout(stopTimer);
-      }
-      stopTimer = setTimeout((function(_this) {
-        return function() {
-          RunCommon.initHandleScrollView();
-          lastLeft = $(_this).scrollLeft();
-          lastTop = $(_this).scrollTop();
-          clearTimeout(stopTimer);
-          return stopTimer = null;
+    scrollStack = [];
+    return window.scrollHandleWrapper.off('scroll').on('scroll', (function(_this) {
+      return function(e) {
+        var _scroll, target, x, y;
+        _scroll = function(target, x, y) {
+          var distX, distY;
+          if (stopTimer !== null) {
+            clearTimeout(stopTimer);
+          }
+          stopTimer = setTimeout((function(_this) {
+            return function() {
+              RunCommon.initHandleScrollView();
+              lastLeft = target.scrollLeft();
+              lastTop = target.scrollTop();
+              clearTimeout(stopTimer);
+              return stopTimer = null;
+            };
+          })(this), 100);
+          distX = x - lastLeft;
+          distY = y - lastTop;
+          window.scrollRunning = true;
+          if (window.scrollRunningTimer != null) {
+            clearTimeout(window.scrollRunningTimer);
+            window.scrollRunningTimer = null;
+          }
+          window.scrollRunningTimer = setTimeout((function(_this) {
+            return function() {
+              return window.scrollRunning = false;
+            };
+          })(this), 100);
+          return requestAnimationFrame((function(_this) {
+            return function() {
+              var s;
+              window.eventAction.thisPage().handleScrollEvent(distX, distY);
+              lastLeft = x;
+              lastTop = y;
+              if (scrollStack.length > 0) {
+                s = $.extend({}, scrollStack[0]);
+                scrollStack.shift();
+                return _scroll.call(_this, target, s.x, s.y);
+              } else {
+                return window.scrollRunning = false;
+              }
+            };
+          })(this));
         };
-      })(this), 100);
-      distX = x - lastLeft;
-      distY = y - lastTop;
-      window.scrollRunning = true;
-      if (window.scrollRunningTimer != null) {
-        clearTimeout(window.scrollRunningTimer);
-        window.scrollRunningTimer = null;
-      }
-      window.scrollRunningTimer = setTimeout((function(_this) {
-        return function() {
-          return window.scrollRunning = false;
-        };
-      })(this), 100);
-      return requestAnimationFrame((function(_this) {
-        return function() {
-          window.eventAction.thisPage().handleScrollEvent(distX, distY);
-          lastLeft = x;
-          lastTop = y;
-          return window.scrollRunning = false;
-        };
-      })(this));
-    });
+        target = $(e.target);
+        x = target.scrollLeft();
+        y = target.scrollTop();
+        if ((window.scrollRunning != null) && window.scrollRunning) {
+          scrollStack.push({
+            x: x,
+            y: y
+          });
+          return;
+        }
+        if ((window.skipScrollEvent != null) && window.skipScrollEvent) {
+          window.skipScrollEvent = false;
+          return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        if (!RunCommon.enabledScroll()) {
+          return;
+        }
+        return _scroll.call(_this, target, x, y);
+      };
+    })(this));
   };
 
   RunCommon.enabledScroll = function() {
