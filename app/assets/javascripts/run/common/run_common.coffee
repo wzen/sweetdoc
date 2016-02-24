@@ -170,6 +170,8 @@ class RunCommon
     stopTimer = null
 
     window.scrollHandleWrapper.off('scroll').on('scroll', (e) ->
+      if window.scrollRunning? && window.scrollRunning
+        return
       if window.skipScrollEvent? && window.skipScrollEvent
         window.skipScrollEvent = false
         return
@@ -194,10 +196,20 @@ class RunCommon
 
       distX = x - lastLeft
       distY = y - lastTop
-      lastLeft = x
-      lastTop = y
       #console.log('distX:' + distX + ' distY:' + distY)
-      window.eventAction.thisPage().handleScrollEvent(distX, distY)
+      window.scrollRunning = true
+      if window.scrollRunningTimer?
+        clearTimeout(window.scrollRunningTimer)
+        window.scrollRunningTimer = null
+      window.scrollRunningTimer = setTimeout( =>
+        window.scrollRunning = false
+      , 100)
+      requestAnimationFrame( =>
+        window.eventAction.thisPage().handleScrollEvent(distX, distY)
+        lastLeft = x
+        lastTop = y
+        window.scrollRunning = false
+      )
     )
 
   # スクロールが有効の状態か判定

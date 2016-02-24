@@ -197,6 +197,9 @@ RunCommon = (function() {
     stopTimer = null;
     return window.scrollHandleWrapper.off('scroll').on('scroll', function(e) {
       var distX, distY, x, y;
+      if ((window.scrollRunning != null) && window.scrollRunning) {
+        return;
+      }
       if ((window.skipScrollEvent != null) && window.skipScrollEvent) {
         window.skipScrollEvent = false;
         return;
@@ -222,9 +225,24 @@ RunCommon = (function() {
       })(this), 100);
       distX = x - lastLeft;
       distY = y - lastTop;
-      lastLeft = x;
-      lastTop = y;
-      return window.eventAction.thisPage().handleScrollEvent(distX, distY);
+      window.scrollRunning = true;
+      if (window.scrollRunningTimer != null) {
+        clearTimeout(window.scrollRunningTimer);
+        window.scrollRunningTimer = null;
+      }
+      window.scrollRunningTimer = setTimeout((function(_this) {
+        return function() {
+          return window.scrollRunning = false;
+        };
+      })(this), 100);
+      return requestAnimationFrame((function(_this) {
+        return function() {
+          window.eventAction.thisPage().handleScrollEvent(distX, distY);
+          lastLeft = x;
+          lastTop = y;
+          return window.scrollRunning = false;
+        };
+      })(this));
     });
   };
 
