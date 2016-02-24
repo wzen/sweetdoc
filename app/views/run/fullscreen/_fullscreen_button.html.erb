@@ -9,7 +9,7 @@
     <input type="hidden" class="<%= Const::Gallery::Key::SCREEN_SIZE_HEIGHT %>" value="<%= screen_size_height %>" />
   </div>
 <% else %>
-    <%= link_to "/gallery/detail/w/#{access_token}", class:'detail_link', target: '_newwindow' do %>
+    <%= link_to "/gallery/detail/#{access_token}", class:'detail_link', target: '_newwindow' do %>
       <div class="new_window"></div>
     <% end %>
 <% end %>
