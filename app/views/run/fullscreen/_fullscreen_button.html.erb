@@ -1,5 +1,15 @@
-<div class="new_window" onclick="GalleryCommon.showWithFullScreen(this); return false;">
-  <input type="hidden" class="<%= Const::Gallery::Key::GALLERY_ACCESS_TOKEN %>" value="<%= access_token %>" />
-  <input type="hidden" class="<%= Const::Gallery::Key::SCREEN_SIZE_WIDTH %>" value="<%= screen_size_width %>" />
-  <input type="hidden" class="<%= Const::Gallery::Key::SCREEN_SIZE_HEIGHT %>" value="<%= screen_size_height %>" />
-</div>
+<%
+  open_with_newwindow = true if open_with_newwindow.nil?
+%>
+
+<% if open_with_newwindow %>
+  <div class="new_window" onclick="GalleryCommon.showWithFullScreen(this); return false;">
+    <input type="hidden" class="<%= Const::Gallery::Key::GALLERY_ACCESS_TOKEN %>" value="<%= access_token %>" />
+    <input type="hidden" class="<%= Const::Gallery::Key::SCREEN_SIZE_WIDTH %>" value="<%= screen_size_width %>" />
+    <input type="hidden" class="<%= Const::Gallery::Key::SCREEN_SIZE_HEIGHT %>" value="<%= screen_size_height %>" />
+  </div>
+<% else %>
+    <a class="detail_link" href="<%= "/gallery/detail/w/#{access_token}" %>" >
+      <div class="new_window"></div>
+    </a>
+<% end %>
