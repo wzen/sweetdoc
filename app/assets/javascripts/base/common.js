@@ -1151,7 +1151,7 @@ Common = (function() {
   };
 
   Common.removeAllItem = function(pageNum) {
-    var item, items, j, k, len, ref, results, v;
+    var cls, clsToken, item, items, j, k, len, ref, ref1, ref2, results, results1, v;
     if (pageNum == null) {
       pageNum = null;
     }
@@ -1162,7 +1162,13 @@ Common = (function() {
         item = items[j];
         if (item != null) {
           if (item instanceof CommonEventBase) {
-            CommonEvent.deleteInstance(item.id);
+            ref = window.classMap;
+            for (clsToken in ref) {
+              cls = ref[clsToken];
+              if (cls.prototype instanceof CommonEvent && item instanceof cls.PrivateClass) {
+                cls.deleteInstance(item.id);
+              }
+            }
           } else {
             item.removeItemElement();
           }
@@ -1173,15 +1179,25 @@ Common = (function() {
       }
       return results;
     } else {
-      ref = Common.allItemInstances();
-      for (k in ref) {
-        v = ref[k];
+      ref1 = Common.allItemInstances();
+      for (k in ref1) {
+        v = ref1[k];
         if (v != null) {
           v.removeItemElement();
         }
       }
       window.instanceMap = {};
-      return CommonEvent.deleteAllInstance();
+      ref2 = window.classMap;
+      results1 = [];
+      for (clsToken in ref2) {
+        cls = ref2[clsToken];
+        if (cls.prototype instanceof CommonEvent) {
+          results1.push(cls.deleteAllInstance());
+        } else {
+          results1.push(void 0);
+        }
+      }
+      return results1;
     }
   };
 

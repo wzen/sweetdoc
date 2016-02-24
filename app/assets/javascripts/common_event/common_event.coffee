@@ -58,6 +58,7 @@ class CommonEvent
   @deleteAllInstance: ->
     for k, v of @instance
       delete @instance[k]
+    @instance = {}
   @deleteInstanceOnPage: (pageNum) ->
     # 後ページのデータをずらす
     for p in [pageNum...PageValue.getPageCount()]

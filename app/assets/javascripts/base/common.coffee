@@ -936,8 +936,10 @@ class Common
       for item in items
         if item?
           if item instanceof CommonEventBase
-            # Singletonのキャッシュを削除
-            CommonEvent.deleteInstance(item.id)
+            for clsToken, cls of window.classMap
+              if cls.prototype instanceof CommonEvent && item instanceof cls.PrivateClass
+                # Singletonのキャッシュを削除
+                cls.deleteInstance(item.id)
           else
             # アイテム削除
             item.removeItemElement()
@@ -947,8 +949,10 @@ class Common
         if v?
           v.removeItemElement()
       window.instanceMap = {}
-      # Singletonのキャッシュを削除
-      CommonEvent.deleteAllInstance()
+      for clsToken, cls of window.classMap
+        if cls.prototype instanceof CommonEvent
+          # Singletonのキャッシュを削除
+          cls.deleteAllInstance()
 
   # JSファイルをサーバから読み込む
   # @param [Int] classDistToken アイテム種別

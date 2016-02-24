@@ -84,14 +84,13 @@ CommonEvent = (function() {
   };
 
   CommonEvent.deleteAllInstance = function() {
-    var k, ref, results, v;
+    var k, ref, v;
     ref = this.instance;
-    results = [];
     for (k in ref) {
       v = ref[k];
-      results.push(delete this.instance[k]);
+      delete this.instance[k];
     }
-    return results;
+    return this.instance = {};
   };
 
   CommonEvent.deleteInstanceOnPage = function(pageNum) {
