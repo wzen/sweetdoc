@@ -209,6 +209,7 @@ class Common
       se = new ScreenEvent()
       @updateScrollContentsPosition(se.initConfigY, se.initConfigX)
     else
+      # ワークテーブルの倍率を設定
       @initScrollContentsPositionByWorktableConfig()
 
   # Worktableの設定を使用してスクロール位置初期化
@@ -252,7 +253,7 @@ class Common
     return {left: itemCenterPosition.x - itemWidth * 0.5, top: itemCenterPosition.y - itemHeight * 0.5}
 
   # 画面スケールの取得
-  @getViewScale = (isViewResize = false)->
+  @getViewScale = ->
     if window.isWorkTable && !window.previewRunning
       # ワークテーブルの倍率
       return WorktableCommon.getWorktableViewScale()
@@ -264,16 +265,13 @@ class Common
       seScale = 1.0
       if ScreenEvent.hasInstanceCache()
         se = new ScreenEvent()
-        if isViewResize
-          seScale = se.getNowProgressScale()
-        else
-          seScale = se.getNowScale()
+        seScale = se.getNowScreenEventScale()
       # プロジェクトビューの倍率 x 画面内の倍率
       return scaleFromViewRate * seScale
 
   # 画面スケール適用
-  @applyViewScale = (isViewResize = false) ->
-    scale = @getViewScale(isViewResize)
+  @applyViewScale = ->
+    scale = @getViewScale()
     if window.isWorkTable || scale <= 1.0
       updateMainWrapperPercent = 100 / scale
     else
@@ -282,8 +280,8 @@ class Common
     @updateCanvasSize()
     window.mainWrapper.css({transform: "scale(#{scale}, #{scale})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
 
-  @scrollContentsSizeUnderScale = (isViewResize = false) ->
-    scale = @getViewScale(isViewResize)
+  @scrollContentsSizeUnderScale = ->
+    scale = @getViewScale()
     if window.isWorkTable
       scale = 1.0
     return {
@@ -292,9 +290,9 @@ class Common
     }
 
   # Canvasサイズ更新
-  @updateCanvasSize = (isViewResize = false) ->
+  @updateCanvasSize = ->
     if window.drawingCanvas?
-      scale = @getViewScale(isViewResize)
+      scale = @getViewScale()
       $(window.drawingCanvas).attr('width', $('#pages').width() / scale)
       $(window.drawingCanvas).attr('height', $('#pages').height() / scale)
 
@@ -510,8 +508,8 @@ class Common
 
   @saveDisplayPosition = (top, left, immediate = true, callback = null) ->
     _save = ->
-      if ScreenEvent?
-        ScreenEvent.PrivateClass.setNowXAndY(left, top)
+      if ScreenEvent.hasInstanceCache()
+        ScreenEvent.PrivateClass.setEventBaseXAndY(left, top)
       if window.isWorkTable
         PageValue.setWorktableScrollContentsPosition(top, left)
       LocalStorage.saveAllPageValues()
@@ -537,7 +535,7 @@ class Common
 
     if !window.isWorkTable || window.previewRunning
       se = new ScreenEvent()
-      scale = se.getNowScale()
+      scale = se.getNowScreenEventScale()
     else
       # プレビュー以外のWorktableでは1.0にすること
       scale = 1.0
@@ -551,7 +549,7 @@ class Common
   # 画面位置をScreenEvent変数から初期化
   @updateScrollContentsFromScreenEventVar: ->
     se = new ScreenEvent()
-    @updateScrollContentsPosition(se.nowY, se.nowX)
+    @updateScrollContentsPosition(se.eventBaseY, se.eventBaseX)
 
   # サニタイズ エンコード
   # @property [String] str 対象文字列

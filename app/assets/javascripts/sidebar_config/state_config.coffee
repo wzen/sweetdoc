@@ -54,10 +54,7 @@ class StateConfig
         $('.initConfigScale:first', emt).attr('disabled', '').removeClass('empty').val(z)
         $('.clear_pointing:first', emt).show()
         se = new ScreenEvent()
-        se.initConfigX = x
-        se.initConfigY = y
-        se.initConfigScale = z
-        se.setItemAllPropToPageValue()
+        se.setInitConfig(x, y, z)
 
       emt.find('.event_pointing:first').eventDragPointingRect({
         applyDrawCallback: (pointingSize) =>
@@ -75,7 +72,4 @@ class StateConfig
     $('.clear_pointing:first', emt).hide()
     if withInitParams
       se = new ScreenEvent()
-      se.initConfigX = null
-      se.initConfigY = null
-      se.initConfigScale = se._defaultInitScale
-      se.setItemAllPropToPageValue()
+      se.clearInitConfig()

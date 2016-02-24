@@ -71,7 +71,7 @@ class RunCommon
     updatedProjectScreenSize.height = projectScreenSize.height * scaleFromViewRate
     $('#project_wrapper').css({width: updatedProjectScreenSize.width, height: updatedProjectScreenSize.height})
     # FIXME: 表示位置もScaleに合わせて直す
-    Common.applyViewScale(true)
+    Common.applyViewScale()
 
   # 画面リサイズイベント
   @resizeMainContainerEvent = ->
@@ -532,6 +532,7 @@ class RunCommon
     window.eventAction = null
     window.runPage = true
     window.initDone = false
+    window.runScaleFromViewRate = 1.0
 
     # メッセージ
     Common.showModalFlashMessage('Getting ready')

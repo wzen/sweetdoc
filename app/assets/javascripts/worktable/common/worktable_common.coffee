@@ -247,7 +247,8 @@ class WorktableCommon
         # アイテムフォーカスしてる場合があるので表示位置を戻す
         WorktableCommon.initScrollContentsPosition()
         # イベントで変更された倍率を戻す
-        ScreenEvent.PrivateClass.resetNowScale
+        se = new ScreenEvent()
+        se.resetNowScaleToWorktableScale()
         # Footprint履歴削除
         PageValue.removeAllFootprint()
       else

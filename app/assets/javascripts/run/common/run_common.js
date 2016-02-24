@@ -99,7 +99,7 @@ RunCommon = (function() {
       width: updatedProjectScreenSize.width,
       height: updatedProjectScreenSize.height
     });
-    return Common.applyViewScale(true);
+    return Common.applyViewScale();
   };
 
   RunCommon.resizeMainContainerEvent = function() {
@@ -614,6 +614,7 @@ RunCommon = (function() {
     window.eventAction = null;
     window.runPage = true;
     window.initDone = false;
+    window.runScaleFromViewRate = 1.0;
     Common.showModalFlashMessage('Getting ready');
     CommonVar.initVarWhenLoadedView();
     CommonVar.initCommonVar();

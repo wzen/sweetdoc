@@ -31,15 +31,15 @@ class ScreenEvent extends CommonEvent
 
     constructor: ->
       super()
-      @_defaultInitScale = Common.getWorktableViewScale()
       @name = 'Screen'
       @initConfigX = null
       @initConfigY = null
-      @initConfigScale = @_defaultInitScale
-      @nowX = null
-      @nowY = null
-      @nowScale = null
-      @previewBaseScale = null
+      @initConfigScale = Common.getWorktableViewScale()
+      @eventBaseX = null
+      @eventBaseY = null
+      @eventBaseScale = null
+      @previewLaunchBaseScale = null
+      @_notMoving = true
       @_initDone = false
 
     # イベントの初期化
@@ -48,21 +48,34 @@ class ScreenEvent extends CommonEvent
       super(event)
 
     initPreview: ->
-      @previewBaseScale = @getNowScale()
+      @previewLaunchBaseScale = @eventBaseScale
+      if @_notMoving
+        @previewLaunchBaseScale = _getInitScale.call(@)
+        # 画面スクロール位置更新
+        if @hasInitConfig()
+          if !@_keepDispMag
+            Common.updateScrollContentsPosition(@initConfigY, @initConfigX, true, false)
+          @eventBaseX = @initConfigX
+          @eventBaseY = @initConfigY
+          @eventBaseScale = @initConfigScale
 
     # 変更を戻して再表示
     refresh: (show = true, callback = null) ->
       s = null
       # 倍率を戻す
-      if window.isWorkTable
-        _setScale.call(@, WorktableCommon.getWorktableViewScale())
-      else if !@nowScale?
-        _setScale.call(@, @_defaultInitScale)
+      if window.isWorkTable && (!window.previewRunning || @_keepDispMag)
+        @resetNowScaleToWorktableScale()
+        _setScaleAndUpdateViewing.call(@, WorktableCommon.getWorktableViewScale())
+      else if @_notMoving
+        # Run初期値で戻す
+        _setScaleAndUpdateViewing.call(@, _getInitScale.call(@))
       else
-        _setScale.call(@, @nowScale)
+        # イベント中の倍率
+        _setScaleAndUpdateViewing.call(@, @eventBaseScale)
       # オーバーレイ削除
       $('#preview_position_overlay').remove()
       $('.keep_mag_base').remove()
+      @_notMoving = true
       if callback?
         callback(@)
 
@@ -71,9 +84,9 @@ class ScreenEvent extends CommonEvent
       super()
       methodName = @getEventMethodName()
       if methodName == 'changeScreenPosition'
-        if !@_keepDispMag && @nowScale?
-          _setScale.call(@, @nowScale)
-          size = _convertCenterCoodToSize.call(@, @nowX, @nowY, @nowScale)
+        if !@_keepDispMag && @eventBaseScale?
+          _setScaleAndUpdateViewing.call(@, @eventBaseScale)
+          size = _convertCenterCoodToSize.call(@, @eventBaseX, @eventBaseY, @eventBaseScale)
           scrollContentsSize = Common.scrollContentsSizeUnderScale()
           Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 
@@ -87,10 +100,10 @@ class ScreenEvent extends CommonEvent
         @_progressY = parseFloat(p.top)
         @_progressScale = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ)
         if @_keepDispMag
-          _setScale.call(@, WorktableCommon.getWorktableViewScale())
+          _setScaleAndUpdateViewing.call(@, WorktableCommon.getWorktableViewScale())
           _overlay.call(@, @_progressX, @_progressY, @_progressScale)
         else
-          _setScale.call(@, @_progressScale)
+          _setScaleAndUpdateViewing.call(@, @_progressScale)
           size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
           scrollContentsSize = Common.scrollContentsSizeUnderScale()
           Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
@@ -98,16 +111,16 @@ class ScreenEvent extends CommonEvent
     # 画面移動イベント
     changeScreenPosition: (opt) =>
       p = Common.calcScrollTopLeftPosition(@_specificMethodValues.afterY, @_specificMethodValues.afterX)
-      @_progressScale = (parseFloat(@_specificMethodValues.afterZ) - @nowScale) * (opt.progress / opt.progressMax) + @nowScale
-      @_progressX = ((parseFloat(p.left) - @nowX) * (opt.progress / opt.progressMax)) + @nowX
-      @_progressY = ((parseFloat(p.top) - @nowY) * (opt.progress / opt.progressMax)) + @nowY
+      @_progressScale = (parseFloat(@_specificMethodValues.afterZ) - @eventBaseScale) * (opt.progress / opt.progressMax) + @eventBaseScale
+      @_progressX = ((parseFloat(p.left) - @eventBaseX) * (opt.progress / opt.progressMax)) + @eventBaseX
+      @_progressY = ((parseFloat(p.top) - @eventBaseY) * (opt.progress / opt.progressMax)) + @eventBaseY
       if window.isWorkTable && opt.isPreview
         _overlay.call(@, @_progressX, @_progressY, @_progressScale)
         if @_keepDispMag
-          _setScale.call(@, WorktableCommon.getWorktableViewScale())
+          _setScaleAndUpdateViewing.call(@, WorktableCommon.getWorktableViewScale())
 
       if !@_keepDispMag
-        _setScale.call(@, @_progressScale)
+        _setScaleAndUpdateViewing.call(@, @_progressScale)
         size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
         scrollContentsSize = Common.scrollContentsSizeUnderScale()
         Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
@@ -123,25 +136,26 @@ class ScreenEvent extends CommonEvent
 
     willChapter: ->
       if window.previewRunning
-        @nowScale = @previewBaseScale
+        # 倍率を戻す
+        @eventBaseScale = @previewLaunchBaseScale
       else
-        @nowScale = @_scale
+        if @_notMoving
+          @eventBaseScale = _getInitScale.call(@)
       super()
 
     didChapter: ->
-      @nowX = @_progressX
-      @nowY = @_progressY
-      @nowScale = @_progressScale
+      @eventBaseX = @_progressX
+      @eventBaseY = @_progressY
+      @eventBaseScale = @_progressScale
       @_progressScale = null
-      @_scale = @nowScale
       super()
 
     setMiniumObject: (obj) ->
       super(obj)
       if !@_initDone
         if !window.isWorkTable
-          _setScale.call(@, _getInitConfigScale.call(@))
-          @nowScale = _getInitConfigScale.call(@)
+          _setScaleAndUpdateViewing.call(@, _getInitScale.call(@))
+          @eventBaseScale = _getInitScale.call(@)
           # スクロール位置設定
           Common.initScrollContentsPosition()
           RunCommon.updateMainViewSize()
@@ -150,21 +164,34 @@ class ScreenEvent extends CommonEvent
           WorktableCommon.initScrollContentsPosition()
           WorktableCommon.updateMainViewSize()
         @_initDone = true
+        @_notMoving = true
 
-    getNowScale: ->
-      if !@_scale?
-        @_scale = _getInitConfigScale.call(@)
-      return @_scale
-
-    getNowProgressScale: ->
-      if @_progressScale?
-        return @_progressScale
-      else
-        # 動作中でない場合はnowScaleを返却
-        @getNowScale()
+    getNowScreenEventScale: ->
+      if !@_nowScreenEventScale?
+        # 設定されていない場合は初期値を返す
+        @_nowScreenEventScale = _getInitScale.call(@)
+      return @_nowScreenEventScale
 
     hasInitConfig: ->
       return @initConfigX? && @initConfigY?
+
+    setInitConfig: (x, y, scale) ->
+      @initConfigX = x
+      @initConfigY = y
+      @initConfigScale = scale
+      @eventBaseScale = @initConfigScale
+      @setItemAllPropToPageValue()
+
+    clearInitConfig: ->
+      @initConfigX = null
+      @initConfigY = null
+      s = Common.getWorktableViewScale()
+      @initConfigScale = s
+      @eventBaseScale = s
+      @setItemAllPropToPageValue()
+
+    resetNowScaleToWorktableScale: ->
+      @eventBaseScale = WorktableCommon.getWorktableViewScale()
 
     # 独自コンフィグのイベント初期化
     @initSpecificConfig = (specificRoot) ->
@@ -197,27 +224,16 @@ class ScreenEvent extends CommonEvent
       if z.val().length == 0
         z.attr('disabled', 'disabled').addClass('empty')
 
-    @setNowXAndY = (x, y) ->
+    @setEventBaseXAndY = (x, y) ->
       if ScreenEvent.hasInstanceCache()
         se = new ScreenEvent()
         ins = PageValue.getInstancePageValue(PageValue.Key.instanceValue(se.id))
         if ins?
-          ins.nowX = x
-          ins.nowY = y
+          ins.eventBaseX = x
+          ins.eventBaseY = y
           PageValue.setInstancePageValue(PageValue.Key.instanceValue(se.id), ins)
-        se.nowX = x
-        se.nowY = y
-
-    @resetNowScale = ->
-      if ScreenEvent.hasInstanceCache()
-        se = new ScreenEvent()
-        s = null
-        if window.isWorkTable
-          s = WorktableCommon.getWorktableViewScale()
-        else
-          s = @_defaultInitScale
-        se.scale = s
-        se.nowScale = null
+        se.eventBaseX = x
+        se.eventBaseY = y
 
     _overlay = (x, y, scale) ->
       _drawOverlay = (context, x, y, width, height, scale) ->
@@ -267,17 +283,18 @@ class ScreenEvent extends CommonEvent
       left = x - width / 2.0
       return {top: top, left: left, width: width, height: height}
 
-    _setScale = (scale) ->
-      @_scale = scale
+    _setScaleAndUpdateViewing = (scale) ->
+      @_nowScreenEventScale = scale
+      @_notMoving = false
       Common.applyViewScale()
 
-    _getScale = ->
-      return @_scale
-
-    _getInitConfigScale = ->
+    _getInitScale = ->
       if window.isWorkTable && !window.previewRunning
         return WorktableCommon.getWorktableViewScale()
-      return @initConfigScale
+      else if @initConfigScale?
+        return @initConfigScale
+      else
+        return 1.0
 
   @CLASS_DIST_TOKEN = @PrivateClass.CLASS_DIST_TOKEN
 

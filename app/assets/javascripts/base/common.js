@@ -324,11 +324,8 @@ Common = (function() {
     };
   };
 
-  Common.getViewScale = function(isViewResize) {
+  Common.getViewScale = function() {
     var scaleFromViewRate, se, seScale;
-    if (isViewResize == null) {
-      isViewResize = false;
-    }
     if (window.isWorkTable && !window.previewRunning) {
       return WorktableCommon.getWorktableViewScale();
     } else {
@@ -339,22 +336,15 @@ Common = (function() {
       seScale = 1.0;
       if (ScreenEvent.hasInstanceCache()) {
         se = new ScreenEvent();
-        if (isViewResize) {
-          seScale = se.getNowProgressScale();
-        } else {
-          seScale = se.getNowScale();
-        }
+        seScale = se.getNowScreenEventScale();
       }
       return scaleFromViewRate * seScale;
     }
   };
 
-  Common.applyViewScale = function(isViewResize) {
+  Common.applyViewScale = function() {
     var scale, updateMainWrapperPercent;
-    if (isViewResize == null) {
-      isViewResize = false;
-    }
-    scale = this.getViewScale(isViewResize);
+    scale = this.getViewScale();
     if (window.isWorkTable || scale <= 1.0) {
       updateMainWrapperPercent = 100 / scale;
     } else {
@@ -368,12 +358,9 @@ Common = (function() {
     });
   };
 
-  Common.scrollContentsSizeUnderScale = function(isViewResize) {
+  Common.scrollContentsSizeUnderScale = function() {
     var scale;
-    if (isViewResize == null) {
-      isViewResize = false;
-    }
-    scale = this.getViewScale(isViewResize);
+    scale = this.getViewScale();
     if (window.isWorkTable) {
       scale = 1.0;
     }
@@ -383,13 +370,10 @@ Common = (function() {
     };
   };
 
-  Common.updateCanvasSize = function(isViewResize) {
+  Common.updateCanvasSize = function() {
     var scale;
-    if (isViewResize == null) {
-      isViewResize = false;
-    }
     if (window.drawingCanvas != null) {
-      scale = this.getViewScale(isViewResize);
+      scale = this.getViewScale();
       $(window.drawingCanvas).attr('width', $('#pages').width() / scale);
       return $(window.drawingCanvas).attr('height', $('#pages').height() / scale);
     }
@@ -668,8 +652,8 @@ Common = (function() {
       callback = null;
     }
     _save = function() {
-      if (typeof ScreenEvent !== "undefined" && ScreenEvent !== null) {
-        ScreenEvent.PrivateClass.setNowXAndY(left, top);
+      if (ScreenEvent.hasInstanceCache()) {
+        ScreenEvent.PrivateClass.setEventBaseXAndY(left, top);
       }
       if (window.isWorkTable) {
         PageValue.setWorktableScrollContentsPosition(top, left);
@@ -703,7 +687,7 @@ Common = (function() {
     }
     if (!window.isWorkTable || window.previewRunning) {
       se = new ScreenEvent();
-      scale = se.getNowScale();
+      scale = se.getNowScreenEventScale();
     } else {
       scale = 1.0;
     }
@@ -719,7 +703,7 @@ Common = (function() {
   Common.updateScrollContentsFromScreenEventVar = function() {
     var se;
     se = new ScreenEvent();
-    return this.updateScrollContentsPosition(se.nowY, se.nowX);
+    return this.updateScrollContentsPosition(se.eventBaseY, se.eventBaseX);
   };
 
   Common.sanitaizeEncode = function(str) {

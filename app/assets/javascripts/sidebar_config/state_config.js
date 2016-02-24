@@ -63,10 +63,7 @@ StateConfig = (function() {
           $('.initConfigScale:first', emt).attr('disabled', '').removeClass('empty').val(z);
           $('.clear_pointing:first', emt).show();
           se = new ScreenEvent();
-          se.initConfigX = x;
-          se.initConfigY = y;
-          se.initConfigScale = z;
-          return se.setItemAllPropToPageValue();
+          return se.setInitConfig(x, y, z);
         };
         return emt.find('.event_pointing:first').eventDragPointingRect({
           applyDrawCallback: function(pointingSize) {
@@ -93,10 +90,7 @@ StateConfig = (function() {
     $('.clear_pointing:first', emt).hide();
     if (withInitParams) {
       se = new ScreenEvent();
-      se.initConfigX = null;
-      se.initConfigY = null;
-      se.initConfigScale = se._defaultInitScale;
-      return se.setItemAllPropToPageValue();
+      return se.clearInitConfig();
     }
   };
 

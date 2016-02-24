@@ -264,7 +264,7 @@ WorktableCommon = (function() {
       callback = null;
     }
     return this.stopAllEventPreview(function(noRunningPreview) {
-      var callbackCount, item, items, l, len;
+      var callbackCount, item, items, l, len, se;
       if (window.worktableItemsChangedState || !noRunningPreview) {
         items = Common.instancesInPage(pn);
         callbackCount = 0;
@@ -281,7 +281,8 @@ WorktableCommon = (function() {
           });
         }
         WorktableCommon.initScrollContentsPosition();
-        ScreenEvent.PrivateClass.resetNowScale;
+        se = new ScreenEvent();
+        se.resetNowScaleToWorktableScale();
         return PageValue.removeAllFootprint();
       } else {
         if (callback != null) {
