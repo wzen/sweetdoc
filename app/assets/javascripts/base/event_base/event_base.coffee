@@ -320,7 +320,7 @@ class EventBase extends Extend
       return
     else if @stepValue >= ePoint
       @stepValue = ePoint
-      # 終了前にもう一度実行する
+      # 終了時に最終ステップで実行
       @execMethod({
         isPreview: isPreview
         progress: @progressMax()
