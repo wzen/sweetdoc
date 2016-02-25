@@ -51,7 +51,7 @@ ScreenEvent = (function(superClass) {
       this.name = 'Screen';
       this.initConfigX = null;
       this.initConfigY = null;
-      this.initConfigScale = Common.getWorktableViewScale();
+      this.initConfigScale = 1.0;
       this.eventBaseX = null;
       this.eventBaseY = null;
       this.eventBaseScale = null;
@@ -193,13 +193,13 @@ ScreenEvent = (function(superClass) {
       PrivateClass.__super__.setMiniumObject.call(this, obj);
       if (!this._initDone) {
         if (!window.isWorkTable) {
+          Common.initScrollContentsPosition();
           _setScaleAndUpdateViewing.call(this, _getInitScale.call(this));
           this.eventBaseScale = _getInitScale.call(this);
           RunCommon.updateMainViewSize();
-          Common.initScrollContentsPosition();
         } else {
-          WorktableCommon.updateMainViewSize();
           WorktableCommon.initScrollContentsPosition();
+          WorktableCommon.updateMainViewSize();
         }
         this._initDone = true;
         return this._notMoving = true;
@@ -229,7 +229,7 @@ ScreenEvent = (function(superClass) {
       var s;
       this.initConfigX = null;
       this.initConfigY = null;
-      s = Common.getWorktableViewScale();
+      s = 1.0;
       this.initConfigScale = s;
       this.eventBaseScale = s;
       return this.setItemAllPropToPageValue();
@@ -357,10 +357,12 @@ ScreenEvent = (function(superClass) {
     };
 
     _getInitScale = function() {
-      if (this.hasInitConfig() && (!window.isWorkTable || window.previewRunning)) {
+      if (window.isWorkTable && !window.previewRunning) {
+        return WorktableCommon.getWorktableViewScale();
+      } else if (this.initConfigScale != null) {
         return this.initConfigScale;
       } else {
-        return Common.getWorktableViewScale();
+        return 1.0;
       }
     };
 

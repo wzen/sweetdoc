@@ -260,7 +260,7 @@ class Common
     else
       scaleFromViewRate = window.runScaleFromViewRate
       if window.isWorkTable && window.previewRunning
-        # プレビューではプロジェクトビューは縮めないため、倍率は1.0固定
+        # プレビューではプロジェクトのビューは縮めないため、倍率は1.0固定
         scaleFromViewRate = 1.0
       seScale = 1.0
       if ScreenEvent.hasInstanceCache()
@@ -282,8 +282,8 @@ class Common
 
   @scrollContentsSizeUnderScale = ->
     scale = @getViewScale()
-    if window.isWorkTable && !window.previewRunning
-      scale = @getWorktableViewScale()
+    if window.isWorkTable
+      scale = 1.0
     return {
       width: window.scrollContents.width() / scale
       height: window.scrollContents.height() / scale
@@ -401,6 +401,7 @@ class Common
     if !target? || target.length == 0
       # ターゲット無し
       return
+
     # col-xs-9 → 75% padding → 15px
     scrollContentsSize = @scrollContentsSizeUnderScreenEventScale()
     if scrollContentsSize?
@@ -412,12 +413,12 @@ class Common
         top: s.height * 0.5 * (1 - viewRate)
         left: s.width * 0.5 * (1 - viewRate)
       }
-      #console.log('viewScaleDiff')
-      #console.log(viewScaleDiff)
+      console.log('viewScaleDiff')
+      console.log(viewScaleDiff)
       if $(target).get(0).offsetParent?
         diff =
-          top: (scrollContents.scrollTop() + (scrollContents.height() - $(target).height()) * 0.5) - $(target).get(0).offsetTop - viewScaleDiff.top
-          left: (scrollContents.scrollLeft() + (scrollContents.width() - $(target).width()) * 0.5) - $(target).get(0).offsetLeft - viewScaleDiff.left
+          top: (scrollContents.scrollTop() + (scrollContentsSize.height - $(target).height()) * 0.5) - $(target).get(0).offsetTop - viewScaleDiff.top
+          left: (scrollContents.scrollLeft() + (scrollContentsSize.width - $(target).width()) * 0.5) - $(target).get(0).offsetLeft - viewScaleDiff.left
 #        if window.runDebug
 #          console.log('window.runScaleFromViewRate:' + window.runScaleFromViewRate)
 #          console.log('original scrollContents.scrollTop():' + scrollContents.scrollTop())
@@ -536,7 +537,8 @@ class Common
       se = new ScreenEvent()
       scale = se.getNowScreenEventScale()
     else
-      scale = @getWorktableViewScale()
+      # プレビュー以外のWorktableでは1.0にすること
+      scale = 1.0
     if window.debug
       console.log('scrollContentsSizeUnderScreenEventScale:' + scale)
     return {

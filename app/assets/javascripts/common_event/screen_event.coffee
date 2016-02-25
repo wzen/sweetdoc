@@ -34,7 +34,7 @@ class ScreenEvent extends CommonEvent
       @name = 'Screen'
       @initConfigX = null
       @initConfigY = null
-      @initConfigScale = Common.getWorktableViewScale()
+      @initConfigScale = 1.0
       @eventBaseX = null
       @eventBaseY = null
       @eventBaseScale = null
@@ -153,15 +153,16 @@ class ScreenEvent extends CommonEvent
     setMiniumObject: (obj) ->
       super(obj)
       if !@_initDone
-        # 倍率 & スクロール位置設定
         if !window.isWorkTable
+          # スクロール位置設定
+          Common.initScrollContentsPosition()
           _setScaleAndUpdateViewing.call(@, _getInitScale.call(@))
           @eventBaseScale = _getInitScale.call(@)
           RunCommon.updateMainViewSize()
-          Common.initScrollContentsPosition()
         else
-          WorktableCommon.updateMainViewSize()
+          # スクロール位置更新
           WorktableCommon.initScrollContentsPosition()
+          WorktableCommon.updateMainViewSize()
         @_initDone = true
         @_notMoving = true
 
@@ -184,7 +185,7 @@ class ScreenEvent extends CommonEvent
     clearInitConfig: ->
       @initConfigX = null
       @initConfigY = null
-      s = Common.getWorktableViewScale()
+      s = 1.0
       @initConfigScale = s
       @eventBaseScale = s
       @setItemAllPropToPageValue()
@@ -288,10 +289,12 @@ class ScreenEvent extends CommonEvent
       Common.applyViewScale()
 
     _getInitScale = ->
-      if @hasInitConfig() && (!window.isWorkTable || window.previewRunning)
+      if window.isWorkTable && !window.previewRunning
+        return WorktableCommon.getWorktableViewScale()
+      else if @initConfigScale?
         return @initConfigScale
       else
-        return Common.getWorktableViewScale()
+        return 1.0
 
   @CLASS_DIST_TOKEN = @PrivateClass.CLASS_DIST_TOKEN
 

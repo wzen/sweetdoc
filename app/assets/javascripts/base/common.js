@@ -361,8 +361,8 @@ Common = (function() {
   Common.scrollContentsSizeUnderScale = function() {
     var scale;
     scale = this.getViewScale();
-    if (window.isWorkTable && !window.previewRunning) {
-      scale = this.getWorktableViewScale();
+    if (window.isWorkTable) {
+      scale = 1.0;
     }
     return {
       width: window.scrollContents.width() / scale,
@@ -528,10 +528,12 @@ Common = (function() {
         top: s.height * 0.5 * (1 - viewRate),
         left: s.width * 0.5 * (1 - viewRate)
       };
+      console.log('viewScaleDiff');
+      console.log(viewScaleDiff);
       if ($(target).get(0).offsetParent != null) {
         diff = {
-          top: (scrollContents.scrollTop() + (scrollContents.height() - $(target).height()) * 0.5) - $(target).get(0).offsetTop - viewScaleDiff.top,
-          left: (scrollContents.scrollLeft() + (scrollContents.width() - $(target).width()) * 0.5) - $(target).get(0).offsetLeft - viewScaleDiff.left
+          top: (scrollContents.scrollTop() + (scrollContentsSize.height - $(target).height()) * 0.5) - $(target).get(0).offsetTop - viewScaleDiff.top,
+          left: (scrollContents.scrollLeft() + (scrollContentsSize.width - $(target).width()) * 0.5) - $(target).get(0).offsetLeft - viewScaleDiff.left
         };
       }
       top = scrollContents.scrollTop() + (scrollContentsSize.height * 0.5) - diff.top;
@@ -684,7 +686,7 @@ Common = (function() {
       se = new ScreenEvent();
       scale = se.getNowScreenEventScale();
     } else {
-      scale = this.getWorktableViewScale();
+      scale = 1.0;
     }
     if (window.debug) {
       console.log('scrollContentsSizeUnderScreenEventScale:' + scale);
