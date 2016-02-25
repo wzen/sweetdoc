@@ -70,7 +70,11 @@ Sidebar = (function() {
           main.removeClass('col-xs-9');
           main.addClass('col-xs-12');
           WorktableCommon.resizeMainContainerEvent();
-          WorktableCommon.changeMode(window.mode);
+          if (window.mode === Constant.Mode.OPTION) {
+            WorktableCommon.changeMode(window.beforeMode);
+          } else {
+            WorktableCommon.changeMode(window.mode);
+          }
           if (callback != null) {
             callback();
           }

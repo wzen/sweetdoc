@@ -51,7 +51,10 @@ class Sidebar
           main.addClass('col-xs-12')
           WorktableCommon.resizeMainContainerEvent()
           # モード再設定
-          WorktableCommon.changeMode(window.mode)
+          if window.mode == Constant.Mode.OPTION
+            WorktableCommon.changeMode(window.beforeMode)
+          else
+            WorktableCommon.changeMode(window.mode)
           if callback?
             callback()
           $('.sidebar-config').hide()
