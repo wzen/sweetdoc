@@ -505,16 +505,13 @@ Common = (function() {
     return $(contents).wrap(w).closest('.item');
   };
 
-  Common.focusToTarget = function(target, callback, immediate, withUpdatePageValue) {
+  Common.focusToTarget = function(target, callback, immediate) {
     var diff, left, s, scrollContentsSize, top, viewRate, viewScaleDiff;
     if (callback == null) {
       callback = null;
     }
     if (immediate == null) {
       immediate = false;
-    }
-    if (withUpdatePageValue == null) {
-      withUpdatePageValue = true;
     }
     if ((target == null) || target.length === 0) {
       return;
@@ -541,7 +538,7 @@ Common = (function() {
       }
       top = scrollContents.scrollTop() + (scrollContentsSize.height * 0.5) - diff.top;
       left = scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5) - diff.left;
-      return this.updateScrollContentsPosition(top, left, immediate, withUpdatePageValue, callback);
+      return this.updateScrollContentsPosition(top, left, immediate, true, callback);
     } else {
       if (callback != null) {
         return callback();
@@ -655,7 +652,7 @@ Common = (function() {
       if (ScreenEvent.hasInstanceCache()) {
         ScreenEvent.PrivateClass.setEventBaseXAndY(left, top);
       }
-      if (window.isWorkTable) {
+      if (window.isWorkTable && !window.previewRunning) {
         PageValue.setWorktableScrollContentsPosition(top, left);
       }
       LocalStorage.saveAllPageValues();

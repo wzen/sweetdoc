@@ -279,9 +279,9 @@ class WorktableSetting
           LocalStorage.saveGeneralPageValue()
       )
 
-      # Zoom (0.1 〜 5.0)
+      # Zoom (0.1 〜 2.0)
       min = 0.1
-      max = 5.0
+      max = 2.0
       worktableScale = WorktableCommon.getWorktableViewScale()
       meterElement = $(".scale_meter:first", rootEmt)
       valueElement = meterElement.prev('input:first')
@@ -314,7 +314,7 @@ class WorktableSetting
       # limit
       $('.display_position_left_limit', rootEmt).html("(#{leftMin} 〜 #{leftMax})")
       $('.display_position_top_limit', rootEmt).html("(#{topMin} 〜 #{topMax})")
-      $('.display_position_scale_limit', rootEmt).html("(10% 〜 500%)")
+      $('.display_position_scale_limit', rootEmt).html("(10% 〜 200%)")
 
     @clear = ->
       scale = WorktableCommon.getWorktableViewScale()

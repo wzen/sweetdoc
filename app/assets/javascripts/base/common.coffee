@@ -397,7 +397,7 @@ class Common
   # アイテムに対してフォーカスする
   # @param [Object] target 対象アイテム
   # @param [Fucntion] callback コールバック
-  @focusToTarget = (target, callback = null, immediate = false, withUpdatePageValue = true) ->
+  @focusToTarget = (target, callback = null, immediate = false) ->
     if !target? || target.length == 0
       # ターゲット無し
       return
@@ -435,7 +435,7 @@ class Common
 #        console.log(diff)
       top = scrollContents.scrollTop() + (scrollContentsSize.height * 0.5) - diff.top
       left = scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5) - diff.left
-      @updateScrollContentsPosition(top, left, immediate, withUpdatePageValue, callback)
+      @updateScrollContentsPosition(top, left, immediate, true, callback)
     else
       if callback?
         callback()
@@ -510,7 +510,7 @@ class Common
     _save = ->
       if ScreenEvent.hasInstanceCache()
         ScreenEvent.PrivateClass.setEventBaseXAndY(left, top)
-      if window.isWorkTable
+      if window.isWorkTable && !window.previewRunning
         PageValue.setWorktableScrollContentsPosition(top, left)
       LocalStorage.saveAllPageValues()
       if callback?

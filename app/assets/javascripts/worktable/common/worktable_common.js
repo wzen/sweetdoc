@@ -820,11 +820,10 @@ WorktableCommon = (function() {
     if (callback == null) {
       callback = null;
     }
-    window.previewRunning = false;
     EventConfig.switchPreviewButton(true);
-    return this.updateAllEventsToBefore(keepDispMag, (function(_this) {
+    this.updateAllEventsToBefore(keepDispMag);
+    return this.refreshAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), (function(_this) {
       return function() {
-        _this.refreshAllItemsFromInstancePageValueIfChanging();
         FloatView.hideWithCloseButtonView();
         if (callback != null) {
           return callback();
@@ -833,11 +832,8 @@ WorktableCommon = (function() {
     })(this));
   };
 
-  WorktableCommon.updateAllEventsToBefore = function(keepDispMag, callback) {
-    var _updateEventBefore, forkNum, i, l, ref, tesArray;
-    if (callback == null) {
-      callback = null;
-    }
+  WorktableCommon.updateAllEventsToBefore = function(keepDispMag) {
+    var forkNum, i, idx, item, l, len, m, ref, results, te, tes, tesArray;
     tesArray = [];
     tesArray.push(PageValue.getEventPageValueSortedListByNum(PageValue.Key.EF_MASTER_FORKNUM));
     forkNum = PageValue.getForkNum();
@@ -846,32 +842,26 @@ WorktableCommon = (function() {
         tesArray.push(PageValue.getEventPageValueSortedListByNum(i));
       }
     }
-    _updateEventBefore = function() {
-      var idx, item, len, m, n, ref1, results, te, tes;
-      results = [];
-      for (m = 0, len = tesArray.length; m < len; m++) {
-        tes = tesArray[m];
+    results = [];
+    for (m = 0, len = tesArray.length; m < len; m++) {
+      tes = tesArray[m];
+      results.push((function() {
+        var n, ref1, results1;
+        results1 = [];
         for (idx = n = ref1 = tes.length - 1; n >= 0; idx = n += -1) {
           te = tes[idx];
           item = window.instanceMap[te.id];
           if (item != null) {
             item.initEvent(te, keepDispMag);
-            item.updateEventBefore();
+            results1.push(item.updateEventBefore());
+          } else {
+            results1.push(void 0);
           }
         }
-        if (callback != null) {
-          results.push(callback());
-        } else {
-          results.push(void 0);
-        }
-      }
-      return results;
-    };
-    return this.stopAllEventPreview((function(_this) {
-      return function() {
-        return _updateEventBefore.call(_this);
-      };
-    })(this));
+        return results1;
+      })());
+    }
+    return results;
   };
 
   WorktableCommon.stopAllEventPreview = function(callback) {

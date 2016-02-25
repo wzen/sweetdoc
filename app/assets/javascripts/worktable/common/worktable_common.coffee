@@ -696,21 +696,20 @@ class WorktableCommon
 
   @stopPreview: (keepDispMag, callback = null) ->
     # プレビューの実行回数超過
-    window.previewRunning = false
     # ボタン変更「StopPreview」->「Preview」
     EventConfig.switchPreviewButton(true)
-    # 全ての状態をイベント適応前にする
-    @updateAllEventsToBefore(keepDispMag, =>
-      # アイテム再描画
-      @refreshAllItemsFromInstancePageValueIfChanging()
+    # 全てのアイテム状態をイベント前にする
+    @updateAllEventsToBefore(keepDispMag)
+    # アイテム再描画
+    @refreshAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), =>
       FloatView.hideWithCloseButtonView()
       if callback?
         callback()
     )
 
-  # 全てのアイテムをイベント適用前に戻す
+  # 全てのアイテム状態をイベント前に戻す
   # @param [Function] callback コールバック
-  @updateAllEventsToBefore: (keepDispMag, callback = null) ->
+  @updateAllEventsToBefore: (keepDispMag) ->
     # EventPageValueを読み込み、全てイベント実行前(updateEventBefore)にする
     tesArray = []
     tesArray.push(PageValue.getEventPageValueSortedListByNum(PageValue.Key.EF_MASTER_FORKNUM))
@@ -720,20 +719,13 @@ class WorktableCommon
         # フォークデータを含める
         tesArray.push(PageValue.getEventPageValueSortedListByNum(i))
 
-    _updateEventBefore = ->
-      for tes in tesArray
-        for idx in [tes.length - 1 .. 0] by -1
-          te = tes[idx]
-          item = window.instanceMap[te.id]
-          if item?
-            item.initEvent(te, keepDispMag)
-            item.updateEventBefore()
-        if callback?
-          callback()
-
-    @stopAllEventPreview( =>
-      _updateEventBefore.call(@)
-    )
+    for tes in tesArray
+      for idx in [tes.length - 1 .. 0] by -1
+        te = tes[idx]
+        item = window.instanceMap[te.id]
+        if item?
+          item.initEvent(te, keepDispMag)
+          item.updateEventBefore()
 
   # 全イベントのプレビューを停止
   # @param [Function] callback コールバック

@@ -341,7 +341,7 @@ WorktableSetting = (function() {
         }
       });
       min = 0.1;
-      max = 5.0;
+      max = 2.0;
       worktableScale = WorktableCommon.getWorktableViewScale();
       meterElement = $(".scale_meter:first", rootEmt);
       valueElement = meterElement.prev('input:first');
@@ -379,7 +379,7 @@ WorktableSetting = (function() {
       });
       $('.display_position_left_limit', rootEmt).html("(" + leftMin + " 〜 " + leftMax + ")");
       $('.display_position_top_limit', rootEmt).html("(" + topMin + " 〜 " + topMax + ")");
-      return $('.display_position_scale_limit', rootEmt).html("(10% 〜 500%)");
+      return $('.display_position_scale_limit', rootEmt).html("(10% 〜 200%)");
     };
 
     PositionAndScale.clear = function() {
