@@ -153,16 +153,15 @@ class ScreenEvent extends CommonEvent
     setMiniumObject: (obj) ->
       super(obj)
       if !@_initDone
+        # 倍率 & スクロール位置設定
         if !window.isWorkTable
-          # スクロール位置設定
-          Common.initScrollContentsPosition()
           _setScaleAndUpdateViewing.call(@, _getInitScale.call(@))
           @eventBaseScale = _getInitScale.call(@)
           RunCommon.updateMainViewSize()
+          Common.initScrollContentsPosition()
         else
-          # スクロール位置更新
-          WorktableCommon.initScrollContentsPosition()
           WorktableCommon.updateMainViewSize()
+          WorktableCommon.initScrollContentsPosition()
         @_initDone = true
         @_notMoving = true
 

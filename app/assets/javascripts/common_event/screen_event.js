@@ -193,13 +193,13 @@ ScreenEvent = (function(superClass) {
       PrivateClass.__super__.setMiniumObject.call(this, obj);
       if (!this._initDone) {
         if (!window.isWorkTable) {
-          Common.initScrollContentsPosition();
           _setScaleAndUpdateViewing.call(this, _getInitScale.call(this));
           this.eventBaseScale = _getInitScale.call(this);
           RunCommon.updateMainViewSize();
+          Common.initScrollContentsPosition();
         } else {
-          WorktableCommon.initScrollContentsPosition();
           WorktableCommon.updateMainViewSize();
+          WorktableCommon.initScrollContentsPosition();
         }
         this._initDone = true;
         return this._notMoving = true;
