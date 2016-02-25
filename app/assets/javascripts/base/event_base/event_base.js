@@ -191,11 +191,9 @@ EventBase = (function(superClass) {
         _this._loopCount = 0;
         _this._previewTimer = null;
         FloatView.showWithCloseButton(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW, function() {
-          return WorktableCommon.stopAllEventPreview(function() {
-            if (_this.loopFinishCallback != null) {
-              return _this.loopFinishCallback();
-            }
-          });
+          if (_this.loopFinishCallback != null) {
+            return _this.loopFinishCallback();
+          }
         });
         _this._progress = 0;
         if (window.debug) {

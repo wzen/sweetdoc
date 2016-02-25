@@ -136,10 +136,8 @@ class EventBase extends Extend
       @_previewTimer = null
       # FloatView表示
       FloatView.showWithCloseButton(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW, =>
-        WorktableCommon.stopAllEventPreview( =>
-          if @loopFinishCallback?
-            @loopFinishCallback()
-        )
+        if @loopFinishCallback?
+          @loopFinishCallback()
       )
       @_progress = 0
       if window.debug
