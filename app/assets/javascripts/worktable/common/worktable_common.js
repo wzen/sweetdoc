@@ -821,7 +821,7 @@ WorktableCommon = (function() {
       callback = null;
     }
     EventConfig.switchPreviewButton(true);
-    this.updateAllEventsToBefore(keepDispMag);
+    this.updateAllItemsToBeforePreview(keepDispMag);
     return this.refreshAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), (function(_this) {
       return function() {
         FloatView.hideWithCloseButtonView();
@@ -832,7 +832,7 @@ WorktableCommon = (function() {
     })(this));
   };
 
-  WorktableCommon.updateAllEventsToBefore = function(keepDispMag) {
+  WorktableCommon.updateAllItemsToBeforePreview = function(keepDispMag) {
     var forkNum, i, idx, item, l, len, m, ref, results, te, tes, tesArray;
     tesArray = [];
     tesArray.push(PageValue.getEventPageValueSortedListByNum(PageValue.Key.EF_MASTER_FORKNUM));

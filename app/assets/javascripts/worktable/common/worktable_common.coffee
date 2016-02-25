@@ -699,7 +699,7 @@ class WorktableCommon
     # ボタン変更「StopPreview」->「Preview」
     EventConfig.switchPreviewButton(true)
     # 全てのアイテム状態をイベント前にする
-    @updateAllEventsToBefore(keepDispMag)
+    @updateAllItemsToBeforePreview(keepDispMag)
     # アイテム再描画
     @refreshAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), =>
       FloatView.hideWithCloseButtonView()
@@ -707,9 +707,9 @@ class WorktableCommon
         callback()
     )
 
-  # 全てのアイテム状態をイベント前に戻す
+  # 全てのアイテム状態をイベント前に戻す(プレビュー停止前に動作させること)
   # @param [Function] callback コールバック
-  @updateAllEventsToBefore: (keepDispMag) ->
+  @updateAllItemsToBeforePreview: (keepDispMag) ->
     # EventPageValueを読み込み、全てイベント実行前(updateEventBefore)にする
     tesArray = []
     tesArray.push(PageValue.getEventPageValueSortedListByNum(PageValue.Key.EF_MASTER_FORKNUM))
@@ -718,7 +718,6 @@ class WorktableCommon
       for i in [1..forkNum]
         # フォークデータを含める
         tesArray.push(PageValue.getEventPageValueSortedListByNum(i))
-
     for tes in tesArray
       for idx in [tes.length - 1 .. 0] by -1
         te = tes[idx]

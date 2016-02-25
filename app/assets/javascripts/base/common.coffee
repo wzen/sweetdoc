@@ -216,7 +216,7 @@ class Common
   @initScrollContentsPositionByWorktableConfig = ->
     position = PageValue.getWorktableScrollContentsPosition()
     if position?
-      # Worktableの画面中央にセット
+      # Worktableの画面状態にセット
       @updateScrollContentsPosition(position.top, position.left)
     else
       # デフォルトの画面中央にセット

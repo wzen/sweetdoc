@@ -154,10 +154,10 @@ class ScreenEvent extends CommonEvent
       super(obj)
       if !@_initDone
         if !window.isWorkTable
-          _setScaleAndUpdateViewing.call(@, _getInitScale.call(@))
-          @eventBaseScale = _getInitScale.call(@)
           # スクロール位置設定
           Common.initScrollContentsPosition()
+          _setScaleAndUpdateViewing.call(@, _getInitScale.call(@))
+          @eventBaseScale = _getInitScale.call(@)
           RunCommon.updateMainViewSize()
         else
           # スクロール位置更新
