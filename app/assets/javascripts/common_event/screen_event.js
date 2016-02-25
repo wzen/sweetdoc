@@ -357,12 +357,10 @@ ScreenEvent = (function(superClass) {
     };
 
     _getInitScale = function() {
-      if (window.isWorkTable && !window.previewRunning) {
-        return WorktableCommon.getWorktableViewScale();
-      } else if (this.initConfigScale != null) {
+      if (this.hasInitConfig() && (!window.isWorkTable || window.previewRunning)) {
         return this.initConfigScale;
       } else {
-        return 1.0;
+        return Common.getWorktableViewScale();
       }
     };
 

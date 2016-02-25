@@ -289,12 +289,10 @@ class ScreenEvent extends CommonEvent
       Common.applyViewScale()
 
     _getInitScale = ->
-      if window.isWorkTable && !window.previewRunning
-        return WorktableCommon.getWorktableViewScale()
-      else if @initConfigScale?
+      if @hasInitConfig() && (!window.isWorkTable || window.previewRunning)
         return @initConfigScale
       else
-        return 1.0
+        return Common.getWorktableViewScale()
 
   @CLASS_DIST_TOKEN = @PrivateClass.CLASS_DIST_TOKEN
 
