@@ -398,7 +398,7 @@ EventBase = (function(superClass) {
       this.stepValue = ePoint;
       this.execMethod({
         isPreview: isPreview,
-        progress: this.stepValue - sPoint,
+        progress: this.progressMax(),
         progressMax: this.progressMax(),
         forward: this.forward
       }, (function(_this) {

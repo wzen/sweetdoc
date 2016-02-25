@@ -142,6 +142,10 @@ ScreenEvent = (function(superClass) {
 
     PrivateClass.prototype.changeScreenPosition = function(opt) {
       var p, scrollContentsSize, size;
+      if (opt.progress > opt.progressMax) {
+        console.log('over');
+        return;
+      }
       p = Common.calcScrollTopLeftPosition(this._specificMethodValues.afterY, this._specificMethodValues.afterX);
       this._progressScale = (parseFloat(this._specificMethodValues.afterZ) - this.eventBaseScale) * (opt.progress / opt.progressMax) + this.eventBaseScale;
       this._progressX = ((parseFloat(p.left) - this.eventBaseX) * (opt.progress / opt.progressMax)) + this.eventBaseX;
@@ -297,7 +301,7 @@ ScreenEvent = (function(superClass) {
     _overlay = function(x, y, scale) {
       var _drawOverlay, canvas, canvasContext, h, overlay, w;
       _drawOverlay = function(context, x, y, width, height, scale) {
-        var _rect, h, left, size, top, w;
+        var _rect, h, left, size, top, w, wScale;
         _rect = function(context, x, y, w, h) {
           context.moveTo(x, y);
           context.lineTo(x, y + h);
@@ -309,9 +313,10 @@ ScreenEvent = (function(superClass) {
         context.fillStyle = "rgba(33, 33, 33, 0.5)";
         context.beginPath();
         context.rect(0, 0, width, height);
-        size = _convertCenterCoodToSize.call(this, x, y, WorktableCommon.getWorktableViewScale());
-        w = size.width / scale;
-        h = size.height / scale;
+        wScale = WorktableCommon.getWorktableViewScale();
+        size = _convertCenterCoodToSize.call(this, x, y, wScale);
+        w = size.width * wScale / scale;
+        h = size.height * wScale / scale;
         top = y - h / 2.0;
         left = x - w / 2.0;
         context.clearRect(0, 0, width, height);

@@ -323,7 +323,7 @@ class EventBase extends Extend
       # 終了前にもう一度実行する
       @execMethod({
         isPreview: isPreview
-        progress: @stepValue - sPoint
+        progress: @progressMax()
         progressMax: @progressMax()
         forward: @forward
       }, =>
