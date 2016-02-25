@@ -142,10 +142,6 @@ ScreenEvent = (function(superClass) {
 
     PrivateClass.prototype.changeScreenPosition = function(opt) {
       var p, scrollContentsSize, size;
-      if (opt.progress > opt.progressMax) {
-        console.log('over');
-        return;
-      }
       p = Common.calcScrollTopLeftPosition(this._specificMethodValues.afterY, this._specificMethodValues.afterX);
       this._progressScale = (parseFloat(this._specificMethodValues.afterZ) - this.eventBaseScale) * (opt.progress / opt.progressMax) + this.eventBaseScale;
       this._progressX = ((parseFloat(p.left) - this.eventBaseX) * (opt.progress / opt.progressMax)) + this.eventBaseX;
