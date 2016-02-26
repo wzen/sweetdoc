@@ -448,7 +448,7 @@ div.info_contents {
       padding: 5px;
     }
   }
-  .operation_parent {
+  > div.operation_parent {
     position: absolute;
     bottom: 5px;
     right: 5px;
@@ -491,7 +491,7 @@ div.contents_info {
     color: white;
     margin: 5px;
     padding: 5px;
-    background-color: rgba(33, 33, 33, 0.3);
+    background-color: rgba(0, 0, 0, 0.8);
     border-radius: 7px;
   }
 
@@ -537,7 +537,7 @@ div.share_info {
     color: white;
     margin: 5px;
     padding: 5px;
-    background-color: rgba(33, 33, 33, 0.3);
+    background-color: rgba(0, 0, 0, 0.8);
     border-radius: 7px;
     > div {
       width: 100%;

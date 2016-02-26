@@ -5,6 +5,9 @@
     <form name="send_form">
       <%= render 'run/fullscreen/fullscreen_button', access_token: @access_token, screen_size_width: @screen_size[:width], screen_size_height: @screen_size[:height] %>
     </form>
+    <div class="operation_parent">
+      <%= render 'run/operation' %>
+    </div>
     <%= render 'run/defaultscreen/main' %>
     <%= render 'run/defaultscreen/info' %>
     <%= render 'base/csscode' %>

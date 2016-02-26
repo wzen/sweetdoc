@@ -112,18 +112,32 @@ RunCommon = (function() {
   };
 
   RunCommon.showCreatorInfo = function() {
-    var _setClose, info, share;
+    var _setClose, info, operation, share;
     info = $('#contents').find('.contents_info:first');
-    _setClose = function(info) {
+    operation = $('#contents').find('.operation_parent:first');
+    share = $('#contents').find('.share_info:first');
+    _setClose = function() {
       return $('#contents').off('click.contents_info').on('click.contents_info', function(e) {
         if (info.is(':visible')) {
-          info.fadeOut('200');
-          return $('#contents').off('click.contents_info');
+          e.preventDefault();
+          e.stopPropagation();
+          operation.fadeOut({
+            duration: '200',
+            queue: false
+          });
+          info.fadeOut({
+            duration: '200',
+            queue: false
+          });
+          $('#contents').off('click.contents_info');
+        }
+        if (share.is(':visible')) {
+          return share.fadeOut('200');
         }
       });
     };
     info.fadeIn('500', function() {
-      _setClose.call(this, info);
+      _setClose.call(this);
       return setTimeout(function() {
         return info.fadeOut('500');
       }, 3000);
@@ -131,24 +145,28 @@ RunCommon = (function() {
     $('#contents .contents_info_show_button:first').off('click').on('click', (function(_this) {
       return function(e) {
         if (!info.is(':visible')) {
-          return info.fadeIn('200', function() {
-            return _setClose.call(_this, info);
+          e.preventDefault();
+          e.stopPropagation();
+          operation.fadeIn({
+            duration: '200',
+            queue: false
+          });
+          return info.fadeIn({
+            duration: '200',
+            queue: false,
+            complete: function() {
+              return _setClose.call(_this);
+            }
           });
         }
       };
     })(this));
-    share = $('#contents').find('.share_info:first');
     $('#contents .contents_share_show_button:first').off('click').on('click', (function(_this) {
       return function(e) {
         if (!share.is(':visible')) {
-          return share.fadeIn('200');
-        }
-      };
-    })(this));
-    share.off('click').on('click', (function(_this) {
-      return function(e) {
-        if (share.is(':visible')) {
-          return share.fadeOut('200');
+          return share.fadeIn('200', function() {
+            return _setClose.call(_this);
+          });
         }
       };
     })(this));

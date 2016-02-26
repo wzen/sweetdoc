@@ -87,18 +87,25 @@ class RunCommon
   # 詳細情報を表示
   @showCreatorInfo = ->
     info = $('#contents').find('.contents_info:first')
+    operation = $('#contents').find('.operation_parent:first')
+    share = $('#contents').find('.share_info:first')
 
-    _setClose = (info) ->
+    _setClose = ->
       # ビュークリックで非表示
       $('#contents').off('click.contents_info').on('click.contents_info', (e) ->
         if info.is(':visible')
-          info.fadeOut('200')
+          e.preventDefault()
+          e.stopPropagation()
+          operation.fadeOut({duration:'200', queue: false})
+          info.fadeOut({duration:'200', queue: false})
           $('#contents').off('click.contents_info')
+        if share.is(':visible')
+          share.fadeOut('200')
       )
 
     info.fadeIn('500', ->
       # ビュークリックで非表示
-      _setClose.call(@, info)
+      _setClose.call(@)
       setTimeout( ->
         info.fadeOut('500')
       , 3000)
@@ -106,22 +113,22 @@ class RunCommon
     # iボタンで情報表示
     $('#contents .contents_info_show_button:first').off('click').on('click', (e) =>
       if !info.is(':visible')
-        info.fadeIn('200', =>
-          # ビュークリックで非表示
-          _setClose.call(@, info)
-        )
+        e.preventDefault()
+        e.stopPropagation()
+        operation.fadeIn({duration: '200', queue: false})
+        info.fadeIn({
+          duration: '200', queue: false, complete: =>
+            # ビュークリックで非表示
+            _setClose.call(@)
+        })
     )
 
     # Share情報表示
-    share = $('#contents').find('.share_info:first')
     $('#contents .contents_share_show_button:first').off('click').on('click', (e)=>
       if !share.is(':visible')
-        share.fadeIn('200')
-    )
-    # Share情報クリックで非表示
-    share.off('click').on('click', (e) =>
-      if share.is(':visible')
-        share.fadeOut('200')
+        share.fadeIn('200', =>
+          _setClose.call(@)
+        )
     )
     share.find('textarea, input').off('click.close').on('click', (e) ->
       e.preventDefault()

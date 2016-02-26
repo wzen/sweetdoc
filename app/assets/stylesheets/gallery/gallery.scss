@@ -248,7 +248,22 @@ div#gallery_contents_wrapper {
     height: 100%;
   }
 }
-
+body.detail {
+  #contents {
+    > div.operation_parent {
+      display: none;
+      z-index: 1999999999;
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 180px;
+      height: 65px;
+      padding: 5px;
+      background-color: rgba(0, 0, 0, 0.8);
+      border-radius: 7px;
+    }
+  }
+}
 body.full_window, body.embed {
   div#contents {
     top: 0 !important;
