@@ -930,29 +930,33 @@ class Common
 
   # アイテムを削除
   # @param [Integer] pageNum ページ番号
-  @removeAllItem = (pageNum = null) ->
+  @removeAllItem = (pageNum = null, withDeleteInstanceMap = true) ->
     if pageNum?
       items = @instancesInPage(pageNum)
       for item in items
         if item?
-          if item instanceof CommonEventBase
-            for clsToken, cls of window.classMap
-              if cls.prototype instanceof CommonEvent && item instanceof cls.PrivateClass
-                # Singletonのキャッシュを削除
-                cls.deleteInstance(item.id)
-          else
-            # アイテム削除
+          if item instanceof CommonEventBase == false
+            # アイテム表示削除
             item.removeItemElement()
-          delete window.instanceMap[item.id]
+          else
+            if withDeleteInstanceMap
+              for clsToken, cls of window.classMap
+                if cls.prototype instanceof CommonEvent && item instanceof cls.PrivateClass
+                  # Singletonのキャッシュを削除
+                  cls.deleteInstance(item.id)
+          if withDeleteInstanceMap
+            delete window.instanceMap[item.id]
     else
       for k, v of Common.allItemInstances()
         if v?
+          # アイテム表示削除
           v.removeItemElement()
-      window.instanceMap = {}
-      for clsToken, cls of window.classMap
-        if cls.prototype instanceof CommonEvent
-          # Singletonのキャッシュを削除
-          cls.deleteAllInstance()
+      if withDeleteInstanceMap
+        window.instanceMap = {}
+        for clsToken, cls of window.classMap
+          if cls.prototype instanceof CommonEvent
+            # Singletonのキャッシュを削除
+            cls.deleteAllInstance()
 
   # JSファイルをサーバから読み込む
   # @param [Int] classDistToken アイテム種別

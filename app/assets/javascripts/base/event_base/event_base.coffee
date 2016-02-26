@@ -41,6 +41,8 @@ class EventBase extends Extend
   # 変更を戻して再表示
   # @abstract
   refresh: (show = true, callback = null) ->
+    if callback?
+      callback()
 
   # 現在の表示状態
   isItemVisible: ->

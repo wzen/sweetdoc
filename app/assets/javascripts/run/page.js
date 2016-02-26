@@ -189,13 +189,13 @@ Page = (function() {
       console.log('Page rewindChapter');
     }
     this.hideAllGuide();
-    return this.resetChapter(this.getChapterIndex(), false, (function(_this) {
+    return this.resetChapter(this.getChapterIndex(), (function(_this) {
       return function() {
         var lastForkObj, nfn, oneBeforeForkObj;
         if (!_this.thisChapter().doMoveChapter) {
           if (_this.getChapterIndex() > 0) {
             _this.addChapterIndex(-1);
-            return _this.resetChapter(_this.getChapterIndex(), false, function() {
+            return _this.resetChapter(_this.getChapterIndex(), function() {
               RunCommon.setChapterNum(_this.thisChapterNum());
               _this.thisChapter().willChapter();
               return FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
@@ -208,7 +208,7 @@ Page = (function() {
               nfn = oneBeforeForkObj.forkNum;
               RunCommon.setForkNum(nfn);
               _this.setChapterIndex(lastForkObj.changedChapterIndex);
-              return _this.resetChapter(_this.getChapterIndex(), true, function() {
+              return _this.resetChapter(_this.getChapterIndex(), function() {
                 RunCommon.setChapterNum(_this.thisChapterNum());
                 RunCommon.setChapterMax(_this.getForkChapterList().length);
                 _this.thisChapter().willChapter();
@@ -227,12 +227,9 @@ Page = (function() {
     })(this));
   };
 
-  Page.prototype.resetChapter = function(chapterIndex, takeStateCapture, callback) {
+  Page.prototype.resetChapter = function(chapterIndex, callback) {
     if (chapterIndex == null) {
       chapterIndex = this.getChapterIndex();
-    }
-    if (takeStateCapture == null) {
-      takeStateCapture = false;
     }
     if (callback == null) {
       callback = null;
@@ -242,7 +239,7 @@ Page = (function() {
     }
     this.finishedAllChapters = false;
     this.finishedScrollDistSum = 0;
-    return this.getForkChapterList()[chapterIndex].resetAllEvents(takeStateCapture, callback);
+    return this.getForkChapterList()[chapterIndex].resetAllEvents(callback);
   };
 
   Page.prototype.rewindAllChapters = function() {
@@ -254,7 +251,7 @@ Page = (function() {
     results = [];
     for (i = j = ref = this.getForkChapterList().length - 1; j >= 0; i = j += -1) {
       this.setChapterIndex(i);
-      results.push(this.resetChapter(i, false, (function(_this) {
+      results.push(this.resetChapter(i, (function(_this) {
         return function() {
           count += 1;
           if (count >= _this.getForkChapterList().length) {
@@ -308,15 +305,16 @@ Page = (function() {
       console.log('Page willPage');
     }
     this.initChapterEvent();
-    this.resetAllChapters();
-    return this.initItemDrawingInPage((function(_this) {
+    return this.resetAllChapters((function(_this) {
       return function() {
-        _this.initFocus(true);
-        RunCommon.setChapterMax(_this.getForkChapterList().length);
-        LocalStorage.saveAllPageValues();
-        if (callback != null) {
-          return callback();
-        }
+        return _this.initItemDrawingInPage(function() {
+          _this.initFocus(true);
+          RunCommon.setChapterMax(_this.getForkChapterList().length);
+          LocalStorage.saveAllPageValues();
+          if (callback != null) {
+            return callback();
+          }
+        });
       };
     })(this));
   };
@@ -329,17 +327,23 @@ Page = (function() {
       console.log('Page willPageFromRewind');
     }
     this.initChapterEvent();
-    this.initFocus(false);
-    this.forwardProgressChapters();
-    this.getForkChapterList()[this.getForkChapterList().length - 1].resetAllEvents();
-    RunCommon.setChapterMax(this.getForkChapterList().length);
-    this.setChapterIndex(this.getForkChapterList().length - 1);
-    RunCommon.setForkNum(RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum()));
-    this.resetChapter();
-    LocalStorage.saveAllPageValues();
-    if (callback != null) {
-      return callback();
-    }
+    return this.initItemDrawingInPage((function(_this) {
+      return function() {
+        _this.initFocus(false);
+        _this.forwardProgressChapters();
+        return _this.getForkChapterList()[_this.getForkChapterList().length - 1].resetAllEvents(function() {
+          RunCommon.setChapterMax(_this.getForkChapterList().length);
+          _this.setChapterIndex(_this.getForkChapterList().length - 1);
+          RunCommon.setForkNum(RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum()));
+          return _this.resetChapter(_this.getChapterIndex(), function() {
+            LocalStorage.saveAllPageValues();
+            if (callback != null) {
+              return callback();
+            }
+          });
+        });
+      };
+    })(this));
   };
 
   Page.prototype.didPage = function() {
@@ -453,12 +457,27 @@ Page = (function() {
     return results;
   };
 
-  Page.prototype.resetAllChapters = function() {
+  Page.prototype.resetAllChapters = function(callback) {
+    var count, max;
+    if (callback == null) {
+      callback = null;
+    }
     if (window.runDebug) {
       console.log('Page resetAllChapters');
     }
+    count = 0;
+    max = this.getAllChapterList().length;
     return this.getAllChapterList().forEach(function(chapter) {
-      return chapter.resetAllEvents();
+      return chapter.resetAllEvents((function(_this) {
+        return function() {
+          count += 1;
+          if (count >= max) {
+            if (callback != null) {
+              return callback();
+            }
+          }
+        };
+      })(this));
     });
   };
 

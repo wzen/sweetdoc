@@ -1147,10 +1147,13 @@ Common = (function() {
     return zindex - (window.pageNumMax - pn) * (Constant.Zindex.EVENTFLOAT + 1);
   };
 
-  Common.removeAllItem = function(pageNum) {
+  Common.removeAllItem = function(pageNum, withDeleteInstanceMap) {
     var cls, clsToken, item, items, j, k, len, ref, ref1, ref2, results, results1, v;
     if (pageNum == null) {
       pageNum = null;
+    }
+    if (withDeleteInstanceMap == null) {
+      withDeleteInstanceMap = true;
     }
     if (pageNum != null) {
       items = this.instancesInPage(pageNum);
@@ -1158,18 +1161,24 @@ Common = (function() {
       for (j = 0, len = items.length; j < len; j++) {
         item = items[j];
         if (item != null) {
-          if (item instanceof CommonEventBase) {
-            ref = window.classMap;
-            for (clsToken in ref) {
-              cls = ref[clsToken];
-              if (cls.prototype instanceof CommonEvent && item instanceof cls.PrivateClass) {
-                cls.deleteInstance(item.id);
+          if (item instanceof CommonEventBase === false) {
+            item.removeItemElement();
+          } else {
+            if (withDeleteInstanceMap) {
+              ref = window.classMap;
+              for (clsToken in ref) {
+                cls = ref[clsToken];
+                if (cls.prototype instanceof CommonEvent && item instanceof cls.PrivateClass) {
+                  cls.deleteInstance(item.id);
+                }
               }
             }
-          } else {
-            item.removeItemElement();
           }
-          results.push(delete window.instanceMap[item.id]);
+          if (withDeleteInstanceMap) {
+            results.push(delete window.instanceMap[item.id]);
+          } else {
+            results.push(void 0);
+          }
         } else {
           results.push(void 0);
         }
@@ -1183,18 +1192,20 @@ Common = (function() {
           v.removeItemElement();
         }
       }
-      window.instanceMap = {};
-      ref2 = window.classMap;
-      results1 = [];
-      for (clsToken in ref2) {
-        cls = ref2[clsToken];
-        if (cls.prototype instanceof CommonEvent) {
-          results1.push(cls.deleteAllInstance());
-        } else {
-          results1.push(void 0);
+      if (withDeleteInstanceMap) {
+        window.instanceMap = {};
+        ref2 = window.classMap;
+        results1 = [];
+        for (clsToken in ref2) {
+          cls = ref2[clsToken];
+          if (cls.prototype instanceof CommonEvent) {
+            results1.push(cls.deleteAllInstance());
+          } else {
+            results1.push(void 0);
+          }
         }
+        return results1;
       }
-      return results1;
     }
   };
 

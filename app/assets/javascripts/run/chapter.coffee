@@ -79,19 +79,20 @@ class Chapter
     window.scrollHandleWrapper.css('pointer-events', '')
 
   # チャプターのイベントをリセットする
-  resetAllEvents: (takeStateCapture = false, callback = null) ->
+  resetAllEvents: (callback = null) ->
     if window.runDebug
       console.log('Chapter resetAllEvents')
 
     # 描画を戻す
     count = 0
+    max = @eventObjList.length
     for e, idx in @eventObjList
       e.initEvent(@eventList[idx])
       e.updateEventBefore()
       e.resetProgress()
       e.refresh(e.visible, =>
         count += 1
-        if count >= @eventObjList.length
+        if count >= max
           if callback?
             callback()
       )

@@ -85,11 +85,8 @@ Chapter = (function() {
     return window.scrollHandleWrapper.css('pointer-events', '');
   };
 
-  Chapter.prototype.resetAllEvents = function(takeStateCapture, callback) {
-    var count, e, i, idx, len, ref, results;
-    if (takeStateCapture == null) {
-      takeStateCapture = false;
-    }
+  Chapter.prototype.resetAllEvents = function(callback) {
+    var count, e, i, idx, len, max, ref, results;
     if (callback == null) {
       callback = null;
     }
@@ -97,6 +94,7 @@ Chapter = (function() {
       console.log('Chapter resetAllEvents');
     }
     count = 0;
+    max = this.eventObjList.length;
     ref = this.eventObjList;
     results = [];
     for (idx = i = 0, len = ref.length; i < len; idx = ++i) {
@@ -107,7 +105,7 @@ Chapter = (function() {
       results.push(e.refresh(e.visible, (function(_this) {
         return function() {
           count += 1;
-          if (count >= _this.eventObjList.length) {
+          if (count >= max) {
             if (callback != null) {
               return callback();
             }

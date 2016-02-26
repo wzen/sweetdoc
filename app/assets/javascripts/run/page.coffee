@@ -106,7 +106,6 @@ class Page
   start: ->
     if window.runDebug
       console.log('Page Start')
-
     # ページングガイド作成
     @pagingGuide = new ArrowPagingGuide()
     # チャプター数設定
@@ -175,11 +174,11 @@ class Page
       console.log('Page rewindChapter')
     # 全ガイド非表示
     @hideAllGuide()
-    @resetChapter(@getChapterIndex(), false, =>
+    @resetChapter(@getChapterIndex(), =>
       if !@thisChapter().doMoveChapter
         if @getChapterIndex() > 0
           @addChapterIndex(-1)
-          @resetChapter(@getChapterIndex(), false, =>
+          @resetChapter(@getChapterIndex(), =>
             RunCommon.setChapterNum(@thisChapterNum())
             # チャプター前処理
             @thisChapter().willChapter()
@@ -197,7 +196,7 @@ class Page
             # チャプター番号をフォーク以前に変更
             @setChapterIndex(lastForkObj.changedChapterIndex)
             # チャプターリセット
-            @resetChapter(@getChapterIndex(), true, =>
+            @resetChapter(@getChapterIndex(), =>
               # チャプター番号設定
               RunCommon.setChapterNum(@thisChapterNum())
               # チャプター最大値設定
@@ -218,12 +217,12 @@ class Page
     )
 
   # チャプターの内容をリセット
-  resetChapter: (chapterIndex = @getChapterIndex(), takeStateCapture = false, callback = null) ->
+  resetChapter: (chapterIndex = @getChapterIndex(), callback = null) ->
     if window.runDebug
       console.log('Page resetChapter')
     @finishedAllChapters = false
     @finishedScrollDistSum = 0
-    @getForkChapterList()[chapterIndex].resetAllEvents(takeStateCapture, callback)
+    @getForkChapterList()[chapterIndex].resetAllEvents(callback)
 
   # 全てのチャプターを戻す
   rewindAllChapters: ->
@@ -233,7 +232,7 @@ class Page
     count = 0
     for i in [(@getForkChapterList().length - 1)..0] by -1
       @setChapterIndex(i)
-      @resetChapter(i, false, =>
+      @resetChapter(i, =>
         count += 1
         if count >= @getForkChapterList().length
           @setChapterIndex(0)
@@ -276,21 +275,21 @@ class Page
   willPage: (callback = null)->
     if window.runDebug
       console.log('Page willPage')
-
     # ページ状態初期化のため、ここで全チャプターのイベントを初期化
     @initChapterEvent()
     # リセット
-    @resetAllChapters()
-    # アイテム状態初期化
-    @initItemDrawingInPage( =>
-      # フォーカス
-      @initFocus(true)
-      # チャプター最大値設定
-      RunCommon.setChapterMax(@getForkChapterList().length)
-      # キャッシュ保存
-      LocalStorage.saveAllPageValues()
-      if callback?
-        callback()
+    @resetAllChapters( =>
+      # アイテム状態初期化
+      @initItemDrawingInPage( =>
+        # フォーカス
+        @initFocus(true)
+        # チャプター最大値設定
+        RunCommon.setChapterMax(@getForkChapterList().length)
+        # キャッシュ保存
+        LocalStorage.saveAllPageValues()
+        if callback?
+          callback()
+      )
     )
 
   # ページ戻し前処理
@@ -300,23 +299,28 @@ class Page
 
     # ページ状態初期化のため、ここで全チャプターのイベントを初期化
     @initChapterEvent()
-    # フォーカス
-    @initFocus(false)
-    # 最後のイベントのみリセット
-    @forwardProgressChapters()
-    @getForkChapterList()[@getForkChapterList().length - 1].resetAllEvents()
-    # チャプター最大値設定
-    RunCommon.setChapterMax(@getForkChapterList().length)
-    # インデックスを最後のチャプターに
-    @setChapterIndex(@getForkChapterList().length - 1)
-    # フォーク番号設定
-    RunCommon.setForkNum(RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum()))
-    # チャプター初期化
-    @resetChapter()
-    # キャッシュ保存
-    LocalStorage.saveAllPageValues()
-    if callback?
-      callback()
+    # アイテム状態初期化
+    @initItemDrawingInPage( =>
+      # フォーカス
+      @initFocus(false)
+      # 最後のイベントのみリセット
+      @forwardProgressChapters()
+      @getForkChapterList()[@getForkChapterList().length - 1].resetAllEvents( =>
+        # チャプター最大値設定
+        RunCommon.setChapterMax(@getForkChapterList().length)
+        # インデックスを最後のチャプターに
+        @setChapterIndex(@getForkChapterList().length - 1)
+        # フォーク番号設定
+        RunCommon.setForkNum(RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum()))
+        # チャプター初期化
+        @resetChapter(@getChapterIndex(), =>
+          # キャッシュ保存
+          LocalStorage.saveAllPageValues()
+          if callback?
+            callback()
+        )
+      )
+    )
 
   # ページ後処理
   didPage: ->
@@ -387,11 +391,18 @@ class Page
       )
 
   # 全てのチャプターをリセット
-  resetAllChapters: ->
+  resetAllChapters: (callback = null) ->
     if window.runDebug
       console.log('Page resetAllChapters')
+    count = 0
+    max = @getAllChapterList().length
     @getAllChapterList().forEach((chapter) ->
-      chapter.resetAllEvents()
+      chapter.resetAllEvents( =>
+        count += 1
+        if count >= max
+          if callback?
+            callback()
+      )
     )
 
   # フォークを含んだ動作予定のチャプターを進行

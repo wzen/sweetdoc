@@ -18,7 +18,7 @@ class EventAction
     return @pageIndex + 1
 
   # 開始イベント
-  start: ->
+  start: (callback = null) ->
     # ページ数設定
     RunCommon.setPageNum(@thisPageNum())
     # フォークをMasterに設定
@@ -26,6 +26,8 @@ class EventAction
     RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM)
     @thisPage().willPage( =>
       @thisPage().start()
+      if callback?
+        callback()
     )
 
   # 中断
@@ -127,8 +129,8 @@ class EventAction
             className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
             section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
             section.hide()
-            # 隠したビューのアイテムを削除
-            Common.removeAllItem(beforePageNum)
+            # 隠したビューのアイテム表示を削除(インスタンスは残す)
+            Common.removeAllItem(beforePageNum, false)
             # CSS削除
             $("##{RunCommon.RUN_CSS.replace('@pagenum', beforePageNum)}").remove()
             if @thisPage().thisChapter()?
@@ -136,7 +138,6 @@ class EventAction
               @thisPage().thisChapter().enableEventHandle()
             # モーダルを削除
             Common.hideModalView()
-            FloatView.show('Next page', FloatView.Type.NEXT_PAGE, 1.0)
             # コールバック
             if callback?
               callback()
@@ -160,14 +161,18 @@ class EventAction
     )
 
   # 全てのページを戻す
-  rewindAllPages: ->
+  rewindAllPages: (callback = null) ->
+    count = 0
     for i in [(@pageList.length - 1)..0] by -1
       page = @pageList[i]
-      page.resetAllChapters()
-    @pageIndex = 0
-    RunCommon.setPageNum(@thisPageNum())
-    @finishedAllPages = false
-    @start()
+      page.resetAllChapters( =>
+        count += 1
+        if count >= @pageList.length
+          @pageIndex = 0
+          RunCommon.setPageNum(@thisPageNum())
+          @finishedAllPages = false
+          @start(callback)
+      )
 
   # 次のページが存在するか
   hasNextPage: ->

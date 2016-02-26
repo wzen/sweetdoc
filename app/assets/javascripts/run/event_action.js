@@ -17,13 +17,19 @@ EventAction = (function() {
     return this.pageIndex + 1;
   };
 
-  EventAction.prototype.start = function() {
+  EventAction.prototype.start = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
     RunCommon.setPageNum(this.thisPageNum());
     RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, window.eventAction.thisPageNum());
     RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);
     return this.thisPage().willPage((function(_this) {
       return function() {
-        return _this.thisPage().start();
+        _this.thisPage().start();
+        if (callback != null) {
+          return callback();
+        }
       };
     })(this));
   };
@@ -130,13 +136,12 @@ EventAction = (function() {
                 className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
                 section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
                 section.hide();
-                Common.removeAllItem(beforePageNum);
+                Common.removeAllItem(beforePageNum, false);
                 $("#" + (RunCommon.RUN_CSS.replace('@pagenum', beforePageNum))).remove();
                 if (_this.thisPage().thisChapter() != null) {
                   _this.thisPage().thisChapter().enableEventHandle();
                 }
                 Common.hideModalView();
-                FloatView.show('Next page', FloatView.Type.NEXT_PAGE, 1.0);
                 if (callback != null) {
                   return callback();
                 }
@@ -159,16 +164,28 @@ EventAction = (function() {
     })(this));
   };
 
-  EventAction.prototype.rewindAllPages = function() {
-    var i, j, page, ref;
+  EventAction.prototype.rewindAllPages = function(callback) {
+    var count, i, j, page, ref, results;
+    if (callback == null) {
+      callback = null;
+    }
+    count = 0;
+    results = [];
     for (i = j = ref = this.pageList.length - 1; j >= 0; i = j += -1) {
       page = this.pageList[i];
-      page.resetAllChapters();
+      results.push(page.resetAllChapters((function(_this) {
+        return function() {
+          count += 1;
+          if (count >= _this.pageList.length) {
+            _this.pageIndex = 0;
+            RunCommon.setPageNum(_this.thisPageNum());
+            _this.finishedAllPages = false;
+            return _this.start(callback);
+          }
+        };
+      })(this)));
     }
-    this.pageIndex = 0;
-    RunCommon.setPageNum(this.thisPageNum());
-    this.finishedAllPages = false;
-    return this.start();
+    return results;
   };
 
   EventAction.prototype.hasNextPage = function() {

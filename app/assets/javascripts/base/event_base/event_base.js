@@ -79,6 +79,9 @@ EventBase = (function(superClass) {
     if (callback == null) {
       callback = null;
     }
+    if (callback != null) {
+      return callback();
+    }
   };
 
   EventBase.prototype.isItemVisible = function() {
