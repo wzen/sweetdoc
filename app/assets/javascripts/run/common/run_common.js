@@ -183,6 +183,21 @@ RunCommon = (function() {
     return window.eventAction.start();
   };
 
+  RunCommon.initOperationEvent = function() {
+    var operationWrapper;
+    operationWrapper = $('.operation_wrapper');
+    operationWrapper.find('.rewind_all_capter').off('click').on('click', function() {
+      if (window.eventAction != null) {
+        return window.eventAction.thisPage().rewindAllChapters();
+      }
+    });
+    return operationWrapper.find('.rewind_capter').off('click').on('click', function() {
+      if (window.eventAction != null) {
+        return window.eventAction.thisPage().rewindChapter();
+      }
+    });
+  };
+
   RunCommon.initHandleScrollView = function() {
     window.skipScrollEvent = true;
     window.scrollHandleWrapper.scrollLeft(window.scrollHandle.width() * 0.5);
@@ -632,6 +647,7 @@ RunCommon = (function() {
     RunCommon.initMainContainer();
     return Common.loadJsFromInstancePageValue(function() {
       RunCommon.initEventAction();
+      RunCommon.initOperationEvent();
       Common.hideModalView();
       return window.initDone = true;
     });

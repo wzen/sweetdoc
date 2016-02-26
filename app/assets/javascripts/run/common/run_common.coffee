@@ -154,6 +154,18 @@ class RunCommon
     window.eventAction = new EventAction(pageList, PageValue.getPageNum() - 1)
     window.eventAction.start()
 
+  # 操作ボタンイベント初期化
+  @initOperationEvent = ->
+    operationWrapper = $('.operation_wrapper')
+    operationWrapper.find('.rewind_all_capter').off('click').on('click', ->
+      if window.eventAction?
+        window.eventAction.thisPage().rewindAllChapters()
+    )
+    operationWrapper.find('.rewind_capter').off('click').on('click', ->
+      if window.eventAction?
+        window.eventAction.thisPage().rewindChapter()
+    )
+
   # Handleスクロールビューの初期化
   @initHandleScrollView = ->
     # スクロール位置初期化
@@ -562,6 +574,8 @@ class RunCommon
     Common.loadJsFromInstancePageValue(->
       # イベント初期化
       RunCommon.initEventAction()
+      # 操作ボタン初期化
+      RunCommon.initOperationEvent()
       # メッセージ非表示
       Common.hideModalView()
       # 初期化終了
