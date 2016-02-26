@@ -377,6 +377,11 @@ div#popup_info_wrapper {
 
     .close_wrapper {
       text-align: right;
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 24px;
+      height: 24px;
     }
     .caption {
       color: white;
@@ -403,18 +408,46 @@ div.popup_creator_wrapper {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-div.creator_info_wrapper {
-  background-color: transparent;
+div.info_contents {
+  position: relative;
   width: 100%;
   height: 100%;
-  .name {
-    color: white;
-  }
-  .page {
-    color: white;
-  }
-  .chapter {
-    color: white;
+  div.info_parent {
+    width: 100%;
+    height: 100%;
+    margin: 24px;
+    div.creator_info_wrapper {
+      background-color: transparent;
+    }
+    .title {
+      font-size: 28px;
+      display: inline-block;
+    }
+    .creator {
+      font-size: 16px;
+      margin-left: 5px;
+      display: inline-block;
+    }
+    .caption {
+      font-size: 14px;
+    }
+    .fork {
+      color: darkorange;
+      font-size: 14px;
+      //display: inline-block;
+      display: none;
+    }
+    .page {
+      font-size: 14px;
+    }
+    .chapter {
+      display: inline-block;
+    }
+    > div {
+      color: white;
+      margin: 5px;
+      padding: 5px;
+    }
   }
 }
 
