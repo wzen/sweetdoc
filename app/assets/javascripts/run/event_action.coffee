@@ -121,6 +121,8 @@ class EventAction
           if @thisPage().thisChapter()?
             # イベント反応無効
             @thisPage().thisChapter().disableEventHandle()
+          # スクロール位置初期化
+          Common.initScrollContentsPosition()
           # ページングアニメーション
           pageFlip.startRender( =>
             # 次ページインデックスを初期化
