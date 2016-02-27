@@ -1025,6 +1025,7 @@ form.item_image_form {
 .drag_pointing {
   border: solid 3px saddlebrown;
   background-color: transparent;
+  pointer-events: none;
 }
 
 .keep_mag_base {

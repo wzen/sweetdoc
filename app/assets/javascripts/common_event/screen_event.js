@@ -292,6 +292,8 @@ ScreenEvent = (function(superClass) {
           h: h
         };
         EventDragPointingRect.draw(size);
+      } else {
+        EventDragPointingRect.clear();
       }
       return emt.find('.event_pointing:first').eventDragPointingRect({
         applyDrawCallback: (function(_this) {

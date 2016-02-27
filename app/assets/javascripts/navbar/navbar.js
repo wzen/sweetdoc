@@ -81,6 +81,7 @@ Navbar = (function() {
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li');
     $('.menu-item', itemsSelectMenuEmt).off('click').on('click', function() {
       var classDistToken, emtId, selected;
+      Sidebar.closeSidebar();
       selected = $(this).html();
       $('#header_items_selected_menu_span').html(selected);
       WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging();
@@ -96,6 +97,7 @@ Navbar = (function() {
       }
     });
     $('#menu-action-edit').off('click').on('click', function() {
+      Sidebar.closeSidebar();
       Navbar.setModeEdit();
       return WorktableCommon.changeMode(Constant.Mode.EDIT);
     });

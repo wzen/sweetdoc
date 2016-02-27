@@ -24,9 +24,10 @@ StateConfig = (function() {
     })(this)();
     return (function(_this) {
       return function() {
-        var _updateConfigInput, center, emt, se;
+        var _updateConfigInput, center, emt, h, screenSize, se, size, w;
         emt = $("#" + _this.ROOT_ID_NAME + " .configBox.screen_event");
         se = new ScreenEvent();
+        size = null;
         if (se.hasInitConfig()) {
           center = Common.calcScrollCenterPosition(se.initConfigY, se.initConfigX);
           $('.initConfigX:first', emt).attr('disabled', '').removeClass('empty').val(center.left);
@@ -40,6 +41,16 @@ StateConfig = (function() {
             se[$(target).attr('class')] = Common.calcScrollTopLeftPosition($(target).val());
             return se.setItemAllPropToPageValue();
           });
+          screenSize = Common.getScreenSize();
+          w = screenSize.width / se.initConfigScale;
+          h = screenSize.height / se.initConfigScale;
+          size = {
+            x: se.initConfigX - w * 0.5,
+            y: se.initConfigY - h * 0.5,
+            w: w,
+            h: h
+          };
+          EventDragPointingRect.draw(size);
         } else {
           $('.initConfigX:first', emt).attr('disabled', 'disabled').addClass('empty').val('');
           $('.initConfigY:first', emt).attr('disabled', 'disabled').addClass('empty').val('');
@@ -47,7 +58,7 @@ StateConfig = (function() {
           $('.clear_pointing:first', emt).hide();
         }
         _updateConfigInput = function(emt, pointingSize) {
-          var screenSize, x, y, z;
+          var x, y, z;
           x = pointingSize.x + pointingSize.w * 0.5;
           y = pointingSize.y + pointingSize.h * 0.5;
           z = null;
@@ -72,6 +83,9 @@ StateConfig = (function() {
               console.log(pointingSize);
             }
             return _updateConfigInput.call(_this, emt, pointingSize);
+          },
+          closeCallback: function() {
+            return EventDragPointingRect.draw(size);
           }
         });
       };
@@ -90,8 +104,9 @@ StateConfig = (function() {
     $('.clear_pointing:first', emt).hide();
     if (withInitParams) {
       se = new ScreenEvent();
-      return se.clearInitConfig();
+      se.clearInitConfig();
     }
+    return EventDragPointingRect.clear();
   };
 
   return StateConfig;

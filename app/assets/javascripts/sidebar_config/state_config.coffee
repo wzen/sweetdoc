@@ -21,6 +21,7 @@ class StateConfig
       # Screen
       emt = $("##{@ROOT_ID_NAME} .configBox.screen_event")
       se = new ScreenEvent()
+      size = null
       if se.hasInitConfig()
         center = Common.calcScrollCenterPosition(se.initConfigY, se.initConfigX)
         $('.initConfigX:first', emt).attr('disabled', '').removeClass('empty').val(center.left)
@@ -33,6 +34,16 @@ class StateConfig
           se[$(target).attr('class')] = Common.calcScrollTopLeftPosition($(target).val())
           se.setItemAllPropToPageValue()
         )
+        screenSize = Common.getScreenSize()
+        w = screenSize.width / se.initConfigScale
+        h = screenSize.height / se.initConfigScale
+        size = {
+          x: se.initConfigX - w * 0.5
+          y: se.initConfigY - h * 0.5
+          w: w
+          h: h
+        }
+        EventDragPointingRect.draw(size)
       else
         $('.initConfigX:first', emt).attr('disabled', 'disabled').addClass('empty').val('')
         $('.initConfigY:first', emt).attr('disabled', 'disabled').addClass('empty').val('')
@@ -55,13 +66,14 @@ class StateConfig
         $('.clear_pointing:first', emt).show()
         se = new ScreenEvent()
         se.setInitConfig(x, y, z)
-
       emt.find('.event_pointing:first').eventDragPointingRect({
         applyDrawCallback: (pointingSize) =>
           if window.debug
             console.log('applyDrawCallback')
             console.log(pointingSize)
           _updateConfigInput.call(@, emt, pointingSize)
+        closeCallback: =>
+          EventDragPointingRect.draw(size)
       })
 
   @clearScreenConfig: (withInitParams = false) ->
@@ -73,3 +85,4 @@ class StateConfig
     if withInitParams
       se = new ScreenEvent()
       se.clearInitConfig()
+    EventDragPointingRect.clear()

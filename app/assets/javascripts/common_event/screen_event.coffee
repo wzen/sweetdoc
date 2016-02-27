@@ -241,6 +241,8 @@ class ScreenEvent extends CommonEvent
           h: h
         }
         EventDragPointingRect.draw(size)
+      else
+        EventDragPointingRect.clear()
       emt.find('.event_pointing:first').eventDragPointingRect({
         applyDrawCallback: (pointingSize) =>
           _updateConfigInput.call(@, emt, pointingSize)

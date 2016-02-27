@@ -66,6 +66,7 @@ class Navbar
     )
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
     $('.menu-item', itemsSelectMenuEmt).off('click').on('click', ->
+      Sidebar.closeSidebar()
       selected = $(@).html()
       $('#header_items_selected_menu_span').html(selected)
       # プレビューを停止して再描画
@@ -80,6 +81,7 @@ class Navbar
         )
     )
     $('#menu-action-edit').off('click').on('click', ->
+      Sidebar.closeSidebar()
       Navbar.setModeEdit()
       WorktableCommon.changeMode(Constant.Mode.EDIT)
     )
