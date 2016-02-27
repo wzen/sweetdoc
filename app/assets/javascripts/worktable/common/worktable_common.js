@@ -267,23 +267,30 @@ WorktableCommon = (function() {
       var callbackCount, item, items, l, len, se;
       if (window.worktableItemsChangedState || !noRunningPreview) {
         items = Common.instancesInPage(pn);
-        callbackCount = 0;
-        for (l = 0, len = items.length; l < len; l++) {
-          item = items[l];
-          item.refreshFromInstancePageValue(true, function() {
-            callbackCount += 1;
-            if (callbackCount >= items.length) {
-              window.worktableItemsChangedState = false;
-              if (callback != null) {
-                return callback();
+        if (items.length > 0) {
+          callbackCount = 0;
+          for (l = 0, len = items.length; l < len; l++) {
+            item = items[l];
+            item.refreshFromInstancePageValue(true, function() {
+              callbackCount += 1;
+              if (callbackCount >= items.length) {
+                window.worktableItemsChangedState = false;
+                if (callback != null) {
+                  return callback();
+                }
               }
-            }
-          });
+            });
+          }
         }
         WorktableCommon.initScrollContentsPosition();
         se = new ScreenEvent();
         se.resetNowScaleToWorktableScale();
-        return PageValue.removeAllFootprint();
+        PageValue.removeAllFootprint();
+        if (items.length === 0) {
+          if (callback != null) {
+            return callback();
+          }
+        }
       } else {
         if (callback != null) {
           return callback();
@@ -870,7 +877,7 @@ WorktableCommon = (function() {
     }
     if ((window.previewRunning == null) || !window.previewRunning) {
       if (callback != null) {
-        callback();
+        callback(true);
       }
       return;
     }
@@ -880,32 +887,38 @@ WorktableCommon = (function() {
         count = 0;
         length = Object.keys(window.instanceMap).length;
         noRunningPreview = true;
-        ref = window.instanceMap;
-        for (k in ref) {
-          v = ref[k];
-          if (v.stopPreview != null) {
-            v.stopPreview(function(wasRunningPreview) {
+        if (length === 0) {
+          if (callback != null) {
+            return callback(noRunningPreview);
+          }
+        } else {
+          ref = window.instanceMap;
+          for (k in ref) {
+            v = ref[k];
+            if (v.stopPreview != null) {
+              v.stopPreview(function(wasRunningPreview) {
+                count += 1;
+                if (wasRunningPreview) {
+                  noRunningPreview = false;
+                }
+                if (length <= count) {
+                  window.previewRunning = false;
+                  EventConfig.switchPreviewButton(true);
+                  if (callback != null) {
+                    callback(noRunningPreview);
+                  }
+                }
+              });
+            } else {
               count += 1;
-              if (wasRunningPreview) {
-                noRunningPreview = false;
-              }
               if (length <= count) {
                 window.previewRunning = false;
                 EventConfig.switchPreviewButton(true);
                 if (callback != null) {
                   callback(noRunningPreview);
                 }
+                return;
               }
-            });
-          } else {
-            count += 1;
-            if (length <= count) {
-              window.previewRunning = false;
-              EventConfig.switchPreviewButton(true);
-              if (callback != null) {
-                callback(noRunningPreview);
-              }
-              return;
             }
           }
         }

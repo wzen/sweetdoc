@@ -233,16 +233,17 @@ class WorktableCommon
       if window.worktableItemsChangedState || !noRunningPreview
         # アイテムの状態に変更がある場合は再描画処理
         items = Common.instancesInPage(pn)
-        callbackCount = 0
-        for item in items
-          item.refreshFromInstancePageValue(true, ->
-            callbackCount += 1
-            if callbackCount >= items.length
-              # アイテム状態変更フラグOFF
-              window.worktableItemsChangedState = false
-              if callback?
-                callback()
-          )
+        if items.length > 0
+          callbackCount = 0
+          for item in items
+            item.refreshFromInstancePageValue(true, ->
+              callbackCount += 1
+              if callbackCount >= items.length
+                # アイテム状態変更フラグOFF
+                window.worktableItemsChangedState = false
+                if callback?
+                  callback()
+            )
 
         # アイテムフォーカスしてる場合があるので表示位置を戻す
         WorktableCommon.initScrollContentsPosition()
@@ -251,6 +252,9 @@ class WorktableCommon
         se.resetNowScaleToWorktableScale()
         # Footprint履歴削除
         PageValue.removeAllFootprint()
+        if items.length == 0
+          if callback?
+            callback()
       else
         if callback?
           callback()
@@ -732,7 +736,7 @@ class WorktableCommon
     if !window.previewRunning? || !window.previewRunning
       # プレビューが動作していない場合は処理無し
       if callback?
-        callback()
+        callback(true)
       return
 
     # EventPageValueの退避がある場合戻す
@@ -740,12 +744,26 @@ class WorktableCommon
       count = 0
       length = Object.keys(window.instanceMap).length
       noRunningPreview = true
-      for k, v of window.instanceMap
-        if v.stopPreview?
-          v.stopPreview((wasRunningPreview) ->
+      if length == 0
+        if callback?
+          callback(noRunningPreview)
+      else
+        for k, v of window.instanceMap
+          if v.stopPreview?
+            v.stopPreview((wasRunningPreview) ->
+              count += 1
+              if wasRunningPreview
+                noRunningPreview = false
+              if length <= count
+                window.previewRunning = false
+                # ボタン変更「StopPreview」->「Preview」
+                EventConfig.switchPreviewButton(true)
+                if callback?
+                  callback(noRunningPreview)
+                return
+            )
+          else
             count += 1
-            if wasRunningPreview
-              noRunningPreview = false
             if length <= count
               window.previewRunning = false
               # ボタン変更「StopPreview」->「Preview」
@@ -753,16 +771,6 @@ class WorktableCommon
               if callback?
                 callback(noRunningPreview)
               return
-          )
-        else
-          count += 1
-          if length <= count
-            window.previewRunning = false
-            # ボタン変更「StopPreview」->「Preview」
-            EventConfig.switchPreviewButton(true)
-            if callback?
-              callback(noRunningPreview)
-            return
     )
 
   @stashEventPageValueForPreview: (teNum, callback = null) ->
