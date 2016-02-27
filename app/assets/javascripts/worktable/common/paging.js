@@ -179,10 +179,16 @@ Paging = (function() {
           console.log('[selectPage] selectedNum:' + selectedPageNum);
         }
         if (selectedPageNum <= 0) {
+          if (callback != null) {
+            callback();
+          }
           return;
         }
         pageCount = PageValue.getPageCount();
         if (selectedPageNum < 0 || selectedPageNum > pageCount) {
+          if (callback != null) {
+            callback();
+          }
           return;
         }
         beforePageNum = PageValue.getPageNum();

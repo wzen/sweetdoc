@@ -181,9 +181,13 @@ class Paging
       if window.debug
         console.log('[selectPage] selectedNum:' + selectedPageNum)
       if selectedPageNum <= 0
+        if callback?
+          callback()
         return
       pageCount = PageValue.getPageCount()
       if selectedPageNum < 0 || selectedPageNum > pageCount
+        if callback?
+          callback()
         return
       beforePageNum = PageValue.getPageNum()
       if window.debug
