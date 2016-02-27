@@ -86,16 +86,20 @@ class Chapter
     # 描画を戻す
     count = 0
     max = @eventObjList.length
-    for e, idx in @eventObjList
-      e.initEvent(@eventList[idx])
-      e.updateEventBefore()
-      e.resetProgress()
-      e.refresh(e.visible, =>
-        count += 1
-        if count >= max
-          if callback?
-            callback()
-      )
+    if max == 0
+      if callback?
+        callback()
+    else
+      for e, idx in @eventObjList
+        e.initEvent(@eventList[idx])
+        e.updateEventBefore()
+        e.resetProgress()
+        e.refresh(e.visible, =>
+          count += 1
+          if count >= max
+            if callback?
+              callback()
+        )
 
   # チャプターのイベントを実行後にする
   forwardAllEvents: ->

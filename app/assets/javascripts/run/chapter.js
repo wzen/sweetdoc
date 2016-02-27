@@ -95,25 +95,31 @@ Chapter = (function() {
     }
     count = 0;
     max = this.eventObjList.length;
-    ref = this.eventObjList;
-    results = [];
-    for (idx = i = 0, len = ref.length; i < len; idx = ++i) {
-      e = ref[idx];
-      e.initEvent(this.eventList[idx]);
-      e.updateEventBefore();
-      e.resetProgress();
-      results.push(e.refresh(e.visible, (function(_this) {
-        return function() {
-          count += 1;
-          if (count >= max) {
-            if (callback != null) {
-              return callback();
+    if (max === 0) {
+      if (callback != null) {
+        return callback();
+      }
+    } else {
+      ref = this.eventObjList;
+      results = [];
+      for (idx = i = 0, len = ref.length; i < len; idx = ++i) {
+        e = ref[idx];
+        e.initEvent(this.eventList[idx]);
+        e.updateEventBefore();
+        e.resetProgress();
+        results.push(e.refresh(e.visible, (function(_this) {
+          return function() {
+            count += 1;
+            if (count >= max) {
+              if (callback != null) {
+                return callback();
+              }
             }
-          }
-        };
-      })(this)));
+          };
+        })(this)));
+      }
+      return results;
     }
-    return results;
   };
 
   Chapter.prototype.forwardAllEvents = function() {

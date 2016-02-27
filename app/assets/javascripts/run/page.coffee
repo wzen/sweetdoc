@@ -207,8 +207,9 @@ class Page
             )
           else
             # ページ戻し
-            window.eventAction.rewindPage()
-            FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0)
+            window.eventAction.rewindPage( =>
+              FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0)
+            )
             return
       else
         # チャプター前処理
@@ -229,21 +230,37 @@ class Page
     if window.runDebug
       console.log('Page rewindAllChapters')
 
+    _rewindAllChapter = ->
+      _callback = ->
+        @setChapterIndex(0)
+        RunCommon.setChapterNum(@thisChapterNum())
+        @finishedAllChapters = false
+        @finishedScrollDistSum = 0
+        @start()
+        FloatView.show('Rewind all events', FloatView.Type.REWIND_ALL_CHAPTER, 1.0)
+      if @getForkChapterList().length == 0
+        _callback.call(@)
+      else
+        count = 0
+        for i in [(@getForkChapterList().length - 1)..0] by -1
+          @setChapterIndex(i)
+          @resetChapter(i, =>
+            count += 1
+            if count >= @getForkChapterList().length
+              _callback.call(@)
+          )
+
     # 全ガイド非表示
     @hideAllGuide()
-    count = 0
-    for i in [(@getForkChapterList().length - 1)..0] by -1
-      @setChapterIndex(i)
-      @resetChapter(i, =>
-        count += 1
-        if count >= @getForkChapterList().length
-          @setChapterIndex(0)
-          RunCommon.setChapterNum(@thisChapterNum())
-          @finishedAllChapters = false
-          @finishedScrollDistSum = 0
-          @start()
-          FloatView.show('Rewind all events', FloatView.Type.REWIND_ALL_CHAPTER, 1.0)
+    if !@thisChapter().doMoveChapter
+      # 前ページ先頭チャプターへ
+      window.eventAction.rewindPage( =>
+        _rewindAllChapter.call(@)
+        FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0)
       )
+      return
+    else
+      _rewindAllChapter.call(@)
 
   # スクロールイベントをハンドル
   # @param [Int] x X軸の動作値
@@ -398,14 +415,18 @@ class Page
       console.log('Page resetAllChapters')
     count = 0
     max = @getAllChapterList().length
-    @getAllChapterList().forEach((chapter) ->
-      chapter.resetAllEvents( =>
-        count += 1
-        if count >= max
-          if callback?
-            callback()
+    if max == 0
+      if callback?
+        callback()
+    else
+      @getAllChapterList().forEach((chapter) ->
+        chapter.resetAllEvents( =>
+          count += 1
+          if count >= max
+            if callback?
+              callback()
+        )
       )
-    )
 
   # フォークを含んだ動作予定のチャプターを進行
   forwardProgressChapters: ->
