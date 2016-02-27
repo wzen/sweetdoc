@@ -147,6 +147,7 @@ Timeline = (function() {
         return;
       }
       _initEventConfig.call(this, e);
+      WorktableCommon.clearSelectedBorder();
       return WorktableCommon.setSelectedBorder($(e), 'timeline');
     };
     _deleteTimeline = function(target) {
