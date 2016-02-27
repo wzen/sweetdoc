@@ -240,7 +240,7 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.initSpecificConfig = function(specificRoot) {
-      var _updateConfigInput, emt, x, y, z;
+      var _updateConfigInput, c, emt, h, screenSize, size, w, x, xVal, y, yVal, z, zVal;
       _updateConfigInput = function(emt, pointingSize) {
         var center, screenSize, x, y, z;
         x = pointingSize.x + pointingSize.w * 0.5;
@@ -258,25 +258,53 @@ ScreenEvent = (function(superClass) {
         return emt.find('.afterZ:first').removeClass('empty').val(z);
       };
       emt = specificRoot['changeScreenPosition'];
-      emt.find('.event_pointing:first').eventDragPointingRect({
-        applyDrawCallback: (function(_this) {
-          return function(pointingSize) {
-            return _updateConfigInput.call(_this, emt, pointingSize);
-          };
-        })(this)
-      });
       x = emt.find('.afterX:first');
+      xVal = null;
+      yVal = null;
+      zVal = null;
+      size = null;
       if (x.val().length === 0) {
         x.attr('disabled', 'disabled').addClass('empty');
+      } else {
+        xVal = parseFloat(x.val());
       }
       y = emt.find('.afterY:first');
       if (y.val().length === 0) {
         y.attr('disabled', 'disabled').addClass('empty');
+      } else {
+        yVal = parseFloat(y.val());
       }
       z = emt.find('.afterZ:first');
       if (z.val().length === 0) {
-        return z.attr('disabled', 'disabled').addClass('empty');
+        z.attr('disabled', 'disabled').addClass('empty');
+      } else {
+        zVal = parseFloat(z.val());
       }
+      if ((xVal != null) && (yVal != null) && (zVal != null)) {
+        c = Common.calcScrollTopLeftPosition(yVal, xVal);
+        screenSize = Common.getScreenSize();
+        w = screenSize.width / zVal;
+        h = screenSize.height / zVal;
+        size = {
+          x: c.left - w * 0.5,
+          y: c.top - h * 0.5,
+          w: w,
+          h: h
+        };
+        EventDragPointingRect.draw(size);
+      }
+      return emt.find('.event_pointing:first').eventDragPointingRect({
+        applyDrawCallback: (function(_this) {
+          return function(pointingSize) {
+            return _updateConfigInput.call(_this, emt, pointingSize);
+          };
+        })(this),
+        closeCallback: (function(_this) {
+          return function() {
+            return EventDragPointingRect.draw(size);
+          };
+        })(this)
+      });
     };
 
     PrivateClass.setEventBaseXAndY = function(x, y) {

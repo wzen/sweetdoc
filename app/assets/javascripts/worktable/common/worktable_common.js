@@ -241,6 +241,15 @@ WorktableCommon = (function() {
     return window.eventPointingMode = afterMode;
   };
 
+  WorktableCommon.clearEventPointer = function() {
+    if ((typeof EventDragPointingDraw !== "undefined" && EventDragPointingDraw !== null) && (EventDragPointingDraw.clear != null)) {
+      EventDragPointingDraw.clear();
+    }
+    if ((typeof EventDragPointingRect !== "undefined" && EventDragPointingRect !== null) && (EventDragPointingRect.clear != null)) {
+      return EventDragPointingRect.clear();
+    }
+  };
+
   WorktableCommon.setModeClassToMainDiv = function(mode) {
     var classes;
     classes = ['draw_mode', 'draw_pointing', 'click_pointing'];

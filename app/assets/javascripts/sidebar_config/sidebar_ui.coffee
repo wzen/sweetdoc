@@ -44,6 +44,8 @@ class Sidebar
     if window.isWorkTable
       # 選択枠を削除
       WorktableCommon.clearSelectedBorder()
+      # イベントポインタ削除
+      WorktableCommon.clearEventPointer()
       if !Sidebar.isClosedConfigSidebar()
         main = $('#main')
         $('#sidebar').fadeOut('200', ->

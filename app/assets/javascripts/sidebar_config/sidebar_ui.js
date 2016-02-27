@@ -64,6 +64,7 @@ Sidebar = (function() {
     }
     if (window.isWorkTable) {
       WorktableCommon.clearSelectedBorder();
+      WorktableCommon.clearEventPointer();
       if (!Sidebar.isClosedConfigSidebar()) {
         main = $('#main');
         return $('#sidebar').fadeOut('200', function() {

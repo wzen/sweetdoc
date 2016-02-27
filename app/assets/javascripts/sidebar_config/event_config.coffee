@@ -25,10 +25,13 @@ class EventConfig
   @initEventConfig: (distId, teNum = 1) ->
     # 選択枠削除
     WorktableCommon.clearTimelineSelectedBorderInMainWrapper()
+    # イベントポインタ削除
+    WorktableCommon.clearEventPointer()
     # アイテム選択メニュー更新
     @updateSelectItemMenu()
     # イベントハンドラの設定
     @setupTimelineEventHandler(distId, teNum)
+
 
   # イベントタイプ選択
   # @param [Object] e 選択オブジェクト

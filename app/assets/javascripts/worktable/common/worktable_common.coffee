@@ -209,6 +209,13 @@ class WorktableCommon
     @setModeClassToMainDiv(afterMode)
     window.eventPointingMode = afterMode
 
+  # イベントポインタ表示削除
+  @clearEventPointer: ->
+    if EventDragPointingDraw? && EventDragPointingDraw.clear?
+      EventDragPointingDraw.clear()
+    if EventDragPointingRect? && EventDragPointingRect.clear?
+      EventDragPointingRect.clear()
+
   # ID=MainのDivにクラス名を設定
   @setModeClassToMainDiv = (mode) ->
     classes = [

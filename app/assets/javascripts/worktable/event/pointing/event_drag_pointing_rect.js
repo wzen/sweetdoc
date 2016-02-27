@@ -156,26 +156,53 @@ EventDragPointingRect = (function() {
   };
 
   EventDragPointingRect.run = function(opt) {
-    var applyDrawCallback, pointing;
+    var applyDrawCallback, closeCallback, pointing;
     applyDrawCallback = opt.applyDrawCallback;
+    closeCallback = opt.closeCallback;
     pointing = new this();
     pointing.setApplyCallback((function(_this) {
       return function(pointingSize) {
         applyDrawCallback(pointingSize);
         Handwrite.initHandwrite();
-        return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
+        WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
+        return EventDragPointingRect.draw(pointingSize);
       };
     })(this));
     PointingHandwrite.initHandwrite(this);
     WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW);
-    return FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, (function(_this) {
+    FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, (function(_this) {
       return function() {
-        pointing = new _this();
-        pointing.getJQueryElement().remove();
+        if (closeCallback != null) {
+          closeCallback();
+        } else {
+          pointing = new _this();
+          pointing.getJQueryElement().remove();
+        }
         Handwrite.initHandwrite();
         return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
       };
     })(this));
+    return this.clear();
+  };
+
+  EventDragPointingRect.draw = function(size) {
+    var pointing;
+    if (size != null) {
+      pointing = new this();
+      pointing.itemSize = size;
+      pointing.zindex = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1;
+      return pointing.refresh(true, (function(_this) {
+        return function() {
+          return pointing.getJQueryElement().addClass('drag_pointing');
+        };
+      })(this), false);
+    }
+  };
+
+  EventDragPointingRect.clear = function() {
+    var pointing;
+    pointing = new this();
+    return pointing.clearDraw();
   };
 
   return EventDragPointingRect;

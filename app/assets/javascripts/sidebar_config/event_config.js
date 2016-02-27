@@ -32,6 +32,7 @@ EventConfig = (function() {
       teNum = 1;
     }
     WorktableCommon.clearTimelineSelectedBorderInMainWrapper();
+    WorktableCommon.clearEventPointer();
     this.updateSelectItemMenu();
     return this.setupTimelineEventHandler(distId, teNum);
   };
