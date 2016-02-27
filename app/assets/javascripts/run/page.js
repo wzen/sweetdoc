@@ -247,6 +247,7 @@ Page = (function() {
     if (window.runDebug) {
       console.log('Page rewindAllChapters');
     }
+    this.hideAllGuide();
     count = 0;
     results = [];
     for (i = j = ref = this.getForkChapterList().length - 1; j >= 0; i = j += -1) {

@@ -229,6 +229,8 @@ class Page
     if window.runDebug
       console.log('Page rewindAllChapters')
 
+    # 全ガイド非表示
+    @hideAllGuide()
     count = 0
     for i in [(@getForkChapterList().length - 1)..0] by -1
       @setChapterIndex(i)
