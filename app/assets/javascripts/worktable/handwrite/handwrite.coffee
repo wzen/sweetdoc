@@ -47,6 +47,11 @@ class Handwrite
       drawingCanvas.onmousedown = (e) =>
         e.preventDefault()
         e.stopPropagation()
+        if @drag && @click
+          # 描画に失敗した場合は一旦削除
+          drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height)
+          @drag = false
+          @click = false
         if e.which == 1 #左クリック
           @zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1
           loc = _calcCanvasLoc.call(@, e)

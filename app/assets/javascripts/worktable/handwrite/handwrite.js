@@ -50,6 +50,11 @@ Handwrite = (function() {
           var loc;
           e.preventDefault();
           e.stopPropagation();
+          if (_this.drag && _this.click) {
+            drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+            _this.drag = false;
+            _this.click = false;
+          }
           if (e.which === 1) {
             _this.zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1;
             loc = _calcCanvasLoc.call(_this, e);
