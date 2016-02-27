@@ -1086,8 +1086,13 @@ Common = (function() {
       emt = $('body').children(".modal-content." + type);
     }
     if (emt != null) {
-      w = $('#main').width();
-      h = $('#main').height();
+      if ($('#main').length > 0) {
+        w = $('#main').width();
+        h = $('#main').height();
+      } else {
+        w = $('body').width();
+        h = $('body').height();
+      }
       callback = null;
       width = emt.outerWidth();
       height = emt.outerHeight();
