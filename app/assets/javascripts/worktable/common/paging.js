@@ -51,6 +51,8 @@ Paging = (function() {
     selectRoot.find(".menu-item").off('click').on('click', (function(_this) {
       return function(e) {
         var classList, forkPrefix, pageNum, pagePrefix;
+        Common.hideModalView(true);
+        Common.showModalFlashMessage('Changing...');
         pagePrefix = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', '');
         forkPrefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '');
         pageNum = null;

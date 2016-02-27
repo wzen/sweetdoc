@@ -20,22 +20,20 @@ class Timeline
     pEmt.append(newEmt)
 
   # タイムラインのイベント設定
-  @setupTimelineEventConfig = (onlyTail) ->
+  @setupTimelineEventConfig = (teNum = null) ->
     te = null
     # 設定開始
     _setupTimelineEvent = ->
       ePageValues = PageValue.getEventPageValueSortedListByNum()
-      timelineEvents = $('#timeline_events').children('.timeline_event')
       emt = null
       if ePageValues.length > 0
-        if onlyTail
-          idx = ePageValues.length - 1
-          _createEvent.call(@, timelineEvents, ePageValues[idx], idx)
-          timelineEvents = $('#timeline_events').children('.timeline_event')
+        if teNum
+          idx = teNum - 1
+          _createEvent.call(@, ePageValues[idx], idx)
         else
           # 色、数値、Sync線を更新
           for pageValue, idx in ePageValues
-            _createEvent.call(@, timelineEvents, pageValue, idx)
+            _createEvent.call(@, pageValue, idx)
           timelineEvents = $('#timeline_events').children('.timeline_event')
           # 不要なタイムラインイベントを削除
           if ePageValues.length < timelineEvents.length - 1
@@ -106,24 +104,26 @@ class Timeline
       )
 
     # イベント作成
-    _createEvent = (timelineEvents, pageValue, idx) ->
+    _createEvent = (pageValue, idx) ->
+      timelineEvents = $('#timeline_events').children('.timeline_event')
       teNum = idx + 1
       emt = timelineEvents.eq(idx)
       if emt.length == 0
         # 無い場合は新規作成
         @createTimelineEvent(teNum)
+        timelineEvents = $('#timeline_events').children('.timeline_event')
+        emt = timelineEvents.eq(idx)
       $('.te_num', emt).val(teNum)
       $('.dist_id', emt).val(pageValue[EventPageValueBase.PageValueKey.DIST_ID])
       actionType = pageValue[EventPageValueBase.PageValueKey.ACTIONTYPE]
       Timeline.changeTimelineColor(teNum, actionType)
-
       # 同期線
       if pageValue[EventPageValueBase.PageValueKey.IS_SYNC]
         # 線表示
-        timelineEvents.eq(idx).before("<div class='sync_line #{Common.getActionTypeClassNameByActionType(actionType)}'></div>")
+        emt.before("<div class='sync_line #{Common.getActionTypeClassNameByActionType(actionType)}'></div>")
       else
         # 線消去
-        timelineEvents.eq(idx).prev('.sync_line').remove()
+        emt.prev('.sync_line').remove()
 
     # クリックイベント内容
     # @param [Object] e イベントオブジェクト
@@ -199,9 +199,9 @@ class Timeline
       Indicator.hideIndicator(Indicator.Type.TIMELINE)
     , 0)
 
-  # イベントを追加
-  @addEvent: ->
-    @setupTimelineEventConfig(true)
+  # イベントを追加or更新
+  @updateEvent: (teNum) ->
+    @setupTimelineEventConfig(teNum)
 
   # タイムラインソートイベント
   @changeSortTimeline: (beforeNum, afterNum) ->

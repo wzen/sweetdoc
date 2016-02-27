@@ -86,7 +86,7 @@ itemBaseWorktableExtend =
         EPVItem.writeDefaultToPageValue(@, teNum, distId)
         # タイムライン更新
         #Timeline.refreshAllTimeline()
-        Timeline.addEvent()
+        Timeline.updateEvent(teNum)
       if callback?
         callback()
     )

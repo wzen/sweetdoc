@@ -205,7 +205,7 @@ EventConfig = (function() {
     if (this.writeToEventPageValue()) {
       LocalStorage.saveAllPageValues();
       FloatView.show('Applied', FloatView.Type.APPLY, 3.0);
-      Timeline.addEvent();
+      Timeline.updateEvent(this.teNum);
       return Common.hideModalView(true);
     }
   };

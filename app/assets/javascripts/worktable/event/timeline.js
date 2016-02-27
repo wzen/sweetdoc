@@ -24,23 +24,24 @@ Timeline = (function() {
     return pEmt.append(newEmt);
   };
 
-  Timeline.setupTimelineEventConfig = function(onlyTail) {
+  Timeline.setupTimelineEventConfig = function(teNum) {
     var _clickTimelineEvent, _createEvent, _deleteTimeline, _initEventConfig, _setupTimelineEvent, te;
+    if (teNum == null) {
+      teNum = null;
+    }
     te = null;
     _setupTimelineEvent = function() {
       var ePageValues, emt, i, idx, j, l, len, menu, pageValue, ref, ref1, timelineEvents;
       ePageValues = PageValue.getEventPageValueSortedListByNum();
-      timelineEvents = $('#timeline_events').children('.timeline_event');
       emt = null;
       if (ePageValues.length > 0) {
-        if (onlyTail) {
-          idx = ePageValues.length - 1;
-          _createEvent.call(this, timelineEvents, ePageValues[idx], idx);
-          timelineEvents = $('#timeline_events').children('.timeline_event');
+        if (teNum) {
+          idx = teNum - 1;
+          _createEvent.call(this, ePageValues[idx], idx);
         } else {
           for (idx = j = 0, len = ePageValues.length; j < len; idx = ++j) {
             pageValue = ePageValues[idx];
-            _createEvent.call(this, timelineEvents, pageValue, idx);
+            _createEvent.call(this, pageValue, idx);
           }
           timelineEvents = $('#timeline_events').children('.timeline_event');
           if (ePageValues.length < timelineEvents.length - 1) {
@@ -120,21 +121,24 @@ Timeline = (function() {
         })(this)
       });
     };
-    _createEvent = function(timelineEvents, pageValue, idx) {
-      var actionType, emt, teNum;
+    _createEvent = function(pageValue, idx) {
+      var actionType, emt, timelineEvents;
+      timelineEvents = $('#timeline_events').children('.timeline_event');
       teNum = idx + 1;
       emt = timelineEvents.eq(idx);
       if (emt.length === 0) {
         this.createTimelineEvent(teNum);
+        timelineEvents = $('#timeline_events').children('.timeline_event');
+        emt = timelineEvents.eq(idx);
       }
       $('.te_num', emt).val(teNum);
       $('.dist_id', emt).val(pageValue[EventPageValueBase.PageValueKey.DIST_ID]);
       actionType = pageValue[EventPageValueBase.PageValueKey.ACTIONTYPE];
       Timeline.changeTimelineColor(teNum, actionType);
       if (pageValue[EventPageValueBase.PageValueKey.IS_SYNC]) {
-        return timelineEvents.eq(idx).before("<div class='sync_line " + (Common.getActionTypeClassNameByActionType(actionType)) + "'></div>");
+        return emt.before("<div class='sync_line " + (Common.getActionTypeClassNameByActionType(actionType)) + "'></div>");
       } else {
-        return timelineEvents.eq(idx).prev('.sync_line').remove();
+        return emt.prev('.sync_line').remove();
       }
     };
     _clickTimelineEvent = function(e) {
@@ -152,7 +156,7 @@ Timeline = (function() {
       return Timeline.refreshAllTimeline();
     };
     _initEventConfig = function(e) {
-      var distId, eId, teNum;
+      var distId, eId;
       Sidebar.switchSidebarConfig(Sidebar.Type.EVENT);
       teNum = $(e).find('input.te_num').val();
       distId = $(e).find('input.dist_id').val();
@@ -207,8 +211,8 @@ Timeline = (function() {
     })(this), 0);
   };
 
-  Timeline.addEvent = function() {
-    return this.setupTimelineEventConfig(true);
+  Timeline.updateEvent = function(teNum) {
+    return this.setupTimelineEventConfig(teNum);
   };
 
   Timeline.changeSortTimeline = function(beforeNum, afterNum) {

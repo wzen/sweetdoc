@@ -208,7 +208,7 @@ class EventConfig
       # 通知
       FloatView.show('Applied', FloatView.Type.APPLY, 3.0)
       # イベントを更新
-      Timeline.addEvent()
+      Timeline.updateEvent(@teNum)
       Common.hideModalView(true)
 
   # プレビュー開始

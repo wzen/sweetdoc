@@ -58,6 +58,8 @@ class Paging
 
     # イベント設定
     selectRoot.find(".menu-item").off('click').on('click', (e) =>
+      Common.hideModalView(true)
+      Common.showModalFlashMessage('Changing...')
       pagePrefix = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', '')
       forkPrefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '')
       pageNum = null
