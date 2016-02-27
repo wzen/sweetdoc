@@ -73,6 +73,8 @@ class Paging
       )
       if pageNum?
         @selectPage(pageNum, forkNum)
+      else
+        Common.hideModalView()
     )
 
     selectRoot.find(".#{Constant.Paging.NAV_MENU_ADDPAGE_CLASS}", root).off('click').on('click', =>
@@ -156,10 +158,11 @@ class Paging
     if selectedPageNum == PageValue.getPageNum()
       if selectedForkNum == PageValue.getForkNum()
         # 同じページ & 同じフォークの場合は変更しない
+        Common.hideModalView()
+        if callback?
+          callback()
         return
       else
-        Common.hideModalView(true)
-        Common.showModalFlashMessage('Changing...')
         @selectFork(selectedForkNum, =>
           # タイムライン更新
           Timeline.refreshAllTimeline()
@@ -173,9 +176,6 @@ class Paging
             callback()
         )
         return
-
-    Common.hideModalView(true)
-    Common.showModalFlashMessage('Page changing')
     # プレビュー停止
     WorktableCommon.stopAllEventPreview( =>
       if window.debug
@@ -259,6 +259,7 @@ class Paging
       # フォーク番号が同じ場合は処理なし
       if callback?
         callback()
+      return
 
     # プレビュー停止
     WorktableCommon.stopAllEventPreview( ->
@@ -271,7 +272,6 @@ class Paging
           callback()
       else
         # Forkに変更
-
         # フォークのアイテムを描画
         WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
           if callback?

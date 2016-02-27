@@ -67,6 +67,8 @@ Paging = (function() {
         });
         if (pageNum != null) {
           return _this.selectPage(pageNum, forkNum);
+        } else {
+          return Common.hideModalView();
         }
       };
     })(this));
@@ -150,10 +152,12 @@ Paging = (function() {
     }
     if (selectedPageNum === PageValue.getPageNum()) {
       if (selectedForkNum === PageValue.getForkNum()) {
+        Common.hideModalView();
+        if (callback != null) {
+          callback();
+        }
         return;
       } else {
-        Common.hideModalView(true);
-        Common.showModalFlashMessage('Changing...');
         this.selectFork(selectedForkNum, (function(_this) {
           return function() {
             Timeline.refreshAllTimeline();
@@ -168,8 +172,6 @@ Paging = (function() {
         return;
       }
     }
-    Common.hideModalView(true);
-    Common.showModalFlashMessage('Page changing');
     return WorktableCommon.stopAllEventPreview((function(_this) {
       return function() {
         var beforePageNum, created, pageCount;
@@ -246,6 +248,7 @@ Paging = (function() {
       if (callback != null) {
         callback();
       }
+      return;
     }
     return WorktableCommon.stopAllEventPreview(function() {
       PageValue.setForkNum(selectedForkNum);
