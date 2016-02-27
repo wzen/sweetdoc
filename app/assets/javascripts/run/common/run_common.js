@@ -204,16 +204,30 @@ RunCommon = (function() {
   RunCommon.initOperationEvent = function() {
     var operationWrapper;
     operationWrapper = $('.operation_wrapper');
-    operationWrapper.find('.rewind_all_capter').off('click').on('click', function() {
-      if (window.eventAction != null) {
-        return window.eventAction.thisPage().rewindAllChapters();
-      }
-    });
-    return operationWrapper.find('.rewind_capter').off('click').on('click', function() {
-      if (window.eventAction != null) {
-        return window.eventAction.thisPage().rewindChapter();
-      }
-    });
+    operationWrapper.find('.rewind_all_capter').off('click').on('click', (function(_this) {
+      return function(e) {
+        if (window.eventAction != null) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.eventAction.thisPage().rewindAllChapters();
+          if ($(e.target).closest('.info_contents') != null) {
+            return RunFullScreen.hidePopupInfo();
+          }
+        }
+      };
+    })(this));
+    return operationWrapper.find('.rewind_capter').off('click').on('click', (function(_this) {
+      return function(e) {
+        if (window.eventAction != null) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.eventAction.thisPage().rewindChapter();
+          if ($(e.target).closest('.info_contents') != null) {
+            return RunFullScreen.hidePopupInfo();
+          }
+        }
+      };
+    })(this));
   };
 
   RunCommon.initHandleScrollView = function() {

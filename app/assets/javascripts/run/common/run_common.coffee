@@ -164,13 +164,23 @@ class RunCommon
   # 操作ボタンイベント初期化
   @initOperationEvent = ->
     operationWrapper = $('.operation_wrapper')
-    operationWrapper.find('.rewind_all_capter').off('click').on('click', ->
+    operationWrapper.find('.rewind_all_capter').off('click').on('click', (e) =>
       if window.eventAction?
+        e.preventDefault()
+        e.stopPropagation()
         window.eventAction.thisPage().rewindAllChapters()
+        if $(e.target).closest('.info_contents')?
+          # ポップアップで実行の場合はポップアップ非表示
+          RunFullScreen.hidePopupInfo()
     )
-    operationWrapper.find('.rewind_capter').off('click').on('click', ->
+    operationWrapper.find('.rewind_capter').off('click').on('click', (e) =>
       if window.eventAction?
+        e.preventDefault()
+        e.stopPropagation()
         window.eventAction.thisPage().rewindChapter()
+        if $(e.target).closest('.info_contents')?
+          # ポップアップで実行の場合はポップアップ非表示
+          RunFullScreen.hidePopupInfo()
     )
 
   # Handleスクロールビューの初期化
