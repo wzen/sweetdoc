@@ -188,17 +188,22 @@ Page = (function() {
     if (window.runDebug) {
       console.log('Page rewindChapter');
     }
+    if ((window.runningOperation != null) && window.runningOperation) {
+      return;
+    }
+    window.runningOperation = true;
     this.hideAllGuide();
     return this.resetChapter(this.getChapterIndex(), (function(_this) {
       return function() {
-        var lastForkObj, nfn, oneBeforeForkObj;
+        var beforePage, lastForkObj, nfn, oneBeforeForkObj;
         if (!_this.thisChapter().doMoveChapter) {
           if (_this.getChapterIndex() > 0) {
             _this.addChapterIndex(-1);
             return _this.resetChapter(_this.getChapterIndex(), function() {
               RunCommon.setChapterNum(_this.thisChapterNum());
               _this.thisChapter().willChapter();
-              return FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
+              FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
+              return window.runningOperation = false;
             });
           } else {
             oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum());
@@ -212,17 +217,27 @@ Page = (function() {
                 RunCommon.setChapterNum(_this.thisChapterNum());
                 RunCommon.setChapterMax(_this.getForkChapterList().length);
                 _this.thisChapter().willChapter();
-                return FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
+                FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
+                return window.runningOperation = false;
               });
             } else {
-              window.eventAction.rewindPage(function() {
-                return FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0);
-              });
+              beforePage = window.eventAction.beforePage();
+              if (beforePage != null) {
+                return window.eventAction.rewindPage(function() {
+                  FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0);
+                  return window.runningOperation = false;
+                });
+              } else {
+                _this.thisChapter().willChapter();
+                FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
+                return window.runningOperation = false;
+              }
             }
           }
         } else {
           _this.thisChapter().willChapter();
-          return FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
+          FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
+          return window.runningOperation = false;
         }
       };
     })(this));
@@ -254,20 +269,30 @@ Page = (function() {
     if (window.runDebug) {
       console.log('Page rewindAllChapters');
     }
+    if (rewindPageIfNeed && (window.runningOperation != null) && window.runningOperation) {
+      return;
+    }
+    window.runningOperation = true;
     this.hideAllGuide();
     if (!this.thisChapter().doMoveChapter && rewindPageIfNeed) {
       beforePage = window.eventAction.beforePage();
       if (beforePage != null) {
-        window.eventAction.rewindPage((function(_this) {
+        return window.eventAction.rewindPage((function(_this) {
           return function() {
             return beforePage.rewindAllChapters(false, function() {
-              return FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0);
+              FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0);
+              window.runningOperation = false;
+              if (callback != null) {
+                return callback();
+              }
             });
           };
         })(this));
-      }
-      if (callback != null) {
-        return callback();
+      } else {
+        window.runningOperation = false;
+        if (callback != null) {
+          return callback();
+        }
       }
     } else {
       _callback = function() {
@@ -278,6 +303,7 @@ Page = (function() {
         this.start();
         if (rewindPageIfNeed) {
           FloatView.show('Rewind all events', FloatView.Type.REWIND_ALL_CHAPTER, 1.0);
+          window.runningOperation = false;
         }
         if (callback != null) {
           return callback();

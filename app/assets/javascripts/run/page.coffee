@@ -172,6 +172,11 @@ class Page
   rewindChapter: ->
     if window.runDebug
       console.log('Page rewindChapter')
+    if window.runningOperation? && window.runningOperation
+      # 二重実行防止
+      return
+    window.runningOperation = true
+
     # 全ガイド非表示
     @hideAllGuide()
     @resetChapter(@getChapterIndex(), =>
@@ -183,6 +188,7 @@ class Page
             # チャプター前処理
             @thisChapter().willChapter()
             FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0)
+            window.runningOperation = false
           )
         else
           oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum())
@@ -204,17 +210,25 @@ class Page
               # チャプター前処理
               @thisChapter().willChapter()
               FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0)
+              window.runningOperation = false
             )
           else
-            # ページ戻し
-            window.eventAction.rewindPage( =>
-              FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0)
-            )
-            return
+            beforePage = window.eventAction.beforePage()
+            if beforePage?
+              # ページ戻し
+              window.eventAction.rewindPage( =>
+                FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0)
+                window.runningOperation = false
+              )
+            else
+              @thisChapter().willChapter()
+              FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0)
+              window.runningOperation = false
       else
         # チャプター前処理
         @thisChapter().willChapter()
         FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0)
+        window.runningOperation = false
     )
 
   # チャプターの内容をリセット
@@ -229,6 +243,10 @@ class Page
   rewindAllChapters: (rewindPageIfNeed = true, callback = null) ->
     if window.runDebug
       console.log('Page rewindAllChapters')
+    if rewindPageIfNeed && window.runningOperation? && window.runningOperation
+      # 二重実行防止
+      return
+    window.runningOperation = true
 
     # 全ガイド非表示
     @hideAllGuide()
@@ -239,10 +257,15 @@ class Page
         window.eventAction.rewindPage( =>
           beforePage.rewindAllChapters(false, =>
             FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0)
+            window.runningOperation = false
+            if callback?
+              callback()
           )
         )
-      if callback?
-        callback()
+      else
+        window.runningOperation = false
+        if callback?
+          callback()
     else
       _callback = ->
         @setChapterIndex(0)
@@ -252,6 +275,7 @@ class Page
         @start()
         if rewindPageIfNeed
           FloatView.show('Rewind all events', FloatView.Type.REWIND_ALL_CHAPTER, 1.0)
+          window.runningOperation = false
         if callback?
           callback()
       if @getForkChapterList().length == 0
