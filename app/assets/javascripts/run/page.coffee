@@ -226,18 +226,34 @@ class Page
     @getForkChapterList()[chapterIndex].resetAllEvents(callback)
 
   # 全てのチャプターを戻す
-  rewindAllChapters: ->
+  rewindAllChapters: (rewindPageIfNeed = true, callback = null) ->
     if window.runDebug
       console.log('Page rewindAllChapters')
 
-    _rewindAllChapter = ->
+    # 全ガイド非表示
+    @hideAllGuide()
+    if !@thisChapter().doMoveChapter && rewindPageIfNeed
+      # 前ページを先頭チャプターに戻す
+      beforePage = window.eventAction.beforePage()
+      if beforePage?
+        window.eventAction.rewindPage( =>
+          beforePage.rewindAllChapters(false, =>
+            FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0)
+          )
+        )
+      if callback?
+        callback()
+    else
       _callback = ->
         @setChapterIndex(0)
         RunCommon.setChapterNum(@thisChapterNum())
         @finishedAllChapters = false
         @finishedScrollDistSum = 0
         @start()
-        FloatView.show('Rewind all events', FloatView.Type.REWIND_ALL_CHAPTER, 1.0)
+        if rewindPageIfNeed
+          FloatView.show('Rewind all events', FloatView.Type.REWIND_ALL_CHAPTER, 1.0)
+        if callback?
+          callback()
       if @getForkChapterList().length == 0
         _callback.call(@)
       else
@@ -249,18 +265,6 @@ class Page
             if count >= @getForkChapterList().length
               _callback.call(@)
           )
-
-    # 全ガイド非表示
-    @hideAllGuide()
-    if !@thisChapter().doMoveChapter
-      # 前ページ先頭チャプターへ
-      window.eventAction.rewindPage( =>
-        _rewindAllChapter.call(@)
-        FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0)
-      )
-      return
-    else
-      _rewindAllChapter.call(@)
 
   # スクロールイベントをハンドル
   # @param [Int] x X軸の動作値

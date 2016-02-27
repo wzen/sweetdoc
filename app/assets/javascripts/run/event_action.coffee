@@ -12,6 +12,13 @@ class EventAction
   thisPage: ->
     return @pageList[@pageIndex]
 
+  # 前のページインスタンスを取得
+  beforePage: ->
+    if @pageIndex > 0
+      return @pageList[@pageIndex - 1]
+    else
+      return null
+
   # 現在のページ番号を取得
   # @return [Object] 現在のページ番号
   thisPageNum: ->
@@ -51,6 +58,8 @@ class EventAction
     if @pageList.length <= @pageIndex + 1
       # 全ページ終了の場合
       @finishAllPages()
+      if callback?
+        callback()
     else
       if @nextPageIndex?
         @pageIndex = @nextPageIndex
@@ -66,16 +75,20 @@ class EventAction
   rewindPage: (callback = null) ->
     beforePageIndex = @pageIndex
     if @pageIndex > 0
-      # 動作させていない場合は前のページに戻す
+      # 前ページが存在する場合は戻す
       @pageIndex -= 1
       RunCommon.setPageNum(@thisPageNum())
       PageValue.setPageNum(@thisPageNum())
       @changePaging(beforePageIndex, @pageIndex, callback)
+      # チャプター動作済みに戻す
+      @thisPage().thisChapter().doMoveChapter = true
     else
-      # 動作させている場合はページのイベントを元に戻して初めから
+      # 前ページが無い場合は現在のページを再開
       # ページ前処理
       @thisPage().willPage( =>
         @thisPage().start()
+        if callback?
+          callback()
       )
 
   # ページ変更処理
@@ -121,8 +134,9 @@ class EventAction
           if @thisPage().thisChapter()?
             # イベント反応無効
             @thisPage().thisChapter().disableEventHandle()
-          # スクロール位置初期化
-          Common.initScrollContentsPosition()
+          if beforePageNum < afterPageNum
+            # スクロール位置初期化
+            Common.initScrollContentsPosition()
           # ページングアニメーション
           pageFlip.startRender( =>
             # 次ページインデックスを初期化

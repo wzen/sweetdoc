@@ -15,7 +15,6 @@ class Chapter
       # インスタンス作成
       event = Common.getInstanceFromMap(id, distId)
       @eventObjList.push(event)
-
     @doMoveChapter = false
 
   # チャプター実行前処理

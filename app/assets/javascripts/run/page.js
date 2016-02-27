@@ -243,20 +243,45 @@ Page = (function() {
     return this.getForkChapterList()[chapterIndex].resetAllEvents(callback);
   };
 
-  Page.prototype.rewindAllChapters = function() {
-    var _rewindAllChapter;
+  Page.prototype.rewindAllChapters = function(rewindPageIfNeed, callback) {
+    var _callback, beforePage, count, i, j, ref, results;
+    if (rewindPageIfNeed == null) {
+      rewindPageIfNeed = true;
+    }
+    if (callback == null) {
+      callback = null;
+    }
     if (window.runDebug) {
       console.log('Page rewindAllChapters');
     }
-    _rewindAllChapter = function() {
-      var _callback, count, i, j, ref, results;
+    this.hideAllGuide();
+    if (!this.thisChapter().doMoveChapter && rewindPageIfNeed) {
+      beforePage = window.eventAction.beforePage();
+      if (beforePage != null) {
+        window.eventAction.rewindPage((function(_this) {
+          return function() {
+            return beforePage.rewindAllChapters(false, function() {
+              return FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0);
+            });
+          };
+        })(this));
+      }
+      if (callback != null) {
+        return callback();
+      }
+    } else {
       _callback = function() {
         this.setChapterIndex(0);
         RunCommon.setChapterNum(this.thisChapterNum());
         this.finishedAllChapters = false;
         this.finishedScrollDistSum = 0;
         this.start();
-        return FloatView.show('Rewind all events', FloatView.Type.REWIND_ALL_CHAPTER, 1.0);
+        if (rewindPageIfNeed) {
+          FloatView.show('Rewind all events', FloatView.Type.REWIND_ALL_CHAPTER, 1.0);
+        }
+        if (callback != null) {
+          return callback();
+        }
       };
       if (this.getForkChapterList().length === 0) {
         return _callback.call(this);
@@ -276,17 +301,6 @@ Page = (function() {
         }
         return results;
       }
-    };
-    this.hideAllGuide();
-    if (!this.thisChapter().doMoveChapter) {
-      window.eventAction.rewindPage((function(_this) {
-        return function() {
-          _rewindAllChapter.call(_this);
-          return FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0);
-        };
-      })(this));
-    } else {
-      return _rewindAllChapter.call(this);
     }
   };
 

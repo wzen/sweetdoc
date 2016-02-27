@@ -13,6 +13,14 @@ EventAction = (function() {
     return this.pageList[this.pageIndex];
   };
 
+  EventAction.prototype.beforePage = function() {
+    if (this.pageIndex > 0) {
+      return this.pageList[this.pageIndex - 1];
+    } else {
+      return null;
+    }
+  };
+
   EventAction.prototype.thisPageNum = function() {
     return this.pageIndex + 1;
   };
@@ -57,7 +65,10 @@ EventAction = (function() {
     this.thisPage().didPage();
     beforePageIndex = this.pageIndex;
     if (this.pageList.length <= this.pageIndex + 1) {
-      return this.finishAllPages();
+      this.finishAllPages();
+      if (callback != null) {
+        return callback();
+      }
     } else {
       if (this.nextPageIndex != null) {
         this.pageIndex = this.nextPageIndex;
@@ -80,11 +91,15 @@ EventAction = (function() {
       this.pageIndex -= 1;
       RunCommon.setPageNum(this.thisPageNum());
       PageValue.setPageNum(this.thisPageNum());
-      return this.changePaging(beforePageIndex, this.pageIndex, callback);
+      this.changePaging(beforePageIndex, this.pageIndex, callback);
+      return this.thisPage().thisChapter().doMoveChapter = true;
     } else {
       return this.thisPage().willPage((function(_this) {
         return function() {
-          return _this.thisPage().start();
+          _this.thisPage().start();
+          if (callback != null) {
+            return callback();
+          }
         };
       })(this));
     }
@@ -128,6 +143,9 @@ EventAction = (function() {
             this.thisPage().start();
             if (this.thisPage().thisChapter() != null) {
               this.thisPage().thisChapter().disableEventHandle();
+            }
+            if (beforePageNum < afterPageNum) {
+              Common.initScrollContentsPosition();
             }
             return pageFlip.startRender((function(_this) {
               return function() {
