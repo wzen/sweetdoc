@@ -65,9 +65,10 @@ Timeline = (function() {
         revert: true,
         axis: 'x',
         containment: $('#timeline_events_container'),
-        items: '.sortable',
+        items: '.sortable:not(.blank)',
         start: function(event, ui) {
-          return $('#timeline_events .sync_line').remove();
+          $('#timeline_events .sync_line').remove();
+          return Sidebar.closeSidebar();
         },
         update: function(event, ui) {
           var afterNum, beforeNum, target, tes;
@@ -205,7 +206,7 @@ Timeline = (function() {
             return emt.remove();
           }
         });
-        _this.setupTimelineEventConfig(false);
+        _this.setupTimelineEventConfig();
         return Indicator.hideIndicator(Indicator.Type.TIMELINE);
       };
     })(this), 0);

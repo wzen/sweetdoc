@@ -58,10 +58,12 @@ class Timeline
         revert: true
         axis: 'x'
         containment: $('#timeline_events_container')
-        items: '.sortable'
+        items: '.sortable:not(.blank)'
         start: (event, ui) ->
           # 同期線消去
           $('#timeline_events .sync_line').remove()
+          # コンフィグ非表示
+          Sidebar.closeSidebar()
         update: (event, ui) ->
           # イベントのソート番号を更新
           target = $(ui.item)
@@ -195,7 +197,7 @@ class Timeline
         if emt.hasClass('timeline_event_temp') == false
           emt.remove()
       )
-      @setupTimelineEventConfig(false)
+      @setupTimelineEventConfig()
       Indicator.hideIndicator(Indicator.Type.TIMELINE)
     , 0)
 
