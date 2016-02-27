@@ -24,7 +24,7 @@ class EventConfig
   # イベントコンフィグ表示前初期化
   @initEventConfig: (distId, teNum = 1) ->
     # 選択枠削除
-    WorktableCommon.clearSelectedBorder()
+    WorktableCommon.clearTimelineSelectedBorderInMainWrapper()
     # アイテム選択メニュー更新
     @updateSelectItemMenu()
     # イベントハンドラの設定
@@ -54,7 +54,7 @@ class EventConfig
 
     if window.isWorkTable
       # 選択枠消去
-      WorktableCommon.clearSelectedBorder()
+      WorktableCommon.clearTimelineSelectedBorderInMainWrapper()
 
     if !@[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       vEmt = $('#' + @[EventPageValueBase.PageValueKey.ID])
@@ -639,13 +639,13 @@ class EventConfig
     teItemSelects.closest('.dropdown').off('show.bs.dropdown.my').on('show.bs.dropdown.my', (e) ->
       # アイテムリスト マウスオーバー
       $(@).find('li').off('mouseenter.dropdown').on('mouseenter.dropdown', (e) ->
-        WorktableCommon.clearSelectedBorder()
+        WorktableCommon.clearTimelineSelectedBorderInMainWrapper()
         if $(@).hasClass('item')
           id = $(@).children('input:first').val().split(EventConfig.EVENT_ITEM_SEPERATOR)[0]
           WorktableCommon.setSelectedBorder($("##{id}"), 'timeline')
       ).off('mouseleave.dropdown').on('mouseleave.dropdown', (e) ->
         e.preventDefault()
-        WorktableCommon.clearSelectedBorder()
+        WorktableCommon.clearTimelineSelectedBorderInMainWrapper()
       )
     )
     # リスト非表示時イベント
@@ -745,5 +745,5 @@ class EventConfig
     # 選択枠
     value = $(dropDownRoot).children('input:first').val()
     id = value.split(EventConfig.EVENT_ITEM_SEPERATOR)[0]
-    WorktableCommon.clearSelectedBorder()
+    WorktableCommon.clearTimelineSelectedBorderInMainWrapper()
     WorktableCommon.setSelectedBorder($("##{id}"), "timeline")

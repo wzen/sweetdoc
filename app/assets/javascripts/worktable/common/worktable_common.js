@@ -29,6 +29,11 @@ WorktableCommon = (function() {
     return window.selectedObjId = null;
   };
 
+  WorktableCommon.clearTimelineSelectedBorderInMainWrapper = function() {
+    $('.timelineSelected', window.mainWrapper).remove();
+    return window.selectedObjId = null;
+  };
+
   WorktableCommon.checkLoadWorktableFromCache = function() {
     var generals;
     if (LocalStorage.isOverWorktableSaveTimeLimit()) {

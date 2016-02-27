@@ -31,7 +31,7 @@ EventConfig = (function() {
     if (teNum == null) {
       teNum = 1;
     }
-    WorktableCommon.clearSelectedBorder();
+    WorktableCommon.clearTimelineSelectedBorderInMainWrapper();
     this.updateSelectItemMenu();
     return this.setupTimelineEventHandler(distId, teNum);
   };
@@ -58,7 +58,7 @@ EventConfig = (function() {
       this.constructor.addEventConfigContents(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
     }
     if (window.isWorkTable) {
-      WorktableCommon.clearSelectedBorder();
+      WorktableCommon.clearTimelineSelectedBorderInMainWrapper();
     }
     if (!this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
       vEmt = $('#' + this[EventPageValueBase.PageValueKey.ID]);
@@ -719,14 +719,14 @@ EventConfig = (function() {
     });
     teItemSelects.closest('.dropdown').off('show.bs.dropdown.my').on('show.bs.dropdown.my', function(e) {
       return $(this).find('li').off('mouseenter.dropdown').on('mouseenter.dropdown', function(e) {
-        WorktableCommon.clearSelectedBorder();
+        WorktableCommon.clearTimelineSelectedBorderInMainWrapper();
         if ($(this).hasClass('item')) {
           id = $(this).children('input:first').val().split(EventConfig.EVENT_ITEM_SEPERATOR)[0];
           return WorktableCommon.setSelectedBorder($("#" + id), 'timeline');
         }
       }).off('mouseleave.dropdown').on('mouseleave.dropdown', function(e) {
         e.preventDefault();
-        return WorktableCommon.clearSelectedBorder();
+        return WorktableCommon.clearTimelineSelectedBorderInMainWrapper();
       });
     });
     teItemSelects.closest('.dropdown').off('hide.bs.dropdown.my').on('hide.bs.dropdown.my', function() {
@@ -831,7 +831,7 @@ EventConfig = (function() {
     var id, value;
     value = $(dropDownRoot).children('input:first').val();
     id = value.split(EventConfig.EVENT_ITEM_SEPERATOR)[0];
-    WorktableCommon.clearSelectedBorder();
+    WorktableCommon.clearTimelineSelectedBorderInMainWrapper();
     return WorktableCommon.setSelectedBorder($("#" + id), "timeline");
   };
 

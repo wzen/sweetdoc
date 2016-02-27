@@ -24,6 +24,11 @@ class WorktableCommon
     # 選択アイテムID解除
     window.selectedObjId = null
 
+  @clearTimelineSelectedBorderInMainWrapper = ->
+    $('.timelineSelected', window.mainWrapper).remove()
+    # 選択アイテムID解除
+    window.selectedObjId = null
+
   # キャッシュからWorktableを作成するか判定
   @checkLoadWorktableFromCache = ->
     if LocalStorage.isOverWorktableSaveTimeLimit()
