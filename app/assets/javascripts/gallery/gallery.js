@@ -40,8 +40,8 @@ $(function() {
     RunFullScreen.showCreatorInfo();
     if (window.isMobileAccess) {
       $('body').css({
-        width: $(window).width(),
-        height: $(window).height()
+        width: window.screen.width + 'px',
+        height: window.screen.height + 'px'
       });
     }
     return RunCommon.start();

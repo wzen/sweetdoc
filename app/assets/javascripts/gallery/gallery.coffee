@@ -37,7 +37,7 @@ $ ->
     # 作成者情報を表示
     RunFullScreen.showCreatorInfo()
     if window.isMobileAccess
-      $('body').css({width: $(window).width(), height: $(window).height()})
+      $('body').css({width: window.screen.width + 'px', height: window.screen.height + 'px'})
     RunCommon.start()
 
 
