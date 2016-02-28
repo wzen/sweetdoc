@@ -164,6 +164,8 @@ RunCommon = (function() {
     $('#contents .contents_share_show_button:first').off('click').on('click', (function(_this) {
       return function(e) {
         if (!share.is(':visible')) {
+          e.preventDefault();
+          e.stopPropagation();
           return share.fadeIn('200', function() {
             return _setClose.call(_this);
           });

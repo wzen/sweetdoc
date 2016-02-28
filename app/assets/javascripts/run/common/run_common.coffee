@@ -126,6 +126,8 @@ class RunCommon
     # Share情報表示
     $('#contents .contents_share_show_button:first').off('click').on('click', (e)=>
       if !share.is(':visible')
+        e.preventDefault()
+        e.stopPropagation()
         share.fadeIn('200', =>
           _setClose.call(@)
         )
