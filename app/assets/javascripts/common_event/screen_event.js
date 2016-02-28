@@ -239,6 +239,20 @@ ScreenEvent = (function(superClass) {
       return this.eventBaseScale = WorktableCommon.getWorktableViewScale();
     };
 
+    PrivateClass.prototype.setEventBaseXAndY = function(x, y) {
+      var ins;
+      if (ScreenEvent.hasInstanceCache()) {
+        ins = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
+        if (ins != null) {
+          ins.eventBaseX = x;
+          ins.eventBaseY = y;
+          PageValue.setInstancePageValue(PageValue.Key.instanceValue(this.id), ins);
+        }
+        this.eventBaseX = x;
+        return this.eventBaseY = y;
+      }
+    };
+
     PrivateClass.initSpecificConfig = function(specificRoot) {
       var _updateConfigInput, c, emt, h, screenSize, size, w, x, xVal, y, yVal, z, zVal;
       _updateConfigInput = function(emt, pointingSize) {
@@ -307,21 +321,6 @@ ScreenEvent = (function(superClass) {
           };
         })(this)
       });
-    };
-
-    PrivateClass.setEventBaseXAndY = function(x, y) {
-      var ins, se;
-      if (ScreenEvent.hasInstanceCache()) {
-        se = new ScreenEvent();
-        ins = PageValue.getInstancePageValue(PageValue.Key.instanceValue(se.id));
-        if (ins != null) {
-          ins.eventBaseX = x;
-          ins.eventBaseY = y;
-          PageValue.setInstancePageValue(PageValue.Key.instanceValue(se.id), ins);
-        }
-        se.eventBaseX = x;
-        return se.eventBaseY = y;
-      }
     };
 
     _overlay = function(x, y, scale) {

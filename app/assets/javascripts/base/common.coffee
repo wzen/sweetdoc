@@ -208,9 +208,10 @@ class Common
     if updateByInitConfig
       # Run & ScreenEventのinitConfigが設定されている場合
       se = new ScreenEvent()
+      se.setEventBaseXAndY(se.initConfigX, se.initConfigY)
       size = @convertCenterCoodToSize(se.initConfigX, se.initConfigY, se.initConfigScale)
       scrollContentsSize = Common.scrollContentsSizeUnderScale();
-      @updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5)
+      @updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
     else
       # ワークテーブルの倍率を設定
       @initScrollContentsPositionByWorktableConfig()
@@ -519,7 +520,8 @@ class Common
   @saveDisplayPosition = (top, left, immediate = true, callback = null) ->
     _save = ->
       if ScreenEvent.hasInstanceCache()
-        ScreenEvent.PrivateClass.setEventBaseXAndY(left, top)
+        se = new ScreenEvent()
+        se.setEventBaseXAndY(left, top)
       if window.isWorkTable && !window.previewRunning
         PageValue.setWorktableScrollContentsPosition(top, left)
       LocalStorage.saveAllPageValues()

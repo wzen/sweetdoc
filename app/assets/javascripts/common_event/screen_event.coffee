@@ -193,6 +193,16 @@ class ScreenEvent extends CommonEvent
     resetNowScaleToWorktableScale: ->
       @eventBaseScale = WorktableCommon.getWorktableViewScale()
 
+    setEventBaseXAndY: (x, y) ->
+      if ScreenEvent.hasInstanceCache()
+        ins = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))
+        if ins?
+          ins.eventBaseX = x
+          ins.eventBaseY = y
+          PageValue.setInstancePageValue(PageValue.Key.instanceValue(@id), ins)
+        @eventBaseX = x
+        @eventBaseY = y
+
     # 独自コンフィグのイベント初期化
     @initSpecificConfig = (specificRoot) ->
       _updateConfigInput = (emt, pointingSize) ->
@@ -249,17 +259,6 @@ class ScreenEvent extends CommonEvent
         closeCallback: =>
           EventDragPointingRect.draw(size)
       })
-
-    @setEventBaseXAndY = (x, y) ->
-      if ScreenEvent.hasInstanceCache()
-        se = new ScreenEvent()
-        ins = PageValue.getInstancePageValue(PageValue.Key.instanceValue(se.id))
-        if ins?
-          ins.eventBaseX = x
-          ins.eventBaseY = y
-          PageValue.setInstancePageValue(PageValue.Key.instanceValue(se.id), ins)
-        se.eventBaseX = x
-        se.eventBaseY = y
 
     _overlay = (x, y, scale) ->
       _drawOverlay = (context, x, y, width, height, scale) ->

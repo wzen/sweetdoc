@@ -243,9 +243,10 @@ Common = (function() {
     }
     if (updateByInitConfig) {
       se = new ScreenEvent();
+      se.setEventBaseXAndY(se.initConfigX, se.initConfigY);
       size = this.convertCenterCoodToSize(se.initConfigX, se.initConfigY, se.initConfigScale);
       scrollContentsSize = Common.scrollContentsSizeUnderScale();
-      return this.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5);
+      return this.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false);
     } else {
       return this.initScrollContentsPositionByWorktableConfig();
     }
@@ -659,8 +660,10 @@ Common = (function() {
       callback = null;
     }
     _save = function() {
+      var se;
       if (ScreenEvent.hasInstanceCache()) {
-        ScreenEvent.PrivateClass.setEventBaseXAndY(left, top);
+        se = new ScreenEvent();
+        se.setEventBaseXAndY(left, top);
       }
       if (window.isWorkTable && !window.previewRunning) {
         PageValue.setWorktableScrollContentsPosition(top, left);
