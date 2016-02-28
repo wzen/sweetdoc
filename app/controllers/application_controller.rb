@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :touch_if_guest
   after_action :store_location
+  helper_method :mobile_access?
 
   def init_const
     # Constantの設定
@@ -148,6 +149,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def mobile_access?
+    ua = request.env["HTTP_USER_AGENT"]
+    return ua.include?('Mobile') || ua.include?('Android')
+  end
+
   protected
   def configure_permitted_parameters
     return if do_through
@@ -189,11 +195,6 @@ class ApplicationController < ActionController::Base
         u.save
       end
     end
-  end
-
-  def mobile_access?
-    ua = request.env["HTTP_USER_AGENT"]
-    return ua.include?('Mobile') || ua.include?('Android')
   end
 
   private
