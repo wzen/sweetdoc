@@ -271,6 +271,9 @@ body.full_window, body.embed {
   }
   div#gallery_contents_wrapper {
     padding-right: 0 !important;
+    .wrapper {
+      padding: 0 !important;
+    }
   }
 }
 

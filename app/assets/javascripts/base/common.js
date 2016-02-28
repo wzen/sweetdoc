@@ -692,8 +692,12 @@ Common = (function() {
 
   Common.updateScrollContentsFromScreenEventVar = function() {
     var se;
-    se = new ScreenEvent();
-    return this.updateScrollContentsPosition(se.eventBaseY, se.eventBaseX);
+    if (ScreenEvent.hasInstanceCache()) {
+      se = new ScreenEvent();
+      if ((se.eventBaseX != null) && (se.eventBaseY != null)) {
+        return this.updateScrollContentsPosition(se.eventBaseY, se.eventBaseX);
+      }
+    }
   };
 
   Common.sanitaizeEncode = function(str) {

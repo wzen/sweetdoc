@@ -302,7 +302,6 @@ class Common
     $(window).resize( ->
       # モーダル中央寄せ
       Common.modalCentering()
-
       if resizeEvent?
         resizeEvent()
     )
@@ -549,8 +548,10 @@ class Common
 
   # 画面位置をScreenEvent変数から初期化
   @updateScrollContentsFromScreenEventVar: ->
-    se = new ScreenEvent()
-    @updateScrollContentsPosition(se.eventBaseY, se.eventBaseX)
+    if ScreenEvent.hasInstanceCache()
+      se = new ScreenEvent()
+      if se.eventBaseX? && se.eventBaseY?
+        @updateScrollContentsPosition(se.eventBaseY, se.eventBaseX)
 
   # サニタイズ エンコード
   # @property [String] str 対象文字列

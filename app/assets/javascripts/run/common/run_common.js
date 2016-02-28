@@ -71,16 +71,24 @@ RunCommon = (function() {
   };
 
   RunCommon.updateMainViewSize = function() {
-    var contentsHeight, contentsWidth, heightRate, projectScreenSize, scaleFromViewRate, updatedProjectScreenSize, widthRate;
+    var contentsHeight, contentsWidth, heightPadding, heightRate, projectScreenSize, scaleFromViewRate, updatedProjectScreenSize, widthPadding, widthRate;
     contentsWidth = $('#contents').width();
     contentsHeight = $('#contents').height();
     projectScreenSize = Common.getScreenSize();
     updatedProjectScreenSize = $.extend(true, {}, projectScreenSize);
-    if (contentsWidth < projectScreenSize.width + 30) {
-      updatedProjectScreenSize.width = contentsWidth - 30;
+    widthPadding = 30;
+    if ($('#project_wrapper').hasClass('fullscreen')) {
+      widthPadding = 0;
     }
-    if (contentsHeight < projectScreenSize.height + 10) {
-      updatedProjectScreenSize.height = contentsHeight - 10;
+    heightPadding = 10;
+    if ($('#project_wrapper').hasClass('fullscreen')) {
+      heightPadding = 0;
+    }
+    if (contentsWidth < projectScreenSize.width + widthPadding) {
+      updatedProjectScreenSize.width = contentsWidth - widthPadding;
+    }
+    if (contentsHeight < projectScreenSize.height + heightPadding) {
+      updatedProjectScreenSize.height = contentsHeight - heightPadding;
     }
     widthRate = updatedProjectScreenSize.width / projectScreenSize.width;
     heightRate = updatedProjectScreenSize.height / projectScreenSize.height;

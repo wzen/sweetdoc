@@ -45,17 +45,22 @@ class RunCommon
     # mainビュー高さ修正
     contentsWidth = $('#contents').width()
     contentsHeight = $('#contents').height()
-
     # スクリーンサイズ修正
     projectScreenSize = Common.getScreenSize()
     updatedProjectScreenSize = $.extend(true, {}, projectScreenSize);
+    widthPadding = 30
+    if $('#project_wrapper').hasClass('fullscreen')
+      widthPadding = 0
+    heightPadding = 10
+    if $('#project_wrapper').hasClass('fullscreen')
+      heightPadding = 0
     # Paddingを考慮して比較
-    if contentsWidth < projectScreenSize.width + 30
+    if contentsWidth < projectScreenSize.width + widthPadding
       # 縮小
-      updatedProjectScreenSize.width = contentsWidth - 30
-    if contentsHeight < projectScreenSize.height + 10
+      updatedProjectScreenSize.width = contentsWidth - widthPadding
+    if contentsHeight < projectScreenSize.height + heightPadding
       # 縮小
-      updatedProjectScreenSize.height = contentsHeight - 10
+      updatedProjectScreenSize.height = contentsHeight - heightPadding
 
     # BaseScale 修正
     widthRate = updatedProjectScreenSize.width / projectScreenSize.width
