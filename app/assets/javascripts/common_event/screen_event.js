@@ -92,6 +92,9 @@ ScreenEvent = (function(superClass) {
       if (window.isWorkTable && (!window.previewRunning || this._keepDispMag)) {
         this.resetNowScaleToWorktableScale();
         _setScaleAndUpdateViewing.call(this, WorktableCommon.getWorktableViewScale());
+        if (!window.previewRunning) {
+          this._notMoving = true;
+        }
       } else if (this._notMoving) {
         _setScaleAndUpdateViewing.call(this, _getInitScale.call(this));
       } else {
@@ -99,7 +102,6 @@ ScreenEvent = (function(superClass) {
       }
       $('#preview_position_overlay').remove();
       $('.keep_mag_base').remove();
-      this._notMoving = true;
       if (callback != null) {
         return callback(this);
       }

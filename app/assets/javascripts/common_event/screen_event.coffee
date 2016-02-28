@@ -66,6 +66,8 @@ class ScreenEvent extends CommonEvent
       if window.isWorkTable && (!window.previewRunning || @_keepDispMag)
         @resetNowScaleToWorktableScale()
         _setScaleAndUpdateViewing.call(@, WorktableCommon.getWorktableViewScale())
+        if !window.previewRunning
+          @_notMoving = true
       else if @_notMoving
         # Run初期値で戻す
         _setScaleAndUpdateViewing.call(@, _getInitScale.call(@))
@@ -75,7 +77,6 @@ class ScreenEvent extends CommonEvent
       # オーバーレイ削除
       $('#preview_position_overlay').remove()
       $('.keep_mag_base').remove()
-      @_notMoving = true
       if callback?
         callback(@)
 
