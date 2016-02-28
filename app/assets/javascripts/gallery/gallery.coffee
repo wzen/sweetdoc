@@ -36,7 +36,10 @@ $ ->
   $('.gallery.full_window').ready ->
     # 作成者情報を表示
     RunFullScreen.showCreatorInfo()
+    if window.isMobileAccess
+      $('body').css({width: $(window).width(), height: $(window).height()})
     RunCommon.start()
+
 
   $('.gallery.embed').ready ->
     # 作成者情報を表示

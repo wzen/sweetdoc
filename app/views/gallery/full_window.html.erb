@@ -1,7 +1,3 @@
-<% if mobile_access? %>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<% end %>
-
 <%= stylesheet_link_tag 'pipeline/gallery', media: 'all', 'data-turbolinks-track' => true %>
 <%if @pagevalues.nil? %>
     <%= render 'base/deleted_page' %>
