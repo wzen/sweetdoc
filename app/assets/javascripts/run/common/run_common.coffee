@@ -75,10 +75,9 @@ class RunCommon
 
   # 画面リサイズイベント
   @resizeMainContainerEvent = ->
+    # フォーカス後にリサイズするとずれるためスクロール位置は更新しないこと
     @updateMainViewSize()
     Common.updateCanvasSize()
-    # FIXME: ⇣ フォーカス後にリサイズするとずれるため一旦コメントアウト
-    #Common.updateScrollContentsFromScreenEventVar()
 
   # ウィンドウリサイズイベント
   @resizeEvent = ->

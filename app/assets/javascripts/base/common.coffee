@@ -162,19 +162,20 @@ class Common
 
   # スクリーンサイズを取得
   @getScreenSize = ->
-    if $('body').hasClass('full_window')
-      # 全画面の場合
-      return {
-        width: $(window).width()
-        height: $(window).height()
-      }
+    # FIXME: リサイズでコンテンツが拡大縮小しなくなるため一旦コメントアウト
+#    if $('body').hasClass('full_window')
+#      # 全画面の場合
+#      return {
+#        width: $(window).width()
+#        height: $(window).height()
+#      }
+#    else
+    p = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
+    if p?
+      return p
     else
-      p = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
-      if p?
-        return p
-      else
-        #console.error('SCREEN_SIZE not defined')
-        return {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
+      #console.error('SCREEN_SIZE not defined')
+      return {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
 
   # プロジェクト表示サイズ設定
   @initScreenSize = (reset = false) ->

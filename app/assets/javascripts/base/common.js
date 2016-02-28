@@ -199,21 +199,14 @@ Common = (function() {
 
   Common.getScreenSize = function() {
     var p;
-    if ($('body').hasClass('full_window')) {
-      return {
-        width: $(window).width(),
-        height: $(window).height()
-      };
+    p = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+    if (p != null) {
+      return p;
     } else {
-      p = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
-      if (p != null) {
-        return p;
-      } else {
-        return {
-          width: window.mainWrapper.width(),
-          height: window.mainWrapper.height()
-        };
-      }
+      return {
+        width: window.mainWrapper.width(),
+        height: window.mainWrapper.height()
+      };
     }
   };
 
