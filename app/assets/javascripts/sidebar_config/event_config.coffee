@@ -32,7 +32,6 @@ class EventConfig
     # イベントハンドラの設定
     @setupTimelineEventHandler(distId, teNum)
 
-
   # イベントタイプ選択
   # @param [Object] e 選択オブジェクト
   selectItem: (e = null) ->

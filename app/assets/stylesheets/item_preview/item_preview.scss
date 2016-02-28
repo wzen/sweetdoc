@@ -53,6 +53,7 @@ div.stop_btn {
 
 .timelineSelected {
   border: none !important;
+  pointer-events: none;
 }
 
 div.config_overlay {
