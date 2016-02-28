@@ -46,6 +46,8 @@ class Sidebar
       WorktableCommon.clearSelectedBorder()
       # イベントポインタ削除
       WorktableCommon.clearEventPointer()
+      # サイドビューのWidgetを全て非表示
+      @closeAllWidget()
       if !Sidebar.isClosedConfigSidebar()
         main = $('#main')
         $('#sidebar').fadeOut('200', ->
@@ -71,6 +73,10 @@ class Sidebar
   # @return [Boolean] 判定結果
   @isClosedConfigSidebar = ->
     return $('#main').hasClass('col-xs-12')
+
+  # 全Widget非表示
+  @closeAllWidget = ->
+    $('.colorpicker:visible').hide()
 
   # サイドバー内容のスイッチ
   # @param [String] configType コンフィグタイプ

@@ -65,6 +65,7 @@ Sidebar = (function() {
     if (window.isWorkTable) {
       WorktableCommon.clearSelectedBorder();
       WorktableCommon.clearEventPointer();
+      this.closeAllWidget();
       if (!Sidebar.isClosedConfigSidebar()) {
         main = $('#main');
         return $('#sidebar').fadeOut('200', function() {
@@ -91,6 +92,10 @@ Sidebar = (function() {
 
   Sidebar.isClosedConfigSidebar = function() {
     return $('#main').hasClass('col-xs-12');
+  };
+
+  Sidebar.closeAllWidget = function() {
+    return $('.colorpicker:visible').hide();
   };
 
   Sidebar.switchSidebarConfig = function(configType, item) {
