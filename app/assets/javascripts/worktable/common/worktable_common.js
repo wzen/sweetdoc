@@ -270,7 +270,7 @@ WorktableCommon = (function() {
     }
   };
 
-  WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging = function(pn, callback) {
+  WorktableCommon.stopPreviewAndRefreshAllItemsFromInstancePageValue = function(pn, callback) {
     if (pn == null) {
       pn = PageValue.getPageNum();
     }
@@ -843,7 +843,7 @@ WorktableCommon = (function() {
     }
     EventConfig.switchPreviewButton(true);
     this.updateAllItemsToBeforePreview(keepDispMag);
-    return this.refreshAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), (function(_this) {
+    return this.stopPreviewAndRefreshAllItemsFromInstancePageValue(PageValue.getPageNum(), (function(_this) {
       return function() {
         FloatView.hideWithCloseButtonView();
         if (callback != null) {

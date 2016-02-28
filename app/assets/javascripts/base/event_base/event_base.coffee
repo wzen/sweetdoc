@@ -140,7 +140,7 @@ class EventBase extends Extend
       FloatView.showWithCloseButton(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW, =>
         if @loopFinishCallback?
           @loopFinishCallback()
-      )
+      , true)
       @_progress = 0
       if window.debug
         console.log('start previewStepDraw')

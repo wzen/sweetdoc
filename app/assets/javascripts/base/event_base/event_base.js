@@ -197,7 +197,7 @@ EventBase = (function(superClass) {
           if (_this.loopFinishCallback != null) {
             return _this.loopFinishCallback();
           }
-        });
+        }, true);
         _this._progress = 0;
         if (window.debug) {
           console.log('start previewStepDraw');

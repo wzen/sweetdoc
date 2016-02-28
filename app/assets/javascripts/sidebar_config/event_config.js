@@ -737,52 +737,43 @@ EventConfig = (function() {
   };
 
   EventConfig.setupTimelineEventHandler = function(distId, teNum) {
-    return WorktableCommon.stopAllEventPreview((function(_this) {
-      return function() {
-        return WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), function() {
-          var config, eId, emt;
-          eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId);
-          emt = $('#' + eId);
-          config = new _this(emt, teNum, distId);
-          $('.update_event_after', emt).removeAttr('checked');
-          $('.button_preview_wrapper', emt).show();
-          $('.apply_wrapper', emt).show();
-          $('.button_stop_preview_wrapper', emt).hide();
-          if (WorktableCommon.isConnectedEventProgressRoute(teNum)) {
-            $('.update_event_after', emt).removeAttr('disabled');
-            $('.update_event_after', emt).off('change').on('change', function(e) {
-              var blankDistId, configDistId, fromBlankEventConfig;
-              if ($(e.target).is(':checked')) {
-                $(e.target).attr('disabled', true);
-                blankDistId = $('#timeline_events > .timeline_event.blank:first').find('.dist_id:first').val();
-                configDistId = $(e.target).closest('.event').attr('id').replace(EventConfig.ITEM_ROOT_ID.replace('@distId', ''), '');
-                fromBlankEventConfig = blankDistId === configDistId;
-                return WorktableCommon.updatePrevEventsToAfter(teNum, true, fromBlankEventConfig, function() {
-                  return $(e.target).removeAttr('disabled');
-                });
-              } else {
-                $(e.target).attr('disabled', true);
-                return WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), function() {
-                  return $(e.target).removeAttr('disabled');
-                });
-              }
+    var config, eId, emt;
+    eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId);
+    emt = $('#' + eId);
+    config = new this(emt, teNum, distId);
+    $('.update_event_after', emt).removeAttr('checked');
+    $('.button_preview_wrapper', emt).show();
+    $('.apply_wrapper', emt).show();
+    $('.button_stop_preview_wrapper', emt).hide();
+    if (WorktableCommon.isConnectedEventProgressRoute(teNum)) {
+      $('.update_event_after', emt).removeAttr('disabled');
+      $('.update_event_after', emt).off('change').on('change', (function(_this) {
+        return function(e) {
+          var blankDistId, configDistId, fromBlankEventConfig;
+          if ($(e.target).is(':checked')) {
+            $(e.target).attr('disabled', true);
+            blankDistId = $('#timeline_events > .timeline_event.blank:first').find('.dist_id:first').val();
+            configDistId = $(e.target).closest('.event').attr('id').replace(EventConfig.ITEM_ROOT_ID.replace('@distId', ''), '');
+            fromBlankEventConfig = blankDistId === configDistId;
+            return WorktableCommon.updatePrevEventsToAfter(teNum, true, fromBlankEventConfig, function() {
+              return $(e.target).removeAttr('disabled');
             });
           } else {
-            $('.update_event_after', emt).attr('disabled', true);
+            $(e.target).attr('disabled', true);
+            return WorktableCommon.stopPreviewAndRefreshAllItemsFromInstancePageValue(PageValue.getPageNum(), function() {
+              return $(e.target).removeAttr('disabled');
+            });
           }
-          $('.te_item_select', emt).find('li:not(".dropdown-header")').off('click').on('click', function(e) {
-            e.preventDefault();
-            config.clearError();
-            return config.selectItem(this);
-          });
-          return $(window.drawingCanvas).one('click.setupTimelineEventHandler', function(e) {
-            if (window.eventPointingMode === Constant.EventInputPointingMode.NOT_SELECT) {
-              return WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging();
-            }
-          });
-        });
-      };
-    })(this));
+        };
+      })(this));
+    } else {
+      $('.update_event_after', emt).attr('disabled', true);
+    }
+    return $('.te_item_select', emt).find('li:not(".dropdown-header")').off('click').on('click', function(e) {
+      e.preventDefault();
+      config.clearError();
+      return config.selectItem(this);
+    });
   };
 
   EventConfig.switchChildrenConfig = function(e, varName, openValue, targetValue) {

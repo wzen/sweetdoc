@@ -239,7 +239,7 @@ class WorktableCommon
 
   # アイテム描画が変更されている場合にインスタンスから全アイテム再描画
   # @param [Integer] pn ページ番号
-  @refreshAllItemsFromInstancePageValueIfChanging = (pn = PageValue.getPageNum(), callback = null) ->
+  @stopPreviewAndRefreshAllItemsFromInstancePageValue = (pn = PageValue.getPageNum(), callback = null) ->
     # イベント停止
     @stopAllEventPreview( (noRunningPreview) ->
       if window.worktableItemsChangedState || !noRunningPreview
@@ -717,7 +717,7 @@ class WorktableCommon
     # 全てのアイテム状態をイベント前にする
     @updateAllItemsToBeforePreview(keepDispMag)
     # アイテム再描画
-    @refreshAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), =>
+    @stopPreviewAndRefreshAllItemsFromInstancePageValue(PageValue.getPageNum(), =>
       FloatView.hideWithCloseButtonView()
       if callback?
         callback()

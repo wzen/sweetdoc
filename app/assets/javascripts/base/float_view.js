@@ -83,16 +83,31 @@ FloatView = (function() {
     return $(".float_view:not('.fixed')").fadeOut('fast');
   };
 
-  FloatView.showWithCloseButton = function(message, type, closeFunc) {
+  FloatView.showWithCloseButton = function(message, type, closeFunc, withDisableOperation) {
     var root, screenWrapper;
     if (closeFunc == null) {
       closeFunc = null;
+    }
+    if (withDisableOperation == null) {
+      withDisableOperation = false;
     }
     if (!window.initDone) {
       return;
     }
     screenWrapper = $('#screen_wrapper');
     root = $(".float_view.fixed." + type + ":first", screenWrapper);
+    if (withDisableOperation) {
+      if ($('#modal-overlay').length === 0) {
+        $("body").append('<div id="modal-overlay"></div>');
+      }
+      $("#modal-overlay").off('click').on('click', (function(_this) {
+        return function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+        };
+      })(this)).show();
+    }
     if (root.length > 0) {
       root.show();
       return;
@@ -122,6 +137,7 @@ FloatView = (function() {
 
   FloatView.hideWithCloseButtonView = function() {
     $(".float_view.fixed").fadeOut('fast');
+    $('#modal-overlay').remove();
     return this.hidePointingController();
   };
 

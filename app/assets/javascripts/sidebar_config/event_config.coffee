@@ -660,54 +660,44 @@ class EventConfig
   # イベントハンドラー設定
   # @param [Integer] distId イベント番号
   @setupTimelineEventHandler = (distId, teNum) ->
-    # 再描画
-    WorktableCommon.stopAllEventPreview( =>
-      WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), =>
-        eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId)
-        emt = $('#' + eId)
-        # Configクラス作成 & イベントハンドラの設定
-        config = new @(emt, teNum, distId)
-        # コンフィグ表示初期化
-        $('.update_event_after', emt).removeAttr('checked')
-        $('.button_preview_wrapper', emt).show()
-        $('.apply_wrapper', emt).show()
-        $('.button_stop_preview_wrapper', emt).hide()
-        if WorktableCommon.isConnectedEventProgressRoute(teNum)
-          $('.update_event_after', emt).removeAttr('disabled')
-          $('.update_event_after', emt).off('change').on('change', (e) =>
-            if $(e.target).is(':checked')
-              # イベント後に変更 ※表示倍率はキープする
-              $(e.target).attr('disabled', true)
-              # Blankのコンフィグか判定
-              blankDistId = $('#timeline_events > .timeline_event.blank:first').find('.dist_id:first').val()
-              configDistId = $(e.target).closest('.event').attr('id').replace(EventConfig.ITEM_ROOT_ID.replace('@distId', ''), '')
-              fromBlankEventConfig = blankDistId == configDistId
-              WorktableCommon.updatePrevEventsToAfter(teNum, true, fromBlankEventConfig, =>
-                $(e.target).removeAttr('disabled')
-              )
-            else
-              # 全アイテム再描画
-              $(e.target).attr('disabled', true)
-              WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), =>
-                $(e.target).removeAttr('disabled')
-              )
+    eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId)
+    emt = $('#' + eId)
+    # Configクラス作成 & イベントハンドラの設定
+    config = new @(emt, teNum, distId)
+    # コンフィグ表示初期化
+    $('.update_event_after', emt).removeAttr('checked')
+    $('.button_preview_wrapper', emt).show()
+    $('.apply_wrapper', emt).show()
+    $('.button_stop_preview_wrapper', emt).hide()
+    if WorktableCommon.isConnectedEventProgressRoute(teNum)
+      $('.update_event_after', emt).removeAttr('disabled')
+      $('.update_event_after', emt).off('change').on('change', (e) =>
+        if $(e.target).is(':checked')
+          # イベント後に変更 ※表示倍率はキープする
+          $(e.target).attr('disabled', true)
+          # Blankのコンフィグか判定
+          blankDistId = $('#timeline_events > .timeline_event.blank:first').find('.dist_id:first').val()
+          configDistId = $(e.target).closest('.event').attr('id').replace(EventConfig.ITEM_ROOT_ID.replace('@distId', ''), '')
+          fromBlankEventConfig = blankDistId == configDistId
+          WorktableCommon.updatePrevEventsToAfter(teNum, true, fromBlankEventConfig, =>
+            $(e.target).removeAttr('disabled')
           )
         else
-          # イベントの設定が繋がっていない場合はdisabled
-          $('.update_event_after', emt).attr('disabled', true)
-
-        # 選択メニューイベント
-        $('.te_item_select', emt).find('li:not(".dropdown-header")').off('click').on('click', (e) ->
-          e.preventDefault()
-          config.clearError()
-          config.selectItem(@)
-        )
-        $(window.drawingCanvas).one('click.setupTimelineEventHandler', (e) =>
-          if window.eventPointingMode == Constant.EventInputPointingMode.NOT_SELECT
-            # メイン画面クリックで全アイテム再描画
-            WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging()
-        )
+          # 全アイテム再描画
+          $(e.target).attr('disabled', true)
+          WorktableCommon.stopPreviewAndRefreshAllItemsFromInstancePageValue(PageValue.getPageNum(), =>
+            $(e.target).removeAttr('disabled')
+          )
       )
+    else
+      # イベントの設定が繋がっていない場合はdisabled
+      $('.update_event_after', emt).attr('disabled', true)
+
+    # 選択メニューイベント
+    $('.te_item_select', emt).find('li:not(".dropdown-header")').off('click').on('click', (e) ->
+      e.preventDefault()
+      config.clearError()
+      config.selectItem(@)
     )
 
   @switchChildrenConfig = (e, varName, openValue, targetValue) ->

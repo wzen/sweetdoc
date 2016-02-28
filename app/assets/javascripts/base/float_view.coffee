@@ -53,12 +53,22 @@ class FloatView
   @hide = ->
     $(".float_view:not('.fixed')").fadeOut('fast')
 
-  @showWithCloseButton = (message, type, closeFunc = null) ->
+  @showWithCloseButton = (message, type, closeFunc = null, withDisableOperation = false) ->
     if !window.initDone
       return
 
     screenWrapper = $('#screen_wrapper')
     root = $(".float_view.fixed.#{type}:first", screenWrapper)
+    if withDisableOperation
+      # オーバーレイを被せる
+      if $('#modal-overlay').length == 0
+        $("body").append( '<div id="modal-overlay"></div>' )
+      $("#modal-overlay").off('click').on('click', (e) =>
+        e.preventDefault()
+        e.stopPropagation()
+        return false
+      ).show()
+
     if root.length > 0
       # 既に表示されている場合はshow
       root.show()
@@ -86,6 +96,7 @@ class FloatView
 
   @hideWithCloseButtonView = ->
     $(".float_view.fixed").fadeOut('fast')
+    $('#modal-overlay').remove()
     # コントローラも消去
     @hidePointingController()
 

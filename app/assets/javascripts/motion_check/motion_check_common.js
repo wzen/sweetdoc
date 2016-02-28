@@ -5,45 +5,37 @@ MotionCheckCommon = (function() {
   function MotionCheckCommon() {}
 
   MotionCheckCommon.run = function(newWindow) {
-    var _operation;
+    var left, navbarHeight, size, target, top;
     if (newWindow == null) {
       newWindow = false;
     }
-    _operation = function() {
-      var left, navbarHeight, size, target, top;
-      LocalStorage.clearRun();
-      target = '';
-      if (newWindow) {
-        size = Common.getScreenSize();
-        navbarHeight = $("#" + Navbar.NAVBAR_ROOT).outerHeight(true);
-        left = Number((window.screen.width - size.width) / 2);
-        top = Number((window.screen.height - (size.height + navbarHeight)) / 2);
-        target = "_runwindow";
-        window.open("about:blank", target, "top=" + top + ",left=" + left + ",width=" + size.width + ",height=" + (size.height + navbarHeight) + ",menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=no");
-        document.run_form.action = '/motion_check/new_window';
-      } else {
-        target = "_runtab";
-        window.open("about:blank", target);
-        document.run_form.action = '/motion_check';
-      }
-      document.run_form.target = target;
-      if (window.isWorkTable) {
-        return ServerStorage.save(function(data) {
-          if (data.resultSuccess) {
-            PageValue.setGeneralPageValue(PageValue.Key.RUNNING_USER_PAGEVALUE_ID, data.updated_user_pagevalue_id);
-            return document.run_form.submit();
-          } else {
-            return console.log('ServerStorage save error');
-          }
-        });
-      } else {
-        return document.run_form.submit();
-      }
-    };
-    if (window.isWorkTable) {
-      return WorktableCommon.stopAllEventPreview(_operation);
+    LocalStorage.clearRun();
+    target = '';
+    if (newWindow) {
+      size = Common.getScreenSize();
+      navbarHeight = $("#" + Navbar.NAVBAR_ROOT).outerHeight(true);
+      left = Number((window.screen.width - size.width) / 2);
+      top = Number((window.screen.height - (size.height + navbarHeight)) / 2);
+      target = "_runwindow";
+      window.open("about:blank", target, "top=" + top + ",left=" + left + ",width=" + size.width + ",height=" + (size.height + navbarHeight) + ",menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=no");
+      document.run_form.action = '/motion_check/new_window';
     } else {
-      return _operation.call(this);
+      target = "_runtab";
+      window.open("about:blank", target);
+      document.run_form.action = '/motion_check';
+    }
+    document.run_form.target = target;
+    if (window.isWorkTable) {
+      return ServerStorage.save(function(data) {
+        if (data.resultSuccess) {
+          PageValue.setGeneralPageValue(PageValue.Key.RUNNING_USER_PAGEVALUE_ID, data.updated_user_pagevalue_id);
+          return document.run_form.submit();
+        } else {
+          return console.log('ServerStorage save error');
+        }
+      });
+    } else {
+      return document.run_form.submit();
     }
   };
 
