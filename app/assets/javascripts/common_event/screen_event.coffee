@@ -86,7 +86,7 @@ class ScreenEvent extends CommonEvent
       if methodName == 'changeScreenPosition'
         if !@_keepDispMag && @eventBaseScale?
           _setScaleAndUpdateViewing.call(@, @eventBaseScale)
-          size = _convertCenterCoodToSize.call(@, @eventBaseX, @eventBaseY, @eventBaseScale)
+          size = Common.convertCenterCoodToSize(@eventBaseX, @eventBaseY, @eventBaseScale)
           scrollContentsSize = Common.scrollContentsSizeUnderScale()
           Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 
@@ -104,7 +104,7 @@ class ScreenEvent extends CommonEvent
           _overlay.call(@, @_progressX, @_progressY, @_progressScale)
         else
           _setScaleAndUpdateViewing.call(@, @_progressScale)
-          size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
+          size = Common.convertCenterCoodToSize(@_progressX, @_progressY, @_progressScale)
           scrollContentsSize = Common.scrollContentsSizeUnderScale()
           Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 
@@ -121,7 +121,7 @@ class ScreenEvent extends CommonEvent
 
       if !@_keepDispMag
         _setScaleAndUpdateViewing.call(@, @_progressScale)
-        size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
+        size = Common.convertCenterCoodToSize(@_progressX, @_progressY, @_progressScale)
         scrollContentsSize = Common.scrollContentsSizeUnderScale()
         Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 
@@ -276,7 +276,7 @@ class ScreenEvent extends CommonEvent
         context.rect(0, 0, width, height);
         # 枠を作成
         wScale = WorktableCommon.getWorktableViewScale()
-        size = _convertCenterCoodToSize.call(@, x, y, wScale)
+        size = Common.convertCenterCoodToSize(x, y, wScale)
         w = size.width * wScale / scale
         h = size.height * wScale / scale
         top = y - h / 2.0
@@ -301,14 +301,6 @@ class ScreenEvent extends CommonEvent
       else
         # オーバーレイ削除
         $('#preview_position_overlay').remove()
-
-    _convertCenterCoodToSize = (x, y, scale) ->
-      screenSize = Common.getScreenSize()
-      width = screenSize.width / scale
-      height = screenSize.height / scale
-      top = y - height / 2.0
-      left = x - width / 2.0
-      return {top: top, left: left, width: width, height: height}
 
     _setScaleAndUpdateViewing = (scale) ->
       @_nowScreenEventScale = scale

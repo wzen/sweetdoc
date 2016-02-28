@@ -233,7 +233,7 @@ Common = (function() {
   };
 
   Common.initScrollContentsPosition = function() {
-    var se, updateByInitConfig;
+    var scrollContentsSize, se, size, updateByInitConfig;
     updateByInitConfig = false;
     if (!window.isWorkTable && ScreenEvent.hasInstanceCache()) {
       se = new ScreenEvent();
@@ -243,7 +243,9 @@ Common = (function() {
     }
     if (updateByInitConfig) {
       se = new ScreenEvent();
-      return this.updateScrollContentsPosition(se.initConfigY, se.initConfigX);
+      size = Common.convertCenterCoodToSize(se.initConfigX, se.initConfigY, se.initConfigScale);
+      scrollContentsSize = Common.scrollContentsSizeUnderScale();
+      return this.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false);
     } else {
       return this.initScrollContentsPositionByWorktableConfig();
     }
@@ -314,6 +316,21 @@ Common = (function() {
     return {
       left: itemCenterPosition.x - itemWidth * 0.5,
       top: itemCenterPosition.y - itemHeight * 0.5
+    };
+  };
+
+  Common.convertCenterCoodToSize = function(x, y, scale) {
+    var height, left, screenSize, top, width;
+    screenSize = Common.getScreenSize();
+    width = screenSize.width / scale;
+    height = screenSize.height / scale;
+    top = y - height * 0.5;
+    left = x - width * 0.5;
+    return {
+      top: top,
+      left: left,
+      width: width,
+      height: height
     };
   };
 
@@ -1453,7 +1470,7 @@ Common = (function() {
   };
 
   Common.colorChangeCacheData = function(beforeColor, afterColor, length, colorType) {
-    var b, bColors, bPer, bp, cColors, g, gPer, gp, i, index, j, len, len1, len2, len3, m, o, q, r, rPer, ref, ref1, ret, rp, u, val, x, y;
+    var aa, b, bColors, bPer, bp, cColors, g, gPer, gp, i, index, j, len, len1, len2, len3, m, o, q, r, rPer, ref, ref1, ret, rp, u, val, z;
     if (colorType == null) {
       colorType = 'hex';
     }
@@ -1494,7 +1511,7 @@ Common = (function() {
         bColors[0] = beforeColor.substring(0, 2);
         bColors[1] = beforeColor.substring(2, 4);
         bColors[2] = beforeColor.substring(4, 6);
-        for (index = x = 0, len3 = bColors.length; x < len3; index = ++x) {
+        for (index = z = 0, len3 = bColors.length; z < len3; index = ++z) {
           val = bColors[index];
           bColors[index] = parseInt(val, 16);
         }
@@ -1505,7 +1522,7 @@ Common = (function() {
       rp = rPer;
       gp = gPer;
       bp = bPer;
-      for (i = y = 0, ref1 = length; 0 <= ref1 ? y <= ref1 : y >= ref1; i = 0 <= ref1 ? ++y : --y) {
+      for (i = aa = 0, ref1 = length; 0 <= ref1 ? aa <= ref1 : aa >= ref1; i = 0 <= ref1 ? ++aa : --aa) {
         r = parseInt(bColors[0] + rp);
         g = parseInt(bColors[1] + gp);
         b = parseInt(bColors[2] + bp);

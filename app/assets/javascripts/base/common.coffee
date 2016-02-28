@@ -208,7 +208,9 @@ class Common
     if updateByInitConfig
       # Run & ScreenEventのinitConfigが設定されている場合
       se = new ScreenEvent()
-      @updateScrollContentsPosition(se.initConfigY, se.initConfigX)
+      size = Common.convertCenterCoodToSize(se.initConfigX, se.initConfigY, se.initConfigScale)
+      scrollContentsSize = Common.scrollContentsSizeUnderScale();
+      @updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
     else
       # ワークテーブルの倍率を設定
       @initScrollContentsPositionByWorktableConfig()
@@ -252,6 +254,14 @@ class Common
     diff = {x:  cp.left - centerPosition.x, y: cp.top - centerPosition.y}
     itemCenterPosition = {x: p.left - diff.x, y: p.top - diff.y}
     return {left: itemCenterPosition.x - itemWidth * 0.5, top: itemCenterPosition.y - itemHeight * 0.5}
+
+  @convertCenterCoodToSize = (x, y, scale) ->
+    screenSize = Common.getScreenSize()
+    width = screenSize.width / scale
+    height = screenSize.height / scale
+    top = y - height * 0.5
+    left = x - width * 0.5
+    return {top: top, left: left, width: width, height: height}
 
   # 画面スケールの取得
   @getViewScale = ->

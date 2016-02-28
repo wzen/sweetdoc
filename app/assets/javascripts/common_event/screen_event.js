@@ -14,7 +14,7 @@ ScreenEvent = (function(superClass) {
   ScreenEvent.instance = {};
 
   ScreenEvent.PrivateClass = (function(superClass1) {
-    var _convertCenterCoodToSize, _getInitScale, _overlay, _setScaleAndUpdateViewing;
+    var _getInitScale, _overlay, _setScaleAndUpdateViewing;
 
     extend(PrivateClass, superClass1);
 
@@ -112,7 +112,7 @@ ScreenEvent = (function(superClass) {
       if (methodName === 'changeScreenPosition') {
         if (!this._keepDispMag && (this.eventBaseScale != null)) {
           _setScaleAndUpdateViewing.call(this, this.eventBaseScale);
-          size = _convertCenterCoodToSize.call(this, this.eventBaseX, this.eventBaseY, this.eventBaseScale);
+          size = Common.convertCenterCoodToSize(this.eventBaseX, this.eventBaseY, this.eventBaseScale);
           scrollContentsSize = Common.scrollContentsSizeUnderScale();
           return Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false);
         }
@@ -133,7 +133,7 @@ ScreenEvent = (function(superClass) {
           return _overlay.call(this, this._progressX, this._progressY, this._progressScale);
         } else {
           _setScaleAndUpdateViewing.call(this, this._progressScale);
-          size = _convertCenterCoodToSize.call(this, this._progressX, this._progressY, this._progressScale);
+          size = Common.convertCenterCoodToSize(this._progressX, this._progressY, this._progressScale);
           scrollContentsSize = Common.scrollContentsSizeUnderScale();
           return Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false);
         }
@@ -154,7 +154,7 @@ ScreenEvent = (function(superClass) {
       }
       if (!this._keepDispMag) {
         _setScaleAndUpdateViewing.call(this, this._progressScale);
-        size = _convertCenterCoodToSize.call(this, this._progressX, this._progressY, this._progressScale);
+        size = Common.convertCenterCoodToSize(this._progressX, this._progressY, this._progressScale);
         scrollContentsSize = Common.scrollContentsSizeUnderScale();
         return Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false);
       }
@@ -340,7 +340,7 @@ ScreenEvent = (function(superClass) {
         context.beginPath();
         context.rect(0, 0, width, height);
         wScale = WorktableCommon.getWorktableViewScale();
-        size = _convertCenterCoodToSize.call(this, x, y, wScale);
+        size = Common.convertCenterCoodToSize(x, y, wScale);
         w = size.width * wScale / scale;
         h = size.height * wScale / scale;
         top = y - h / 2.0;
@@ -364,21 +364,6 @@ ScreenEvent = (function(superClass) {
       } else {
         return $('#preview_position_overlay').remove();
       }
-    };
-
-    _convertCenterCoodToSize = function(x, y, scale) {
-      var height, left, screenSize, top, width;
-      screenSize = Common.getScreenSize();
-      width = screenSize.width / scale;
-      height = screenSize.height / scale;
-      top = y - height / 2.0;
-      left = x - width / 2.0;
-      return {
-        top: top,
-        left: left,
-        width: width,
-        height: height
-      };
     };
 
     _setScaleAndUpdateViewing = function(scale) {
