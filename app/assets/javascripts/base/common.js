@@ -243,9 +243,9 @@ Common = (function() {
     }
     if (updateByInitConfig) {
       se = new ScreenEvent();
-      size = Common.convertCenterCoodToSize(se.initConfigX, se.initConfigY, se.initConfigScale);
+      size = this.convertCenterCoodToSize(se.initConfigX, se.initConfigY, se.initConfigScale);
       scrollContentsSize = Common.scrollContentsSizeUnderScale();
-      return this.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false);
+      return this.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5);
     } else {
       return this.initScrollContentsPositionByWorktableConfig();
     }

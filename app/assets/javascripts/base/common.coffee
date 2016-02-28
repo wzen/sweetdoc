@@ -208,9 +208,9 @@ class Common
     if updateByInitConfig
       # Run & ScreenEventのinitConfigが設定されている場合
       se = new ScreenEvent()
-      size = Common.convertCenterCoodToSize(se.initConfigX, se.initConfigY, se.initConfigScale)
+      size = @convertCenterCoodToSize(se.initConfigX, se.initConfigY, se.initConfigScale)
       scrollContentsSize = Common.scrollContentsSizeUnderScale();
-      @updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
+      @updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5)
     else
       # ワークテーブルの倍率を設定
       @initScrollContentsPositionByWorktableConfig()
