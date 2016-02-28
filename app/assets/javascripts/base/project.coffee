@@ -374,15 +374,18 @@ class Project
     # 作成済みプロジェクト一覧取得
     _loadAdminMenu.call(@, (admin_html) =>
       modalEmt.find('.am_list:first').html(admin_html)
-      # アクティブ設定
-      _updateActive.call(@)
-      # イベント設定
-      modalEmt.find('.am_row .edit_button').off('click').on('click', (e) =>
-        # 右にスライド
-        scrollWrapper = modalEmt.find('.am_scroll_wrapper:first')
-        scrollContents = scrollWrapper.children('div:first')
-        scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
-        if scrollContentsSize?
+      _setEvent = ->
+        # アクティブ設定
+        _updateActive.call(@)
+        # イベント設定
+        modalEmt.find('.am_row .edit_button').off('click').on('click', (e) =>
+          # 右にスライド
+          scrollWrapper = modalEmt.find('.am_scroll_wrapper:first')
+          scrollContents = scrollWrapper.children('div:first')
+          scrollContentsSize = {
+            width: $('.am_list_wrapper:first').width()
+            height: $('.am_list_wrapper:first').height()
+          }
           scrollWrapper.animate({scrollLeft: scrollContentsSize.width}, 200)
           # プロジェクト情報初期化
           _initEditInput.call(@)
@@ -396,26 +399,28 @@ class Project
             _settingEditInputEvent.call(@)
             inputWrapper.show()
           )
-      )
-      modalEmt.find('.am_row .remove_button').off('click').on('click', (e) =>
-        # 削除確認
-        if window.confirm(I18n.t('message.dialog.delete_project'))
-          deletedProjectId = $(e.target).closest('.am_row').find(".#{Constant.Project.Key.PROJECT_ID}:first").val()
-          # 削除
-          _delete.call(@, $(e.target), (admin_html) =>
-            # アクティブ設定
-            _updateActive.call(@)
-            if parseInt(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)) == parseInt(deletedProjectId)
-              # 自身のプロジェクトを削除 -> プロジェクト選択
-              Common.hideModalView()
-              WorktableCommon.resetWorktable()
-              # 初期モーダル表示
-              Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal)
-            else
-              # 削除完了 -> リスト再表示
-              modalEmt.find('.am_list:first').empty().html(admin_html)
-          )
-      )
+        )
+        modalEmt.find('.am_row .remove_button').off('click').on('click', (e) =>
+          # 削除確認
+          if window.confirm(I18n.t('message.dialog.delete_project'))
+            deletedProjectId = $(e.target).closest('.am_row').find(".#{Constant.Project.Key.PROJECT_ID}:first").val()
+            # 削除
+            _delete.call(@, $(e.target), (admin_html) =>
+              # アクティブ設定
+              _updateActive.call(@)
+              if parseInt(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)) == parseInt(deletedProjectId)
+                # 自身のプロジェクトを削除 -> プロジェクト選択
+                Common.hideModalView(true)
+                WorktableCommon.resetWorktable()
+                # 初期モーダル表示
+                Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal)
+              else
+                # 削除完了 -> リスト再表示
+                modalEmt.find('.am_list:first').empty().html(admin_html)
+                _setEvent.call(@)
+            )
+        )
+      _setEvent.call(@)
       Common.modalCentering()
       if callback?
         callback()

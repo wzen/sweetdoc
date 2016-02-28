@@ -409,46 +409,56 @@ Project = (function() {
     };
     return _loadAdminMenu.call(this, (function(_this) {
       return function(admin_html) {
+        var _setEvent;
         modalEmt.find('.am_list:first').html(admin_html);
-        _updateActive.call(_this);
-        modalEmt.find('.am_row .edit_button').off('click').on('click', function(e) {
-          var scrollContents, scrollContentsSize, scrollWrapper;
-          scrollWrapper = modalEmt.find('.am_scroll_wrapper:first');
-          scrollContents = scrollWrapper.children('div:first');
-          scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
-          if (scrollContentsSize != null) {
-            scrollWrapper.animate({
-              scrollLeft: scrollContentsSize.width
-            }, 200);
-            _initEditInput.call(_this);
-            return _loadEditInput($(e.target), function(project) {
-              var inputWrapper;
-              inputWrapper = modalEmt.find('.am_input_wrapper:first');
-              inputWrapper.find('.project_name:first').val(project.title);
-              inputWrapper.find('.display_size_input_width:first').val(project.screen_width);
-              inputWrapper.find('.display_size_input_height:first').val(project.screen_height);
-              inputWrapper.find("." + Constant.Project.Key.PROJECT_ID + ":first").val(project.id);
-              _settingEditInputEvent.call(_this);
-              return inputWrapper.show();
-            });
-          }
-        });
-        modalEmt.find('.am_row .remove_button').off('click').on('click', function(e) {
-          var deletedProjectId;
-          if (window.confirm(I18n.t('message.dialog.delete_project'))) {
-            deletedProjectId = $(e.target).closest('.am_row').find("." + Constant.Project.Key.PROJECT_ID + ":first").val();
-            return _delete.call(_this, $(e.target), function(admin_html) {
-              _updateActive.call(_this);
-              if (parseInt(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)) === parseInt(deletedProjectId)) {
-                Common.hideModalView();
-                WorktableCommon.resetWorktable();
-                return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);
-              } else {
-                return modalEmt.find('.am_list:first').empty().html(admin_html);
+        _setEvent = function() {
+          _updateActive.call(this);
+          modalEmt.find('.am_row .edit_button').off('click').on('click', (function(_this) {
+            return function(e) {
+              var scrollContents, scrollContentsSize, scrollWrapper;
+              scrollWrapper = modalEmt.find('.am_scroll_wrapper:first');
+              scrollContents = scrollWrapper.children('div:first');
+              scrollContentsSize = {
+                width: $('.am_list_wrapper:first').width(),
+                height: $('.am_list_wrapper:first').height()
+              };
+              scrollWrapper.animate({
+                scrollLeft: scrollContentsSize.width
+              }, 200);
+              _initEditInput.call(_this);
+              return _loadEditInput($(e.target), function(project) {
+                var inputWrapper;
+                inputWrapper = modalEmt.find('.am_input_wrapper:first');
+                inputWrapper.find('.project_name:first').val(project.title);
+                inputWrapper.find('.display_size_input_width:first').val(project.screen_width);
+                inputWrapper.find('.display_size_input_height:first').val(project.screen_height);
+                inputWrapper.find("." + Constant.Project.Key.PROJECT_ID + ":first").val(project.id);
+                _settingEditInputEvent.call(_this);
+                return inputWrapper.show();
+              });
+            };
+          })(this));
+          return modalEmt.find('.am_row .remove_button').off('click').on('click', (function(_this) {
+            return function(e) {
+              var deletedProjectId;
+              if (window.confirm(I18n.t('message.dialog.delete_project'))) {
+                deletedProjectId = $(e.target).closest('.am_row').find("." + Constant.Project.Key.PROJECT_ID + ":first").val();
+                return _delete.call(_this, $(e.target), function(admin_html) {
+                  _updateActive.call(_this);
+                  if (parseInt(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)) === parseInt(deletedProjectId)) {
+                    Common.hideModalView(true);
+                    WorktableCommon.resetWorktable();
+                    return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);
+                  } else {
+                    modalEmt.find('.am_list:first').empty().html(admin_html);
+                    return _setEvent.call(_this);
+                  }
+                });
               }
-            });
-          }
-        });
+            };
+          })(this));
+        };
+        _setEvent.call(_this);
         Common.modalCentering();
         if (callback != null) {
           return callback();
