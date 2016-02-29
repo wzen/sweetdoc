@@ -38,12 +38,6 @@ $(function() {
   });
   $('.gallery.full_window').ready(function() {
     RunFullScreen.showCreatorInfo();
-    if (window.isMobileAccess) {
-      $('body').css({
-        width: window.screen.width + 'px',
-        height: window.screen.height + 'px'
-      });
-    }
     return RunCommon.start();
   });
   return $('.gallery.embed').ready(function() {
