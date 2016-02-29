@@ -4,7 +4,7 @@ var PreloadItemText,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemText = (function(superClass) {
-  var _adjustFreeHandPath, _calcFontSizeAbout, _calcHorizontalColumnHeightMax, _calcHorizontalColumnHeightSum, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcRowWordLength, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _calcWordMeasure, _defaultWorkWidth, _drawBalloon, _drawText, _drawTextAndBalloonToCanvas, _freeHandBalloonDraw, _getRandomInt, _isWordNeedRotate, _isWordSmallJapanease, _measureImage, _prepareEditModal, _setNoTextStyle, _setTextAlpha, _setTextStyle, _settingTextDbclickEvent, _showInputModal, _startCloseAnimation, _startOpenAnimation, _writeLength, constant;
+  var _adjustFreeHandPath, _balloonStyle, _calcFontSizeAbout, _calcHorizontalColumnHeightMax, _calcHorizontalColumnHeightSum, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcRowWordLength, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _calcWordMeasure, _defaultWorkWidth, _drawBalloon, _drawText, _drawTextAndBalloonToCanvas, _freeHandBalloonDraw, _getRandomInt, _isWordNeedRotate, _isWordSmallJapanease, _measureImage, _prepareEditModal, _setNoTextStyle, _setTextAlpha, _setTextStyle, _settingTextDbclickEvent, _showInputModal, _startCloseAnimation, _startOpenAnimation, _writeLength, constant;
 
   extend(PreloadItemText, superClass);
 
@@ -490,8 +490,8 @@ PreloadItemText = (function(superClass) {
                 for (idx2 = q = 0, len3 = dp.length; q < len3; idx2 = ++q) {
                   d = dp[idx2];
                   drawPaths[idx1][idx2] = {
-                    x: d.x - minX + _this._freeHandDrawPadding,
-                    y: d.y - minY + _this._freeHandDrawPadding
+                    x: Math.round(d.x - minX + _this._freeHandDrawPadding),
+                    y: Math.round(d.y - minY + _this._freeHandDrawPadding)
                   };
                 }
               }
@@ -587,6 +587,7 @@ PreloadItemText = (function(superClass) {
     this._time = 0;
     this._pertime = 1;
     this.disableHandleResponse();
+    _balloonStyle.call(this, this._context);
     return requestAnimationFrame((function(_this) {
       return function() {
         return _startOpenAnimation.call(_this, callback);
@@ -598,11 +599,6 @@ PreloadItemText = (function(superClass) {
     var emt, fontSize, height, progressPercent, step1, step2, step3, timemax, width, writingLength, x, y;
     if (callback == null) {
       callback = null;
-    }
-    if (this._canvas == null) {
-      this._canvas = document.getElementById(this.canvasElementId());
-      this._context = this._canvas.getContext('2d');
-      this._context.save();
     }
     emt = this.getJQueryElement();
     x = null;
@@ -676,7 +672,6 @@ PreloadItemText = (function(superClass) {
         };
       })(this));
     } else {
-      this._context.restore();
       this.enableHandleResponse();
       if (callback != null) {
         return callback();
@@ -691,6 +686,12 @@ PreloadItemText = (function(superClass) {
     this._time = 0;
     this._pertime = 1;
     this.disableHandleResponse();
+    if (this._canvas == null) {
+      this._canvas = document.getElementById(this.canvasElementId());
+      this._context = this._canvas.getContext('2d');
+      this._context.save();
+    }
+    _balloonStyle.call(this, this._context);
     return requestAnimationFrame((function(_this) {
       return function() {
         return _startCloseAnimation.call(_this, callback);
@@ -702,11 +703,6 @@ PreloadItemText = (function(superClass) {
     var canvas, context, emt, fontSize, height, progressPercent, step1, step2, step3, timemax, width, x, y;
     if (callback == null) {
       callback = null;
-    }
-    if (this._canvas == null) {
-      this._canvas = document.getElementById(this.canvasElementId());
-      this._context = this._canvas.getContext('2d');
-      this._context.save();
     }
     this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
     emt = this.getJQueryElement();
@@ -781,7 +777,6 @@ PreloadItemText = (function(superClass) {
         };
       })(this));
     } else {
-      this._context.restore();
       canvas = document.getElementById(this.canvasElementId());
       context = canvas.getContext('2d');
       context.clearRect(0, 0, canvas.width, canvas.height);
@@ -842,10 +837,16 @@ PreloadItemText = (function(superClass) {
     this.showAnimationType = this.showAnimationType__after;
     this._forward = opt.forward;
     if (this.showWithAnimation && (this._animationFlg['startOpenAnimation'] == null)) {
+      if (this._canvas == null) {
+        this._canvas = document.getElementById(this.canvasElementId());
+        this._context = this._canvas.getContext('2d');
+        this._context.save();
+      }
       this.startOpenAnimation((function(_this) {
         return function() {
           _this._animationFlg['startOpenAnimation'] = true;
-          return _this.resetProgress();
+          _this.resetProgress();
+          return _this._context.restore();
         };
       })(this));
     } else {
@@ -864,7 +865,10 @@ PreloadItemText = (function(superClass) {
             this._writeBlurLength = Math.abs(writeBlurLength);
             this._alphaDiff = 0;
             _write = function() {
+              var canvas, context;
               _setTextStyle.call(this);
+              canvas = document.getElementById(this.canvasElementId());
+              context = canvas.getContext('2d');
               _drawTextAndBalloonToCanvas.call(this, this.inputText, writeLength);
               this._alphaDiff += this._writeBlurLength / 5;
               if (this._alphaDiff <= this._writeBlurLength) {
@@ -941,8 +945,17 @@ PreloadItemText = (function(superClass) {
     return Math.floor(Math.random() * (max - min)) + min;
   };
 
+  _balloonStyle = function(context) {
+    context.fillStyle = "rgba(" + this.balloonColor.r + "," + this.balloonColor.g + "," + this.balloonColor.b + ", 0.95)";
+    context.strokeStyle = "rgba(" + this.balloonBorderColor.r + "," + this.balloonBorderColor.g + "," + this.balloonBorderColor.b + ", 0.95)";
+    context.shadowColor = 'rgba(0,0,0,0.3)';
+    context.shadowOffsetX = 3;
+    context.shadowOffsetY = 3;
+    return context.shadowBlur = 4;
+  };
+
   _drawBalloon = function(context, x, y, width, height, canvasWidth, canvasHeight) {
-    var _balloonStyle, _drawArc, _drawBArc, _drawBRect, _drawFreeHand, _drawRect, _drawShout, _drawThink;
+    var _drawArc, _drawBArc, _drawBRect, _drawFreeHand, _drawRect, _drawShout, _drawThink;
     if (canvasWidth == null) {
       canvasWidth = width;
     }
@@ -959,14 +972,6 @@ PreloadItemText = (function(superClass) {
       context.putImageData(this._drawBalloonPathCacle[x][y][width][height][this.balloonType], 0, 0);
       return;
     }
-    _balloonStyle = function(context) {
-      context.fillStyle = "rgba(" + this.balloonColor.r + "," + this.balloonColor.g + "," + this.balloonColor.b + ", 0.95)";
-      context.strokeStyle = "rgba(" + this.balloonBorderColor.r + "," + this.balloonBorderColor.g + "," + this.balloonBorderColor.b + ", 0.95)";
-      context.shadowColor = 'rgba(0,0,0,0.3)';
-      context.shadowOffsetX = 3;
-      context.shadowOffsetY = 3;
-      return context.shadowBlur = 4;
-    };
     _drawArc = function() {
       var diff, r;
       context.beginPath();
@@ -978,14 +983,14 @@ PreloadItemText = (function(superClass) {
         if (r < 0) {
           r = 0;
         }
-        context.arc(0, 0, r, 0, Math.PI * 2);
+        context.arc(0, 0, Math.round(r), 0, Math.PI * 2);
       } else {
         context.scale(1, canvasHeight / canvasWidth);
         r = width * 0.5 - diff;
         if (r < 0) {
           r = 0;
         }
-        context.arc(0, 0, r, 0, Math.PI * 2);
+        context.arc(0, 0, Math.round(r), 0, Math.PI * 2);
       }
       context.fill();
       return context.stroke();
@@ -1012,7 +1017,7 @@ PreloadItemText = (function(superClass) {
           if (r < 0) {
             r = 0;
           }
-          context.arc(0, 0, r, x, y);
+          context.arc(0, 0, Math.round(r), x, y);
           context.fill();
           context.stroke();
           sum += l;
@@ -1077,7 +1082,7 @@ PreloadItemText = (function(superClass) {
     };
     _drawShout = (function(_this) {
       return function() {
-        var addDeg, beginX, beginY, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, endX, endY, i, k, num, punkLineMax, punkLineMin, radiusX, radiusY, random, ref, s;
+        var addDeg, beginX, beginY, bex, bey, c1x, c1y, c2x, c2y, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, endX, endY, ex, ey, i, k, num, punkLineMax, punkLineMin, radiusX, radiusY, random, ref, s;
         num = 18;
         radiusX = width / 2;
         radiusY = height / 2;
@@ -1109,11 +1114,19 @@ PreloadItemText = (function(superClass) {
           cp1y = PreloadItemText.getCircumPos.y(deg, radiusY - random * 0.6, cy);
           cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX - random * 0.6, cx);
           cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY - random * 0.6, cy);
+          bex = Math.round(beginX);
+          bey = Math.round(beginY);
+          ex = Math.round(endX);
+          ey = Math.round(endY);
+          c1x = Math.round(cp1x);
+          c1y = Math.round(cp1y);
+          c2x = Math.round(cp2x);
+          c2y = Math.round(cp2y);
           if (i === 0) {
-            context.moveTo(beginX, beginY);
-            context.arcTo(beginX, beginY, endX, endY, punkLineMax);
+            context.moveTo(bex, bey);
+            context.arcTo(bex, bey, ex, ey, punkLineMax);
           }
-          context.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY);
+          context.bezierCurveTo(c1x, c1y, c2x, c2y, ex, ey);
         }
         context.fill();
         return context.stroke();
@@ -1121,7 +1134,7 @@ PreloadItemText = (function(superClass) {
     })(this);
     _drawThink = (function(_this) {
       return function() {
-        var addDeg, beginX, beginY, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, diff, endX, endY, i, k, num, punkLineMax, punkLineMin, radiusX, radiusY, random, ref, s;
+        var addDeg, beginX, beginY, bex, bey, c1x, c1y, c2x, c2y, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, diff, endX, endY, ex, ey, i, k, num, punkLineMax, punkLineMin, radiusX, radiusY, random, ref, s;
         num = 8;
         cx = x + width / 2;
         cy = y + height / 2;
@@ -1154,11 +1167,19 @@ PreloadItemText = (function(superClass) {
           cp1y = PreloadItemText.getCircumPos.y(deg, radiusY + random * 0.7, cy);
           cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX + random * 0.7, cx);
           cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY + random * 0.7, cy);
+          bex = Math.round(beginX);
+          bey = Math.round(beginY);
+          ex = Math.round(endX);
+          ey = Math.round(endY);
+          c1x = Math.round(cp1x);
+          c1y = Math.round(cp1y);
+          c2x = Math.round(cp2x);
+          c2y = Math.round(cp2y);
           if (i === 0) {
-            context.moveTo(beginX, beginY);
-            context.arcTo(beginX, beginY, endX, endY, punkLineMax);
+            context.moveTo(bex, bey);
+            context.arcTo(bex, bey, ex, ey, punkLineMax);
           }
-          context.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY);
+          context.bezierCurveTo(c1x, c1y, c2x, c2y, ex, ey);
         }
         context.fill();
         return context.stroke();

@@ -363,8 +363,8 @@ class PreloadItemText extends CanvasItemBase
             for dp, idx1 in drawPaths
               for d, idx2 in dp
                 drawPaths[idx1][idx2] = {
-                  x: d.x - minX + @_freeHandDrawPadding
-                  y: d.y - minY + @_freeHandDrawPadding
+                  x: Math.round(d.x - minX + @_freeHandDrawPadding)
+                  y: Math.round(d.y - minY + @_freeHandDrawPadding)
                 }
 
             @itemSize.x = window.scrollContents.scrollLeft() + minX - @_freeHandDrawPadding
@@ -442,15 +442,11 @@ class PreloadItemText extends CanvasItemBase
     @_time = 0
     @_pertime = 1
     @disableHandleResponse()
+    _balloonStyle.call(@, @_context)
     requestAnimationFrame( =>
       _startOpenAnimation.call(@, callback)
     )
   _startOpenAnimation = (callback = null) ->
-    if !@_canvas?
-      @_canvas = document.getElementById(@canvasElementId())
-      @_context = @_canvas.getContext('2d')
-      @_context.save()
-
     emt = @getJQueryElement()
     x = null
     y = null
@@ -508,7 +504,6 @@ class PreloadItemText extends CanvasItemBase
         _startOpenAnimation.call(@, callback)
       )
     else
-      @_context.restore()
       @enableHandleResponse()
       if callback?
         callback()
@@ -517,14 +512,15 @@ class PreloadItemText extends CanvasItemBase
     @_time = 0
     @_pertime = 1
     @disableHandleResponse()
-    requestAnimationFrame( =>
-      _startCloseAnimation.call(@, callback)
-    )
-  _startCloseAnimation = (callback = null) ->
     if !@_canvas?
       @_canvas = document.getElementById(@canvasElementId())
       @_context = @_canvas.getContext('2d')
       @_context.save()
+    _balloonStyle.call(@, @_context)
+    requestAnimationFrame( =>
+      _startCloseAnimation.call(@, callback)
+    )
+  _startCloseAnimation = (callback = null) ->
     @_context.clearRect(0, 0, @_canvas.width, @_canvas.height)
     emt = @getJQueryElement()
     x = null
@@ -585,7 +581,6 @@ class PreloadItemText extends CanvasItemBase
         _startCloseAnimation.call(@, callback)
       )
     else
-      @_context.restore()
       canvas = document.getElementById(@canvasElementId())
       context = canvas.getContext('2d')
       context.clearRect(0, 0, canvas.width, canvas.height)
@@ -634,9 +629,14 @@ class PreloadItemText extends CanvasItemBase
     @showAnimationType = @showAnimationType__after
     @_forward = opt.forward
     if @showWithAnimation && !@_animationFlg['startOpenAnimation']?
+      if !@_canvas?
+        @_canvas = document.getElementById(@canvasElementId())
+        @_context = @_canvas.getContext('2d')
+        @_context.save()
       @startOpenAnimation( =>
         @_animationFlg['startOpenAnimation'] = true
         @resetProgress()
+        @_context.restore()
       )
     else
       if opt.progress < opt.progressMax && @inputText? && @inputText.length > 0
@@ -654,6 +654,8 @@ class PreloadItemText extends CanvasItemBase
             @_alphaDiff = 0
             _write = ->
               _setTextStyle.call(@)
+              canvas = document.getElementById(@canvasElementId())
+              context = canvas.getContext('2d')
               _drawTextAndBalloonToCanvas.call(@ , @inputText, writeLength)
               @_alphaDiff += @_writeBlurLength / 5
               if @_alphaDiff <= @_writeBlurLength
@@ -704,6 +706,15 @@ class PreloadItemText extends CanvasItemBase
   _getRandomInt = (max, min) ->
     return Math.floor(Math.random() * (max - min)) + min
 
+  _balloonStyle = (context) ->
+    context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.95)"
+    context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.95)"
+    # 影
+    context.shadowColor = 'rgba(0,0,0,0.3)'
+    context.shadowOffsetX = 3
+    context.shadowOffsetY = 3
+    context.shadowBlur = 4
+
   _drawBalloon = (context, x, y, width, height, canvasWidth = width, canvasHeight = height) ->
     if !@showBalloon
       return
@@ -721,15 +732,6 @@ class PreloadItemText extends CanvasItemBase
         context.putImageData(@_drawBalloonPathCacle[x][y][width][height][@balloonType], 0, 0)
         return
 
-    _balloonStyle = (context) ->
-      context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.95)"
-      context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.95)"
-      # 影
-      context.shadowColor = 'rgba(0,0,0,0.3)'
-      context.shadowOffsetX = 3
-      context.shadowOffsetY = 3
-      context.shadowBlur = 4
-
     _drawArc = ->
       # 円
       context.beginPath()
@@ -741,13 +743,13 @@ class PreloadItemText extends CanvasItemBase
         r = height * 0.5 - diff
         if r < 0
           r = 0
-        context.arc(0, 0, r, 0, Math.PI * 2)
+        context.arc(0, 0, Math.round(r), 0, Math.PI * 2)
       else
         context.scale(1, canvasHeight / canvasWidth)
         r = width * 0.5 - diff
         if r < 0
           r = 0
-        context.arc(0, 0, r, 0, Math.PI * 2)
+        context.arc(0, 0, Math.round(r), 0, Math.PI * 2)
       context.fill()
       context.stroke()
 
@@ -774,7 +776,7 @@ class PreloadItemText extends CanvasItemBase
           r = height * 0.5 - diff
           if r < 0
             r = 0
-          context.arc(0, 0, r, x, y)
+          context.arc(0, 0, Math.round(r), x, y)
           context.fill()
           context.stroke()
           sum += l
@@ -864,10 +866,18 @@ class PreloadItemText extends CanvasItemBase
         cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY - random * 0.6, cy)
 
         # 開始点と最終点のズレを調整する
+        bex = Math.round(beginX)
+        bey = Math.round(beginY)
+        ex = Math.round(endX)
+        ey = Math.round(endY)
+        c1x = Math.round(cp1x)
+        c1y = Math.round(cp1y)
+        c2x = Math.round(cp2x)
+        c2y = Math.round(cp2y)
         if i == 0
-          context.moveTo(beginX, beginY)
-          context.arcTo(beginX, beginY, endX, endY, punkLineMax)
-        context.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY)
+          context.moveTo(bex, bey)
+          context.arcTo(bex, bey, ex, ey, punkLineMax)
+        context.bezierCurveTo(c1x, c1y, c2x, c2y, ex, ey)
 
       context.fill()
       context.stroke()
@@ -908,11 +918,19 @@ class PreloadItemText extends CanvasItemBase
         cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX + random * 0.7, cx)
         cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY + random * 0.7, cy)
 
+        bex = Math.round(beginX)
+        bey = Math.round(beginY)
+        ex = Math.round(endX)
+        ey = Math.round(endY)
+        c1x = Math.round(cp1x)
+        c1y = Math.round(cp1y)
+        c2x = Math.round(cp2x)
+        c2y = Math.round(cp2y)
         # 開始点と最終点のズレを調整する
         if i == 0
-          context.moveTo(beginX, beginY)
-          context.arcTo(beginX, beginY, endX, endY, punkLineMax)
-        context.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY)
+          context.moveTo(bex, bey)
+          context.arcTo(bex, bey, ex, ey, punkLineMax)
+        context.bezierCurveTo(c1x, c1y, c2x, c2y, ex, ey)
 
       context.fill()
       context.stroke()
