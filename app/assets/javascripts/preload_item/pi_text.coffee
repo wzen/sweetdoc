@@ -1169,7 +1169,7 @@ class PreloadItemText extends CanvasItemBase
         wl = 0
         for c, idx in column[j].split('')
           _setTextAlpha.call(@, context, idx + wordSum + 1, writingLength)
-          context.fillText(c, w + wl, heightLine)
+          context.fillText(c, Math.round(w + wl), Math.round(heightLine))
           wl += context.measureText(c).width
         wordSum += column[j].length
     else
@@ -1200,7 +1200,7 @@ class PreloadItemText extends CanvasItemBase
           if _isWordSmallJapanease.call(@, c)
             # 小文字は右上に寄せる
             heightDiff = wordWidth * 0.1
-            context.fillText(c, widthLine + (wordWidth - measure.width) * 0.5, h + hl - heightDiff)
+            context.fillText(c, Math.round(widthLine + (wordWidth - measure.width) * 0.5), Math.round(h + hl - heightDiff))
           else if _isWordNeedRotate.call(@, c)
             # 90°回転
             context.save()
@@ -1217,10 +1217,10 @@ class PreloadItemText extends CanvasItemBase
             # 「wordWidth * 0.75」は調整用の値
             # engDiffは英字の調整
             engDiff = wordWidth - ww
-            context.fillText(c, -measure.width * 0.5, wordWidth * 0.75 * 0.5 - engDiff * 0.5)
+            context.fillText(c, Math.round(-measure.width * 0.5), Math.round(wordWidth * 0.75 * 0.5 - engDiff * 0.5))
             context.restore()
           else
-            context.fillText(c, widthLine, h + hl)
+            context.fillText(c, Math.round(widthLine), Math.round(h + hl))
         wordSum += column[j].length
     context.restore()
 

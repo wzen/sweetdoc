@@ -1500,7 +1500,7 @@ PreloadItemText = (function(superClass) {
         for (idx = p = 0, len = ref2.length; p < len; idx = ++p) {
           c = ref2[idx];
           _setTextAlpha.call(this, context, idx + wordSum + 1, writingLength);
-          context.fillText(c, w + wl, heightLine);
+          context.fillText(c, Math.round(w + wl), Math.round(heightLine));
           wl += context.measureText(c).width;
         }
         wordSum += column[j].length;
@@ -1536,7 +1536,7 @@ PreloadItemText = (function(superClass) {
           }
           if (_isWordSmallJapanease.call(this, c)) {
             heightDiff = wordWidth * 0.1;
-            context.fillText(c, widthLine + (wordWidth - measure.width) * 0.5, h + hl - heightDiff);
+            context.fillText(c, Math.round(widthLine + (wordWidth - measure.width) * 0.5), Math.round(h + hl - heightDiff));
           } else if (_isWordNeedRotate.call(this, c)) {
             context.save();
             context.beginPath();
@@ -1548,10 +1548,10 @@ PreloadItemText = (function(superClass) {
             context.translate(widthLine + wordWidth * 0.5, h + hl - ww * 0.5);
             context.rotate(Math.PI / 2);
             engDiff = wordWidth - ww;
-            context.fillText(c, -measure.width * 0.5, wordWidth * 0.75 * 0.5 - engDiff * 0.5);
+            context.fillText(c, Math.round(-measure.width * 0.5), Math.round(wordWidth * 0.75 * 0.5 - engDiff * 0.5));
             context.restore();
           } else {
-            context.fillText(c, widthLine, h + hl);
+            context.fillText(c, Math.round(widthLine), Math.round(h + hl));
           }
         }
         wordSum += column[j].length;
