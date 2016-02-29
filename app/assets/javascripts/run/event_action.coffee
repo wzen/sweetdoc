@@ -111,6 +111,12 @@ class EventAction
     RunCommon.loadPagingPageValue(afterPageNum, doLoadFootprint, =>
       # 必要JSファイル読み込み
       Common.loadJsFromInstancePageValue( =>
+        # Mainコンテナ作成
+        Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum)
+        # ページングアニメーションクラス作成
+        pageFlip = new PageFlip(beforePageNum, afterPageNum)
+        # 新規コンテナ初期化
+        RunCommon.initMainContainer()
         if @thisPage() == null
           # 次のページオブジェクトがない場合は作成
           forkEventPageValueList = {}
@@ -121,14 +127,7 @@ class EventAction
           })
           if window.debug
             console.log('[nextPage] created page instance')
-        # Mainコンテナ作成
-        Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum)
-        # ページングアニメーションクラス作成
-        pageFlip = new PageFlip(beforePageNum, afterPageNum)
-        # 新規コンテナ初期化
-        RunCommon.initMainContainer()
         PageValue.adjustInstanceAndEventOnPage()
-
         _after = ->
           @thisPage().start()
           if @thisPage().thisChapter()?

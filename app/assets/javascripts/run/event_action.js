@@ -123,6 +123,9 @@ EventAction = (function() {
       return function() {
         return Common.loadJsFromInstancePageValue(function() {
           var _after, forkEventPageValueList, i, j, pageFlip, ref;
+          Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum);
+          pageFlip = new PageFlip(beforePageNum, afterPageNum);
+          RunCommon.initMainContainer();
           if (_this.thisPage() === null) {
             forkEventPageValueList = {};
             for (i = j = 0, ref = PageValue.getForkCount(); 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
@@ -135,9 +138,6 @@ EventAction = (function() {
               console.log('[nextPage] created page instance');
             }
           }
-          Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum);
-          pageFlip = new PageFlip(beforePageNum, afterPageNum);
-          RunCommon.initMainContainer();
           PageValue.adjustInstanceAndEventOnPage();
           _after = function() {
             this.thisPage().start();
