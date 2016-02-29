@@ -248,76 +248,45 @@ RunCommon = (function() {
   };
 
   RunCommon.setupScrollEvent = function() {
-    var lastLeft, lastTop, scrollStack, stopTimer;
+    var lastLeft, lastTop;
     lastLeft = window.scrollHandleWrapper.scrollLeft();
     lastTop = window.scrollHandleWrapper.scrollTop();
-    stopTimer = null;
-    scrollStack = [];
     return window.scrollHandleWrapper.off('scroll').on('scroll', (function(_this) {
       return function(e) {
-        var _scroll, target, x, y;
-        _scroll = function(target, x, y) {
-          var distX, distY;
-          if (stopTimer !== null) {
-            clearTimeout(stopTimer);
-          }
-          stopTimer = setTimeout((function(_this) {
-            return function() {
-              RunCommon.initHandleScrollView();
-              lastLeft = target.scrollLeft();
-              lastTop = target.scrollTop();
-              clearTimeout(stopTimer);
-              return stopTimer = null;
-            };
-          })(this), 100);
-          distX = x - lastLeft;
-          distY = y - lastTop;
-          window.scrollRunning = true;
-          if (window.scrollRunningTimer != null) {
-            clearTimeout(window.scrollRunningTimer);
-            window.scrollRunningTimer = null;
-          }
-          window.scrollRunningTimer = setTimeout((function(_this) {
-            return function() {
-              return window.scrollRunning = false;
-            };
-          })(this), 100);
-          return requestAnimationFrame((function(_this) {
-            return function() {
-              var s;
-              window.eventAction.thisPage().handleScrollEvent(distX, distY);
-              lastLeft = x;
-              lastTop = y;
-              if (scrollStack.length > 0) {
-                s = $.extend({}, scrollStack[0]);
-                scrollStack.shift();
-                return _scroll.call(_this, target, s.x, s.y);
-              } else {
-                return window.scrollRunning = false;
-              }
-            };
-          })(this));
-        };
+        var distX, distY, target, x, y;
+        e.preventDefault();
+        e.stopPropagation();
         target = $(e.target);
         x = target.scrollLeft();
         y = target.scrollTop();
-        if ((window.scrollRunning != null) && window.scrollRunning) {
-          scrollStack.push({
-            x: x,
-            y: y
-          });
+        if (((window.scrollRunning != null) && window.scrollRunning) || !RunCommon.enabledScroll()) {
           return;
         }
         if ((window.skipScrollEvent != null) && window.skipScrollEvent) {
           window.skipScrollEvent = false;
           return;
         }
-        e.preventDefault();
-        e.stopPropagation();
-        if (!RunCommon.enabledScroll()) {
-          return;
+        distX = x - lastLeft;
+        distY = y - lastTop;
+        window.scrollRunning = true;
+        if (window.scrollRunningTimer != null) {
+          clearTimeout(window.scrollRunningTimer);
+          window.scrollRunningTimer = null;
         }
-        return _scroll.call(_this, target, x, y);
+        window.scrollRunningTimer = setTimeout(function() {
+          window.scrollRunning = false;
+          RunCommon.initHandleScrollView();
+          lastLeft = target.scrollLeft();
+          lastTop = target.scrollTop();
+          clearTimeout(window.scrollRunningTimer);
+          return window.scrollRunningTimer = null;
+        }, 100);
+        return requestAnimationFrame(function() {
+          window.eventAction.thisPage().handleScrollEvent(distX, distY);
+          lastLeft = x;
+          lastTop = y;
+          return window.scrollRunning = false;
+        });
       };
     })(this));
   };

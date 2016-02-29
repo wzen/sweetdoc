@@ -202,59 +202,41 @@ class RunCommon
   @setupScrollEvent = ->
     lastLeft = window.scrollHandleWrapper.scrollLeft()
     lastTop = window.scrollHandleWrapper.scrollTop()
-    stopTimer = null
-    scrollStack = []
 
     window.scrollHandleWrapper.off('scroll').on('scroll', (e) =>
-      _scroll = (target, x, y) ->
-        if stopTimer != null
-          clearTimeout(stopTimer)
-        stopTimer = setTimeout( =>
-          RunCommon.initHandleScrollView()
-          lastLeft = target.scrollLeft()
-          lastTop = target.scrollTop()
-          clearTimeout(stopTimer)
-          stopTimer = null
-        , 100)
-
-        distX = x - lastLeft
-        distY = y - lastTop
-        #console.log('distX:' + distX + ' distY:' + distY)
-        window.scrollRunning = true
-        if window.scrollRunningTimer?
-          clearTimeout(window.scrollRunningTimer)
-          window.scrollRunningTimer = null
-        window.scrollRunningTimer = setTimeout( =>
-          window.scrollRunning = false
-        , 100)
-        requestAnimationFrame( =>
-          window.eventAction.thisPage().handleScrollEvent(distX, distY)
-          lastLeft = x
-          lastTop = y
-          if scrollStack.length > 0
-            # スタックから取り出し
-            s = $.extend({}, scrollStack[0])
-            scrollStack.shift()
-            _scroll.call(@, target, s.x, s.y)
-          else
-            window.scrollRunning = false
-        )
-
+      e.preventDefault()
+      e.stopPropagation()
       target = $(e.target)
       x = target.scrollLeft()
       y = target.scrollTop()
-      if window.scrollRunning? && window.scrollRunning
-        # スタックに登録
-        scrollStack.push({x: x, y: y})
+      if (window.scrollRunning? && window.scrollRunning) || !RunCommon.enabledScroll()
+        # 動作中はイベント無視
         return
       if window.skipScrollEvent? && window.skipScrollEvent
         window.skipScrollEvent = false
         return
-      e.preventDefault()
-      e.stopPropagation()
-      if !RunCommon.enabledScroll()
-        return
-      _scroll.call(@, target, x, y)
+
+      distX = x - lastLeft
+      distY = y - lastTop
+      #console.log('distX:' + distX + ' distY:' + distY)
+      window.scrollRunning = true
+      if window.scrollRunningTimer?
+        clearTimeout(window.scrollRunningTimer)
+        window.scrollRunningTimer = null
+      window.scrollRunningTimer = setTimeout( =>
+        window.scrollRunning = false
+        RunCommon.initHandleScrollView()
+        lastLeft = target.scrollLeft()
+        lastTop = target.scrollTop()
+        clearTimeout(window.scrollRunningTimer)
+        window.scrollRunningTimer = null
+      , 100)
+      requestAnimationFrame( =>
+        window.eventAction.thisPage().handleScrollEvent(distX, distY)
+        lastLeft = x
+        lastTop = y
+        window.scrollRunning = false
+      )
     )
 
   # スクロールが有効の状態か判定
