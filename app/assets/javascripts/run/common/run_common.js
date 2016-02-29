@@ -283,8 +283,8 @@ RunCommon = (function() {
         }, 100);
         return requestAnimationFrame(function() {
           window.eventAction.thisPage().handleScrollEvent(distX, distY);
-          lastLeft = x;
-          lastTop = y;
+          lastLeft = target.scrollLeft();
+          lastTop = target.scrollTop();
           return window.scrollRunning = false;
         });
       };

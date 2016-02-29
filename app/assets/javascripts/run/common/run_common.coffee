@@ -233,8 +233,8 @@ class RunCommon
       , 100)
       requestAnimationFrame( =>
         window.eventAction.thisPage().handleScrollEvent(distX, distY)
-        lastLeft = x
-        lastTop = y
+        lastLeft = target.scrollLeft()
+        lastTop = target.scrollTop()
         window.scrollRunning = false
       )
     )
