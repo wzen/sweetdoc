@@ -1272,6 +1272,8 @@ class PreloadItemText extends CanvasItemBase
     if width <= 0 || height <= 0
       return
 
+    return 12
+
     if !@inputText?
       # Blankの場合は小さめのフォントで表示
       return 12

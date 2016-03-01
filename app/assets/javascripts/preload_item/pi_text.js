@@ -1613,6 +1613,7 @@ PreloadItemText = (function(superClass) {
     if (width <= 0 || height <= 0) {
       return;
     }
+    return 12;
     if (this.inputText == null) {
       return 12;
     }
