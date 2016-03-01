@@ -844,7 +844,6 @@ PreloadItemText = (function(superClass) {
           }
           writeBlurLength = parseInt(writeLength) - parseInt(this._beforeWriteLength);
           if (Math.abs(writeBlurLength) > 0) {
-            this.disableHandleResponse();
             this._writeTextRunning = true;
             this._beforeWriteLength = writeLength;
             this._writeBlurLength = Math.abs(writeBlurLength);
@@ -867,7 +866,6 @@ PreloadItemText = (function(superClass) {
                   return _write.call(this);
                 }
               } else {
-                this.enableHandleResponse();
                 return this._writeTextRunning = false;
               }
             };

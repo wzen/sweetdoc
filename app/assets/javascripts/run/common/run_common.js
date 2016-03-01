@@ -285,12 +285,10 @@ RunCommon = (function() {
           window.scrollRunningTimer = null;
           return window.scrollRunning = false;
         }, 3000);
-        return requestAnimationFrame(function() {
-          window.eventAction.thisPage().handleScrollEvent(distX, distY);
-          window.lastLeft = window.scrollHandleWrapper.scrollLeft();
-          window.lastTop = window.scrollHandleWrapper.scrollTop();
-          return window.scrollRunning = false;
-        });
+        window.eventAction.thisPage().handleScrollEvent(distX, distY);
+        window.lastLeft = window.scrollHandleWrapper.scrollLeft();
+        window.lastTop = window.scrollHandleWrapper.scrollTop();
+        return window.scrollRunning = false;
       };
     })(this));
   };

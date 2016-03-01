@@ -203,7 +203,6 @@ class RunCommon
   @setupScrollEvent = ->
     window.lastLeft = window.scrollHandleWrapper.scrollLeft()
     window.lastTop = window.scrollHandleWrapper.scrollTop()
-
     window.scrollHandleWrapper.off('scroll').on('scroll', (e) =>
       e.preventDefault()
       e.stopPropagation()
@@ -233,12 +232,10 @@ class RunCommon
         window.scrollRunningTimer = null
         window.scrollRunning = false
       , 3000)
-      requestAnimationFrame( =>
-        window.eventAction.thisPage().handleScrollEvent(distX, distY)
-        window.lastLeft = window.scrollHandleWrapper.scrollLeft()
-        window.lastTop = window.scrollHandleWrapper.scrollTop()
-        window.scrollRunning = false
-      )
+      window.eventAction.thisPage().handleScrollEvent(distX, distY)
+      window.lastLeft = window.scrollHandleWrapper.scrollLeft()
+      window.lastTop = window.scrollHandleWrapper.scrollTop()
+      window.scrollRunning = false
     )
 
   # スクロールが有効の状態か判定
