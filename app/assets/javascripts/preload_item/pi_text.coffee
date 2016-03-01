@@ -634,7 +634,6 @@ class PreloadItemText extends CanvasItemBase
             @_beforeWriteLength = 0
           writeBlurLength = parseInt(writeLength) - parseInt(@_beforeWriteLength)
           if Math.abs(writeBlurLength) > 0
-            #@disableHandleResponse()
             @_writeTextRunning = true
             @_beforeWriteLength = writeLength
             @_writeBlurLength = Math.abs(writeBlurLength)
@@ -655,7 +654,6 @@ class PreloadItemText extends CanvasItemBase
                 if !@_animationFlg['startCloseAnimation']?
                   _write.call(@)
               else
-                #@enableHandleResponse()
                 @_writeTextRunning = false
             _write.call(@)
 
