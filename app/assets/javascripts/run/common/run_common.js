@@ -284,7 +284,7 @@ RunCommon = (function() {
           clearTimeout(window.scrollRunningTimer);
           window.scrollRunningTimer = null;
           return window.scrollRunning = false;
-        }, 1000);
+        }, 3000);
         return requestAnimationFrame(function() {
           window.eventAction.thisPage().handleScrollEvent(distX, distY);
           window.lastLeft = window.scrollHandleWrapper.scrollLeft();

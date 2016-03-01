@@ -93,7 +93,7 @@ div.scroll_handle_wrapper {
   box-sizing: content-box;
   -webkit-overflow-scrolling: touch;
   &.disable_inertial_scroll {
-    -webkit-overflow-scrolling: auto !important;
+    //-webkit-overflow-scrolling: auto !important;
   }
 }
 
