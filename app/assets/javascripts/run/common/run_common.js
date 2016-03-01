@@ -244,7 +244,6 @@ RunCommon = (function() {
     if (withSetupScrollEvent == null) {
       withSetupScrollEvent = true;
     }
-    window.skipScrollEvent = true;
     window.scrollHandleWrapper.scrollLeft(window.scrollHandle.width() * 0.5);
     window.scrollHandleWrapper.scrollTop(window.scrollHandle.height() * 0.5);
     if (withSetupScrollEvent) {
@@ -278,17 +277,18 @@ RunCommon = (function() {
           window.scrollRunningTimer = null;
         }
         window.scrollRunningTimer = setTimeout(function() {
-          window.scrollRunning = false;
+          window.scrollRunning = true;
           RunCommon.initHandleScrollView(false);
           window.lastLeft = window.scrollHandleWrapper.scrollLeft();
           window.lastTop = window.scrollHandleWrapper.scrollTop();
           clearTimeout(window.scrollRunningTimer);
-          return window.scrollRunningTimer = null;
+          window.scrollRunningTimer = null;
+          return window.scrollRunning = false;
         }, 100);
         return requestAnimationFrame(function() {
           window.eventAction.thisPage().handleScrollEvent(distX, distY);
-          window.lastLeft = window.scrollHandleWrapper.scrollLeft();
-          window.lastTop = window.scrollHandleWrapper.scrollTop();
+          window.lastLeft = x;
+          window.lastTop = y;
           return window.scrollRunning = false;
         });
       };

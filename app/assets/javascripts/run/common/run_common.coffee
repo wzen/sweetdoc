@@ -192,7 +192,7 @@ class RunCommon
   # Handleスクロールビューの初期化
   @initHandleScrollView = (withSetupScrollEvent = true) ->
     # スクロール位置初期化
-    window.skipScrollEvent = true
+    #window.skipScrollEvent = true
     window.scrollHandleWrapper.scrollLeft(window.scrollHandle.width() * 0.5)
     window.scrollHandleWrapper.scrollTop(window.scrollHandle.height() * 0.5)
     if withSetupScrollEvent
@@ -225,17 +225,18 @@ class RunCommon
         clearTimeout(window.scrollRunningTimer)
         window.scrollRunningTimer = null
       window.scrollRunningTimer = setTimeout( =>
-        window.scrollRunning = false
+        window.scrollRunning = true
         RunCommon.initHandleScrollView(false)
         window.lastLeft = window.scrollHandleWrapper.scrollLeft()
         window.lastTop = window.scrollHandleWrapper.scrollTop()
         clearTimeout(window.scrollRunningTimer)
         window.scrollRunningTimer = null
+        window.scrollRunning = false
       , 100)
       requestAnimationFrame( =>
         window.eventAction.thisPage().handleScrollEvent(distX, distY)
-        window.lastLeft = window.scrollHandleWrapper.scrollLeft()
-        window.lastTop = window.scrollHandleWrapper.scrollTop()
+        window.lastLeft = x
+        window.lastTop = y
         window.scrollRunning = false
       )
     )
