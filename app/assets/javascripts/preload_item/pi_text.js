@@ -387,7 +387,6 @@ PreloadItemText = (function(superClass) {
       left: 0
     };
     this._freeHandDrawPadding = 5;
-    this._fontMeatureCache = {};
     this._fixedTextAlpha = null;
     this._defaultWorkWidth = {};
   }
@@ -1535,10 +1534,11 @@ PreloadItemText = (function(superClass) {
   };
 
   _calcWordMeasure = function(char, fontSize, fontFamily) {
-    var fontSizeKey, mi, nCanvas, nContext, writedImage;
+    var cache, fontSizeKey, mi, nCanvas, nContext, writedImage;
     fontSizeKey = "" + fontSize;
-    if ((this._fontMeatureCache[fontSizeKey] != null) && (this._fontMeatureCache[fontSizeKey][fontFamily] != null) && (this._fontMeatureCache[fontSizeKey][fontFamily][char] != null)) {
-      return this._fontMeatureCache[fontSizeKey][fontFamily][char];
+    cache = this.loadCache(['fontMeatureCache', fontSizeKey, fontFamily.replace(' ', '_'), char]);
+    if (cache != null) {
+      return cache;
     }
     nCanvas = document.createElement('canvas');
     nCanvas.width = 500;
@@ -1550,13 +1550,7 @@ PreloadItemText = (function(superClass) {
     nContext.fillText(char, 0, 0);
     writedImage = nContext.getImageData(0, 0, nCanvas.width, nCanvas.height);
     mi = _measureImage.call(this, writedImage);
-    if (this._fontMeatureCache[fontSizeKey] == null) {
-      this._fontMeatureCache[fontSizeKey] = {};
-    }
-    if (this._fontMeatureCache[fontSizeKey][fontFamily] == null) {
-      this._fontMeatureCache[fontSizeKey][fontFamily] = {};
-    }
-    this._fontMeatureCache[fontSizeKey][fontFamily][char] = mi;
+    this.saveCache(['fontMeatureCache', fontSizeKey, fontFamily.replace(' ', '_'), char], mi);
     return mi;
   };
 

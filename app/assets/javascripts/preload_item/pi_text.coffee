@@ -278,7 +278,6 @@ class PreloadItemText extends CanvasItemBase
     @freeHandDrawPaths = null
     @freeHandTextOffset = {top: 0, left: 0}
     @_freeHandDrawPadding = 5
-    @_fontMeatureCache = {}
     @_fixedTextAlpha = null
     @_defaultWorkWidth = {}
 
@@ -1205,10 +1204,10 @@ class PreloadItemText extends CanvasItemBase
 
   _calcWordMeasure = (char, fontSize, fontFamily) ->
     fontSizeKey = "#{fontSize}"
-    if @_fontMeatureCache[fontSizeKey]? && @_fontMeatureCache[fontSizeKey][fontFamily]? && @_fontMeatureCache[fontSizeKey][fontFamily][char]?
-      return @_fontMeatureCache[fontSizeKey][fontFamily][char]
+    cache = @loadCache(['fontMeatureCache', fontSizeKey, fontFamily.replace(' ', '_'), char])
+    if cache?
+      return cache
 
-      
     nCanvas = document.createElement('canvas')
     nCanvas.width = 500
     nCanvas.height = 500
@@ -1223,12 +1222,7 @@ class PreloadItemText extends CanvasItemBase
 #    if window.debug
 #      console.log('char: ' + char + ' textWidth:' + mi.width + ' textHeight:' + mi.height)
 
-    if !@_fontMeatureCache[fontSizeKey]?
-      @_fontMeatureCache[fontSizeKey] = {}
-    if !@_fontMeatureCache[fontSizeKey][fontFamily]?
-      @_fontMeatureCache[fontSizeKey][fontFamily] = {}
-    @_fontMeatureCache[fontSizeKey][fontFamily][char] = mi
-
+    @saveCache(['fontMeatureCache', fontSizeKey, fontFamily.replace(' ', '_'), char], mi)
     return mi
 
   _measureImage = (_writedImage) ->
