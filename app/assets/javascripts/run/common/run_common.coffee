@@ -226,15 +226,15 @@ class RunCommon
       window.scrollRunningTimer = setTimeout( =>
         window.scrollRunning = false
         RunCommon.initHandleScrollView()
-        lastLeft = target.scrollLeft()
-        lastTop = target.scrollTop()
+        lastLeft = window.scrollHandleWrapper.scrollLeft()
+        lastTop = window.scrollHandleWrapper.scrollTop()
         clearTimeout(window.scrollRunningTimer)
         window.scrollRunningTimer = null
       , 100)
       requestAnimationFrame( =>
         window.eventAction.thisPage().handleScrollEvent(distX, distY)
-        lastLeft = target.scrollLeft()
-        lastTop = target.scrollTop()
+        lastLeft = window.scrollHandleWrapper.scrollLeft()
+        lastTop = window.scrollHandleWrapper.scrollTop()
         window.scrollRunning = false
       )
     )

@@ -276,15 +276,15 @@ RunCommon = (function() {
         window.scrollRunningTimer = setTimeout(function() {
           window.scrollRunning = false;
           RunCommon.initHandleScrollView();
-          lastLeft = target.scrollLeft();
-          lastTop = target.scrollTop();
+          lastLeft = window.scrollHandleWrapper.scrollLeft();
+          lastTop = window.scrollHandleWrapper.scrollTop();
           clearTimeout(window.scrollRunningTimer);
           return window.scrollRunningTimer = null;
         }, 100);
         return requestAnimationFrame(function() {
           window.eventAction.thisPage().handleScrollEvent(distX, distY);
-          lastLeft = target.scrollLeft();
-          lastTop = target.scrollTop();
+          lastLeft = window.scrollHandleWrapper.scrollLeft();
+          lastTop = window.scrollHandleWrapper.scrollTop();
           return window.scrollRunning = false;
         });
       };
