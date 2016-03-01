@@ -632,6 +632,8 @@ class PreloadItemText extends CanvasItemBase
             @_beforeWriteLength = 0
           writeBlurLength = parseInt(writeLength) - parseInt(@_beforeWriteLength)
           if Math.abs(writeBlurLength) > 0
+            if window.debug
+              console.log('write word')
             @_writeTextRunning = true
             @_beforeWriteLength = writeLength
             @_writeBlurLength = Math.abs(writeBlurLength)
@@ -652,9 +654,7 @@ class PreloadItemText extends CanvasItemBase
                 , 10)
               else
                 @_writeTextRunning = false
-            requestAnimationFrame( =>
-              _write.call(@)
-            )
+            _write.call(@)
 
     if opt.progress >= opt.progressMax && @showWithAnimation && !@_animationFlg['startCloseAnimation']?
       if @_writeTextTimer?
@@ -1067,31 +1067,31 @@ class PreloadItemText extends CanvasItemBase
         context.globalAlpha = @_fixedTextAlpha
     else if methodName == 'writeText'
       if @_forward
-        ga = null
+        ga = 1
         if writingLength == 0 || idx > writingLength
           ga = 0
-        else if idx <= writingLength - @_writeBlurLength
-          ga = 1
-        else
-          ga = @_alphaDiff / @_writeBlurLength + ((writingLength - idx) / @_writeBlurLength)
-          if ga < 0
-            ga = 0
-          if ga > 1
-            ga = 1
+#        else if idx <= writingLength - @_writeBlurLength
+#          ga = 1
+#        else
+#          ga = @_alphaDiff / @_writeBlurLength + ((writingLength - idx) / @_writeBlurLength)
+#          if ga < 0
+#            ga = 0
+#          if ga > 1
+#            ga = 1
         #console.log('ga:' + ga + ' _alphaDiff:' + @_alphaDiff + ' _writeBlurLength:' + @_writeBlurLength + ' idx:' + idx)
         context.globalAlpha = ga
       else
-        ga = null
+        ga = 1
         if writingLength == 0 || idx > writingLength + @_writeBlurLength
           ga = 0
-        else if idx <= writingLength
-          ga = 1
-        else
-          ga = 1 - (@_alphaDiff / @_writeBlurLength + ((idx - writingLength) / @_writeBlurLength))
-          if ga < 0
-            ga = 0
-          if ga > 1
-            ga = 1
+#        else if idx <= writingLength
+#          ga = 1
+#        else
+#          ga = 1 - (@_alphaDiff / @_writeBlurLength + ((idx - writingLength) / @_writeBlurLength))
+#          if ga < 0
+#            ga = 0
+#          if ga > 1
+#            ga = 1
         context.globalAlpha = ga
 
   _writeLength = (column, writingLength, wordSum) ->

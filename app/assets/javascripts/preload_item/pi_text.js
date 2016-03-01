@@ -842,6 +842,9 @@ PreloadItemText = (function(superClass) {
           }
           writeBlurLength = parseInt(writeLength) - parseInt(this._beforeWriteLength);
           if (Math.abs(writeBlurLength) > 0) {
+            if (window.debug) {
+              console.log('write word');
+            }
             this._writeTextRunning = true;
             this._beforeWriteLength = writeLength;
             this._writeBlurLength = Math.abs(writeBlurLength);
@@ -868,11 +871,7 @@ PreloadItemText = (function(superClass) {
                 return this._writeTextRunning = false;
               }
             };
-            requestAnimationFrame((function(_this) {
-              return function() {
-                return _write.call(_this);
-              };
-            })(this));
+            _write.call(this);
           }
         }
       }
@@ -1372,35 +1371,15 @@ PreloadItemText = (function(superClass) {
       }
     } else if (methodName === 'writeText') {
       if (this._forward) {
-        ga = null;
+        ga = 1;
         if (writingLength === 0 || idx > writingLength) {
           ga = 0;
-        } else if (idx <= writingLength - this._writeBlurLength) {
-          ga = 1;
-        } else {
-          ga = this._alphaDiff / this._writeBlurLength + ((writingLength - idx) / this._writeBlurLength);
-          if (ga < 0) {
-            ga = 0;
-          }
-          if (ga > 1) {
-            ga = 1;
-          }
         }
         return context.globalAlpha = ga;
       } else {
-        ga = null;
+        ga = 1;
         if (writingLength === 0 || idx > writingLength + this._writeBlurLength) {
           ga = 0;
-        } else if (idx <= writingLength) {
-          ga = 1;
-        } else {
-          ga = 1 - (this._alphaDiff / this._writeBlurLength + ((idx - writingLength) / this._writeBlurLength));
-          if (ga < 0) {
-            ga = 0;
-          }
-          if (ga > 1) {
-            ga = 1;
-          }
         }
         return context.globalAlpha = ga;
       }
