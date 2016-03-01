@@ -310,8 +310,8 @@ class EventBase extends Extend
         (plusY < 0 && @_forwardDirections.top)
           plusY = -plusY
 
-      if !isIosAccess
-        # 「-webkit-overflow-scrolling: touch;」が効かないため調整
+      if !isIosAccess || window.scrollHandleWrapper.hasClass('disable_inertial_scroll')
+        # 「-webkit-overflow-scrolling: touch;」が効かないor無効の場合、調整
         @stepValue += (plusX + plusY) * 4.0
       else
         @stepValue += plusX + plusY
