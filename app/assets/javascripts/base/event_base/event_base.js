@@ -389,7 +389,11 @@ EventBase = (function(superClass) {
       if ((plusY > 0 && !this._forwardDirections.bottom) || (plusY < 0 && this._forwardDirections.top)) {
         plusY = -plusY;
       }
-      this.stepValue += plusX + plusY;
+      if (!isIosAccess) {
+        this.stepValue += (plusX + plusY) * 4.0;
+      } else {
+        this.stepValue += plusX + plusY;
+      }
       this.forward = plusX + plusY >= 0;
     }
     sPoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);

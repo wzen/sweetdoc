@@ -11,7 +11,6 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :touch_if_guest
   after_action :store_location
-  helper_method :mobile_access?
 
   def init_const
     # Constantの設定
@@ -20,6 +19,7 @@ class ApplicationController < ActionController::Base
     gon.locale = I18n.locale
     gon.user_logined = user_signed_in?
     gon.is_mobile_access = mobile_access?
+    gon.is_ios_access = ios_access?
   end
 
   def const_values(const_class, obj)
@@ -152,6 +152,11 @@ class ApplicationController < ActionController::Base
   def mobile_access?
     ua = request.env["HTTP_USER_AGENT"]
     return ua.include?('Mobile') || ua.include?('Android')
+  end
+
+  def ios_access?
+    ua = request.env["HTTP_USER_AGENT"]
+    return ["iPhone", "iPad", "iPod"].find{|s| ua.include?(s)}
   end
 
   protected

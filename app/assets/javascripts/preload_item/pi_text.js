@@ -587,7 +587,6 @@ PreloadItemText = (function(superClass) {
     this._time = 0;
     this._pertime = 1;
     this.disableHandleResponse();
-    _balloonStyle.call(this, this._context);
     return requestAnimationFrame((function(_this) {
       return function() {
         return _startOpenAnimation.call(_this, callback);
@@ -599,6 +598,11 @@ PreloadItemText = (function(superClass) {
     var emt, fontSize, height, progressPercent, step1, step2, step3, timemax, width, writingLength, x, y;
     if (callback == null) {
       callback = null;
+    }
+    if (this._canvas == null) {
+      this._canvas = document.getElementById(this.canvasElementId());
+      this._context = this._canvas.getContext('2d');
+      this._context.save();
     }
     emt = this.getJQueryElement();
     x = null;
@@ -672,6 +676,7 @@ PreloadItemText = (function(superClass) {
         };
       })(this));
     } else {
+      this._context.restore();
       this.enableHandleResponse();
       if (callback != null) {
         return callback();
@@ -686,12 +691,6 @@ PreloadItemText = (function(superClass) {
     this._time = 0;
     this._pertime = 1;
     this.disableHandleResponse();
-    if (this._canvas == null) {
-      this._canvas = document.getElementById(this.canvasElementId());
-      this._context = this._canvas.getContext('2d');
-      this._context.save();
-    }
-    _balloonStyle.call(this, this._context);
     return requestAnimationFrame((function(_this) {
       return function() {
         return _startCloseAnimation.call(_this, callback);
@@ -700,11 +699,10 @@ PreloadItemText = (function(superClass) {
   };
 
   _startCloseAnimation = function(callback) {
-    var canvas, context, emt, fontSize, height, progressPercent, step1, step2, step3, timemax, width, x, y;
+    var emt, fontSize, height, progressPercent, step1, step2, step3, timemax, width, x, y;
     if (callback == null) {
       callback = null;
     }
-    this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
     emt = this.getJQueryElement();
     x = null;
     y = null;
@@ -767,6 +765,7 @@ PreloadItemText = (function(superClass) {
         this._fixedTextAlpha = progressPercent;
       }
     }
+    this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
     _drawBalloon.call(this, this._context, x, y, width, height, this._canvas.width, this._canvas.height);
     _drawText.call(this, this._context, this.inputText, x, y, width, height, fontSize, this.inputText.length);
     this._time += this._pertime;
@@ -777,9 +776,7 @@ PreloadItemText = (function(superClass) {
         };
       })(this));
     } else {
-      canvas = document.getElementById(this.canvasElementId());
-      context = canvas.getContext('2d');
-      context.clearRect(0, 0, canvas.width, canvas.height);
+      this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
       this.enableHandleResponse();
       if (!this._isFinishedEvent) {
         this.finishEvent();
@@ -837,16 +834,10 @@ PreloadItemText = (function(superClass) {
     this.showAnimationType = this.showAnimationType__after;
     this._forward = opt.forward;
     if (this.showWithAnimation && (this._animationFlg['startOpenAnimation'] == null)) {
-      if (this._canvas == null) {
-        this._canvas = document.getElementById(this.canvasElementId());
-        this._context = this._canvas.getContext('2d');
-        this._context.save();
-      }
       this.startOpenAnimation((function(_this) {
         return function() {
           _this._animationFlg['startOpenAnimation'] = true;
-          _this.resetProgress();
-          return _this._context.restore();
+          return _this.resetProgress();
         };
       })(this));
     } else {
@@ -865,10 +856,7 @@ PreloadItemText = (function(superClass) {
             this._writeBlurLength = Math.abs(writeBlurLength);
             this._alphaDiff = 0;
             _write = function() {
-              var canvas, context;
               _setTextStyle.call(this);
-              canvas = document.getElementById(this.canvasElementId());
-              context = canvas.getContext('2d');
               _drawTextAndBalloonToCanvas.call(this, this.inputText, writeLength);
               this._alphaDiff += this._writeBlurLength / 5;
               if (this._alphaDiff <= this._writeBlurLength) {

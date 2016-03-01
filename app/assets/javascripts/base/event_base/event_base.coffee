@@ -310,7 +310,11 @@ class EventBase extends Extend
         (plusY < 0 && @_forwardDirections.top)
           plusY = -plusY
 
-      @stepValue += plusX + plusY
+      if !isIosAccess
+        # 「-webkit-overflow-scrolling: touch;」が効かないため調整
+        @stepValue += (plusX + plusY) * 4.0
+      else
+        @stepValue += plusX + plusY
       @forward = plusX + plusY >= 0
 
     sPoint = parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])

@@ -442,11 +442,15 @@ class PreloadItemText extends CanvasItemBase
     @_time = 0
     @_pertime = 1
     @disableHandleResponse()
-    _balloonStyle.call(@, @_context)
     requestAnimationFrame( =>
       _startOpenAnimation.call(@, callback)
     )
   _startOpenAnimation = (callback = null) ->
+    if !@_canvas?
+      @_canvas = document.getElementById(@canvasElementId())
+      @_context = @_canvas.getContext('2d')
+      @_context.save()
+
     emt = @getJQueryElement()
     x = null
     y = null
@@ -504,6 +508,7 @@ class PreloadItemText extends CanvasItemBase
         _startOpenAnimation.call(@, callback)
       )
     else
+      @_context.restore()
       @enableHandleResponse()
       if callback?
         callback()
@@ -512,16 +517,10 @@ class PreloadItemText extends CanvasItemBase
     @_time = 0
     @_pertime = 1
     @disableHandleResponse()
-    if !@_canvas?
-      @_canvas = document.getElementById(@canvasElementId())
-      @_context = @_canvas.getContext('2d')
-      @_context.save()
-    _balloonStyle.call(@, @_context)
     requestAnimationFrame( =>
       _startCloseAnimation.call(@, callback)
     )
   _startCloseAnimation = (callback = null) ->
-    @_context.clearRect(0, 0, @_canvas.width, @_canvas.height)
     emt = @getJQueryElement()
     x = null
     y = null
@@ -571,9 +570,8 @@ class PreloadItemText extends CanvasItemBase
         @_fixedBalloonAlpha = progressPercent
         @_fixedTextAlpha = progressPercent
 
+    @_context.clearRect(0, 0, @_canvas.width, @_canvas.height)
     _drawBalloon.call(@, @_context, x, y, width, height, @_canvas.width, @_canvas.height)
-#    if window.debug
-#      console.log('startCloseAnimation -- x:' + x + ' y:' + y + ' width:' + width + ' height:' + height)
     _drawText.call(@, @_context, @inputText, x, y, width, height, fontSize, @inputText.length)
     @_time += @_pertime
     if @_time <= timemax
@@ -581,9 +579,7 @@ class PreloadItemText extends CanvasItemBase
         _startCloseAnimation.call(@, callback)
       )
     else
-      canvas = document.getElementById(@canvasElementId())
-      context = canvas.getContext('2d')
-      context.clearRect(0, 0, canvas.width, canvas.height)
+      @_context.clearRect(0, 0, @_canvas.width, @_canvas.height)
       @enableHandleResponse()
       if !@_isFinishedEvent
         # 終了イベント
@@ -629,14 +625,9 @@ class PreloadItemText extends CanvasItemBase
     @showAnimationType = @showAnimationType__after
     @_forward = opt.forward
     if @showWithAnimation && !@_animationFlg['startOpenAnimation']?
-      if !@_canvas?
-        @_canvas = document.getElementById(@canvasElementId())
-        @_context = @_canvas.getContext('2d')
-        @_context.save()
       @startOpenAnimation( =>
         @_animationFlg['startOpenAnimation'] = true
         @resetProgress()
-        @_context.restore()
       )
     else
       if opt.progress < opt.progressMax && @inputText? && @inputText.length > 0
@@ -654,8 +645,6 @@ class PreloadItemText extends CanvasItemBase
             @_alphaDiff = 0
             _write = ->
               _setTextStyle.call(@)
-              canvas = document.getElementById(@canvasElementId())
-              context = canvas.getContext('2d')
               _drawTextAndBalloonToCanvas.call(@ , @inputText, writeLength)
               @_alphaDiff += @_writeBlurLength / 5
               if @_alphaDiff <= @_writeBlurLength
@@ -1229,6 +1218,7 @@ class PreloadItemText extends CanvasItemBase
     if @_fontMeatureCache[fontSizeKey]? && @_fontMeatureCache[fontSizeKey][fontFamily]? && @_fontMeatureCache[fontSizeKey][fontFamily][char]?
       return @_fontMeatureCache[fontSizeKey][fontFamily][char]
 
+      
     nCanvas = document.createElement('canvas')
     nCanvas.width = 500
     nCanvas.height = 500
