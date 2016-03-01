@@ -240,17 +240,21 @@ RunCommon = (function() {
     })(this));
   };
 
-  RunCommon.initHandleScrollView = function() {
+  RunCommon.initHandleScrollView = function(withSetupScrollEvent) {
+    if (withSetupScrollEvent == null) {
+      withSetupScrollEvent = true;
+    }
     window.skipScrollEvent = true;
     window.scrollHandleWrapper.scrollLeft(window.scrollHandle.width() * 0.5);
     window.scrollHandleWrapper.scrollTop(window.scrollHandle.height() * 0.5);
-    return this.setupScrollEvent();
+    if (withSetupScrollEvent) {
+      return this.setupScrollEvent();
+    }
   };
 
   RunCommon.setupScrollEvent = function() {
-    var lastLeft, lastTop;
-    lastLeft = window.scrollHandleWrapper.scrollLeft();
-    lastTop = window.scrollHandleWrapper.scrollTop();
+    window.lastLeft = window.scrollHandleWrapper.scrollLeft();
+    window.lastTop = window.scrollHandleWrapper.scrollTop();
     return window.scrollHandleWrapper.off('scroll').on('scroll', (function(_this) {
       return function(e) {
         var distX, distY, target, x, y;
@@ -266,8 +270,8 @@ RunCommon = (function() {
           window.skipScrollEvent = false;
           return;
         }
-        distX = x - lastLeft;
-        distY = y - lastTop;
+        distX = x - window.lastLeft;
+        distY = y - window.lastTop;
         window.scrollRunning = true;
         if (window.scrollRunningTimer != null) {
           clearTimeout(window.scrollRunningTimer);
@@ -275,16 +279,16 @@ RunCommon = (function() {
         }
         window.scrollRunningTimer = setTimeout(function() {
           window.scrollRunning = false;
-          RunCommon.initHandleScrollView();
-          lastLeft = window.scrollHandleWrapper.scrollLeft();
-          lastTop = window.scrollHandleWrapper.scrollTop();
+          RunCommon.initHandleScrollView(false);
+          window.lastLeft = window.scrollHandleWrapper.scrollLeft();
+          window.lastTop = window.scrollHandleWrapper.scrollTop();
           clearTimeout(window.scrollRunningTimer);
           return window.scrollRunningTimer = null;
         }, 100);
         return requestAnimationFrame(function() {
           window.eventAction.thisPage().handleScrollEvent(distX, distY);
-          lastLeft = window.scrollHandleWrapper.scrollLeft();
-          lastTop = window.scrollHandleWrapper.scrollTop();
+          window.lastLeft = window.scrollHandleWrapper.scrollLeft();
+          window.lastTop = window.scrollHandleWrapper.scrollTop();
           return window.scrollRunning = false;
         });
       };

@@ -190,18 +190,19 @@ class RunCommon
     )
 
   # Handleスクロールビューの初期化
-  @initHandleScrollView = ->
+  @initHandleScrollView = (withSetupScrollEvent = true) ->
     # スクロール位置初期化
     window.skipScrollEvent = true
     window.scrollHandleWrapper.scrollLeft(window.scrollHandle.width() * 0.5)
     window.scrollHandleWrapper.scrollTop(window.scrollHandle.height() * 0.5)
-    # スクロールイベント設定
-    @setupScrollEvent()
+    if withSetupScrollEvent
+      # スクロールイベント設定
+      @setupScrollEvent()
 
   # スクロールイベントの初期化
   @setupScrollEvent = ->
-    lastLeft = window.scrollHandleWrapper.scrollLeft()
-    lastTop = window.scrollHandleWrapper.scrollTop()
+    window.lastLeft = window.scrollHandleWrapper.scrollLeft()
+    window.lastTop = window.scrollHandleWrapper.scrollTop()
 
     window.scrollHandleWrapper.off('scroll').on('scroll', (e) =>
       e.preventDefault()
@@ -216,8 +217,8 @@ class RunCommon
         window.skipScrollEvent = false
         return
 
-      distX = x - lastLeft
-      distY = y - lastTop
+      distX = x - window.lastLeft
+      distY = y - window.lastTop
       #console.log('distX:' + distX + ' distY:' + distY)
       window.scrollRunning = true
       if window.scrollRunningTimer?
@@ -225,16 +226,16 @@ class RunCommon
         window.scrollRunningTimer = null
       window.scrollRunningTimer = setTimeout( =>
         window.scrollRunning = false
-        RunCommon.initHandleScrollView()
-        lastLeft = window.scrollHandleWrapper.scrollLeft()
-        lastTop = window.scrollHandleWrapper.scrollTop()
+        RunCommon.initHandleScrollView(false)
+        window.lastLeft = window.scrollHandleWrapper.scrollLeft()
+        window.lastTop = window.scrollHandleWrapper.scrollTop()
         clearTimeout(window.scrollRunningTimer)
         window.scrollRunningTimer = null
       , 100)
       requestAnimationFrame( =>
         window.eventAction.thisPage().handleScrollEvent(distX, distY)
-        lastLeft = window.scrollHandleWrapper.scrollLeft()
-        lastTop = window.scrollHandleWrapper.scrollTop()
+        window.lastLeft = window.scrollHandleWrapper.scrollLeft()
+        window.lastTop = window.scrollHandleWrapper.scrollTop()
         window.scrollRunning = false
       )
     )
