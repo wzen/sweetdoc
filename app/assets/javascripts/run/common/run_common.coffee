@@ -232,11 +232,13 @@ class RunCommon
         clearTimeout(window.scrollRunningTimer)
         window.scrollRunningTimer = null
         window.scrollRunning = false
-      , 100)
+      , 1000)
       requestAnimationFrame( =>
         window.eventAction.thisPage().handleScrollEvent(distX, distY)
-        window.lastLeft = x
-        window.lastTop = y
+        window.lastLeft = window.scrollHandleWrapper.scrollLeft()
+        window.lastTop = window.scrollHandleWrapper.scrollTop()
+        #window.lastLeft = x
+        #window.lastTop = y
         window.scrollRunning = false
       )
     )

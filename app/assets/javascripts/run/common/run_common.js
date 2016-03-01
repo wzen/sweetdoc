@@ -284,11 +284,11 @@ RunCommon = (function() {
           clearTimeout(window.scrollRunningTimer);
           window.scrollRunningTimer = null;
           return window.scrollRunning = false;
-        }, 100);
+        }, 1000);
         return requestAnimationFrame(function() {
           window.eventAction.thisPage().handleScrollEvent(distX, distY);
-          window.lastLeft = x;
-          window.lastTop = y;
+          window.lastLeft = window.scrollHandleWrapper.scrollLeft();
+          window.lastTop = window.scrollHandleWrapper.scrollTop();
           return window.scrollRunning = false;
         });
       };
