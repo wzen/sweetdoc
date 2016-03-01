@@ -645,12 +645,10 @@ class PreloadItemText extends CanvasItemBase
             _write = ->
               @_context.putImageData(@loadCache('writeTextBlurCache'), 0, 0)
               _drawText.call(@, @_context, @inputText, 0, 0, @_canvas.width, @_canvas.height, @fontSize, writeLength)
-              @_alphaDiff += 0.2
+              @_alphaDiff += 0.25
               if @_alphaDiff <= 1
-                requestAnimationFrame( =>
-                  if !@_animationFlg['startCloseAnimation']?
-                    _write.call(@)
-                )
+                if !@_animationFlg['startCloseAnimation']?
+                  _write.call(@)
               else
                 @enableHandleResponse()
                 @_writeTextRunning = false

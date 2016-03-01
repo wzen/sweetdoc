@@ -855,15 +855,11 @@ PreloadItemText = (function(superClass) {
             _write = function() {
               this._context.putImageData(this.loadCache('writeTextBlurCache'), 0, 0);
               _drawText.call(this, this._context, this.inputText, 0, 0, this._canvas.width, this._canvas.height, this.fontSize, writeLength);
-              this._alphaDiff += 0.2;
+              this._alphaDiff += 0.25;
               if (this._alphaDiff <= 1) {
-                return requestAnimationFrame((function(_this) {
-                  return function() {
-                    if (_this._animationFlg['startCloseAnimation'] == null) {
-                      return _write.call(_this);
-                    }
-                  };
-                })(this));
+                if (this._animationFlg['startCloseAnimation'] == null) {
+                  return _write.call(this);
+                }
               } else {
                 this.enableHandleResponse();
                 return this._writeTextRunning = false;
