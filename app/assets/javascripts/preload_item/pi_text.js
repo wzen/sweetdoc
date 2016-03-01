@@ -850,25 +850,8 @@ PreloadItemText = (function(superClass) {
             _write = function() {
               _setTextStyle.call(this);
               _drawTextAndBalloonToCanvas.call(this, this.inputText, writeLength);
-              this._alphaDiff += this._writeBlurLength / 5;
-              if (this._alphaDiff <= this._writeBlurLength) {
-                if (this._writeTextTimer != null) {
-                  clearTimeout(this._writeTextTimer);
-                  this._writeTextTimer = null;
-                }
-                return this._writeTextTimer = setTimeout((function(_this) {
-                  return function() {
-                    return requestAnimationFrame(function() {
-                      if (_this._animationFlg['startCloseAnimation'] == null) {
-                        return _write.call(_this);
-                      }
-                    });
-                  };
-                })(this), 10);
-              } else {
-                this._writeTextRunning = false;
-                return this.enableHandleResponse();
-              }
+              this.enableHandleResponse();
+              return this._writeTextRunning = false;
             };
             _write.call(this);
           }
@@ -1373,34 +1356,14 @@ PreloadItemText = (function(superClass) {
         ga = 1;
         if (writingLength === 0 || idx > writingLength) {
           ga = 0;
-        } else if (idx <= writingLength - this._writeBlurLength) {
-          ga = 1;
-        } else {
-          ga = this._alphaDiff / this._writeBlurLength + ((writingLength - idx) / this._writeBlurLength);
-          if (ga < 0) {
-            ga = 0;
-          }
-          if (ga > 1) {
-            ga = 1;
-          }
         }
-        return context.globalAlpha = Math.round(ga * 10) / 10;
+        return context.globalAlpha = ga;
       } else {
         ga = 1;
         if (writingLength === 0 || idx > writingLength + this._writeBlurLength) {
           ga = 0;
-        } else if (idx <= writingLength) {
-          ga = 1;
-        } else {
-          ga = 1 - (this._alphaDiff / this._writeBlurLength + ((idx - writingLength) / this._writeBlurLength));
-          if (ga < 0) {
-            ga = 0;
-          }
-          if (ga > 1) {
-            ga = 1;
-          }
         }
-        return context.globalAlpha = Math.round(ga * 10) / 10;
+        return context.globalAlpha = ga;
       }
     }
   };

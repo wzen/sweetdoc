@@ -640,20 +640,21 @@ class PreloadItemText extends CanvasItemBase
             _write = ->
               _setTextStyle.call(@)
               _drawTextAndBalloonToCanvas.call(@ , @inputText, writeLength)
-              @_alphaDiff += @_writeBlurLength / 5
-              if @_alphaDiff <= @_writeBlurLength
-                if @_writeTextTimer?
-                  clearTimeout(@_writeTextTimer)
-                  @_writeTextTimer = null
-                @_writeTextTimer = setTimeout( =>
-                  requestAnimationFrame( =>
-                    if !@_animationFlg['startCloseAnimation']?
-                      _write.call(@)
-                  )
-                , 10)
-              else
-                @_writeTextRunning = false
-                @enableHandleResponse()
+#              @_alphaDiff += @_writeBlurLength / 5
+#              if @_alphaDiff <= @_writeBlurLength
+#                if @_writeTextTimer?
+#                  clearTimeout(@_writeTextTimer)
+#                  @_writeTextTimer = null
+#                @_writeTextTimer = setTimeout( =>
+#                  requestAnimationFrame( =>
+#                    if !@_animationFlg['startCloseAnimation']?
+#                      _write.call(@)
+#                  )
+#                , 10)
+#              else
+#                @_writeTextRunning = false
+              @enableHandleResponse()
+              @_writeTextRunning = false
             _write.call(@)
 
     if opt.progress >= opt.progressMax && @showWithAnimation && !@_animationFlg['startCloseAnimation']?
@@ -1070,29 +1071,29 @@ class PreloadItemText extends CanvasItemBase
         ga = 1
         if writingLength == 0 || idx > writingLength
           ga = 0
-        else if idx <= writingLength - @_writeBlurLength
-          ga = 1
-        else
-          ga = @_alphaDiff / @_writeBlurLength + ((writingLength - idx) / @_writeBlurLength)
-          if ga < 0
-            ga = 0
-          if ga > 1
-            ga = 1
+#        else if idx <= writingLength - @_writeBlurLength
+#          ga = 1
+#        else
+#          ga = @_alphaDiff / @_writeBlurLength + ((writingLength - idx) / @_writeBlurLength)
+#          if ga < 0
+#            ga = 0
+#          if ga > 1
+#            ga = 1
         #console.log('ga:' + ga + ' _alphaDiff:' + @_alphaDiff + ' _writeBlurLength:' + @_writeBlurLength + ' idx:' + idx)
-        context.globalAlpha = Math.round(ga * 10) / 10
+        context.globalAlpha = ga
       else
         ga = 1
         if writingLength == 0 || idx > writingLength + @_writeBlurLength
           ga = 0
-        else if idx <= writingLength
-          ga = 1
-        else
-          ga = 1 - (@_alphaDiff / @_writeBlurLength + ((idx - writingLength) / @_writeBlurLength))
-          if ga < 0
-            ga = 0
-          if ga > 1
-            ga = 1
-        context.globalAlpha = Math.round(ga * 10) / 10
+#        else if idx <= writingLength
+#          ga = 1
+#        else
+#          ga = 1 - (@_alphaDiff / @_writeBlurLength + ((idx - writingLength) / @_writeBlurLength))
+#          if ga < 0
+#            ga = 0
+#          if ga > 1
+#            ga = 1
+        context.globalAlpha = ga
 
   _writeLength = (column, writingLength, wordSum) ->
     v = parseInt(writingLength - wordSum)
