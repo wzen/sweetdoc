@@ -820,7 +820,7 @@ PreloadItemText = (function(superClass) {
   };
 
   PreloadItemText.prototype.writeText = function(opt) {
-    var _write, adjustProgress, writeBlurLength, writeLength;
+    var _write, adjustProgress, cache, writeBlurLength, writeLength;
     this.showWithAnimation = this.showWithAnimation__after;
     this.showAnimationType = this.showAnimationType__after;
     this._forward = opt.forward;
@@ -829,7 +829,8 @@ PreloadItemText = (function(superClass) {
         return function() {
           _this._animationFlg['startOpenAnimation'] = true;
           _this.resetProgress();
-          return _this.fontSize = _calcFontSizeAbout.call(_this, _this.inputText, _this._canvas.width, _this._canvas.height, _this.isFixedFontSize, _this.drawHorizontal);
+          _this.fontSize = _calcFontSizeAbout.call(_this, _this.inputText, _this._canvas.width, _this._canvas.height, _this.isFixedFontSize, _this.drawHorizontal);
+          return _setTextStyle.call(_this);
         };
       })(this));
     } else {
@@ -847,13 +848,18 @@ PreloadItemText = (function(superClass) {
             this._writeTextRunning = true;
             this._beforeWriteLength = writeLength;
             this._writeBlurLength = Math.abs(writeBlurLength);
-            _setTextStyle.call(this);
-            this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
-            _drawBalloon.call(this, this._context, 0, 0, this._canvas.width, this._canvas.height);
-            this.saveCache('writeTextBlurCache', this._context.getImageData(0, 0, this._canvas.width, this._canvas.height));
+            cache = this.loadCache('writeTextBlurCache');
+            if (cache != null) {
+              this._context.putImageData(cache, 0, 0);
+            } else {
+              this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
+              _drawBalloon.call(this, this._context, 0, 0, this._canvas.width, this._canvas.height);
+              this.saveCache('writeTextBlurCache', this._context.getImageData(0, 0, this._canvas.width, this._canvas.height));
+              cache = this.loadCache('writeTextBlurCache');
+            }
             this._alphaDiff = 0;
             _write = function() {
-              this._context.putImageData(this.loadCache('writeTextBlurCache'), 0, 0);
+              this._context.putImageData(cache, 0, 0);
               _drawText.call(this, this._context, this.inputText, 0, 0, this._canvas.width, this._canvas.height, this.fontSize, writeLength);
               this._alphaDiff += 0.25;
               if (this._alphaDiff <= 1) {

@@ -622,6 +622,7 @@ class PreloadItemText extends CanvasItemBase
         @_animationFlg['startOpenAnimation'] = true
         @resetProgress()
         @fontSize = _calcFontSizeAbout.call(@, @inputText, @_canvas.width, @_canvas.height, @isFixedFontSize, @drawHorizontal)
+        _setTextStyle.call(@)
       )
     else
       if opt.progress < opt.progressMax && @inputText? && @inputText.length > 0
@@ -637,13 +638,17 @@ class PreloadItemText extends CanvasItemBase
             @_writeTextRunning = true
             @_beforeWriteLength = writeLength
             @_writeBlurLength = Math.abs(writeBlurLength)
-            _setTextStyle.call(@)
-            @_context.clearRect(0, 0, @_canvas.width, @_canvas.height)
-            _drawBalloon.call(@, @_context, 0, 0, @_canvas.width, @_canvas.height)
-            @saveCache('writeTextBlurCache', @_context.getImageData(0, 0, @_canvas.width, @_canvas.height))
+            cache = @loadCache('writeTextBlurCache')
+            if cache?
+              @_context.putImageData(cache, 0, 0)
+            else
+              @_context.clearRect(0, 0, @_canvas.width, @_canvas.height)
+              _drawBalloon.call(@, @_context, 0, 0, @_canvas.width, @_canvas.height)
+              @saveCache('writeTextBlurCache', @_context.getImageData(0, 0, @_canvas.width, @_canvas.height))
+              cache = @loadCache('writeTextBlurCache')
             @_alphaDiff = 0
             _write = ->
-              @_context.putImageData(@loadCache('writeTextBlurCache'), 0, 0)
+              @_context.putImageData(cache, 0, 0)
               _drawText.call(@, @_context, @inputText, 0, 0, @_canvas.width, @_canvas.height, @fontSize, writeLength)
               @_alphaDiff += 0.25
               if @_alphaDiff <= 1
