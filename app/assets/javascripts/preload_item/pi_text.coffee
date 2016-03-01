@@ -716,14 +716,10 @@ class PreloadItemText extends CanvasItemBase
       return
 
     # キャッシュ参照
-    if @_drawBalloonPathCacle? &&
-      @_drawBalloonPathCacle[x]? &&
-      @_drawBalloonPathCacle[x][y]? &&
-      @_drawBalloonPathCacle[x][y][width]? &&
-      @_drawBalloonPathCacle[x][y][width][height]? &&
-      @_drawBalloonPathCacle[x][y][width][height][@balloonType]
-        context.putImageData(@_drawBalloonPathCacle[x][y][width][height][@balloonType], 0, 0)
-        return
+    cache = @loadCache(['drawBalloonPathCacle', x, y, width, height, @balloonType])
+    if cache?
+      context.putImageData(cache, 0, 0)
+      return
 
     _drawArc = ->
       # 円
@@ -950,17 +946,7 @@ class PreloadItemText extends CanvasItemBase
     else if @balloonType == @constructor.BalloonType.FREE
       _drawFreeHand.call(@)
     # キャッシュ保存
-    if !@_drawBalloonPathCacle?
-      @_drawBalloonPathCacle = {}
-    if !@_drawBalloonPathCacle[x]?
-      @_drawBalloonPathCacle[x] = {}
-    if !@_drawBalloonPathCacle[x][y]?
-      @_drawBalloonPathCacle[x][y] = {}
-    if !@_drawBalloonPathCacle[x][y][width]?
-      @_drawBalloonPathCacle[x][y][width] = {}
-    if !@_drawBalloonPathCacle[x][y][width][height]?
-      @_drawBalloonPathCacle[x][y][width][height] = {}
-    @_drawBalloonPathCacle[x][y][width][height][@balloonType] = context.getImageData(0, 0, width, height)
+    @saveCache(['drawBalloonPathCacle', x, y, width, height, @balloonType], context.getImageData(0, 0, width, height))
     context.restore()
 
   _adjustFreeHandPath = (drawPaths) ->

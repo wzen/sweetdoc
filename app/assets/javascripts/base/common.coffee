@@ -62,31 +62,6 @@ class Common
         return ret
     return _func(obj1, obj2)
 
-  @diffEventObject: (obj1, obj2) ->
-    _func = (o1, o2) ->
-      if !o1?
-        return o2
-      if typeof o1 != typeof o2
-        return o2
-      else if typeof o1 != 'object'
-        if o1 != o2
-          return o2
-        else
-          # 一致
-          return null
-      else
-        ret = {}
-        for k, v of o2
-          f = _func(o1[k], v)
-          if f?
-            ret[k] = f
-        return if Object.keys(ret).length > 0 then ret else null
-    obj = _func(obj1, obj2)
-    if window.debug
-      console.log('diffEventObject')
-      console.log(obj)
-    return obj
-
   # オブジェクトがHTML要素か判定
   @isElement: (obj) ->
     return (typeof obj == "object") && (obj.length == 1) && obj.get? && (obj.get(0).nodeType ==1) && (typeof obj.get(0).style == "object") && (typeof obj.get(0).ownerDocument == "object")

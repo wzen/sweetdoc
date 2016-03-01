@@ -245,6 +245,21 @@ class EventBase extends Extend
   clickTargetElement: ->
     @getJQueryElement()
 
+  saveCache: (key, value) ->
+    if !@['__saveCache']?
+      @['__saveCache'] = {}
+    if $.isArray(key)
+      key = key.join('__')
+    @['__saveCache'][key + ''] = value
+    return true
+
+  loadCache: (key) ->
+    if !@['__saveCache']?
+      return null
+    if $.isArray(key)
+      key = key.join('__')
+    return @['__saveCache'][key + '']
+
   # チャプター開始前イベント
   willChapter: ->
     # インスタンスの状態を保存

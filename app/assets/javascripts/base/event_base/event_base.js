@@ -323,6 +323,27 @@ EventBase = (function(superClass) {
     return this.getJQueryElement();
   };
 
+  EventBase.prototype.saveCache = function(key, value) {
+    if (this['__saveCache'] == null) {
+      this['__saveCache'] = {};
+    }
+    if ($.isArray(key)) {
+      key = key.join('__');
+    }
+    this['__saveCache'][key + ''] = value;
+    return true;
+  };
+
+  EventBase.prototype.loadCache = function(key) {
+    if (this['__saveCache'] == null) {
+      return null;
+    }
+    if ($.isArray(key)) {
+      key = key.join('__');
+    }
+    return this['__saveCache'][key + ''];
+  };
+
   EventBase.prototype.willChapter = function() {
     this.saveToFootprint(this.id, true, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
     this.setModifyBeforeAndAfterVar();

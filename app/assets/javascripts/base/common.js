@@ -80,45 +80,6 @@ Common = (function() {
     return _func(obj1, obj2);
   };
 
-  Common.diffEventObject = function(obj1, obj2) {
-    var _func, obj;
-    _func = function(o1, o2) {
-      var f, k, ret, v;
-      if (o1 == null) {
-        return o2;
-      }
-      if (typeof o1 !== typeof o2) {
-        return o2;
-      } else if (typeof o1 !== 'object') {
-        if (o1 !== o2) {
-          return o2;
-        } else {
-          return null;
-        }
-      } else {
-        ret = {};
-        for (k in o2) {
-          v = o2[k];
-          f = _func(o1[k], v);
-          if (f != null) {
-            ret[k] = f;
-          }
-        }
-        if (Object.keys(ret).length > 0) {
-          return ret;
-        } else {
-          return null;
-        }
-      }
-    };
-    obj = _func(obj1, obj2);
-    if (window.debug) {
-      console.log('diffEventObject');
-      console.log(obj);
-    }
-    return obj;
-  };
-
   Common.isElement = function(obj) {
     return (typeof obj === "object") && (obj.length === 1) && (obj.get != null) && (obj.get(0).nodeType === 1) && (typeof obj.get(0).style === "object") && (typeof obj.get(0).ownerDocument === "object");
   };

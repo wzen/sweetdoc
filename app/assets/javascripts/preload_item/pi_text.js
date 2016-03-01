@@ -943,7 +943,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _drawBalloon = function(context, x, y, width, height, canvasWidth, canvasHeight) {
-    var _drawArc, _drawBArc, _drawBRect, _drawFreeHand, _drawRect, _drawShout, _drawThink;
+    var _drawArc, _drawBArc, _drawBRect, _drawFreeHand, _drawRect, _drawShout, _drawThink, cache;
     if (canvasWidth == null) {
       canvasWidth = width;
     }
@@ -956,8 +956,9 @@ PreloadItemText = (function(superClass) {
     if (width <= 0 || height <= 0) {
       return;
     }
-    if ((this._drawBalloonPathCacle != null) && (this._drawBalloonPathCacle[x] != null) && (this._drawBalloonPathCacle[x][y] != null) && (this._drawBalloonPathCacle[x][y][width] != null) && (this._drawBalloonPathCacle[x][y][width][height] != null) && this._drawBalloonPathCacle[x][y][width][height][this.balloonType]) {
-      context.putImageData(this._drawBalloonPathCacle[x][y][width][height][this.balloonType], 0, 0);
+    cache = this.loadCache(['drawBalloonPathCacle', x, y, width, height, this.balloonType]);
+    if (cache != null) {
+      context.putImageData(cache, 0, 0);
       return;
     }
     _drawArc = function() {
@@ -1198,22 +1199,7 @@ PreloadItemText = (function(superClass) {
     } else if (this.balloonType === this.constructor.BalloonType.FREE) {
       _drawFreeHand.call(this);
     }
-    if (this._drawBalloonPathCacle == null) {
-      this._drawBalloonPathCacle = {};
-    }
-    if (this._drawBalloonPathCacle[x] == null) {
-      this._drawBalloonPathCacle[x] = {};
-    }
-    if (this._drawBalloonPathCacle[x][y] == null) {
-      this._drawBalloonPathCacle[x][y] = {};
-    }
-    if (this._drawBalloonPathCacle[x][y][width] == null) {
-      this._drawBalloonPathCacle[x][y][width] = {};
-    }
-    if (this._drawBalloonPathCacle[x][y][width][height] == null) {
-      this._drawBalloonPathCacle[x][y][width][height] = {};
-    }
-    this._drawBalloonPathCacle[x][y][width][height][this.balloonType] = context.getImageData(0, 0, width, height);
+    this.saveCache(['drawBalloonPathCacle', x, y, width, height, this.balloonType], context.getImageData(0, 0, width, height));
     return context.restore();
   };
 
