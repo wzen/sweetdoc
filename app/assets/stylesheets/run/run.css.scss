@@ -91,6 +91,7 @@ div.scroll_handle_wrapper {
   padding-bottom: 30px;
   background-color: transparent;
   box-sizing: content-box;
+  -webkit-overflow-scrolling: touch;
 }
 
 div.scroll_contents {
