@@ -835,7 +835,7 @@ PreloadItemText = (function(superClass) {
     this._forward = opt.forward;
     if (this.showWithAnimation && (this._animationFlg['startOpenAnimation'] == null)) {
       if (!window.isWorkTable) {
-        window.scrollHandleWrapper.addClass('disable_inertial_scroll');
+        window.scrollHandleWrapper.removeClass('enable_inertial_scroll');
       }
       this.startOpenAnimation((function(_this) {
         return function() {
@@ -898,7 +898,7 @@ PreloadItemText = (function(superClass) {
       this.startCloseAnimation();
       this._animationFlg['startCloseAnimation'] = true;
       if (!window.isWorkTable) {
-        return window.scrollHandleWrapper.removeClass('disable_inertial_scroll');
+        return window.scrollHandleWrapper.addClass('enable_inertial_scroll');
       }
     }
   };
