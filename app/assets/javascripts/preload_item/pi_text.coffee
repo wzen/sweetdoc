@@ -625,6 +625,8 @@ class PreloadItemText extends CanvasItemBase
     @showAnimationType = @showAnimationType__after
     @_forward = opt.forward
     if @showWithAnimation && !@_animationFlg['startOpenAnimation']?
+      if !window.isWorkTable
+        window.scrollHandleWrapper.addClass('disable_inertial_scroll')
       @startOpenAnimation( =>
         @_animationFlg['startOpenAnimation'] = true
         @resetProgress()
@@ -670,6 +672,8 @@ class PreloadItemText extends CanvasItemBase
       @_writeTextRunning = false
       @startCloseAnimation()
       @_animationFlg['startCloseAnimation'] = true
+      if !window.isWorkTable
+        window.scrollHandleWrapper.removeClass('disable_inertial_scroll')
 
   _setTextStyle = ->
     canvas = document.getElementById(@canvasElementId())

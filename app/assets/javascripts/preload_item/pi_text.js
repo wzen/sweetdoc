@@ -834,6 +834,9 @@ PreloadItemText = (function(superClass) {
     this.showAnimationType = this.showAnimationType__after;
     this._forward = opt.forward;
     if (this.showWithAnimation && (this._animationFlg['startOpenAnimation'] == null)) {
+      if (!window.isWorkTable) {
+        window.scrollHandleWrapper.addClass('disable_inertial_scroll');
+      }
       this.startOpenAnimation((function(_this) {
         return function() {
           _this._animationFlg['startOpenAnimation'] = true;
@@ -893,7 +896,10 @@ PreloadItemText = (function(superClass) {
       }
       this._writeTextRunning = false;
       this.startCloseAnimation();
-      return this._animationFlg['startCloseAnimation'] = true;
+      this._animationFlg['startCloseAnimation'] = true;
+      if (!window.isWorkTable) {
+        return window.scrollHandleWrapper.removeClass('disable_inertial_scroll');
+      }
     }
   };
 
