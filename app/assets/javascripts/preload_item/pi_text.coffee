@@ -621,6 +621,7 @@ class PreloadItemText extends CanvasItemBase
       @startOpenAnimation( =>
         @_animationFlg['startOpenAnimation'] = true
         @resetProgress()
+        @fontSize = _calcFontSizeAbout.call(@, @inputText, @_canvas.width, @_canvas.height, @isFixedFontSize, @drawHorizontal)
       )
     else
       if opt.progress < opt.progressMax && @inputText? && @inputText.length > 0
@@ -636,25 +637,23 @@ class PreloadItemText extends CanvasItemBase
             @_writeTextRunning = true
             @_beforeWriteLength = writeLength
             @_writeBlurLength = Math.abs(writeBlurLength)
+            _setTextStyle.call(@)
+            @_context.clearRect(0, 0, @_canvas.width, @_canvas.height)
+            _drawBalloon.call(@, @_context, 0, 0, @_canvas.width, @_canvas.height)
+            @saveCache('writeTextBlurCache', @_context.getImageData(0, 0, @_canvas.width, @_canvas.height))
             @_alphaDiff = 0
             _write = ->
-              _setTextStyle.call(@)
-              _drawTextAndBalloonToCanvas.call(@ , @inputText, writeLength)
-#              @_alphaDiff += @_writeBlurLength / 5
-#              if @_alphaDiff <= @_writeBlurLength
-#                if @_writeTextTimer?
-#                  clearTimeout(@_writeTextTimer)
-#                  @_writeTextTimer = null
-#                @_writeTextTimer = setTimeout( =>
-#                  requestAnimationFrame( =>
-#                    if !@_animationFlg['startCloseAnimation']?
-#                      _write.call(@)
-#                  )
-#                , 10)
-#              else
-#                @_writeTextRunning = false
-              @enableHandleResponse()
-              @_writeTextRunning = false
+              @_context.putImageData(@loadCache('writeTextBlurCache'), 0, 0)
+              _drawText.call(@, @_context, @inputText, 0, 0, @_canvas.width, @_canvas.height, @fontSize, writeLength)
+              @_alphaDiff += 0.2
+              if @_alphaDiff <= 1
+                requestAnimationFrame( =>
+                  if !@_animationFlg['startCloseAnimation']?
+                    _write.call(@)
+                )
+              else
+                @enableHandleResponse()
+                @_writeTextRunning = false
             _write.call(@)
 
     if opt.progress >= opt.progressMax && @showWithAnimation && !@_animationFlg['startCloseAnimation']?
@@ -1071,28 +1070,28 @@ class PreloadItemText extends CanvasItemBase
         ga = 1
         if writingLength == 0 || idx > writingLength
           ga = 0
-#        else if idx <= writingLength - @_writeBlurLength
-#          ga = 1
-#        else
-#          ga = @_alphaDiff / @_writeBlurLength + ((writingLength - idx) / @_writeBlurLength)
-#          if ga < 0
-#            ga = 0
-#          if ga > 1
-#            ga = 1
+        else if idx <= writingLength - @_writeBlurLength
+          ga = 1
+        else
+          ga = @_alphaDiff
+          if ga < 0
+            ga = 0
+          if ga > 1
+            ga = 1
         #console.log('ga:' + ga + ' _alphaDiff:' + @_alphaDiff + ' _writeBlurLength:' + @_writeBlurLength + ' idx:' + idx)
         context.globalAlpha = ga
       else
         ga = 1
         if writingLength == 0 || idx > writingLength + @_writeBlurLength
           ga = 0
-#        else if idx <= writingLength
-#          ga = 1
-#        else
-#          ga = 1 - (@_alphaDiff / @_writeBlurLength + ((idx - writingLength) / @_writeBlurLength))
-#          if ga < 0
-#            ga = 0
-#          if ga > 1
-#            ga = 1
+        else if idx <= writingLength
+          ga = 1
+        else
+          ga = @_alphaDiff
+          if ga < 0
+            ga = 0
+          if ga > 1
+            ga = 1
         context.globalAlpha = ga
 
   _writeLength = (column, writingLength, wordSum) ->

@@ -828,7 +828,8 @@ PreloadItemText = (function(superClass) {
       this.startOpenAnimation((function(_this) {
         return function() {
           _this._animationFlg['startOpenAnimation'] = true;
-          return _this.resetProgress();
+          _this.resetProgress();
+          return _this.fontSize = _calcFontSizeAbout.call(_this, _this.inputText, _this._canvas.width, _this._canvas.height, _this.isFixedFontSize, _this.drawHorizontal);
         };
       })(this));
     } else {
@@ -846,12 +847,27 @@ PreloadItemText = (function(superClass) {
             this._writeTextRunning = true;
             this._beforeWriteLength = writeLength;
             this._writeBlurLength = Math.abs(writeBlurLength);
+            _setTextStyle.call(this);
+            this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
+            _drawBalloon.call(this, this._context, 0, 0, this._canvas.width, this._canvas.height);
+            this.saveCache('writeTextBlurCache', this._context.getImageData(0, 0, this._canvas.width, this._canvas.height));
             this._alphaDiff = 0;
             _write = function() {
-              _setTextStyle.call(this);
-              _drawTextAndBalloonToCanvas.call(this, this.inputText, writeLength);
-              this.enableHandleResponse();
-              return this._writeTextRunning = false;
+              this._context.putImageData(this.loadCache('writeTextBlurCache'), 0, 0);
+              _drawText.call(this, this._context, this.inputText, 0, 0, this._canvas.width, this._canvas.height, this.fontSize, writeLength);
+              this._alphaDiff += 0.2;
+              if (this._alphaDiff <= 1) {
+                return requestAnimationFrame((function(_this) {
+                  return function() {
+                    if (_this._animationFlg['startCloseAnimation'] == null) {
+                      return _write.call(_this);
+                    }
+                  };
+                })(this));
+              } else {
+                this.enableHandleResponse();
+                return this._writeTextRunning = false;
+              }
             };
             _write.call(this);
           }
@@ -1356,12 +1372,32 @@ PreloadItemText = (function(superClass) {
         ga = 1;
         if (writingLength === 0 || idx > writingLength) {
           ga = 0;
+        } else if (idx <= writingLength - this._writeBlurLength) {
+          ga = 1;
+        } else {
+          ga = this._alphaDiff;
+          if (ga < 0) {
+            ga = 0;
+          }
+          if (ga > 1) {
+            ga = 1;
+          }
         }
         return context.globalAlpha = ga;
       } else {
         ga = 1;
         if (writingLength === 0 || idx > writingLength + this._writeBlurLength) {
           ga = 0;
+        } else if (idx <= writingLength) {
+          ga = 1;
+        } else {
+          ga = this._alphaDiff;
+          if (ga < 0) {
+            ga = 0;
+          }
+          if (ga > 1) {
+            ga = 1;
+          }
         }
         return context.globalAlpha = ga;
       }
