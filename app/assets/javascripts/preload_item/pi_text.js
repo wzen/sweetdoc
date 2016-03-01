@@ -842,9 +842,7 @@ PreloadItemText = (function(superClass) {
           }
           writeBlurLength = parseInt(writeLength) - parseInt(this._beforeWriteLength);
           if (Math.abs(writeBlurLength) > 0) {
-            if (window.debug) {
-              console.log('write word');
-            }
+            this.disableHandleResponse();
             this._writeTextRunning = true;
             this._beforeWriteLength = writeLength;
             this._writeBlurLength = Math.abs(writeBlurLength);
@@ -868,7 +866,8 @@ PreloadItemText = (function(superClass) {
                   };
                 })(this), 10);
               } else {
-                return this._writeTextRunning = false;
+                this._writeTextRunning = false;
+                return this.enableHandleResponse();
               }
             };
             _write.call(this);
@@ -1374,14 +1373,34 @@ PreloadItemText = (function(superClass) {
         ga = 1;
         if (writingLength === 0 || idx > writingLength) {
           ga = 0;
+        } else if (idx <= writingLength - this._writeBlurLength) {
+          ga = 1;
+        } else {
+          ga = this._alphaDiff / this._writeBlurLength + ((writingLength - idx) / this._writeBlurLength);
+          if (ga < 0) {
+            ga = 0;
+          }
+          if (ga > 1) {
+            ga = 1;
+          }
         }
-        return context.globalAlpha = ga;
+        return context.globalAlpha = Math.round(ga * 10) / 10;
       } else {
         ga = 1;
         if (writingLength === 0 || idx > writingLength + this._writeBlurLength) {
           ga = 0;
+        } else if (idx <= writingLength) {
+          ga = 1;
+        } else {
+          ga = 1 - (this._alphaDiff / this._writeBlurLength + ((idx - writingLength) / this._writeBlurLength));
+          if (ga < 0) {
+            ga = 0;
+          }
+          if (ga > 1) {
+            ga = 1;
+          }
         }
-        return context.globalAlpha = ga;
+        return context.globalAlpha = Math.round(ga * 10) / 10;
       }
     }
   };
