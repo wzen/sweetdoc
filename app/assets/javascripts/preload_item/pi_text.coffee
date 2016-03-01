@@ -484,11 +484,9 @@ class PreloadItemText extends CanvasItemBase
         y = @_step2.y - @_step2.y * progressPercent
         width = @_step2.w + (@itemSize.w - @_step2.w) * progressPercent
         height = @_step2.h + (@itemSize.h - @_step2.h) * progressPercent
-      fontSize = _calcFontSizeAbout.call(@, @inputText, width, height, @isFixedFontSize, @drawHorizontal)
     else if @showAnimationType == @constructor.ShowAnimationType.FADE
       timemax = 30
       step1 = 1
-      fontSize = @fontSize
       x = 0
       y = 0
       width = @_canvas.width
@@ -499,8 +497,6 @@ class PreloadItemText extends CanvasItemBase
 
     @_context.clearRect(0, 0, @_canvas.width, @_canvas.height)
     _drawBalloon.call(@, @_context, x, y, width, height,  @_canvas.width, @_canvas.height)
-    writingLength = if @getEventMethodName() == 'changeText' then @inputText.length else 0
-    _drawText.call(@, @_context, @inputText, x, y, width, height, fontSize, writingLength)
     @_time += @_pertime
     if @_time <= timemax
       requestAnimationFrame( =>
@@ -525,7 +521,6 @@ class PreloadItemText extends CanvasItemBase
     y = null
     width = null
     height = null
-    fontSize = null
     if @showAnimationType == @constructor.ShowAnimationType.POPUP
       timemax = 8
       step1 = 0.2
@@ -555,11 +550,9 @@ class PreloadItemText extends CanvasItemBase
         y = @_step2.y + (@itemSize.h * 0.5 - @_step2.y) * progressPercent
         width = @_step2.w - @_step2.w * progressPercent
         height = @_step2.h - @_step2.h * progressPercent
-      fontSize = _calcFontSizeAbout.call(@, @inputText, width, height, @isFixedFontSize, @drawHorizontal)
     else if @showAnimationType == @constructor.ShowAnimationType.FADE
       timemax = 30
       step1 = 1
-      fontSize = @fontSize
       x = 0
       y = 0
       width = @_canvas.width
@@ -571,7 +564,6 @@ class PreloadItemText extends CanvasItemBase
 
     @_context.clearRect(0, 0, @_canvas.width, @_canvas.height)
     _drawBalloon.call(@, @_context, x, y, width, height, @_canvas.width, @_canvas.height)
-    _drawText.call(@, @_context, @inputText, x, y, width, height, fontSize, @inputText.length)
     @_time += @_pertime
     if @_time <= timemax
       requestAnimationFrame( =>
@@ -1272,8 +1264,6 @@ class PreloadItemText extends CanvasItemBase
     if width <= 0 || height <= 0
       return
 
-    return 12
-
     if !@inputText?
       # Blankの場合は小さめのフォントで表示
       return 12
@@ -1285,6 +1275,11 @@ class PreloadItemText extends CanvasItemBase
     if !isFixedFontSize
       # フォントサイズを計算
       newLineCount = text.split('\n').length - 1
+      # キャッシュ確認
+      cache = @loadCache(['calcFontSizeAboutCache', newLineCount, width, height, drawHorizontal, @showBalloon])
+      if cache?
+        return cache
+
       if drawHorizontal == @constructor.WriteDirectionType.HORIZONTAL
         w = height
         h = width
@@ -1301,6 +1296,8 @@ class PreloadItemText extends CanvasItemBase
         fontSize = 1
       if @showBalloon && fontSize >= 6
         fontSize -= 5
+      # キャッシュ保存
+      @saveCache(['calcFontSizeAboutCache', newLineCount, width, height, drawHorizontal, @showBalloon], fontSize)
       return fontSize
     else
       return @fixedFontSize

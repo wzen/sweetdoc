@@ -594,7 +594,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _startOpenAnimation = function(callback) {
-    var emt, fontSize, height, progressPercent, step1, step2, step3, timemax, width, writingLength, x, y;
+    var emt, height, progressPercent, step1, step2, step3, timemax, width, x, y;
     if (callback == null) {
       callback = null;
     }
@@ -649,11 +649,9 @@ PreloadItemText = (function(superClass) {
         width = this._step2.w + (this.itemSize.w - this._step2.w) * progressPercent;
         height = this._step2.h + (this.itemSize.h - this._step2.h) * progressPercent;
       }
-      fontSize = _calcFontSizeAbout.call(this, this.inputText, width, height, this.isFixedFontSize, this.drawHorizontal);
     } else if (this.showAnimationType === this.constructor.ShowAnimationType.FADE) {
       timemax = 30;
       step1 = 1;
-      fontSize = this.fontSize;
       x = 0;
       y = 0;
       width = this._canvas.width;
@@ -665,8 +663,6 @@ PreloadItemText = (function(superClass) {
     }
     this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
     _drawBalloon.call(this, this._context, x, y, width, height, this._canvas.width, this._canvas.height);
-    writingLength = this.getEventMethodName() === 'changeText' ? this.inputText.length : 0;
-    _drawText.call(this, this._context, this.inputText, x, y, width, height, fontSize, writingLength);
     this._time += this._pertime;
     if (this._time <= timemax) {
       return requestAnimationFrame((function(_this) {
@@ -698,7 +694,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _startCloseAnimation = function(callback) {
-    var emt, fontSize, height, progressPercent, step1, step2, step3, timemax, width, x, y;
+    var emt, height, progressPercent, step1, step2, step3, timemax, width, x, y;
     if (callback == null) {
       callback = null;
     }
@@ -707,7 +703,6 @@ PreloadItemText = (function(superClass) {
     y = null;
     width = null;
     height = null;
-    fontSize = null;
     if (this.showAnimationType === this.constructor.ShowAnimationType.POPUP) {
       timemax = 8;
       step1 = 0.2;
@@ -749,11 +744,9 @@ PreloadItemText = (function(superClass) {
         width = this._step2.w - this._step2.w * progressPercent;
         height = this._step2.h - this._step2.h * progressPercent;
       }
-      fontSize = _calcFontSizeAbout.call(this, this.inputText, width, height, this.isFixedFontSize, this.drawHorizontal);
     } else if (this.showAnimationType === this.constructor.ShowAnimationType.FADE) {
       timemax = 30;
       step1 = 1;
-      fontSize = this.fontSize;
       x = 0;
       y = 0;
       width = this._canvas.width;
@@ -766,7 +759,6 @@ PreloadItemText = (function(superClass) {
     }
     this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
     _drawBalloon.call(this, this._context, x, y, width, height, this._canvas.width, this._canvas.height);
-    _drawText.call(this, this._context, this.inputText, x, y, width, height, fontSize, this.inputText.length);
     this._time += this._pertime;
     if (this._time <= timemax) {
       return requestAnimationFrame((function(_this) {
@@ -1609,11 +1601,10 @@ PreloadItemText = (function(superClass) {
   };
 
   _calcFontSizeAbout = function(text, width, height, isFixedFontSize, drawHorizontal) {
-    var a, fontSize, h, newLineCount, w;
+    var a, cache, fontSize, h, newLineCount, w;
     if (width <= 0 || height <= 0) {
       return;
     }
-    return 12;
     if (this.inputText == null) {
       return 12;
     }
@@ -1621,6 +1612,10 @@ PreloadItemText = (function(superClass) {
     text = text.replace(/\n+$/g, '');
     if (!isFixedFontSize) {
       newLineCount = text.split('\n').length - 1;
+      cache = this.loadCache(['calcFontSizeAboutCache', newLineCount, width, height, drawHorizontal, this.showBalloon]);
+      if (cache != null) {
+        return cache;
+      }
       if (drawHorizontal === this.constructor.WriteDirectionType.HORIZONTAL) {
         w = height;
         h = width;
@@ -1636,6 +1631,7 @@ PreloadItemText = (function(superClass) {
       if (this.showBalloon && fontSize >= 6) {
         fontSize -= 5;
       }
+      this.saveCache(['calcFontSizeAboutCache', newLineCount, width, height, drawHorizontal, this.showBalloon], fontSize);
       return fontSize;
     } else {
       return this.fixedFontSize;
