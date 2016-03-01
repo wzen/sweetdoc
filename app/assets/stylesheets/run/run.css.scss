@@ -91,9 +91,9 @@ div.scroll_handle_wrapper {
   padding-bottom: 30px;
   background-color: transparent;
   box-sizing: content-box;
-  &.enable_inertial_scroll {
-    -webkit-overflow-scrolling: touch;
-  }
+  //&.enable_inertial_scroll {
+  //  -webkit-overflow-scrolling: touch;
+  //}
 }
 
 div.scroll_contents {

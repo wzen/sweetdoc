@@ -389,11 +389,7 @@ EventBase = (function(superClass) {
       if ((plusY > 0 && !this._forwardDirections.bottom) || (plusY < 0 && this._forwardDirections.top)) {
         plusY = -plusY;
       }
-      if (!isIosAccess || window.scrollHandleWrapper.hasClass('disable_inertial_scroll')) {
-        this.stepValue += (plusX + plusY) * 4.0;
-      } else {
-        this.stepValue += plusX + plusY;
-      }
+      this.stepValue += parseInt((plusX + plusY) * 3.5);
       this.forward = plusX + plusY >= 0;
     }
     sPoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
