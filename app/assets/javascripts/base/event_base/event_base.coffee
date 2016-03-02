@@ -74,6 +74,7 @@ class EventBase extends Extend
     @_runningClickEvent = false
     @_doPreviewLoop = false
     @_handlerFuncComplete = null
+    @_isScrollHeader = true
     @_enabledDirections = @_event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS]
     @_forwardDirections = @_event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS]
     @_specificMethodValues = @_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES]
@@ -137,6 +138,7 @@ class EventBase extends Extend
       @_skipEvent = false
       @_loopCount = 0
       @_previewTimer = null
+      @_isScrollHeader = true
       # FloatView表示
       FloatView.showWithCloseButton(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW, =>
         if @loopFinishCallback?
@@ -298,11 +300,9 @@ class EventBase extends Extend
     if @_isFinishedEvent || @_skipEvent
       # 終了済みorイベントを反応させない場合
       return
-
     # 動作済みフラグON
     if window.eventAction?
       window.eventAction.thisPage().thisChapter().doMoveChapter = true
-
     if isPreview
       # プレビュー時は1ずつ実行
       @stepValue += 1
@@ -342,14 +342,25 @@ class EventBase extends Extend
     ePoint = parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) + 1
     # スクロール指定範囲外なら反応させない
     if @stepValue < sPoint
-      # チャプター戻しガイド
-      if window.eventAction?
-        chapter = window.eventAction.thisPage().thisChapter()
-        if chapter.reverseDoMoveChapterFlgIfAllReverse()
-          window.eventAction.rewindOperationGuide.scrollEventByDistSum(sPoint - @stepValue)
+      if @_isScrollHeader
+        # チャプター戻しガイド表示
+        if window.eventAction? && window.eventAction.thisPage().getChapterIndex() > 0
+          chapter = window.eventAction.thisPage().thisChapter()
+          if chapter.reverseDoMoveChapterFlgIfAllReverse()
+            window.eventAction.rewindOperationGuide.scrollEventByDistSum(sPoint - @stepValue)
+      else
+        # イベント頭で一度実行
+        @execMethod({
+          isPreview: isPreview
+          progress: 0
+          progressMax: @progressMax()
+          forward: @forward
+        })
       @stepValue = sPoint
+      @_isScrollHeader = true
       return
     else if @stepValue >= ePoint
+      @_isScrollHeader = false
       # チャプター戻しガイドを削除
       window.eventAction.rewindOperationGuide.clear()
       @stepValue = ePoint
@@ -369,6 +380,7 @@ class EventBase extends Extend
       )
       return
 
+    @_isScrollHeader = false
     @canForward = @stepValue < ePoint
     @canReverse = @stepValue > sPoint
 
@@ -441,7 +453,7 @@ class EventBase extends Extend
   isEventHeader: ->
     if @_event?
       if @_event[EventPageValueBase.PageValueKey.ACTIONTYPE] == constant.ActionType.SCROLL
-        return parseInt(@stepValue) <= parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
+        return @_isScrollHeader
       else if @_event[EventPageValueBase.PageValueKey.ACTIONTYPE] == constant.ActionType.CLICK
         return !@_runningClickEvent
     else
