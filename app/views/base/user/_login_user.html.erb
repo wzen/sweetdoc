@@ -19,7 +19,7 @@
       <% end %>
   <% else %>
       <!-- 未ログイン-->
-      <div class="circle <%= Const::Gallery::Sidebar::USER %> guest" onclick="Common.showModalView(Constant.ModalViewType.NOTICE_LOGIN); return false;">
+      <div class="circle <%= Const::Gallery::Sidebar::USER %> guest" onclick="Common.showModalView(constant.ModalViewType.NOTICE_LOGIN); return false;">
         <%= image_tag 'gallery/sidebar/guest_user.png', size:"#{size}x#{size}" %>
       </div>
   <% end %>
