@@ -344,8 +344,9 @@ class EventBase extends Extend
     if @stepValue < sPoint
       if @_isScrollHeader
         # チャプター戻しガイド表示
-        if window.eventAction? && window.eventAction.thisPage().getChapterIndex() > 0
-          chapter = window.eventAction.thisPage().thisChapter()
+        page = window.eventAction.thisPage()
+        chapter = page.thisChapter()
+        if window.eventAction? && (window.eventAction.pageIndex > 0 || page.getChapterIndex() > 0)
           if chapter.reverseDoMoveChapterFlgIfAllReverse()
             window.eventAction.rewindOperationGuide.scrollEventByDistSum(sPoint - @stepValue)
       else

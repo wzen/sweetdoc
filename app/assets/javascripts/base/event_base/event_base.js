@@ -381,7 +381,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.scrollHandlerFunc = function(isPreview, x, y) {
-    var chapter, ePoint, plusX, plusY, sPoint;
+    var chapter, ePoint, page, plusX, plusY, sPoint;
     if (isPreview == null) {
       isPreview = false;
     }
@@ -426,8 +426,9 @@ EventBase = (function(superClass) {
     ePoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) + 1;
     if (this.stepValue < sPoint) {
       if (this._isScrollHeader) {
-        if ((window.eventAction != null) && window.eventAction.thisPage().getChapterIndex() > 0) {
-          chapter = window.eventAction.thisPage().thisChapter();
+        page = window.eventAction.thisPage();
+        chapter = page.thisChapter();
+        if ((window.eventAction != null) && (window.eventAction.pageIndex > 0 || page.getChapterIndex() > 0)) {
           if (chapter.reverseDoMoveChapterFlgIfAllReverse()) {
             window.eventAction.rewindOperationGuide.scrollEventByDistSum(sPoint - this.stepValue);
           }
