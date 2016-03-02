@@ -163,6 +163,18 @@ Chapter = (function() {
     })(this));
   };
 
+  Chapter.prototype.reverseDoMoveChapterFlgIfAllReverse = function() {
+    this.eventObjList.forEach((function(_this) {
+      return function(e) {
+        if (!e.isEventHeader()) {
+          return false;
+        }
+      };
+    })(this));
+    this.doMoveChapter = false;
+    return true;
+  };
+
   return Chapter;
 
 })();

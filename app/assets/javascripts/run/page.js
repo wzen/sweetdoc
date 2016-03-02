@@ -133,7 +133,6 @@ Page = (function() {
     if (window.runDebug) {
       console.log('Page Start');
     }
-    this.pagingGuide = new ArrowPagingGuide();
     RunCommon.setChapterNum(this.thisChapterNum());
     this.floatPageScrollHandleCanvas();
     if (this.thisChapter() != null) {
@@ -184,7 +183,10 @@ Page = (function() {
     return this.thisChapter().willChapter();
   };
 
-  Page.prototype.rewindChapter = function() {
+  Page.prototype.rewindChapter = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
     if (window.runDebug) {
       console.log('Page rewindChapter');
     }
@@ -197,7 +199,10 @@ Page = (function() {
       window.eventAction.rewindPage((function(_this) {
         return function() {
           FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0);
-          return window.runningOperation = false;
+          window.runningOperation = false;
+          if (callback != null) {
+            return callback();
+          }
         };
       })(this));
       return;
@@ -212,7 +217,10 @@ Page = (function() {
               RunCommon.setChapterNum(_this.thisChapterNum());
               _this.thisChapter().willChapter();
               FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
-              return window.runningOperation = false;
+              window.runningOperation = false;
+              if (callback != null) {
+                return callback();
+              }
             });
           } else {
             oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum());
@@ -227,26 +235,38 @@ Page = (function() {
                 RunCommon.setChapterMax(_this.getForkChapterList().length);
                 _this.thisChapter().willChapter();
                 FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
-                return window.runningOperation = false;
+                window.runningOperation = false;
+                if (callback != null) {
+                  return callback();
+                }
               });
             } else {
               beforePage = window.eventAction.beforePage();
               if (beforePage != null) {
                 return window.eventAction.rewindPage(function() {
                   FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0);
-                  return window.runningOperation = false;
+                  window.runningOperation = false;
+                  if (callback != null) {
+                    return callback();
+                  }
                 });
               } else {
                 _this.thisChapter().willChapter();
                 FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
-                return window.runningOperation = false;
+                window.runningOperation = false;
+                if (callback != null) {
+                  return callback();
+                }
               }
             }
           }
         } else {
           _this.thisChapter().willChapter();
           FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
-          return window.runningOperation = false;
+          window.runningOperation = false;
+          if (callback != null) {
+            return callback();
+          }
         }
       };
     })(this));
@@ -349,15 +369,17 @@ Page = (function() {
   };
 
   Page.prototype.handleScrollEvent = function(x, y) {
+    var v;
     if (!this.finishedAllChapters) {
       if (this.isScrollChapter()) {
         return this.thisChapter().scrollEvent(x, y);
       }
     } else {
-      if (window.eventAction.hasNextPage()) {
-        if (this.pagingGuide != null) {
-          return this.pagingGuide.scrollEvent(x, y);
-        }
+      if (window.eventAction.hasNextPage() && x + y > 0) {
+        return window.eventAction.pagingOperationGuide.scrollEvent(x, y);
+      } else if (x + y < 0) {
+        v = -(x + y);
+        return window.eventAction.rewindOperationGuide.scrollEventByDistSum(v);
       }
     }
   };

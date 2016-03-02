@@ -26,6 +26,9 @@ class EventAction
 
   # 開始イベント
   start: (callback = null) ->
+    # ページングガイド作成
+    @pagingOperationGuide = new ScrollOperationGuide(ScrollOperationGuide.Type.PAGING)
+    @rewindOperationGuide = new ScrollOperationGuide(ScrollOperationGuide.Type.REWIND, ScrollOperationGuide.Direction.REVERSE)
     # ページ数設定
     RunCommon.setPageNum(@thisPageNum())
     # フォークをMasterに設定
@@ -74,6 +77,7 @@ class EventAction
   # @param [Function] callback コールバック
   rewindPage: (callback = null) ->
     beforePageIndex = @pageIndex
+    @pagingOperationGuide.clear()
     if @pageIndex > 0
       # 前ページが存在する場合は戻す
       @pageIndex -= 1

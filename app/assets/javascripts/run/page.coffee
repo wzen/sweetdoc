@@ -106,8 +106,6 @@ class Page
   start: ->
     if window.runDebug
       console.log('Page Start')
-    # ページングガイド作成
-    @pagingGuide = new ArrowPagingGuide()
     # チャプター数設定
     RunCommon.setChapterNum(@thisChapterNum())
     # チャプター前処理
@@ -169,7 +167,7 @@ class Page
     @thisChapter().willChapter()
 
   # チャプターを戻す
-  rewindChapter: ->
+  rewindChapter: (callback = null) ->
     if window.runDebug
       console.log('Page rewindChapter')
     if window.runningOperation? && window.runningOperation
@@ -183,6 +181,8 @@ class Page
       window.eventAction.rewindPage( =>
         FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0)
         window.runningOperation = false
+        if callback?
+          callback()
       )
       return
 
@@ -196,6 +196,8 @@ class Page
             @thisChapter().willChapter()
             FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0)
             window.runningOperation = false
+            if callback?
+              callback()
           )
         else
           oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum())
@@ -218,6 +220,8 @@ class Page
               @thisChapter().willChapter()
               FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0)
               window.runningOperation = false
+              if callback?
+                callback()
             )
           else
             beforePage = window.eventAction.beforePage()
@@ -226,16 +230,22 @@ class Page
               window.eventAction.rewindPage( =>
                 FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0)
                 window.runningOperation = false
+                if callback?
+                  callback()
               )
             else
               @thisChapter().willChapter()
               FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0)
               window.runningOperation = false
+              if callback?
+                callback()
       else
         # チャプター前処理
         @thisChapter().willChapter()
         FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0)
         window.runningOperation = false
+        if callback?
+          callback()
     )
 
   # チャプターの内容をリセット
@@ -310,10 +320,13 @@ class Page
       if @isScrollChapter()
         @thisChapter().scrollEvent(x, y)
     else
-      if window.eventAction.hasNextPage()
+      if window.eventAction.hasNextPage() && x + y > 0
         # 次ページ移動ガイドを表示する
-        if @pagingGuide?
-          @pagingGuide.scrollEvent(x, y)
+        window.eventAction.pagingOperationGuide.scrollEvent(x, y)
+      else if x + y < 0
+        # チャプター戻し
+        v = -(x + y)
+        window.eventAction.rewindOperationGuide.scrollEventByDistSum(v)
 
   # スクロールチャプターか判定
   isScrollChapter: ->

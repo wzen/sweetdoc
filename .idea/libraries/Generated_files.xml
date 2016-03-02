@@ -190,7 +190,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/item.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/click.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/paging_guide/arrow_paging_guide.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/operation_guide/scroll_operation_guide.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_setting.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item_gallery/item_gallery.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item_gallery/item_gallery_common.js" />

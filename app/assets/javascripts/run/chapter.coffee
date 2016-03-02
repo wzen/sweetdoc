@@ -133,3 +133,11 @@ class Chapter
     @eventObjList.forEach((e) =>
       e._skipEvent = true
     )
+
+  reverseDoMoveChapterFlgIfAllReverse: ->
+    @eventObjList.forEach((e) =>
+      if !e.isEventHeader()
+        return false
+    )
+    @doMoveChapter = false
+    return true

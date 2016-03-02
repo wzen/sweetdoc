@@ -379,7 +379,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.scrollHandlerFunc = function(isPreview, x, y) {
-    var ePoint, plusX, plusY, sPoint;
+    var chapter, ePoint, plusX, plusY, sPoint;
     if (isPreview == null) {
       isPreview = false;
     }
@@ -423,9 +423,16 @@ EventBase = (function(superClass) {
     sPoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
     ePoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) + 1;
     if (this.stepValue < sPoint) {
+      if (window.eventAction != null) {
+        chapter = window.eventAction.thisPage().thisChapter();
+        if (chapter.reverseDoMoveChapterFlgIfAllReverse()) {
+          window.eventAction.rewindOperationGuide.scrollEventByDistSum(sPoint - this.stepValue);
+        }
+      }
       this.stepValue = sPoint;
       return;
     } else if (this.stepValue >= ePoint) {
+      window.eventAction.rewindOperationGuide.clear();
       this.stepValue = ePoint;
       this.execMethod({
         isPreview: isPreview,
@@ -520,6 +527,18 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.disableHandleResponse = function() {
     return this._skipEvent = true;
+  };
+
+  EventBase.prototype.isEventHeader = function() {
+    if (this._event != null) {
+      if (this._event[EventPageValueBase.PageValueKey.ACTIONTYPE] === constant.ActionType.SCROLL) {
+        return parseInt(this.stepValue) <= parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
+      } else if (this._event[EventPageValueBase.PageValueKey.ACTIONTYPE] === constant.ActionType.CLICK) {
+        return !this._runningClickEvent;
+      }
+    } else {
+      return true;
+    }
   };
 
   EventBase.prototype.finishEvent = function() {

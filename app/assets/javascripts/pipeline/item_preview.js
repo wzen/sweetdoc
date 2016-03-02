@@ -45,7 +45,7 @@
 //= require common_event/common_event
 //= require common_event/background_event
 //= require common_event/screen_event
-//= require common_event/paging_guide/arrow_paging_guide
+//= require common_event/operation_guide/scroll_operation_guide
 //= require item/worktable_extend/item_base_worktable_extend
 //= require item/worktable_extend/canvas_item_base_worktable_extend
 //= require item/worktable_extend/css_item_base_worktable_extend

@@ -29,6 +29,8 @@ EventAction = (function() {
     if (callback == null) {
       callback = null;
     }
+    this.pagingOperationGuide = new ScrollOperationGuide(ScrollOperationGuide.Type.PAGING);
+    this.rewindOperationGuide = new ScrollOperationGuide(ScrollOperationGuide.Type.REWIND, ScrollOperationGuide.Direction.REVERSE);
     RunCommon.setPageNum(this.thisPageNum());
     RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, window.eventAction.thisPageNum());
     RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);
@@ -87,6 +89,7 @@ EventAction = (function() {
       callback = null;
     }
     beforePageIndex = this.pageIndex;
+    this.pagingOperationGuide.clear();
     if (this.pageIndex > 0) {
       this.pageIndex -= 1;
       RunCommon.setPageNum(this.thisPageNum());

@@ -340,12 +340,18 @@ class EventBase extends Extend
 
     sPoint = parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
     ePoint = parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) + 1
-
     # スクロール指定範囲外なら反応させない
     if @stepValue < sPoint
+      # チャプター戻しガイド
+      if window.eventAction?
+        chapter = window.eventAction.thisPage().thisChapter()
+        if chapter.reverseDoMoveChapterFlgIfAllReverse()
+          window.eventAction.rewindOperationGuide.scrollEventByDistSum(sPoint - @stepValue)
       @stepValue = sPoint
       return
     else if @stepValue >= ePoint
+      # チャプター戻しガイドを削除
+      window.eventAction.rewindOperationGuide.clear()
       @stepValue = ePoint
       # 終了時に最終ステップで実行
       @execMethod({
@@ -431,6 +437,15 @@ class EventBase extends Extend
   # UIの反応を無効にする
   disableHandleResponse: ->
     @_skipEvent = true
+
+  isEventHeader: ->
+    if @_event?
+      if @_event[EventPageValueBase.PageValueKey.ACTIONTYPE] == constant.ActionType.SCROLL
+        return parseInt(@stepValue) <= parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
+      else if @_event[EventPageValueBase.PageValueKey.ACTIONTYPE] == constant.ActionType.CLICK
+        return !@_runningClickEvent
+    else
+      return true
 
   # イベントを終了する
   finishEvent: ->
