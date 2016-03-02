@@ -69,7 +69,8 @@ EventBase = (function(superClass) {
   }
 
   EventBase.prototype.changeInstanceVarByConfig = function(varName, value) {
-    return this[varName] = value;
+    this[varName] = value;
+    return this.clearAllCache();
   };
 
   EventBase.prototype.refresh = function(show, callback) {
@@ -342,6 +343,12 @@ EventBase = (function(superClass) {
       key = key.join('__');
     }
     return this['__saveCache'][key + ''];
+  };
+
+  EventBase.prototype.clearAllCache = function() {
+    if (this['__saveCache'] != null) {
+      return delete this['__saveCache'];
+    }
   };
 
   EventBase.prototype.willChapter = function() {

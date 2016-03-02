@@ -37,6 +37,7 @@ class EventBase extends Extend
   # インスタンス値セッター
   changeInstanceVarByConfig: (varName, value) ->
     @[varName] = value
+    @clearAllCache()
 
   # 変更を戻して再表示
   # @abstract
@@ -259,6 +260,10 @@ class EventBase extends Extend
     if $.isArray(key)
       key = key.join('__')
     return @['__saveCache'][key + '']
+
+  clearAllCache: ->
+    if @['__saveCache']?
+      delete @['__saveCache']
 
   # チャプター開始前イベント
   willChapter: ->
