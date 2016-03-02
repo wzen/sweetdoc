@@ -206,7 +206,7 @@ en:
     fork: 'Fork'
     chapter: 'Chapter'
   user:
-    sign_in: 'Sign in to SweetDoc'
+    sign_in: 'Sign in to Sweetdoc'
     do_sign_in: 'Sign in'
     sign_in_with_social: 'Sign In with a Social Network'
     sign_up: 'Create an account'
