@@ -13,7 +13,7 @@ EPVItem = (function(superClass) {
   EPVItem.itemSize = 'item_size';
 
   EPVItem.writeDefaultToPageValue = function(item, teNum, distId) {
-    var actionType, end, errorMes, start, writeValue;
+    var actionType, adjust, end, errorMes, start, writeValue;
     if (window.isItemPreview) {
       teNum = 1;
       distId = Common.generateId();
@@ -36,7 +36,8 @@ EPVItem = (function(superClass) {
     actionType = item.constructor.defaultActionType();
     writeValue[this.PageValueKey.ACTIONTYPE] = actionType;
     start = this.getAllScrollLength();
-    end = start + item.registCoord.length;
+    adjust = 4.0;
+    end = start + item.registCoord.length * adjust;
     if (start > end) {
       start = null;
       end = null;

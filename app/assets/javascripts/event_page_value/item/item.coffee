@@ -24,7 +24,9 @@ class EPVItem extends EventPageValueBase
     actionType = item.constructor.defaultActionType()
     writeValue[@PageValueKey.ACTIONTYPE] = actionType
     start = @getAllScrollLength()
-    end = start + item.registCoord.length
+    # FIXME: スクロールの長さは要調整
+    adjust = 4.0
+    end = start + item.registCoord.length * adjust
     if start > end
       start = null
       end = null
