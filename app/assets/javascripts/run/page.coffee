@@ -176,9 +176,16 @@ class Page
       # 二重実行防止
       return
     window.runningOperation = true
-
     # 全ガイド非表示
     @hideAllGuide()
+    if !@thisChapter()?
+      # チャプターが無い場合はページを戻す
+      window.eventAction.rewindPage( =>
+        FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0)
+        window.runningOperation = false
+      )
+      return
+
     @resetChapter(@getChapterIndex(), =>
       if !@thisChapter().doMoveChapter
         if @getChapterIndex() > 0
@@ -237,7 +244,12 @@ class Page
       console.log('Page resetChapter')
     @finishedAllChapters = false
     @finishedScrollDistSum = 0
-    @getForkChapterList()[chapterIndex].resetAllEvents(callback)
+    chapterList = @getForkChapterList()[chapterIndex]
+    if chapterList?
+      chapterList.resetAllEvents(callback)
+    else
+      if callback?
+        callback()
 
   # 全てのチャプターを戻す
   rewindAllChapters: (rewindPageIfNeed = true, callback = null) ->
@@ -247,10 +259,10 @@ class Page
       # 二重実行防止
       return
     window.runningOperation = true
-
     # 全ガイド非表示
     @hideAllGuide()
-    if !@thisChapter().doMoveChapter && rewindPageIfNeed
+    chapter = @thisChapter()
+    if !chapter? || (!chapter.doMoveChapter && rewindPageIfNeed)
       # 前ページを先頭チャプターに戻す
       beforePage = window.eventAction.beforePage()
       if beforePage?
