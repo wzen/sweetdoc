@@ -5,7 +5,7 @@ $(function() {
     window.isItemPreview = false;
     window.initDone = false;
     if (!Common.checkBlowserEnvironment()) {
-      Common.showModalView(Constant.ModalViewType.ENVIRONMENT_NOT_SUPPORT, false);
+      Common.showModalView(constant.ModalViewType.ENVIRONMENT_NOT_SUPPORT, false);
       return;
     }
     $.ajaxSetup({
@@ -39,7 +39,7 @@ $(function() {
       LocalStorage.clearWorktable();
       Timeline.refreshAllTimeline();
       OperationHistory.add(true);
-      Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);
+      Common.showModalView(constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);
       return Common.initResize();
     }
   });

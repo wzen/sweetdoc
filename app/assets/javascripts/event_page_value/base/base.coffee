@@ -62,7 +62,7 @@ class EventPageValueBase
       return 0
 
     handlerDiv = $(".handler_div", eventConfig.emt)
-    if eventConfig[@PageValueKey.ACTIONTYPE] == Constant.ActionType.SCROLL
+    if eventConfig[@PageValueKey.ACTIONTYPE] == constant.ActionType.SCROLL
       startDiv = handlerDiv.find('.scroll_point_start:first')
       start = startDiv.val()
       s = null
@@ -75,7 +75,7 @@ class EventPageValueBase
       end = endDiv.val()
       if end.length == 0
         endDiv.val(parseInt(s) + _scrollLength.call(@, eventConfig))
-    else if eventConfig[@PageValueKey.ACTIONTYPE] == Constant.ActionType.CLICK
+    else if eventConfig[@PageValueKey.ACTIONTYPE] == constant.ActionType.CLICK
       eventDuration = handlerDiv.find('.click_duration:first')
       item = window.instanceMap[eventConfig[@PageValueKey.ID]]
       if item?
@@ -159,7 +159,7 @@ class EventPageValueBase
 
       # 操作
       handlerDiv = $(".handler_div", eventConfig.emt)
-      if eventConfig[@PageValueKey.ACTIONTYPE] == Constant.ActionType.SCROLL
+      if eventConfig[@PageValueKey.ACTIONTYPE] == constant.ActionType.SCROLL
         handlerDiv.find('input[type=radio][value=scroll]').prop('checked', true)
         if eventConfig[@PageValueKey.SCROLL_POINT_START]? && eventConfig[@PageValueKey.SCROLL_POINT_END]?
           handlerDiv.find('.scroll_point_start:first').val(eventConfig[@PageValueKey.SCROLL_POINT_START])
@@ -198,7 +198,7 @@ class EventPageValueBase
             rightEmt.children('.scroll_forward:first').prop("checked", false)
             rightEmt.children('.scroll_forward:first').parent('label').hide()
 
-      else if eventConfig[@PageValueKey.ACTIONTYPE] == Constant.ActionType.CLICK
+      else if eventConfig[@PageValueKey.ACTIONTYPE] == constant.ActionType.CLICK
         handlerDiv.find('input[type=radio][value=click]').prop('checked', true)
         eventDuration = handlerDiv.find('.click_duration:first')
         if eventConfig[@PageValueKey.EVENT_DURATION]?

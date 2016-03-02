@@ -319,8 +319,8 @@ RunCommon = (function() {
       if (forceUpdate) {
         targetPages.push(i);
       } else {
-        className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', i);
-        section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+        className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', i);
+        section = $("#" + constant.Paging.ROOT_ID).find("." + className + ":first");
         if ((section == null) || section.length === 0) {
           targetPages.push(i);
         }
@@ -457,8 +457,8 @@ RunCommon = (function() {
     target = '_uploadgallery';
     window.open("about:blank", target);
     root = $('#nav');
-    $("input[name='" + Constant.Gallery.Key.PROJECT_ID + "']", root).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
-    $("input[name='" + Constant.Gallery.Key.PAGE_MAX + "']", root).val(PageValue.getPageCount());
+    $("input[name='" + constant.Gallery.Key.PROJECT_ID + "']", root).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
+    $("input[name='" + constant.Gallery.Key.PAGE_MAX + "']", root).val(PageValue.getPageCount());
     document.upload_gallery_form.target = target;
     return document.upload_gallery_form.submit();
   };

@@ -2,7 +2,7 @@ class UploadItem extends UploadBase
   # アップロード
   upload: (root, callback = null) ->
     # 入力値バリデーションチェック
-    title = $("input[name='#{Constant.ItemGallery.Key.TITLE}']", root).val()
+    title = $("input[name='#{constant.ItemGallery.Key.TITLE}']", root).val()
     if title.length == 0
       return
 
@@ -12,9 +12,9 @@ class UploadItem extends UploadBase
       fd = new FormData(document.getElementById('upload_form'))
       tags = $.map($('.select_tag a', root), (n) -> $(n).html())
       if tags?
-        fd.append(Constant.ItemGallery.Key.TAGS, tags)
+        fd.append(constant.ItemGallery.Key.TAGS, tags)
       else
-        fd.append(Constant.ItemGallery.Key.TAGS, null)
+        fd.append(constant.ItemGallery.Key.TAGS, null)
 
       $.ajax({
         url: '/item_gallery/save_state'

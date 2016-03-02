@@ -25,7 +25,7 @@ class UploadBase
       return $('a', n).html()
     )
 
-    if tags.length >= Constant.Gallery.TAG_MAX || $.inArray(tagname, tags) >= 0
+    if tags.length >= constant.Gallery.TAG_MAX || $.inArray(tagname, tags) >= 0
       return
     ul.append($("<li><a href='#'>#{tagname}</a></li>"))
 
@@ -34,7 +34,7 @@ class UploadBase
     $('a', ul).on('click', (e) ->
       # タグ削除
       @closest('li').remove()
-      if $('.select_tag ul li', root).length < Constant.Gallery.TAG_MAX
+      if $('.select_tag ul li', root).length < constant.Gallery.TAG_MAX
         $('.select_tag_input', root).show()
     )
 
@@ -51,7 +51,7 @@ class UploadBase
       $('li .delete_pop', ul).remove()
     )
 
-    if $('.select_tag ul li', root).length >= Constant.Gallery.TAG_MAX
+    if $('.select_tag ul li', root).length >= constant.Gallery.TAG_MAX
       # タグ数が最大数になった場合, Inputを非表示
       $('.select_tag_input', root).hide()
 

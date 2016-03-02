@@ -5,7 +5,7 @@ $ ->
 
   # ブラウザ対応チェック
   if !Common.checkBlowserEnvironment()
-    Common.showModalView(Constant.ModalViewType.ENVIRONMENT_NOT_SUPPORT, false)
+    Common.showModalView(constant.ModalViewType.ENVIRONMENT_NOT_SUPPORT, false)
     alert('This browser is not under support.')
     return
 
@@ -23,7 +23,7 @@ $ ->
 
     count = 0
     timer = setInterval( =>
-      if window[Constant.ITEM_CODING_TEMP_CLASS_NAME]?
+      if window[constant.ITEM_CODING_TEMP_CLASS_NAME]?
         clearInterval(timer)
         ItemPreviewCommon.initAfterLoadItem()
       count += 1
@@ -38,7 +38,7 @@ $ ->
     # 初期化終了
     window.initDone = true
 
-    itemClassName = $(".#{Constant.ITEM_GALLERY_ITEM_CLASSNAME}:first").val()
+    itemClassName = $(".#{constant.ITEM_GALLERY_ITEM_CLASSNAME}:first").val()
     count = 0
     timer = setInterval( =>
       if window[itemClassName]?

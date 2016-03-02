@@ -7,8 +7,8 @@ class Paging
   # 選択メニュー作成
   @createPageSelectMenu: ->
     pageCount = PageValue.getPageCount()
-    root = $("##{Constant.Paging.NAV_ROOT_ID}")
-    selectRoot = $(".#{Constant.Paging.NAV_SELECT_ROOT_CLASS}", root)
+    root = $("##{constant.Paging.NAV_ROOT_ID}")
+    selectRoot = $(".#{constant.Paging.NAV_SELECT_ROOT_CLASS}", root)
 
     # ページ選択メニュー
     divider = "<li class='divider'></li>"
@@ -54,7 +54,7 @@ class Paging
     if PageValue.getForkNum() > 0
       name = "#{I18n.t('header_menu.page.fork')} #{PageValue.getForkNum()}"
       nowMenuName += " - (#{name})"
-    $(".#{Constant.Paging.NAV_SELECTED_CLASS}", root).html(nowMenuName)
+    $(".#{constant.Paging.NAV_SELECTED_CLASS}", root).html(nowMenuName)
 
     # イベント設定
     selectRoot.find(".menu-item").off('click').on('click', (e) =>
@@ -91,9 +91,9 @@ class Paging
   # 表示ページ切り替え
   # @param [Integer] pageNum 変更ページ番号
   @switchSectionDisplay: (pageNum) ->
-    $("##{Constant.Paging.ROOT_ID}").find(".section").hide()
-    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
-    section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+    $("##{constant.Paging.ROOT_ID}").find(".section").hide()
+    className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
+    section = $("##{constant.Paging.ROOT_ID}").find(".#{className}:first")
     section.show()
 
   # ページ追加作成
@@ -123,11 +123,11 @@ class Paging
       # タイムライン更新
       Timeline.refreshAllTimeline()
       # ページ表示変更
-      className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
-      newSection = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+      className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
+      newSection = $("##{constant.Paging.ROOT_ID}").find(".#{className}:first")
       newSection.show()
-      className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
-      oldSection = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+      className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
+      oldSection = $("##{constant.Paging.ROOT_ID}").find(".#{className}:first")
       oldSection.hide()
       Common.removeAllItem(beforePageNum)
       # ページ総数 & フォーク総数の更新
@@ -205,12 +205,12 @@ class Paging
         WorktableCommon.changeMode(window.mode, selectedPageNum)
         # タイムライン更新
         Timeline.refreshAllTimeline()
-        className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', selectedPageNum)
-        newSection = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+        className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', selectedPageNum)
+        newSection = $("##{constant.Paging.ROOT_ID}").find(".#{className}:first")
         newSection.show()
         # 隠したビューを非表示にする
-        className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
-        oldSection = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+        className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
+        oldSection = $("##{constant.Paging.ROOT_ID}").find(".#{className}:first")
         oldSection.hide()
         if window.debug
           console.log('[selectPage] deleted pageNum:' + beforePageNum)

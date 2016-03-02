@@ -40,15 +40,15 @@ PageValue = (function() {
 
     Key.IS_ROOT = constant.PageValueKey.IS_ROOT;
 
-    Key.PROJECT_ID = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.PROJECT_ID;
+    Key.PROJECT_ID = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + constant.Project.Key.PROJECT_ID;
 
-    Key.PROJECT_NAME = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.TITLE;
+    Key.PROJECT_NAME = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + constant.Project.Key.TITLE;
 
-    Key.SCREEN_SIZE = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.SCREEN_SIZE;
+    Key.SCREEN_SIZE = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + constant.Project.Key.SCREEN_SIZE;
 
     Key.LAST_SAVE_TIME = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + "last_save_time";
 
-    Key.RUNNING_USER_PAGEVALUE_ID = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.USER_PAGEVALUE_ID;
+    Key.RUNNING_USER_PAGEVALUE_ID = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + constant.Project.Key.USER_PAGEVALUE_ID;
 
     Key.INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX;
 

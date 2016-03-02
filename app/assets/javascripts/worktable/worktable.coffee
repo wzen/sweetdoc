@@ -5,7 +5,7 @@ $ ->
 
     # ブラウザ対応チェック
     if !Common.checkBlowserEnvironment()
-      Common.showModalView(Constant.ModalViewType.ENVIRONMENT_NOT_SUPPORT, false)
+      Common.showModalView(constant.ModalViewType.ENVIRONMENT_NOT_SUPPORT, false)
       return
 
     $.ajaxSetup({
@@ -58,6 +58,6 @@ $ ->
       # 履歴に画面初期時を状態を保存
       OperationHistory.add(true)
       # プロジェクトモーダル表示
-      Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal)
+      Common.showModalView(constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal)
       # モーダル用にリサイズイベントを設定
       Common.initResize()

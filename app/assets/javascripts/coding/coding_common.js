@@ -239,7 +239,7 @@ CodingCommon = (function() {
       title: I18n.t('context_menu.new_file'),
       cmd: "new_file",
       func: function(event, ui) {
-        return Common.showModalView(Constant.ModalViewType.CREATE_USER_CODE, false, CodingCommon.initAddNewFileModal, {
+        return Common.showModalView(constant.ModalViewType.CREATE_USER_CODE, false, CodingCommon.initAddNewFileModal, {
           target: event.target
         });
       }
@@ -614,9 +614,9 @@ CodingCommon = (function() {
         ext = '.coffee';
       }
       if ($('.draw_select', modalEmt).val() === 'canvas') {
-        draw_type = Constant.ItemDrawType.CANVAS;
+        draw_type = constant.ItemDrawType.CANVAS;
       } else if ($('.draw_select', modalEmt).val() === 'css') {
-        draw_type = Constant.ItemDrawType.CSS;
+        draw_type = constant.ItemDrawType.CSS;
       }
       if (lang_type !== '' && draw_type !== '') {
         fileName = $('.file_name:first', modalEmt).val();

@@ -14,7 +14,7 @@ class UploadCommon
 
     # Inputイベント
     $('.select_tag_input', root).off('keypress').on('keypress', (e) ->
-      if e.keyCode == Constant.KeyboardKeyCode.ENTER
+      if e.keyCode == constant.KeyboardKeyCode.ENTER
         # Enterキーを押した場合、選択タグに追加
         upload.addUploadSelectTag(root, $(@).val())
         $(@).val('')
@@ -32,14 +32,14 @@ class UploadCommon
     try
       png = canvas.toDataURL('image/png')
       $(".capture", root).attr('src', png)
-      $("input[name='#{Constant.Gallery.Key.THUMBNAIL_IMG}']", root).val(png.replace(/^.*,/, ''))
+      $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG}']", root).val(png.replace(/^.*,/, ''))
     catch
       $(".capture", root).attr('src', '')
-    $("input[name='#{Constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE}']", root).val('image/png')
+    $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE}']", root).val('image/png')
     width = parseInt($(canvas).attr('width'))
     height = parseInt($(canvas).attr('height'))
-    $("input[name='#{Constant.Gallery.Key.THUMBNAIL_IMG_WIDTH}']", root).val(width)
-    $("input[name='#{Constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT}']", root).val(height)
+    $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_WIDTH}']", root).val(width)
+    $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT}']", root).val(height)
     if width > height
       $(".capture", root).css({width: '100%', height: 'auto'})
     else

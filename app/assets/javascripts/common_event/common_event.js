@@ -34,8 +34,8 @@ CommonEvent = (function() {
 
     PrivateClass.prototype.willChapter = function() {
       var z_index;
-      if (this._event[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
-        z_index = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT);
+      if (this._event[EventPageValueBase.PageValueKey.ACTIONTYPE] === constant.ActionType.CLICK) {
+        z_index = Common.plusPagingZindex(constant.Zindex.EVENTFLOAT);
         if ($('#common_event_click_overlay').length === 0) {
           $('body').append("<div id='common_event_click_overlay' style='z-index:" + z_index + "'></div>");
         }
@@ -44,7 +44,7 @@ CommonEvent = (function() {
     };
 
     PrivateClass.prototype.didChapter = function() {
-      if (this._event[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
+      if (this._event[EventPageValueBase.PageValueKey.ACTIONTYPE] === constant.ActionType.CLICK) {
         $('#common_event_click_overlay').remove();
       }
       return PrivateClass.__super__.didChapter.call(this);

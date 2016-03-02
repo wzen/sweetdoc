@@ -179,7 +179,7 @@ class CodingCommon
 
   @getContextMenuArray = (type) ->
     makeFile = {title: I18n.t('context_menu.new_file'), cmd: "new_file", func: (event, ui) ->
-      Common.showModalView(Constant.ModalViewType.CREATE_USER_CODE, false, CodingCommon.initAddNewFileModal, {target: event.target})
+      Common.showModalView(constant.ModalViewType.CREATE_USER_CODE, false, CodingCommon.initAddNewFileModal, {target: event.target})
     }
 
     makeFolder = {title: I18n.t('context_menu.new_folder'), cmd: "new_folder", func: (event, ui) ->
@@ -449,9 +449,9 @@ class CodingCommon
         lang_type = CodingCommon.Lang.COFFEESCRIPT
         ext = '.coffee'
       if $('.draw_select', modalEmt).val() == 'canvas'
-        draw_type = Constant.ItemDrawType.CANVAS
+        draw_type = constant.ItemDrawType.CANVAS
       else if $('.draw_select', modalEmt).val() == 'css'
-        draw_type = Constant.ItemDrawType.CSS
+        draw_type = constant.ItemDrawType.CSS
 
       if lang_type != '' && draw_type != ''
         # 同名ファイルチェック

@@ -56,7 +56,7 @@ Handwrite = (function() {
             _this.click = false;
           }
           if (e.which === 1) {
-            _this.zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1;
+            _this.zindex = constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1;
             loc = _calcCanvasLoc.call(_this, e);
             _saveLastLoc(loc);
             _this.click = true;
@@ -98,7 +98,7 @@ Handwrite = (function() {
   };
 
   Handwrite.mouseDownDrawing = function(loc) {
-    if (window.mode === Constant.Mode.DRAW) {
+    if (window.mode === constant.Mode.DRAW) {
       if (typeof selectItemMenu !== "undefined" && selectItemMenu !== null) {
         window.handwritingItem = new (Common.getClassFromMap(selectItemMenu))(loc);
         window.instanceMap[window.handwritingItem.id] = window.handwritingItem;
@@ -138,7 +138,7 @@ Handwrite = (function() {
   };
 
   Handwrite.isDrawMode = function() {
-    return window.mode === Constant.Mode.DRAW;
+    return window.mode === constant.Mode.DRAW;
   };
 
   return Handwrite;

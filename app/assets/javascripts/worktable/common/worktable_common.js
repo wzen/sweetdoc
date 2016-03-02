@@ -43,7 +43,7 @@ WorktableCommon = (function() {
       return false;
     }
     generals = LocalStorage.loadGeneralValue();
-    if (generals[Constant.Project.Key.PROJECT_ID] == null) {
+    if (generals[constant.Project.Key.PROJECT_ID] == null) {
       return false;
     }
     return true;
@@ -192,19 +192,19 @@ WorktableCommon = (function() {
     if (pn == null) {
       pn = PageValue.getPageNum();
     }
-    if (afterMode === Constant.Mode.NOT_SELECT) {
+    if (afterMode === constant.Mode.NOT_SELECT) {
       $(window.drawingCanvas).css('pointer-events', '');
       window.scrollInsideWrapper.removeClass('edit_mode');
-    } else if (afterMode === Constant.Mode.DRAW) {
+    } else if (afterMode === constant.Mode.DRAW) {
       $(window.drawingCanvas).css('pointer-events', '');
       window.scrollContents.find('.item.draggable').removeClass('edit_mode');
       window.scrollInsideWrapper.removeClass('edit_mode');
-    } else if (afterMode === Constant.Mode.EDIT) {
+    } else if (afterMode === constant.Mode.EDIT) {
       $(window.drawingCanvas).css('pointer-events', 'none');
       window.scrollContents.find('.item.draggable').addClass('edit_mode');
       window.scrollInsideWrapper.addClass('edit_mode');
       Navbar.setModeEdit();
-    } else if (afterMode === Constant.Mode.OPTION) {
+    } else if (afterMode === constant.Mode.OPTION) {
       $(window.drawingCanvas).css('pointer-events', '');
       window.scrollContents.find('.item.draggable').removeClass('edit_mode');
       window.scrollInsideWrapper.removeClass('edit_mode');
@@ -228,11 +228,11 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.changeEventPointingMode = function(afterMode) {
-    if (afterMode === Constant.EventInputPointingMode.NOT_SELECT) {
+    if (afterMode === constant.EventInputPointingMode.NOT_SELECT) {
       Timeline.disabledOperation(false);
       Sidebar.disabledOperation(false);
       Navbar.disabledOperation(false);
-    } else if (afterMode === Constant.EventInputPointingMode.DRAW || afterMode === Constant.EventInputPointingMode.ITEM_TOUCH) {
+    } else if (afterMode === constant.EventInputPointingMode.DRAW || afterMode === constant.EventInputPointingMode.ITEM_TOUCH) {
       Timeline.disabledOperation(true);
       Sidebar.disabledOperation(true);
       Navbar.disabledOperation(true);
@@ -254,11 +254,11 @@ WorktableCommon = (function() {
     var classes;
     classes = ['draw_mode', 'draw_pointing', 'click_pointing'];
     $('#main').removeClass(classes.join(' '));
-    if (mode === Constant.Mode.DRAW) {
+    if (mode === constant.Mode.DRAW) {
       return $('#main').addClass('draw_mode');
-    } else if (mode === Constant.EventInputPointingMode.DRAW) {
+    } else if (mode === constant.EventInputPointingMode.DRAW) {
       return $('#main').addClass('draw_pointing');
-    } else if (mode === Constant.EventInputPointingMode.ITEM_TOUCH) {
+    } else if (mode === constant.EventInputPointingMode.ITEM_TOUCH) {
       return $('#main').addClass('click_pointing');
     }
   };
@@ -347,26 +347,26 @@ WorktableCommon = (function() {
         if (window.debug) {
           console.log(e);
         }
-        if (e.keyCode === Constant.KeyboardKeyCode.Z) {
+        if (e.keyCode === constant.KeyboardKeyCode.Z) {
           e.preventDefault();
           if (e.shiftKey) {
             return OperationHistory.redo();
           } else {
             return OperationHistory.undo();
           }
-        } else if (e.keyCode === Constant.KeyboardKeyCode.C) {
+        } else if (e.keyCode === constant.KeyboardKeyCode.C) {
           e.preventDefault();
           WorktableCommon.copyItem();
           return WorktableCommon.setMainContainerContext();
-        } else if (e.keyCode === Constant.KeyboardKeyCode.X) {
+        } else if (e.keyCode === constant.KeyboardKeyCode.X) {
           e.preventDefault();
           WorktableCommon.cutItem();
           return WorktableCommon.setMainContainerContext();
-        } else if (e.keyCode === Constant.KeyboardKeyCode.V) {
+        } else if (e.keyCode === constant.KeyboardKeyCode.V) {
           e.preventDefault();
           WorktableCommon.pasteItem();
           return OperationHistory.add();
-        } else if (e.shiftKey && (e.keyCode === Constant.KeyboardKeyCode.PLUS || e.keyCode === Constant.KeyboardKeyCode.SEMICOLON)) {
+        } else if (e.shiftKey && (e.keyCode === constant.KeyboardKeyCode.PLUS || e.keyCode === constant.KeyboardKeyCode.SEMICOLON)) {
           e.preventDefault();
           step = 0.1;
           updatedScale = WorktableCommon.getWorktableViewScale() + step;
@@ -374,7 +374,7 @@ WorktableCommon = (function() {
           if (Sidebar.isOpenedConfigSidebar()) {
             return WorktableSetting.PositionAndScale.initConfig();
           }
-        } else if (e.keyCode === Constant.KeyboardKeyCode.MINUS || e.keyCode === Constant.KeyboardKeyCode.F_MINUS) {
+        } else if (e.keyCode === constant.KeyboardKeyCode.MINUS || e.keyCode === constant.KeyboardKeyCode.F_MINUS) {
           e.preventDefault();
           step = 0.1;
           updatedScale = WorktableCommon.getWorktableViewScale() - step;
@@ -429,17 +429,17 @@ WorktableCommon = (function() {
     if (callback == null) {
       callback = null;
     }
-    root = $("#" + Constant.Paging.ROOT_ID);
-    afterSectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageCount());
+    root = $("#" + constant.Paging.ROOT_ID);
+    afterSectionClass = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageCount());
     afterSection = $("." + afterSectionClass + ":first", root);
     for (p = l = ref = PageValue.getPageCount() - 1, ref1 = pageNum; l >= ref1; p = l += -1) {
-      beforeSectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', p);
+      beforeSectionClass = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', p);
       beforeSection = $("." + beforeSectionClass + ":first", root);
       afterSection.removeClass(afterSectionClass).addClass(beforeSectionClass);
       afterSection.css('z-index', Common.plusPagingZindex(0, p));
       afterSection = beforeSection;
     }
-    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
+    className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
     $("#pages ." + className).remove();
     this.removeCommonEventInstances(pageNum);
     PageValue.removeAndShiftGeneralPageValueOnPage(pageNum);
@@ -461,10 +461,10 @@ WorktableCommon = (function() {
   WorktableCommon.initMainContainer = function() {
     CommonVar.worktableCommonVar();
     Common.updateCanvasSize();
-    $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
+    $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTFLOAT));
     window.scrollInsideWrapper.width(window.scrollViewSize);
     window.scrollInsideWrapper.height(window.scrollViewSize);
-    window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
+    window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM + 1));
     window.scrollContents.off('scroll').on('scroll', function(e) {
       var centerPosition, left, scrollContentsSize, top;
       if ((window.skipScrollEvent != null) && window.skipScrollEvent) {
@@ -507,7 +507,7 @@ WorktableCommon = (function() {
     Sidebar.resizeConfigHeight();
     WorktableSetting.clear();
     WorktableSetting.initConfig();
-    WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
+    WorktableCommon.changeEventPointingMode(constant.EventInputPointingMode.NOT_SELECT);
     PageValue.updatePageCount();
     PageValue.updateForkCount();
     return Paging.initPaging();
@@ -539,7 +539,7 @@ WorktableCommon = (function() {
         }
       });
     }
-    page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
+    page = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
     return WorktableCommon.setupContextMenu($("#pages ." + page + " .scroll_inside:first"), "#pages ." + page + " .main-wrapper:first", menu);
   };
 
@@ -603,7 +603,7 @@ WorktableCommon = (function() {
         var t;
         t = $(event.target);
         ui.menu.zIndex($(event.target).zIndex() + 1);
-        if (window.mode === Constant.Mode.EDIT && $(t).hasClass('item')) {
+        if (window.mode === constant.Mode.EDIT && $(t).hasClass('item')) {
           return WorktableCommon.setSelectedBorder(t);
         }
       }

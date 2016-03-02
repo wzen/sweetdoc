@@ -33,7 +33,7 @@ Sidebar = (function() {
     }
     if (window.isWorkTable) {
       if (!Sidebar.isOpenedConfigSidebar()) {
-        WorktableCommon.changeMode(Constant.Mode.OPTION);
+        WorktableCommon.changeMode(constant.Mode.OPTION);
         main = $('#main');
         if (!Sidebar.isOpenedConfigSidebar()) {
           main.removeClass('col-xs-12');
@@ -45,7 +45,7 @@ Sidebar = (function() {
         return $('#screen_wrapper').off('click.sidebar_close').on('click.sidebar_close', (function(_this) {
           return function(e) {
             if (Sidebar.isOpenedConfigSidebar()) {
-              if (window.eventPointingMode === Constant.EventInputPointingMode.NOT_SELECT) {
+              if (window.eventPointingMode === constant.EventInputPointingMode.NOT_SELECT) {
                 Sidebar.closeSidebar();
                 WorktableCommon.putbackMode();
                 return $(window.drawingCanvas).off('click.sidebar_close');
@@ -72,7 +72,7 @@ Sidebar = (function() {
           main.removeClass('col-xs-9');
           main.addClass('col-xs-12');
           WorktableCommon.resizeMainContainerEvent();
-          if (window.mode === Constant.Mode.OPTION) {
+          if (window.mode === constant.Mode.OPTION) {
             WorktableCommon.changeMode(window.beforeMode);
           } else {
             WorktableCommon.changeMode(window.mode);

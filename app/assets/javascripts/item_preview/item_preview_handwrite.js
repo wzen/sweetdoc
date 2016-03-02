@@ -27,7 +27,7 @@ ItemPreviewHandwrite = (function(superClass) {
         })(this));
       }
     }
-    return WorktableCommon.changeMode(Constant.Mode.EDIT);
+    return WorktableCommon.changeMode(constant.Mode.EDIT);
   };
 
   return ItemPreviewHandwrite;

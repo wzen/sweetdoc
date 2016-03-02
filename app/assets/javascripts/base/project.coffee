@@ -167,8 +167,8 @@ class Project
   # プロジェクト新規作成リクエスト
   @create = (title, screenWidth, screenHeight, callback = null) ->
     data = {}
-    data[Constant.Project.Key.TITLE] = title
-    data[Constant.Project.Key.SCREEN_SIZE] = {
+    data[constant.Project.Key.TITLE] = title
+    data[constant.Project.Key.SCREEN_SIZE] = {
       width: screenWidth
       height: screenHeight
     }
@@ -221,11 +221,11 @@ class Project
         # 最新更新日時設定
         Navbar.setLastUpdateTime(data.updated_at)
         # ページ変更処理
-        sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
+        sectionClass = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
         $('#pages .section:first').attr('class', "#{sectionClass} section")
-        $('#pages .section:first').css({'backgroundColor': Constant.DEFAULT_BACKGROUNDCOLOR, 'z-index': Common.plusPagingZindex(0, PageValue.getPageNum())})
-        $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
-        window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1))
+        $('#pages .section:first').css({'backgroundColor': constant.DEFAULT_BACKGROUNDCOLOR, 'z-index': Common.plusPagingZindex(0, PageValue.getPageNum())})
+        $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTFLOAT))
+        window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM + 1))
         # ナビバーをプロジェクト作成後状態に
         Navbar.switchWorktableNavbarWhenProjectCreated(true)
         # モーダルを削除
@@ -268,7 +268,7 @@ class Project
 
     _loadEditInput = (target, callback) ->
       data = {}
-      data[Constant.Project.Key.USER_PAGEVALUE_ID] = $(target).closest('.am_row').find(".#{Constant.Project.Key.USER_PAGEVALUE_ID}:first").val()
+      data[constant.Project.Key.USER_PAGEVALUE_ID] = $(target).closest('.am_row').find(".#{constant.Project.Key.USER_PAGEVALUE_ID}:first").val()
       $.ajax(
         {
           url: "/project/get_project_by_user_pagevalue_id"
@@ -289,7 +289,7 @@ class Project
 
     _update = (target, callback) ->
       data = {}
-      data[Constant.Project.Key.PROJECT_ID] = $(target).closest('.am_input_wrapper').find(".#{Constant.Project.Key.PROJECT_ID}:first").val()
+      data[constant.Project.Key.PROJECT_ID] = $(target).closest('.am_input_wrapper').find(".#{constant.Project.Key.PROJECT_ID}:first").val()
       inputWrapper = modalEmt.find('.am_input_wrapper:first')
       data.value = {
         p_title: inputWrapper.find('.project_name:first').val()
@@ -316,7 +316,7 @@ class Project
 
     _delete = (target, callback) ->
       data = {}
-      data[Constant.Project.Key.PROJECT_ID] = $(target).closest('.am_row').find(".#{Constant.Project.Key.PROJECT_ID}:first").val()
+      data[constant.Project.Key.PROJECT_ID] = $(target).closest('.am_row').find(".#{constant.Project.Key.PROJECT_ID}:first").val()
       $.ajax(
         {
           url: "/project/remove"
@@ -365,7 +365,7 @@ class Project
     _updateActive = ->
       modalEmt.find('.am_row').each( ->
         openedProjectId = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)
-        if parseInt($(@).find(".#{Constant.Project.Key.PROJECT_ID}:first").val()) == parseInt(openedProjectId)
+        if parseInt($(@).find(".#{constant.Project.Key.PROJECT_ID}:first").val()) == parseInt(openedProjectId)
           $(@).find(".am_title:first").addClass('opened')
         else
           $(@).find(".am_title:first").removeClass('opened')
@@ -395,7 +395,7 @@ class Project
             inputWrapper.find('.project_name:first').val(project.title)
             inputWrapper.find('.display_size_input_width:first').val(project.screen_width)
             inputWrapper.find('.display_size_input_height:first').val(project.screen_height)
-            inputWrapper.find(".#{Constant.Project.Key.PROJECT_ID}:first").val(project.id)
+            inputWrapper.find(".#{constant.Project.Key.PROJECT_ID}:first").val(project.id)
             _settingEditInputEvent.call(@)
             inputWrapper.show()
           )
@@ -403,7 +403,7 @@ class Project
         modalEmt.find('.am_row .remove_button').off('click').on('click', (e) =>
           # 削除確認
           if window.confirm(I18n.t('message.dialog.delete_project'))
-            deletedProjectId = $(e.target).closest('.am_row').find(".#{Constant.Project.Key.PROJECT_ID}:first").val()
+            deletedProjectId = $(e.target).closest('.am_row').find(".#{constant.Project.Key.PROJECT_ID}:first").val()
             # 削除
             _delete.call(@, $(e.target), (admin_html) =>
               # アクティブ設定
@@ -413,7 +413,7 @@ class Project
                 Common.hideModalView(true)
                 WorktableCommon.resetWorktable()
                 # 初期モーダル表示
-                Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal)
+                Common.showModalView(constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal)
               else
                 # 削除完了 -> リスト再表示
                 modalEmt.find('.am_list:first').empty().html(admin_html)

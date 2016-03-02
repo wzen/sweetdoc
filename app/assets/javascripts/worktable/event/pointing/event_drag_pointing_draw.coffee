@@ -104,7 +104,7 @@ class EventDragPointingDraw
         pointing = new @()
         pointing.getJQueryElement().remove()
         Handwrite.initHandwrite()
-        WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
+        WorktableCommon.changeEventPointingMode(constant.EventInputPointingMode.NOT_SELECT)
       if applyDrawCallback?
         if applyDrawCallback(pointingPaths)
           _cb.call(@)
@@ -117,13 +117,13 @@ class EventDragPointingDraw
     )
     pointing.initData(multiDraw)
     PointingHandwrite.initHandwrite(@)
-    WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW)
+    WorktableCommon.changeEventPointingMode(constant.EventInputPointingMode.DRAW)
     FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, =>
       # 画面上のポイントアイテムを削除
       pointing = new @()
       pointing.getJQueryElement().remove()
       Handwrite.initHandwrite()
-      WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
+      WorktableCommon.changeEventPointingMode(constant.EventInputPointingMode.NOT_SELECT)
     )
 
 $.fn.eventDragPointingDraw = (opt, eventType = 'click') ->

@@ -74,7 +74,7 @@ EventPageValueBase = (function() {
       return 0;
     };
     handlerDiv = $(".handler_div", eventConfig.emt);
-    if (eventConfig[this.PageValueKey.ACTIONTYPE] === Constant.ActionType.SCROLL) {
+    if (eventConfig[this.PageValueKey.ACTIONTYPE] === constant.ActionType.SCROLL) {
       startDiv = handlerDiv.find('.scroll_point_start:first');
       start = startDiv.val();
       s = null;
@@ -90,7 +90,7 @@ EventPageValueBase = (function() {
       if (end.length === 0) {
         return endDiv.val(parseInt(s) + _scrollLength.call(this, eventConfig));
       }
-    } else if (eventConfig[this.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
+    } else if (eventConfig[this.PageValueKey.ACTIONTYPE] === constant.ActionType.CLICK) {
       eventDuration = handlerDiv.find('.click_duration:first');
       item = window.instanceMap[eventConfig[this.PageValueKey.ID]];
       if (item != null) {
@@ -179,7 +179,7 @@ EventPageValueBase = (function() {
         parallel.prop("checked", true);
       }
       handlerDiv = $(".handler_div", eventConfig.emt);
-      if (eventConfig[this.PageValueKey.ACTIONTYPE] === Constant.ActionType.SCROLL) {
+      if (eventConfig[this.PageValueKey.ACTIONTYPE] === constant.ActionType.SCROLL) {
         handlerDiv.find('input[type=radio][value=scroll]').prop('checked', true);
         if ((eventConfig[this.PageValueKey.SCROLL_POINT_START] != null) && (eventConfig[this.PageValueKey.SCROLL_POINT_END] != null)) {
           handlerDiv.find('.scroll_point_start:first').val(eventConfig[this.PageValueKey.SCROLL_POINT_START]);
@@ -225,7 +225,7 @@ EventPageValueBase = (function() {
             rightEmt.children('.scroll_forward:first').parent('label').hide();
           }
         }
-      } else if (eventConfig[this.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
+      } else if (eventConfig[this.PageValueKey.ACTIONTYPE] === constant.ActionType.CLICK) {
         handlerDiv.find('input[type=radio][value=click]').prop('checked', true);
         eventDuration = handlerDiv.find('.click_duration:first');
         if (eventConfig[this.PageValueKey.EVENT_DURATION] != null) {

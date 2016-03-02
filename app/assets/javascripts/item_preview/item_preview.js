@@ -3,7 +3,7 @@ $(function() {
   window.isItemPreview = true;
   window.isMotionCheck = false;
   if (!Common.checkBlowserEnvironment()) {
-    Common.showModalView(Constant.ModalViewType.ENVIRONMENT_NOT_SUPPORT, false);
+    Common.showModalView(constant.ModalViewType.ENVIRONMENT_NOT_SUPPORT, false);
     alert('This browser is not under support.');
     return;
   }
@@ -18,7 +18,7 @@ $(function() {
     count = 0;
     return timer = setInterval((function(_this) {
       return function() {
-        if (window[Constant.ITEM_CODING_TEMP_CLASS_NAME] != null) {
+        if (window[constant.ITEM_CODING_TEMP_CLASS_NAME] != null) {
           clearInterval(timer);
           ItemPreviewCommon.initAfterLoadItem();
         }
@@ -33,7 +33,7 @@ $(function() {
     var count, itemClassName, timer;
     window.isCodingDebug = false;
     window.initDone = true;
-    itemClassName = $("." + Constant.ITEM_GALLERY_ITEM_CLASSNAME + ":first").val();
+    itemClassName = $("." + constant.ITEM_GALLERY_ITEM_CLASSNAME + ":first").val();
     count = 0;
     return timer = setInterval((function(_this) {
       return function() {

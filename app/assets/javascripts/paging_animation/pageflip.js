@@ -19,7 +19,7 @@ PageFlip = (function() {
     }
     this.zIndex = Common.plusPagingZindex(0, this.flipPageNum);
     zIndexMax = Common.plusPagingZindex(0, 0);
-    $("#" + Constant.Paging.ROOT_ID).append("<div id='pageflip-root' style='position:absolute;top:0;left:0;width:100%;height:100%;z-index:" + zIndexMax + "'><canvas id='pageflip-canvas' style='z-index:" + zIndexMax + "'></canvas></div>");
+    $("#" + constant.Paging.ROOT_ID).append("<div id='pageflip-root' style='position:absolute;top:0;left:0;width:100%;height:100%;z-index:" + zIndexMax + "'><canvas id='pageflip-canvas' style='z-index:" + zIndexMax + "'></canvas></div>");
     this.canvas = document.getElementById("pageflip-canvas");
     this.context = this.canvas.getContext("2d");
     this.canvas.width = this.PAGE_WIDTH + (this.CANVAS_PADDING * 2);
@@ -30,8 +30,8 @@ PageFlip = (function() {
     if (window.debug) {
       console.log('[PageFlip constructor] direction:' + this.direction);
     }
-    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', afterPageNum);
-    section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+    className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', afterPageNum);
+    section = $("#" + constant.Paging.ROOT_ID).find("." + className + ":first");
     section.show();
     if (this.direction === PageFlip.DIRECTION.FORWARD) {
       section.css('width', '');
@@ -45,8 +45,8 @@ PageFlip = (function() {
     if (callback == null) {
       callback = null;
     }
-    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', this.flipPageNum);
-    pages = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+    className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', this.flipPageNum);
+    pages = $("#" + constant.Paging.ROOT_ID).find("." + className + ":first");
     if (this.direction === PageFlip.DIRECTION.FORWARD) {
       this.flip = {
         progress: 1,

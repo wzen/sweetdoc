@@ -188,8 +188,8 @@ Project = (function() {
       callback = null;
     }
     data = {};
-    data[Constant.Project.Key.TITLE] = title;
-    data[Constant.Project.Key.SCREEN_SIZE] = {
+    data[constant.Project.Key.TITLE] = title;
+    data[constant.Project.Key.SCREEN_SIZE] = {
       width: screenWidth,
       height: screenHeight
     };
@@ -239,14 +239,14 @@ Project = (function() {
           WorktableSetting.initConfig();
           WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded();
           Navbar.setLastUpdateTime(data.updated_at);
-          sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
+          sectionClass = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
           $('#pages .section:first').attr('class', sectionClass + " section");
           $('#pages .section:first').css({
-            'backgroundColor': Constant.DEFAULT_BACKGROUNDCOLOR,
+            'backgroundColor': constant.DEFAULT_BACKGROUNDCOLOR,
             'z-index': Common.plusPagingZindex(0, PageValue.getPageNum())
           });
-          $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
-          window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
+          $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTFLOAT));
+          window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM + 1));
           Navbar.switchWorktableNavbarWhenProjectCreated(true);
           Common.hideModalView();
           FloatView.show('Project loaded', FloatView.Type.APPLY, 3.0);
@@ -294,7 +294,7 @@ Project = (function() {
     _loadEditInput = function(target, callback) {
       var data;
       data = {};
-      data[Constant.Project.Key.USER_PAGEVALUE_ID] = $(target).closest('.am_row').find("." + Constant.Project.Key.USER_PAGEVALUE_ID + ":first").val();
+      data[constant.Project.Key.USER_PAGEVALUE_ID] = $(target).closest('.am_row').find("." + constant.Project.Key.USER_PAGEVALUE_ID + ":first").val();
       return $.ajax({
         url: "/project/get_project_by_user_pagevalue_id",
         type: "POST",
@@ -317,7 +317,7 @@ Project = (function() {
     _update = function(target, callback) {
       var data, inputWrapper;
       data = {};
-      data[Constant.Project.Key.PROJECT_ID] = $(target).closest('.am_input_wrapper').find("." + Constant.Project.Key.PROJECT_ID + ":first").val();
+      data[constant.Project.Key.PROJECT_ID] = $(target).closest('.am_input_wrapper').find("." + constant.Project.Key.PROJECT_ID + ":first").val();
       inputWrapper = modalEmt.find('.am_input_wrapper:first');
       data.value = {
         p_title: inputWrapper.find('.project_name:first').val(),
@@ -346,7 +346,7 @@ Project = (function() {
     _delete = function(target, callback) {
       var data;
       data = {};
-      data[Constant.Project.Key.PROJECT_ID] = $(target).closest('.am_row').find("." + Constant.Project.Key.PROJECT_ID + ":first").val();
+      data[constant.Project.Key.PROJECT_ID] = $(target).closest('.am_row').find("." + constant.Project.Key.PROJECT_ID + ":first").val();
       return $.ajax({
         url: "/project/remove",
         type: "POST",
@@ -400,7 +400,7 @@ Project = (function() {
       return modalEmt.find('.am_row').each(function() {
         var openedProjectId;
         openedProjectId = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
-        if (parseInt($(this).find("." + Constant.Project.Key.PROJECT_ID + ":first").val()) === parseInt(openedProjectId)) {
+        if (parseInt($(this).find("." + constant.Project.Key.PROJECT_ID + ":first").val()) === parseInt(openedProjectId)) {
           return $(this).find(".am_title:first").addClass('opened');
         } else {
           return $(this).find(".am_title:first").removeClass('opened');
@@ -432,7 +432,7 @@ Project = (function() {
                 inputWrapper.find('.project_name:first').val(project.title);
                 inputWrapper.find('.display_size_input_width:first').val(project.screen_width);
                 inputWrapper.find('.display_size_input_height:first').val(project.screen_height);
-                inputWrapper.find("." + Constant.Project.Key.PROJECT_ID + ":first").val(project.id);
+                inputWrapper.find("." + constant.Project.Key.PROJECT_ID + ":first").val(project.id);
                 _settingEditInputEvent.call(_this);
                 return inputWrapper.show();
               });
@@ -442,13 +442,13 @@ Project = (function() {
             return function(e) {
               var deletedProjectId;
               if (window.confirm(I18n.t('message.dialog.delete_project'))) {
-                deletedProjectId = $(e.target).closest('.am_row').find("." + Constant.Project.Key.PROJECT_ID + ":first").val();
+                deletedProjectId = $(e.target).closest('.am_row').find("." + constant.Project.Key.PROJECT_ID + ":first").val();
                 return _delete.call(_this, $(e.target), function(admin_html) {
                   _updateActive.call(_this);
                   if (parseInt(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)) === parseInt(deletedProjectId)) {
                     Common.hideModalView(true);
                     WorktableCommon.resetWorktable();
-                    return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);
+                    return Common.showModalView(constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);
                   } else {
                     modalEmt.find('.am_list:first').empty().html(admin_html);
                     return _setEvent.call(_this);

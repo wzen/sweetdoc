@@ -177,13 +177,13 @@ class Timeline
         teEmt = @
     )
 
-    for k,v of Constant.TimelineActionTypeClassName
+    for k,v of constant.TimelineActionTypeClassName
       $(teEmt).removeClass(v)
 
     if actionType?
       $(teEmt).addClass(Common.getActionTypeClassNameByActionType(actionType))
     else
-      $(teEmt).addClass(Constant.TimelineActionTypeClassName.BLANK)
+      $(teEmt).addClass(constant.TimelineActionTypeClassName.BLANK)
 
   # EventPageValueを参照してタイムラインを更新
   @refreshAllTimeline: ->

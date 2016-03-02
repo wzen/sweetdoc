@@ -10,7 +10,7 @@ CommonVar = (function() {
     window.operationHistories = {};
     window.operationHistoryTailIndexes = {};
     window.operationHistoryIndexes = {};
-    return window.mode = Constant.Mode.NOT_SELECT;
+    return window.mode = constant.Mode.NOT_SELECT;
   };
 
   CommonVar.initCommonVar = function() {
@@ -21,7 +21,7 @@ CommonVar = (function() {
 
   CommonVar.updateWorktableBaseElement = function(pageNum) {
     var page;
-    page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
+    page = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
     window.sidebarWrapper = $("#sidebar-wrapper");
     window.scrollContents = $("#pages ." + page + " .scroll_contents:first");
     window.scrollInsideWrapper = $("#pages ." + page + " .scroll_inside_wrapper:first");
@@ -34,7 +34,7 @@ CommonVar = (function() {
 
   CommonVar.updateRunBaseElement = function(pageNum) {
     var page;
-    page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
+    page = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
     window.mainWrapper = $("#pages ." + page + " .main-wrapper:first");
     window.scrollContents = $("#pages ." + page + " .scroll_contents:first");
     window.scrollHandleWrapper = $("#pages ." + page + " .scroll_handle_wrapper:first");
@@ -70,7 +70,7 @@ CommonVar = (function() {
     window.selectedObjId = null;
     window.worktableItemsChangedState = false;
     this.updateWorktableBaseElement(PageValue.getPageNum());
-    window.eventPointingMode = Constant.EventInputPointingMode.NOT_SELECT;
+    window.eventPointingMode = constant.EventInputPointingMode.NOT_SELECT;
     return window.previewRunning = false;
   };
 
@@ -80,8 +80,8 @@ CommonVar = (function() {
     window.distY = 0;
     window.resizeTimer = false;
     window.scrollViewSwitchZindex = {
-      'on': Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT),
-      'off': Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM)
+      'on': Common.plusPagingZindex(constant.Zindex.EVENTFLOAT),
+      'off': Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM)
     };
     window.disabledEventHandler = false;
     window.firstItemFocused = false;

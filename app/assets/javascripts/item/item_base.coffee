@@ -42,7 +42,7 @@ class ItemBase extends ItemEventBase
     # @property [Array] itemSize サイズ
     @itemSize = null
     # @property [Int] zIndex z-index
-    @zindex = Constant.Zindex.EVENTBOTTOM + 1
+    @zindex = constant.Zindex.EVENTBOTTOM + 1
     # @property [Array] _ohiRegist 操作履歴Index保存配列
     @_ohiRegist = []
     # @property [Int] _ohiRegistIndex 操作履歴Index保存配列のインデックス
@@ -98,7 +98,7 @@ class ItemBase extends ItemEventBase
     @getJQueryElement().css({'opacity': 1, 'z-index': Common.plusPagingZindex(@zindex)})
   # アイテム非表示
   hideItem: ->
-    @getJQueryElement().css({'opacity': 0, 'z-index': Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM)})
+    @getJQueryElement().css({'opacity': 0, 'z-index': Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM)})
 
   # アイテム描画
   # @abstract
@@ -409,7 +409,7 @@ class ItemBase extends ItemEventBase
       if typeof targetValue == 'string' && (targetValue == 'true' || targetValue == 'false')
         targetValue = targetValue == 'true'
 
-      root = e.closest(".#{Constant.DesignConfig.DESIGN_ROOT_CLASSNAME}")
+      root = e.closest(".#{constant.DesignConfig.ROOT_CLASSNAME}")
       openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName).replace('@childrenkey', cKey)
       if cValue == targetValue
         $(root).find(".#{openClassName}").show()

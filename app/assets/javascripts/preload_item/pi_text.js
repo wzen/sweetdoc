@@ -581,7 +581,7 @@ PreloadItemText = (function(superClass) {
         _this.saveObj(true);
         _this.firstFocus = Common.firstFocusItemObj() === null;
         Navbar.setModeEdit();
-        WorktableCommon.changeMode(Constant.Mode.EDIT);
+        WorktableCommon.changeMode(constant.Mode.EDIT);
         if (callback != null) {
           return callback();
         }
@@ -1647,7 +1647,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _showInputModal = function() {
-    return Common.showModalView(Constant.ModalViewType.ITEM_TEXT_EDITING, false, (function(_this) {
+    return Common.showModalView(constant.ModalViewType.ITEM_TEXT_EDITING, false, (function(_this) {
       return function(modalEmt, params, callback) {
         if (callback == null) {
           callback = null;
@@ -1701,7 +1701,7 @@ PreloadItemText = (function(superClass) {
         _this.fontSize = _calcFontSizeAbout.call(_this, _this.inputText, canvas.width, canvas.height, _this.isFixedFontSize, _this.drawHorizontal);
         _this.saveObj();
         return Navbar.setModeDraw(_this.classDistToken, function() {
-          WorktableCommon.changeMode(Constant.Mode.DRAW);
+          WorktableCommon.changeMode(constant.Mode.DRAW);
           return _this.refresh(true, function() {
             return Common.hideModalView();
           });

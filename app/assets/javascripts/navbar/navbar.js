@@ -26,7 +26,7 @@ Navbar = (function() {
           return function() {
             WorktableCommon.resetWorktable();
             Navbar.switchWorktableNavbarWhenProjectCreated(false);
-            return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);
+            return Common.showModalView(constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);
           };
         })(this));
       };
@@ -44,7 +44,7 @@ Navbar = (function() {
       }
     });
     $('.menu-adminproject', fileMenuEmt).off('click').on('click', function() {
-      return Common.showModalView(Constant.ModalViewType.ADMIN_PROJECTS, true, Project.initAdminProjectModal);
+      return Common.showModalView(constant.ModalViewType.ADMIN_PROJECTS, true, Project.initAdminProjectModal);
     });
     menuSave = $('.menu-save', fileMenuEmt);
     menuSave.off('click').on('click', function() {
@@ -73,7 +73,7 @@ Navbar = (function() {
     });
     etcMenuEmt = $('#header_etc_select_menu .dropdown-menu > li');
     $('.menu-about', etcMenuEmt).off('click').on('click', function() {
-      return Common.showModalView(Constant.ModalViewType.ABOUT);
+      return Common.showModalView(constant.ModalViewType.ABOUT);
     });
     $('.menu-backtomainpage', etcMenuEmt).off('click').on('click', function() {
       return window.location.href = '/';
@@ -90,7 +90,7 @@ Navbar = (function() {
         classDistToken = emtId.replace(Navbar.ITEM_MENU_PREFIX, '');
         return Navbar.setModeDraw(classDistToken, (function(_this) {
           return function() {
-            return WorktableCommon.changeMode(Constant.Mode.DRAW);
+            return WorktableCommon.changeMode(constant.Mode.DRAW);
           };
         })(this));
       }
@@ -98,7 +98,7 @@ Navbar = (function() {
     $('#menu-action-edit').off('click').on('click', function() {
       Sidebar.closeSidebar();
       Navbar.setModeEdit();
-      return WorktableCommon.changeMode(Constant.Mode.EDIT);
+      return WorktableCommon.changeMode(constant.Mode.EDIT);
     });
     return $('#menu_sidebar_toggle').off('click').on('click', function() {
       if (Sidebar.isOpenedConfigSidebar()) {
@@ -121,7 +121,7 @@ Navbar = (function() {
       $('#header_items_select_menu').show();
       $('#header_items_motion_check').show();
       $('#menu_sidebar_toggle').show();
-      $("#" + Constant.Paging.NAV_ROOT_ID).show();
+      $("#" + constant.Paging.NAV_ROOT_ID).show();
       $('#menu_sidebar_toggle_li').show();
       return $("#" + this.NAVBAR_ROOT + " ." + this.LAST_UPDATE_TIME_CLASS).closest('li').show();
     } else {
@@ -129,7 +129,7 @@ Navbar = (function() {
       $('#header_items_select_menu').hide();
       $('#header_items_motion_check').hide();
       $('#menu_sidebar_toggle').hide();
-      $("#" + Constant.Paging.NAV_ROOT_ID).hide();
+      $("#" + constant.Paging.NAV_ROOT_ID).hide();
       $('#menu_sidebar_toggle_li').hide();
       return $("#" + this.NAVBAR_ROOT + " ." + this.LAST_UPDATE_TIME_CLASS).closest('li').hide();
     }

@@ -112,7 +112,7 @@ class PreloadItemImage extends ItemBase
         @addContentsToScrollInside(contents, callback)
         if showModal
           # 画像アップロードモーダル表示
-          Common.showModalView(Constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, (modalEmt, params, callback = null) =>
+          Common.showModalView(constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, (modalEmt, params, callback = null) =>
             $(modalEmt).find('form').off().on('ajax:complete', (e, data, status, error) =>
               # モーダル非表示
               Common.hideModalView()

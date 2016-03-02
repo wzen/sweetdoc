@@ -39,14 +39,14 @@ UploadBase = (function() {
     tags = $.map(ul.children(), function(n) {
       return $('a', n).html();
     });
-    if (tags.length >= Constant.Gallery.TAG_MAX || $.inArray(tagname, tags) >= 0) {
+    if (tags.length >= constant.Gallery.TAG_MAX || $.inArray(tagname, tags) >= 0) {
       return;
     }
     ul.append($("<li><a href='#'>" + tagname + "</a></li>"));
     $('a', ul).off('click');
     $('a', ul).on('click', function(e) {
       this.closest('li').remove();
-      if ($('.select_tag ul li', root).length < Constant.Gallery.TAG_MAX) {
+      if ($('.select_tag ul li', root).length < constant.Gallery.TAG_MAX) {
         return $('.select_tag_input', root).show();
       }
     });
@@ -65,7 +65,7 @@ UploadBase = (function() {
     $('a', ul).on('mouseleave', function(e) {
       return $('li .delete_pop', ul).remove();
     });
-    if ($('.select_tag ul li', root).length >= Constant.Gallery.TAG_MAX) {
+    if ($('.select_tag ul li', root).length >= constant.Gallery.TAG_MAX) {
       return $('.select_tag_input', root).hide();
     }
   };

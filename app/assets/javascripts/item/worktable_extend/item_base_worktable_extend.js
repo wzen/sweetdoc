@@ -10,7 +10,7 @@ itemBaseWorktableExtend = {
       callback = null;
     }
     this.saveDrawingSurface();
-    WorktableCommon.changeMode(Constant.Mode.DRAW);
+    WorktableCommon.changeMode(constant.Mode.DRAW);
     this.startDraw();
     if (callback != null) {
       return callback();
@@ -24,7 +24,7 @@ itemBaseWorktableExtend = {
     return this.endDraw(zindex, true, (function(_this) {
       return function() {
         _this.setupItemEvents();
-        WorktableCommon.changeMode(Constant.Mode.DRAW);
+        WorktableCommon.changeMode(constant.Mode.DRAW);
         _this.saveObj(true);
         _this.firstFocus = Common.firstFocusItemObj() === null;
         if (callback != null) {
@@ -126,7 +126,7 @@ itemBaseWorktableExtend = {
     var sc;
     sc = $('.sidebar-config');
     sc.hide();
-    $("." + Constant.DesignConfig.DESIGN_ROOT_CLASSNAME, sc).hide();
+    $("." + constant.DesignConfig.ROOT_CLASSNAME, sc).hide();
     $('#design-config').show();
     return $('#' + this.getDesignConfigId()).show();
   },
@@ -540,19 +540,19 @@ itemBaseWorktableExtend = {
       results = [];
       for (varName in ref) {
         value = ref[varName];
-        if (value.type === Constant.ItemDesignOptionType.NUMBER) {
+        if (value.type === constant.ItemDesignOptionType.NUMBER) {
           results.push(this.settingModifiableVarSlider(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], value.min, value.max, value.stepValue));
-        } else if (value.type === Constant.ItemDesignOptionType.STRING) {
+        } else if (value.type === constant.ItemDesignOptionType.STRING) {
           results.push(this.settingModifiableString(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
-        } else if (value.type === Constant.ItemDesignOptionType.BOOLEAN) {
+        } else if (value.type === constant.ItemDesignOptionType.BOOLEAN) {
           results.push(this.settingModifiableCheckbox(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
-        } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
+        } else if (value.type === constant.ItemDesignOptionType.COLOR) {
           results.push(this.settingModifiableColor(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.COLOR_TYPE], value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
-        } else if (value.type === Constant.ItemDesignOptionType.SELECT_FILE) {
+        } else if (value.type === constant.ItemDesignOptionType.SELECT_FILE) {
           results.push(this.settingModifiableSelectFile(designConfigRoot, varName));
-        } else if (value.type === Constant.ItemDesignOptionType.SELECT_IMAGE_FILE) {
+        } else if (value.type === constant.ItemDesignOptionType.SELECT_IMAGE_FILE) {
           results.push(this.settingModifiableSelectImageFile(designConfigRoot, varName));
-        } else if (value.type === Constant.ItemDesignOptionType.SELECT) {
+        } else if (value.type === constant.ItemDesignOptionType.SELECT) {
           results.push(this.settingModifiableSelect(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], value['options[]']));
         } else {
           results.push(void 0);

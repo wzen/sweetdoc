@@ -102,7 +102,7 @@ EventDragPointingRect = (function() {
       }
       this.itemSize.x += scrollContents.scrollLeft();
       this.itemSize.y += scrollContents.scrollTop();
-      this.zindex = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1;
+      this.zindex = Common.plusPagingZindex(constant.Zindex.EVENTFLOAT) + 1;
       return this.refresh(true, (function(_this) {
         return function() {
           _this.getJQueryElement().addClass('drag_pointing');
@@ -164,12 +164,12 @@ EventDragPointingRect = (function() {
       return function(pointingSize) {
         applyDrawCallback(pointingSize);
         Handwrite.initHandwrite();
-        WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
+        WorktableCommon.changeEventPointingMode(constant.EventInputPointingMode.NOT_SELECT);
         return EventDragPointingRect.draw(pointingSize);
       };
     })(this));
     PointingHandwrite.initHandwrite(this);
-    WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW);
+    WorktableCommon.changeEventPointingMode(constant.EventInputPointingMode.DRAW);
     FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, (function(_this) {
       return function() {
         if (closeCallback != null) {
@@ -179,7 +179,7 @@ EventDragPointingRect = (function() {
           pointing.getJQueryElement().remove();
         }
         Handwrite.initHandwrite();
-        return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
+        return WorktableCommon.changeEventPointingMode(constant.EventInputPointingMode.NOT_SELECT);
       };
     })(this));
     return this.clear();
@@ -190,7 +190,7 @@ EventDragPointingRect = (function() {
     if (size != null) {
       pointing = new this();
       pointing.itemSize = size;
-      pointing.zindex = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1;
+      pointing.zindex = Common.plusPagingZindex(constant.Zindex.EVENTFLOAT) + 1;
       return pointing.refresh(true, (function(_this) {
         return function() {
           return pointing.getJQueryElement().addClass('drag_pointing');

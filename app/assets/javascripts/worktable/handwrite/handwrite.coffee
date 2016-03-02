@@ -53,7 +53,7 @@ class Handwrite
           @drag = false
           @click = false
         if e.which == 1 #左クリック
-          @zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1
+          @zindex = constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1
           loc = _calcCanvasLoc.call(@, e)
           _saveLastLoc(loc)
           @click = true
@@ -90,7 +90,7 @@ class Handwrite
   # マウスダウン時の描画イベント
   # @param [Array] loc Canvas座標
   @mouseDownDrawing = (loc) ->
-    if window.mode == Constant.Mode.DRAW
+    if window.mode == constant.Mode.DRAW
       # 通常描画
       if selectItemMenu?
         # インスタンス作成
@@ -127,4 +127,4 @@ class Handwrite
       )
 
   @isDrawMode = ->
-    return window.mode == Constant.Mode.DRAW
+    return window.mode == constant.Mode.DRAW

@@ -17,7 +17,7 @@ class Page
 
           if !sync
             chapter = null
-            if obj[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.CLICK
+            if obj[EventPageValueBase.PageValueKey.ACTIONTYPE] == constant.ActionType.CLICK
               chapter = new ClickChapter({eventList: eventList, num: idx})
             else
               chapter = new ScrollChapter({eventList: eventList, num: idx})

@@ -25,7 +25,7 @@ class ItemPreviewEventConfig extends EventConfig
     if parallel?
       @[EventPageValueBase.PageValueKey.IS_SYNC] = parallel.is(":checked")
     handlerDiv = $(".handler_div", @emt)
-    if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.SCROLL
+    if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == constant.ActionType.SCROLL
       @[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = handlerDiv.find('.scroll_point_start:first').val()
       @[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = handlerDiv.find('.scroll_point_end:first').val()
 
@@ -46,7 +46,7 @@ class ItemPreviewEventConfig extends EventConfig
         right: rightEmt.find('.scroll_forward:first').is(":checked")
       }
 
-    else if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.CLICK
+    else if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == constant.ActionType.CLICK
       @[EventPageValueBase.PageValueKey.EVENT_DURATION] = handlerDiv.find('.click_duration:first').val()
 
       @[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = 0

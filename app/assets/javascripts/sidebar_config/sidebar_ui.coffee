@@ -15,7 +15,7 @@ class Sidebar
     if window.isWorkTable
       if !Sidebar.isOpenedConfigSidebar()
         # モードを変更
-        WorktableCommon.changeMode(Constant.Mode.OPTION)
+        WorktableCommon.changeMode(constant.Mode.OPTION)
         main = $('#main')
         if !Sidebar.isOpenedConfigSidebar()
           main.removeClass('col-xs-12')
@@ -30,7 +30,7 @@ class Sidebar
         $('#screen_wrapper').off('click.sidebar_close').on('click.sidebar_close', (e) =>
           if Sidebar.isOpenedConfigSidebar()
             # イベント用選択モードの場合は閉じない
-            if window.eventPointingMode == Constant.EventInputPointingMode.NOT_SELECT
+            if window.eventPointingMode == constant.EventInputPointingMode.NOT_SELECT
               Sidebar.closeSidebar()
               # モードを変更以前に戻す
               WorktableCommon.putbackMode()
@@ -55,7 +55,7 @@ class Sidebar
           main.addClass('col-xs-12')
           WorktableCommon.resizeMainContainerEvent()
           # モード再設定
-          if window.mode == Constant.Mode.OPTION
+          if window.mode == constant.Mode.OPTION
             WorktableCommon.changeMode(window.beforeMode)
           else
             WorktableCommon.changeMode(window.mode)

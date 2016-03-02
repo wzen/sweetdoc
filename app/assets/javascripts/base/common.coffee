@@ -317,8 +317,8 @@ class Common
   # @param [Boolean] collapsed 初期表示でページを閉じた状態にするか
   # @return [Boolean] ページを作成したか
   @createdMainContainerIfNeeded: (pageNum, collapsed = false) ->
-    root = $("##{Constant.Paging.ROOT_ID}")
-    sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
+    root = $("##{constant.Paging.ROOT_ID}")
+    sectionClass = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
     pageSection = $(".#{sectionClass}", root)
     if !pageSection? || pageSection.length == 0
       # Tempからコピー
@@ -337,8 +337,8 @@ class Common
   # Mainコンテナを削除
   # @param [Integer] pageNum ページ番号
   @removeMainContainer: (pageNum) ->
-    root = $("##{Constant.Paging.ROOT_ID}")
-    sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
+    root = $("##{constant.Paging.ROOT_ID}")
+    sectionClass = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
     $(".#{sectionClass}", root).remove()
 
   # ページ内のインスタンスを取得
@@ -632,10 +632,10 @@ class Common
   # @param [Integer] actionType アクションタイプID
   # @return [String] アクションタイプクラス名
   @getActionTypeClassNameByActionType = (actionType) ->
-    if parseInt(actionType) == Constant.ActionType.CLICK
-      return Constant.TimelineActionTypeClassName.CLICK
-    else if parseInt(actionType) == Constant.ActionType.SCROLL
-      return Constant.TimelineActionTypeClassName.SCROLL
+    if parseInt(actionType) == constant.ActionType.CLICK
+      return constant.TimelineActionTypeClassName.CLICK
+    else if parseInt(actionType) == constant.ActionType.SCROLL
+      return constant.TimelineActionTypeClassName.SCROLL
     return null
 
   # コードのアクションタイプからアクションタイプを取得
@@ -643,9 +643,9 @@ class Common
   # @return [String] アクションタイプクラス名
   @getActionTypeByCodingActionType = (actionType) ->
     if actionType == 'click'
-      return Constant.ActionType.CLICK
+      return constant.ActionType.CLICK
     else if actionType == 'scroll'
-      return Constant.ActionType.SCROLL
+      return constant.ActionType.SCROLL
     return null
 
   # 日付をフォーマットで変換
@@ -766,7 +766,7 @@ class Common
 
   # メッセージモーダル表示
   @showModalFlashMessage = (message, isModalFlush = false, immediately = true, enableOverlayClose = false) ->
-    type = Constant.ModalViewType.MESSAGE
+    type = constant.ModalViewType.MESSAGE
     _showModalView.call(@, type, null, isModalFlush, {}, ->
       $("body").append( '<div id="modal-overlay"></div>' )
       $("#modal-overlay").show()
@@ -912,14 +912,14 @@ class Common
   # @param [Integer] pn ページ番号
   # @return [Integer] 計算後zidnex
   @plusPagingZindex: (zindex, pn = PageValue.getPageNum()) ->
-    return (window.pageNumMax - pn) * (Constant.Zindex.EVENTFLOAT + 1) + zindex
+    return (window.pageNumMax - pn) * (constant.Zindex.EVENTFLOAT + 1) + zindex
 
   # Zindexにページ分のZindexを減算
   # @param [Integer] zindex 対象zindex
   # @param [Integer] pn ページ番号
   # @return [Integer] 計算後zidnex
   @minusPagingZindex: (zindex, pn = PageValue.getPageNum()) ->
-    return zindex - (window.pageNumMax - pn) * (Constant.Zindex.EVENTFLOAT + 1)
+    return zindex - (window.pageNumMax - pn) * (constant.Zindex.EVENTFLOAT + 1)
 
   # アイテムを削除
   # @param [Integer] pageNum ページ番号
@@ -989,7 +989,7 @@ class Common
 
     # js読み込み
     data = {}
-    data[Constant.ItemGallery.Key.ITEM_GALLERY_ACCESS_TOKEN] = needReadclassDistTokens
+    data[constant.ItemGallery.Key.ITEM_GALLERY_ACCESS_TOKEN] = needReadclassDistTokens
     $.ajax(
       {
         url: "/item_js/index"

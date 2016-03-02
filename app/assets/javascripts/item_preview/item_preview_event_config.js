@@ -36,7 +36,7 @@ ItemPreviewEventConfig = (function(superClass) {
       this[EventPageValueBase.PageValueKey.IS_SYNC] = parallel.is(":checked");
     }
     handlerDiv = $(".handler_div", this.emt);
-    if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.SCROLL) {
+    if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === constant.ActionType.SCROLL) {
       this[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = handlerDiv.find('.scroll_point_start:first').val();
       this[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = handlerDiv.find('.scroll_point_end:first').val();
       topEmt = handlerDiv.find('.scroll_enabled_top:first');
@@ -55,7 +55,7 @@ ItemPreviewEventConfig = (function(superClass) {
         left: leftEmt.find('.scroll_forward:first').is(":checked"),
         right: rightEmt.find('.scroll_forward:first').is(":checked")
       };
-    } else if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
+    } else if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === constant.ActionType.CLICK) {
       this[EventPageValueBase.PageValueKey.EVENT_DURATION] = handlerDiv.find('.click_duration:first').val();
       this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = 0;
       checked = handlerDiv.find('.enable_fork:first').is(':checked');

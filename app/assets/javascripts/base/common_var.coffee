@@ -8,7 +8,7 @@ class CommonVar
     window.operationHistories = {}
     window.operationHistoryTailIndexes = {}
     window.operationHistoryIndexes = {}
-    window.mode = Constant.Mode.NOT_SELECT
+    window.mode = constant.Mode.NOT_SELECT
 
   # 変数初期化(全メニュー共通)
   @initCommonVar = ->
@@ -19,7 +19,7 @@ class CommonVar
   # 作業テーブルのJQueryオブジェクト保存
   # @param [Integer] pageNum ページ番号
   @updateWorktableBaseElement = (pageNum) ->
-    page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
+    page = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
     window.sidebarWrapper = $("#sidebar-wrapper")
     window.scrollContents = $("#pages .#{page} .scroll_contents:first")
     window.scrollInsideWrapper = $("#pages .#{page} .scroll_inside_wrapper:first")
@@ -32,7 +32,7 @@ class CommonVar
   # 実行画面のJQueryオブジェクト保存
   # @param [Integer] pageNum ページ番号
   @updateRunBaseElement = (pageNum) ->
-    page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
+    page = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
     window.mainWrapper = $("#pages .#{page} .main-wrapper:first")
     window.scrollContents = $("#pages .#{page} .scroll_contents:first")
     window.scrollHandleWrapper = $("#pages .#{page} .scroll_handle_wrapper:first")
@@ -68,7 +68,7 @@ class CommonVar
     window.selectedObjId = null
     window.worktableItemsChangedState = false
     @updateWorktableBaseElement(PageValue.getPageNum())
-    window.eventPointingMode = Constant.EventInputPointingMode.NOT_SELECT
+    window.eventPointingMode = constant.EventInputPointingMode.NOT_SELECT
     window.previewRunning = false
 
   # 実行画面共通変数
@@ -77,7 +77,7 @@ class CommonVar
     window.distX = 0
     window.distY = 0
     window.resizeTimer = false
-    window.scrollViewSwitchZindex = {'on': Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT), 'off': Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM)}
+    window.scrollViewSwitchZindex = {'on': Common.plusPagingZindex(constant.Zindex.EVENTFLOAT), 'off': Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM)}
     window.disabledEventHandler = false
     window.firstItemFocused = false
     @updateRunBaseElement(PageValue.getPageNum())

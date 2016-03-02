@@ -23,7 +23,7 @@ class PageFlip
 
     # アニメーション用Div作成
     zIndexMax = Common.plusPagingZindex(0, 0)
-    $("##{Constant.Paging.ROOT_ID}").append("<div id='pageflip-root' style='position:absolute;top:0;left:0;width:100%;height:100%;z-index:#{zIndexMax}'><canvas id='pageflip-canvas' style='z-index:#{zIndexMax}'></canvas></div>")
+    $("##{constant.Paging.ROOT_ID}").append("<div id='pageflip-root' style='position:absolute;top:0;left:0;width:100%;height:100%;z-index:#{zIndexMax}'><canvas id='pageflip-canvas' style='z-index:#{zIndexMax}'></canvas></div>")
 
     @canvas = document.getElementById("pageflip-canvas")
     @context = @canvas.getContext("2d")
@@ -40,8 +40,8 @@ class PageFlip
     if window.debug
       console.log('[PageFlip constructor] direction:' + @direction)
 
-    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', afterPageNum)
-    section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+    className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', afterPageNum)
+    section = $("##{constant.Paging.ROOT_ID}").find(".#{className}:first")
     section.show()
     if @direction == PageFlip.DIRECTION.FORWARD
       section.css('width', '')
@@ -51,8 +51,8 @@ class PageFlip
   # 描画開始
   # @param [Function] callback コールバック
   startRender: (callback = null)->
-    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', @flipPageNum)
-    pages = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+    className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', @flipPageNum)
+    pages = $("##{constant.Paging.ROOT_ID}").find(".#{className}:first")
     if @direction == PageFlip.DIRECTION.FORWARD
       @flip = {
         progress: 1,

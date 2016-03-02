@@ -14,7 +14,7 @@ UploadCommon = (function() {
     $('.caption_markup', root).markItUp(mySettings);
     upload.prepareUploadTagEvent(root);
     $('.select_tag_input', root).off('keypress').on('keypress', function(e) {
-      if (e.keyCode === Constant.KeyboardKeyCode.ENTER) {
+      if (e.keyCode === constant.KeyboardKeyCode.ENTER) {
         upload.addUploadSelectTag(root, $(this).val());
         return $(this).val('');
       }
@@ -31,15 +31,15 @@ UploadCommon = (function() {
     try {
       png = canvas.toDataURL('image/png');
       $(".capture", root).attr('src', png);
-      $("input[name='" + Constant.Gallery.Key.THUMBNAIL_IMG + "']", root).val(png.replace(/^.*,/, ''));
+      $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG + "']", root).val(png.replace(/^.*,/, ''));
     } catch (_error) {
       $(".capture", root).attr('src', '');
     }
-    $("input[name='" + Constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE + "']", root).val('image/png');
+    $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE + "']", root).val('image/png');
     width = parseInt($(canvas).attr('width'));
     height = parseInt($(canvas).attr('height'));
-    $("input[name='" + Constant.Gallery.Key.THUMBNAIL_IMG_WIDTH + "']", root).val(width);
-    $("input[name='" + Constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT + "']", root).val(height);
+    $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_WIDTH + "']", root).val(width);
+    $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT + "']", root).val(height);
     if (width > height) {
       return $(".capture", root).css({
         width: '100%',

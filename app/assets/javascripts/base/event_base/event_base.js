@@ -211,7 +211,7 @@ EventBase = (function(superClass) {
   EventBase.prototype.previewStepDraw = function() {
     if (!this._skipEvent) {
       this._stepLoopCount = 0;
-      if (this.getEventActionType() === Constant.ActionType.SCROLL) {
+      if (this.getEventActionType() === constant.ActionType.SCROLL) {
         if (this._previewTimer != null) {
           clearTimeout(this._previewTimer);
           this._previewTimer = null;
@@ -234,7 +234,7 @@ EventBase = (function(superClass) {
             }
           };
         })(this), this.constructor.STEP_INTERVAL_DURATION * 1000);
-      } else if (this.getEventActionType() === Constant.ActionType.CLICK) {
+      } else if (this.getEventActionType() === constant.ActionType.CLICK) {
         this.clickHandlerFunc(true);
         return this._doPreviewLoop = false;
       }
@@ -578,7 +578,7 @@ EventBase = (function(superClass) {
       console.log('EventBase updateEventAfter id:' + this.id);
     }
     actionType = this.getEventActionType();
-    if (actionType === Constant.ActionType.SCROLL) {
+    if (actionType === constant.ActionType.SCROLL) {
       this.stepValue = this.scrollLength();
     }
     this.updateInstanceParamByStep(null, true);
@@ -618,9 +618,9 @@ EventBase = (function(superClass) {
             results.push(this.changeInstanceVarByConfig(varName, after));
           } else {
             if (value.varAutoChange) {
-              if (value.type === Constant.ItemDesignOptionType.NUMBER) {
+              if (value.type === constant.ItemDesignOptionType.NUMBER) {
                 results.push(this.changeInstanceVarByConfig(varName, before + (after - before) * progressPercentage));
-              } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
+              } else if (value.type === constant.ItemDesignOptionType.COLOR) {
                 colorCacheVarName = varName + "ColorChange__Cache";
                 if (this[colorCacheVarName] == null) {
                   colorType = this.constructor.actionPropertiesModifiableVars()[varName].colorType;
@@ -683,9 +683,9 @@ EventBase = (function(superClass) {
             after = _this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
             if ((before != null) && (after != null)) {
               if (value.varAutoChange) {
-                if (value.type === Constant.ItemDesignOptionType.NUMBER) {
+                if (value.type === constant.ItemDesignOptionType.NUMBER) {
                   _this.changeInstanceVarByConfig(varName, before + (after - before) * progressPercentage);
-                } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
+                } else if (value.type === constant.ItemDesignOptionType.COLOR) {
                   colorCacheVarName = varName + "ColorChange__Cache";
                   if (_this[colorCacheVarName] == null) {
                     colorType = _this.constructor.actionPropertiesModifiableVars()[varName].colorType;
@@ -761,7 +761,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.progressMax = function() {
-    if (this._event[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.SCROLL) {
+    if (this._event[EventPageValueBase.PageValueKey.ACTIONTYPE] === constant.ActionType.SCROLL) {
       return this.scrollLength();
     } else {
       return this.clickDurationStepMax();

@@ -150,7 +150,7 @@ EventConfig = (function() {
       this[EventPageValueBase.PageValueKey.IS_SYNC] = parallel.is(":checked");
     }
     handlerDiv = $(".handler_div", this.emt);
-    if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.SCROLL) {
+    if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === constant.ActionType.SCROLL) {
       this[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = '';
       this[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = "";
       this[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = handlerDiv.find('.scroll_point_start:first').val();
@@ -171,7 +171,7 @@ EventConfig = (function() {
         left: leftEmt.find('.scroll_forward:first').is(":checked"),
         right: rightEmt.find('.scroll_forward:first').is(":checked")
       };
-    } else if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
+    } else if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === constant.ActionType.CLICK) {
       this[EventPageValueBase.PageValueKey.EVENT_DURATION] = handlerDiv.find('.click_duration:first').val();
       this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = 0;
       checked = handlerDiv.find('.enable_fork:first').is(':checked');
@@ -313,10 +313,10 @@ EventConfig = (function() {
         }
         $('.handler_form', _this.emt).hide();
         if ($(e.target).val() === 'scroll') {
-          _this[EventPageValueBase.PageValueKey.ACTIONTYPE] = Constant.ActionType.SCROLL;
+          _this[EventPageValueBase.PageValueKey.ACTIONTYPE] = constant.ActionType.SCROLL;
           $('.scroll_form', _this.emt).show();
         } else if ($(e.target).val() === 'click') {
-          _this[EventPageValueBase.PageValueKey.ACTIONTYPE] = Constant.ActionType.CLICK;
+          _this[EventPageValueBase.PageValueKey.ACTIONTYPE] = constant.ActionType.CLICK;
           $('.click_form', _this.emt).show();
         }
         if (_this.teNum > 1) {
@@ -485,15 +485,15 @@ EventConfig = (function() {
             defaultValue = objClass.actionPropertiesModifiableVars()[varName]["default"];
           }
         }
-        if (v[objClass.ActionPropertiesKey.TYPE] === Constant.ItemDesignOptionType.NUMBER) {
+        if (v[objClass.ActionPropertiesKey.TYPE] === constant.ItemDesignOptionType.NUMBER) {
           results.push(this.settingModifiableVarSlider(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], v.min, v.max, v.stepValue));
-        } else if (v[objClass.ActionPropertiesKey.TYPE] === Constant.ItemDesignOptionType.STRING) {
+        } else if (v[objClass.ActionPropertiesKey.TYPE] === constant.ItemDesignOptionType.STRING) {
           results.push(this.settingModifiableString(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
-        } else if (v[objClass.ActionPropertiesKey.TYPE] === Constant.ItemDesignOptionType.BOOLEAN) {
+        } else if (v[objClass.ActionPropertiesKey.TYPE] === constant.ItemDesignOptionType.BOOLEAN) {
           results.push(this.settingModifiableCheckbox(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
-        } else if (v[objClass.ActionPropertiesKey.TYPE] === Constant.ItemDesignOptionType.COLOR) {
+        } else if (v[objClass.ActionPropertiesKey.TYPE] === constant.ItemDesignOptionType.COLOR) {
           results.push(this.settingModifiableColor(varName, defaultValue, v[objClass.ActionPropertiesKey.COLOR_TYPE], v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
-        } else if (v[objClass.ActionPropertiesKey.TYPE] === Constant.ItemDesignOptionType.SELECT) {
+        } else if (v[objClass.ActionPropertiesKey.TYPE] === constant.ItemDesignOptionType.SELECT) {
           results.push(this.settingModifiableSelect(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], v['options[]']));
         } else {
           results.push(void 0);

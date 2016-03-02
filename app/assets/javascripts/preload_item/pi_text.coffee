@@ -442,7 +442,7 @@ class PreloadItemText extends CanvasItemBase
       @firstFocus = Common.firstFocusItemObj() == null
       # 編集モード
       Navbar.setModeEdit()
-      WorktableCommon.changeMode(Constant.Mode.EDIT)
+      WorktableCommon.changeMode(constant.Mode.EDIT)
       if callback?
         callback()
     )
@@ -1315,7 +1315,7 @@ class PreloadItemText extends CanvasItemBase
       return @fixedFontSize
 
   _showInputModal = ->
-    Common.showModalView(Constant.ModalViewType.ITEM_TEXT_EDITING, false, (modalEmt, params, callback = null) =>
+    Common.showModalView(constant.ModalViewType.ITEM_TEXT_EDITING, false, (modalEmt, params, callback = null) =>
       _prepareEditModal.call(@ ,modalEmt)
       if callback?
         callback()
@@ -1358,7 +1358,7 @@ class PreloadItemText extends CanvasItemBase
       @saveObj()
       # モードを描画モードに
       Navbar.setModeDraw(@classDistToken, =>
-        WorktableCommon.changeMode(Constant.Mode.DRAW)
+        WorktableCommon.changeMode(constant.Mode.DRAW)
         @refresh(true, =>
           Common.hideModalView()
         )

@@ -179,7 +179,7 @@ EventDragPointingDraw = (function() {
           pointing = new _this();
           pointing.getJQueryElement().remove();
           Handwrite.initHandwrite();
-          return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
+          return WorktableCommon.changeEventPointingMode(constant.EventInputPointingMode.NOT_SELECT);
         };
         if (applyDrawCallback != null) {
           if (applyDrawCallback(pointingPaths)) {
@@ -199,13 +199,13 @@ EventDragPointingDraw = (function() {
     })(this));
     pointing.initData(multiDraw);
     PointingHandwrite.initHandwrite(this);
-    WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW);
+    WorktableCommon.changeEventPointingMode(constant.EventInputPointingMode.DRAW);
     return FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, (function(_this) {
       return function() {
         pointing = new _this();
         pointing.getJQueryElement().remove();
         Handwrite.initHandwrite();
-        return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
+        return WorktableCommon.changeEventPointingMode(constant.EventInputPointingMode.NOT_SELECT);
       };
     })(this));
   };

@@ -11,8 +11,8 @@ Paging = (function() {
   Paging.createPageSelectMenu = function() {
     var active, deletePageMenu, divider, forkCount, forkNum, i, j, k, l, name, navForkClass, navForkName, navPageClass, navPageName, newForkMenu, newPageMenu, nowMenuName, pageCount, pageMenu, ref, ref1, root, selectRoot, subActive, subMenu;
     pageCount = PageValue.getPageCount();
-    root = $("#" + Constant.Paging.NAV_ROOT_ID);
-    selectRoot = $("." + Constant.Paging.NAV_SELECT_ROOT_CLASS, root);
+    root = $("#" + constant.Paging.NAV_ROOT_ID);
+    selectRoot = $("." + constant.Paging.NAV_SELECT_ROOT_CLASS, root);
     divider = "<li class='divider'></li>";
     newPageMenu = "<li><a class='" + Constant.Paging.NAV_MENU_ADDPAGE_CLASS + " menu-item'>" + (I18n.t('header_menu.page.add_page')) + "</a></li>";
     newForkMenu = "<li><a class='" + Constant.Paging.NAV_MENU_ADDFORK_CLASS + " menu-item'>" + (I18n.t('header_menu.page.add_fork')) + "</a></li>";
@@ -47,7 +47,7 @@ Paging = (function() {
       name = (I18n.t('header_menu.page.fork')) + " " + (PageValue.getForkNum());
       nowMenuName += " - (" + name + ")";
     }
-    $("." + Constant.Paging.NAV_SELECTED_CLASS, root).html(nowMenuName);
+    $("." + constant.Paging.NAV_SELECTED_CLASS, root).html(nowMenuName);
     selectRoot.find(".menu-item").off('click').on('click', (function(_this) {
       return function(e) {
         var classList, forkPrefix, pageNum, pagePrefix;
@@ -93,9 +93,9 @@ Paging = (function() {
 
   Paging.switchSectionDisplay = function(pageNum) {
     var className, section;
-    $("#" + Constant.Paging.ROOT_ID).find(".section").hide();
-    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
-    section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+    $("#" + constant.Paging.ROOT_ID).find(".section").hide();
+    className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
+    section = $("#" + constant.Paging.ROOT_ID).find("." + className + ":first");
     return section.show();
   };
 
@@ -120,11 +120,11 @@ Paging = (function() {
         WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded();
         WorktableCommon.changeMode(window.mode);
         Timeline.refreshAllTimeline();
-        className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
-        newSection = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+        className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
+        newSection = $("#" + constant.Paging.ROOT_ID).find("." + className + ":first");
         newSection.show();
-        className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
-        oldSection = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+        className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
+        oldSection = $("#" + constant.Paging.ROOT_ID).find("." + className + ":first");
         oldSection.hide();
         Common.removeAllItem(beforePageNum);
         PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
@@ -204,11 +204,11 @@ Paging = (function() {
           var className, newSection, oldSection;
           WorktableCommon.changeMode(window.mode, selectedPageNum);
           Timeline.refreshAllTimeline();
-          className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', selectedPageNum);
-          newSection = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+          className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', selectedPageNum);
+          newSection = $("#" + constant.Paging.ROOT_ID).find("." + className + ":first");
           newSection.show();
-          className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
-          oldSection = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+          className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
+          oldSection = $("#" + constant.Paging.ROOT_ID).find("." + className + ":first");
           oldSection.hide();
           if (window.debug) {
             console.log('[selectPage] deleted pageNum:' + beforePageNum);

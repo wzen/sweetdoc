@@ -38,7 +38,7 @@ class WorktableCommon
       # ユーザが変更された場合
       return false
     generals = LocalStorage.loadGeneralValue()
-    if !generals[Constant.Project.Key.PROJECT_ID]?
+    if !generals[constant.Project.Key.PROJECT_ID]?
       # プロジェクトが存在しない場合
       return false
 
@@ -158,24 +158,24 @@ class WorktableCommon
   # @param [Mode] afterMode 変更後画面モード
   @changeMode = (afterMode, pn = PageValue.getPageNum()) ->
     # 画面Zindex変更
-    if afterMode == Constant.Mode.NOT_SELECT
-      #$(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT, pn))
+    if afterMode == constant.Mode.NOT_SELECT
+      #$(window.drawingCanvas).css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTFLOAT, pn))
       $(window.drawingCanvas).css('pointer-events', '')
       window.scrollInsideWrapper.removeClass('edit_mode')
-    else if afterMode == Constant.Mode.DRAW
-      #$(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT, pn))
+    else if afterMode == constant.Mode.DRAW
+      #$(window.drawingCanvas).css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTFLOAT, pn))
       $(window.drawingCanvas).css('pointer-events', '')
       window.scrollContents.find('.item.draggable').removeClass('edit_mode')
       window.scrollInsideWrapper.removeClass('edit_mode')
-    else if afterMode == Constant.Mode.EDIT
-      #$(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM, pn))
+    else if afterMode == constant.Mode.EDIT
+      #$(window.drawingCanvas).css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM, pn))
       $(window.drawingCanvas).css('pointer-events', 'none')
       window.scrollContents.find('.item.draggable').addClass('edit_mode')
       window.scrollInsideWrapper.addClass('edit_mode')
       # ヘッダーをEditに
       Navbar.setModeEdit()
-    else if afterMode == Constant.Mode.OPTION
-      #$(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT, pn))
+    else if afterMode == constant.Mode.OPTION
+      #$(window.drawingCanvas).css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTFLOAT, pn))
       $(window.drawingCanvas).css('pointer-events', '')
       window.scrollContents.find('.item.draggable').removeClass('edit_mode')
       window.scrollInsideWrapper.removeClass('edit_mode')
@@ -195,12 +195,12 @@ class WorktableCommon
 
   # 画面Pointingモードに変更
   @changeEventPointingMode = (afterMode) ->
-    if afterMode == Constant.EventInputPointingMode.NOT_SELECT
+    if afterMode == constant.EventInputPointingMode.NOT_SELECT
       # 全入力を有効
       Timeline.disabledOperation(false)
       Sidebar.disabledOperation(false)
       Navbar.disabledOperation(false)
-    else if afterMode == Constant.EventInputPointingMode.DRAW || afterMode == Constant.EventInputPointingMode.ITEM_TOUCH
+    else if afterMode == constant.EventInputPointingMode.DRAW || afterMode == constant.EventInputPointingMode.ITEM_TOUCH
       # 全入力を無効に
       Timeline.disabledOperation(true)
       Sidebar.disabledOperation(true)
@@ -224,11 +224,11 @@ class WorktableCommon
       'click_pointing'
     ]
     $('#main').removeClass(classes.join(' '))
-    if mode == Constant.Mode.DRAW
+    if mode == constant.Mode.DRAW
       $('#main').addClass('draw_mode')
-    else if mode == Constant.EventInputPointingMode.DRAW
+    else if mode == constant.EventInputPointingMode.DRAW
       $('#main').addClass('draw_pointing')
-    else if mode == Constant.EventInputPointingMode.ITEM_TOUCH
+    else if mode == constant.EventInputPointingMode.ITEM_TOUCH
       $('#main').addClass('click_pointing')
 
   # モードを一つ前に戻す
@@ -300,7 +300,7 @@ class WorktableCommon
       if (isMac && e.metaKey) ||  (!isMac && e.ctrlKey)
         if window.debug
           console.log(e)
-        if e.keyCode == Constant.KeyboardKeyCode.Z
+        if e.keyCode == constant.KeyboardKeyCode.Z
           e.preventDefault()
           if e.shiftKey
             # Shift + Ctrl + z → Redo
@@ -308,23 +308,23 @@ class WorktableCommon
           else
             # Ctrl + z → Undo
             OperationHistory.undo()
-        else if e.keyCode == Constant.KeyboardKeyCode.C
+        else if e.keyCode == constant.KeyboardKeyCode.C
           e.preventDefault()
           # Ctrl + c -> Copy
           WorktableCommon.copyItem()
           WorktableCommon.setMainContainerContext()
-        else if e.keyCode == Constant.KeyboardKeyCode.X
+        else if e.keyCode == constant.KeyboardKeyCode.X
           e.preventDefault()
           # Ctrl + x -> Cut
           WorktableCommon.cutItem()
           WorktableCommon.setMainContainerContext()
-        else if e.keyCode == Constant.KeyboardKeyCode.V
+        else if e.keyCode == constant.KeyboardKeyCode.V
           e.preventDefault()
           # 貼り付け
           WorktableCommon.pasteItem()
           # 履歴保存
           OperationHistory.add()
-        else if e.shiftKey && (e.keyCode == Constant.KeyboardKeyCode.PLUS || e.keyCode == Constant.KeyboardKeyCode.SEMICOLON)
+        else if e.shiftKey && (e.keyCode == constant.KeyboardKeyCode.PLUS || e.keyCode == constant.KeyboardKeyCode.SEMICOLON)
           e.preventDefault()
           # ズームイン
           step = 0.1
@@ -332,7 +332,7 @@ class WorktableCommon
           WorktableCommon.setWorktableViewScale(updatedScale, true)
           if Sidebar.isOpenedConfigSidebar()
             WorktableSetting.PositionAndScale.initConfig()
-        else if e.keyCode == Constant.KeyboardKeyCode.MINUS || e.keyCode == Constant.KeyboardKeyCode.F_MINUS
+        else if e.keyCode == constant.KeyboardKeyCode.MINUS || e.keyCode == constant.KeyboardKeyCode.F_MINUS
           e.preventDefault()
           # ズームアウト
           step = 0.1
@@ -379,17 +379,17 @@ class WorktableCommon
   # ページ削除
   @removePage = (pageNum, callback = null) ->
     # ページHTMLを削除
-    root = $("##{Constant.Paging.ROOT_ID}")
-    afterSectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageCount())
+    root = $("##{constant.Paging.ROOT_ID}")
+    afterSectionClass = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageCount())
     afterSection = $(".#{afterSectionClass}:first", root)
     for p in [(PageValue.getPageCount() - 1)..pageNum] by -1
       # ページをずらす
-      beforeSectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', p)
+      beforeSectionClass = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', p)
       beforeSection = $(".#{beforeSectionClass}:first", root)
       afterSection.removeClass(afterSectionClass).addClass(beforeSectionClass)
       afterSection.css('z-index', Common.plusPagingZindex(0, p))
       afterSection = beforeSection
-    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
+    className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
     $("#pages .#{className}").remove()
 
     # 共通イベントのデータを削除
@@ -414,11 +414,11 @@ class WorktableCommon
     # 定数 & レイアウト & イベント系変数の初期化
     CommonVar.worktableCommonVar()
     Common.updateCanvasSize()
-    $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
+    $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTFLOAT))
     # スクロールサイズ
     window.scrollInsideWrapper.width(window.scrollViewSize)
     window.scrollInsideWrapper.height(window.scrollViewSize)
-    window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1))
+    window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM + 1))
     # スクロールイベント設定
     window.scrollContents.off('scroll').on('scroll', (e) ->
       if window.skipScrollEvent? && window.skipScrollEvent
@@ -466,7 +466,7 @@ class WorktableCommon
     WorktableSetting.clear()
     WorktableSetting.initConfig()
     # 選択アイテム初期化
-    WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
+    WorktableCommon.changeEventPointingMode(constant.EventInputPointingMode.NOT_SELECT)
     # ページ総数更新
     PageValue.updatePageCount()
     # フォーク総数更新
@@ -496,7 +496,7 @@ class WorktableCommon
         # 履歴保存
         OperationHistory.add()
       })
-    page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
+    page = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
     WorktableCommon.setupContextMenu($("#pages .#{page} .scroll_inside:first"), "#pages .#{page} .main-wrapper:first", menu)
 
   # ワークテーブル初期化
@@ -560,7 +560,7 @@ class WorktableCommon
         t = $(event.target)
         # 選択メニューを最前面に表示
         ui.menu.zIndex( $(event.target).zIndex() + 1)
-        if window.mode == Constant.Mode.EDIT && $(t).hasClass('item')
+        if window.mode == constant.Mode.EDIT && $(t).hasClass('item')
         # 選択状態にする
           WorktableCommon.setSelectedBorder(t)
     })

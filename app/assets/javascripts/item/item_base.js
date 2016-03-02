@@ -55,7 +55,7 @@ ItemBase = (function(superClass) {
       };
     }
     this.itemSize = null;
-    this.zindex = Constant.Zindex.EVENTBOTTOM + 1;
+    this.zindex = constant.Zindex.EVENTBOTTOM + 1;
     this._ohiRegist = [];
     this._ohiRegistIndex = 0;
     this.registCoord = [];
@@ -115,7 +115,7 @@ ItemBase = (function(superClass) {
   ItemBase.prototype.hideItem = function() {
     return this.getJQueryElement().css({
       'opacity': 0,
-      'z-index': Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM)
+      'z-index': Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM)
     });
   };
 
@@ -487,7 +487,7 @@ ItemBase = (function(superClass) {
       if (typeof targetValue === 'string' && (targetValue === 'true' || targetValue === 'false')) {
         targetValue = targetValue === 'true';
       }
-      root = e.closest("." + Constant.DesignConfig.DESIGN_ROOT_CLASSNAME);
+      root = e.closest("." + constant.DesignConfig.ROOT_CLASSNAME);
       openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName).replace('@childrenkey', cKey);
       if (cValue === targetValue) {
         $(root).find("." + openClassName).show();

@@ -292,7 +292,7 @@ class ScreenEvent extends CommonEvent
           # オーバーレイを被せる
           w = $(window.drawingCanvas).attr('width')
           h = $(window.drawingCanvas).attr('height')
-          canvas = $("<canvas id='preview_position_overlay' class='canvas_container canvas' width='#{w}' height='#{h}' style='z-index: #{Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1}'></canvas>")
+          canvas = $("<canvas id='preview_position_overlay' class='canvas_container canvas' width='#{w}' height='#{h}' style='z-index: #{Common.plusPagingZindex(constant.Zindex.EVENTFLOAT) + 1}'></canvas>")
           $(window.drawingCanvas).parent().append(canvas)
           overlay = $('#preview_position_overlay')
         # オーバーレイ描画

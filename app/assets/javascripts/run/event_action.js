@@ -151,8 +151,8 @@ EventAction = (function() {
               return function() {
                 var className, section;
                 _this.nextPageIndex = null;
-                className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
-                section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+                className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
+                section = $("#" + constant.Paging.ROOT_ID).find("." + className + ":first");
                 section.hide();
                 Common.removeAllItem(beforePageNum, false);
                 $("#" + (RunCommon.RUN_CSS.replace('@pagenum', beforePageNum))).remove();

@@ -141,8 +141,8 @@ class EventAction
             # 次ページインデックスを初期化
             @nextPageIndex = null
             # 隠したビューを非表示にする
-            className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
-            section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+            className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
+            section = $("##{constant.Paging.ROOT_ID}").find(".#{className}:first")
             section.hide()
             # 隠したビューのアイテム表示を削除(インスタンスは残す)
             Common.removeAllItem(beforePageNum, false)

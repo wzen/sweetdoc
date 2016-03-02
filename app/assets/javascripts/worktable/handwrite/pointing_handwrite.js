@@ -16,14 +16,14 @@ PointingHandwrite = (function(superClass) {
   };
 
   PointingHandwrite.mouseDownDrawing = function(loc) {
-    if (window.eventPointingMode === Constant.EventInputPointingMode.DRAW) {
+    if (window.eventPointingMode === constant.EventInputPointingMode.DRAW) {
       window.handwritingItem = new this.targetClass(loc);
       return window.handwritingItem.mouseDownDrawing();
     }
   };
 
   PointingHandwrite.isDrawMode = function() {
-    return window.eventPointingMode === Constant.EventInputPointingMode.DRAW;
+    return window.eventPointingMode === constant.EventInputPointingMode.DRAW;
   };
 
   return PointingHandwrite;

@@ -8,7 +8,7 @@ itemBaseWorktableExtend =
   # @param [Array] loc Canvas座標
   mouseDownDrawing: (callback = null) ->
     @saveDrawingSurface()
-    WorktableCommon.changeMode(Constant.Mode.DRAW)
+    WorktableCommon.changeMode(constant.Mode.DRAW)
     @startDraw()
     if callback?
       callback()
@@ -18,7 +18,7 @@ itemBaseWorktableExtend =
     @restoreAllDrawingSurface()
     @endDraw(zindex, true, =>
       @setupItemEvents()
-      WorktableCommon.changeMode(Constant.Mode.DRAW)
+      WorktableCommon.changeMode(constant.Mode.DRAW)
       @saveObj(true)
       # フォーカス設定
       @firstFocus = Common.firstFocusItemObj() == null
@@ -107,7 +107,7 @@ itemBaseWorktableExtend =
     # 全てのサイドバーを非表示
     sc = $('.sidebar-config')
     sc.hide()
-    $(".#{Constant.DesignConfig.DESIGN_ROOT_CLASSNAME}", sc).hide()
+    $(".#{constant.DesignConfig.ROOT_CLASSNAME}", sc).hide()
     $('#design-config').show()
     $('#' + @getDesignConfigId()).show()
 
@@ -463,19 +463,19 @@ itemBaseWorktableExtend =
     designConfigRoot = $('#' + @getDesignConfigId())
     if @constructor.actionPropertiesModifiableVars()?
       for varName, value of @constructor.actionPropertiesModifiableVars()
-        if value.type == Constant.ItemDesignOptionType.NUMBER
+        if value.type == constant.ItemDesignOptionType.NUMBER
           @settingModifiableVarSlider(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], value.min, value.max, value.stepValue)
-        else if value.type == Constant.ItemDesignOptionType.STRING
+        else if value.type == constant.ItemDesignOptionType.STRING
           @settingModifiableString(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
-        else if value.type == Constant.ItemDesignOptionType.BOOLEAN
+        else if value.type == constant.ItemDesignOptionType.BOOLEAN
           @settingModifiableCheckbox(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
-        else if value.type == Constant.ItemDesignOptionType.COLOR
+        else if value.type == constant.ItemDesignOptionType.COLOR
           @settingModifiableColor(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.COLOR_TYPE], value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
-        else if value.type == Constant.ItemDesignOptionType.SELECT_FILE
+        else if value.type == constant.ItemDesignOptionType.SELECT_FILE
           @settingModifiableSelectFile(designConfigRoot, varName)
-        else if value.type == Constant.ItemDesignOptionType.SELECT_IMAGE_FILE
+        else if value.type == constant.ItemDesignOptionType.SELECT_IMAGE_FILE
           @settingModifiableSelectImageFile(designConfigRoot, varName)
-        else if value.type == Constant.ItemDesignOptionType.SELECT
+        else if value.type == constant.ItemDesignOptionType.SELECT
           @settingModifiableSelect(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], value['options[]'])
 
   # 変数編集スライダーの作成

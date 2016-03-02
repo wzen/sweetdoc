@@ -21,7 +21,7 @@ class Navbar
           # ナビバーをプロジェクト作成前状態に
           Navbar.switchWorktableNavbarWhenProjectCreated(false)
           # 初期モーダル表示
-          Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal)
+          Common.showModalView(constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal)
         )
 
       if Object.keys(window.instanceMap).length > 0 || PageValue.getPageCount() >= 2
@@ -36,7 +36,7 @@ class Navbar
     )
     $('.menu-adminproject', fileMenuEmt).off('click').on('click', ->
       # モーダル表示
-      Common.showModalView(Constant.ModalViewType.ADMIN_PROJECTS, true, Project.initAdminProjectModal)
+      Common.showModalView(constant.ModalViewType.ADMIN_PROJECTS, true, Project.initAdminProjectModal)
     )
     menuSave = $('.menu-save', fileMenuEmt)
     menuSave.off('click').on('click', ->
@@ -59,7 +59,7 @@ class Navbar
     )
     etcMenuEmt = $('#header_etc_select_menu .dropdown-menu > li')
     $('.menu-about', etcMenuEmt).off('click').on('click', ->
-      Common.showModalView(Constant.ModalViewType.ABOUT)
+      Common.showModalView(constant.ModalViewType.ABOUT)
     )
     $('.menu-backtomainpage', etcMenuEmt).off('click').on('click', ->
       window.location.href = '/'
@@ -75,13 +75,13 @@ class Navbar
       if emtId.indexOf(Navbar.ITEM_MENU_PREFIX) >= 0
         classDistToken = emtId.replace(Navbar.ITEM_MENU_PREFIX, '')
         Navbar.setModeDraw(classDistToken, =>
-          WorktableCommon.changeMode(Constant.Mode.DRAW)
+          WorktableCommon.changeMode(constant.Mode.DRAW)
         )
     )
     $('#menu-action-edit').off('click').on('click', ->
       Sidebar.closeSidebar()
       Navbar.setModeEdit()
-      WorktableCommon.changeMode(Constant.Mode.EDIT)
+      WorktableCommon.changeMode(constant.Mode.EDIT)
     )
     $('#menu_sidebar_toggle').off('click').on('click', ->
       if Sidebar.isOpenedConfigSidebar()
@@ -102,7 +102,7 @@ class Navbar
       $('#header_items_select_menu').show()
       $('#header_items_motion_check').show()
       $('#menu_sidebar_toggle').show()
-      $("##{Constant.Paging.NAV_ROOT_ID}").show()
+      $("##{constant.Paging.NAV_ROOT_ID}").show()
       $('#menu_sidebar_toggle_li').show()
       $("##{@NAVBAR_ROOT} .#{@LAST_UPDATE_TIME_CLASS}").closest('li').show()
     else
@@ -111,7 +111,7 @@ class Navbar
       $('#header_items_select_menu').hide()
       $('#header_items_motion_check').hide()
       $('#menu_sidebar_toggle').hide()
-      $("##{Constant.Paging.NAV_ROOT_ID}").hide()
+      $("##{constant.Paging.NAV_ROOT_ID}").hide()
       $('#menu_sidebar_toggle_li').hide()
       $("##{@NAVBAR_ROOT} .#{@LAST_UPDATE_TIME_CLASS}").closest('li').hide()
   # Runナビバー初期化

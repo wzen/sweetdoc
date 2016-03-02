@@ -154,7 +154,7 @@ class EventBase extends Extend
     if !@_skipEvent
       @_stepLoopCount = 0
 
-      if @getEventActionType() == Constant.ActionType.SCROLL
+      if @getEventActionType() == constant.ActionType.SCROLL
         if @_previewTimer?
           clearTimeout(@_previewTimer)
           @_previewTimer = null
@@ -172,7 +172,7 @@ class EventBase extends Extend
           else
             @previewStepDraw()
         , @constructor.STEP_INTERVAL_DURATION * 1000)
-      else if @getEventActionType() == Constant.ActionType.CLICK
+      else if @getEventActionType() == constant.ActionType.CLICK
         @clickHandlerFunc(true)
         @_doPreviewLoop = false
     else if !@_isFinishedEvent && (!@_stepLoopCount? || @_stepLoopCount < 20)
@@ -485,7 +485,7 @@ class EventBase extends Extend
     if window.runDebug
       console.log('EventBase updateEventAfter id:' + @id)
     actionType = @getEventActionType()
-    if actionType == Constant.ActionType.SCROLL
+    if actionType == constant.ActionType.SCROLL
       @stepValue = @scrollLength()
     @updateInstanceParamByStep(null, true)
     # 最終ステップでメソッドを実行
@@ -521,9 +521,9 @@ class EventBase extends Extend
           else
             if value.varAutoChange
               # 変数自動変更
-              if value.type == Constant.ItemDesignOptionType.NUMBER
+              if value.type == constant.ItemDesignOptionType.NUMBER
                 @changeInstanceVarByConfig(varName, before + (after - before) * progressPercentage)
-              else if value.type == Constant.ItemDesignOptionType.COLOR
+              else if value.type == constant.ItemDesignOptionType.COLOR
                 colorCacheVarName = "#{varName}ColorChange__Cache"
                 if !@[colorCacheVarName]?
                   colorType = @constructor.actionPropertiesModifiableVars()[varName].colorType
@@ -559,9 +559,9 @@ class EventBase extends Extend
           after = @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
           if before? && after?
             if value.varAutoChange
-              if value.type == Constant.ItemDesignOptionType.NUMBER
+              if value.type == constant.ItemDesignOptionType.NUMBER
                 @changeInstanceVarByConfig(varName, before + (after - before) * progressPercentage)
-              else if value.type == Constant.ItemDesignOptionType.COLOR
+              else if value.type == constant.ItemDesignOptionType.COLOR
                 colorCacheVarName = "#{varName}ColorChange__Cache"
                 if !@[colorCacheVarName]?
                   colorType = @constructor.actionPropertiesModifiableVars()[varName].colorType
@@ -603,7 +603,7 @@ class EventBase extends Extend
 
   # ステップ数最大値
   progressMax: ->
-    return if @_event[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.SCROLL then @scrollLength() else @clickDurationStepMax()
+    return if @_event[EventPageValueBase.PageValueKey.ACTIONTYPE] == constant.ActionType.SCROLL then @scrollLength() else @clickDurationStepMax()
 
   # クリック時間ステップ数最大値
   clickDurationStepMax: ->

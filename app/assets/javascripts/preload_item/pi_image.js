@@ -135,7 +135,7 @@ PreloadItemImage = (function(superClass) {
           contents = "<div class='no_image'><div class='center_image put_center'></div></div>";
           _this.addContentsToScrollInside(contents, callback);
           if (showModal) {
-            return Common.showModalView(Constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, function(modalEmt, params, callback) {
+            return Common.showModalView(constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, function(modalEmt, params, callback) {
               if (callback == null) {
                 callback = null;
               }

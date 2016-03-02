@@ -18,4 +18,4 @@ class ItemPreviewHandwrite extends Handwrite
           window.handwritingItem = null
         )
 
-    WorktableCommon.changeMode(Constant.Mode.EDIT)
+    WorktableCommon.changeMode(constant.Mode.EDIT)

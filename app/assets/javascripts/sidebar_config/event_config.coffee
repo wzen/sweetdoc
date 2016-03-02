@@ -149,7 +149,7 @@ class EventConfig
       @[EventPageValueBase.PageValueKey.IS_SYNC] = parallel.is(":checked")
 
     handlerDiv = $(".handler_div", @emt)
-    if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.SCROLL
+    if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == constant.ActionType.SCROLL
       @[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = ''
       @[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = ""
       @[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = handlerDiv.find('.scroll_point_start:first').val()
@@ -172,7 +172,7 @@ class EventConfig
         right: rightEmt.find('.scroll_forward:first').is(":checked")
       }
 
-    else if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.CLICK
+    else if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == constant.ActionType.CLICK
       @[EventPageValueBase.PageValueKey.EVENT_DURATION] = handlerDiv.find('.click_duration:first').val()
       @[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = 0
       checked = handlerDiv.find('.enable_fork:first').is(':checked')
@@ -296,10 +296,10 @@ class EventConfig
 
       $('.handler_form', @emt).hide()
       if $(e.target).val() == 'scroll'
-        @[EventPageValueBase.PageValueKey.ACTIONTYPE] = Constant.ActionType.SCROLL
+        @[EventPageValueBase.PageValueKey.ACTIONTYPE] = constant.ActionType.SCROLL
         $('.scroll_form', @emt).show()
       else if $(e.target).val() == 'click'
-        @[EventPageValueBase.PageValueKey.ACTIONTYPE] = Constant.ActionType.CLICK
+        @[EventPageValueBase.PageValueKey.ACTIONTYPE] = constant.ActionType.CLICK
         $('.click_form', @emt).show()
 
       if @teNum > 1
@@ -446,15 +446,15 @@ class EventConfig
           if objClass.actionPropertiesModifiableVars()[varName]?
             defaultValue = objClass.actionPropertiesModifiableVars()[varName].default
 
-        if v[objClass.ActionPropertiesKey.TYPE] == Constant.ItemDesignOptionType.NUMBER
+        if v[objClass.ActionPropertiesKey.TYPE] == constant.ItemDesignOptionType.NUMBER
           @settingModifiableVarSlider(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], v.min, v.max, v.stepValue)
-        else if v[objClass.ActionPropertiesKey.TYPE] == Constant.ItemDesignOptionType.STRING
+        else if v[objClass.ActionPropertiesKey.TYPE] == constant.ItemDesignOptionType.STRING
           @settingModifiableString(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
-        else if v[objClass.ActionPropertiesKey.TYPE] == Constant.ItemDesignOptionType.BOOLEAN
+        else if v[objClass.ActionPropertiesKey.TYPE] == constant.ItemDesignOptionType.BOOLEAN
           @settingModifiableCheckbox(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
-        else if v[objClass.ActionPropertiesKey.TYPE] == Constant.ItemDesignOptionType.COLOR
+        else if v[objClass.ActionPropertiesKey.TYPE] == constant.ItemDesignOptionType.COLOR
           @settingModifiableColor(varName, defaultValue, v[objClass.ActionPropertiesKey.COLOR_TYPE], v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
-        else if v[objClass.ActionPropertiesKey.TYPE] == Constant.ItemDesignOptionType.SELECT
+        else if v[objClass.ActionPropertiesKey.TYPE] == constant.ItemDesignOptionType.SELECT
           @settingModifiableSelect(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], v['options[]'])
 
   # 独自変数コンフィグの初期化

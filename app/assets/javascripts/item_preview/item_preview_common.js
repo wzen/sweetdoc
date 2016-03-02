@@ -14,7 +14,7 @@ ItemPreviewCommon = (function() {
 
   ItemPreviewCommon.createdMainContainerIfNeeded = function() {
     var container, markClass, pageSection, root, sectionClass, temp;
-    root = $("#" + Constant.Paging.ROOT_ID);
+    root = $("#" + constant.Paging.ROOT_ID);
     markClass = '';
     if (isWorkTable) {
       markClass = 'ws';
@@ -22,7 +22,7 @@ ItemPreviewCommon = (function() {
       markClass = 'run';
     }
     container = $("." + markClass, root);
-    sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', 1);
+    sectionClass = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', 1);
     pageSection = $("." + sectionClass, root);
     if ((container == null) || container.length === 0) {
       root.children('.section').remove();
@@ -45,10 +45,10 @@ ItemPreviewCommon = (function() {
     }
     CommonVar.worktableCommonVar();
     Common.updateCanvasSize();
-    $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
+    $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTFLOAT));
     window.scrollInsideWrapper.width(window.scrollViewSize);
     window.scrollInsideWrapper.height(window.scrollViewSize);
-    window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
+    window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM + 1));
     window.scrollContents.off('scroll').on('scroll', function(e) {
       var left, top;
       if ((window.skipScrollEvent != null) && window.skipScrollEvent) {
@@ -96,12 +96,12 @@ ItemPreviewCommon = (function() {
   ItemPreviewCommon.initAfterLoadItem = function() {
     var itemClassName;
     if (window.isCodingDebug) {
-      window.selectItemMenu = window[Constant.ITEM_CODING_TEMP_CLASS_NAME].CLASS_DIST_TOKEN;
+      window.selectItemMenu = window[constant.ITEM_CODING_TEMP_CLASS_NAME].CLASS_DIST_TOKEN;
     } else {
-      itemClassName = $("." + Constant.ITEM_GALLERY_ITEM_CLASSNAME + ":first").val();
+      itemClassName = $("." + constant.ITEM_GALLERY_ITEM_CLASSNAME + ":first").val();
       window.selectItemMenu = window[itemClassName].CLASS_DIST_TOKEN;
     }
-    WorktableCommon.changeMode(Constant.Mode.DRAW);
+    WorktableCommon.changeMode(constant.Mode.DRAW);
     this.initEvent();
     return Navbar.initItemPreviewNavbar();
   };
@@ -135,7 +135,7 @@ ItemPreviewCommon = (function() {
           return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
             window.initDone = true;
             $('#sidebar').find('.cover_touch_overlay').remove();
-            WorktableCommon.changeMode(Constant.Mode.EDIT);
+            WorktableCommon.changeMode(constant.Mode.EDIT);
             $('#run_btn_wrapper').show();
             $('#stop_btn_wrapper').hide();
             if (callback != null) {

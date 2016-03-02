@@ -64,7 +64,7 @@ class EventDragPointingRect
     endDraw: (callback = null) ->
       @itemSize.x += scrollContents.scrollLeft()
       @itemSize.y += scrollContents.scrollTop()
-      @zindex = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1
+      @zindex = Common.plusPagingZindex(constant.Zindex.EVENTFLOAT) + 1
 
       @refresh(true, =>
         @getJQueryElement().addClass('drag_pointing')
@@ -94,11 +94,11 @@ class EventDragPointingRect
     pointing.setApplyCallback((pointingSize) =>
       applyDrawCallback(pointingSize)
       Handwrite.initHandwrite()
-      WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
+      WorktableCommon.changeEventPointingMode(constant.EventInputPointingMode.NOT_SELECT)
       EventDragPointingRect.draw(pointingSize)
     )
     PointingHandwrite.initHandwrite(@)
-    WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW)
+    WorktableCommon.changeEventPointingMode(constant.EventInputPointingMode.DRAW)
     FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, =>
       if closeCallback?
         closeCallback()
@@ -107,7 +107,7 @@ class EventDragPointingRect
         pointing = new @()
         pointing.getJQueryElement().remove()
       Handwrite.initHandwrite()
-      WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
+      WorktableCommon.changeEventPointingMode(constant.EventInputPointingMode.NOT_SELECT)
     )
     @clear()
 
@@ -115,7 +115,7 @@ class EventDragPointingRect
     if size?
       pointing = new @()
       pointing.itemSize = size
-      pointing.zindex = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1
+      pointing.zindex = Common.plusPagingZindex(constant.Zindex.EVENTFLOAT) + 1
       pointing.refresh(true, =>
         pointing.getJQueryElement().addClass('drag_pointing')
       , false)

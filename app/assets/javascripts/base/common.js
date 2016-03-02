@@ -399,8 +399,8 @@ Common = (function() {
     if (collapsed == null) {
       collapsed = false;
     }
-    root = $("#" + Constant.Paging.ROOT_ID);
-    sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
+    root = $("#" + constant.Paging.ROOT_ID);
+    sectionClass = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
     pageSection = $("." + sectionClass, root);
     if ((pageSection == null) || pageSection.length === 0) {
       temp = $("#" + Common.MAIN_TEMP_ID).children(':first').clone(true);
@@ -418,8 +418,8 @@ Common = (function() {
 
   Common.removeMainContainer = function(pageNum) {
     var root, sectionClass;
-    root = $("#" + Constant.Paging.ROOT_ID);
-    sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
+    root = $("#" + constant.Paging.ROOT_ID);
+    sectionClass = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
     return $("." + sectionClass, root).remove();
   };
 
@@ -779,19 +779,19 @@ Common = (function() {
   };
 
   Common.getActionTypeClassNameByActionType = function(actionType) {
-    if (parseInt(actionType) === Constant.ActionType.CLICK) {
-      return Constant.TimelineActionTypeClassName.CLICK;
-    } else if (parseInt(actionType) === Constant.ActionType.SCROLL) {
-      return Constant.TimelineActionTypeClassName.SCROLL;
+    if (parseInt(actionType) === constant.ActionType.CLICK) {
+      return constant.TimelineActionTypeClassName.CLICK;
+    } else if (parseInt(actionType) === constant.ActionType.SCROLL) {
+      return constant.TimelineActionTypeClassName.SCROLL;
     }
     return null;
   };
 
   Common.getActionTypeByCodingActionType = function(actionType) {
     if (actionType === 'click') {
-      return Constant.ActionType.CLICK;
+      return constant.ActionType.CLICK;
     } else if (actionType === 'scroll') {
-      return Constant.ActionType.SCROLL;
+      return constant.ActionType.SCROLL;
     }
     return null;
   };
@@ -942,7 +942,7 @@ Common = (function() {
     if (enableOverlayClose == null) {
       enableOverlayClose = false;
     }
-    type = Constant.ModalViewType.MESSAGE;
+    type = constant.ModalViewType.MESSAGE;
     return _showModalView.call(this, type, null, isModalFlush, {}, function() {
       var emt;
       $("body").append('<div id="modal-overlay"></div>');
@@ -1120,14 +1120,14 @@ Common = (function() {
     if (pn == null) {
       pn = PageValue.getPageNum();
     }
-    return (window.pageNumMax - pn) * (Constant.Zindex.EVENTFLOAT + 1) + zindex;
+    return (window.pageNumMax - pn) * (constant.Zindex.EVENTFLOAT + 1) + zindex;
   };
 
   Common.minusPagingZindex = function(zindex, pn) {
     if (pn == null) {
       pn = PageValue.getPageNum();
     }
-    return zindex - (window.pageNumMax - pn) * (Constant.Zindex.EVENTFLOAT + 1);
+    return zindex - (window.pageNumMax - pn) * (constant.Zindex.EVENTFLOAT + 1);
   };
 
   Common.removeAllItem = function(pageNum, withDeleteInstanceMap) {
@@ -1231,7 +1231,7 @@ Common = (function() {
       }
     }
     data = {};
-    data[Constant.ItemGallery.Key.ITEM_GALLERY_ACCESS_TOKEN] = needReadclassDistTokens;
+    data[constant.ItemGallery.Key.ITEM_GALLERY_ACCESS_TOKEN] = needReadclassDistTokens;
     return $.ajax({
       url: "/item_js/index",
       type: "POST",

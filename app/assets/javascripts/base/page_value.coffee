@@ -29,15 +29,15 @@ class PageValue
     # @property [String] IS_ROOT ページ値ルート
     @IS_ROOT = constant.PageValueKey.IS_ROOT
     # @property [String] PROJECT_NAME プロジェクトID
-    @PROJECT_ID = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.PROJECT_ID}"
+    @PROJECT_ID = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{constant.Project.Key.PROJECT_ID}"
     # @property [String] PROJECT_NAME プロジェクト名
-    @PROJECT_NAME = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.TITLE}"
+    @PROJECT_NAME = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{constant.Project.Key.TITLE}"
     # @property [String] SCREEN_SIZE プロジェクトサイズ
-    @SCREEN_SIZE = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.SCREEN_SIZE}"
+    @SCREEN_SIZE = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{constant.Project.Key.SCREEN_SIZE}"
     # @property [String] LAST_SAVE_TIME 最終保存時刻
     @LAST_SAVE_TIME = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}last_save_time"
     # @property [String] LAST_SAVE_TIME 最終保存時刻
-    @RUNNING_USER_PAGEVALUE_ID = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.USER_PAGEVALUE_ID}"
+    @RUNNING_USER_PAGEVALUE_ID = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{constant.Project.Key.USER_PAGEVALUE_ID}"
     # @property [String] INSTANCE_PREFIX インスタンスプレフィックス
     @INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX
     # @property [return] インスタンスページプレフィックスを取得

@@ -182,7 +182,7 @@ Timeline = (function() {
         return teEmt = this;
       }
     });
-    ref = Constant.TimelineActionTypeClassName;
+    ref = constant.TimelineActionTypeClassName;
     for (k in ref) {
       v = ref[k];
       $(teEmt).removeClass(v);
@@ -190,7 +190,7 @@ Timeline = (function() {
     if (actionType != null) {
       return $(teEmt).addClass(Common.getActionTypeClassNameByActionType(actionType));
     } else {
-      return $(teEmt).addClass(Constant.TimelineActionTypeClassName.BLANK);
+      return $(teEmt).addClass(constant.TimelineActionTypeClassName.BLANK);
     }
   };
 

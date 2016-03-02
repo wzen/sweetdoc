@@ -118,7 +118,7 @@ WorktableSetting = (function() {
 
     Grid.drawGrid = function(doDraw) {
       var canvas, context, emt, i, j, k, left, max, min, page, ref, ref1, ref2, ref3, ref4, ref5, root, step, stepInput, stepx, stepy, top;
-      page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
+      page = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
       canvas = $("#pages ." + page + " ." + this.SETTING_GRID_CANVAS_CLASS + ":first")[0];
       context = null;
       if (canvas != null) {
@@ -316,7 +316,7 @@ WorktableSetting = (function() {
       topMax = window.scrollInsideWrapper.height() * 0.5;
       $('.display_position_x, .display_position_y', rootEmt).off('keypress focusout').on('keypress focusout', function(e) {
         var left, p, top;
-        if ((e.type === 'keypress' && e.keyCode === Constant.KeyboardKeyCode.ENTER) || e.type === 'focusout') {
+        if ((e.type === 'keypress' && e.keyCode === constant.KeyboardKeyCode.ENTER) || e.type === 'focusout') {
           left = $('.display_position_x', rootEmt).val();
           top = $('.display_position_y', rootEmt).val();
           if (left < leftMin) {
