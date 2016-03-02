@@ -1,3 +1,8 @@
+if gon.run_pagevalue?
+  window.pageValue = gon.run_pagevalue
+else
+  window.pageValue = {}
+
 # PageValue
 class PageValue
   # 定数
@@ -151,11 +156,94 @@ class PageValue
   @getFootprintPageValue = (key) ->
     _getPageValue.call(@, key, @Key.F_ROOT)
 
+
   # ページが持つ値を取得
   # @param [String] key キー値
   # @param [String] rootId Root要素ID
   # @return [Object] ハッシュ配列または値で返す
   _getPageValue = (key, rootId) ->
+#    if window.debug
+    _getPageValueDebug.call(@, key, rootId)
+#    else
+#      _getPageValueProduction.call(@, key, rootId)
+
+  # ページが持つ値を取得
+  # @param [String] key キー値
+  # @param [String] rootId Root要素ID
+  # @return [Object] ハッシュ配列または値で返す
+  _getPageValueDebug = (key, rootId) ->
+    f = @
+    # div以下の値をハッシュとしてまとめる
+    takeValue = (element) ->
+      ret = null
+      c = $(element).children()
+      if c? && c.length > 0
+        $(c).each((e) ->
+          cList = @.classList
+          if $(@).hasClass(PageValue.Key.UPDATED)
+            cList = cList.filter((f) ->
+              return f != PageValue.Key.UPDATED
+            )
+          k = cList[0]
+
+          if !ret?
+            if jQuery.isNumeric(k)
+              ret = []
+            else
+              ret = {}
+
+          v = null
+          if @.tagName == "INPUT"
+            # サニタイズをデコード
+            v = Common.sanitaizeDecode($(@).val())
+            if jQuery.isNumeric(v)
+              v = Number(v)
+            else if v == "true" || v == "false"
+              v = if v == "true" then true else false
+          else
+            v = takeValue.call(f, @)
+
+          # nullの場合は返却データに含めない
+          if v != null
+            if jQuery.type(ret) == "array" && jQuery.isNumeric(k)
+              k = Number(k)
+            ret[k] = v
+
+          return true
+        )
+
+        # 空配列の場合はnullとする
+        if (jQuery.type(ret) == "object" && !$.isEmptyObject(ret)) || (jQuery.type(ret) == "array" && ret.length > 0)
+          return ret
+        else
+          return null
+      else
+        return null
+
+    value = null
+    root = $("##{rootId}")
+    keys = key.split(@Key.PAGE_VALUES_SEPERATOR)
+    keys.forEach((k, index) ->
+      root = $(".#{k}", root)
+      if !root? || root.length == 0
+        value = null
+        return
+      if keys.length - 1 == index
+        if root[0].tagName == "INPUT"
+          value = Common.sanitaizeDecode(root.val())
+          if jQuery.isNumeric(value)
+            value = Number(value)
+        else
+          value = takeValue.call(f, root)
+    )
+    return value
+
+  # ページが持つ値を取得
+  # @param [String] key キー値
+  # @param [String] rootId Root要素ID
+  # @return [Object] ハッシュ配列または値で返す
+  _getPageValueProduction = (key, rootId) ->
+    # TODO: JS変数から取得
     f = @
     # div以下の値をハッシュとしてまとめる
     takeValue = (element) ->
@@ -275,6 +363,22 @@ class PageValue
   # @param [Boolean] giveName name属性を付与するか
   # @param [Boolean] doAdded 上書きでなく追加する
   _setPageValue = (key, value, isCache, rootId, giveName, doAdded) ->
+#    if window.debug
+    _setPageValueDebug.call(@, key, value, isCache, rootId, giveName, doAdded)
+#    else
+#      _setPageValueProduction.call(@, key, value, isCache, rootId, giveName, doAdded)
+    if window.isWorkTable
+      # 自動保存実行
+      ServerStorage.startSaveIdleTimer()
+
+  # ページが持つ値を設定
+  # @param [String] key キー値
+  # @param [Object] value 設定値(ハッシュ配列または値)
+  # @param [Boolean] isCache このページでのみ保持させるか
+  # @param [String] rootId Root要素ID
+  # @param [Boolean] giveName name属性を付与するか
+  # @param [Boolean] doAdded 上書きでなく追加する
+  _setPageValueDebug = (key, value, isCache, rootId, giveName, doAdded) ->
     f = @
 
     if doAdded
@@ -338,9 +442,78 @@ class PageValue
           root.addClass(cacheClassName)
     )
 
-    if window.isWorkTable
-      # 自動保存実行
-      ServerStorage.startSaveIdleTimer()
+  # ページが持つ値を設定
+  # @param [String] key キー値
+  # @param [Object] value 設定値(ハッシュ配列または値)
+  # @param [Boolean] isCache このページでのみ保持させるか
+  # @param [String] rootId Root要素ID
+  # @param [Boolean] giveName name属性を付与するか
+  # @param [Boolean] doAdded 上書きでなく追加する
+  _setPageValueProduction = (key, value, isCache, rootId, giveName, doAdded) ->
+    # TODO: HTML要素でなく変数に持たせる
+
+    f = @
+
+    if doAdded
+      n = _getPageValue.call(@, key, rootId)
+      $.extend(value, n)
+
+    # ハッシュを要素の文字列に変換
+    makeElementStr = (ky, val, kyName) ->
+      if val == null || val == "null"
+        return ''
+
+      if kyName?
+        kyName += "[#{ky}]"
+      else
+        kyName = ky
+      if jQuery.type(val) != "object" && jQuery.type(val) != "array"
+        # サニタイズする
+        val = Common.sanitaizeEncode(val)
+        name = ""
+        if giveName
+          name = "name = #{kyName}"
+
+        return "<input type='hidden' class='#{ky}' value='#{val}' #{name} />"
+
+      ret = ""
+      for k, v of val
+        ret += makeElementStr.call(f, k, v, kyName)
+
+      return "<div class=#{ky}>#{ret}</div>"
+
+    cacheClassName = 'cache'
+    root = $("##{rootId}")
+    parentClassName = null
+    keys = key.split(@Key.PAGE_VALUES_SEPERATOR)
+    keys.forEach((k, index) ->
+      parent = root
+      element = ''
+      if keys.length - 1 > index
+        element = 'div'
+      else
+        if jQuery.type(value) == "object"
+          element = 'div'
+        else
+          element = 'input'
+      root = $("#{element}.#{k}", parent)
+      if keys.length - 1 > index
+        if !root? || root.length == 0
+          # 親要素のdiv作成
+          root = jQuery("<div class=#{k}></div>").appendTo(parent)
+        if parentClassName == null
+          parentClassName = k
+        else
+          parentClassName += "[#{k}]"
+      else
+        if root? && root.length > 0
+          # 要素が存在する場合は消去して上書き
+          root.remove()
+        # 要素作成
+        root = jQuery(makeElementStr.call(f, k, value, parentClassName)).appendTo(parent)
+        if isCache
+          root.addClass(cacheClassName)
+    )
 
   # 汎用値を削除
   @removeAndShiftGeneralPageValueOnPage = (pageNum) ->
