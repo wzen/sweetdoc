@@ -86,6 +86,16 @@ class PreloadItemText extends CanvasItemBase
                 name: '吹き出し枠の色'
               }
             }
+            balloonBorderWidth: {
+              name: 'BalloonBorderWidth'
+              default: 1
+              type: 'number'
+              min: 1
+              max: 30
+              ja: {
+                name: '吹き出し枠の幅'
+              }
+            }
             balloonType: {
               name: 'BalloonType'
               type: 'select'
@@ -136,7 +146,7 @@ class PreloadItemText extends CanvasItemBase
         default: false
         openChildrenValue: {one: true}
         ja: {
-          name: 'フォントサイズ'
+          name: 'フォントサイズ指定'
         }
         children: {
           one: {
@@ -694,6 +704,7 @@ class PreloadItemText extends CanvasItemBase
   _balloonStyle = (context) ->
     context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.95)"
     context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.95)"
+    context.lineWidth = @balloonBorderWidth
     # 影
     context.shadowColor = 'rgba(0,0,0,0.3)'
     context.shadowOffsetX = 3

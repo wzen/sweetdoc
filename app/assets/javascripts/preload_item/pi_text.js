@@ -149,6 +149,16 @@ PreloadItemText = (function(superClass) {
                 name: '吹き出し枠の色'
               }
             },
+            balloonBorderWidth: {
+              name: 'BalloonBorderWidth',
+              "default": 1,
+              type: 'number',
+              min: 1,
+              max: 30,
+              ja: {
+                name: '吹き出し枠の幅'
+              }
+            },
             balloonType: {
               name: 'BalloonType',
               type: 'select',
@@ -216,7 +226,7 @@ PreloadItemText = (function(superClass) {
           one: true
         },
         ja: {
-          name: 'フォントサイズ'
+          name: 'フォントサイズ指定'
         },
         children: {
           one: {
@@ -924,6 +934,7 @@ PreloadItemText = (function(superClass) {
   _balloonStyle = function(context) {
     context.fillStyle = "rgba(" + this.balloonColor.r + "," + this.balloonColor.g + "," + this.balloonColor.b + ", 0.95)";
     context.strokeStyle = "rgba(" + this.balloonBorderColor.r + "," + this.balloonBorderColor.g + "," + this.balloonBorderColor.b + ", 0.95)";
+    context.lineWidth = this.balloonBorderWidth;
     context.shadowColor = 'rgba(0,0,0,0.3)';
     context.shadowOffsetX = 3;
     context.shadowOffsetY = 3;
