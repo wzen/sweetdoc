@@ -340,7 +340,7 @@ RunCommon = (function() {
     data[RunCommon.Key.RUNNING_USER_PAGEVALUE_ID] = PageValue.getGeneralPageValue(PageValue.Key.RUNNING_USER_PAGEVALUE_ID);
     if (window.isMotionCheck && doLoadFootprint) {
       data[RunCommon.Key.LOAD_FOOTPRINT] = false;
-      LocalStorage.loadPagingFootprintPageValue(loadPageNum);
+      window.lStorage.loadPagingFootprintPageValue(loadPageNum);
     } else {
       data[RunCommon.Key.LOAD_FOOTPRINT] = doLoadFootprint;
     }
@@ -564,7 +564,7 @@ RunCommon = (function() {
       callback = null;
     }
     if ((window.isMotionCheck != null) && window.isMotionCheck) {
-      LocalStorage.saveFootprintPageValue();
+      window.lStorage.saveFootprintPageValue();
       if (callback != null) {
         return callback();
       }
@@ -602,7 +602,7 @@ RunCommon = (function() {
       callback = null;
     }
     if ((window.isMotionCheck != null) && window.isMotionCheck) {
-      LocalStorage.loadCommonFootprintPageValue();
+      window.lStorage.loadCommonFootprintPageValue();
       if (callback != null) {
         return callback();
       }
@@ -649,11 +649,11 @@ RunCommon = (function() {
     if (useLocalStorate) {
       is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD);
       if (is_reload != null) {
-        LocalStorage.loadAllPageValues();
+        window.lStorage.loadAllPageValues();
       } else {
         PageValue.setPageNum(1);
         PageValue.removeAllFootprint();
-        LocalStorage.saveAllPageValues();
+        window.lStorage.saveAllPageValues();
       }
     }
     Common.createdMainContainerIfNeeded(PageValue.getPageNum());

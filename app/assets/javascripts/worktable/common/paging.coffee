@@ -106,7 +106,7 @@ class Paging
 
     Sidebar.closeSidebar()
     # WebStorageのアイテム&イベント情報を消去
-    LocalStorage.clearWorktableWithoutSetting()
+    window.lStorage.clearWorktableWithoutSetting()
     EventConfig.removeAllConfig()
     # Mainコンテナ作成
     created = Common.createdMainContainerIfNeeded(PageValue.getPageCount() + 1)
@@ -141,7 +141,7 @@ class Paging
         # 履歴に画面初期時状態を保存
         OperationHistory.add(true)
       # キャッシュ保存
-      LocalStorage.saveAllPageValues()
+      window.lStorage.saveAllPageValues()
       # 選択メニューの更新
       @createPageSelectMenu()
       # モーダルを削除
@@ -164,7 +164,7 @@ class Paging
           # タイムライン更新
           Timeline.refreshAllTimeline()
           # キャッシュ保存
-          LocalStorage.saveAllPageValues()
+          window.lStorage.saveAllPageValues()
           # 選択メニューの更新
           @createPageSelectMenu()
           # モーダルを削除
@@ -189,7 +189,7 @@ class Paging
       console.log('[selectPage] beforePageNum:' + beforePageNum)
     Sidebar.closeSidebar()
     # WebStorageのアイテム&イベント情報を消去
-    LocalStorage.clearWorktableWithoutSetting()
+    window.lStorage.clearWorktableWithoutSetting()
     EventConfig.removeAllConfig()
     # Mainコンテナ作成
     created = Common.createdMainContainerIfNeeded(selectedPageNum, false)
@@ -220,7 +220,7 @@ class Paging
           # 履歴に画面初期時状態を保存
           OperationHistory.add(true)
         # キャッシュ保存
-        LocalStorage.saveAllPageValues()
+        window.lStorage.saveAllPageValues()
         # 選択メニューの更新
         @createPageSelectMenu()
         # モーダルを削除
@@ -240,7 +240,7 @@ class Paging
     # 履歴に画面初期時状態を保存
     OperationHistory.add(true)
     # キャッシュ保存
-    LocalStorage.saveAllPageValues()
+    window.lStorage.saveAllPageValues()
     # 選択メニューの更新
     @createPageSelectMenu()
     # タイムライン更新
@@ -281,7 +281,7 @@ class Paging
     _removePage = (pageNum) ->
       # ページを削除
       WorktableCommon.removePage(pageNum, =>
-        LocalStorage.saveAllPageValues()
+        window.lStorage.saveAllPageValues()
         # 選択メニューの更新
         @createPageSelectMenu()
         if callback?

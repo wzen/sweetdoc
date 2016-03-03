@@ -182,7 +182,7 @@ class ItemBase extends ItemEventBase
     # ページに状態を保存
     @setItemAllPropToPageValue()
     # キャッシュに保存
-    LocalStorage.saveAllPageValues()
+    window.lStorage.saveAllPageValues()
     # 操作履歴に保存
     OperationHistory.add()
     if window.debug
@@ -206,7 +206,7 @@ class ItemBase extends ItemEventBase
   setItemPropToPageValue : (prop, value, isCache = false) ->
     prefix_key = if isCache then PageValue.Key.instanceValueCache(@id) else PageValue.Key.instanceValue(@id)
     PageValue.setInstancePageValue(prefix_key + ":#{prop}", value)
-    LocalStorage.saveInstancePageValue()
+    window.lStorage.saveInstancePageValue()
 
   # アニメーション変更前のアイテムサイズ
   originalItemElementSize: ->

@@ -15,7 +15,7 @@ $(function() {
     });
     loadWorktableFromCache = WorktableCommon.checkLoadWorktableFromCache();
     if (loadWorktableFromCache) {
-      LocalStorage.loadAllPageValues();
+      window.lStorage.loadAllPageValues();
     }
     CommonVar.initVarWhenLoadedView();
     CommonVar.initCommonVar();
@@ -36,7 +36,7 @@ $(function() {
       });
       return Timeline.refreshAllTimeline();
     } else {
-      LocalStorage.clearWorktable();
+      window.lStorage.clearWorktable();
       Timeline.refreshAllTimeline();
       OperationHistory.add(true);
       Common.showModalView(constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);

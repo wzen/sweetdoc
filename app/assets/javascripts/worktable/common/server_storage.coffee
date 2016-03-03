@@ -124,7 +124,7 @@ class ServerStorage
                   PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, data.setting_pagevalue_data)
 
                 PageValue.adjustInstanceAndEventOnPage()
-                LocalStorage.saveAllPageValues()
+                window.lStorage.saveAllPageValues()
                 if callback?
                   callback(data)
               )

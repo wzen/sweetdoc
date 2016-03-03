@@ -278,7 +278,7 @@ class RunCommon
     if window.isMotionCheck && doLoadFootprint
       # 動作確認の場合はLocalStorageから操作履歴を取得
       data[RunCommon.Key.LOAD_FOOTPRINT] = false
-      LocalStorage.loadPagingFootprintPageValue(loadPageNum)
+      window.lStorage.loadPagingFootprintPageValue(loadPageNum)
     else
       data[RunCommon.Key.LOAD_FOOTPRINT] = doLoadFootprint
     $.ajax(
@@ -484,7 +484,7 @@ class RunCommon
   @saveFootprint = (callback = null) ->
     if window.isMotionCheck? && window.isMotionCheck
       # LocalStorageに保存
-      LocalStorage.saveFootprintPageValue()
+      window.lStorage.saveFootprintPageValue()
       if callback?
         callback()
     else
@@ -516,7 +516,7 @@ class RunCommon
   @loadCommonFootprint = (callback = null) ->
     if window.isMotionCheck? && window.isMotionCheck
       # LocalStorageから読み込み
-      LocalStorage.loadCommonFootprintPageValue()
+      window.lStorage.loadCommonFootprintPageValue()
       if callback?
         callback()
     else
@@ -561,13 +561,13 @@ class RunCommon
       # キャッシュ読み込み
       is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD)
       if is_reload?
-        LocalStorage.loadAllPageValues()
+        window.lStorage.loadAllPageValues()
       else
         # 1ページから開始
         PageValue.setPageNum(1)
         # footprintを初期化
         PageValue.removeAllFootprint()
-        LocalStorage.saveAllPageValues()
+        window.lStorage.saveAllPageValues()
 
     # Mainコンテナ作成
     Common.createdMainContainerIfNeeded(PageValue.getPageNum())

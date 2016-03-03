@@ -102,7 +102,7 @@ class WorktableSetting
         # 削除
         $(".#{@SETTING_GRID_ELEMENT_CLASS}").remove()
         PageValue.setSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID, false)
-        LocalStorage.saveSettingPageValue()
+        window.lStorage.saveSettingPageValue()
       else if doDraw
         root = $("##{WorktableSetting.ROOT_ID_NAME}")
         stepInput = $(".#{@GRID_STEP_CLASS_NAME}", root)
@@ -151,7 +151,7 @@ class WorktableSetting
           context.stroke()
 
         PageValue.setSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID, true)
-        LocalStorage.saveSettingPageValue()
+        window.lStorage.saveSettingPageValue()
 
     # グリッド線のテンプレートHTMLを読み込み
     # @param [Integer] top HTMLを設置するY位置
@@ -276,7 +276,7 @@ class WorktableSetting
           p = Common.calcScrollTopLeftPosition(top, left)
           PageValue.setGeneralPageValue(PageValue.Key.worktableDisplayPosition(), {top: p.top, left: p.left})
           WorktableCommon.initScrollContentsPosition()
-          LocalStorage.saveGeneralPageValue()
+          window.lStorage.saveGeneralPageValue()
       )
 
       # Zoom (0.1 〜 2.0)
@@ -321,4 +321,4 @@ class WorktableSetting
       if scale?
         WorktableCommon.setWorktableViewScale(scale)
       WorktableCommon.initScrollContentsPosition()
-      LocalStorage.saveGeneralPageValue()
+      window.lStorage.saveGeneralPageValue()

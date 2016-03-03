@@ -18,7 +18,7 @@ $ ->
     loadWorktableFromCache = WorktableCommon.checkLoadWorktableFromCache()
     if loadWorktableFromCache
       # キャッシュが存在する場合PageValueに読み込み
-      LocalStorage.loadAllPageValues()
+      window.lStorage.loadAllPageValues()
     # 変数初期化
     CommonVar.initVarWhenLoadedView()
     CommonVar.initCommonVar()
@@ -52,7 +52,7 @@ $ ->
       # タイムライン更新
       Timeline.refreshAllTimeline()
     else
-      LocalStorage.clearWorktable()
+      window.lStorage.clearWorktable()
       # タイムライン更新
       Timeline.refreshAllTimeline()
       # 履歴に画面初期時を状態を保存

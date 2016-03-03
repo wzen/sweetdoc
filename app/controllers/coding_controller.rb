@@ -65,10 +65,10 @@ class CodingController < ApplicationController
   end
 
   def item
-    user_id = current_or_guest_user.id
+    @user = current_or_guest_user
+    user_id = @user.id
     @load_user_coding = Coding.load_opened_code(user_id)
     @load_tree_html, @load_user_codings, @code_state = Coding.load_coding_item_data(user_id)
-    @user = current_or_guest_user
   end
 
   def item_preview

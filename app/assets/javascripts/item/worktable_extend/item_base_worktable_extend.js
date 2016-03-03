@@ -168,7 +168,7 @@ itemBaseWorktableExtend = {
         var objId;
         objId = $(event.target).attr('id');
         WorktableCommon.floatItem(objId);
-        LocalStorage.saveAllPageValues();
+        window.lStorage.saveAllPageValues();
         return OperationHistory.add();
       }
     });
@@ -180,7 +180,7 @@ itemBaseWorktableExtend = {
         var objId;
         objId = $(event.target).attr('id');
         WorktableCommon.rearItem(objId);
-        LocalStorage.saveAllPageValues();
+        window.lStorage.saveAllPageValues();
         return OperationHistory.add();
       }
     });
@@ -525,7 +525,7 @@ itemBaseWorktableExtend = {
     return this.saveDesignReflectTimer = setTimeout((function(_this) {
       return function() {
         _this.setItemAllPropToPageValue();
-        LocalStorage.saveAllPageValues();
+        window.lStorage.saveAllPageValues();
         return _this.saveDesignReflectTimer = setTimeout(function() {
           return OperationHistory.add();
         }, 1000);

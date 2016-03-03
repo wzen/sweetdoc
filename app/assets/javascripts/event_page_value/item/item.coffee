@@ -45,6 +45,6 @@ class EPVItem extends EventPageValueBase
       PageValue.setEventPageValue(PageValue.Key.eventCount(), teNum)
 
       # Storageに保存
-      LocalStorage.saveAllPageValues()
+      window.lStorage.saveAllPageValues()
 
     return errorMes

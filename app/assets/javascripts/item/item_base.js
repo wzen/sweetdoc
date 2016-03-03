@@ -224,7 +224,7 @@ ItemBase = (function(superClass) {
       this.name = this.constructor.NAME_PREFIX + (" " + num);
     }
     this.setItemAllPropToPageValue();
-    LocalStorage.saveAllPageValues();
+    window.lStorage.saveAllPageValues();
     OperationHistory.add();
     if (window.debug) {
       console.log('save obj');
@@ -248,7 +248,7 @@ ItemBase = (function(superClass) {
     }
     prefix_key = isCache ? PageValue.Key.instanceValueCache(this.id) : PageValue.Key.instanceValue(this.id);
     PageValue.setInstancePageValue(prefix_key + (":" + prop), value);
-    return LocalStorage.saveInstancePageValue();
+    return window.lStorage.saveInstancePageValue();
   };
 
   ItemBase.prototype.originalItemElementSize = function() {

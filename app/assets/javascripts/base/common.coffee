@@ -499,7 +499,7 @@ class Common
         se.setEventBaseXAndY(left, top)
       if window.isWorkTable && !window.previewRunning
         PageValue.setWorktableScrollContentsPosition(top, left)
-      LocalStorage.saveAllPageValues()
+      window.lStorage.saveAllPageValues()
       if callback?
         callback()
 

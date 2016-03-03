@@ -206,7 +206,7 @@ class EventConfig
       # イベントの色を変更
       #Timeline.changeTimelineColor(@teNum, @[EventPageValueBase.PageValueKey.ACTIONTYPE])
       # キャッシュに保存
-      LocalStorage.saveAllPageValues()
+      window.lStorage.saveAllPageValues()
       # 通知
       FloatView.show('Applied', FloatView.Type.APPLY, 3.0)
       # イベントを更新

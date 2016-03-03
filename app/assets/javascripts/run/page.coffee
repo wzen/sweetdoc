@@ -357,7 +357,7 @@ class Page
         # チャプター最大値設定
         RunCommon.setChapterMax(@getForkChapterList().length)
         # キャッシュ保存
-        LocalStorage.saveAllPageValues()
+        window.lStorage.saveAllPageValues()
         if callback?
           callback()
       )
@@ -386,7 +386,7 @@ class Page
         # チャプター初期化
         @resetChapter(@getChapterIndex(), =>
           # キャッシュ保存
-          LocalStorage.saveAllPageValues()
+          window.lStorage.saveAllPageValues()
           if callback?
             callback()
         )

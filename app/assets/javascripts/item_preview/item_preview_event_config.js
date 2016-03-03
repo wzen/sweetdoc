@@ -69,7 +69,7 @@ ItemPreviewEventConfig = (function(superClass) {
       this.showError(errorMes);
       return;
     }
-    LocalStorage.saveAllPageValues();
+    window.lStorage.saveAllPageValues();
     ItemPreviewCommon.switchRun();
     return window.sidebarWrapper.scrollTop(0);
   };

@@ -4,6 +4,7 @@ locale = gon.locale
 userLogined = gon.user_logined
 isMobileAccess = gon.is_mobile_access
 isIosAccess = gon.is_ios_access
+utoken = gon.u_token
 
 # アプリ共通定数
 class Constant

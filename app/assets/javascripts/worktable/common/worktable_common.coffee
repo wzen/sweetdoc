@@ -31,13 +31,13 @@ class WorktableCommon
 
   # キャッシュからWorktableを作成するか判定
   @checkLoadWorktableFromCache = ->
-    if LocalStorage.isOverWorktableSaveTimeLimit()
+    if window.lStorage.isOverWorktableSaveTimeLimit()
       # キャッシュ期限切れ
       return false
     if window.changeUser? && window.changeUser
       # ユーザが変更された場合
       return false
-    generals = LocalStorage.loadGeneralValue()
+    generals = window.lStorage.loadGeneralValue()
     if !generals[constant.Project.Key.PROJECT_ID]?
       # プロジェクトが存在しない場合
       return false
@@ -80,7 +80,7 @@ class WorktableCommon
       if instance.drawAndMakeConfigs?
         instance.drawAndMakeConfigs()
       instance.setItemAllPropToPageValue()
-      LocalStorage.saveAllPageValues()
+      window.lStorage.saveAllPageValues()
 
   # アイテムを最前面に移動
   # @param [Integer] objId 対象オブジェクトID
@@ -373,7 +373,7 @@ class WorktableCommon
       window.instanceMap[targetId].getJQueryElement().remove()
     PageValue.adjustInstanceAndEventOnPage()
     Timeline.refreshAllTimeline()
-    LocalStorage.saveAllPageValues()
+    window.lStorage.saveAllPageValues()
     OperationHistory.add()
 
   # ページ削除
@@ -492,7 +492,7 @@ class WorktableCommon
         # 貼り付け
         WorktableCommon.pasteItem()
         # キャッシュ保存
-        LocalStorage.saveAllPageValues()
+        window.lStorage.saveAllPageValues()
         # 履歴保存
         OperationHistory.add()
       })
@@ -517,7 +517,7 @@ class WorktableCommon
       # Mainビューの高さを初期化
       $('#main').css('height', '')
       # キャッシュ削除
-      LocalStorage.clearWorktableWithoutSetting()
+      window.lStorage.clearWorktableWithoutSetting()
       # ページ数初期化
       PageValue.setPageNum(1)
       # 履歴に画面初期時を状態を保存
@@ -543,7 +543,7 @@ class WorktableCommon
       # スクロール位置修正
       @adjustScrollContentsPosition()
       # キャッシュ保存
-      LocalStorage.saveGeneralPageValue()
+      window.lStorage.saveGeneralPageValue()
 
   # コンテキストメニュー初期化
   # @param [String] elementID HTML要素ID
@@ -569,7 +569,7 @@ class WorktableCommon
   @removeAllItemAndEvent = (callback = null) ->
     Sidebar.closeSidebar()
     # WebStorageのアイテム&イベント情報を消去
-    LocalStorage.clearWorktableWithoutSetting()
+    window.lStorage.clearWorktableWithoutSetting()
     Common.removeAllItem()
     EventConfig.removeAllConfig()
     PageValue.removeAllGeneralAndInstanceAndEventPageValue()
@@ -581,7 +581,7 @@ class WorktableCommon
   @removeAllItemAndEventOnThisPage = (callback = null) ->
     Sidebar.closeSidebar()
     # WebStorageのアイテム&イベント情報を消去
-    LocalStorage.clearWorktableWithoutGeneralAndSetting()
+    window.lStorage.clearWorktableWithoutGeneralAndSetting()
     Common.removeAllItem(PageValue.getPageNum())
     EventConfig.removeAllConfig()
     PageValue.removeAllInstanceAndEventPageValueOnPage()

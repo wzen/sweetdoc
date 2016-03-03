@@ -412,7 +412,7 @@ Page = (function() {
         return _this.initItemDrawingInPage(function() {
           _this.initFocus(true);
           RunCommon.setChapterMax(_this.getForkChapterList().length);
-          LocalStorage.saveAllPageValues();
+          window.lStorage.saveAllPageValues();
           if (callback != null) {
             return callback();
           }
@@ -438,7 +438,7 @@ Page = (function() {
           _this.setChapterIndex(_this.getForkChapterList().length - 1);
           RunCommon.setForkNum(RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum()));
           return _this.resetChapter(_this.getChapterIndex(), function() {
-            LocalStorage.saveAllPageValues();
+            window.lStorage.saveAllPageValues();
             if (callback != null) {
               return callback();
             }

@@ -62,7 +62,7 @@ class ItemPreviewEventConfig extends EventConfig
       return
 
     # キャッシュに保存
-    LocalStorage.saveAllPageValues()
+    window.lStorage.saveAllPageValues()
     # Run開始
     ItemPreviewCommon.switchRun()
     # サイドメニューのスクロールをTopに

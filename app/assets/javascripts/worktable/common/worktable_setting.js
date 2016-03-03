@@ -127,7 +127,7 @@ WorktableSetting = (function() {
       if ((context != null) && doDraw === false) {
         $("." + this.SETTING_GRID_ELEMENT_CLASS).remove();
         PageValue.setSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID, false);
-        return LocalStorage.saveSettingPageValue();
+        return window.lStorage.saveSettingPageValue();
       } else if (doDraw) {
         root = $("#" + WorktableSetting.ROOT_ID_NAME);
         stepInput = $("." + this.GRID_STEP_CLASS_NAME, root);
@@ -181,7 +181,7 @@ WorktableSetting = (function() {
           context.stroke();
         }
         PageValue.setSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID, true);
-        return LocalStorage.saveSettingPageValue();
+        return window.lStorage.saveSettingPageValue();
       }
     };
 
@@ -337,7 +337,7 @@ WorktableSetting = (function() {
             left: p.left
           });
           WorktableCommon.initScrollContentsPosition();
-          return LocalStorage.saveGeneralPageValue();
+          return window.lStorage.saveGeneralPageValue();
         }
       });
       min = 0.1;
@@ -389,7 +389,7 @@ WorktableSetting = (function() {
         WorktableCommon.setWorktableViewScale(scale);
       }
       WorktableCommon.initScrollContentsPosition();
-      return LocalStorage.saveGeneralPageValue();
+      return window.lStorage.saveGeneralPageValue();
     };
 
     return PositionAndScale;

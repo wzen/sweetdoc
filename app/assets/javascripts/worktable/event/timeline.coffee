@@ -145,7 +145,7 @@ class Timeline
       # EventPageValueを削除
       PageValue.removeEventPageValue(eNum)
       # キャッシュ更新
-      LocalStorage.saveAllPageValues()
+      window.lStorage.saveAllPageValues()
       # タイムライン表示更新
       Timeline.refreshAllTimeline()
 

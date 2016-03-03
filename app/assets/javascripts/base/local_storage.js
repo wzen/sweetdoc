@@ -2,8 +2,6 @@
 var LocalStorage;
 
 LocalStorage = (function() {
-  function LocalStorage() {}
-
   LocalStorage.Key = (function() {
     function Key() {}
 
@@ -37,38 +35,42 @@ LocalStorage = (function() {
 
   LocalStorage.RUN_SAVETIME = 9999;
 
-  LocalStorage.saveAllPageValues = function() {
+  function LocalStorage(userToken) {
+    this.userToken = userToken;
+  }
+
+  LocalStorage.prototype.saveAllPageValues = function() {
     this.saveGeneralPageValue();
     this.saveInstancePageValue();
     this.saveEventPageValue();
     return this.saveSettingPageValue();
   };
 
-  LocalStorage.loadAllPageValues = function() {
+  LocalStorage.prototype.loadAllPageValues = function() {
     this.loadGeneralPageValue();
     this.loadInstancePageValue();
     this.loadEventPageValue();
     return this.loadSettingPageValue();
   };
 
-  LocalStorage.isOverWorktableSaveTimeLimit = function() {
+  LocalStorage.prototype.isOverWorktableSaveTimeLimit = function() {
     var diffTime, key, saveTime, time;
     if (typeof localStorage === "undefined" || localStorage === null) {
       return true;
     }
-    key = '';
+    key = this.userToken;
     time = 0;
     if ((window.isItemPreview != null) && window.isItemPreview) {
       return true;
     }
     if (window.isWorkTable) {
-      key = this.Key.WORKTABLE_SAVETIME;
-      time = this.WORKTABLE_SAVETIME;
+      key += this.constructor.Key.WORKTABLE_SAVETIME;
+      time = this.constructor.WORKTABLE_SAVETIME;
     } else {
-      key = this.Key.RUN_SAVETIME;
-      time = this.RUN_SAVETIME;
+      key += this.constructor.Key.RUN_SAVETIME;
+      time = this.constructor.RUN_SAVETIME;
     }
-    if (key !== '') {
+    if (key !== this.userToken) {
       saveTime = localStorage.getItem(key);
       if (saveTime == null) {
         return true;
@@ -80,138 +82,138 @@ LocalStorage = (function() {
     }
   };
 
-  LocalStorage.generalKey = function() {
+  LocalStorage.prototype.generalKey = function() {
     var key;
-    key = '';
+    key = this.userToken;
     if ((window.isItemPreview != null) && window.isItemPreview) {
       return '';
     }
     if (window.isWorkTable) {
-      key = this.Key.WORKTABLE_GENERAL_PAGEVALUES;
+      key += this.constructor.Key.WORKTABLE_GENERAL_PAGEVALUES;
     } else {
-      key = this.Key.RUN_GENERAL_PAGEVALUES;
+      key += this.constructor.Key.RUN_GENERAL_PAGEVALUES;
     }
     return key;
   };
 
-  LocalStorage.instanceKey = function() {
+  LocalStorage.prototype.instanceKey = function() {
     var key;
-    key = '';
+    key = this.userToken;
     if ((window.isItemPreview != null) && window.isItemPreview) {
       return '';
     }
     if (window.isWorkTable) {
-      key = this.Key.WORKTABLE_INSTANCE_PAGEVALUES;
+      key += this.constructor.Key.WORKTABLE_INSTANCE_PAGEVALUES;
     } else {
-      key = this.Key.RUN_INSTANCE_PAGEVALUES;
+      key += this.constructor.Key.RUN_INSTANCE_PAGEVALUES;
     }
     return key;
   };
 
-  LocalStorage.eventKey = function() {
+  LocalStorage.prototype.eventKey = function() {
     var key;
-    key = '';
+    key = this.userToken;
     if ((window.isItemPreview != null) && window.isItemPreview) {
       return '';
     }
     if (window.isWorkTable) {
-      key = this.Key.WORKTABLE_EVENT_PAGEVALUES;
+      key += this.constructor.Key.WORKTABLE_EVENT_PAGEVALUES;
     } else {
-      key = this.Key.RUN_EVENT_PAGEVALUES;
+      key += this.constructor.Key.RUN_EVENT_PAGEVALUES;
     }
     return key;
   };
 
-  LocalStorage.settingKey = function() {
+  LocalStorage.prototype.settingKey = function() {
     var key;
-    key = '';
+    key = this.userToken;
     if ((window.isItemPreview != null) && window.isItemPreview) {
       return '';
     }
     if (window.isWorkTable) {
-      key = this.Key.WORKTABLE_SETTING_PAGEVALUES;
+      key += this.constructor.Key.WORKTABLE_SETTING_PAGEVALUES;
     } else {
-      key = this.Key.RUN_SETTING_PAGEVALUES;
+      key += this.constructor.Key.RUN_SETTING_PAGEVALUES;
     }
     return key;
   };
 
-  LocalStorage.footprintKey = function() {
+  LocalStorage.prototype.footprintKey = function() {
     var key;
-    key = '';
+    key = this.userToken;
     if ((window.isItemPreview != null) && window.isItemPreview) {
       return '';
     }
     if (!window.isWorkTable) {
-      key = this.Key.RUN_FOOTPRINT_PAGE_VALUES;
+      key += this.constructor.Key.RUN_FOOTPRINT_PAGE_VALUES;
     }
     return key;
   };
 
-  LocalStorage.savetimeKey = function() {
+  LocalStorage.prototype.savetimeKey = function() {
     var key;
-    key = '';
+    key = this.userToken;
     if ((window.isItemPreview != null) && window.isItemPreview) {
       return '';
     }
     if (window.isWorkTable) {
-      key = this.Key.WORKTABLE_SAVETIME;
+      key += this.constructor.Key.WORKTABLE_SAVETIME;
     } else {
-      key = this.Key.RUN_SAVETIME;
+      key += this.constructor.Key.RUN_SAVETIME;
     }
     return key;
   };
 
-  LocalStorage.savetime = function() {
+  LocalStorage.prototype.savetime = function() {
     var time;
     time = 0;
     if (window.isWorkTable) {
-      time = this.WORKTABLE_SAVETIME;
+      time = this.constructor.WORKTABLE_SAVETIME;
     } else {
-      time = this.RUN_SAVETIME;
+      time = this.constructor.RUN_SAVETIME;
     }
     return time;
   };
 
-  LocalStorage.clearWorktable = function() {
+  LocalStorage.prototype.clearWorktable = function() {
     if (typeof localStorage !== "undefined" && localStorage !== null) {
-      localStorage.removeItem(this.Key.WORKTABLE_GENERAL_PAGEVALUES);
-      localStorage.removeItem(this.Key.WORKTABLE_INSTANCE_PAGEVALUES);
-      localStorage.removeItem(this.Key.WORKTABLE_EVENT_PAGEVALUES);
-      localStorage.removeItem(this.Key.WORKTABLE_SETTING_PAGEVALUES);
-      return localStorage.removeItem(this.Key.WORKTABLE_SAVETIME);
+      localStorage.removeItem(this.constructor.Key.WORKTABLE_GENERAL_PAGEVALUES);
+      localStorage.removeItem(this.constructor.Key.WORKTABLE_INSTANCE_PAGEVALUES);
+      localStorage.removeItem(this.constructor.Key.WORKTABLE_EVENT_PAGEVALUES);
+      localStorage.removeItem(this.constructor.Key.WORKTABLE_SETTING_PAGEVALUES);
+      return localStorage.removeItem(this.constructor.Key.WORKTABLE_SAVETIME);
     }
   };
 
-  LocalStorage.clearWorktableWithoutSetting = function() {
+  LocalStorage.prototype.clearWorktableWithoutSetting = function() {
     if (typeof localStorage !== "undefined" && localStorage !== null) {
-      localStorage.removeItem(this.Key.WORKTABLE_GENERAL_PAGEVALUES);
-      localStorage.removeItem(this.Key.WORKTABLE_INSTANCE_PAGEVALUES);
-      localStorage.removeItem(this.Key.WORKTABLE_EVENT_PAGEVALUES);
-      return localStorage.removeItem(this.Key.WORKTABLE_SAVETIME);
+      localStorage.removeItem(this.constructor.Key.WORKTABLE_GENERAL_PAGEVALUES);
+      localStorage.removeItem(this.constructor.Key.WORKTABLE_INSTANCE_PAGEVALUES);
+      localStorage.removeItem(this.constructor.Key.WORKTABLE_EVENT_PAGEVALUES);
+      return localStorage.removeItem(this.constructor.Key.WORKTABLE_SAVETIME);
     }
   };
 
-  LocalStorage.clearWorktableWithoutGeneralAndSetting = function() {
+  LocalStorage.prototype.clearWorktableWithoutGeneralAndSetting = function() {
     if (typeof localStorage !== "undefined" && localStorage !== null) {
-      localStorage.removeItem(this.Key.WORKTABLE_INSTANCE_PAGEVALUES);
-      localStorage.removeItem(this.Key.WORKTABLE_EVENT_PAGEVALUES);
-      return localStorage.removeItem(this.Key.WORKTABLE_SAVETIME);
+      localStorage.removeItem(this.constructor.Key.WORKTABLE_INSTANCE_PAGEVALUES);
+      localStorage.removeItem(this.constructor.Key.WORKTABLE_EVENT_PAGEVALUES);
+      return localStorage.removeItem(this.constructor.Key.WORKTABLE_SAVETIME);
     }
   };
 
-  LocalStorage.clearRun = function() {
+  LocalStorage.prototype.clearRun = function() {
     if (typeof localStorage !== "undefined" && localStorage !== null) {
-      localStorage.removeItem(this.Key.RUN_GENERAL_PAGEVALUES);
-      localStorage.removeItem(this.Key.RUN_INSTANCE_PAGEVALUES);
-      localStorage.removeItem(this.Key.RUN_EVENT_PAGEVALUES);
-      localStorage.removeItem(this.Key.RUN_SETTING_PAGEVALUES);
-      localStorage.removeItem(this.Key.RUN_FOOTPRINT_PAGE_VALUES);
-      return localStorage.removeItem(this.Key.RUN_SAVETIME);
+      localStorage.removeItem(this.constructor.Key.RUN_GENERAL_PAGEVALUES);
+      localStorage.removeItem(this.constructor.Key.RUN_INSTANCE_PAGEVALUES);
+      localStorage.removeItem(this.constructor.Key.RUN_EVENT_PAGEVALUES);
+      localStorage.removeItem(this.constructor.Key.RUN_SETTING_PAGEVALUES);
+      localStorage.removeItem(this.constructor.Key.RUN_FOOTPRINT_PAGE_VALUES);
+      return localStorage.removeItem(this.constructor.Key.RUN_SAVETIME);
     }
   };
 
-  LocalStorage.saveGeneralPageValue = function() {
+  LocalStorage.prototype.saveGeneralPageValue = function() {
     var h, key;
     key = this.generalKey();
     if (key !== '' && (typeof localStorage !== "undefined" && localStorage !== null)) {
@@ -221,7 +223,7 @@ LocalStorage = (function() {
     }
   };
 
-  LocalStorage.loadGeneralValue = function() {
+  LocalStorage.prototype.loadGeneralValue = function() {
     var l;
     if (typeof localStorage !== "undefined" && localStorage !== null) {
       l = localStorage.getItem(this.generalKey());
@@ -233,7 +235,7 @@ LocalStorage = (function() {
     }
   };
 
-  LocalStorage.loadGeneralPageValue = function() {
+  LocalStorage.prototype.loadGeneralPageValue = function() {
     var h;
     h = this.loadGeneralValue();
     if (h != null) {
@@ -241,7 +243,7 @@ LocalStorage = (function() {
     }
   };
 
-  LocalStorage.saveInstancePageValue = function() {
+  LocalStorage.prototype.saveInstancePageValue = function() {
     var h, key;
     key = this.instanceKey();
     if (key !== '') {
@@ -253,7 +255,7 @@ LocalStorage = (function() {
     }
   };
 
-  LocalStorage.loadInstancePageValue = function() {
+  LocalStorage.prototype.loadInstancePageValue = function() {
     var h, l;
     if (typeof localStorage !== "undefined" && localStorage !== null) {
       l = localStorage.getItem(this.instanceKey());
@@ -264,7 +266,7 @@ LocalStorage = (function() {
     }
   };
 
-  LocalStorage.saveEventPageValue = function() {
+  LocalStorage.prototype.saveEventPageValue = function() {
     var h, key;
     key = this.eventKey();
     if (key !== '' && (typeof localStorage !== "undefined" && localStorage !== null)) {
@@ -274,7 +276,7 @@ LocalStorage = (function() {
     }
   };
 
-  LocalStorage.loadEventPageValue = function() {
+  LocalStorage.prototype.loadEventPageValue = function() {
     var h, l;
     if (typeof localStorage !== "undefined" && localStorage !== null) {
       l = localStorage.getItem(this.eventKey());
@@ -285,7 +287,7 @@ LocalStorage = (function() {
     }
   };
 
-  LocalStorage.saveSettingPageValue = function() {
+  LocalStorage.prototype.saveSettingPageValue = function() {
     var h, key;
     key = this.settingKey();
     if (key !== '' && (typeof localStorage !== "undefined" && localStorage !== null)) {
@@ -294,7 +296,7 @@ LocalStorage = (function() {
     }
   };
 
-  LocalStorage.loadSettingPageValue = function() {
+  LocalStorage.prototype.loadSettingPageValue = function() {
     var h, l;
     if (typeof localStorage !== "undefined" && localStorage !== null) {
       l = localStorage.getItem(this.settingKey());
@@ -305,7 +307,7 @@ LocalStorage = (function() {
     }
   };
 
-  LocalStorage.saveFootprintPageValue = function() {
+  LocalStorage.prototype.saveFootprintPageValue = function() {
     var h, key;
     key = this.footprintKey();
     if (key !== '' && (typeof localStorage !== "undefined" && localStorage !== null)) {
@@ -314,7 +316,7 @@ LocalStorage = (function() {
     }
   };
 
-  LocalStorage.loadCommonFootprintPageValue = function() {
+  LocalStorage.prototype.loadCommonFootprintPageValue = function() {
     var h, k, l, ret, v;
     if (typeof localStorage !== "undefined" && localStorage !== null) {
       l = localStorage.getItem(this.footprintKey());
@@ -332,7 +334,7 @@ LocalStorage = (function() {
     }
   };
 
-  LocalStorage.loadPagingFootprintPageValue = function(pageNum) {
+  LocalStorage.prototype.loadPagingFootprintPageValue = function(pageNum) {
     var h, k, l, ret, v;
     if (typeof localStorage !== "undefined" && localStorage !== null) {
       l = localStorage.getItem(this.footprintKey());
@@ -353,5 +355,7 @@ LocalStorage = (function() {
   return LocalStorage;
 
 })();
+
+window.lStorage = new LocalStorage(utoken);
 
 //# sourceMappingURL=local_storage.js.map

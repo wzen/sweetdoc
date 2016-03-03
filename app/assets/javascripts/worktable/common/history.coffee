@@ -57,7 +57,7 @@ class OperationHistory
         window.operationHistoryIndexes[@operationHistoryIndex()] = hIndex
           # キャッシュ保存 & 描画 & タイムライン更新
         PageValue.adjustInstanceAndEventOnPage()
-        LocalStorage.saveAllPageValues()
+        window.lStorage.saveAllPageValues()
         WorktableCommon.createAllInstanceAndDrawFromInstancePageValue()
         Timeline.refreshAllTimeline()
       )
@@ -86,7 +86,7 @@ class OperationHistory
 
         # キャッシュ保存 & 描画 & タイムライン更新
         PageValue.adjustInstanceAndEventOnPage()
-        LocalStorage.saveAllPageValues()
+        window.lStorage.saveAllPageValues()
         WorktableCommon.createAllInstanceAndDrawFromInstancePageValue()
         Timeline.refreshAllTimeline()
       )

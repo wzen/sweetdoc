@@ -204,7 +204,7 @@ EventConfig = (function() {
   EventConfig.prototype.applyAction = function() {
     Common.showModalFlashMessage('Please Wait');
     if (this.writeToEventPageValue()) {
-      LocalStorage.saveAllPageValues();
+      window.lStorage.saveAllPageValues();
       FloatView.show('Applied', FloatView.Type.APPLY, 3.0);
       Timeline.updateEvent(this.teNum);
       return Common.hideModalView(true);

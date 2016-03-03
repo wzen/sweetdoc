@@ -629,7 +629,7 @@ Common = (function() {
       if (window.isWorkTable && !window.previewRunning) {
         PageValue.setWorktableScrollContentsPosition(top, left);
       }
-      LocalStorage.saveAllPageValues();
+      window.lStorage.saveAllPageValues();
       if (callback != null) {
         return callback();
       }

@@ -9,7 +9,7 @@ MotionCheckCommon = (function() {
     if (newWindow == null) {
       newWindow = false;
     }
-    LocalStorage.clearRun();
+    window.lStorage.clearRun();
     target = '';
     if (newWindow) {
       size = Common.getScreenSize();

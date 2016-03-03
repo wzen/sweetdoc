@@ -53,7 +53,7 @@ EPVItem = (function(superClass) {
     if (errorMes.length === 0) {
       PageValue.setEventPageValue(PageValue.Key.eventNumber(teNum), writeValue);
       PageValue.setEventPageValue(PageValue.Key.eventCount(), teNum);
-      LocalStorage.saveAllPageValues();
+      window.lStorage.saveAllPageValues();
     }
     return errorMes;
   };

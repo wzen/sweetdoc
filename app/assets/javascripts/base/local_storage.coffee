@@ -28,39 +28,41 @@ class LocalStorage
   @WORKTABLE_SAVETIME = 5
   @RUN_SAVETIME = 9999
 
+  constructor: (@userToken) ->
+
   # PageValueを保存
-  @saveAllPageValues: ->
+  saveAllPageValues: ->
     @saveGeneralPageValue()
     @saveInstancePageValue()
     @saveEventPageValue()
     @saveSettingPageValue()
 
   # PageValueを読み込み
-  @loadAllPageValues: ->
+  loadAllPageValues: ->
     @loadGeneralPageValue()
     @loadInstancePageValue()
     @loadEventPageValue()
     @loadSettingPageValue()
 
   # 保存時間が経過しているか
-  @isOverWorktableSaveTimeLimit: ->
+  isOverWorktableSaveTimeLimit: ->
     if !localStorage?
       return true
 
-    key = ''
+    key = @userToken
     time = 0
     if window.isItemPreview? && window.isItemPreview
       # アイテムプレビュー時
       return true
 
     if window.isWorkTable
-      key = @Key.WORKTABLE_SAVETIME
-      time = @WORKTABLE_SAVETIME
+      key += @constructor.Key.WORKTABLE_SAVETIME
+      time = @constructor.WORKTABLE_SAVETIME
     else
-      key = @Key.RUN_SAVETIME
-      time = @RUN_SAVETIME
+      key += @constructor.Key.RUN_SAVETIME
+      time = @constructor.RUN_SAVETIME
 
-    if key != ''
+    if key != @userToken
       saveTime = localStorage.getItem(key)
       if !saveTime?
         return true
@@ -69,126 +71,126 @@ class LocalStorage
     else
       return true
 
-  @generalKey = ->
-    key = ''
+  generalKey : ->
+    key = @userToken
 
     if window.isItemPreview? && window.isItemPreview
       # アイテムプレビュー時は保存しない
       return ''
 
     if window.isWorkTable
-      key = @Key.WORKTABLE_GENERAL_PAGEVALUES
+      key += @constructor.Key.WORKTABLE_GENERAL_PAGEVALUES
     else
-      key = @Key.RUN_GENERAL_PAGEVALUES
+      key += @constructor.Key.RUN_GENERAL_PAGEVALUES
     return key
 
-  @instanceKey = ->
-    key = ''
+  instanceKey : ->
+    key = @userToken
 
     if window.isItemPreview? && window.isItemPreview
       # アイテムプレビュー時は保存しない
       return ''
 
     if window.isWorkTable
-      key = @Key.WORKTABLE_INSTANCE_PAGEVALUES
+      key += @constructor.Key.WORKTABLE_INSTANCE_PAGEVALUES
     else
-      key = @Key.RUN_INSTANCE_PAGEVALUES
+      key += @constructor.Key.RUN_INSTANCE_PAGEVALUES
     return key
 
-  @eventKey = ->
-    key = ''
+  eventKey : ->
+    key = @userToken
 
     if window.isItemPreview? && window.isItemPreview
       # アイテムプレビュー時は保存しない
       return ''
 
     if window.isWorkTable
-      key = @Key.WORKTABLE_EVENT_PAGEVALUES
+      key += @constructor.Key.WORKTABLE_EVENT_PAGEVALUES
     else
-      key = @Key.RUN_EVENT_PAGEVALUES
+      key += @constructor.Key.RUN_EVENT_PAGEVALUES
     return key
 
-  @settingKey = ->
-    key = ''
+  settingKey : ->
+    key = @userToken
 
     if window.isItemPreview? && window.isItemPreview
       # アイテムプレビュー時は保存しない
       return ''
 
     if window.isWorkTable
-      key = @Key.WORKTABLE_SETTING_PAGEVALUES
+      key += @constructor.Key.WORKTABLE_SETTING_PAGEVALUES
     else
-      key = @Key.RUN_SETTING_PAGEVALUES
+      key += @constructor.Key.RUN_SETTING_PAGEVALUES
     return key
 
-  @footprintKey = ->
-    key = ''
+  footprintKey : ->
+    key = @userToken
 
     if window.isItemPreview? && window.isItemPreview
       # アイテムプレビュー時は保存しない
       return ''
 
     if !window.isWorkTable
-      key = @Key.RUN_FOOTPRINT_PAGE_VALUES
+      key += @constructor.Key.RUN_FOOTPRINT_PAGE_VALUES
     return key
 
-  @savetimeKey = ->
-    key = ''
+  savetimeKey : ->
+    key = @userToken
 
     if window.isItemPreview? && window.isItemPreview
       # アイテムプレビュー時は保存しない
       return ''
 
     if window.isWorkTable
-      key = @Key.WORKTABLE_SAVETIME
+      key += @constructor.Key.WORKTABLE_SAVETIME
     else
-      key = @Key.RUN_SAVETIME
+      key += @constructor.Key.RUN_SAVETIME
     return key
 
-  @savetime = ->
+  savetime : ->
     time = 0
     if window.isWorkTable
-      time = @WORKTABLE_SAVETIME
+      time = @constructor.WORKTABLE_SAVETIME
     else
-      time = @RUN_SAVETIME
+      time = @constructor.RUN_SAVETIME
     return time
 
   # 全ワークテーブルキャッシュを消去
-  @clearWorktable: ->
+  clearWorktable: ->
     if localStorage?
-      localStorage.removeItem(@Key.WORKTABLE_GENERAL_PAGEVALUES)
-      localStorage.removeItem(@Key.WORKTABLE_INSTANCE_PAGEVALUES)
-      localStorage.removeItem(@Key.WORKTABLE_EVENT_PAGEVALUES)
-      localStorage.removeItem(@Key.WORKTABLE_SETTING_PAGEVALUES)
-      localStorage.removeItem(@Key.WORKTABLE_SAVETIME)
+      localStorage.removeItem(@constructor.Key.WORKTABLE_GENERAL_PAGEVALUES)
+      localStorage.removeItem(@constructor.Key.WORKTABLE_INSTANCE_PAGEVALUES)
+      localStorage.removeItem(@constructor.Key.WORKTABLE_EVENT_PAGEVALUES)
+      localStorage.removeItem(@constructor.Key.WORKTABLE_SETTING_PAGEVALUES)
+      localStorage.removeItem(@constructor.Key.WORKTABLE_SAVETIME)
 
   # 設定値以外のワークテーブルキャッシュを消去
-  @clearWorktableWithoutSetting: ->
+  clearWorktableWithoutSetting: ->
     if localStorage?
-      localStorage.removeItem(@Key.WORKTABLE_GENERAL_PAGEVALUES)
-      localStorage.removeItem(@Key.WORKTABLE_INSTANCE_PAGEVALUES)
-      localStorage.removeItem(@Key.WORKTABLE_EVENT_PAGEVALUES)
-      localStorage.removeItem(@Key.WORKTABLE_SAVETIME)
+      localStorage.removeItem(@constructor.Key.WORKTABLE_GENERAL_PAGEVALUES)
+      localStorage.removeItem(@constructor.Key.WORKTABLE_INSTANCE_PAGEVALUES)
+      localStorage.removeItem(@constructor.Key.WORKTABLE_EVENT_PAGEVALUES)
+      localStorage.removeItem(@constructor.Key.WORKTABLE_SAVETIME)
 
   # 共通値と設定値以外のワークテーブルキャッシュを消去
-  @clearWorktableWithoutGeneralAndSetting: ->
+  clearWorktableWithoutGeneralAndSetting: ->
     if localStorage?
-      localStorage.removeItem(@Key.WORKTABLE_INSTANCE_PAGEVALUES)
-      localStorage.removeItem(@Key.WORKTABLE_EVENT_PAGEVALUES)
-      localStorage.removeItem(@Key.WORKTABLE_SAVETIME)
+      localStorage.removeItem(@constructor.Key.WORKTABLE_INSTANCE_PAGEVALUES)
+      localStorage.removeItem(@constructor.Key.WORKTABLE_EVENT_PAGEVALUES)
+      localStorage.removeItem(@constructor.Key.WORKTABLE_SAVETIME)
 
   # 実行画面キャッシュを消去
-  @clearRun: ->
+  clearRun: ->
     if localStorage?
-      localStorage.removeItem(@Key.RUN_GENERAL_PAGEVALUES)
-      localStorage.removeItem(@Key.RUN_INSTANCE_PAGEVALUES)
-      localStorage.removeItem(@Key.RUN_EVENT_PAGEVALUES)
-      localStorage.removeItem(@Key.RUN_SETTING_PAGEVALUES)
-      localStorage.removeItem(@Key.RUN_FOOTPRINT_PAGE_VALUES)
-      localStorage.removeItem(@Key.RUN_SAVETIME)
+      localStorage.removeItem(@constructor.Key.RUN_GENERAL_PAGEVALUES)
+      localStorage.removeItem(@constructor.Key.RUN_INSTANCE_PAGEVALUES)
+      localStorage.removeItem(@constructor.Key.RUN_EVENT_PAGEVALUES)
+      localStorage.removeItem(@constructor.Key.RUN_SETTING_PAGEVALUES)
+      localStorage.removeItem(@constructor.Key.RUN_FOOTPRINT_PAGE_VALUES)
+      localStorage.removeItem(@constructor.Key.RUN_SAVETIME)
 
   # キャッシュに共通値を保存
-  @saveGeneralPageValue: ->
+  saveGeneralPageValue: ->
     key = @generalKey()
     if key != '' && localStorage?
       h = PageValue.getGeneralPageValue(PageValue.Key.G_PREFIX)
@@ -197,20 +199,20 @@ class LocalStorage
       localStorage.setItem(@savetimeKey(), $.now())
 
   # キャッシュから共通値を読み込み
-  @loadGeneralValue: ->
+  loadGeneralValue: ->
     if localStorage?
       l = localStorage.getItem(@generalKey())
       if l?
         return JSON.parse(l)
       else
         return null
-  @loadGeneralPageValue: ->
+  loadGeneralPageValue: ->
     h = @loadGeneralValue()
     if h?
       PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, h)
 
   # キャッシュにインスタンス値を保存
-  @saveInstancePageValue: ->
+  saveInstancePageValue: ->
     key = @instanceKey()
     if key != ''
       if localStorage?
@@ -220,7 +222,7 @@ class LocalStorage
         localStorage.setItem(@savetimeKey(), $.now())
 
   # キャッシュからインスタンス値を読み込み
-  @loadInstancePageValue: ->
+  loadInstancePageValue: ->
     if localStorage?
       l = localStorage.getItem(@instanceKey())
       if l?
@@ -228,7 +230,7 @@ class LocalStorage
         PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, h)
 
   # キャッシュにイベント値を保存
-  @saveEventPageValue: ->
+  saveEventPageValue: ->
     key = @eventKey()
     if key != '' && localStorage?
       h = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT)
@@ -237,7 +239,7 @@ class LocalStorage
       localStorage.setItem(@savetimeKey(), $.now())
 
   # キャッシュからイベント値を読み込み
-  @loadEventPageValue: ->
+  loadEventPageValue: ->
     if localStorage?
       l = localStorage.getItem(@eventKey())
       if l?
@@ -245,14 +247,14 @@ class LocalStorage
         PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT, h)
 
   # キャッシュに共通設定値を保存
-  @saveSettingPageValue: ->
+  saveSettingPageValue: ->
     key = @settingKey()
     if key != '' && localStorage?
       h = PageValue.getSettingPageValue(PageValue.Key.ST_PREFIX)
       localStorage.setItem(key, JSON.stringify(h))
 
   # キャッシュから共通設定値を読み込み
-  @loadSettingPageValue: ->
+  loadSettingPageValue: ->
     if localStorage?
       l = localStorage.getItem(@settingKey())
       if l?
@@ -260,14 +262,14 @@ class LocalStorage
         PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, h)
 
   # キャッシュに操作履歴値を保存
-  @saveFootprintPageValue: ->
+  saveFootprintPageValue: ->
     key = @footprintKey()
     if key != '' && localStorage?
       h = PageValue.getFootprintPageValue(PageValue.Key.F_PREFIX)
       localStorage.setItem(key, JSON.stringify(h))
 
   # キャッシュから操作履歴値を読み込み
-  @loadCommonFootprintPageValue: ->
+  loadCommonFootprintPageValue: ->
     if localStorage?
       l = localStorage.getItem(@footprintKey())
       if l?
@@ -278,7 +280,7 @@ class LocalStorage
             ret[k] = v
         PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, ret)
 
-  @loadPagingFootprintPageValue: (pageNum) ->
+  loadPagingFootprintPageValue: (pageNum) ->
     if localStorage?
       l = localStorage.getItem(@footprintKey())
       if l?
@@ -288,3 +290,6 @@ class LocalStorage
           if k.indexOf(PageValue.Key.P_PREFIX) >= 0 && parseInt(k.replace(PageValue.Key.P_PREFIX, '')) == pageNum
             ret[k] = v
         PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, ret)
+
+# インスタンスを作成
+window.lStorage = new LocalStorage(utoken)

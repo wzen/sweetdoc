@@ -36,13 +36,13 @@ WorktableCommon = (function() {
 
   WorktableCommon.checkLoadWorktableFromCache = function() {
     var generals;
-    if (LocalStorage.isOverWorktableSaveTimeLimit()) {
+    if (window.lStorage.isOverWorktableSaveTimeLimit()) {
       return false;
     }
     if ((window.changeUser != null) && window.changeUser) {
       return false;
     }
-    generals = LocalStorage.loadGeneralValue();
+    generals = window.lStorage.loadGeneralValue();
     if (generals[constant.Project.Key.PROJECT_ID] == null) {
       return false;
     }
@@ -97,7 +97,7 @@ WorktableCommon = (function() {
         instance.drawAndMakeConfigs();
       }
       instance.setItemAllPropToPageValue();
-      return LocalStorage.saveAllPageValues();
+      return window.lStorage.saveAllPageValues();
     }
   };
 
@@ -420,7 +420,7 @@ WorktableCommon = (function() {
     }
     PageValue.adjustInstanceAndEventOnPage();
     Timeline.refreshAllTimeline();
-    LocalStorage.saveAllPageValues();
+    window.lStorage.saveAllPageValues();
     return OperationHistory.add();
   };
 
@@ -534,7 +534,7 @@ WorktableCommon = (function() {
         uiIcon: "ui-icon-scissors",
         func: function(event, ui) {
           WorktableCommon.pasteItem();
-          LocalStorage.saveAllPageValues();
+          window.lStorage.saveAllPageValues();
           return OperationHistory.add();
         }
       });
@@ -553,7 +553,7 @@ WorktableCommon = (function() {
         Common.createdMainContainerIfNeeded(PageValue.getPageNum());
         _this.initMainContainer();
         $('#main').css('height', '');
-        LocalStorage.clearWorktableWithoutSetting();
+        window.lStorage.clearWorktableWithoutSetting();
         PageValue.setPageNum(1);
         OperationHistory.add(true);
         PageValue.updatePageCount();
@@ -579,7 +579,7 @@ WorktableCommon = (function() {
     if (withViewStateUpdate) {
       FloatView.show('View scale : ' + parseInt(scale * 100) + '%', FloatView.Type.SCALE, 1.0);
       this.adjustScrollContentsPosition();
-      return LocalStorage.saveGeneralPageValue();
+      return window.lStorage.saveGeneralPageValue();
     }
   };
 
@@ -615,7 +615,7 @@ WorktableCommon = (function() {
       callback = null;
     }
     Sidebar.closeSidebar();
-    LocalStorage.clearWorktableWithoutSetting();
+    window.lStorage.clearWorktableWithoutSetting();
     Common.removeAllItem();
     EventConfig.removeAllConfig();
     PageValue.removeAllGeneralAndInstanceAndEventPageValue();
@@ -630,7 +630,7 @@ WorktableCommon = (function() {
       callback = null;
     }
     Sidebar.closeSidebar();
-    LocalStorage.clearWorktableWithoutGeneralAndSetting();
+    window.lStorage.clearWorktableWithoutGeneralAndSetting();
     Common.removeAllItem(PageValue.getPageNum());
     EventConfig.removeAllConfig();
     PageValue.removeAllInstanceAndEventPageValueOnPage();

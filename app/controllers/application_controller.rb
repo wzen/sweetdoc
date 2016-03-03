@@ -20,6 +20,7 @@ class ApplicationController < ActionController::Base
     gon.user_logined = user_signed_in?
     gon.is_mobile_access = mobile_access?
     gon.is_ios_access = ios_access?
+    gon.u_token = current_or_guest_user.access_token
   end
 
   def const_values(const_class, obj)

@@ -138,7 +138,7 @@ itemBaseWorktableExtend =
         objId = $(event.target).attr('id')
         WorktableCommon.floatItem(objId)
         # キャッシュ保存
-        LocalStorage.saveAllPageValues()
+        window.lStorage.saveAllPageValues()
         # 履歴保存
         OperationHistory.add()
     })
@@ -148,7 +148,7 @@ itemBaseWorktableExtend =
         objId = $(event.target).attr('id')
         WorktableCommon.rearItem(objId)
         # キャッシュ保存
-        LocalStorage.saveAllPageValues()
+        window.lStorage.saveAllPageValues()
         # 履歴保存
         OperationHistory.add()
     })
@@ -451,7 +451,7 @@ itemBaseWorktableExtend =
       # ページに状態を保存
       @setItemAllPropToPageValue()
       # キャッシュに保存
-      LocalStorage.saveAllPageValues()
+      window.lStorage.saveAllPageValues()
       @saveDesignReflectTimer = setTimeout(->
         # 1秒後に操作履歴に保存
         OperationHistory.add()

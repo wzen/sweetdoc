@@ -108,7 +108,7 @@ Paging = (function() {
       console.log('[createNewPage] beforePageNum:' + beforePageNum);
     }
     Sidebar.closeSidebar();
-    LocalStorage.clearWorktableWithoutSetting();
+    window.lStorage.clearWorktableWithoutSetting();
     EventConfig.removeAllConfig();
     created = Common.createdMainContainerIfNeeded(PageValue.getPageCount() + 1);
     PageValue.setPageNum(PageValue.getPageCount() + 1);
@@ -134,7 +134,7 @@ Paging = (function() {
         if (created) {
           OperationHistory.add(true);
         }
-        LocalStorage.saveAllPageValues();
+        window.lStorage.saveAllPageValues();
         _this.createPageSelectMenu();
         return Common.hideModalView();
       };
@@ -160,7 +160,7 @@ Paging = (function() {
         this.selectFork(selectedForkNum, (function(_this) {
           return function() {
             Timeline.refreshAllTimeline();
-            LocalStorage.saveAllPageValues();
+            window.lStorage.saveAllPageValues();
             _this.createPageSelectMenu();
             Common.hideModalView();
             if (callback != null) {
@@ -192,7 +192,7 @@ Paging = (function() {
       console.log('[selectPage] beforePageNum:' + beforePageNum);
     }
     Sidebar.closeSidebar();
-    LocalStorage.clearWorktableWithoutSetting();
+    window.lStorage.clearWorktableWithoutSetting();
     EventConfig.removeAllConfig();
     created = Common.createdMainContainerIfNeeded(selectedPageNum, false);
     PageValue.setPageNum(selectedPageNum);
@@ -217,7 +217,7 @@ Paging = (function() {
           if (created) {
             OperationHistory.add(true);
           }
-          LocalStorage.saveAllPageValues();
+          window.lStorage.saveAllPageValues();
           _this.createPageSelectMenu();
           Common.hideModalView();
           if (callback != null) {
@@ -233,7 +233,7 @@ Paging = (function() {
     PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
     PageValue.updateForkCount();
     OperationHistory.add(true);
-    LocalStorage.saveAllPageValues();
+    window.lStorage.saveAllPageValues();
     this.createPageSelectMenu();
     return Timeline.refreshAllTimeline();
   };
@@ -276,7 +276,7 @@ Paging = (function() {
     _removePage = function(pageNum) {
       return WorktableCommon.removePage(pageNum, (function(_this) {
         return function() {
-          LocalStorage.saveAllPageValues();
+          window.lStorage.saveAllPageValues();
           _this.createPageSelectMenu();
           if (callback != null) {
             return callback();
