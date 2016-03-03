@@ -394,12 +394,6 @@ EventBase = (function(superClass) {
     if (this._skipEvent || ((window.eventAction != null) && window.eventAction.thisPage().thisChapter().isFinishedAllEvent(true))) {
       return;
     }
-    if (this._isFinishedEvent) {
-      this._isFinishedEvent = false;
-      if (window.eventAction != null) {
-        window.eventAction.thisPage().thisChapter().isFinishedAllEvent(false);
-      }
-    }
     if (isPreview) {
       this.stepValue += 1;
       this.forward = true;
@@ -424,6 +418,16 @@ EventBase = (function(superClass) {
       }
       this.stepValue += parseInt((plusX + plusY) * 3.5);
       this.forward = plusX + plusY >= 0;
+      if (this._isFinishedEvent) {
+        if (!this.forward) {
+          this._isFinishedEvent = false;
+          if (window.eventAction != null) {
+            window.eventAction.thisPage().thisChapter().isFinishedAllEvent(false);
+          }
+        } else {
+          return;
+        }
+      }
     }
     sPoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
     ePoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) + 1;
