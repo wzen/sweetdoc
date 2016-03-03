@@ -27,26 +27,9 @@ OperationHistory = (function() {
   };
 
   OperationHistory.add = function(isInit) {
-    var obj;
     if (isInit == null) {
       isInit = false;
     }
-    if ((window.isItemPreview != null) && window.isItemPreview) {
-      return;
-    }
-    if ((window.operationHistoryIndexes[this.operationHistoryIndex()] != null) && !isInit) {
-      window.operationHistoryIndexes[this.operationHistoryIndex()] = (window.operationHistoryIndexes[this.operationHistoryIndex()] + 1) % this.OPERATION_STORE_MAX;
-    } else {
-      window.operationHistoryIndexes[this.operationHistoryIndex()] = 0;
-    }
-    window.operationHistoryTailIndexes[this.operationHistoryIndex()] = window.operationHistoryIndexes[this.operationHistoryIndex()];
-    obj = {};
-    obj[this.Key.INSTANCE] = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
-    obj[this.Key.EVENT] = PageValue.getEventPageValue(PageValue.Key.eventPageMainRoot());
-    if (window.operationHistories[this.operationHistoryIndex()] == null) {
-      window.operationHistories[this.operationHistoryIndex()] = [];
-    }
-    return window.operationHistories[this.operationHistoryIndex()][window.operationHistoryIndexes[this.operationHistoryIndex()]] = obj;
   };
 
   _pop = function() {
@@ -118,25 +101,9 @@ OperationHistory = (function() {
     }
   };
 
-  OperationHistory.undo = function() {
-    var nextTailIndex;
-    if ((window.isItemPreview != null) && window.isItemPreview) {
-      return;
-    }
-    nextTailIndex = (window.operationHistoryTailIndexes[this.operationHistoryIndex()] + 1) % this.OPERATION_STORE_MAX;
-    if ((window.operationHistoryIndexes[this.operationHistoryIndex()] == null) || nextTailIndex === window.operationHistoryIndexes[this.operationHistoryIndex()] || !_pop.call(this)) {
-      return Message.flushWarn("Can't Undo");
-    }
-  };
+  OperationHistory.undo = function() {};
 
-  OperationHistory.redo = function() {
-    if ((window.isItemPreview != null) && window.isItemPreview) {
-      return;
-    }
-    if ((window.operationHistoryIndexes[this.operationHistoryIndex()] == null) || window.operationHistoryTailIndexes[this.operationHistoryIndex()] === window.operationHistoryIndexes[this.operationHistoryIndex()] || !_popRedo.call(this)) {
-      return Message.flushWarn("Can't Redo");
-    }
-  };
+  OperationHistory.redo = function() {};
 
   return OperationHistory;
 
