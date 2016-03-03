@@ -41,6 +41,7 @@ ScrollOperationGuide = (function() {
     this.finishedScrollDistSum = 0;
     this.stopTimer = null;
     this.intervalTimer = null;
+    this.runningTargetId = null;
     this.wrapper = $('#pages .operation_guide_wrapper:first');
     if (this.type === this.constructor.Type.PAGING) {
       this.emt = $('#pages .paging_parent:first');
@@ -49,11 +50,23 @@ ScrollOperationGuide = (function() {
     }
   }
 
-  ScrollOperationGuide.prototype.scrollEvent = function(x, y) {
-    return this.scrollEventByDistSum(x + y);
+  ScrollOperationGuide.prototype.scrollEvent = function(x, y, target) {
+    if (target == null) {
+      target = null;
+    }
+    return this.scrollEventByDistSum(x + y, target);
   };
 
-  ScrollOperationGuide.prototype.scrollEventByDistSum = function(distSum) {
+  ScrollOperationGuide.prototype.scrollEventByDistSum = function(distSum, target) {
+    if (target == null) {
+      target = null;
+    }
+    if ((target != null) && (this.runningTargetId != null) && this.runningTargetId !== target.id) {
+      return;
+    }
+    if (target != null) {
+      this.runningTargetId = target.id;
+    }
     this.wrapper.show();
     $('#pages .operation_guide').hide();
     this.emt.show();
@@ -73,9 +86,7 @@ ScrollOperationGuide = (function() {
           _this.finishedScrollDistSum -= 3;
           _this.update(_this.finishedScrollDistSum * _this.perWidth);
           if (_this.finishedScrollDistSum <= 0) {
-            _this.finishedScrollDistSum = 0;
-            clearInterval(_this.intervalTimer);
-            _this.intervalTimer = null;
+            _this.clear();
             return _this.wrapper.hide();
           }
         }, 10);
@@ -114,9 +125,16 @@ ScrollOperationGuide = (function() {
     return this.emt.css('width', v);
   };
 
-  ScrollOperationGuide.prototype.clear = function() {
+  ScrollOperationGuide.prototype.clear = function(target) {
+    if (target == null) {
+      target = null;
+    }
+    if ((target != null) && (this.runningTargetId != null) && this.runningTargetId !== target.id) {
+      return;
+    }
     this.update(0);
     this.finishedScrollDistSum = 0;
+    this.runningTargetId = null;
     if (this.stopTimer !== null) {
       clearTimeout(this.stopTimer);
       this.stopTimer = null;

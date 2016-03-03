@@ -19,6 +19,7 @@ class ScrollOperationGuide
     @finishedScrollDistSum = 0
     @stopTimer = null
     @intervalTimer = null
+    @runningTargetId = null
     @wrapper = $('#pages .operation_guide_wrapper:first')
     if @type == @constructor.Type.PAGING
       @emt = $('#pages .paging_parent:first')
@@ -28,13 +29,17 @@ class ScrollOperationGuide
   # スクロールイベント
   # @param [Int] x X軸の動作値
   # @param [Int] y Y軸の動作値
-  scrollEvent: (x, y) ->
-    @scrollEventByDistSum(x + y)
+  scrollEvent: (x, y, target = null) ->
+    @scrollEventByDistSum(x + y, target)
 
   # スクロールイベント
   # @param [Int] x X軸の動作値
   # @param [Int] y Y軸の動作値
-  scrollEventByDistSum: (distSum) ->
+  scrollEventByDistSum: (distSum, target = null) ->
+    if target? && @runningTargetId? && @runningTargetId != target.id
+      return
+    if target?
+      @runningTargetId = target.id
     @wrapper.show()
     $('#pages .operation_guide').hide()
     @emt.show()
@@ -52,9 +57,7 @@ class ScrollOperationGuide
         @finishedScrollDistSum -= 3
         @update(@finishedScrollDistSum * @perWidth)
         if @finishedScrollDistSum <= 0
-          @finishedScrollDistSum = 0
-          clearInterval(@intervalTimer)
-          @intervalTimer = null
+          @clear()
           @wrapper.hide()
       , 10)
     , 200)
@@ -84,9 +87,13 @@ class ScrollOperationGuide
     v = value + 'px'
     @emt.css('width', v)
 
-  clear: ->
+  clear: (target = null) ->
+    if target? && @runningTargetId? && @runningTargetId != target.id
+      return
+
     @update(0)
     @finishedScrollDistSum = 0
+    @runningTargetId = null
     if @stopTimer != null
       clearTimeout(@stopTimer)
       @stopTimer = null

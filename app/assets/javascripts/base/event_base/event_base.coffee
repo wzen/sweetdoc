@@ -347,8 +347,7 @@ class EventBase extends Extend
         page = window.eventAction.thisPage()
         chapter = page.thisChapter()
         if window.eventAction? && (window.eventAction.pageIndex > 0 || page.getChapterIndex() > 0)
-          if chapter.reverseDoMoveChapterFlgIfAllReverse()
-            window.eventAction.rewindOperationGuide.scrollEventByDistSum(sPoint - @stepValue)
+          chapter.showRewindOperationGuide(@, sPoint - @stepValue)
       else
         # イベント頭で一度実行
         @execMethod({
@@ -362,8 +361,7 @@ class EventBase extends Extend
       return
     else if @stepValue >= ePoint
       @_isScrollHeader = false
-      # チャプター戻しガイドを削除
-      window.eventAction.rewindOperationGuide.clear()
+      window.eventAction.thisPage().thisChapter().hideRewindOperationGuide(@)
       @stepValue = ePoint
       # 終了時に最終ステップで実行
       @execMethod({

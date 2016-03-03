@@ -134,10 +134,20 @@ class Chapter
       e._skipEvent = true
     )
 
-  reverseDoMoveChapterFlgIfAllReverse: ->
+  # 全てのイベントがイベントの頭にいる場合は動作フラグを戻す
+  reverseDoMoveChapterFlgIfAllEventOnHeader: ->
     @eventObjList.forEach((e) =>
       if !e.isEventHeader()
         return false
     )
     @doMoveChapter = false
     return true
+
+  # ページ戻しガイド表示
+  showRewindOperationGuide: (target, value) ->
+    if @reverseDoMoveChapterFlgIfAllEventOnHeader()
+      window.eventAction.rewindOperationGuide.scrollEventByDistSum(value, target)
+
+  hideRewindOperationGuide: (target) ->
+    # チャプター戻しガイドを削除
+    window.eventAction.rewindOperationGuide.clear(target)

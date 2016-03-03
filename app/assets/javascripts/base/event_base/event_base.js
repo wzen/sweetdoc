@@ -429,9 +429,7 @@ EventBase = (function(superClass) {
         page = window.eventAction.thisPage();
         chapter = page.thisChapter();
         if ((window.eventAction != null) && (window.eventAction.pageIndex > 0 || page.getChapterIndex() > 0)) {
-          if (chapter.reverseDoMoveChapterFlgIfAllReverse()) {
-            window.eventAction.rewindOperationGuide.scrollEventByDistSum(sPoint - this.stepValue);
-          }
+          chapter.showRewindOperationGuide(this, sPoint - this.stepValue);
         }
       } else {
         this.execMethod({
@@ -446,7 +444,7 @@ EventBase = (function(superClass) {
       return;
     } else if (this.stepValue >= ePoint) {
       this._isScrollHeader = false;
-      window.eventAction.rewindOperationGuide.clear();
+      window.eventAction.thisPage().thisChapter().hideRewindOperationGuide(this);
       this.stepValue = ePoint;
       this.execMethod({
         isPreview: isPreview,

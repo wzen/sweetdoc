@@ -163,7 +163,7 @@ Chapter = (function() {
     })(this));
   };
 
-  Chapter.prototype.reverseDoMoveChapterFlgIfAllReverse = function() {
+  Chapter.prototype.reverseDoMoveChapterFlgIfAllEventOnHeader = function() {
     this.eventObjList.forEach((function(_this) {
       return function(e) {
         if (!e.isEventHeader()) {
@@ -173,6 +173,16 @@ Chapter = (function() {
     })(this));
     this.doMoveChapter = false;
     return true;
+  };
+
+  Chapter.prototype.showRewindOperationGuide = function(target, value) {
+    if (this.reverseDoMoveChapterFlgIfAllEventOnHeader()) {
+      return window.eventAction.rewindOperationGuide.scrollEventByDistSum(value, target);
+    }
+  };
+
+  Chapter.prototype.hideRewindOperationGuide = function(target) {
+    return window.eventAction.rewindOperationGuide.clear(target);
   };
 
   return Chapter;

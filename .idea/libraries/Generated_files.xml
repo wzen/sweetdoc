@@ -57,7 +57,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/item.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/click.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/paging_guide/arrow_paging_guide.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/operation_guide/scroll_operation_guide.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_setting.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item_gallery/item_gallery.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item_gallery/item_gallery_common.js" />
