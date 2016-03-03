@@ -54,7 +54,7 @@ class ScrollOperationGuide
       @stopTimer = null
       @intervalTimer = setInterval( =>
         # Width短くする
-        @finishedScrollDistSum -= 3
+        @finishedScrollDistSum -= parseInt(@runScrollDist * 0.2)
         @update(@finishedScrollDistSum * @perWidth)
         if @finishedScrollDistSum <= 0
           @clear()
@@ -90,7 +90,6 @@ class ScrollOperationGuide
   clear: (target = null) ->
     if target? && @runningTargetId? && @runningTargetId != target.id
       return
-
     @update(0)
     @finishedScrollDistSum = 0
     @runningTargetId = null

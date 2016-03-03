@@ -83,7 +83,7 @@ ScrollOperationGuide = (function() {
         clearTimeout(_this.stopTimer);
         _this.stopTimer = null;
         return _this.intervalTimer = setInterval(function() {
-          _this.finishedScrollDistSum -= 3;
+          _this.finishedScrollDistSum -= parseInt(_this.runScrollDist * 0.2);
           _this.update(_this.finishedScrollDistSum * _this.perWidth);
           if (_this.finishedScrollDistSum <= 0) {
             _this.clear();
