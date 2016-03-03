@@ -5,7 +5,7 @@ class GuideBase
   # 表示用タイマー
   @timer = null
   # アイドル時間
-  @IDLE_TIMER = 3000 # 3秒
+  @IDLE_TIMER = 1500 # 1.5秒
 
   # ガイド表示
   # @abstract
