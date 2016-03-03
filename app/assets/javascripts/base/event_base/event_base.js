@@ -394,6 +394,12 @@ EventBase = (function(superClass) {
     if (this._skipEvent || ((window.eventAction != null) && window.eventAction.thisPage().thisChapter().isFinishedAllEvent(true))) {
       return;
     }
+    if (this._isFinishedEvent) {
+      this._isFinishedEvent = false;
+      if (window.eventAction != null) {
+        window.eventAction.thisPage().thisChapter().isFinishedAllEvent(false);
+      }
+    }
     if (isPreview) {
       this.stepValue += 1;
       this.forward = true;
@@ -446,27 +452,26 @@ EventBase = (function(superClass) {
     } else if (this.stepValue >= ePoint) {
       this._runningEvent = true;
       this._isScrollHeader = false;
-      this.stepValue = ePoint;
       if (window.eventAction != null) {
         window.eventAction.thisPage().thisChapter().doMoveChapter = true;
       }
-      this.execMethod({
-        isPreview: isPreview,
-        progress: this.progressMax(),
-        progressMax: this.progressMax(),
-        forward: this.forward
-      }, (function(_this) {
-        return function() {
-          if (!_this._isFinishedEvent) {
+      if (!this._isFinishedEvent) {
+        this.execMethod({
+          isPreview: isPreview,
+          progress: this.progressMax(),
+          progressMax: this.progressMax(),
+          forward: this.forward
+        }, (function(_this) {
+          return function() {
             if (!_this.isFinishedWithHand()) {
               _this.finishEvent();
             }
             if (!isPreview) {
               return ScrollGuide.hideGuide();
             }
-          }
-        };
-      })(this));
+          };
+        })(this));
+      }
       return;
     }
     this._runningEvent = true;

@@ -298,8 +298,14 @@ class EventBase extends Extend
   # @param [Integer] y スクロール縦座標
   scrollHandlerFunc: (isPreview = false, x = 0, y = 0) ->
     if @_skipEvent || (window.eventAction? && window.eventAction.thisPage().thisChapter().isFinishedAllEvent(true))
-      # 全イベント終了済みorイベントを反応させない場合
+      # 全イベント終了済みorイベントを反応させない場合はスキップ
       return
+    if @_isFinishedEvent
+      # 終了状態で実行した場合はOFFに戻す
+      @_isFinishedEvent = false
+      if window.eventAction?
+        # 終了判定のキャッシュを更新するために一度実行
+        window.eventAction.thisPage().thisChapter().isFinishedAllEvent(false)
     if isPreview
       # プレビュー時は1ずつ実行
       @stepValue += 1
@@ -361,24 +367,23 @@ class EventBase extends Extend
     else if @stepValue >= ePoint
       @_runningEvent = true
       @_isScrollHeader = false
-      @stepValue = ePoint
       # 動作済みフラグON
       if window.eventAction?
         window.eventAction.thisPage().thisChapter().doMoveChapter = true
-      # 終了時に最終ステップで実行
-      @execMethod({
-        isPreview: isPreview
-        progress: @progressMax()
-        progressMax: @progressMax()
-        forward: @forward
-      }, =>
-        if !@_isFinishedEvent
+      if !@_isFinishedEvent
+        # 終了時に最終ステップで実行
+        @execMethod({
+          isPreview: isPreview
+          progress: @progressMax()
+          progressMax: @progressMax()
+          forward: @forward
+        }, =>
           if !@isFinishedWithHand()
             # 終了イベント
             @finishEvent()
           if !isPreview
             ScrollGuide.hideGuide()
-      )
+        )
       return
 
     @_runningEvent = true

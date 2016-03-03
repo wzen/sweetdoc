@@ -99,10 +99,8 @@ class ScrollChapter extends Chapter
   isFinishedAllEvent: (cached = false) ->
     if cached && @_isFinishedAllEventCache?
       return @_isFinishedAllEventCache
-
     ret = true
     @eventObjList.forEach((event) ->
-      methodName = event._event[EventPageValueBase.PageValueKey.METHODNAME]
       if !event._isFinishedEvent
         ret = false
         return false

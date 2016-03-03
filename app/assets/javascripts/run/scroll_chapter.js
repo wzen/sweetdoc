@@ -132,8 +132,6 @@ ScrollChapter = (function(superClass) {
     }
     ret = true;
     this.eventObjList.forEach(function(event) {
-      var methodName;
-      methodName = event._event[EventPageValueBase.PageValueKey.METHODNAME];
       if (!event._isFinishedEvent) {
         ret = false;
         return false;
