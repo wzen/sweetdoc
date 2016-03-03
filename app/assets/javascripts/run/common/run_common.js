@@ -244,6 +244,7 @@ RunCommon = (function() {
     if (withSetupScrollEvent == null) {
       withSetupScrollEvent = true;
     }
+    window.skipScrollEvent = true;
     window.scrollHandleWrapper.scrollLeft(window.scrollHandle.width() * 0.5);
     window.scrollHandleWrapper.scrollTop(window.scrollHandle.height() * 0.5);
     if (withSetupScrollEvent) {

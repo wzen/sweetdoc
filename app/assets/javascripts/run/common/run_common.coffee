@@ -192,7 +192,7 @@ class RunCommon
   # Handleスクロールビューの初期化
   @initHandleScrollView = (withSetupScrollEvent = true) ->
     # スクロール位置初期化
-    #window.skipScrollEvent = true
+    window.skipScrollEvent = true
     window.scrollHandleWrapper.scrollLeft(window.scrollHandle.width() * 0.5)
     window.scrollHandleWrapper.scrollTop(window.scrollHandle.height() * 0.5)
     if withSetupScrollEvent
