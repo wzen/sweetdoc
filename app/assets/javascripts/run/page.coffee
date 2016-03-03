@@ -118,8 +118,7 @@ class Page
 
   # 全てのイベントが終了している場合、チャプターを進める
   nextChapterIfFinishedAllEvent: ->
-    if !@thisChapter().finishedAllEvent? || @thisChapter().finishedAllEvent()
-      # イベント終了判定メソッドが無い or 終了判定がTrueの場合に進行
+    if @thisChapter().isFinishedAllEvent(false)
       @nextChapter()
 
   # 次のチャプター処理

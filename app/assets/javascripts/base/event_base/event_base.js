@@ -116,10 +116,10 @@ EventBase = (function(superClass) {
     this._event = event;
     this._isFinishedEvent = false;
     this._skipEvent = true;
-    this._runningClickEvent = false;
+    this._runningEvent = false;
+    this._isScrollHeader = true;
     this._doPreviewLoop = false;
     this._handlerFuncComplete = null;
-    this._isScrollHeader = true;
     this._enabledDirections = this._event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS];
     this._forwardDirections = this._event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS];
     return this._specificMethodValues = this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES];
@@ -195,7 +195,7 @@ EventBase = (function(superClass) {
         _this._skipEvent = false;
         _this._loopCount = 0;
         _this._previewTimer = null;
-        _this._isScrollHeader = true;
+        _this._runningEvent = true;
         FloatView.showWithCloseButton(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW, function() {
           if (_this.loopFinishCallback != null) {
             return _this.loopFinishCallback();
@@ -391,11 +391,8 @@ EventBase = (function(superClass) {
     if (y == null) {
       y = 0;
     }
-    if (this._isFinishedEvent || this._skipEvent) {
+    if (this._skipEvent || ((window.eventAction != null) && window.eventAction.thisPage().thisChapter().isFinishedAllEvent(true))) {
       return;
-    }
-    if (window.eventAction != null) {
-      window.eventAction.thisPage().thisChapter().doMoveChapter = true;
     }
     if (isPreview) {
       this.stepValue += 1;
@@ -425,27 +422,34 @@ EventBase = (function(superClass) {
     sPoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
     ePoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) + 1;
     if (this.stepValue < sPoint) {
-      if (this._isScrollHeader) {
-        page = window.eventAction.thisPage();
-        chapter = page.thisChapter();
-        if ((window.eventAction != null) && (window.eventAction.pageIndex > 0 || page.getChapterIndex() > 0)) {
-          chapter.showRewindOperationGuide(this, sPoint - this.stepValue);
+      if (this.stepValue < 0) {
+        if (!this._runningEvent) {
+          page = window.eventAction.thisPage();
+          chapter = page.thisChapter();
+          if ((window.eventAction != null) && (window.eventAction.pageIndex > 0 || page.getChapterIndex() > 0)) {
+            chapter.showRewindOperationGuide(this, -this.stepValue);
+          }
         }
-      } else {
+        this.stepValue = 0;
+        this._runningEvent = false;
+      }
+      if (!this._isScrollHeader) {
         this.execMethod({
           isPreview: isPreview,
           progress: 0,
           progressMax: this.progressMax(),
           forward: this.forward
         });
+        this._isScrollHeader = true;
       }
-      this.stepValue = sPoint;
-      this._isScrollHeader = true;
       return;
     } else if (this.stepValue >= ePoint) {
+      this._runningEvent = true;
       this._isScrollHeader = false;
-      window.eventAction.thisPage().thisChapter().hideRewindOperationGuide(this);
       this.stepValue = ePoint;
+      if (window.eventAction != null) {
+        window.eventAction.thisPage().thisChapter().doMoveChapter = true;
+      }
       this.execMethod({
         isPreview: isPreview,
         progress: this.progressMax(),
@@ -465,7 +469,12 @@ EventBase = (function(superClass) {
       })(this));
       return;
     }
+    this._runningEvent = true;
     this._isScrollHeader = false;
+    if (window.eventAction != null) {
+      window.eventAction.thisPage().thisChapter().doMoveChapter = true;
+    }
+    window.eventAction.thisPage().thisChapter().hideRewindOperationGuide(this);
     this.canForward = this.stepValue < ePoint;
     this.canReverse = this.stepValue > sPoint;
     return this.execMethod({
@@ -491,10 +500,10 @@ EventBase = (function(superClass) {
     if (e != null) {
       e.preventDefault();
     }
-    if (this._isFinishedEvent || this._skipEvent || this._runningClickEvent) {
+    if (this._isFinishedEvent || this._skipEvent || this._runningEvent) {
       return;
     }
-    this._runningClickEvent = true;
+    this._runningEvent = true;
     if (window.eventAction != null) {
       window.eventAction.thisPage().thisChapter().doMoveChapter = true;
     }
@@ -528,7 +537,7 @@ EventBase = (function(superClass) {
     }
     this.stepValue = 0;
     this._skipEvent = false;
-    this._runningClickEvent = false;
+    this._runningEvent = false;
     if (withResetFinishedEventFlg) {
       return this._isFinishedEvent = false;
     }
@@ -540,18 +549,6 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.disableHandleResponse = function() {
     return this._skipEvent = true;
-  };
-
-  EventBase.prototype.isEventHeader = function() {
-    if (this._event != null) {
-      if (this._event[EventPageValueBase.PageValueKey.ACTIONTYPE] === constant.ActionType.SCROLL) {
-        return this._isScrollHeader;
-      } else if (this._event[EventPageValueBase.PageValueKey.ACTIONTYPE] === constant.ActionType.CLICK) {
-        return !this._runningClickEvent;
-      }
-    } else {
-      return true;
-    }
   };
 
   EventBase.prototype.finishEvent = function() {

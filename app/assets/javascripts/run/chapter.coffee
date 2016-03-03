@@ -134,10 +134,15 @@ class Chapter
       e._skipEvent = true
     )
 
+  # 全てのイベントアイテムが終了しているか
+  # @abstract
+  isFinishedAllEvent: ->
+    return false
+
   # 全てのイベントがイベントの頭にいる場合は動作フラグを戻す
   reverseDoMoveChapterFlgIfAllEventOnHeader: ->
     @eventObjList.forEach((e) =>
-      if !e.isEventHeader()
+      if e._runningEvent
         return false
     )
     @doMoveChapter = false

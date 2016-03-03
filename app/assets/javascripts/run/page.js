@@ -143,7 +143,7 @@ Page = (function() {
   };
 
   Page.prototype.nextChapterIfFinishedAllEvent = function() {
-    if ((this.thisChapter().finishedAllEvent == null) || this.thisChapter().finishedAllEvent()) {
+    if (this.thisChapter().isFinishedAllEvent(false)) {
       return this.nextChapter();
     }
   };

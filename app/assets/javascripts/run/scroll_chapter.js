@@ -38,7 +38,7 @@ ScrollChapter = (function(superClass) {
         }
       };
     })(this));
-    if (!this.finishedAllEvent()) {
+    if (!this.isFinishedAllEvent()) {
       return this.showGuide();
     }
   };
@@ -122,8 +122,14 @@ ScrollChapter = (function(superClass) {
     }
   };
 
-  ScrollChapter.prototype.finishedAllEvent = function() {
+  ScrollChapter.prototype.isFinishedAllEvent = function(cached) {
     var ret;
+    if (cached == null) {
+      cached = false;
+    }
+    if (cached && (this._isFinishedAllEventCache != null)) {
+      return this._isFinishedAllEventCache;
+    }
     ret = true;
     this.eventObjList.forEach(function(event) {
       var methodName;
@@ -133,6 +139,7 @@ ScrollChapter = (function(superClass) {
         return false;
       }
     });
+    this._isFinishedAllEventCache = ret;
     return ret;
   };
 

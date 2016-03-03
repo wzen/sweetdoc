@@ -20,7 +20,6 @@ class ScrollChapter extends Chapter
   scrollEvent : (x, y) ->
     if window.disabledEventHandler
       return
-
     @eventObjList.forEach((event) =>
       if event.scrollEvent?
         event.scrollEvent(x, y, =>
@@ -29,7 +28,7 @@ class ScrollChapter extends Chapter
             window.eventAction.thisPage().nextChapterIfFinishedAllEvent()
         )
     )
-    if !@finishedAllEvent()
+    if !@isFinishedAllEvent()
       @showGuide()
 
   # ガイド表示
@@ -97,7 +96,10 @@ class ScrollChapter extends Chapter
 
   # 全てのイベントアイテムのスクロールが終了しているか
   # @return [Boolean] 判定結果
-  finishedAllEvent: ->
+  isFinishedAllEvent: (cached = false) ->
+    if cached && @_isFinishedAllEventCache?
+      return @_isFinishedAllEventCache
+
     ret = true
     @eventObjList.forEach((event) ->
       methodName = event._event[EventPageValueBase.PageValueKey.METHODNAME]
@@ -105,5 +107,6 @@ class ScrollChapter extends Chapter
         ret = false
         return false
     )
+    @_isFinishedAllEventCache = ret
     return ret
 

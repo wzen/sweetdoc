@@ -163,10 +163,14 @@ Chapter = (function() {
     })(this));
   };
 
+  Chapter.prototype.isFinishedAllEvent = function() {
+    return false;
+  };
+
   Chapter.prototype.reverseDoMoveChapterFlgIfAllEventOnHeader = function() {
     this.eventObjList.forEach((function(_this) {
       return function(e) {
-        if (!e.isEventHeader()) {
+        if (e._runningEvent) {
           return false;
         }
       };

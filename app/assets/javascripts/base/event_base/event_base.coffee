@@ -71,10 +71,10 @@ class EventBase extends Extend
     @_event = event
     @_isFinishedEvent = false
     @_skipEvent = true
-    @_runningClickEvent = false
+    @_runningEvent = false
+    @_isScrollHeader = true
     @_doPreviewLoop = false
     @_handlerFuncComplete = null
-    @_isScrollHeader = true
     @_enabledDirections = @_event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS]
     @_forwardDirections = @_event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS]
     @_specificMethodValues = @_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES]
@@ -138,7 +138,7 @@ class EventBase extends Extend
       @_skipEvent = false
       @_loopCount = 0
       @_previewTimer = null
-      @_isScrollHeader = true
+      @_runningEvent = true
       # FloatView表示
       FloatView.showWithCloseButton(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW, =>
         if @loopFinishCallback?
@@ -297,12 +297,9 @@ class EventBase extends Extend
   # @param [Integer] x スクロール横座標
   # @param [Integer] y スクロール縦座標
   scrollHandlerFunc: (isPreview = false, x = 0, y = 0) ->
-    if @_isFinishedEvent || @_skipEvent
-      # 終了済みorイベントを反応させない場合
+    if @_skipEvent || (window.eventAction? && window.eventAction.thisPage().thisChapter().isFinishedAllEvent(true))
+      # 全イベント終了済みorイベントを反応させない場合
       return
-    # 動作済みフラグON
-    if window.eventAction?
-      window.eventAction.thisPage().thisChapter().doMoveChapter = true
     if isPreview
       # プレビュー時は1ずつ実行
       @stepValue += 1
@@ -342,27 +339,32 @@ class EventBase extends Extend
     ePoint = parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) + 1
     # スクロール指定範囲外なら反応させない
     if @stepValue < sPoint
-      if @_isScrollHeader
-        # チャプター戻しガイド表示
-        page = window.eventAction.thisPage()
-        chapter = page.thisChapter()
-        if window.eventAction? && (window.eventAction.pageIndex > 0 || page.getChapterIndex() > 0)
-          chapter.showRewindOperationGuide(@, sPoint - @stepValue)
-      else
-        # イベント頭で一度実行
+      if @stepValue < 0
+        if !@_runningEvent
+          # チャプター戻しガイド表示
+          page = window.eventAction.thisPage()
+          chapter = page.thisChapter()
+          if window.eventAction? && (window.eventAction.pageIndex > 0 || page.getChapterIndex() > 0)
+            chapter.showRewindOperationGuide(@, -@stepValue)
+        @stepValue = 0
+        @_runningEvent = false
+      if !@_isScrollHeader
+        # イベント頭で一回実行
         @execMethod({
           isPreview: isPreview
           progress: 0
           progressMax: @progressMax()
           forward: @forward
         })
-      @stepValue = sPoint
-      @_isScrollHeader = true
+        @_isScrollHeader = true
       return
     else if @stepValue >= ePoint
+      @_runningEvent = true
       @_isScrollHeader = false
-      window.eventAction.thisPage().thisChapter().hideRewindOperationGuide(@)
       @stepValue = ePoint
+      # 動作済みフラグON
+      if window.eventAction?
+        window.eventAction.thisPage().thisChapter().doMoveChapter = true
       # 終了時に最終ステップで実行
       @execMethod({
         isPreview: isPreview
@@ -379,7 +381,12 @@ class EventBase extends Extend
       )
       return
 
+    @_runningEvent = true
     @_isScrollHeader = false
+    # 動作済みフラグON
+    if window.eventAction?
+      window.eventAction.thisPage().thisChapter().doMoveChapter = true
+    window.eventAction.thisPage().thisChapter().hideRewindOperationGuide(@)
     @canForward = @stepValue < ePoint
     @canReverse = @stepValue > sPoint
 
@@ -402,12 +409,12 @@ class EventBase extends Extend
     if e?
       e.preventDefault()
 
-    if @_isFinishedEvent || @_skipEvent || @_runningClickEvent
+    if @_isFinishedEvent || @_skipEvent || @_runningEvent
       # 終了済みorイベントを反応させない場合
       return
 
     # クリックイベントは一回のみ実行
-    @_runningClickEvent = true
+    @_runningEvent = true
 
     # 動作済みフラグON
     if window.eventAction?
@@ -437,7 +444,7 @@ class EventBase extends Extend
   resetProgress: (withResetFinishedEventFlg = true) ->
     @stepValue = 0
     @_skipEvent = false
-    @_runningClickEvent = false
+    @_runningEvent = false
     if withResetFinishedEventFlg
       @_isFinishedEvent = false
 
@@ -449,21 +456,11 @@ class EventBase extends Extend
   disableHandleResponse: ->
     @_skipEvent = true
 
-  isEventHeader: ->
-    if @_event?
-      if @_event[EventPageValueBase.PageValueKey.ACTIONTYPE] == constant.ActionType.SCROLL
-        return @_isScrollHeader
-      else if @_event[EventPageValueBase.PageValueKey.ACTIONTYPE] == constant.ActionType.CLICK
-        return !@_runningClickEvent
-    else
-      return true
-
   # イベントを終了する
   finishEvent: ->
     if @_isFinishedEvent
       # 二重でコールしない
       return
-
     @_isFinishedEvent = true
     if @_clickIntervalTimer?
       clearInterval(@_clickIntervalTimer)
@@ -473,7 +470,7 @@ class EventBase extends Extend
     else
       if window.eventAction?
         if @_event[EventPageValueBase.PageValueKey.FINISH_PAGE]
-          # ページ遷移
+          # このイベント終了時にページ遷移する場合
           if @_event[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] != EventPageValueBase.NO_JUMPPAGE
             # 指定ページに遷移
             window.eventAction.thisPage().finishAllChapters(@_event[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] - 1)
