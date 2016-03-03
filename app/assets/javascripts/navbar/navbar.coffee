@@ -65,7 +65,12 @@ class Navbar
       window.location.href = '/'
     )
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
-    $('.menu-item', itemsSelectMenuEmt).off('click').on('click', ->
+    $('.menu-item', itemsSelectMenuEmt).off('click').on('click', (e) ->
+      if $(@).hasClass('href')
+        d = $(@).attr('disabled')
+        if d?
+          return false
+        return
       Sidebar.closeSidebar()
       selected = $(@).html()
       $('#header_items_selected_menu_span').html(selected)

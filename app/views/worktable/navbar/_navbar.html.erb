@@ -57,9 +57,25 @@
                         <li><a id="menu-action-edit" class="menu-item"><%= t('header_menu.action.edit') %></a></li>
                         <li class="divider"></li>
                         <% if user_signed_in? %>
-                          <li><a id="menu-action-coding" class="menu-item" href="coding/item" target="_coding"><%= t('header_menu.action.item_coding') %></a></li>
+                          <li>
+                            <a id="menu-action-coding" class="menu-item href" href="coding/item" target="_coding">
+                              <div class="icon">
+                              </div>
+                              <div>
+                                <%= t('header_menu.action.item_coding') %>
+                              </div>
+                            </a>
+                          </li>
                         <% else %>
-                          <li class="disabled"><a id="menu-action-coding" class="menu-item" href="" disabled="disabled"><%= t('header_menu.action.item_coding') %></a></li>
+                          <li class="disabled">
+                            <a id="menu-action-coding" class="menu-item href" href="" disabled="disabled">
+                              <div class="icon">
+                              </div>
+                              <div>
+                                <%= t('header_menu.action.item_coding') %>
+                              </div>
+                            </a>
+                          </li>
                         <% end %>
                     </ul>
                 </li>

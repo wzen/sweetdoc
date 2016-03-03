@@ -79,8 +79,15 @@ Navbar = (function() {
       return window.location.href = '/';
     });
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li');
-    $('.menu-item', itemsSelectMenuEmt).off('click').on('click', function() {
-      var classDistToken, emtId, selected;
+    $('.menu-item', itemsSelectMenuEmt).off('click').on('click', function(e) {
+      var classDistToken, d, emtId, selected;
+      if ($(this).hasClass('href')) {
+        d = $(this).attr('disabled');
+        if (d != null) {
+          return false;
+        }
+        return;
+      }
       Sidebar.closeSidebar();
       selected = $(this).html();
       $('#header_items_selected_menu_span').html(selected);
