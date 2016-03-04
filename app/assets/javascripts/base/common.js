@@ -206,7 +206,7 @@ Common = (function() {
       se = new ScreenEvent();
       se.setEventBaseXAndY(se.initConfigX, se.initConfigY);
       size = this.convertCenterCoodToSize(se.initConfigX, se.initConfigY, se.initConfigScale);
-      scrollContentsSize = Common.screenSizeUnderViewScale();
+      scrollContentsSize = Common.scrollContentsSizeUnderViewScale();
       return this.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false);
     } else {
       return this.initScrollContentsPositionByWorktableConfig();
@@ -330,17 +330,25 @@ Common = (function() {
     });
   };
 
-  Common.screenSizeUnderViewScale = function() {
-    var borderPadding, scale, screen;
-    screen = this.getScreenSize();
-    borderPadding = 5 * 2;
+  Common.scrollContentsSizeUnderViewScale = function() {
+    var borderPadding, h, scale, scaleFromViewRate, screen, w;
+    w = window.scrollContents.width();
+    h = window.scrollContents.height();
+    if (!window.isWorkTable && w <= 0) {
+      screen = this.getScreenSize();
+      if (screen != null) {
+        borderPadding = 5 * 2;
+        scaleFromViewRate = window.runScaleFromViewRate;
+        w = screen.width * scaleFromViewRate - borderPadding;
+      }
+    }
     scale = this.getViewScale();
     if (window.isWorkTable) {
       scale = 1.0;
     }
     return {
-      width: (screen.width - borderPadding) / scale,
-      height: (screen.height - borderPadding) / scale
+      width: w / scale,
+      height: h / scale
     };
   };
 
@@ -490,13 +498,13 @@ Common = (function() {
     if ((target == null) || target.length === 0) {
       return;
     }
-    scrollContentsSize = this.screenSizeUnderViewScale();
+    scrollContentsSize = this.scrollContentsSizeUnderViewScale();
     if (scrollContentsSize != null) {
       diff = {
         top: 0,
         left: 0
       };
-      s = this.screenSizeUnderViewScale();
+      s = this.scrollContentsSizeUnderViewScale();
       viewRate = window.isWorkTable ? 1.0 : window.runScaleFromViewRate;
       viewScaleDiff = {
         top: s.height * 0.5 * (1 - viewRate),
@@ -534,7 +542,7 @@ Common = (function() {
     if (withUpdateScreenEventVar) {
       this.saveDisplayPosition(top, left, true);
     }
-    scrollContentsSize = this.screenSizeUnderViewScale();
+    scrollContentsSize = this.scrollContentsSizeUnderViewScale();
     top -= scrollContentsSize.height * 0.5;
     left -= scrollContentsSize.width * 0.5;
     if (top <= 0 && left <= 0) {
@@ -593,7 +601,7 @@ Common = (function() {
     if (withUpdateScreenEventVar == null) {
       withUpdateScreenEventVar = true;
     }
-    scrollContentsSize = this.screenSizeUnderViewScale();
+    scrollContentsSize = this.scrollContentsSizeUnderViewScale();
     top = (window.scrollInsideWrapper.height() + scrollContentsSize.height) * 0.5;
     left = (window.scrollInsideWrapper.width() + scrollContentsSize.width) * 0.5;
     return this.updateScrollContentsPosition(top, left, true, withUpdateScreenEventVar);

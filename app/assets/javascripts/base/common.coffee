@@ -185,7 +185,7 @@ class Common
       se = new ScreenEvent()
       se.setEventBaseXAndY(se.initConfigX, se.initConfigY)
       size = @convertCenterCoodToSize(se.initConfigX, se.initConfigY, se.initConfigScale)
-      scrollContentsSize = Common.screenSizeUnderViewScale();
+      scrollContentsSize = Common.scrollContentsSizeUnderViewScale();
       @updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
     else
       # ワークテーブルの倍率を設定
@@ -267,15 +267,22 @@ class Common
     @updateCanvasSize()
     window.mainWrapper.css({transform: "scale(#{scale}, #{scale})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
 
-  @screenSizeUnderViewScale = ->
-    screen = @getScreenSize()
-    borderPadding = 5 * 2
+  @scrollContentsSizeUnderViewScale = ->
+    w = window.scrollContents.width()
+    h = window.scrollContents.height()
+    if !window.isWorkTable && w <= 0
+      # 幅0 (ページ遷移前のビューが閉じている状態)の時はScreenから取得
+      screen = @getScreenSize()
+      if screen?
+        borderPadding = 5 * 2
+        scaleFromViewRate = window.runScaleFromViewRate
+        w = screen.width * scaleFromViewRate - borderPadding
     scale = @getViewScale()
     if window.isWorkTable
       scale = 1.0
     return {
-      width: (screen.width - borderPadding)  / scale
-      height: (screen.height - borderPadding) / scale
+      width: w / scale
+      height: h / scale
     }
 
   # Canvasサイズ更新
@@ -391,11 +398,11 @@ class Common
       return
 
     # col-xs-9 → 75% padding → 15px
-    scrollContentsSize = @screenSizeUnderViewScale()
+    scrollContentsSize = @scrollContentsSizeUnderViewScale()
     if scrollContentsSize?
       diff = {top: 0, left: 0}
       # MainView縮小時のDiff
-      s = @screenSizeUnderViewScale()
+      s = @scrollContentsSizeUnderViewScale()
       viewRate = if window.isWorkTable then 1.0 else window.runScaleFromViewRate
       viewScaleDiff = {
         top: s.height * 0.5 * (1 - viewRate)
@@ -435,7 +442,7 @@ class Common
     if withUpdateScreenEventVar
       @saveDisplayPosition(top, left, true)
 
-    scrollContentsSize = @screenSizeUnderViewScale()
+    scrollContentsSize = @scrollContentsSizeUnderViewScale()
     top -= scrollContentsSize.height * 0.5
     left -= scrollContentsSize.width * 0.5
     if top <= 0 && left <= 0
@@ -480,7 +487,7 @@ class Common
 
   # スクロール位置を中心に初期化
   @resetScrollContentsPositionToCenter: (withUpdateScreenEventVar = true) ->
-    scrollContentsSize = @screenSizeUnderViewScale()
+    scrollContentsSize = @scrollContentsSizeUnderViewScale()
     top = (window.scrollInsideWrapper.height() + scrollContentsSize.height) * 0.5
     left = (window.scrollInsideWrapper.width() + scrollContentsSize.width) * 0.5
     @updateScrollContentsPosition(top, left, true, withUpdateScreenEventVar)
