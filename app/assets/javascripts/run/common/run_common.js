@@ -448,7 +448,7 @@ RunCommon = (function() {
   RunCommon.popLastForkNumInStack = function(pn) {
     var stack;
     stack = this.getForkStack(pn);
-    stack[pn].pop();
+    stack.pop();
     PageValue.setFootprintPageValue(PageValue.Key.forkStack(pn), stack);
     return true;
   };

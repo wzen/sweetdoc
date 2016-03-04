@@ -511,7 +511,7 @@ PageValue = (function() {
       if (keys.length - 1 > index) {
         element = 'div';
       } else {
-        if (jQuery.type(value) === "object") {
+        if (jQuery.type(value) === "object" || jQuery.type(value) === "array") {
           element = 'div';
         } else {
           element = 'input';

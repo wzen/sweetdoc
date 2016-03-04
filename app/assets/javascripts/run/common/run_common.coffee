@@ -380,7 +380,7 @@ class RunCommon
   # @return [Boolean] 処理正常終了か
   @popLastForkNumInStack = (pn) ->
     stack = @getForkStack(pn)
-    stack[pn].pop()
+    stack.pop()
     # PageValueに書き込み
     PageValue.setFootprintPageValue(PageValue.Key.forkStack(pn), stack)
     return true
