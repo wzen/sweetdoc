@@ -35,18 +35,18 @@ ClickChapter = (function(superClass) {
     if (window.disabledEventHandler) {
       return;
     }
-    return this.eventObjList.forEach(function(event) {
-      if (event.clickTargetElement().get(0) === $(e.currentTarget).get(0)) {
-        return event.clickEvent(e, (function(_this) {
-          return function() {
+    return this.eventObjList.forEach((function(_this) {
+      return function(event) {
+        if (event.clickTargetElement().get(0) === $(e.currentTarget).get(0)) {
+          return event.clickEvent(e, function() {
             _this.changeForkNum = event.getChangeForkNum();
             if (window.eventAction != null) {
               return window.eventAction.thisPage().nextChapter();
             }
-          };
-        })(this));
-      }
-    });
+          });
+        }
+      };
+    })(this));
   };
 
   ClickChapter.prototype.showGuide = function() {

@@ -31,7 +31,7 @@ class ClickChapter extends Chapter
     @hideGuide()
     if window.disabledEventHandler
       return
-    @eventObjList.forEach((event) ->
+    @eventObjList.forEach((event) =>
       if event.clickTargetElement().get(0) == $(e.currentTarget).get(0)
         event.clickEvent(e, =>
           # クリックしたイベントのフォーク番号を保存
