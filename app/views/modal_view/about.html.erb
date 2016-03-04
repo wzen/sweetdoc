@@ -1,10 +1,20 @@
 <div class="modal-content <%= Const::ModalViewType::ABOUT %>">
   <div class="content">
-    <%= render 'base/copyright' %>
-    <%= render 'base/myinfo'%>
 
-    <br/>
+    <div style="font-size: 15px">
+      Sweetdoc is active document maker.
+    </div>
 
+    <div style="margin-top: 20px">
+      <div>
+        <%= render 'base/copyright' %>
+      </div>
+      <div>
+        <%= render 'base/myinfo'%>
+      </div>
+    </div>
+
+    <div style="overflow-y: scroll;width:100%;height: 100px;margin-top: 20px">
     <div>Icons made by</div>
     <div><a href="http://www.freepik.com" title="Freepik">Freepik</a></div>
     <div><a href="http://www.flaticon.com/authors/simpleicon" title="SimpleIcon">SimpleIcon</a></div>
@@ -16,6 +26,7 @@
     <div><a href="http://www.flaticon.com/authors/ocha" title="OCHA">OCHA</a></div>
     <div><a href="http://www.flaticon.com/authors/puppets" title="Puppets">Puppets</a></div>
     <div>from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
+    </div>
   </div>
   <script type="text/javascript">
     var twitterTitle = $(".modal-context.<%= Const::ModalViewType::ABOUT %>");
