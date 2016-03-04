@@ -54,7 +54,7 @@ en:
       fork: 'Fork'
       add_fork: 'Add fork'
       delete_fork: 'Remove fork'
-      master: 'Base'
+      master: 'Upstream'
     etc:
       etc: "Etc"
       language: "Language"

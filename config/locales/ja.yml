@@ -33,7 +33,7 @@ ja:
       fork: 'フォーク'
       add_fork: 'フォーク追加'
       delete_fork: 'フォーク削除'
-      master: 'ベース'
+      master: 'マスター'
     etc:
       etc: "その他"
       language: "言語"
