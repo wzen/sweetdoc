@@ -410,8 +410,6 @@ class Common
             top: scrollContentsSize.height * 0.5 * (1 - window.runScaleFromViewRate)
             left: scrollContentsSize.width * 0.5 * (1 - window.runScaleFromViewRate)
           }
-      console.log('viewScaleDiff')
-      console.log(viewScaleDiff)
       if $(target).get(0).offsetParent?
 #        if window.runDebug
 #          console.log('window.runScaleFromViewRate:' + window.runScaleFromViewRate)

@@ -513,8 +513,6 @@ Common = (function() {
           };
         }
       }
-      console.log('viewScaleDiff');
-      console.log(viewScaleDiff);
       if ($(target).get(0).offsetParent != null) {
         top = $(target).height() * 0.5 + $(target).get(0).offsetTop + viewScaleDiff.top;
         left = $(target).width() * 0.5 + $(target).get(0).offsetLeft + viewScaleDiff.left;
