@@ -488,7 +488,7 @@ Common = (function() {
   };
 
   Common.focusToTarget = function(target, callback, immediate) {
-    var diff, left, s, scrollContentsSize, top, viewRate, viewScaleDiff;
+    var left, scrollContentsSize, top, viewRate, viewScaleDiff;
     if (callback == null) {
       callback = null;
     }
@@ -500,26 +500,20 @@ Common = (function() {
     }
     scrollContentsSize = this.scrollContentsSizeUnderViewScale();
     if (scrollContentsSize != null) {
-      diff = {
-        top: 0,
-        left: 0
-      };
-      s = this.scrollContentsSizeUnderViewScale();
       viewRate = window.isWorkTable ? 1.0 : window.runScaleFromViewRate;
       viewScaleDiff = {
-        top: s.height * 0.5 * (1 - viewRate),
-        left: s.width * 0.5 * (1 - viewRate)
+        top: scrollContentsSize.height * 0.5 * (1 - viewRate),
+        left: scrollContentsSize.width * 0.5 * (1 - viewRate)
       };
       console.log('viewScaleDiff');
       console.log(viewScaleDiff);
       if ($(target).get(0).offsetParent != null) {
-        diff = {
-          top: (scrollContents.scrollTop() + (scrollContentsSize.height - $(target).height()) * 0.5) - $(target).get(0).offsetTop - viewScaleDiff.top,
-          left: (scrollContents.scrollLeft() + (scrollContentsSize.width - $(target).width()) * 0.5) - $(target).get(0).offsetLeft - viewScaleDiff.left
-        };
+        top = $(target).height() * 0.5 + $(target).get(0).offsetTop + viewScaleDiff.top;
+        left = $(target).width() * 0.5 + $(target).get(0).offsetLeft + viewScaleDiff.left;
+      } else {
+        top = scrollContents.scrollTop() + (scrollContentsSize.height * 0.5);
+        left = scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5);
       }
-      top = scrollContents.scrollTop() + (scrollContentsSize.height * 0.5) - diff.top;
-      left = scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5) - diff.left;
       return this.updateScrollContentsPosition(top, left, immediate, true, callback);
     } else {
       if (callback != null) {
