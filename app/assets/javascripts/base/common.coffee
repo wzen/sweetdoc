@@ -421,10 +421,11 @@ class Common
 #          console.log('$(target).height():' + $(target).height())
         top = $(target).height() * 0.5 + $(target).get(0).offsetTop + viewScaleDiff.top
         left = $(target).width() * 0.5 + $(target).get(0).offsetLeft + viewScaleDiff.left
+        @updateScrollContentsPosition(top, left, immediate, true, callback)
       else
-        top = scrollContents.scrollTop() + (scrollContentsSize.height * 0.5)
-        left = scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5)
-      @updateScrollContentsPosition(top, left, immediate, true, callback)
+        # offsetが取得できない場合は処理なし
+        if callback?
+          callback()
     else
       if callback?
         callback()

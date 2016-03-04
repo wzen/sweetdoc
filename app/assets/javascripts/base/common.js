@@ -510,11 +510,12 @@ Common = (function() {
       if ($(target).get(0).offsetParent != null) {
         top = $(target).height() * 0.5 + $(target).get(0).offsetTop + viewScaleDiff.top;
         left = $(target).width() * 0.5 + $(target).get(0).offsetLeft + viewScaleDiff.left;
+        return this.updateScrollContentsPosition(top, left, immediate, true, callback);
       } else {
-        top = scrollContents.scrollTop() + (scrollContentsSize.height * 0.5);
-        left = scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5);
+        if (callback != null) {
+          return callback();
+        }
       }
-      return this.updateScrollContentsPosition(top, left, immediate, true, callback);
     } else {
       if (callback != null) {
         return callback();
