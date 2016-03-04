@@ -445,7 +445,6 @@ WorktableCommon = (function() {
     PageValue.removeAndShiftInstancePageValueOnPage(pageNum);
     PageValue.removeAndShiftEventPageValueOnPage(pageNum);
     PageValue.removeAndShiftFootprintPageValueOnPage(pageNum);
-    PageValue.setPageNum(PageValue.getPageCount() - 1);
     PageValue.updatePageCount();
     PageValue.adjustInstanceAndEventOnPage();
     if (callback != null) {

@@ -398,7 +398,6 @@ class WorktableCommon
     PageValue.removeAndShiftEventPageValueOnPage(pageNum)
     PageValue.removeAndShiftFootprintPageValueOnPage(pageNum)
     # ページ総数を減らす
-    PageValue.setPageNum(PageValue.getPageCount() - 1)
     PageValue.updatePageCount()
     # PageValue調整
     PageValue.adjustInstanceAndEventOnPage()
