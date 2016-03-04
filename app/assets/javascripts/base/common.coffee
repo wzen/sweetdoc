@@ -401,11 +401,15 @@ class Common
     scrollContentsSize = @scrollContentsSizeUnderViewScale()
     if scrollContentsSize?
       # MainView縮小時のDiff
-      viewRate = if window.isWorkTable then 1.0 else window.runScaleFromViewRate
-      viewScaleDiff = {
-        top: scrollContentsSize.height * 0.5 * (1 - viewRate)
-        left: scrollContentsSize.width * 0.5 * (1 - viewRate)
-      }
+      viewScaleDiff = {top: 0, left: 0}
+      if !window.isWorkTable && ScreenEvent.hasInstanceCache()
+        se = new ScreenEvent()
+        if se.getNowScreenEventScale() == 1.0
+          # 倍率1.0の場合に調整が必要
+          viewScaleDiff = {
+            top: scrollContentsSize.height * 0.5 * (1 - window.runScaleFromViewRate)
+            left: scrollContentsSize.width * 0.5 * (1 - window.runScaleFromViewRate)
+          }
       console.log('viewScaleDiff')
       console.log(viewScaleDiff)
       if $(target).get(0).offsetParent?

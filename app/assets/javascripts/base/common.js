@@ -488,7 +488,7 @@ Common = (function() {
   };
 
   Common.focusToTarget = function(target, callback, immediate) {
-    var left, scrollContentsSize, top, viewRate, viewScaleDiff;
+    var left, scrollContentsSize, se, top, viewScaleDiff;
     if (callback == null) {
       callback = null;
     }
@@ -500,11 +500,19 @@ Common = (function() {
     }
     scrollContentsSize = this.scrollContentsSizeUnderViewScale();
     if (scrollContentsSize != null) {
-      viewRate = window.isWorkTable ? 1.0 : window.runScaleFromViewRate;
       viewScaleDiff = {
-        top: scrollContentsSize.height * 0.5 * (1 - viewRate),
-        left: scrollContentsSize.width * 0.5 * (1 - viewRate)
+        top: 0,
+        left: 0
       };
+      if (!window.isWorkTable && ScreenEvent.hasInstanceCache()) {
+        se = new ScreenEvent();
+        if (se.getNowScreenEventScale() === 1.0) {
+          viewScaleDiff = {
+            top: scrollContentsSize.height * 0.5 * (1 - window.runScaleFromViewRate),
+            left: scrollContentsSize.width * 0.5 * (1 - window.runScaleFromViewRate)
+          };
+        }
+      }
       console.log('viewScaleDiff');
       console.log(viewScaleDiff);
       if ($(target).get(0).offsetParent != null) {
