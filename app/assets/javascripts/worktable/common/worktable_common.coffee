@@ -505,6 +505,8 @@ class WorktableCommon
       $('#pages .section').remove()
       # 環境をリセット
       Common.resetEnvironment()
+      # アイテム選択をデフォルトに戻す
+      Navbar.setDefaultItemSelect()
       # 変数初期化
       CommonVar.initVarWhenLoadedView()
       CommonVar.initCommonVar()

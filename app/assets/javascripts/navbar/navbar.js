@@ -297,6 +297,11 @@ Navbar = (function() {
     }
   };
 
+  Navbar.setDefaultItemSelect = function() {
+    window.mode = constant.Mode.NOT_SELECT;
+    return $('#header_items_selected_menu_span').html(I18n.t('header_menu.action.select_action'));
+  };
+
   return Navbar;
 
 })();

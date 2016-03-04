@@ -256,3 +256,8 @@ class Navbar
         )
     else
       $("##{@NAVBAR_ROOT} .cover_touch_overlay").remove()
+
+  # アイテム選択をデフォルトに戻す
+  @setDefaultItemSelect = ->
+    window.mode = constant.Mode.NOT_SELECT
+    $('#header_items_selected_menu_span').html(I18n.t('header_menu.action.select_action'))

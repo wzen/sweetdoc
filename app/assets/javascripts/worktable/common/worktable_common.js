@@ -547,6 +547,7 @@ WorktableCommon = (function() {
       return function() {
         $('#pages .section').remove();
         Common.resetEnvironment();
+        Navbar.setDefaultItemSelect();
         CommonVar.initVarWhenLoadedView();
         CommonVar.initCommonVar();
         Common.createdMainContainerIfNeeded(PageValue.getPageNum());
