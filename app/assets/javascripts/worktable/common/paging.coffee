@@ -64,7 +64,7 @@ class Paging
       forkPrefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '')
       pageNum = null
       forkNum = PageValue.Key.EF_MASTER_FORKNUM
-      classList = e.target.classList
+      classList = $(e.target).attr('class').split(' ')
       classList.forEach((c) ->
         if c.indexOf(pagePrefix) >= 0
           pageNum = parseInt(c.replace(pagePrefix, ''))

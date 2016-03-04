@@ -57,7 +57,7 @@ Paging = (function() {
         forkPrefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '');
         pageNum = null;
         forkNum = PageValue.Key.EF_MASTER_FORKNUM;
-        classList = e.target.classList;
+        classList = $(e.target).attr('class').split(' ');
         classList.forEach(function(c) {
           if (c.indexOf(pagePrefix) >= 0) {
             return pageNum = parseInt(c.replace(pagePrefix, ''));
