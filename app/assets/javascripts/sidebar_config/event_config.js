@@ -348,7 +348,7 @@ EventConfig = (function() {
   };
 
   _setForkSelect = function() {
-    var forkCount, forkNum, handler, i, j, name, ref, selectOptions, value;
+    var enabled, fn, forkCount, forkNum, handler, i, j, name, ref, select, selectOptions, value;
     handler = $('.handler_div', this.emt);
     $('.enable_fork', handler).off('click').on('click', function(e) {
       return $('.fork_select', handler).parent('div').css('display', $(this).is(':checked') ? 'block' : 'none');
@@ -365,8 +365,13 @@ EventConfig = (function() {
         }
       }
       if (selectOptions.length > 0) {
-        $('.fork_select', handler).children().remove();
-        $('.fork_select', handler).append($(selectOptions));
+        select = $('.fork_select', handler);
+        select.children().remove();
+        select.append($(selectOptions));
+        enabled = (this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] != null) && this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] > 0;
+        fn = enabled ? this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] : 1;
+        select.val(Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', fn));
+        select.parent('div').css('display', enabled ? 'block' : 'none');
         return $('.fork_handler_wrapper', handler).show();
       } else {
         return $('.fork_handler_wrapper', handler).hide();

@@ -211,12 +211,8 @@ class EventPageValueBase
             if !duration?
               duration = 0
             eventDuration.val(duration)
-
         enabled = eventConfig[@PageValueKey.CHANGE_FORKNUM]? && eventConfig[@PageValueKey.CHANGE_FORKNUM] > 0
         $('.enable_fork:first', handlerDiv).prop('checked', enabled)
-        fn = if enabled then eventConfig[@PageValueKey.CHANGE_FORKNUM] else 1
-        $('.fork_select:first', handlerDiv).val(Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', fn))
-        $('.fork_select:first', handlerDiv).parent('div').css('display', if enabled then 'block' else 'none')
 
       specificValues = eventConfig[@PageValueKey.SPECIFIC_METHOD_VALUES]
       specificRoot = $(eventConfig.emt).find(".#{eventConfig.methodClassName()} .#{eventConfig.constructor.METHOD_VALUE_SPECIFIC_ROOT}")

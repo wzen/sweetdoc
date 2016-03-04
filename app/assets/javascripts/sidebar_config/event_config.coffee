@@ -342,8 +342,13 @@ class EventConfig
           selectOptions += "<option value='#{value}'>#{name}</option>"
 
       if selectOptions.length > 0
-        $('.fork_select', handler).children().remove()
-        $('.fork_select', handler).append($(selectOptions))
+        select = $('.fork_select', handler)
+        select.children().remove()
+        select.append($(selectOptions))
+        enabled = @[EventPageValueBase.PageValueKey.CHANGE_FORKNUM]? && @[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] > 0
+        fn = if enabled then @[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] else 1
+        select.val(Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', fn))
+        select.parent('div').css('display', if enabled then 'block' else 'none')
         # Fork表示
         $('.fork_handler_wrapper', handler).show()
       else
