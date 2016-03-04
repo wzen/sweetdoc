@@ -78,6 +78,7 @@ ClickChapter = (function(superClass) {
       clearTimeout(this.constructor.guideTimer);
       this.constructor.guideTimer = null;
     }
+    ScrollGuide.hideGuide();
     return ClickGuide.hideGuide();
   };
 

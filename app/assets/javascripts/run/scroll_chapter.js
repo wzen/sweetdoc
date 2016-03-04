@@ -69,7 +69,8 @@ ScrollChapter = (function(superClass) {
       clearTimeout(this.constructor.guideTimer);
       this.constructor.guideTimer = null;
     }
-    return ScrollGuide.hideGuide();
+    ScrollGuide.hideGuide();
+    return ClickGuide.hideGuide();
   };
 
   ScrollChapter.prototype.adjustGuideParams = function(calledByWillChapter) {

@@ -47,8 +47,9 @@ class ClickGuide extends GuideBase
     window.cssCode.find('.chapter_itemkeyframes').remove()
 
   # ガイド表示
-# @param [Array] items アイテムオブジェクト
+  # @param [Array] items アイテムオブジェクト
   @showGuide: (items) ->
+    @hideGuide()
     @addItemKeyFrams(items)
     for item in items
       color = @focusColor(item)

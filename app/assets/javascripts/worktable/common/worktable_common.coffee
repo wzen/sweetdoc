@@ -74,7 +74,7 @@ class WorktableCommon
       if obj.isCopy? && obj.isCopy
         instance.name = instance.name + ' (Copy)'
       # 画面中央に貼り付け
-      scrollContentsSize = Common.scrollContentsSizeUnderScale()
+      scrollContentsSize = Common.screenSizeUnderViewScale()
       instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (scrollContentsSize.width - instance.itemSize.w) * 0.5)
       instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (scrollContentsSize.height - instance.itemSize.h) * 0.5)
       if instance.drawAndMakeConfigs?
@@ -426,7 +426,7 @@ class WorktableCommon
         return
       e.preventDefault()
       e.stopPropagation()
-      scrollContentsSize = Common.scrollContentsSizeUnderScale()
+      scrollContentsSize = Common.screenSizeUnderViewScale()
       top = window.scrollContents.scrollTop() + scrollContentsSize.height * 0.5
       left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5
       centerPosition = Common.calcScrollCenterPosition(top, left)

@@ -88,7 +88,7 @@ class ScreenEvent extends CommonEvent
         if !@_keepDispMag && @eventBaseScale?
           _setScaleAndUpdateViewing.call(@, @eventBaseScale)
           size = Common.convertCenterCoodToSize(@eventBaseX, @eventBaseY, @eventBaseScale)
-          scrollContentsSize = Common.scrollContentsSizeUnderScale()
+          scrollContentsSize = Common.screenSizeUnderViewScale()
           Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 
     # イベント後の表示状態にする
@@ -106,7 +106,7 @@ class ScreenEvent extends CommonEvent
         else
           _setScaleAndUpdateViewing.call(@, @_progressScale)
           size = Common.convertCenterCoodToSize(@_progressX, @_progressY, @_progressScale)
-          scrollContentsSize = Common.scrollContentsSizeUnderScale()
+          scrollContentsSize = Common.screenSizeUnderViewScale()
           Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 
     # 画面移動イベント
@@ -123,7 +123,7 @@ class ScreenEvent extends CommonEvent
       if !@_keepDispMag
         _setScaleAndUpdateViewing.call(@, @_progressScale)
         size = Common.convertCenterCoodToSize(@_progressX, @_progressY, @_progressScale)
-        scrollContentsSize = Common.scrollContentsSizeUnderScale()
+        scrollContentsSize = Common.screenSizeUnderViewScale()
         Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 
     # プレビューを停止

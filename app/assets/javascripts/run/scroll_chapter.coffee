@@ -54,6 +54,7 @@ class ScrollChapter extends Chapter
       clearTimeout(@constructor.guideTimer)
       @constructor.guideTimer = null
     ScrollGuide.hideGuide()
+    ClickGuide.hideGuide()
 
   # ガイドフラグ調整
   # @param [Boolean] calledByWillChapter チャプター開始時に呼ばれたか

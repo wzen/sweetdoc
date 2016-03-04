@@ -138,7 +138,7 @@ class EventBase extends Extend
       @_skipEvent = false
       @_loopCount = 0
       @_previewTimer = null
-      @_runningEvent = true
+      @_runningEvent = false
       # FloatView表示
       FloatView.showWithCloseButton(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW, =>
         if @loopFinishCallback?
@@ -297,7 +297,7 @@ class EventBase extends Extend
   # @param [Integer] x スクロール横座標
   # @param [Integer] y スクロール縦座標
   scrollHandlerFunc: (isPreview = false, x = 0, y = 0) ->
-    if @_skipEvent || (window.eventAction? && window.eventAction.thisPage().thisChapter().isFinishedAllEvent(true))
+    if @_skipEvent || (!isPreview && window.eventAction.thisPage().thisChapter().isFinishedAllEvent(true))
       # 全イベント終了済みorイベントを反応させない場合はスキップ
       return
     if isPreview
@@ -339,7 +339,7 @@ class EventBase extends Extend
         if !@forward
           # 終了状態で戻した場合はOFFに戻す
           @_isFinishedEvent = false
-          if window.eventAction?
+          if !isPreview
             # 終了判定のキャッシュを更新するために一度実行
             window.eventAction.thisPage().thisChapter().isFinishedAllEvent(false)
         else
@@ -349,13 +349,13 @@ class EventBase extends Extend
     sPoint = parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
     ePoint = parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) + 1
     # スクロール指定範囲外なら反応させない
-    if @stepValue < sPoint
+    if @stepValue < sPoint && !isPreview
       if @stepValue < 0
         if !@_runningEvent
           # チャプター戻しガイド表示
           page = window.eventAction.thisPage()
           chapter = page.thisChapter()
-          if window.eventAction? && (window.eventAction.pageIndex > 0 || page.getChapterIndex() > 0)
+          if window.eventAction.pageIndex > 0 || page.getChapterIndex() > 0
             chapter.showRewindOperationGuide(@, -@stepValue)
         @stepValue = 0
         @_runningEvent = false
@@ -373,7 +373,7 @@ class EventBase extends Extend
       @_runningEvent = true
       @_isScrollHeader = false
       # 動作済みフラグON
-      if window.eventAction?
+      if !isPreview
         window.eventAction.thisPage().thisChapter().doMoveChapter = true
       if !@_isFinishedEvent
         # 終了時に最終ステップで実行
@@ -394,9 +394,9 @@ class EventBase extends Extend
     @_runningEvent = true
     @_isScrollHeader = false
     # 動作済みフラグON
-    if window.eventAction?
+    if !isPreview
       window.eventAction.thisPage().thisChapter().doMoveChapter = true
-    window.eventAction.thisPage().thisChapter().hideRewindOperationGuide(@)
+      window.eventAction.thisPage().thisChapter().hideRewindOperationGuide(@)
     @canForward = @stepValue < ePoint
     @canReverse = @stepValue > sPoint
 

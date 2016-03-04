@@ -33,6 +33,7 @@ ClickGuide = (function(superClass) {
 
   ClickGuide.showGuide = function(items) {
     var color, guideClassName, item, j, len, results, style;
+    this.hideGuide();
     this.addItemKeyFrams(items);
     results = [];
     for (j = 0, len = items.length; j < len; j++) {

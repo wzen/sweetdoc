@@ -68,4 +68,5 @@ class ClickChapter extends Chapter
     if @constructor.guideTimer?
       clearTimeout(@constructor.guideTimer)
       @constructor.guideTimer = null
+    ScrollGuide.hideGuide()
     ClickGuide.hideGuide()

@@ -115,7 +115,7 @@ ScreenEvent = (function(superClass) {
         if (!this._keepDispMag && (this.eventBaseScale != null)) {
           _setScaleAndUpdateViewing.call(this, this.eventBaseScale);
           size = Common.convertCenterCoodToSize(this.eventBaseX, this.eventBaseY, this.eventBaseScale);
-          scrollContentsSize = Common.scrollContentsSizeUnderScale();
+          scrollContentsSize = Common.screenSizeUnderViewScale();
           return Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false);
         }
       }
@@ -136,7 +136,7 @@ ScreenEvent = (function(superClass) {
         } else {
           _setScaleAndUpdateViewing.call(this, this._progressScale);
           size = Common.convertCenterCoodToSize(this._progressX, this._progressY, this._progressScale);
-          scrollContentsSize = Common.scrollContentsSizeUnderScale();
+          scrollContentsSize = Common.screenSizeUnderViewScale();
           return Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false);
         }
       }
@@ -157,7 +157,7 @@ ScreenEvent = (function(superClass) {
       if (!this._keepDispMag) {
         _setScaleAndUpdateViewing.call(this, this._progressScale);
         size = Common.convertCenterCoodToSize(this._progressX, this._progressY, this._progressScale);
-        scrollContentsSize = Common.scrollContentsSizeUnderScale();
+        scrollContentsSize = Common.screenSizeUnderViewScale();
         return Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false);
       }
     };

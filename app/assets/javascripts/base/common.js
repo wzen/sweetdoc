@@ -206,7 +206,7 @@ Common = (function() {
       se = new ScreenEvent();
       se.setEventBaseXAndY(se.initConfigX, se.initConfigY);
       size = this.convertCenterCoodToSize(se.initConfigX, se.initConfigY, se.initConfigScale);
-      scrollContentsSize = Common.scrollContentsSizeUnderScale();
+      scrollContentsSize = Common.screenSizeUnderViewScale();
       return this.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false);
     } else {
       return this.initScrollContentsPositionByWorktableConfig();
@@ -330,15 +330,17 @@ Common = (function() {
     });
   };
 
-  Common.scrollContentsSizeUnderScale = function() {
-    var scale;
+  Common.screenSizeUnderViewScale = function() {
+    var borderPadding, scale, screen;
+    screen = this.getScreenSize();
+    borderPadding = 5 * 2;
     scale = this.getViewScale();
     if (window.isWorkTable) {
       scale = 1.0;
     }
     return {
-      width: window.scrollContents.width() / scale,
-      height: window.scrollContents.height() / scale
+      width: (screen.width - borderPadding) / scale,
+      height: (screen.height - borderPadding) / scale
     };
   };
 
@@ -488,13 +490,13 @@ Common = (function() {
     if ((target == null) || target.length === 0) {
       return;
     }
-    scrollContentsSize = this.scrollContentsSizeUnderScreenEventScale();
+    scrollContentsSize = this.screenSizeUnderViewScale();
     if (scrollContentsSize != null) {
       diff = {
         top: 0,
         left: 0
       };
-      s = this.scrollContentsSizeUnderScale();
+      s = this.screenSizeUnderViewScale();
       viewRate = window.isWorkTable ? 1.0 : window.runScaleFromViewRate;
       viewScaleDiff = {
         top: s.height * 0.5 * (1 - viewRate),
@@ -532,7 +534,7 @@ Common = (function() {
     if (withUpdateScreenEventVar) {
       this.saveDisplayPosition(top, left, true);
     }
-    scrollContentsSize = this.scrollContentsSizeUnderScale();
+    scrollContentsSize = this.screenSizeUnderViewScale();
     top -= scrollContentsSize.height * 0.5;
     left -= scrollContentsSize.width * 0.5;
     if (top <= 0 && left <= 0) {
@@ -591,7 +593,7 @@ Common = (function() {
     if (withUpdateScreenEventVar == null) {
       withUpdateScreenEventVar = true;
     }
-    scrollContentsSize = this.scrollContentsSizeUnderScale();
+    scrollContentsSize = this.screenSizeUnderViewScale();
     top = (window.scrollInsideWrapper.height() + scrollContentsSize.height) * 0.5;
     left = (window.scrollInsideWrapper.width() + scrollContentsSize.width) * 0.5;
     return this.updateScrollContentsPosition(top, left, true, withUpdateScreenEventVar);
@@ -649,26 +651,6 @@ Common = (function() {
         })(this), 0);
       }, 500);
     }
-  };
-
-  Common.scrollContentsSizeUnderScreenEventScale = function() {
-    var scale, se;
-    if (!ScreenEvent.hasInstanceCache()) {
-      return null;
-    }
-    if (!window.isWorkTable || window.previewRunning) {
-      se = new ScreenEvent();
-      scale = se.getNowScreenEventScale();
-    } else {
-      scale = 1.0;
-    }
-    if (window.debug) {
-      console.log('scrollContentsSizeUnderScreenEventScale:' + scale);
-    }
-    return {
-      width: window.scrollContents.width() / scale,
-      height: window.scrollContents.height() / scale
-    };
   };
 
   Common.updateScrollContentsFromScreenEventVar = function() {

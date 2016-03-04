@@ -195,7 +195,7 @@ EventBase = (function(superClass) {
         _this._skipEvent = false;
         _this._loopCount = 0;
         _this._previewTimer = null;
-        _this._runningEvent = true;
+        _this._runningEvent = false;
         FloatView.showWithCloseButton(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW, function() {
           if (_this.loopFinishCallback != null) {
             return _this.loopFinishCallback();
@@ -391,7 +391,7 @@ EventBase = (function(superClass) {
     if (y == null) {
       y = 0;
     }
-    if (this._skipEvent || ((window.eventAction != null) && window.eventAction.thisPage().thisChapter().isFinishedAllEvent(true))) {
+    if (this._skipEvent || (!isPreview && window.eventAction.thisPage().thisChapter().isFinishedAllEvent(true))) {
       return;
     }
     if (isPreview) {
@@ -421,7 +421,7 @@ EventBase = (function(superClass) {
       if (this._isFinishedEvent) {
         if (!this.forward) {
           this._isFinishedEvent = false;
-          if (window.eventAction != null) {
+          if (!isPreview) {
             window.eventAction.thisPage().thisChapter().isFinishedAllEvent(false);
           }
         } else {
@@ -431,12 +431,12 @@ EventBase = (function(superClass) {
     }
     sPoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
     ePoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) + 1;
-    if (this.stepValue < sPoint) {
+    if (this.stepValue < sPoint && !isPreview) {
       if (this.stepValue < 0) {
         if (!this._runningEvent) {
           page = window.eventAction.thisPage();
           chapter = page.thisChapter();
-          if ((window.eventAction != null) && (window.eventAction.pageIndex > 0 || page.getChapterIndex() > 0)) {
+          if (window.eventAction.pageIndex > 0 || page.getChapterIndex() > 0) {
             chapter.showRewindOperationGuide(this, -this.stepValue);
           }
         }
@@ -456,7 +456,7 @@ EventBase = (function(superClass) {
     } else if (this.stepValue >= ePoint) {
       this._runningEvent = true;
       this._isScrollHeader = false;
-      if (window.eventAction != null) {
+      if (!isPreview) {
         window.eventAction.thisPage().thisChapter().doMoveChapter = true;
       }
       if (!this._isFinishedEvent) {
@@ -480,10 +480,10 @@ EventBase = (function(superClass) {
     }
     this._runningEvent = true;
     this._isScrollHeader = false;
-    if (window.eventAction != null) {
+    if (!isPreview) {
       window.eventAction.thisPage().thisChapter().doMoveChapter = true;
+      window.eventAction.thisPage().thisChapter().hideRewindOperationGuide(this);
     }
-    window.eventAction.thisPage().thisChapter().hideRewindOperationGuide(this);
     this.canForward = this.stepValue < ePoint;
     this.canReverse = this.stepValue > sPoint;
     return this.execMethod({
