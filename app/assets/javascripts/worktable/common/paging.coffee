@@ -14,11 +14,11 @@ class Paging
     divider = "<li class='divider'></li>"
     newPageMenu = "<li><a class='#{Constant.Paging.NAV_MENU_ADDPAGE_CLASS} menu-item'>#{I18n.t('header_menu.page.add_page')}</a></li>"
     newForkMenu = "<li><a class='#{Constant.Paging.NAV_MENU_ADDFORK_CLASS} menu-item'>#{I18n.t('header_menu.page.add_fork')}</a></li>"
-    deletePageMenu = "<li><a class='#{Constant.Paging.NAV_MENU_DELETEPAGE_CLASS} menu-item'>#{I18n.t('header_menu.page.delete_page')}</a></li>"
     pageMenu = ''
     for i in [1..pageCount]
       navPageClass = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', i)
       navPageName = "#{I18n.t('header_menu.page.page')} #{i}"
+      deletePageMenu = "<li><a class='#{navPageClass} #{Constant.Paging.NAV_MENU_DELETEPAGE_CLASS} menu-item'>#{I18n.t('header_menu.page.delete_page')}</a></li>"
 
       # サブ選択メニュー
       forkCount = PageValue.getForkCount(i)
@@ -33,7 +33,8 @@ class Paging
           subMenu += """
             <li #{subActive}><a class='#{navPageClass} #{navForkClass} menu-item '>#{navForkName}</a></li>
           """
-      subMenu += divider + newForkMenu
+      if i == PageValue.getPageNum()
+        subMenu += divider + newForkMenu
       if i > 1
         # ページ１以外は削除メニュー追加
         subMenu += divider + deletePageMenu
@@ -83,9 +84,14 @@ class Paging
     selectRoot.find(".#{Constant.Paging.NAV_MENU_ADDFORK_CLASS}", root).off('click').on('click', =>
       @createNewFork()
     )
-    selectRoot.find(".#{Constant.Paging.NAV_MENU_DELETEPAGE_CLASS}", root).off('click').on('click', =>
+    selectRoot.find(".#{Constant.Paging.NAV_MENU_DELETEPAGE_CLASS}", root).off('click').on('click', (e) =>
       if window.confirm(I18n.t('message.dialog.delete_page'))
-        @removePage()
+        pagePrefix = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', '')
+        page = $.grep($(e.target).attr('class').split(' '), (n)->
+          n.indexOf(pagePrefix) >= 0
+        )[0]
+        pageNum = parseInt(page.replace(pagePrefix, ''))
+        @removePage(pageNum)
     )
 
   # 表示ページ切り替え
@@ -291,7 +297,15 @@ class Paging
     if pageNum == PageValue.getPageNum()
       # 現在のページの場合は前ページに変更
       @selectPage(pageNum - 1, PageValue.Key.EF_MASTER_FORKNUM, =>
-        _removePage.call(@)
+        _removePage.call(@, pageNum)
       )
     else
-      _removePage.call(@)
+      _removePage.call(@, pageNum)
+
+  @removeFork: (forkNum, callback = null) ->
+    # TODO: 実装する
+#    _removeFork = ->
+#
+#    if forkNum == PageValue.getForkNum()
+#      @selectFork(selectedForkNum, callback = null) ->
+

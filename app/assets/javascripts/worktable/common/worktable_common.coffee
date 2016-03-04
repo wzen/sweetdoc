@@ -389,9 +389,7 @@ class WorktableCommon
       afterSection.removeClass(afterSectionClass).addClass(beforeSectionClass)
       afterSection.css('z-index', Common.plusPagingZindex(0, p))
       afterSection = beforeSection
-    className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
-    $("#pages .#{className}").remove()
-
+    afterSection.remove()
     # 共通イベントのデータを削除
     @removeCommonEventInstances(pageNum)
     # PageValueを削除
@@ -401,6 +399,7 @@ class WorktableCommon
     PageValue.removeAndShiftFootprintPageValueOnPage(pageNum)
     # ページ総数を減らす
     PageValue.setPageNum(PageValue.getPageCount() - 1)
+    PageValue.updatePageCount()
     # PageValue調整
     PageValue.adjustInstanceAndEventOnPage()
     if callback?

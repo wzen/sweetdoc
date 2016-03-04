@@ -425,7 +425,7 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.removePage = function(pageNum, callback) {
-    var afterSection, afterSectionClass, beforeSection, beforeSectionClass, className, l, p, ref, ref1, root;
+    var afterSection, afterSectionClass, beforeSection, beforeSectionClass, l, p, ref, ref1, root;
     if (callback == null) {
       callback = null;
     }
@@ -439,14 +439,14 @@ WorktableCommon = (function() {
       afterSection.css('z-index', Common.plusPagingZindex(0, p));
       afterSection = beforeSection;
     }
-    className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
-    $("#pages ." + className).remove();
+    afterSection.remove();
     this.removeCommonEventInstances(pageNum);
     PageValue.removeAndShiftGeneralPageValueOnPage(pageNum);
     PageValue.removeAndShiftInstancePageValueOnPage(pageNum);
     PageValue.removeAndShiftEventPageValueOnPage(pageNum);
     PageValue.removeAndShiftFootprintPageValueOnPage(pageNum);
     PageValue.setPageNum(PageValue.getPageCount() - 1);
+    PageValue.updatePageCount();
     PageValue.adjustInstanceAndEventOnPage();
     if (callback != null) {
       return callback();

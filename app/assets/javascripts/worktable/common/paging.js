@@ -16,11 +16,11 @@ Paging = (function() {
     divider = "<li class='divider'></li>";
     newPageMenu = "<li><a class='" + Constant.Paging.NAV_MENU_ADDPAGE_CLASS + " menu-item'>" + (I18n.t('header_menu.page.add_page')) + "</a></li>";
     newForkMenu = "<li><a class='" + Constant.Paging.NAV_MENU_ADDFORK_CLASS + " menu-item'>" + (I18n.t('header_menu.page.add_fork')) + "</a></li>";
-    deletePageMenu = "<li><a class='" + Constant.Paging.NAV_MENU_DELETEPAGE_CLASS + " menu-item'>" + (I18n.t('header_menu.page.delete_page')) + "</a></li>";
     pageMenu = '';
     for (i = k = 1, ref = pageCount; 1 <= ref ? k <= ref : k >= ref; i = 1 <= ref ? ++k : --k) {
       navPageClass = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', i);
       navPageName = (I18n.t('header_menu.page.page')) + " " + i;
+      deletePageMenu = "<li><a class='" + navPageClass + " " + Constant.Paging.NAV_MENU_DELETEPAGE_CLASS + " menu-item'>" + (I18n.t('header_menu.page.delete_page')) + "</a></li>";
       forkCount = PageValue.getForkCount(i);
       forkNum = PageValue.getForkNum(i);
       active = forkNum === PageValue.Key.EF_MASTER_FORKNUM ? 'class="active"' : '';
@@ -33,7 +33,9 @@ Paging = (function() {
           subMenu += "<li " + subActive + "><a class='" + navPageClass + " " + navForkClass + " menu-item '>" + navForkName + "</a></li>";
         }
       }
-      subMenu += divider + newForkMenu;
+      if (i === PageValue.getPageNum()) {
+        subMenu += divider + newForkMenu;
+      }
       if (i > 1) {
         subMenu += divider + deletePageMenu;
       }
@@ -83,9 +85,15 @@ Paging = (function() {
       };
     })(this));
     return selectRoot.find("." + Constant.Paging.NAV_MENU_DELETEPAGE_CLASS, root).off('click').on('click', (function(_this) {
-      return function() {
+      return function(e) {
+        var page, pageNum, pagePrefix;
         if (window.confirm(I18n.t('message.dialog.delete_page'))) {
-          return _this.removePage();
+          pagePrefix = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', '');
+          page = $.grep($(e.target).attr('class').split(' '), function(n) {
+            return n.indexOf(pagePrefix) >= 0;
+          })[0];
+          pageNum = parseInt(page.replace(pagePrefix, ''));
+          return _this.removePage(pageNum);
         }
       };
     })(this));
@@ -287,11 +295,17 @@ Paging = (function() {
     if (pageNum === PageValue.getPageNum()) {
       return this.selectPage(pageNum - 1, PageValue.Key.EF_MASTER_FORKNUM, (function(_this) {
         return function() {
-          return _removePage.call(_this);
+          return _removePage.call(_this, pageNum);
         };
       })(this));
     } else {
-      return _removePage.call(this);
+      return _removePage.call(this, pageNum);
+    }
+  };
+
+  Paging.removeFork = function(forkNum, callback) {
+    if (callback == null) {
+      callback = null;
     }
   };
 
