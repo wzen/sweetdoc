@@ -296,7 +296,7 @@ Page = (function() {
   };
 
   Page.prototype.rewindAllChapters = function(rewindPageIfNeed, callback) {
-    var _callback, beforePage, chapter, count, i, j, ref, results;
+    var _callback, beforePage, c, chapter, count, i, j, list, ref, results;
     if (rewindPageIfNeed == null) {
       rewindPageIfNeed = true;
     }
@@ -336,6 +336,8 @@ Page = (function() {
       _callback = function() {
         this.setChapterIndex(0);
         RunCommon.setChapterNum(this.thisChapterNum());
+        RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, window.eventAction.thisPageNum());
+        RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);
         this.finishedAllChapters = false;
         this.finishedScrollDistSum = 0;
         this.start();
@@ -347,17 +349,18 @@ Page = (function() {
           return callback();
         }
       };
-      if (this.getForkChapterList().length === 0) {
+      list = this.getProgressChapterList();
+      if (list.length === 0) {
         return _callback.call(this);
       } else {
         count = 0;
         results = [];
-        for (i = j = ref = this.getForkChapterList().length - 1; j >= 0; i = j += -1) {
-          this.setChapterIndex(i);
-          results.push(this.resetChapter(i, (function(_this) {
+        for (i = j = ref = list.length - 1; j >= 0; i = j += -1) {
+          c = list[i];
+          results.push(c.resetAllEvents((function(_this) {
             return function() {
               count += 1;
-              if (count >= _this.getForkChapterList().length) {
+              if (count >= list.length) {
                 return _callback.call(_this);
               }
             };

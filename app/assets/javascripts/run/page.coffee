@@ -291,6 +291,9 @@ class Page
       _callback = ->
         @setChapterIndex(0)
         RunCommon.setChapterNum(@thisChapterNum())
+        # フォークをMasterに設定
+        RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, window.eventAction.thisPageNum())
+        RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM)
         @finishedAllChapters = false
         @finishedScrollDistSum = 0
         @start()
@@ -299,15 +302,17 @@ class Page
           window.runningOperation = false
         if callback?
           callback()
-      if @getForkChapterList().length == 0
+
+      list = @getProgressChapterList()
+      if list.length == 0
         _callback.call(@)
       else
         count = 0
-        for i in [(@getForkChapterList().length - 1)..0] by -1
-          @setChapterIndex(i)
-          @resetChapter(i, =>
+        for i in [(list.length - 1)..0] by -1
+          c = list[i]
+          c.resetAllEvents( =>
             count += 1
-            if count >= @getForkChapterList().length
+            if count >= list.length
               _callback.call(@)
           )
 
