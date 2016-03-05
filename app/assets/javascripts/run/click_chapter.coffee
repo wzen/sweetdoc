@@ -27,6 +27,8 @@ class ClickChapter extends Chapter
     super( =>
       @enableScrollHandleViewEvent()
       @hideGuide()
+      if callback?
+        callback()
     )
 
   # クリックイベント

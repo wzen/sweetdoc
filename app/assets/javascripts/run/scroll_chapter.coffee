@@ -16,6 +16,8 @@ class ScrollChapter extends Chapter
   didChapter: (callback = null) ->
     super( =>
       @hideGuide()
+      if callback?
+        callback()
     )
 
   # スクロールイベント

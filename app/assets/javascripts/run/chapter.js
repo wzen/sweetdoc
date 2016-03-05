@@ -60,18 +60,18 @@ Chapter = (function() {
       console.log('Chapter didChapter');
     }
     count = 0;
-    return this.eventObjList.forEach(function(event) {
-      return event.didChapter((function(_this) {
-        return function() {
+    return this.eventObjList.forEach((function(_this) {
+      return function(event) {
+        return event.didChapter(function() {
           count += 1;
           if (count >= _this.eventObjList.length) {
             if (callback != null) {
               return callback();
             }
           }
-        };
-      })(this));
-    });
+        });
+      };
+    })(this));
   };
 
   Chapter.prototype.focusToActorIfNeed = function(isImmediate, type) {

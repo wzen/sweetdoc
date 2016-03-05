@@ -179,11 +179,16 @@ ItemBase = (function(superClass) {
     if (callback == null) {
       callback = null;
     }
-    if (this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER]) {
+    if ((this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER] == null) || this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER]) {
       d = this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION];
-      return this.showItem(function() {
-        return ItemBase.__super__.willChapter.call(this, callback);
-      }, d <= 0, d);
+      if (d != null) {
+        d = 0;
+      }
+      return this.showItem((function(_this) {
+        return function() {
+          return ItemBase.__super__.willChapter.call(_this, callback);
+        };
+      })(this), d <= 0, d);
     } else {
       return ItemBase.__super__.willChapter.call(this, callback);
     }
@@ -196,11 +201,15 @@ ItemBase = (function(superClass) {
     return ItemBase.__super__.didChapter.call(this, (function(_this) {
       return function() {
         var d;
-        if (_this._event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER]) {
+        if ((_this._event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER] != null) && _this._event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER]) {
           d = _this._event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER_DURATION];
           return _this.hideItem(function() {
-            return ItemBase.__super__.didChapter.call(this, callback);
+            return ItemBase.__super__.didChapter.call(_this, callback);
           }, d <= 0, d);
+        } else {
+          if (callback != null) {
+            return callback();
+          }
         }
       };
     })(this));

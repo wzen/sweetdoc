@@ -142,12 +142,12 @@ class EventConfig
       h: parseInt($('.item_diff_height:first', @emt).val())
     }
 
-    checked = handlerDiv.find('.show_will_chapter:first').is(':checked')
+    checked = $('.show_will_chapter:first', @emt).is(':checked')
     @[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER] = checked? && checked
-    @[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION] = handlerDiv.find('.show_will_chapter_duration:first').val()
-    checked = handlerDiv.find('.hide_did_chapter:first').is(':checked')
+    @[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION] = $('.show_will_chapter_duration:first', @emt).val()
+    checked = $('.hide_did_chapter:first', @emt).is(':checked')
     @[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER] = checked? && checked
-    @[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER_DURATION] = handlerDiv.find('.hide_did_chapter_duration:first').val()
+    @[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER_DURATION] = $('.hide_did_chapter_duration:first', @emt).val()
 
     @[EventPageValueBase.PageValueKey.FINISH_PAGE] = $('.finish_page', @emt).is(":checked")
     @[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] = $('.finish_page_select', @emt).val()
@@ -265,12 +265,12 @@ class EventConfig
     eventConfigError.hide()
 
   _setItemCommonEvent = ->
-    $('.show_will_chapter', handler).off('click').on('click', (e) ->
-      $('.show_will_chapter_duration', handler).parent('div').css('display', if $(@).is(':checked') then 'block' else 'none')
-    ).trigger('click')
-    $('.hide_did_chapter', handler).off('click').on('click', (e) ->
-      $('.hide_did_chapter_duration', handler).parent('div').css('display', if $(@).is(':checked') then 'block' else 'none')
-    ).trigger('click')
+    $('.show_will_chapter', @emt).off('change').on('change', (e) ->
+      $('.show_will_chapter_duration', @emt).parent('div').css('display', if $(@).is(':checked') then 'block' else 'none')
+    ).trigger('change')
+    $('.hide_did_chapter', @emt).off('change').on('change', (e) ->
+      $('.hide_did_chapter_duration', @emt).parent('div').css('display', if $(@).is(':checked') then 'block' else 'none')
+    ).trigger('change')
 
   _setMethodActionEvent = ->
     actionClassName = @actionClassName()

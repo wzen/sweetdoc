@@ -134,7 +134,7 @@ EventPageValueBase = (function() {
   };
 
   EventPageValueBase.readFromPageValue = function(eventConfig) {
-    var actionFormName, bottomEmt, className, duration, enabled, eventDuration, handlerDiv, item, k, leftEmt, parallel, ref, rightEmt, selectItemValue, specificRoot, specificValues, topEmt, v, value, writeValue;
+    var actionFormName, bottomEmt, className, duration, enabled, eventDuration, handlerDiv, hideDidDuration, hideDidEnabled, item, k, leftEmt, parallel, ref, rightEmt, selectItemValue, showWillDuration, showWillEnabled, specificRoot, specificValues, topEmt, v, value, writeValue;
     writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
     if (writeValue != null) {
       ref = this.PageValueKey;
@@ -183,17 +183,18 @@ EventPageValueBase = (function() {
         } else {
           $('.do_focus', eventConfig.emt).removeAttr('checked');
         }
-        enabled = (eventConfig[this.PageValueKey.SHOW_WILL_CHAPTER] != null) && eventConfig[this.PageValueKey.SHOW_WILL_CHAPTER];
-        $('.show_will_chapter:first', handlerDiv).prop('checked', enabled);
-        duration = eventConfig[this.PageValueKey.SHOW_WILL_CHAPTER_DURATION];
-        if (duration != null) {
-          $('.show_will_chapter_duration:first', handlerDiv).val(duration);
+        showWillEnabled = (eventConfig[this.PageValueKey.SHOW_WILL_CHAPTER] == null) || eventConfig[this.PageValueKey.SHOW_WILL_CHAPTER];
+        $('.show_will_chapter', eventConfig.emt).prop('checked', showWillEnabled);
+        showWillDuration = eventConfig[this.PageValueKey.SHOW_WILL_CHAPTER_DURATION];
+        if (showWillDuration == null) {
+          showWillDuration = 0;
         }
-        enabled = (eventConfig[this.PageValueKey.HIDE_DID_CHAPTER] != null) && eventConfig[this.PageValueKey.HIDE_DID_CHAPTER];
-        $('.hide_did_chapter:first', handlerDiv).prop('checked', enabled);
-        duration = eventConfig[this.PageValueKey.HIDE_DID_CHAPTER_DURATION];
-        if (duration != null) {
-          $('.hide_did_chapter_duration:first', handlerDiv).val(duration);
+        $('.show_will_chapter_duration', eventConfig.emt).val(showWillDuration);
+        hideDidEnabled = (eventConfig[this.PageValueKey.HIDE_DID_CHAPTER] != null) && eventConfig[this.PageValueKey.HIDE_DID_CHAPTER];
+        $('.hide_did_chapter', eventConfig.emt).prop('checked', hideDidEnabled);
+        hideDidDuration = eventConfig[this.PageValueKey.HIDE_DID_CHAPTER_DURATION];
+        if (hideDidDuration != null) {
+          $('.hide_did_chapter_duration', eventConfig.emt).val(hideDidDuration);
         }
       }
       parallel = $(".parallel_div .parallel", eventConfig.emt);

@@ -17,12 +17,12 @@ class ItemPreviewEventConfig extends EventConfig
       h: parseInt($('.item_diff_height:first', @emt).val())
     }
 
-    checked = handlerDiv.find('.show_will_chapter:first').is(':checked')
+    checked = $('.show_will_chapter:first', @emt).is(':checked')
     @[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER] = checked? && checked
-    @[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION] = handlerDiv.find('.show_will_chapter_duration:first').val()
-    checked = handlerDiv.find('.hide_did_chapter:first').is(':checked')
+    @[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION] = $('.show_will_chapter_duration:first', @emt).val()
+    checked = $('.hide_did_chapter:first', @emt).is(':checked')
     @[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER] = checked? && checked
-    @[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER_DURATION] = handlerDiv.find('.hide_did_chapter_duration:first').val()
+    @[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER_DURATION] = $('.hide_did_chapter_duration:first', @emt).val()
 
     @[EventPageValueBase.PageValueKey.FINISH_PAGE] = $('.finish_page', @emt).is(":checked")
     @[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] = $('.finish_page_select', @emt).val()

@@ -38,7 +38,10 @@ ClickChapter = (function(superClass) {
     return ClickChapter.__super__.didChapter.call(this, (function(_this) {
       return function() {
         _this.enableScrollHandleViewEvent();
-        return _this.hideGuide();
+        _this.hideGuide();
+        if (callback != null) {
+          return callback();
+        }
       };
     })(this));
   };

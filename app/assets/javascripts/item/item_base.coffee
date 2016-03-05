@@ -128,10 +128,13 @@ class ItemBase extends ItemEventBase
       @showItem()
 
   willChapter: (callback = null) ->
-    if @_event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER]
+    # nullの場合もデフォルトで表示
+    if !@_event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER]? || @_event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER]
       # 表示
       d = @_event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION]
-      @showItem( ->
+      if d?
+        d = 0
+      @showItem( =>
         super(callback)
       , d <= 0, d)
     else
@@ -139,12 +142,15 @@ class ItemBase extends ItemEventBase
 
   didChapter: (callback = null) ->
     super( =>
-      if @_event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER]
+      if @_event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER]? && @_event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER]
         # 非表示
         d = @_event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER_DURATION]
-        @hideItem( ->
+        @hideItem( =>
           super(callback)
         , d <= 0, d)
+      else
+        if callback?
+          callback()
     )
 
   # 再描画処理

@@ -42,7 +42,7 @@ class Chapter
     if window.runDebug
       console.log('Chapter didChapter')
     count = 0
-    @eventObjList.forEach((event) ->
+    @eventObjList.forEach((event) =>
       event.didChapter( =>
         count += 1
         if count >= @eventObjList.length

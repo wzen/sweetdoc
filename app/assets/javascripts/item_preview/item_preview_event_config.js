@@ -27,12 +27,12 @@ ItemPreviewEventConfig = (function(superClass) {
       w: parseInt($('.item_diff_width:first', this.emt).val()),
       h: parseInt($('.item_diff_height:first', this.emt).val())
     };
-    checked = handlerDiv.find('.show_will_chapter:first').is(':checked');
+    checked = $('.show_will_chapter:first', this.emt).is(':checked');
     this[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER] = (checked != null) && checked;
-    this[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION] = handlerDiv.find('.show_will_chapter_duration:first').val();
-    checked = handlerDiv.find('.hide_did_chapter:first').is(':checked');
+    this[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION] = $('.show_will_chapter_duration:first', this.emt).val();
+    checked = $('.hide_did_chapter:first', this.emt).is(':checked');
     this[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER] = (checked != null) && checked;
-    this[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER_DURATION] = handlerDiv.find('.hide_did_chapter_duration:first').val();
+    this[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER_DURATION] = $('.hide_did_chapter_duration:first', this.emt).val();
     this[EventPageValueBase.PageValueKey.FINISH_PAGE] = $('.finish_page', this.emt).is(":checked");
     this[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] = $('.finish_page_select', this.emt).val();
     this[EventPageValueBase.PageValueKey.DO_FOCUS] = $('.do_focus', this.emt).prop('checked');

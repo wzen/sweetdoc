@@ -161,16 +161,17 @@ class EventPageValueBase
           $('.do_focus', eventConfig.emt).removeAttr('checked')
 
         # 画面表示
-        enabled = eventConfig[@PageValueKey.SHOW_WILL_CHAPTER]? && eventConfig[@PageValueKey.SHOW_WILL_CHAPTER]
-        $('.show_will_chapter:first', handlerDiv).prop('checked', enabled)
-        duration = eventConfig[@PageValueKey.SHOW_WILL_CHAPTER_DURATION]
-        if duration?
-          $('.show_will_chapter_duration:first', handlerDiv).val(duration)
-        enabled = eventConfig[@PageValueKey.HIDE_DID_CHAPTER]? && eventConfig[@PageValueKey.HIDE_DID_CHAPTER]
-        $('.hide_did_chapter:first', handlerDiv).prop('checked', enabled)
-        duration = eventConfig[@PageValueKey.HIDE_DID_CHAPTER_DURATION]
-        if duration?
-          $('.hide_did_chapter_duration:first', handlerDiv).val(duration)
+        showWillEnabled = !eventConfig[@PageValueKey.SHOW_WILL_CHAPTER]? || eventConfig[@PageValueKey.SHOW_WILL_CHAPTER]
+        $('.show_will_chapter', eventConfig.emt).prop('checked', showWillEnabled)
+        showWillDuration = eventConfig[@PageValueKey.SHOW_WILL_CHAPTER_DURATION]
+        if !showWillDuration?
+          showWillDuration = 0
+        $('.show_will_chapter_duration', eventConfig.emt).val(showWillDuration)
+        hideDidEnabled = eventConfig[@PageValueKey.HIDE_DID_CHAPTER]? && eventConfig[@PageValueKey.HIDE_DID_CHAPTER]
+        $('.hide_did_chapter', eventConfig.emt).prop('checked', hideDidEnabled)
+        hideDidDuration = eventConfig[@PageValueKey.HIDE_DID_CHAPTER_DURATION]
+        if hideDidDuration?
+          $('.hide_did_chapter_duration', eventConfig.emt).val(hideDidDuration)
 
       # Sync
       parallel = $(".parallel_div .parallel", eventConfig.emt)

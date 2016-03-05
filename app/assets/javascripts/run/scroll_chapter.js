@@ -32,7 +32,10 @@ ScrollChapter = (function(superClass) {
     }
     return ScrollChapter.__super__.didChapter.call(this, (function(_this) {
       return function() {
-        return _this.hideGuide();
+        _this.hideGuide();
+        if (callback != null) {
+          return callback();
+        }
       };
     })(this));
   };
