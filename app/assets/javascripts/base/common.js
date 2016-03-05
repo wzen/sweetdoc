@@ -317,6 +317,10 @@ Common = (function() {
   Common.applyViewScale = function() {
     var scale, updateMainWrapperPercent;
     scale = this.getViewScale();
+    if (scale === 0.0) {
+      return;
+    }
+    scale = Math.round(scale * 100) / 100;
     if (window.isWorkTable || scale <= 1.0) {
       updateMainWrapperPercent = 100 / scale;
     } else {

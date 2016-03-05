@@ -259,6 +259,9 @@ class Common
   # 画面スケール適用
   @applyViewScale = ->
     scale = @getViewScale()
+    if scale == 0.0
+      return
+    scale = Math.round((scale * 100)) / 100
     if window.isWorkTable || scale <= 1.0
       updateMainWrapperPercent = 100 / scale
     else
