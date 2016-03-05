@@ -488,7 +488,7 @@ Common = (function() {
   };
 
   Common.focusToTarget = function(target, callback, immediate) {
-    var left, scrollContentsSize, se, top, viewScaleDiff;
+    var left, scale, scrollContentsSize, se, top, viewScaleDiff;
     if (callback == null) {
       callback = null;
     }
@@ -506,12 +506,17 @@ Common = (function() {
       };
       if (!window.isWorkTable && ScreenEvent.hasInstanceCache()) {
         se = new ScreenEvent();
-        if (se.getNowScreenEventScale() === 1.0) {
+        if (se.getNowScreenEventScale() <= 1.0) {
+          scale = this.getViewScale();
           viewScaleDiff = {
-            top: scrollContentsSize.height * 0.5 * (1 - window.runScaleFromViewRate),
-            left: scrollContentsSize.width * 0.5 * (1 - window.runScaleFromViewRate)
+            top: scrollContentsSize.height * 0.5 * (1 - scale),
+            left: scrollContentsSize.width * 0.5 * (1 - scale)
           };
         }
+      }
+      if (window.runDebug) {
+        console.log('viewScaleDiff');
+        console.log(viewScaleDiff);
       }
       if ($(target).get(0).offsetParent != null) {
         top = $(target).height() * 0.5 + $(target).get(0).offsetTop + viewScaleDiff.top;

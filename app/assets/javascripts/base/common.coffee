@@ -404,12 +404,16 @@ class Common
       viewScaleDiff = {top: 0, left: 0}
       if !window.isWorkTable && ScreenEvent.hasInstanceCache()
         se = new ScreenEvent()
-        if se.getNowScreenEventScale() == 1.0
-          # 倍率1.0の場合に調整が必要
+        if se.getNowScreenEventScale() <= 1.0
+          # 倍率1.0以下の場合に調整が必要
+          scale = @getViewScale()
           viewScaleDiff = {
-            top: scrollContentsSize.height * 0.5 * (1 - window.runScaleFromViewRate)
-            left: scrollContentsSize.width * 0.5 * (1 - window.runScaleFromViewRate)
+            top: scrollContentsSize.height * 0.5 * (1 - scale)
+            left: scrollContentsSize.width * 0.5 * (1 - scale)
           }
+      if window.runDebug
+        console.log('viewScaleDiff')
+        console.log(viewScaleDiff)
       if $(target).get(0).offsetParent?
 #        if window.runDebug
 #          console.log('window.runScaleFromViewRate:' + window.runScaleFromViewRate)
