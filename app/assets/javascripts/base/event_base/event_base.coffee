@@ -709,7 +709,7 @@ class EventBase extends Extend
         if @actionProperties[methodName]?
           modifiableRoot = @actionProperties[methodName][@ActionPropertiesKey.MODIFIABLE_VARS]
       else
-        if @actionProperties.methods[methodName]?
+        if @actionProperties.methods? && @actionProperties.methods[methodName]?
           modifiableRoot = @actionProperties.methods[methodName][@ActionPropertiesKey.MODIFIABLE_VARS]
     else
       modifiableRoot = @actionProperties[@ActionPropertiesKey.MODIFIABLE_VARS]

@@ -429,7 +429,7 @@ class EventConfig
           return
 
         # アクションメソッドConfig追加
-        if itemClass instanceof ItemBase
+        if itemClass.prototype instanceof ItemBase
           # 'none'が選択できるのはアイテムのみ
           methodClone = $('#event-config .method_none_temp').children(':first').clone(true)
           methodClone.find('input[type=radio]').attr('name', className)

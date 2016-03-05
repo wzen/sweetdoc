@@ -460,7 +460,7 @@ EventConfig = (function() {
           }
           return;
         }
-        if (itemClass instanceof ItemBase) {
+        if (itemClass.prototype instanceof ItemBase) {
           methodClone = $('#event-config .method_none_temp').children(':first').clone(true);
           methodClone.find('input[type=radio]').attr('name', className);
           actionParent.append(methodClone);

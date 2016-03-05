@@ -903,7 +903,7 @@ EventBase = (function(superClass) {
           modifiableRoot = this.actionProperties[methodName][this.ActionPropertiesKey.MODIFIABLE_VARS];
         }
       } else {
-        if (this.actionProperties.methods[methodName] != null) {
+        if ((this.actionProperties.methods != null) && (this.actionProperties.methods[methodName] != null)) {
           modifiableRoot = this.actionProperties.methods[methodName][this.ActionPropertiesKey.MODIFIABLE_VARS];
         }
       }
