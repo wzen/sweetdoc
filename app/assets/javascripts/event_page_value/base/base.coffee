@@ -18,13 +18,13 @@ class EventPageValueBase
     # @property [String] DO_FOCUS フォーカス
     @DO_FOCUS = constant.EventPageValueKey.DO_FOCUS
     # @property [String] DO_FOCUS チャプター開始時に表示
-    SHOW_WILL_CHAPTER = constant.EventPageValueKey.SHOW_WILL_CHAPTER
+    @SHOW_WILL_CHAPTER = constant.EventPageValueKey.SHOW_WILL_CHAPTER
     # @property [String] DO_FOCUS チャプター開始時の表示実行時間
-    SHOW_WILL_CHAPTER_DURATION = constant.EventPageValueKey.SHOW_WILL_CHAPTER_DURATION
+    @SHOW_WILL_CHAPTER_DURATION = constant.EventPageValueKey.SHOW_WILL_CHAPTER_DURATION
     # @property [String] DO_FOCUS チャプター終了時に非表示
-    HIDE_DID_CHAPTER = constant.EventPageValueKey.HIDE_DID_CHAPTER
+    @HIDE_DID_CHAPTER = constant.EventPageValueKey.HIDE_DID_CHAPTER
     # @property [String] DO_FOCUS チャプター終了時に非表示実行時間
-    HIDE_DID_CHAPTER_DURATION = constant.EventPageValueKey.HIDE_DID_CHAPTER_DURATION
+    @HIDE_DID_CHAPTER_DURATION = constant.EventPageValueKey.HIDE_DID_CHAPTER_DURATION
     # @property [String] SPECIFIC_METHOD_VALUES メソッド固有値
     @SPECIFIC_METHOD_VALUES = constant.EventPageValueKey.SPECIFIC_METHOD_VALUES
     # @property [String] IS_COMMON_EVENT 共通イベント判定

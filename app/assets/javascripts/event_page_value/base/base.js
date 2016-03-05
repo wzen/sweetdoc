@@ -13,8 +13,6 @@ EventPageValueBase = (function() {
   EventPageValueBase.NO_JUMPPAGE = constant.EventPageValue.NO_JUMPPAGE;
 
   EventPageValueBase.PageValueKey = (function() {
-    var HIDE_DID_CHAPTER, HIDE_DID_CHAPTER_DURATION, SHOW_WILL_CHAPTER, SHOW_WILL_CHAPTER_DURATION;
-
     function PageValueKey() {}
 
     PageValueKey.DIST_ID = constant.EventPageValueKey.DIST_ID;
@@ -27,13 +25,13 @@ EventPageValueBase = (function() {
 
     PageValueKey.DO_FOCUS = constant.EventPageValueKey.DO_FOCUS;
 
-    SHOW_WILL_CHAPTER = constant.EventPageValueKey.SHOW_WILL_CHAPTER;
+    PageValueKey.SHOW_WILL_CHAPTER = constant.EventPageValueKey.SHOW_WILL_CHAPTER;
 
-    SHOW_WILL_CHAPTER_DURATION = constant.EventPageValueKey.SHOW_WILL_CHAPTER_DURATION;
+    PageValueKey.SHOW_WILL_CHAPTER_DURATION = constant.EventPageValueKey.SHOW_WILL_CHAPTER_DURATION;
 
-    HIDE_DID_CHAPTER = constant.EventPageValueKey.HIDE_DID_CHAPTER;
+    PageValueKey.HIDE_DID_CHAPTER = constant.EventPageValueKey.HIDE_DID_CHAPTER;
 
-    HIDE_DID_CHAPTER_DURATION = constant.EventPageValueKey.HIDE_DID_CHAPTER_DURATION;
+    PageValueKey.HIDE_DID_CHAPTER_DURATION = constant.EventPageValueKey.HIDE_DID_CHAPTER_DURATION;
 
     PageValueKey.SPECIFIC_METHOD_VALUES = constant.EventPageValueKey.SPECIFIC_METHOD_VALUES;
 

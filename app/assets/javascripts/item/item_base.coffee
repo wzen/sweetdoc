@@ -132,11 +132,11 @@ class ItemBase extends ItemEventBase
     if !@_event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER]? || @_event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER]
       # 表示
       d = @_event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION]
-      if d?
+      if !d?
         d = 0
       @showItem( =>
         super(callback)
-      , d <= 0, d)
+      , d <= 0, d * 1000)
     else
       super(callback)
 
@@ -147,7 +147,7 @@ class ItemBase extends ItemEventBase
         d = @_event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER_DURATION]
         @hideItem( =>
           super(callback)
-        , d <= 0, d)
+        , d <= 0, d * 1000)
       else
         if callback?
           callback()

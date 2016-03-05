@@ -181,14 +181,14 @@ ItemBase = (function(superClass) {
     }
     if ((this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER] == null) || this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER]) {
       d = this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION];
-      if (d != null) {
+      if (d == null) {
         d = 0;
       }
       return this.showItem((function(_this) {
         return function() {
           return ItemBase.__super__.willChapter.call(_this, callback);
         };
-      })(this), d <= 0, d);
+      })(this), d <= 0, d * 1000);
     } else {
       return ItemBase.__super__.willChapter.call(this, callback);
     }
@@ -205,7 +205,7 @@ ItemBase = (function(superClass) {
           d = _this._event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER_DURATION];
           return _this.hideItem(function() {
             return ItemBase.__super__.didChapter.call(_this, callback);
-          }, d <= 0, d);
+          }, d <= 0, d * 1000);
         } else {
           if (callback != null) {
             return callback();
