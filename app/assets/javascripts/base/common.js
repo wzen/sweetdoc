@@ -488,7 +488,7 @@ Common = (function() {
   };
 
   Common.focusToTarget = function(target, callback, immediate) {
-    var left, scale, scrollContentsSize, se, top, viewScaleDiff;
+    var focusDiff, left, top;
     if (callback == null) {
       callback = null;
     }
@@ -498,35 +498,11 @@ Common = (function() {
     if ((target == null) || target.length === 0) {
       return;
     }
-    scrollContentsSize = this.scrollContentsSizeUnderViewScale();
-    if (scrollContentsSize != null) {
-      viewScaleDiff = {
-        top: 0,
-        left: 0
-      };
-      if (!window.isWorkTable && ScreenEvent.hasInstanceCache()) {
-        se = new ScreenEvent();
-        if (se.getNowScreenEventScale() <= 1.0) {
-          scale = this.getViewScale();
-          viewScaleDiff = {
-            top: scrollContentsSize.height * 0.5 * (1 - scale),
-            left: scrollContentsSize.width * 0.5 * (1 - scale)
-          };
-        }
-      }
-      if (window.runDebug) {
-        console.log('viewScaleDiff');
-        console.log(viewScaleDiff);
-      }
-      if ($(target).get(0).offsetParent != null) {
-        top = $(target).height() * 0.5 + $(target).get(0).offsetTop + viewScaleDiff.top;
-        left = $(target).width() * 0.5 + $(target).get(0).offsetLeft + viewScaleDiff.left;
-        return this.updateScrollContentsPosition(top, left, immediate, true, callback);
-      } else {
-        if (callback != null) {
-          return callback();
-        }
-      }
+    focusDiff = this.focusDiff();
+    if ($(target).get(0).offsetParent != null) {
+      top = $(target).height() * 0.5 + $(target).get(0).offsetTop + focusDiff.top;
+      left = $(target).width() * 0.5 + $(target).get(0).offsetLeft + focusDiff.left;
+      return this.updateScrollContentsPosition(top, left, immediate, true, callback);
     } else {
       if (callback != null) {
         return callback();
@@ -534,8 +510,30 @@ Common = (function() {
     }
   };
 
+  Common.focusDiff = function() {
+    var diff, scale, scrollContentsSize, se;
+    diff = {
+      top: 0,
+      left: 0
+    };
+    if (!window.isWorkTable && ScreenEvent.hasInstanceCache()) {
+      se = new ScreenEvent();
+      if (se.getNowScreenEventScale() <= 1.0) {
+        scale = this.getViewScale();
+        scrollContentsSize = this.scrollContentsSizeUnderViewScale();
+        if (scrollContentsSize != null) {
+          diff = {
+            top: scrollContentsSize.height * 0.5 * (1 - scale),
+            left: scrollContentsSize.width * 0.5 * (1 - scale)
+          };
+        }
+      }
+    }
+    return diff;
+  };
+
   Common.updateScrollContentsPosition = function(top, left, immediate, withUpdateScreenEventVar, callback) {
-    var _loop, count, nowLeft, nowTop, per, perLeft, perTop, scrollContentsSize;
+    var _loop, count, focusDiff, nowLeft, nowTop, per, perLeft, perTop, scrollContentsSize;
     if (immediate == null) {
       immediate = true;
     }
@@ -546,7 +544,8 @@ Common = (function() {
       callback = null;
     }
     if (withUpdateScreenEventVar) {
-      this.saveDisplayPosition(top, left, true);
+      focusDiff = this.focusDiff();
+      this.saveDisplayPosition(top - focusDiff.top, left - focusDiff.left, true);
     }
     scrollContentsSize = this.scrollContentsSizeUnderViewScale();
     top -= scrollContentsSize.height * 0.5;
@@ -559,8 +558,8 @@ Common = (function() {
     }
     if (immediate) {
       window.skipScrollEvent = true;
-      window.scrollContents.scrollTop(top);
-      window.scrollContents.scrollLeft(left);
+      window.scrollContents.scrollTop(Math.round(top));
+      window.scrollContents.scrollLeft(Math.round(left));
       if (callback != null) {
         return callback();
       }
@@ -580,8 +579,8 @@ Common = (function() {
         window.scrollContents.scrollLeft(nowLeft + perLeft * count);
         count += 1;
         if (count > per) {
-          window.scrollContents.scrollTop(top);
-          window.scrollContents.scrollLeft(left);
+          window.scrollContents.scrollTop(Math.round(top));
+          window.scrollContents.scrollLeft(Math.round(left));
           window.skipScrollEventByAnimation = false;
           if (callback != null) {
             return callback();

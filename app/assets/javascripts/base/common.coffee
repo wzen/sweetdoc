@@ -396,25 +396,8 @@ class Common
     if !target? || target.length == 0
       # ターゲット無し
       return
-
-    # col-xs-9 → 75% padding → 15px
-    scrollContentsSize = @scrollContentsSizeUnderViewScale()
-    if scrollContentsSize?
-      # MainView縮小時のDiff
-      viewScaleDiff = {top: 0, left: 0}
-      if !window.isWorkTable && ScreenEvent.hasInstanceCache()
-        se = new ScreenEvent()
-        if se.getNowScreenEventScale() <= 1.0
-          # 倍率1.0以下の場合に調整が必要
-          scale = @getViewScale()
-          viewScaleDiff = {
-            top: scrollContentsSize.height * 0.5 * (1 - scale)
-            left: scrollContentsSize.width * 0.5 * (1 - scale)
-          }
-      if window.runDebug
-        console.log('viewScaleDiff')
-        console.log(viewScaleDiff)
-      if $(target).get(0).offsetParent?
+    focusDiff = @focusDiff()
+    if $(target).get(0).offsetParent?
 #        if window.runDebug
 #          console.log('window.runScaleFromViewRate:' + window.runScaleFromViewRate)
 #          console.log('original scrollContents.scrollTop():' + scrollContents.scrollTop())
@@ -425,23 +408,39 @@ class Common
 #          console.log('$(target).get(0).offsetLeft:' + $(target).get(0).offsetLeft)
 #          console.log('$(target).width():' + $(target).width())
 #          console.log('$(target).height():' + $(target).height())
-        top = $(target).height() * 0.5 + $(target).get(0).offsetTop + viewScaleDiff.top
-        left = $(target).width() * 0.5 + $(target).get(0).offsetLeft + viewScaleDiff.left
-        @updateScrollContentsPosition(top, left, immediate, true, callback)
-      else
-        # offsetが取得できない場合は処理なし
-        if callback?
-          callback()
+      top = $(target).height() * 0.5 + $(target).get(0).offsetTop + focusDiff.top
+      left = $(target).width() * 0.5 + $(target).get(0).offsetLeft + focusDiff.left
+      @updateScrollContentsPosition(top, left, immediate, true, callback)
     else
+      # offsetが取得できない場合は処理なし
       if callback?
         callback()
+
+  @focusDiff: ->
+    diff = {top: 0, left: 0}
+    if !window.isWorkTable && ScreenEvent.hasInstanceCache()
+      se = new ScreenEvent()
+      if se.getNowScreenEventScale() <= 1.0
+        # 倍率1.0以下の場合にスクロール値に調整が必要
+        scale = @getViewScale()
+        scrollContentsSize = @scrollContentsSizeUnderViewScale()
+        if scrollContentsSize?
+          diff = {
+            top: scrollContentsSize.height * 0.5 * (1 - scale)
+            left: scrollContentsSize.width * 0.5 * (1 - scale)
+          }
+#    if window.runDebug
+#      console.log('focusDiff')
+#      console.log(diff)
+    return diff
 
   # スクロール位置の更新
   # @param [Float] top Y中央値
   # @param [Float] left X中央値
   @updateScrollContentsPosition: (top, left, immediate = true, withUpdateScreenEventVar = true, callback = null) ->
     if withUpdateScreenEventVar
-      @saveDisplayPosition(top, left, true)
+      focusDiff = @focusDiff()
+      @saveDisplayPosition(top - focusDiff.top, left - focusDiff.left, true)
 
     scrollContentsSize = @scrollContentsSizeUnderViewScale()
     top -= scrollContentsSize.height * 0.5
@@ -454,8 +453,8 @@ class Common
 
     if immediate
       window.skipScrollEvent = true
-      window.scrollContents.scrollTop(top)
-      window.scrollContents.scrollLeft(left)
+      window.scrollContents.scrollTop(Math.round(top))
+      window.scrollContents.scrollLeft(Math.round(left))
       if callback?
         callback()
     else
@@ -473,8 +472,8 @@ class Common
         window.scrollContents.scrollLeft(nowLeft + perLeft * count)
         count += 1
         if count > per
-          window.scrollContents.scrollTop(top)
-          window.scrollContents.scrollLeft(left)
+          window.scrollContents.scrollTop(Math.round(top))
+          window.scrollContents.scrollLeft(Math.round(left))
           window.skipScrollEventByAnimation = false
           if callback?
             callback()
