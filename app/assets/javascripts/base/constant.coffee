@@ -11,6 +11,9 @@ class Constant
   @ITEM_PREVIEW_CLASS_DIST_TOKEN = 'dummy'
   @CANVAS_ITEM_COORDINATE_VAR_SURFIX = 'Coord'
 
+  class @EventBase
+    @PREVIEW_STEP = 3
+
   # ZIndex
   class @Zindex
     # @property GRID グリッド線

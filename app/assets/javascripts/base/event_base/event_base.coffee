@@ -162,17 +162,19 @@ class EventBase extends Extend
           clearTimeout(@_previewTimer)
           @_previewTimer = null
         @_previewTimer = setTimeout( =>
-          if @_progress + 1 > @progressMax()
+          if @_progress + Constant.EventBase.PREVIEW_STEP > @progressMax()
             @_doPreviewLoop = false
             clearTimeout(@_previewTimer)
             @_previewTimer = null
 
           @scrollHandlerFunc(true)
-          @_progress += 1
-          if @_progress > @progressMax()
+          if @_progress + Constant.EventBase.PREVIEW_STEP  > @progressMax()
             if !@isFinishedWithHand()
               @finishEvent()
           else
+            @_progress += Constant.EventBase.PREVIEW_STEP
+            if @_progress > @progressMax()
+              @_progress = @progressMax()
             @previewStepDraw()
         , @constructor.STEP_INTERVAL_DURATION * 1000)
       else if @getEventActionType() == constant.ActionType.CLICK
@@ -308,7 +310,7 @@ class EventBase extends Extend
       return
     if isPreview
       # プレビュー時は1ずつ実行
-      @stepValue += 1
+      @stepValue += Constant.EventBase.PREVIEW_STEP
       # 進行方向は+
       @forward = true
     else

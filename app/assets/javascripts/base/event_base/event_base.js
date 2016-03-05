@@ -221,18 +221,21 @@ EventBase = (function(superClass) {
         }
         return this._previewTimer = setTimeout((function(_this) {
           return function() {
-            if (_this._progress + 1 > _this.progressMax()) {
+            if (_this._progress + Constant.EventBase.PREVIEW_STEP > _this.progressMax()) {
               _this._doPreviewLoop = false;
               clearTimeout(_this._previewTimer);
               _this._previewTimer = null;
             }
             _this.scrollHandlerFunc(true);
-            _this._progress += 1;
-            if (_this._progress > _this.progressMax()) {
+            if (_this._progress + Constant.EventBase.PREVIEW_STEP > _this.progressMax()) {
               if (!_this.isFinishedWithHand()) {
                 return _this.finishEvent();
               }
             } else {
+              _this._progress += Constant.EventBase.PREVIEW_STEP;
+              if (_this._progress > _this.progressMax()) {
+                _this._progress = _this.progressMax();
+              }
               return _this.previewStepDraw();
             }
           };
@@ -409,7 +412,7 @@ EventBase = (function(superClass) {
       return;
     }
     if (isPreview) {
-      this.stepValue += 1;
+      this.stepValue += Constant.EventBase.PREVIEW_STEP;
       this.forward = true;
     } else {
       plusX = 0;

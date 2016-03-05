@@ -22,6 +22,15 @@ Constant = (function() {
 
   Constant.CANVAS_ITEM_COORDINATE_VAR_SURFIX = 'Coord';
 
+  Constant.EventBase = (function() {
+    function EventBase() {}
+
+    EventBase.PREVIEW_STEP = 3;
+
+    return EventBase;
+
+  })();
+
   Constant.Zindex = (function() {
     function Zindex() {}
 
