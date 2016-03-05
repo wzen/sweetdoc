@@ -791,9 +791,12 @@ PreloadItemText = (function(superClass) {
     }
   };
 
-  PreloadItemText.prototype.willChapter = function() {
+  PreloadItemText.prototype.willChapter = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
     this._animationFlg = {};
-    return PreloadItemText.__super__.willChapter.call(this);
+    return PreloadItemText.__super__.willChapter.call(this, callback);
   };
 
   PreloadItemText.isJapanease = function(c) {

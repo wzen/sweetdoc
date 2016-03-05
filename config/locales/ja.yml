@@ -94,7 +94,12 @@ ja:
         fork: 'イベント分岐'
       item_common:
         item_common: "アイテム状態変更"
-        position: "画面表示位置"
+        position: "表示位置"
+        show: "表示状態"
+        show_will_chapter: "チャプター開始時に表示"
+        show_will_chapter_duration: "実行時間"
+        hide_did_chapter: "チャプター終了時に非表示"
+        hide_did_chapter_duration: "実行時間"
         size: "アイテムサイズ"
       item_state:
         item_state: 'アイテム状態'

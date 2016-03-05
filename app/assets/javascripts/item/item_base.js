@@ -105,18 +105,62 @@ ItemBase = (function(superClass) {
     return window.drawingContext.putImageData(this._drawingSurfaceImageData, 0, 0, size.x - padding, size.y - padding, size.w + (padding * 2), size.h + (padding * 2));
   };
 
-  ItemBase.prototype.showItem = function() {
-    return this.getJQueryElement().css({
-      'opacity': 1,
-      'z-index': Common.plusPagingZindex(this.zindex)
-    });
+  ItemBase.prototype.showItem = function(callback, immediate, duration) {
+    if (callback == null) {
+      callback = null;
+    }
+    if (immediate == null) {
+      immediate = true;
+    }
+    if (duration == null) {
+      duration = 0;
+    }
+    if (immediate || (window.isWorkTable && window.previewRunning)) {
+      this.getJQueryElement().css({
+        'opacity': 1,
+        'z-index': Common.plusPagingZindex(this.zindex)
+      });
+      if (callback != null) {
+        return callback();
+      }
+    } else {
+      return this.getJQueryElement().css('z-index', Common.plusPagingZindex(this.zindex)).animate({
+        'opacity': 1
+      }, duration, function() {
+        if (callback != null) {
+          return callback();
+        }
+      });
+    }
   };
 
-  ItemBase.prototype.hideItem = function() {
-    return this.getJQueryElement().css({
-      'opacity': 0,
-      'z-index': Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM)
-    });
+  ItemBase.prototype.hideItem = function(callback, immediate, duration) {
+    if (callback == null) {
+      callback = null;
+    }
+    if (immediate == null) {
+      immediate = true;
+    }
+    if (duration == null) {
+      duration = 0;
+    }
+    if (immediate || (window.isWorkTable && window.previewRunning)) {
+      this.getJQueryElement().css({
+        'opacity': 0,
+        'z-index': Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM)
+      });
+      if (callback != null) {
+        return callback();
+      }
+    } else {
+      return this.getJQueryElement().css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM)).animate({
+        'opacity': 0
+      }, duration, function() {
+        if (callback != null) {
+          return callback();
+        }
+      });
+    }
   };
 
   ItemBase.prototype.itemDraw = function(show) {
@@ -130,9 +174,19 @@ ItemBase = (function(superClass) {
     }
   };
 
-  ItemBase.prototype.willChapter = function() {
-    this.showItem();
-    return ItemBase.__super__.willChapter.call(this);
+  ItemBase.prototype.willChapter = function(callback) {
+    var d;
+    if (callback == null) {
+      callback = null;
+    }
+    if (this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER]) {
+      d = this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION];
+      return this.showItem(function() {
+        return ItemBase.__super__.willChapter.call(this, callback);
+      }, d < 0, d);
+    } else {
+      return ItemBase.__super__.willChapter.call(this, callback);
+    }
   };
 
   ItemBase.prototype.refresh = function(show, callback) {

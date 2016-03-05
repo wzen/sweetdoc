@@ -68,13 +68,51 @@ class ItemPreviewTemp extends CssItemBase
         name: "Background Color"
         default: 'ffffff'
         type: 'color'
+        colorType: 'hex'
         ja :{
           name: "背景色"
+        }
+      }
+      text: {
+        name: "Text"
+        type: 'string'
+        default: 'Button'
+        ja: {
+          name: "文字"
+        }
+      }
+      textColor: {
+        name: 'TextColor'
+        default: {r:0, g:0, b:0}
+        type: 'color'
+        colorType: 'rgb'
+        ja: {
+          name: '文字色'
+        }
+      }
+      fontFamily: {
+        name: "Select Font"
+        type: 'select'
+        temp: 'fontFamily'
+        default: 'Times New Roman'
+        ja: {
+          name: 'フォント選択'
+        }
+      }
+      fontSize: {
+        type: 'number'
+        name: "FontSize"
+        default: 14
+        min: 1
+        max: 100
+        ja: {
+          name: 'フォントサイズ'
         }
       }
     }
     methods: {
       defaultClick: {
+        finishWithHand: true
         options: {
           id: 'defaultClick'
           name: 'Default click action'
@@ -125,6 +163,30 @@ class ItemPreviewTemp extends CssItemBase
     }
   }
 
+  # HTML要素
+  cssItemHtml: ->
+    return """
+      <div class='content_table'><div class='content_table_cell'>#{@text}</div></div>
+    """
+
+  # CSSスタイル
+  cssStyle: ->
+    return """
+      ##{@id} .content_table {
+        width: 100%;
+        height: 100%;
+        display: table;
+      }
+      ##{@id} .content_table_cell {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+        font-family: #{@fontFamily};
+        font-size: #{@fontSize}px;
+        color: rgb(#{@textColor.r}, #{@textColor.g}, #{@textColor.b});
+      }
+    """
+
   # イベント前の表示状態にする
   updateEventBefore: ->
     super()
@@ -135,7 +197,7 @@ class ItemPreviewTemp extends CssItemBase
     else if methodName == 'changeColorClick' || methodName == 'changeColorScroll'
       @backgroundColor = 'ffffff'
 
-# イベント後の表示状態にする
+  # イベント後の表示状態にする
   updateEventAfter: ->
     super()
     @showItem()
@@ -143,33 +205,27 @@ class ItemPreviewTemp extends CssItemBase
     if methodName == 'defaultClick'
       @getJQueryElement().css({'-webkit-animation-duration':'0', '-moz-animation-duration', '0'})
 
-# 共通クリックイベント ※アクションイベント
+  # 共通クリックイベント ※アクションイベント
   defaultClick : (opt) ->
-# ボタン凹むアクション
+    @disableHandleResponse()
+    # ボタン凹むアクション
     @getJQueryElement().find('.item_contents:first').addClass('defaultClick_' + @id)
-    @getJQueryElement().off('webkitAnimationEnd animationend')
-    @getJQueryElement().on('webkitAnimationEnd animationend', (e) =>
-#console.log('css-anim end')
+    @getJQueryElement().off('webkitAnimationEnd animationend').on('webkitAnimationEnd animationend', (e) =>
       @getJQueryElement().find('.item_contents:first').removeClass('defaultClick_' + @id)
-      if opt.complete?
-        opt.complete()
+      # イベント終了
+      @finishEvent()
     )
 
-# *アクションイベント
+  # *アクションイベント
   changeColorScroll: (opt) ->
     @getJQueryElement().find('.css_item_base').css('background', "##{@backgroundColor}")
-    if opt.complete?
-      opt.complete()
 
   changeColorClick: (opt) ->
     @getJQueryElement().find('.css_item_base').css('background', "##{@backgroundColor}")
-    if opt.complete?
-      opt.complete()
 
-# CSSアニメーションの定義(必要な場合)
+  # CSSアニメーションの定義(必要な場合)
   cssAnimationKeyframe : ->
     methodName = @getEventMethodName()
-    funcName = "#{methodName}_#{@id}"
     keyFrameName = "#{@id}_frame"
     emt = @getJQueryElement().find('.item_contents:first')
     top = emt.css('top')
@@ -212,18 +268,10 @@ class ItemPreviewTemp extends CssItemBase
       }
     }
     """
+
     return keyframe
 
-  willChapter: ->
-    if @getEventMethodName() == 'defaultClick'
-      # ボタンを表示
-      @showItem()
-    else if @getEventMethodName() == 'changeColorClick' || @getEventMethodName() == 'changeColorScroll'
-      # ボタンを表示
-      @showItem()
-    super()
-
-Common.setClassToMap(ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp)
+Common.setClassToMap(PreloadItemButton.CLASS_DIST_TOKEN, PreloadItemButton)
 
 # Don't Delete
 if window.itemInitFuncList? && !window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN]?

@@ -172,7 +172,10 @@ ScreenEvent = (function(superClass) {
       return PrivateClass.__super__.stopPreview.call(this, callback);
     };
 
-    PrivateClass.prototype.willChapter = function() {
+    PrivateClass.prototype.willChapter = function(callback) {
+      if (callback == null) {
+        callback = null;
+      }
       if (window.previewRunning) {
         this.eventBaseScale = this.previewLaunchBaseScale;
       } else {
@@ -180,15 +183,18 @@ ScreenEvent = (function(superClass) {
           this.eventBaseScale = _getInitScale.call(this);
         }
       }
-      return PrivateClass.__super__.willChapter.call(this);
+      return PrivateClass.__super__.willChapter.call(this, callback);
     };
 
-    PrivateClass.prototype.didChapter = function() {
+    PrivateClass.prototype.didChapter = function(callback) {
+      if (callback == null) {
+        callback = null;
+      }
       this.eventBaseX = this._progressX;
       this.eventBaseY = this._progressY;
       this.eventBaseScale = this._progressScale;
       this._progressScale = null;
-      return PrivateClass.__super__.didChapter.call(this);
+      return PrivateClass.__super__.didChapter.call(this, callback);
     };
 
     PrivateClass.prototype.setMiniumObject = function(obj) {

@@ -818,9 +818,10 @@ WorktableCommon = (function() {
           Common.focusToTarget(item.getJQueryElement(), null, true);
         }
         if (idx < tes.length - 1 || fromBlankEventConfig) {
-          item.willChapter();
-          item.updateEventAfter();
-          item.didChapter();
+          item.willChapter(function() {
+            item.updateEventAfter();
+            return item.didChapter();
+          });
         } else if (doRunPreview) {
           item.preview((function(_this) {
             return function() {

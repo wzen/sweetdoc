@@ -190,22 +190,23 @@ EventBase = (function(superClass) {
       return function() {
         _this._runningPreview = true;
         _this.initPreview();
-        _this.willChapter();
-        _this._doPreviewLoop = false;
-        _this._skipEvent = false;
-        _this._loopCount = 0;
-        _this._previewTimer = null;
-        _this._runningEvent = false;
-        FloatView.showWithCloseButton(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW, function() {
-          if (_this.loopFinishCallback != null) {
-            return _this.loopFinishCallback();
+        return _this.willChapter(function() {
+          _this._doPreviewLoop = false;
+          _this._skipEvent = false;
+          _this._loopCount = 0;
+          _this._previewTimer = null;
+          _this._runningEvent = false;
+          FloatView.showWithCloseButton(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW, function() {
+            if (_this.loopFinishCallback != null) {
+              return _this.loopFinishCallback();
+            }
+          }, true);
+          _this._progress = 0;
+          if (window.debug) {
+            console.log('start previewStepDraw');
           }
-        }, true);
-        _this._progress = 0;
-        if (window.debug) {
-          console.log('start previewStepDraw');
-        }
-        return _this.previewStepDraw();
+          return _this.previewStepDraw();
+        });
       };
     })(this));
   };
@@ -281,9 +282,10 @@ EventBase = (function(superClass) {
         if (_this._runningPreview) {
           _this.updateEventBefore();
           return _this.refresh(_this.visible, function() {
-            _this.willChapter();
-            _this._progress = 0;
-            return _this.previewStepDraw();
+            return _this.willChapter(function() {
+              _this._progress = 0;
+              return _this.previewStepDraw();
+            });
           });
         }
       };
@@ -353,21 +355,33 @@ EventBase = (function(superClass) {
     }
   };
 
-  EventBase.prototype.willChapter = function() {
+  EventBase.prototype.willChapter = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
     this.saveToFootprint(this.id, true, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
     this.setModifyBeforeAndAfterVar();
-    return this.resetProgress();
+    this.resetProgress();
+    if (callback != null) {
+      return callback();
+    }
   };
 
-  EventBase.prototype.didChapter = function() {
+  EventBase.prototype.didChapter = function(callback) {
     var k, v;
+    if (callback == null) {
+      callback = null;
+    }
     for (k in this) {
       v = this[k];
       if (k.lastIndexOf('__Cache') >= 0) {
         delete this[k];
       }
     }
-    return this.saveToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
+    this.saveToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
+    if (callback != null) {
+      return callback();
+    }
   };
 
   EventBase.prototype.execMethod = function(opt, callback) {

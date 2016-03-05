@@ -135,21 +135,21 @@ class ScreenEvent extends CommonEvent
       , 0)
       super(callback)
 
-    willChapter: ->
+    willChapter: (callback = null) ->
       if window.previewRunning
         # 倍率を戻す
         @eventBaseScale = @previewLaunchBaseScale
       else
         if @_notMoving
           @eventBaseScale = _getInitScale.call(@)
-      super()
+      super(callback)
 
-    didChapter: ->
+    didChapter: (callback = null) ->
       @eventBaseX = @_progressX
       @eventBaseY = @_progressY
       @eventBaseScale = @_progressScale
       @_progressScale = null
-      super()
+      super(callback)
 
     setMiniumObject: (obj) ->
       super(obj)

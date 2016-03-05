@@ -1,18 +1,22 @@
 # スクロール用Chapterクラス
 class ScrollChapter extends Chapter
   # チャプターの前処理
-  willChapter: ->
-    super()
-    @enableScrollHandleViewEvent()
-    # スクロール位置初期化
-    RunCommon.initHandleScrollView()
-    # ガイド表示
-    @showGuide(true)
+  willChapter: (callback = null) ->
+    super( =>
+      @enableScrollHandleViewEvent()
+      # スクロール位置初期化
+      RunCommon.initHandleScrollView()
+      # ガイド表示
+      @showGuide(true)
+      if callback?
+        callback()
+    )
 
   # チャプターの後処理
-  didChapter: ->
-    super()
-    @hideGuide()
+  didChapter: (callback = null) ->
+    super( =>
+      @hideGuide()
+    )
 
   # スクロールイベント
   # @param [Integer] x 横方向スクロール位置

@@ -133,21 +133,22 @@ class EventBase extends Extend
     @stopPreview( =>
       @_runningPreview = true
       @initPreview()
-      @willChapter()
-      @_doPreviewLoop = false
-      @_skipEvent = false
-      @_loopCount = 0
-      @_previewTimer = null
-      @_runningEvent = false
-      # FloatView表示
-      FloatView.showWithCloseButton(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW, =>
-        if @loopFinishCallback?
-          @loopFinishCallback()
-      , true)
-      @_progress = 0
-      if window.debug
-        console.log('start previewStepDraw')
-      @previewStepDraw()
+      @willChapter( =>
+        @_doPreviewLoop = false
+        @_skipEvent = false
+        @_loopCount = 0
+        @_previewTimer = null
+        @_runningEvent = false
+        # FloatView表示
+        FloatView.showWithCloseButton(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW, =>
+          if @loopFinishCallback?
+            @loopFinishCallback()
+        , true)
+        @_progress = 0
+        if window.debug
+          console.log('start previewStepDraw')
+        @previewStepDraw()
+      )
     )
 
   # プレビューStep実行
@@ -210,9 +211,10 @@ class EventBase extends Extend
       if @_runningPreview
         @updateEventBefore()
         @refresh(@visible, =>
-          @willChapter()
-          @_progress = 0
-          @previewStepDraw()
+          @willChapter( =>
+            @_progress = 0
+            @previewStepDraw()
+          )
         )
     , loopDelay)
 
@@ -268,22 +270,26 @@ class EventBase extends Extend
       delete @['__saveCache']
 
   # チャプター開始前イベント
-  willChapter: ->
+  willChapter: (callback = null) ->
     # インスタンスの状態を保存
     @saveToFootprint(@id, true, @_event[EventPageValueBase.PageValueKey.DIST_ID])
     # イベント前後の変数の設定
     @setModifyBeforeAndAfterVar()
     # ステータス値初期化
     @resetProgress()
+    if callback?
+      callback()
 
   # チャプター終了時イベント
-  didChapter: ->
+  didChapter: (callback = null) ->
     # キャッシュ用の「__Cache」と付くインスタンス変数を削除
     for k, v of @
       if k.lastIndexOf('__Cache') >= 0
         delete @[k]
     # インスタンスの状態を保存
     @saveToFootprint(@id, false, @_event[EventPageValueBase.PageValueKey.DIST_ID])
+    if callback?
+      callback()
 
   # メソッド実行
   execMethod: (opt, callback = null) ->

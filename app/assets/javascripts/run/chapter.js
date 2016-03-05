@@ -20,28 +20,57 @@ Chapter = (function() {
     this.doMoveChapter = false;
   }
 
-  Chapter.prototype.willChapter = function() {
-    var event, i, idx, len, ref;
+  Chapter.prototype.willChapter = function(callback) {
+    var count, event, i, idx, len, ref, results;
+    if (callback == null) {
+      callback = null;
+    }
     if (window.runDebug) {
       console.log('Chapter willChapter');
     }
+    count = 0;
     ref = this.eventObjList;
+    results = [];
     for (idx = i = 0, len = ref.length; i < len; idx = ++i) {
       event = ref[idx];
       event.initEvent(this.eventList[idx]);
-      event.willChapter();
-      this.doMoveChapter = false;
+      results.push(event.willChapter((function(_this) {
+        return function() {
+          _this.doMoveChapter = false;
+          count += 1;
+          if (count >= _this.eventObjList.length) {
+            _this.focusToActorIfNeed(false);
+            _this.enableEventHandle();
+            if (callback != null) {
+              return callback();
+            }
+          }
+        };
+      })(this)));
     }
-    this.focusToActorIfNeed(false);
-    return this.enableEventHandle();
+    return results;
   };
 
-  Chapter.prototype.didChapter = function() {
+  Chapter.prototype.didChapter = function(callback) {
+    var count;
+    if (callback == null) {
+      callback = null;
+    }
     if (window.runDebug) {
       console.log('Chapter didChapter');
     }
+    count = 0;
     return this.eventObjList.forEach(function(event) {
-      return event.didChapter();
+      return event.didChapter((function(_this) {
+        return function() {
+          count += 1;
+          if (count >= _this.eventObjList.length) {
+            if (callback != null) {
+              return callback();
+            }
+          }
+        };
+      })(this));
     });
   };
 

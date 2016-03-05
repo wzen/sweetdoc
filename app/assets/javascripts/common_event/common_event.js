@@ -32,22 +32,28 @@ CommonEvent = (function() {
       return $('#common_event_click_overlay');
     };
 
-    PrivateClass.prototype.willChapter = function() {
+    PrivateClass.prototype.willChapter = function(callback) {
       var z_index;
+      if (callback == null) {
+        callback = null;
+      }
       if (this._event[EventPageValueBase.PageValueKey.ACTIONTYPE] === constant.ActionType.CLICK) {
         z_index = Common.plusPagingZindex(constant.Zindex.EVENTFLOAT);
         if ($('#common_event_click_overlay').length === 0) {
           $('body').append("<div id='common_event_click_overlay' style='z-index:" + z_index + "'></div>");
         }
       }
-      return PrivateClass.__super__.willChapter.call(this);
+      return PrivateClass.__super__.willChapter.call(this, callback);
     };
 
-    PrivateClass.prototype.didChapter = function() {
+    PrivateClass.prototype.didChapter = function(callback) {
+      if (callback == null) {
+        callback = null;
+      }
       if (this._event[EventPageValueBase.PageValueKey.ACTIONTYPE] === constant.ActionType.CLICK) {
         $('#common_event_click_overlay').remove();
       }
-      return PrivateClass.__super__.didChapter.call(this);
+      return PrivateClass.__super__.didChapter.call(this, callback);
     };
 
     return PrivateClass;

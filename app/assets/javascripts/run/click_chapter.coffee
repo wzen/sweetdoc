@@ -8,22 +8,26 @@ class ClickChapter extends Chapter
     @changeForkNum = null
 
   # チャプターの前処理
-  willChapter: ->
-    super()
-    @disableScrollHandleViewEvent()
-    # イベント設定
-    @eventObjList.forEach((event) =>
-      event.clickTargetElement().off('click').on('click', (e) =>
-        @clickEvent(e)
+  willChapter: (callback = null) ->
+    super( =>
+      @disableScrollHandleViewEvent()
+      # イベント設定
+      @eventObjList.forEach((event) =>
+        event.clickTargetElement().off('click').on('click', (e) =>
+          @clickEvent(e)
+        )
       )
+      @showGuide()
+      if callback?
+        callback()
     )
-    @showGuide()
 
   # チャプターの後処理
-  didChapter: ->
-    super()
-    @enableScrollHandleViewEvent()
-    @hideGuide()
+  didChapter: (callback = null) ->
+    super( =>
+      @enableScrollHandleViewEvent()
+      @hideGuide()
+    )
 
   # クリックイベント
   # @param [Object] e クリックオブジェクト

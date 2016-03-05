@@ -158,29 +158,35 @@ Page = (function() {
 
   Page.prototype.progressChapter = function() {
     this.hideAllGuide();
-    this.thisChapter().didChapter();
-    if (this.getForkChapterList().length <= this.getChapterIndex() + 1) {
-      return this.finishAllChapters();
-    } else {
-      this.addChapterIndex(1);
-      RunCommon.setChapterNum(this.thisChapterNum());
-      return this.thisChapter().willChapter();
-    }
+    return this.thisChapter().didChapter((function(_this) {
+      return function() {
+        if (_this.getForkChapterList().length <= _this.getChapterIndex() + 1) {
+          return _this.finishAllChapters();
+        } else {
+          _this.addChapterIndex(1);
+          RunCommon.setChapterNum(_this.thisChapterNum());
+          return _this.thisChapter().willChapter();
+        }
+      };
+    })(this));
   };
 
   Page.prototype.switchFork = function() {
-    var nfn;
     this.hideAllGuide();
-    this.thisChapter().didChapter();
-    if (this.thisChapter().changeForkNum != null) {
-      nfn = this.thisChapter().changeForkNum;
-      if (RunCommon.addForkNumToStack(nfn, this.getChapterIndex(), window.eventAction.thisPageNum())) {
-        RunCommon.setForkNum(nfn);
-      }
-    }
-    RunCommon.setChapterNum(this.thisChapterNum());
-    RunCommon.setChapterMax(this.getForkChapterList().length);
-    return this.thisChapter().willChapter();
+    return this.thisChapter().didChapter((function(_this) {
+      return function() {
+        var nfn;
+        if (_this.thisChapter().changeForkNum != null) {
+          nfn = _this.thisChapter().changeForkNum;
+          if (RunCommon.addForkNumToStack(nfn, _this.getChapterIndex(), window.eventAction.thisPageNum())) {
+            RunCommon.setForkNum(nfn);
+          }
+        }
+        RunCommon.setChapterNum(_this.thisChapterNum());
+        RunCommon.setChapterMax(_this.getForkChapterList().length);
+        return _this.thisChapter().willChapter();
+      };
+    })(this));
   };
 
   Page.prototype.rewindChapter = function(callback) {
@@ -215,12 +221,13 @@ Page = (function() {
             _this.addChapterIndex(-1);
             return _this.resetChapter(_this.getChapterIndex(), function() {
               RunCommon.setChapterNum(_this.thisChapterNum());
-              _this.thisChapter().willChapter();
-              FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
-              window.runningOperation = false;
-              if (callback != null) {
-                return callback();
-              }
+              return _this.thisChapter().willChapter(function() {
+                FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
+                window.runningOperation = false;
+                if (callback != null) {
+                  return callback();
+                }
+              });
             });
           } else {
             oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum());
@@ -233,12 +240,13 @@ Page = (function() {
               return _this.resetChapter(_this.getChapterIndex(), function() {
                 RunCommon.setChapterNum(_this.thisChapterNum());
                 RunCommon.setChapterMax(_this.getForkChapterList().length);
-                _this.thisChapter().willChapter();
-                FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
-                window.runningOperation = false;
-                if (callback != null) {
-                  return callback();
-                }
+                return _this.thisChapter().willChapter(function() {
+                  FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
+                  window.runningOperation = false;
+                  if (callback != null) {
+                    return callback();
+                  }
+                });
               });
             } else {
               beforePage = window.eventAction.beforePage();
@@ -251,22 +259,24 @@ Page = (function() {
                   }
                 });
               } else {
-                _this.thisChapter().willChapter();
-                FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
-                window.runningOperation = false;
-                if (callback != null) {
-                  return callback();
-                }
+                return _this.thisChapter().willChapter(function() {
+                  FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
+                  window.runningOperation = false;
+                  if (callback != null) {
+                    return callback();
+                  }
+                });
               }
             }
           }
         } else {
-          _this.thisChapter().willChapter();
-          FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
-          window.runningOperation = false;
-          if (callback != null) {
-            return callback();
-          }
+          return _this.thisChapter().willChapter(function() {
+            FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
+            window.runningOperation = false;
+            if (callback != null) {
+              return callback();
+            }
+          });
         }
       };
     })(this));

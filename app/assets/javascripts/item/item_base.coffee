@@ -94,11 +94,29 @@ class ItemBase extends ItemEventBase
     window.drawingContext.putImageData(@_drawingSurfaceImageData, 0, 0, size.x - padding, size.y - padding, size.w + (padding * 2), size.h + (padding * 2))
 
   # アイテム表示
-  showItem: ->
-    @getJQueryElement().css({'opacity': 1, 'z-index': Common.plusPagingZindex(@zindex)})
+  showItem: (callback = null, immediate = true, duration = 0) ->
+    if immediate || (window.isWorkTable && window.previewRunning)
+      # ※プレビュー実行時は即時変更
+      @getJQueryElement().css({'opacity': 1, 'z-index': Common.plusPagingZindex(@zindex)})
+      if callback?
+        callback()
+    else
+      @getJQueryElement().css('z-index', Common.plusPagingZindex(@zindex)).animate({'opacity': 1}, duration, ->
+        if callback?
+          callback()
+      )
   # アイテム非表示
-  hideItem: ->
-    @getJQueryElement().css({'opacity': 0, 'z-index': Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM)})
+  hideItem: (callback = null, immediate = true, duration = 0) ->
+    if immediate || (window.isWorkTable && window.previewRunning)
+      # ※プレビュー実行時は即時変更
+      @getJQueryElement().css({'opacity': 0, 'z-index': Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM)})
+      if callback?
+        callback()
+    else
+      @getJQueryElement().css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM)).animate({'opacity': 0}, duration, ->
+        if callback?
+          callback()
+      )
 
   # アイテム描画
   # @abstract
@@ -109,10 +127,15 @@ class ItemBase extends ItemEventBase
     else
       @showItem()
 
-  willChapter: ->
-    # チャプター開始時に表示
-    @showItem()
-    super()
+  willChapter: (callback = null) ->
+    if @_event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER]
+      # 表示
+      d = @_event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION]
+      @showItem( ->
+        super(callback)
+      , d < 0, d)
+    else
+      super(callback)
 
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか

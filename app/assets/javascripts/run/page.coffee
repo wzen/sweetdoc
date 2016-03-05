@@ -134,36 +134,37 @@ class Page
   progressChapter: ->
     # 全ガイド非表示
     @hideAllGuide()
-
     # チャプター後処理
-    @thisChapter().didChapter()
-    # indexを更新
-    if @getForkChapterList().length <= @getChapterIndex() + 1
-      @finishAllChapters()
-    else
-      @addChapterIndex(1)
-      # チャプター数設定
-      RunCommon.setChapterNum(@thisChapterNum())
-      # チャプター前処理
-      @thisChapter().willChapter()
+    @thisChapter().didChapter( =>
+      # indexを更新
+      if @getForkChapterList().length <= @getChapterIndex() + 1
+        @finishAllChapters()
+      else
+        @addChapterIndex(1)
+        # チャプター数設定
+        RunCommon.setChapterNum(@thisChapterNum())
+        # チャプター前処理
+        @thisChapter().willChapter()
+    )
 
   # フォークを変更する
   switchFork: ->
     # 全ガイド非表示
     @hideAllGuide()
     # チャプター後処理
-    @thisChapter().didChapter()
-    # フォーク番号変更
-    if @thisChapter().changeForkNum?
-      nfn = @thisChapter().changeForkNum
-      if RunCommon.addForkNumToStack(nfn, @getChapterIndex(), window.eventAction.thisPageNum())
-        RunCommon.setForkNum(nfn)
-    # チャプター数設定
-    RunCommon.setChapterNum(@thisChapterNum())
-    # チャプター最大値設定
-    RunCommon.setChapterMax(@getForkChapterList().length)
-    # チャプター前処理
-    @thisChapter().willChapter()
+    @thisChapter().didChapter( =>
+      # フォーク番号変更
+      if @thisChapter().changeForkNum?
+        nfn = @thisChapter().changeForkNum
+        if RunCommon.addForkNumToStack(nfn, @getChapterIndex(), window.eventAction.thisPageNum())
+          RunCommon.setForkNum(nfn)
+      # チャプター数設定
+      RunCommon.setChapterNum(@thisChapterNum())
+      # チャプター最大値設定
+      RunCommon.setChapterMax(@getForkChapterList().length)
+      # チャプター前処理
+      @thisChapter().willChapter()
+    )
 
   # チャプターを戻す
   rewindChapter: (callback = null) ->
@@ -192,11 +193,12 @@ class Page
           @resetChapter(@getChapterIndex(), =>
             RunCommon.setChapterNum(@thisChapterNum())
             # チャプター前処理
-            @thisChapter().willChapter()
-            FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0)
-            window.runningOperation = false
-            if callback?
-              callback()
+            @thisChapter().willChapter( =>
+              FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0)
+              window.runningOperation = false
+              if callback?
+                callback()
+            )
           )
         else
           oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum())
@@ -216,11 +218,12 @@ class Page
               # チャプター最大値設定
               RunCommon.setChapterMax(@getForkChapterList().length)
               # チャプター前処理
-              @thisChapter().willChapter()
-              FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0)
-              window.runningOperation = false
-              if callback?
-                callback()
+              @thisChapter().willChapter( =>
+                FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0)
+                window.runningOperation = false
+                if callback?
+                  callback()
+              )
             )
           else
             beforePage = window.eventAction.beforePage()
@@ -233,18 +236,20 @@ class Page
                   callback()
               )
             else
-              @thisChapter().willChapter()
-              FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0)
-              window.runningOperation = false
-              if callback?
-                callback()
+              @thisChapter().willChapter( =>
+                FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0)
+                window.runningOperation = false
+                if callback?
+                  callback()
+              )
       else
         # チャプター前処理
-        @thisChapter().willChapter()
-        FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0)
-        window.runningOperation = false
-        if callback?
-          callback()
+        @thisChapter().willChapter( =>
+          FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0)
+          window.runningOperation = false
+          if callback?
+            callback()
+        )
     )
 
   # チャプターの内容をリセット

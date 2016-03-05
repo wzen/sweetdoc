@@ -2,7 +2,7 @@
 var EventConfig;
 
 EventConfig = (function() {
-  var _setApplyClickEvent, _setCommonStateEvent, _setForkSelect, _setHandlerRadioEvent, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues, constant;
+  var _setApplyClickEvent, _setCommonStateEvent, _setForkSelect, _setHandlerRadioEvent, _setItemCommonEvent, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues, constant;
 
   constant = gon["const"];
 
@@ -78,6 +78,7 @@ EventConfig = (function() {
     actionClassName = this.actionClassName();
     $(".action_div ." + actionClassName, this.emt).show();
     _setCommonStateEvent.call(this);
+    _setItemCommonEvent.call(this);
     _setHandlerRadioEvent.call(this);
     _setScrollDirectionEvent.call(this);
     _setForkSelect.call(this);
@@ -141,6 +142,12 @@ EventConfig = (function() {
       w: parseInt($('.item_diff_width:first', this.emt).val()),
       h: parseInt($('.item_diff_height:first', this.emt).val())
     };
+    checked = handlerDiv.find('.show_will_chapter:first').is(':checked');
+    this[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER] = (checked != null) && checked;
+    this[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION] = handlerDiv.find('.show_will_chapter_duration:first').val();
+    checked = handlerDiv.find('.hide_did_chapter:first').is(':checked');
+    this[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER] = (checked != null) && checked;
+    this[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER_DURATION] = handlerDiv.find('.hide_did_chapter_duration:first').val();
     this[EventPageValueBase.PageValueKey.FINISH_PAGE] = $('.finish_page', this.emt).is(":checked");
     this[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] = $('.finish_page_select', this.emt).val();
     this[EventPageValueBase.PageValueKey.DO_FOCUS] = $('.do_focus', this.emt).prop('checked');
@@ -259,6 +266,15 @@ EventConfig = (function() {
     eventConfigError = $('.event_config_error', this.emt);
     eventConfigError.find('p').html('');
     return eventConfigError.hide();
+  };
+
+  _setItemCommonEvent = function() {
+    $('.show_will_chapter', handler).off('click').on('click', function(e) {
+      return $('.show_will_chapter_duration', handler).parent('div').css('display', $(this).is(':checked') ? 'block' : 'none');
+    }).trigger('click');
+    return $('.hide_did_chapter', handler).off('click').on('click', function(e) {
+      return $('.hide_did_chapter_duration', handler).parent('div').css('display', $(this).is(':checked') ? 'block' : 'none');
+    }).trigger('click');
   };
 
   _setMethodActionEvent = function() {

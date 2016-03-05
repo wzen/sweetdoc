@@ -10,16 +10,31 @@ ScrollChapter = (function(superClass) {
     return ScrollChapter.__super__.constructor.apply(this, arguments);
   }
 
-  ScrollChapter.prototype.willChapter = function() {
-    ScrollChapter.__super__.willChapter.call(this);
-    this.enableScrollHandleViewEvent();
-    RunCommon.initHandleScrollView();
-    return this.showGuide(true);
+  ScrollChapter.prototype.willChapter = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    return ScrollChapter.__super__.willChapter.call(this, (function(_this) {
+      return function() {
+        _this.enableScrollHandleViewEvent();
+        RunCommon.initHandleScrollView();
+        _this.showGuide(true);
+        if (callback != null) {
+          return callback();
+        }
+      };
+    })(this));
   };
 
-  ScrollChapter.prototype.didChapter = function() {
-    ScrollChapter.__super__.didChapter.call(this);
-    return this.hideGuide();
+  ScrollChapter.prototype.didChapter = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    return ScrollChapter.__super__.didChapter.call(this, (function(_this) {
+      return function() {
+        return _this.hideGuide();
+      };
+    })(this));
   };
 
   ScrollChapter.prototype.scrollEvent = function(x, y) {

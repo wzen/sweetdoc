@@ -13,6 +13,8 @@ EventPageValueBase = (function() {
   EventPageValueBase.NO_JUMPPAGE = constant.EventPageValue.NO_JUMPPAGE;
 
   EventPageValueBase.PageValueKey = (function() {
+    var HIDE_DID_CHAPTER, HIDE_DID_CHAPTER_DURATION, SHOW_WILL_CHAPTER, SHOW_WILL_CHAPTER_DURATION;
+
     function PageValueKey() {}
 
     PageValueKey.DIST_ID = constant.EventPageValueKey.DIST_ID;
@@ -24,6 +26,14 @@ EventPageValueBase = (function() {
     PageValueKey.ITEM_SIZE_DIFF = constant.EventPageValueKey.ITEM_SIZE_DIFF;
 
     PageValueKey.DO_FOCUS = constant.EventPageValueKey.DO_FOCUS;
+
+    SHOW_WILL_CHAPTER = constant.EventPageValueKey.SHOW_WILL_CHAPTER;
+
+    SHOW_WILL_CHAPTER_DURATION = constant.EventPageValueKey.SHOW_WILL_CHAPTER_DURATION;
+
+    HIDE_DID_CHAPTER = constant.EventPageValueKey.HIDE_DID_CHAPTER;
+
+    HIDE_DID_CHAPTER_DURATION = constant.EventPageValueKey.HIDE_DID_CHAPTER_DURATION;
 
     PageValueKey.SPECIFIC_METHOD_VALUES = constant.EventPageValueKey.SPECIFIC_METHOD_VALUES;
 
@@ -172,6 +182,18 @@ EventPageValueBase = (function() {
           $('.do_focus', eventConfig.emt).prop('checked', true);
         } else {
           $('.do_focus', eventConfig.emt).removeAttr('checked');
+        }
+        enabled = (eventConfig[this.PageValueKey.SHOW_WILL_CHAPTER] != null) && eventConfig[this.PageValueKey.SHOW_WILL_CHAPTER];
+        $('.show_will_chapter:first', handlerDiv).prop('checked', enabled);
+        duration = eventConfig[this.PageValueKey.SHOW_WILL_CHAPTER_DURATION];
+        if (duration != null) {
+          $('.show_will_chapter_duration:first', handlerDiv).val(duration);
+        }
+        enabled = (eventConfig[this.PageValueKey.HIDE_DID_CHAPTER] != null) && eventConfig[this.PageValueKey.HIDE_DID_CHAPTER];
+        $('.hide_did_chapter:first', handlerDiv).prop('checked', enabled);
+        duration = eventConfig[this.PageValueKey.HIDE_DID_CHAPTER_DURATION];
+        if (duration != null) {
+          $('.hide_did_chapter_duration:first', handlerDiv).val(duration);
         }
       }
       parallel = $(".parallel_div .parallel", eventConfig.emt);

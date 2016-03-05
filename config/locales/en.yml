@@ -117,7 +117,12 @@ en:
         fork: 'Event fork'
       item_common:
         item_common: "Change item state"
-        position: "Display's position"
+        position: "Display position"
+        show: "Display state"
+        show_will_chapter: "Show as launched"
+        show_will_chapter_duration: "Duration time"
+        hide_did_chapter: "Hide as finished"
+        hide_did_chapter_duration: "Duration time"
         size: "Item Size"
       item_state:
         item_state: 'Item state'

@@ -590,9 +590,9 @@ class PreloadItemText extends CanvasItemBase
       if callback?
         callback()
 
-  willChapter: ->
+  willChapter: (callback = null) ->
     @_animationFlg = {}
-    super()
+    super(callback)
 
   @isJapanease = (c) ->
     return c.charCodeAt(0) >= 256

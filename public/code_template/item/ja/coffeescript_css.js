@@ -77,13 +77,55 @@ ItemPreviewTemp = (function(superClass) {
         name: "Background Color",
         "default": 'ffffff',
         type: 'color',
+        colorType: 'hex',
         ja: {
           name: "背景色"
+        }
+      },
+      text: {
+        name: "Text",
+        type: 'string',
+        "default": 'Button',
+        ja: {
+          name: "文字"
+        }
+      },
+      textColor: {
+        name: 'TextColor',
+        "default": {
+          r: 0,
+          g: 0,
+          b: 0
+        },
+        type: 'color',
+        colorType: 'rgb',
+        ja: {
+          name: '文字色'
+        }
+      },
+      fontFamily: {
+        name: "Select Font",
+        type: 'select',
+        temp: 'fontFamily',
+        "default": 'Times New Roman',
+        ja: {
+          name: 'フォント選択'
+        }
+      },
+      fontSize: {
+        type: 'number',
+        name: "FontSize",
+        "default": 14,
+        min: 1,
+        max: 100,
+        ja: {
+          name: 'フォントサイズ'
         }
       }
     },
     methods: {
       defaultClick: {
+        finishWithHand: true,
         options: {
           id: 'defaultClick',
           name: 'Default click action',
@@ -132,6 +174,14 @@ ItemPreviewTemp = (function(superClass) {
     }
   };
 
+  ItemPreviewTemp.prototype.cssItemHtml = function() {
+    return "<div class='content_table'><div class='content_table_cell'>" + this.text + "</div></div>";
+  };
+
+  ItemPreviewTemp.prototype.cssStyle = function() {
+    return "#" + this.id + " .content_table {\n  width: 100%;\n  height: 100%;\n  display: table;\n}\n#" + this.id + " .content_table_cell {\n  display: table-cell;\n  vertical-align: middle;\n  text-align: center;\n  font-family: " + this.fontFamily + ";\n  font-size: " + this.fontSize + "px;\n  color: rgb(" + this.textColor.r + ", " + this.textColor.g + ", " + this.textColor.b + ");\n}";
+  };
+
   ItemPreviewTemp.prototype.updateEventBefore = function() {
     var methodName;
     ItemPreviewTemp.__super__.updateEventBefore.call(this);
@@ -159,36 +209,27 @@ ItemPreviewTemp = (function(superClass) {
   };
 
   ItemPreviewTemp.prototype.defaultClick = function(opt) {
+    this.disableHandleResponse();
     this.getJQueryElement().find('.item_contents:first').addClass('defaultClick_' + this.id);
-    this.getJQueryElement().off('webkitAnimationEnd animationend');
-    return this.getJQueryElement().on('webkitAnimationEnd animationend', (function(_this) {
+    return this.getJQueryElement().off('webkitAnimationEnd animationend').on('webkitAnimationEnd animationend', (function(_this) {
       return function(e) {
         _this.getJQueryElement().find('.item_contents:first').removeClass('defaultClick_' + _this.id);
-        if (opt.complete != null) {
-          return opt.complete();
-        }
+        return _this.finishEvent();
       };
     })(this));
   };
 
   ItemPreviewTemp.prototype.changeColorScroll = function(opt) {
-    this.getJQueryElement().find('.css_item_base').css('background', "#" + this.backgroundColor);
-    if (opt.complete != null) {
-      return opt.complete();
-    }
+    return this.getJQueryElement().find('.css_item_base').css('background', "#" + this.backgroundColor);
   };
 
   ItemPreviewTemp.prototype.changeColorClick = function(opt) {
-    this.getJQueryElement().find('.css_item_base').css('background', "#" + this.backgroundColor);
-    if (opt.complete != null) {
-      return opt.complete();
-    }
+    return this.getJQueryElement().find('.css_item_base').css('background', "#" + this.backgroundColor);
   };
 
   ItemPreviewTemp.prototype.cssAnimationKeyframe = function() {
-    var emt, funcName, height, keyFrameName, keyframe, left, methodName, top, width;
+    var emt, height, keyFrameName, keyframe, left, methodName, top, width;
     methodName = this.getEventMethodName();
-    funcName = methodName + "_" + this.id;
     keyFrameName = this.id + "_frame";
     emt = this.getJQueryElement().find('.item_contents:first');
     top = emt.css('top');
@@ -199,20 +240,11 @@ ItemPreviewTemp = (function(superClass) {
     return keyframe;
   };
 
-  ItemPreviewTemp.prototype.willChapter = function() {
-    if (this.getEventMethodName() === 'defaultClick') {
-      this.showItem();
-    } else if (this.getEventMethodName() === 'changeColorClick' || this.getEventMethodName() === 'changeColorScroll') {
-      this.showItem();
-    }
-    return ItemPreviewTemp.__super__.willChapter.call(this);
-  };
-
   return ItemPreviewTemp;
 
 })(CssItemBase);
 
-Common.setClassToMap(ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp);
+Common.setClassToMap(PreloadItemButton.CLASS_DIST_TOKEN, PreloadItemButton);
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] == null)) {
   window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] = function(option) {

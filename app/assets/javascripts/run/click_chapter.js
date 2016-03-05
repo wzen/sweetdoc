@@ -11,23 +11,36 @@ ClickChapter = (function(superClass) {
     this.changeForkNum = null;
   }
 
-  ClickChapter.prototype.willChapter = function() {
-    ClickChapter.__super__.willChapter.call(this);
-    this.disableScrollHandleViewEvent();
-    this.eventObjList.forEach((function(_this) {
-      return function(event) {
-        return event.clickTargetElement().off('click').on('click', function(e) {
-          return _this.clickEvent(e);
+  ClickChapter.prototype.willChapter = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    return ClickChapter.__super__.willChapter.call(this, (function(_this) {
+      return function() {
+        _this.disableScrollHandleViewEvent();
+        _this.eventObjList.forEach(function(event) {
+          return event.clickTargetElement().off('click').on('click', function(e) {
+            return _this.clickEvent(e);
+          });
         });
+        _this.showGuide();
+        if (callback != null) {
+          return callback();
+        }
       };
     })(this));
-    return this.showGuide();
   };
 
-  ClickChapter.prototype.didChapter = function() {
-    ClickChapter.__super__.didChapter.call(this);
-    this.enableScrollHandleViewEvent();
-    return this.hideGuide();
+  ClickChapter.prototype.didChapter = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    return ClickChapter.__super__.didChapter.call(this, (function(_this) {
+      return function() {
+        _this.enableScrollHandleViewEvent();
+        return _this.hideGuide();
+      };
+    })(this));
   };
 
   ClickChapter.prototype.clickEvent = function(e) {

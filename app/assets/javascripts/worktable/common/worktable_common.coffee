@@ -694,10 +694,11 @@ class WorktableCommon
           # アイテムにフォーカス
           Common.focusToTarget(item.getJQueryElement(), null, true)
         if idx < tes.length - 1 || fromBlankEventConfig
-          item.willChapter()
-          # イベント後の状態に変更
-          item.updateEventAfter()
-          item.didChapter()
+          item.willChapter( ->
+            # イベント後の状態に変更
+            item.updateEventAfter()
+            item.didChapter()
+          )
         else if doRunPreview
           # プレビュー実行
           item.preview( =>

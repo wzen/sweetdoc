@@ -18,28 +18,37 @@ class Chapter
     @doMoveChapter = false
 
   # チャプター実行前処理
-  willChapter: ->
+  willChapter: (callback = null) ->
     if window.runDebug
       console.log('Chapter willChapter')
-
+    count = 0
     # 個々イベントのwillChapter呼び出し & CSS追加
     for event, idx in @eventObjList
       event.initEvent(@eventList[idx])
-      event.willChapter()
-      @doMoveChapter = false
-
-    # 対象アイテムにフォーカス
-    @focusToActorIfNeed(false)
-    # イベント反応有効
-    @enableEventHandle()
+      event.willChapter( =>
+        @doMoveChapter = false
+        count += 1
+        if count >= @eventObjList.length
+          # 対象アイテムにフォーカス
+          @focusToActorIfNeed(false)
+          # イベント反応有効
+          @enableEventHandle()
+          if callback?
+            callback()
+      )
 
   # チャプター共通の後処理
-  didChapter: ->
+  didChapter: (callback = null) ->
     if window.runDebug
       console.log('Chapter didChapter')
-
+    count = 0
     @eventObjList.forEach((event) ->
-      event.didChapter()
+      event.didChapter( =>
+        count += 1
+        if count >= @eventObjList.length
+          if callback?
+            callback()
+      )
     )
 
   # アイテムにフォーカス(アイテムが1つのみの場合)

@@ -56,7 +56,6 @@ class EventAction
   nextPage: (callback = null) ->
     # ページ後処理
     @thisPage().didPage()
-
     beforePageIndex = @pageIndex
     if @pageList.length <= @pageIndex + 1
       # 全ページ終了の場合
