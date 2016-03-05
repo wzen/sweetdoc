@@ -133,9 +133,19 @@ class ItemBase extends ItemEventBase
       d = @_event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION]
       @showItem( ->
         super(callback)
-      , d < 0, d)
+      , d <= 0, d)
     else
       super(callback)
+
+  didChapter: (callback = null) ->
+    super( =>
+      if @_event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER]
+        # 非表示
+        d = @_event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER_DURATION]
+        @hideItem( ->
+          super(callback)
+        , d <= 0, d)
+    )
 
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか

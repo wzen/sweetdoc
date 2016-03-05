@@ -183,10 +183,27 @@ ItemBase = (function(superClass) {
       d = this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION];
       return this.showItem(function() {
         return ItemBase.__super__.willChapter.call(this, callback);
-      }, d < 0, d);
+      }, d <= 0, d);
     } else {
       return ItemBase.__super__.willChapter.call(this, callback);
     }
+  };
+
+  ItemBase.prototype.didChapter = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    return ItemBase.__super__.didChapter.call(this, (function(_this) {
+      return function() {
+        var d;
+        if (_this._event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER]) {
+          d = _this._event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER_DURATION];
+          return _this.hideItem(function() {
+            return ItemBase.__super__.didChapter.call(this, callback);
+          }, d <= 0, d);
+        }
+      };
+    })(this));
   };
 
   ItemBase.prototype.refresh = function(show, callback) {
