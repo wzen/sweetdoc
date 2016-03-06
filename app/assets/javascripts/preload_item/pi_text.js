@@ -335,7 +335,7 @@ PreloadItemText = (function(superClass) {
                       name: 'Popup',
                       value: PreloadItemText.ShowAnimationType.POPUP
                     }, {
-                      name: 'Blur',
+                      name: 'Fade',
                       value: PreloadItemText.ShowAnimationType.FADE
                     }
                   ]

@@ -236,7 +236,7 @@ class PreloadItemText extends CanvasItemBase
                   default: @ShowAnimationType.POPUP
                   options: [
                     {name: 'Popup', value: @ShowAnimationType.POPUP}
-                    {name: 'Blur', value: @ShowAnimationType.FADE}
+                    {name: 'Fade', value: @ShowAnimationType.FADE}
                   ]
                 }
               }
