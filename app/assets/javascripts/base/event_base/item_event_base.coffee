@@ -24,4 +24,4 @@ class ItemEventBase extends EventBase
         callback()
     else
       # 再描画してアイテム状態を反映
-      @refresh(true, callback)
+      @refresh(@isItemVisible(), callback)

@@ -72,14 +72,6 @@ PreloadItemImage = (function(superClass) {
     if (callback == null) {
       callback = null;
     }
-    if ((this.refreshing != null) && this.refreshing) {
-      this.refreshStack = true;
-      if (window.debug) {
-        console.log('add stack');
-      }
-      return;
-    }
-    this.refreshing = true;
     this.removeItemElement();
     return this.createItemElement((function(_this) {
       return function() {
@@ -87,17 +79,8 @@ PreloadItemImage = (function(superClass) {
         if (_this.setupItemEvents != null) {
           _this.setupItemEvents();
         }
-        _this.refreshing = false;
-        if ((_this.refreshStack != null) && _this.refreshStack) {
-          _this.refreshStack = false;
-          if (window.debug) {
-            console.log('stack redraw');
-          }
-          return _this.refresh(show, callback);
-        } else {
-          if (callback != null) {
-            return callback(_this);
-          }
+        if (callback != null) {
+          return callback(_this);
         }
       };
     })(this), false);

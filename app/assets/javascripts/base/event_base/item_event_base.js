@@ -30,7 +30,7 @@ ItemEventBase = (function(superClass) {
         return callback();
       }
     } else {
-      return this.refresh(true, callback);
+      return this.refresh(this.isItemVisible(), callback);
     }
   };
 
