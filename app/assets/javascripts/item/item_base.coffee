@@ -122,10 +122,10 @@ class ItemBase extends ItemEventBase
   # @abstract
   # @param [Boolean] show 要素作成後に表示するか
   itemDraw: (show = true) ->
-    if !show
-      @hideItem()
-    else
+    if show
       @showItem()
+    else
+      @hideItem()
 
   willChapter: (callback = null) ->
     # nullの場合もデフォルトで表示

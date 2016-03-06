@@ -30,7 +30,10 @@ ItemEventBase = (function(superClass) {
         return callback();
       }
     } else {
-      return this.refresh(this.isItemVisible(), callback);
+      this.updatePositionAndItemSize(this.itemSize, false, false);
+      if (callback != null) {
+        return callback();
+      }
     }
   };
 

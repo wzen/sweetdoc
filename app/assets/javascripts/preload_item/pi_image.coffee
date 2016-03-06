@@ -52,8 +52,8 @@ class PreloadItemImage extends ItemBase
   # @param [Function] callback コールバック
   refresh: (show = true, callback = null) ->
     @removeItemElement()
-    @createItemElement( =>
-      @itemDraw(show)
+    @createItemElement(show, (_show) =>
+      @itemDraw(_show)
       if @setupItemEvents?
         # アイテムのイベント設定
         @setupItemEvents()
@@ -69,30 +69,41 @@ class PreloadItemImage extends ItemBase
 
   # アイテム用のテンプレートHTMLを読み込み
   # @return [String] HTML
-  createItemElement: (callback, showModal = true) ->
-    _makeImageObjectIfNeed.call(@, =>
+  createItemElement: (show, callback, showModal = true) ->
+    _makeImageObjectIfNeed.call(@, (show) =>
       if @_image?
-        if @isKeepAspect
-          size = _sizeOfKeepAspect.call(@)
-          width = size.width
-          height = size.height
+        if @_onloaded? && @_onloaded
+          if @isKeepAspect
+            size = _sizeOfKeepAspect.call(@)
+            width = size.width
+            height = size.height
+          else
+            width = @itemSize.w
+            height = @itemSize.h
+          imageCanvas = document.createElement('canvas')
+          imageCanvas.width = @itemSize.w
+          imageCanvas.height = @itemSize.h
+          imageContext = imageCanvas.getContext('2d')
+          left = (@itemSize.w - width) * 0.5
+          top = (@itemSize.h - height) * 0.5
+          imageContext.drawImage(@_image, left, top, width, height)
+          @addContentsToScrollInside(imageCanvas, ->
+            if callback?
+              callback(show)
+          )
         else
-          width = @itemSize.w
-          height = @itemSize.h
-        imageCanvas = document.createElement('canvas')
-        imageCanvas.width = @itemSize.w
-        imageCanvas.height = @itemSize.h
-        imageContext = imageCanvas.getContext('2d')
-        left = (@itemSize.w - width) * 0.5
-        top = (@itemSize.h - height) * 0.5
-        imageContext.drawImage(@_image, left, top, width, height)
-        @addContentsToScrollInside(imageCanvas, callback)
+          # @_image有り & @_onloaded無し -> 別スレッドで描画中の場合はadd処理なし
+          if callback?
+            callback()
       else
         # 画像未設定時表示
         contents = """
           <div class='no_image'><div class='center_image put_center'></div></div>
         """
-        @addContentsToScrollInside(contents, callback)
+        @addContentsToScrollInside(contents, ->
+          if callback?
+            callback(show)
+        )
         if showModal
           # 画像アップロードモーダル表示
           Common.showModalView(constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, (modalEmt, params, callback = null) =>
@@ -106,25 +117,27 @@ class PreloadItemImage extends ItemBase
             )
             _initModalEvent.call(@, modalEmt)
             if callback?
-              callback()
+              callback(show)
           )
-    )
+    , show)
 
-  _makeImageObjectIfNeed = (callback) ->
+  _makeImageObjectIfNeed = (callback, show) ->
     if @_image?
-      # 作成済み
-      callback()
+      # 作成済みの場合
+      callback(show)
       return
 
     if !@imagePath?
       # 作成不可
-      callback()
+      callback(show)
       return
 
+    @_onloaded = false
     @_image = new Image()
     @_image.src = @imagePath
-    @_image.onload = ->
-      callback()
+    @_image.onload = =>
+      @_onloaded = true
+      callback(show)
     @_image.onerror = =>
       # 読み込み失敗 -> NoImageに変更
       @imagePath = null

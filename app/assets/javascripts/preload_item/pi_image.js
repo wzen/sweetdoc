@@ -73,9 +73,9 @@ PreloadItemImage = (function(superClass) {
       callback = null;
     }
     this.removeItemElement();
-    return this.createItemElement((function(_this) {
-      return function() {
-        _this.itemDraw(show);
+    return this.createItemElement(show, (function(_this) {
+      return function(_show) {
+        _this.itemDraw(_show);
         if (_this.setupItemEvents != null) {
           _this.setupItemEvents();
         }
@@ -90,33 +90,47 @@ PreloadItemImage = (function(superClass) {
     return PreloadItemImage.__super__.removeItemElement.call(this);
   };
 
-  PreloadItemImage.prototype.createItemElement = function(callback, showModal) {
+  PreloadItemImage.prototype.createItemElement = function(show, callback, showModal) {
     if (showModal == null) {
       showModal = true;
     }
     return _makeImageObjectIfNeed.call(this, (function(_this) {
-      return function() {
+      return function(show) {
         var contents, height, imageCanvas, imageContext, left, size, top, width;
         if (_this._image != null) {
-          if (_this.isKeepAspect) {
-            size = _sizeOfKeepAspect.call(_this);
-            width = size.width;
-            height = size.height;
+          if ((_this._onloaded != null) && _this._onloaded) {
+            if (_this.isKeepAspect) {
+              size = _sizeOfKeepAspect.call(_this);
+              width = size.width;
+              height = size.height;
+            } else {
+              width = _this.itemSize.w;
+              height = _this.itemSize.h;
+            }
+            imageCanvas = document.createElement('canvas');
+            imageCanvas.width = _this.itemSize.w;
+            imageCanvas.height = _this.itemSize.h;
+            imageContext = imageCanvas.getContext('2d');
+            left = (_this.itemSize.w - width) * 0.5;
+            top = (_this.itemSize.h - height) * 0.5;
+            imageContext.drawImage(_this._image, left, top, width, height);
+            return _this.addContentsToScrollInside(imageCanvas, function() {
+              if (callback != null) {
+                return callback(show);
+              }
+            });
           } else {
-            width = _this.itemSize.w;
-            height = _this.itemSize.h;
+            if (callback != null) {
+              return callback();
+            }
           }
-          imageCanvas = document.createElement('canvas');
-          imageCanvas.width = _this.itemSize.w;
-          imageCanvas.height = _this.itemSize.h;
-          imageContext = imageCanvas.getContext('2d');
-          left = (_this.itemSize.w - width) * 0.5;
-          top = (_this.itemSize.h - height) * 0.5;
-          imageContext.drawImage(_this._image, left, top, width, height);
-          return _this.addContentsToScrollInside(imageCanvas, callback);
         } else {
           contents = "<div class='no_image'><div class='center_image put_center'></div></div>";
-          _this.addContentsToScrollInside(contents, callback);
+          _this.addContentsToScrollInside(contents, function() {
+            if (callback != null) {
+              return callback(show);
+            }
+          });
           if (showModal) {
             return Common.showModalView(constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, function(modalEmt, params, callback) {
               if (callback == null) {
@@ -132,29 +146,33 @@ PreloadItemImage = (function(superClass) {
               });
               _initModalEvent.call(_this, modalEmt);
               if (callback != null) {
-                return callback();
+                return callback(show);
               }
             });
           }
         }
       };
-    })(this));
+    })(this), show);
   };
 
-  _makeImageObjectIfNeed = function(callback) {
+  _makeImageObjectIfNeed = function(callback, show) {
     if (this._image != null) {
-      callback();
+      callback(show);
       return;
     }
     if (this.imagePath == null) {
-      callback();
+      callback(show);
       return;
     }
+    this._onloaded = false;
     this._image = new Image();
     this._image.src = this.imagePath;
-    this._image.onload = function() {
-      return callback();
-    };
+    this._image.onload = (function(_this) {
+      return function() {
+        _this._onloaded = true;
+        return callback(show);
+      };
+    })(this);
     return this._image.onerror = (function(_this) {
       return function() {
         _this.imagePath = null;

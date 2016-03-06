@@ -23,5 +23,7 @@ class ItemEventBase extends EventBase
       if callback?
         callback()
     else
-      # 再描画してアイテム状態を反映
-      @refresh(@isItemVisible(), callback)
+      # アイテム状態の表示反映
+      @updatePositionAndItemSize(@itemSize, false, false)
+      if callback?
+        callback()

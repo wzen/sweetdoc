@@ -167,10 +167,10 @@ ItemBase = (function(superClass) {
     if (show == null) {
       show = true;
     }
-    if (!show) {
-      return this.hideItem();
-    } else {
+    if (show) {
       return this.showItem();
+    } else {
+      return this.hideItem();
     }
   };
 
