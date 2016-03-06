@@ -214,6 +214,7 @@ EventConfig = (function() {
       window.lStorage.saveAllPageValues();
       FloatView.show('Applied', FloatView.Type.APPLY, 3.0);
       Timeline.updateEvent(this.teNum);
+      Timeline.addTimelineContainerWidth();
       return Common.hideModalView(true);
     }
   };

@@ -220,6 +220,8 @@ class EventConfig
       FloatView.show('Applied', FloatView.Type.APPLY, 3.0)
       # イベントを更新
       Timeline.updateEvent(@teNum)
+      # タイムライン幅更新
+      Timeline.addTimelineContainerWidth()
       Common.hideModalView(true)
 
   # プレビュー開始

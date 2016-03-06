@@ -100,6 +100,7 @@ itemBaseWorktableExtend = {
           distId = blank.find('.dist_id').val();
           EPVItem.writeDefaultToPageValue(_this, teNum, distId);
           Timeline.updateEvent(teNum);
+          Timeline.addTimelineContainerWidth();
         }
         if (callback != null) {
           return callback();

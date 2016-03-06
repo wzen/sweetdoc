@@ -208,6 +208,7 @@ Timeline = (function() {
           }
         });
         _this.setupTimelineEventConfig();
+        _this.updateTimelineContainerWidth();
         return Indicator.hideIndicator(Indicator.Type.TIMELINE);
       };
     })(this), 0);
@@ -235,6 +236,24 @@ Timeline = (function() {
     } else {
       return $('#timeline_container .cover_touch_overlay').remove();
     }
+  };
+
+  Timeline.updateTimelineContainerWidth = function() {
+    var eachTimeEventWidth, num, paddingLeft, timelineEvents, width;
+    paddingLeft = 10;
+    eachTimeEventWidth = 30 + 10;
+    timelineEvents = $('#timeline_events');
+    num = timelineEvents.children('.timeline_event').length;
+    width = paddingLeft + eachTimeEventWidth * num;
+    return timelineEvents.css('width', width + 'px');
+  };
+
+  Timeline.addTimelineContainerWidth = function() {
+    var eachTimeEventWidth, timelineEvents, width;
+    eachTimeEventWidth = 30 + 10;
+    timelineEvents = $('#timeline_events');
+    width = parseInt(timelineEvents.css('width')) + eachTimeEventWidth;
+    return timelineEvents.css('width', width + 'px');
   };
 
   return Timeline;

@@ -199,6 +199,8 @@ class Timeline
           emt.remove()
       )
       @setupTimelineEventConfig()
+      # ビューの幅更新
+      @updateTimelineContainerWidth()
       Indicator.hideIndicator(Indicator.Type.TIMELINE)
     , 0)
 
@@ -225,3 +227,17 @@ class Timeline
         )
     else
       $('#timeline_container .cover_touch_overlay').remove()
+
+  @updateTimelineContainerWidth = ->
+    paddingLeft = 10
+    eachTimeEventWidth = 30 + 10
+    timelineEvents = $('#timeline_events')
+    num = timelineEvents.children('.timeline_event').length
+    width = paddingLeft + eachTimeEventWidth * num
+    timelineEvents.css('width', width + 'px')
+
+  @addTimelineContainerWidth = ->
+    eachTimeEventWidth = 30 + 10
+    timelineEvents = $('#timeline_events')
+    width = parseInt(timelineEvents.css('width')) + eachTimeEventWidth
+    timelineEvents.css('width', width + 'px')

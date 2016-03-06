@@ -87,6 +87,7 @@ itemBaseWorktableExtend =
         # タイムライン更新
         #Timeline.refreshAllTimeline()
         Timeline.updateEvent(teNum)
+        Timeline.addTimelineContainerWidth()
       if callback?
         callback()
     )
