@@ -94,7 +94,7 @@ class PreloadItemImage extends ItemBase
         else
           # @_image有り & @_onloaded無し -> 別スレッドで描画中の場合はadd処理なし
           if callback?
-            callback()
+            callback(show)
       else
         # 画像未設定時表示
         contents = """

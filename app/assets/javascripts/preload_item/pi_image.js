@@ -121,7 +121,7 @@ PreloadItemImage = (function(superClass) {
             });
           } else {
             if (callback != null) {
-              return callback();
+              return callback(show);
             }
           }
         } else {

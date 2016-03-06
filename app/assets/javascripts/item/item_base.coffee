@@ -101,7 +101,9 @@ class ItemBase extends ItemEventBase
       if callback?
         callback()
     else
+      @_skipEvent = true
       @getJQueryElement().css('z-index', Common.plusPagingZindex(@zindex)).animate({'opacity': 1}, duration, ->
+        @_skipEvent = false
         if callback?
           callback()
       )
@@ -113,7 +115,9 @@ class ItemBase extends ItemEventBase
       if callback?
         callback()
     else
+      @_skipEvent = true
       @getJQueryElement().css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM)).animate({'opacity': 0}, duration, ->
+        @_skipEvent = false
         if callback?
           callback()
       )

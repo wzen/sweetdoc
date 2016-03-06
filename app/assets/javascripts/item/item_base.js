@@ -124,9 +124,11 @@ ItemBase = (function(superClass) {
         return callback();
       }
     } else {
+      this._skipEvent = true;
       return this.getJQueryElement().css('z-index', Common.plusPagingZindex(this.zindex)).animate({
         'opacity': 1
       }, duration, function() {
+        this._skipEvent = false;
         if (callback != null) {
           return callback();
         }
@@ -153,9 +155,11 @@ ItemBase = (function(superClass) {
         return callback();
       }
     } else {
+      this._skipEvent = true;
       return this.getJQueryElement().css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM)).animate({
         'opacity': 0
       }, duration, function() {
+        this._skipEvent = false;
         if (callback != null) {
           return callback();
         }
