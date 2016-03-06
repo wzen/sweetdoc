@@ -719,7 +719,8 @@ class PreloadItemText extends CanvasItemBase
       return
 
     # キャッシュ参照
-    cache = @loadCache(['drawBalloonPathCacle', x, y, width, height, @balloonType])
+    fba = if @_fixedBalloonAlpha? then @_fixedBalloonAlpha else 1
+    cache = @loadCache(['drawBalloonPathCacle', x, y, width, height, @balloonType, fba])
     if cache?
       context.putImageData(cache, 0, 0)
       return
@@ -932,7 +933,7 @@ class PreloadItemText extends CanvasItemBase
         _freeHandBalloonDraw.call(@, context, x, y, width, height, canvasWidth, canvasHeight, @freeHandDrawPaths)
 
     context.save()
-    context.globalAlpha = if @_fixedBalloonAlpha? then @_fixedBalloonAlpha else 1
+    context.globalAlpha = fba
     _balloonStyle.call(@, context)
     if @balloonType == @constructor.BalloonType.ARC
       _drawArc.call(@)

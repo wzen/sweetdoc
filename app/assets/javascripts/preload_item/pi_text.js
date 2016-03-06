@@ -945,7 +945,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _drawBalloon = function(context, x, y, width, height, canvasWidth, canvasHeight) {
-    var _drawArc, _drawBArc, _drawBRect, _drawFreeHand, _drawRect, _drawShout, _drawThink, cache;
+    var _drawArc, _drawBArc, _drawBRect, _drawFreeHand, _drawRect, _drawShout, _drawThink, cache, fba;
     if (canvasWidth == null) {
       canvasWidth = width;
     }
@@ -958,7 +958,8 @@ PreloadItemText = (function(superClass) {
     if (width <= 0 || height <= 0) {
       return;
     }
-    cache = this.loadCache(['drawBalloonPathCacle', x, y, width, height, this.balloonType]);
+    fba = this._fixedBalloonAlpha != null ? this._fixedBalloonAlpha : 1;
+    cache = this.loadCache(['drawBalloonPathCacle', x, y, width, height, this.balloonType, fba]);
     if (cache != null) {
       context.putImageData(cache, 0, 0);
       return;
@@ -1184,7 +1185,7 @@ PreloadItemText = (function(superClass) {
       };
     })(this);
     context.save();
-    context.globalAlpha = this._fixedBalloonAlpha != null ? this._fixedBalloonAlpha : 1;
+    context.globalAlpha = fba;
     _balloonStyle.call(this, context);
     if (this.balloonType === this.constructor.BalloonType.ARC) {
       _drawArc.call(this);
