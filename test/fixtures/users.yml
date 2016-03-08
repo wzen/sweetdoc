@@ -1,2 +1,11 @@
-
+one:
+  id: 1
+  access_token: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+  name: 'sweetdoc_sample_user'
+  user_auth_id: 1
+  email: 'example@mail.com'
+  encrypted_password: '$2a$10$ApybBVkX/MBOjnVVfgQarOgYPN20UPSV1mQ6RUokyhvzL5HScTA.S'
+  guest: false
+  sign_in_count: 0
+  del_flg: false
 

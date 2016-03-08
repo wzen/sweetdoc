@@ -1,14 +1,19 @@
 one:
   id: 1
-  name: "General"
-  strength_order: 1
+  name: "Admin"
+  strength_order: 3
 
 two:
   id: 2
+  name: "General"
+  strength_order: 1
+
+three:
+  id: 3
   name: "Premium"
   strength_order: 2
 
 three:
-  id: 3
+  id: 4
   name: "Temp"
   strength_order: 0

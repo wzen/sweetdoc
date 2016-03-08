@@ -35,6 +35,7 @@ class User < ActiveRecord::Base
       user = User.create(
           access_token: generate_access_token,
           name:     auth.extra.raw_info.name,
+          user_auth_id: 2,
           provider: auth.provider,
           uid:      auth.uid,
           email:    dummy_email(auth),
@@ -52,6 +53,7 @@ class User < ActiveRecord::Base
       user = User.create(
           access_token: generate_access_token,
           name:     auth.info.nickname,
+          user_auth_id: 2,
           provider: auth.provider,
           uid:      auth.uid,
           email:    dummy_email(auth),
@@ -69,6 +71,7 @@ class User < ActiveRecord::Base
       user = User.create(
           access_token: generate_access_token,
           name:     auth.info.name,
+          user_auth_id: 2,
           provider: auth.provider,
           uid:      auth.uid,
           email:    dummy_email(auth),

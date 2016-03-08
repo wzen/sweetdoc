@@ -404,7 +404,7 @@ ActiveRecord::Schema.define(version: 20151209141157) do
     t.string   "access_token",                                            null: false
     t.string   "name",                                                    null: false
     t.string   "uid"
-    t.integer  "user_auth_id",                            default: 3,     null: false
+    t.integer  "user_auth_id",                            default: 4,     null: false
     t.string   "email",                                                   null: false
     t.string   "encrypted_password",                                      null: false
     t.boolean  "guest",                                   default: false

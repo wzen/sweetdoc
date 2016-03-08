@@ -8,7 +8,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.string :access_token, null: false
       t.string :name, null:false
       t.string :uid
-      t.integer :user_auth_id, null: false, default: 3
+      t.integer :user_auth_id, null: false, default: 4
       t.string :email,              null: false
       t.string :encrypted_password, null: false
       t.boolean :guest, default: false
