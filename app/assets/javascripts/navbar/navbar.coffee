@@ -133,8 +133,11 @@ class Navbar
       if window.eventAction?
         window.eventAction.thisPage().rewindChapter()
     )
-    $('.menu-upload-gallery', navEmt).off('click').on('click', ->
-      RunCommon.showUploadGalleryConfirm()
+    $('.menu-upload-gallery', navEmt).off('click').on('click', (e) =>
+      e.preventDefault()
+      e.stopPropagation()
+      if !$(e.target).closest('.menu-upload-gallery').hasClass('disabled')
+        RunCommon.showUploadGalleryConfirm()
     )
 
   # Codingナビバー初期化

@@ -299,6 +299,7 @@ ActiveRecord::Schema.define(version: 20151209141157) do
     t.string   "title"
     t.integer  "screen_width",                  null: false
     t.integer  "screen_height",                 null: false
+    t.boolean  "is_sample",     default: false
     t.boolean  "del_flg",       default: false
     t.datetime "created_at"
     t.datetime "updated_at"

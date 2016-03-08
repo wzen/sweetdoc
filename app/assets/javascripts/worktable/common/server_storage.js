@@ -109,7 +109,7 @@ ServerStorage = (function() {
           } else {
             console.log('/page_value_state/save_state server error');
             if (callback != null) {
-              callback();
+              callback(data);
             }
             return Common.ajaxError(data);
           }
@@ -117,7 +117,7 @@ ServerStorage = (function() {
         error: function(data) {
           console.log('/page_value_state/save_state ajax error');
           if (callback != null) {
-            callback();
+            callback(data);
           }
           return Common.ajaxError(data);
         }

@@ -27,7 +27,7 @@
               <li><a class="menu-control-rewind-chapter" title="Rewind Chapter"><%= image_tag("nav/rewind_chapter.png", size:'20x20') %></a></li>
               <li>
                 <% if @is_sample_project %>
-                  <a class="menu-upload-gallery" title="Upload Document" onclick="Common.showModalWithMessage('OK')"><%= image_tag("nav/upload.png", size:'36x36') %></a>
+                  <a class="menu-upload-gallery disabled" title="Upload Document" onclick="Common.showModalWithMessage(I18n.t('message.dialog.sample_project_upload')); return false;"><%= image_tag("nav/upload.png", size:'36x36') %></a>
                 <% else %>
                   <a class="menu-upload-gallery" title="Upload Document"><%= image_tag("nav/upload.png", size:'36x36') %></a>
                   <div style="display: none">

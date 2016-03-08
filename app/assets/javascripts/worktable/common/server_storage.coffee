@@ -77,13 +77,13 @@ class ServerStorage
               console.log('/page_value_state/save_state server error')
               # 保存エラー時にもコールバックは呼ぶ
               if callback?
-                callback()
+                callback(data)
               Common.ajaxError(data)
           error: (data) ->
             console.log('/page_value_state/save_state ajax error')
             # 保存エラー時にもコールバックは呼ぶ
             if callback?
-              callback()
+              callback(data)
             Common.ajaxError(data)
         }
       )

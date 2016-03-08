@@ -182,6 +182,7 @@ class Project
           if data.resultSuccess
             # PageValue設定
             PageValue.setGeneralPageValue(PageValue.Key.PROJECT_ID, data.project_id)
+            PageValue.setGeneralPageValue(PageValue.Key.IS_SAMPLE_PROJECT, false)
             # 共通イベントのインスタンス作成
             WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded()
             # 更新日時設定

@@ -587,6 +587,9 @@ div.contents_share_show_button {
   .navbar-right {
     .menu-upload-gallery {
       padding: 7px 15px 7px;
+      &.disabled {
+        opacity: 0.3;
+      }
     }
   }
 }

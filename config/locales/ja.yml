@@ -131,6 +131,7 @@ ja:
       delete_project: "プロジェクトを削除します。"
       delete_event: "イベントを削除します。"
       delete_page: "ページを削除します。"
+      sample_project_upload: "このプロジェクトはサンプルのためアップロードはできません。"
     database:
       item_state:
         save:

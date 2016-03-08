@@ -158,9 +158,15 @@ Navbar = (function() {
         return window.eventAction.thisPage().rewindChapter();
       }
     });
-    return $('.menu-upload-gallery', navEmt).off('click').on('click', function() {
-      return RunCommon.showUploadGalleryConfirm();
-    });
+    return $('.menu-upload-gallery', navEmt).off('click').on('click', (function(_this) {
+      return function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!$(e.target).closest('.menu-upload-gallery').hasClass('disabled')) {
+          return RunCommon.showUploadGalleryConfirm();
+        }
+      };
+    })(this));
   };
 
   Navbar.initCodingNavbar = function() {

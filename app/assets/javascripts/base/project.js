@@ -201,6 +201,7 @@ Project = (function() {
       success: function(data) {
         if (data.resultSuccess) {
           PageValue.setGeneralPageValue(PageValue.Key.PROJECT_ID, data.project_id);
+          PageValue.setGeneralPageValue(PageValue.Key.IS_SAMPLE_PROJECT, false);
           WorktableCommon.createCommonEventInstancesOnThisPageIfNeeded();
           Navbar.setLastUpdateTime(data.updated_at);
           Navbar.switchWorktableNavbarWhenProjectCreated(true);

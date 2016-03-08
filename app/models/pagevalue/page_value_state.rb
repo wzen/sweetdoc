@@ -185,7 +185,7 @@ class PageValueState
       gpd = {}
       gpd[Const::Project::Key::PROJECT_ID] = pagevalues.first['project_id']
       gpd[Const::Project::Key::TITLE] = pagevalues.first['project_title']
-      gpd[Const::Project::Key::IS_SAMPLE_PROJECT] = pagevalues.first['is_sample_project']
+      gpd[Const::Project::Key::IS_SAMPLE_PROJECT] = pagevalues.first['is_sample_project'].to_i != 0
       gpd[Const::Project::Key::SCREEN_SIZE] = {
           width: pagevalues.first['project_screen_width'],
           height: pagevalues.first['project_screen_height']
