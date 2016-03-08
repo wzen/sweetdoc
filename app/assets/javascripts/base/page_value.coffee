@@ -37,6 +37,8 @@ class PageValue
     @PROJECT_ID = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{constant.Project.Key.PROJECT_ID}"
     # @property [String] PROJECT_NAME プロジェクト名
     @PROJECT_NAME = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{constant.Project.Key.TITLE}"
+    # @property [String] IS_SAMPLE_PROJECT サンプルプロジェクトか
+    @IS_SAMPLE_PROJECT = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{constant.Project.Key.IS_SAMPLE_PROJECT}"
     # @property [String] SCREEN_SIZE プロジェクトサイズ
     @SCREEN_SIZE = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{constant.Project.Key.SCREEN_SIZE}"
     # @property [String] LAST_SAVE_TIME 最終保存時刻

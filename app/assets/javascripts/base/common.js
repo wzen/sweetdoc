@@ -930,6 +930,39 @@ Common = (function() {
     });
   };
 
+  Common.showModalWithMessage = function(message, enableOverlayClose, immediately) {
+    var type;
+    if (enableOverlayClose == null) {
+      enableOverlayClose = true;
+    }
+    if (immediately == null) {
+      immediately = true;
+    }
+    type = constant.ModalViewType.MESSAGE;
+    return _showModalView.call(this, type, null, {}, false, function() {
+      var emt;
+      $("body").append('<div id="modal-overlay"></div>');
+      $("#modal-overlay").show();
+      Common.modalCentering.call(this, type);
+      emt = $('body').children(".modal-content." + type);
+      emt.css('max-height', $(window).height() * Constant.ModalView.HEIGHT_RATE);
+      emt.find('.message_contents').text(message);
+      if (immediately) {
+        emt.show();
+        window.modalRun = false;
+      } else {
+        emt.fadeIn('fast', function() {
+          return window.modalRun = false;
+        });
+      }
+      return $("#modal-overlay,#modal-close").unbind().click(function() {
+        if (enableOverlayClose) {
+          return Common.hideModalView();
+        }
+      });
+    });
+  };
+
   Common.showModalFlashMessage = function(message, isModalFlush, immediately, enableOverlayClose) {
     var type;
     if (isModalFlush == null) {
@@ -941,7 +974,7 @@ Common = (function() {
     if (enableOverlayClose == null) {
       enableOverlayClose = false;
     }
-    type = constant.ModalViewType.MESSAGE;
+    type = constant.ModalViewType.FLASH_MESSAGE;
     return _showModalView.call(this, type, null, isModalFlush, {}, function() {
       var emt;
       $("body").append('<div id="modal-overlay"></div>');

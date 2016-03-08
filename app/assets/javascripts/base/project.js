@@ -474,6 +474,12 @@ Project = (function() {
     return $('#screen_wrapper').height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2);
   };
 
+  Project.isSampleProject = function() {
+    var p;
+    p = PageValue.getGeneralPageValue(PageValue.Key.IS_SAMPLE_PROJECT);
+    return (p != null) && p;
+  };
+
   Project.showError = function(modalEmt, message) {
     modalEmt.find('.error_wrapper .error:first').html(message);
     return modalEmt.find('.error_wrapper').show();

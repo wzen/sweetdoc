@@ -759,8 +759,34 @@ class Common
     )
 
   # メッセージモーダル表示
-  @showModalFlashMessage = (message, isModalFlush = false, immediately = true, enableOverlayClose = false) ->
+  @showModalWithMessage = (message, enableOverlayClose = true, immediately = true) ->
     type = constant.ModalViewType.MESSAGE
+    _showModalView.call(@, type, null, {}, false, ->
+      $("body").append( '<div id="modal-overlay"></div>' )
+      $("#modal-overlay").show()
+      # センタリング
+      Common.modalCentering.call(@, type)
+      emt = $('body').children(".modal-content.#{type}")
+      # ビューの高さ
+      emt.css('max-height', $(window).height() * Constant.ModalView.HEIGHT_RATE)
+      # メッセージ
+      emt.find('.message_contents').text(message)
+      if immediately
+        emt.show()
+        window.modalRun = false
+      else
+        emt.fadeIn('fast', ->
+          window.modalRun = false
+        )
+      $("#modal-overlay,#modal-close").unbind().click( ->
+        if enableOverlayClose
+          Common.hideModalView()
+      )
+    )
+
+  # フラッシュメッセージモーダル表示
+  @showModalFlashMessage = (message, isModalFlush = false, immediately = true, enableOverlayClose = false) ->
+    type = constant.ModalViewType.FLASH_MESSAGE
     _showModalView.call(@, type, null, isModalFlush, {}, ->
       $("body").append( '<div id="modal-overlay"></div>' )
       $("#modal-overlay").show()

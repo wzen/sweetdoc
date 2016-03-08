@@ -50,6 +50,8 @@ PageValue = (function() {
 
     Key.PROJECT_NAME = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + constant.Project.Key.TITLE;
 
+    Key.IS_SAMPLE_PROJECT = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + constant.Project.Key.IS_SAMPLE_PROJECT;
+
     Key.SCREEN_SIZE = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + constant.Project.Key.SCREEN_SIZE;
 
     Key.LAST_SAVE_TIME = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + "last_save_time";

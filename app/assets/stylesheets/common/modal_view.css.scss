@@ -297,6 +297,30 @@
   }
 
   &.message {
+    width: 300px;
+    height: 150px;
+    .message_wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      > div {
+        display: table;
+        width: 100%;
+        height: 100%;
+      }
+      .message_contents {
+        display: table-cell;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 12px;
+      }
+    }
+  }
+
+  &.flash_message {
     width: 150px;
     height: 150px;
     background-color: transparent;
@@ -341,7 +365,7 @@
 
 body.full_window, body.embed{
   .modal-content {
-    &.message {
+    &.flash_message {
       top: 0 !important;
       left: 0 !important;
       width: 100% !important;

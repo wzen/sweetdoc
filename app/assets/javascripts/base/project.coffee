@@ -433,6 +433,11 @@ class Project
     timelineTopPadding = 5
     return $('#screen_wrapper').height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2)
 
+  # サンプルプロジェクトか
+  @isSampleProject = ->
+    p = PageValue.getGeneralPageValue(PageValue.Key.IS_SAMPLE_PROJECT)
+    return p? && p
+
   @showError = (modalEmt, message) ->
     modalEmt.find('.error_wrapper .error:first').html(message)
     modalEmt.find('.error_wrapper').show()

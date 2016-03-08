@@ -215,6 +215,9 @@ LocalStorage = (function() {
 
   LocalStorage.prototype.saveGeneralPageValue = function() {
     var h, key;
+    if ((typeof Project !== "undefined" && Project !== null) && Project.isSampleProject()) {
+      return;
+    }
     key = this.generalKey();
     if (key !== '' && (typeof localStorage !== "undefined" && localStorage !== null)) {
       h = PageValue.getGeneralPageValue(PageValue.Key.G_PREFIX);
@@ -245,6 +248,9 @@ LocalStorage = (function() {
 
   LocalStorage.prototype.saveInstancePageValue = function() {
     var h, key;
+    if ((typeof Project !== "undefined" && Project !== null) && Project.isSampleProject()) {
+      return;
+    }
     key = this.instanceKey();
     if (key !== '') {
       if (typeof localStorage !== "undefined" && localStorage !== null) {
@@ -268,6 +274,9 @@ LocalStorage = (function() {
 
   LocalStorage.prototype.saveEventPageValue = function() {
     var h, key;
+    if ((typeof Project !== "undefined" && Project !== null) && Project.isSampleProject()) {
+      return;
+    }
     key = this.eventKey();
     if (key !== '' && (typeof localStorage !== "undefined" && localStorage !== null)) {
       h = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT);
@@ -289,6 +298,9 @@ LocalStorage = (function() {
 
   LocalStorage.prototype.saveSettingPageValue = function() {
     var h, key;
+    if ((typeof Project !== "undefined" && Project !== null) && Project.isSampleProject()) {
+      return;
+    }
     key = this.settingKey();
     if (key !== '' && (typeof localStorage !== "undefined" && localStorage !== null)) {
       h = PageValue.getSettingPageValue(PageValue.Key.ST_PREFIX);
@@ -309,6 +321,9 @@ LocalStorage = (function() {
 
   LocalStorage.prototype.saveFootprintPageValue = function() {
     var h, key;
+    if ((typeof Project !== "undefined" && Project !== null) && Project.isSampleProject()) {
+      return;
+    }
     key = this.footprintKey();
     if (key !== '' && (typeof localStorage !== "undefined" && localStorage !== null)) {
       h = PageValue.getFootprintPageValue(PageValue.Key.F_PREFIX);

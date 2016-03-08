@@ -191,6 +191,10 @@ class LocalStorage
 
   # キャッシュに共通値を保存
   saveGeneralPageValue: ->
+    if Project? && Project.isSampleProject()
+      # サンプルプロジェクトでは保存しない
+      return
+
     key = @generalKey()
     if key != '' && localStorage?
       h = PageValue.getGeneralPageValue(PageValue.Key.G_PREFIX)
@@ -213,6 +217,10 @@ class LocalStorage
 
   # キャッシュにインスタンス値を保存
   saveInstancePageValue: ->
+    if Project? && Project.isSampleProject()
+    # サンプルプロジェクトでは保存しない
+      return
+
     key = @instanceKey()
     if key != ''
       if localStorage?
@@ -231,6 +239,10 @@ class LocalStorage
 
   # キャッシュにイベント値を保存
   saveEventPageValue: ->
+    if Project? && Project.isSampleProject()
+      # サンプルプロジェクトでは保存しない
+      return
+
     key = @eventKey()
     if key != '' && localStorage?
       h = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT)
@@ -248,6 +260,10 @@ class LocalStorage
 
   # キャッシュに共通設定値を保存
   saveSettingPageValue: ->
+    if Project? && Project.isSampleProject()
+      # サンプルプロジェクトでは保存しない
+      return
+
     key = @settingKey()
     if key != '' && localStorage?
       h = PageValue.getSettingPageValue(PageValue.Key.ST_PREFIX)
@@ -263,6 +279,10 @@ class LocalStorage
 
   # キャッシュに操作履歴値を保存
   saveFootprintPageValue: ->
+    if Project? && Project.isSampleProject()
+      # サンプルプロジェクトでは保存しない
+      return
+
     key = @footprintKey()
     if key != '' && localStorage?
       h = PageValue.getFootprintPageValue(PageValue.Key.F_PREFIX)

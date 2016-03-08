@@ -10,6 +10,7 @@ require 'pagevalue/instance_pagevalue_paging'
 require 'pagevalue/setting_pagevalue'
 require 'pagevalue/user_pagevalue'
 require 'project/user_project_map'
+require 'project/project'
 require 'pagevalue/user_gallery_footprint'
 require 'pagevalue/user_gallery_footprint_pagevalue'
 require 'pagevalue/user_gallery_footprint_paging'
@@ -32,6 +33,13 @@ class PageValueState
           s_page_values != 'null'
 
         ActiveRecord::Base.transaction do
+
+          # Projectのチェック
+          p = Project.find(project_id)
+          if p.blank? || p.is_sample
+            # サンプルプロジェクトの場合は保存せず終了
+            return false, I18n.t('message.database.item_state.save.success'), nil, nil
+          end
 
           # UserPagevalue Update or Insert
           sql = <<-"SQL"
@@ -130,7 +138,7 @@ class PageValueState
   # @param [Array] loaded_class_dist_tokens 読み込み済みのアイテムID一覧
   def self.load_state(user_id, user_pagevalue_id, loaded_class_dist_tokens)
     sql = <<-"SQL"
-      SELECT p.id as project_id, p.title as project_title, p.screen_width as project_screen_width, p.screen_height as project_screen_height,
+      SELECT p.id as project_id, p.title as project_title, p.screen_width as project_screen_width, p.screen_height as project_screen_height, p.is_sample as is_sample_project,
              ip.data as instance_pagevalue_data,
              ep.data as event_pagevalue_data,
              gcp.data as general_common_pagevalue_data,
@@ -177,6 +185,7 @@ class PageValueState
       gpd = {}
       gpd[Const::Project::Key::PROJECT_ID] = pagevalues.first['project_id']
       gpd[Const::Project::Key::TITLE] = pagevalues.first['project_title']
+      gpd[Const::Project::Key::IS_SAMPLE_PROJECT] = pagevalues.first['is_sample_project']
       gpd[Const::Project::Key::SCREEN_SIZE] = {
           width: pagevalues.first['project_screen_width'],
           height: pagevalues.first['project_screen_height']

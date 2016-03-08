@@ -245,6 +245,7 @@ class Const
     class Key
       PROJECT_ID = 'project_id'
       TITLE = 'title'
+      IS_SAMPLE_PROJECT = 'is_sample_project'
       SCREEN_SIZE = 'screen_size'
       USER_PAGEVALUE_ID = 'user_pagevalue_id'
       USER_PAGEVALUE_UPDATED_AT = 'user_pagevalue_updated_at'
@@ -386,6 +387,7 @@ class Const
     NOTICE_LOGIN = 'notice_login'
     ABOUT = 'about'
     MESSAGE = 'message'
+    FLASH_MESSAGE = 'flash_message'
     ENVIRONMENT_NOT_SUPPORT = 'environment_not_support'
   end
 
