@@ -289,6 +289,16 @@ class PageValueState
         user_project_maps upm ON up.user_project_map_id = upm.id
         INNER JOIN
         projects p ON upm.project_id = p.id
+        INNER JOIN
+        (
+          SELECT upm_sub.project_id as user_project_map_project_id, MAX(up_sub.updated_at) as user_pagevalue_updated_at_max
+          FROM user_pagevalues up_sub
+          INNER JOIN user_project_maps upm_sub ON up_sub.user_project_map_id = upm_sub.id
+          WHERE upm_sub.user_id = #{Const::ADMIN_USER_ID}
+          AND up_sub.del_flg = 0
+          AND upm_sub.del_flg = 0
+          GROUP BY upm_sub.project_id
+        ) sub ON upm.project_id = sub.user_project_map_project_id AND up.updated_at = sub.user_pagevalue_updated_at_max
         WHERE
         up.del_flg = 0
         AND
