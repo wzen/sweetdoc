@@ -23,7 +23,7 @@ class MotionCheckController < ApplicationController
       event = params.require(Const::PageValueKey::E_SUB_ROOT.to_sym)
       footprint = params.fetch(Const::PageValueKey::F_PREFIX.to_sym, {})
       @pagevalues, @creator = Run.setup_data(user_id, general, instance, event, footprint, page_num)
-      @is_sample_project = general[Const::Project::Key::IS_SAMPLE_PROJECT]
+      @is_sample_project = general[Const::Project::Key::IS_SAMPLE_PROJECT].to_s == 'true'
     end
   end
 
