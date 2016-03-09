@@ -7,6 +7,7 @@ class Const
   BEFORE_MODIFY_VAR_SUFFIX = '__before'
   AFTER_MODIFY_VAR_SUFFIX = '__after'
   ADMIN_USER_ID = 1
+  SAMPLE_PROJECT_USER_PROJECT_MAP_ID = 2147483647 # MySQL Int max
 
   # 操作モード
   class Mode

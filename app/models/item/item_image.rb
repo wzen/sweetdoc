@@ -22,12 +22,13 @@ class ItemImage < ActiveRecord::Base
           if upm.blank?
             return false, I18n.t('message.database.item_state.save.error'), nil
           end
+          upm_id = upm.id
         else
-          upm = UserProjectMap.find_by(user_id: Const::ADMIN_USER_ID, project_id: project_id, del_flg: false)
+          upm_id = Const::SAMPLE_PROJECT_USER_PROJECT_MAP_ID
         end
 
         # 存在チェック
-        image = self.find_by(user_project_map_id: upm.id, item_obj_id: item_obj_id, event_dist_id: event_dist_id, del_flg: false)
+        image = self.find_by(user_project_map_id: upm_id, item_obj_id: item_obj_id, event_dist_id: event_dist_id, del_flg: false)
         if image.present?
           # 更新
           image.file_path = file_path
@@ -35,7 +36,7 @@ class ItemImage < ActiveRecord::Base
         else
           # 作成
           image = self.new
-          image.user_project_map_id = upm.id
+          image.user_project_map_id = upm_id
           image.item_obj_id = item_obj_id
           image.event_dist_id = event_dist_id
           image.file_path = file_path
