@@ -107,9 +107,11 @@ class Navbar
       if Project.isSampleProject()
         $(".menu-save-li", root).addClass('disabled')
         $(".menu-save", root).attr('disabled', 'disabled')
+        $(".last_update_time_li", root).hide()
       else
         $(".menu-save-li", root).removeClass('disabled')
         $(".menu-save", root).removeAttr('disabled')
+        $(".last_update_time_li", root).show()
       $('#header_items_select_menu').show()
       $('#header_items_motion_check').show()
       $('#menu_sidebar_toggle').show()
