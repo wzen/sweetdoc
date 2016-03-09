@@ -24,9 +24,9 @@ class PageValueStateController < ApplicationController
     @result_success, @item_js_list, @general_pagevalue_data, @instance_pagevalue_data, @event_pagevalue_data, @setting_pagevalue_data, @message, @updated_at = PageValueState.load_state(user_id, user_pagevalue_id, loaded_class_dist_tokens)
   end
 
-  def user_pagevalues_and_projects_sorted_updated
+  def load_created_projects
     user_id = current_or_guest_user.id
-    @result_success, @user_pagevalue_list = PageValueState.user_pagevalues_and_projects_sorted_updated(user_id)
+    @result_success, @user_pagevalue_list = PageValueState.load_created_projects(user_id)
   end
 
   def user_pagevalue_list_sorted_update

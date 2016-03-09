@@ -38,16 +38,11 @@ class Project
     # ウィンドウサイズ
     $('.default_window_size', modalEmt).html("#{$('#screen_wrapper').width()} x #{Project.calcOriginalViewHeight()}")
     # 作成済みプロジェクト一覧取得
-    Project.load_data_order_last_updated((data) ->
+    Project.load_data_order_last_updated((data) =>
       user_pagevalue_list = data.user_pagevalue_list
       projectSelect = $('.project_select', modalEmt)
       if user_pagevalue_list.length > 0
-        list = ''
-        n = $.now()
-        for p in user_pagevalue_list
-          d = new Date(p['up_updated_at'])
-          e = "<option value='#{p['up_id']}'>#{p['p_title']} - #{Common.displayDiffAlmostTime(n, d.getTime())}</option>"
-          list += e
+        list = _project_select_options.call(@, user_pagevalue_list)
         projectSelect.children().remove()
         $(list).appendTo(projectSelect)
         $('.project_create_wrapper input[type=radio][value=select]', modalEmt).prop('checked', true)
@@ -140,11 +135,30 @@ class Project
     # Error非表示
     Project.hideError(modalEmt)
 
+  _project_select_options = (user_pagevalue_list) ->
+    list = ''
+    n = $.now()
+    l = $.grep(user_pagevalue_list, (u) -> u['p_is_sample'] == 0)
+    if l.length > 0
+      list += "<optgroup label='#{I18n.t('modal.not_sample_project')}'>"
+      for p in l
+        d = new Date(p['up_updated_at'])
+        list += "<option value='#{p['up_id']}'>#{p['p_title']} - #{Common.displayDiffAlmostTime(n, d.getTime())}</option>"
+      list += "</optgroup>"
+    l = $.grep(user_pagevalue_list, (u) -> u['p_is_sample'] == 1)
+    if l.length > 0
+      list += "<optgroup label='#{I18n.t('modal.sample_project')}'>"
+      for p in l
+        d = new Date(p['up_updated_at'])
+        list += "<option value='#{p['up_id']}'>#{p['p_title']}</option>"
+      list += "</optgroup>"
+    return list
+
   # プロジェクト一覧を更新順に取得
   @load_data_order_last_updated: (successCallback = null, errorCallback = null) ->
     $.ajax(
       {
-        url: "/page_value_state/user_pagevalues_and_projects_sorted_updated"
+        url: "/page_value_state/load_created_projects"
         type: "GET"
         dataType: "json"
         success: (data)->
@@ -154,12 +168,12 @@ class Project
           else
             if errorCallback?
               errorCallback()
-            console.log('/page_value_state/user_pagevalues_and_projects_sorted_updated server error')
+            console.log('/page_value_state/load_created_projects server error')
             Common.ajaxError(data)
         error: (data)->
           if errorCallback?
             errorCallback()
-          console.log('/page_value_state/user_pagevalues_and_projects_sorted_updated ajax error')
+          console.log('/page_value_state/load_created_projects ajax error')
           Common.ajaxError(data)
       }
     )

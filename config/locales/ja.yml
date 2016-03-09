@@ -184,6 +184,8 @@ ja:
       open: "選択"
       back: "ギャラリーに戻る"
     environment_not_support: "お使いのブラウザは未対応です。"
+    not_sample_project: "あなたのプロジェクト"
+    sample_project: "サンプルプロジェクト"
   contents_info:
     page: 'ページ'
     fork: 'フォーク'

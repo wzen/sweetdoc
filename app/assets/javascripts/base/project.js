@@ -2,6 +2,8 @@
 var Project;
 
 Project = (function() {
+  var _project_select_options;
+
   function Project() {}
 
   Project.updateProjectInfo = function(info) {
@@ -51,57 +53,52 @@ Project = (function() {
       return $('.display_size_input_wrapper', modalEmt).css('display', $(this).val() === 'input' ? 'block' : 'none');
     });
     $('.default_window_size', modalEmt).html(($('#screen_wrapper').width()) + " x " + (Project.calcOriginalViewHeight()));
-    Project.load_data_order_last_updated(function(data) {
-      var d, e, i, len, list, n, p, projectSelect, size, user_pagevalue_list;
-      user_pagevalue_list = data.user_pagevalue_list;
-      projectSelect = $('.project_select', modalEmt);
-      if (user_pagevalue_list.length > 0) {
-        list = '';
-        n = $.now();
-        for (i = 0, len = user_pagevalue_list.length; i < len; i++) {
-          p = user_pagevalue_list[i];
-          d = new Date(p['up_updated_at']);
-          e = "<option value='" + p['up_id'] + "'>" + p['p_title'] + " - " + (Common.displayDiffAlmostTime(n, d.getTime())) + "</option>";
-          list += e;
+    Project.load_data_order_last_updated((function(_this) {
+      return function(data) {
+        var list, projectSelect, size, user_pagevalue_list;
+        user_pagevalue_list = data.user_pagevalue_list;
+        projectSelect = $('.project_select', modalEmt);
+        if (user_pagevalue_list.length > 0) {
+          list = _project_select_options.call(_this, user_pagevalue_list);
+          projectSelect.children().remove();
+          $(list).appendTo(projectSelect);
+          $('.project_create_wrapper input[type=radio][value=select]', modalEmt).prop('checked', true);
+          $('.display_project_new_wrapper', modalEmt).hide();
+          $('.display_project_select_wrapper', modalEmt).show();
+          $(".button_wrapper .select", modalEmt).show();
+          $('.button_wrapper span', modalEmt).hide();
+          $(".button_wrapper .select", modalEmt).show();
+          size = _modalSize('select');
+          modalEmt.css({
+            width: size.width,
+            height: size.height
+          });
+          $('.project_create_wrapper', modalEmt).show();
+          Common.modalCentering();
+          if (callback != null) {
+            return callback();
+          }
+        } else {
+          projectSelect.children().remove();
+          $('.project_create_wrapper input[type=radio][value=new]', modalEmt).prop('checked', true);
+          $('.display_project_new_wrapper', modalEmt).show();
+          $('.display_project_select_wrapper', modalEmt).hide();
+          $(".button_wrapper .new", modalEmt).show();
+          $('.button_wrapper span', modalEmt).hide();
+          $(".button_wrapper .new", modalEmt).show();
+          size = _modalSize('new');
+          modalEmt.css({
+            width: size.width,
+            height: size.height
+          });
+          $('.project_create_wrapper', modalEmt).hide();
+          Common.modalCentering();
+          if (callback != null) {
+            return callback();
+          }
         }
-        projectSelect.children().remove();
-        $(list).appendTo(projectSelect);
-        $('.project_create_wrapper input[type=radio][value=select]', modalEmt).prop('checked', true);
-        $('.display_project_new_wrapper', modalEmt).hide();
-        $('.display_project_select_wrapper', modalEmt).show();
-        $(".button_wrapper .select", modalEmt).show();
-        $('.button_wrapper span', modalEmt).hide();
-        $(".button_wrapper .select", modalEmt).show();
-        size = _modalSize('select');
-        modalEmt.css({
-          width: size.width,
-          height: size.height
-        });
-        $('.project_create_wrapper', modalEmt).show();
-        Common.modalCentering();
-        if (callback != null) {
-          return callback();
-        }
-      } else {
-        projectSelect.children().remove();
-        $('.project_create_wrapper input[type=radio][value=new]', modalEmt).prop('checked', true);
-        $('.display_project_new_wrapper', modalEmt).show();
-        $('.display_project_select_wrapper', modalEmt).hide();
-        $(".button_wrapper .new", modalEmt).show();
-        $('.button_wrapper span', modalEmt).hide();
-        $(".button_wrapper .new", modalEmt).show();
-        size = _modalSize('new');
-        modalEmt.css({
-          width: size.width,
-          height: size.height
-        });
-        $('.project_create_wrapper', modalEmt).hide();
-        Common.modalCentering();
-        if (callback != null) {
-          return callback();
-        }
-      }
-    });
+      };
+    })(this));
     $('.create_button', modalEmt).off('click').on('click', function() {
       var height, projectName, width;
       Common.hideModalView(true);
@@ -148,6 +145,37 @@ Project = (function() {
     return Project.hideError(modalEmt);
   };
 
+  _project_select_options = function(user_pagevalue_list) {
+    var d, i, j, l, len, len1, list, n, p;
+    list = '';
+    n = $.now();
+    l = $.grep(user_pagevalue_list, function(u) {
+      return u['p_is_sample'] === 0;
+    });
+    if (l.length > 0) {
+      list += "<optgroup label='" + (I18n.t('modal.not_sample_project')) + "'>";
+      for (i = 0, len = l.length; i < len; i++) {
+        p = l[i];
+        d = new Date(p['up_updated_at']);
+        list += "<option value='" + p['up_id'] + "'>" + p['p_title'] + " - " + (Common.displayDiffAlmostTime(n, d.getTime())) + "</option>";
+      }
+      list += "</optgroup>";
+    }
+    l = $.grep(user_pagevalue_list, function(u) {
+      return u['p_is_sample'] === 1;
+    });
+    if (l.length > 0) {
+      list += "<optgroup label='" + (I18n.t('modal.sample_project')) + "'>";
+      for (j = 0, len1 = l.length; j < len1; j++) {
+        p = l[j];
+        d = new Date(p['up_updated_at']);
+        list += "<option value='" + p['up_id'] + "'>" + p['p_title'] + "</option>";
+      }
+      list += "</optgroup>";
+    }
+    return list;
+  };
+
   Project.load_data_order_last_updated = function(successCallback, errorCallback) {
     if (successCallback == null) {
       successCallback = null;
@@ -156,7 +184,7 @@ Project = (function() {
       errorCallback = null;
     }
     return $.ajax({
-      url: "/page_value_state/user_pagevalues_and_projects_sorted_updated",
+      url: "/page_value_state/load_created_projects",
       type: "GET",
       dataType: "json",
       success: function(data) {
@@ -168,7 +196,7 @@ Project = (function() {
           if (errorCallback != null) {
             errorCallback();
           }
-          console.log('/page_value_state/user_pagevalues_and_projects_sorted_updated server error');
+          console.log('/page_value_state/load_created_projects server error');
           return Common.ajaxError(data);
         }
       },
@@ -176,7 +204,7 @@ Project = (function() {
         if (errorCallback != null) {
           errorCallback();
         }
-        console.log('/page_value_state/user_pagevalues_and_projects_sorted_updated ajax error');
+        console.log('/page_value_state/load_created_projects ajax error');
         return Common.ajaxError(data);
       }
     });

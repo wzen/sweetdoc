@@ -102,6 +102,23 @@ class PageValueState
     end
   end
 
+  def self.load_created_projects(user_id)
+    # ユーザ作成プロジェクト + サンプルプロジェクト
+    select =<<-"SELECT"
+      up.id as up_id,
+      up.updated_at as up_updated_at,
+      p.id as p_id,
+      p.title as p_title,
+      p.screen_width as p_screen_width,
+      p.screen_height as p_screen_height,
+      p.is_sample as p_is_sample
+    SELECT
+    sql = _user_pagevalue_sql_order_updated_desc(select, user_id)
+    ret = ActiveRecord::Base.connection.select_all(sql).to_hash
+    ret += _sample_project_user_pagevalue
+    return true, ret
+  end
+
   def self.user_pagevalues_and_projects_sorted_updated(user_id)
     select =<<-"SELECT"
       up.id as up_id,
@@ -250,6 +267,40 @@ class PageValueState
       p.del_flg = 0
       ORDER BY up.updated_at DESC
     SQL
+  end
+
+  def self._sample_project_user_pagevalue
+
+    ret = Rails.cache.fetch('sample_project_user_pagevalue') do
+      sql =<<-"SQL"
+        SELECT
+        up.id as up_id,
+        up.updated_at as up_updated_at,
+        p.id as p_id,
+        p.title as p_title,
+        p.screen_width as p_screen_width,
+        p.screen_height as p_screen_height,
+        p.is_sample as p_is_sample
+        FROM
+        user_pagevalues up
+        LEFT JOIN
+        setting_pagevalues sp ON up.setting_pagevalue_id = sp.id AND sp.del_flg = 0
+        INNER JOIN
+        user_project_maps upm ON up.user_project_map_id = upm.id
+        INNER JOIN
+        projects p ON upm.project_id = p.id
+        WHERE
+        up.del_flg = 0
+        AND
+        upm.del_flg = 0
+        AND
+        p.del_flg = 0
+        AND
+        p.is_sample = 1
+      SQL
+      ActiveRecord::Base.connection.select_all(sql).to_hash
+    end
+    return ret
   end
 
   def self._save_setting_pagevalue(save_value, update_id = nil)
@@ -572,5 +623,5 @@ class PageValueState
     end
   end
 
-  private_class_method :_user_pagevalue_sql_order_updated_desc, :_save_general_pagevalue, :_save_setting_pagevalue, :_save_instance_pagevalue, :_save_event_pagevalue
+  private_class_method :_user_pagevalue_sql_order_updated_desc, :_sample_project_user_pagevalue, :_save_general_pagevalue, :_save_setting_pagevalue, :_save_instance_pagevalue, :_save_event_pagevalue
 end
