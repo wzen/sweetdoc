@@ -154,7 +154,9 @@ en:
       delete_project: "This project will delete."
       delete_event: "This event will delete."
       delete_page: "This page will delete."
-      sample_project_upload: "Sample project can't upload to gallery. Please write your own project."
+      sample_project_upload: |
+       Sample project can't upload to gallery.
+       Please write your own project.
     database:
       item_state:
         save:

@@ -506,7 +506,14 @@ Project = (function() {
   Project.isSampleProject = function() {
     var p;
     p = PageValue.getGeneralPageValue(PageValue.Key.IS_SAMPLE_PROJECT);
-    return (p != null) && p;
+    if (p != null) {
+      if (typeof p === 'string') {
+        return p === 'true';
+      } else {
+        return p;
+      }
+    }
+    return false;
   };
 
   Project.showError = function(modalEmt, message) {

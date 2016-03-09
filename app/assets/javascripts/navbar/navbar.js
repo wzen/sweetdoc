@@ -125,6 +125,13 @@ Navbar = (function() {
     if (flg) {
       root = $('#header_items_file_menu');
       $(".menu-save-li", root).show();
+      if (Project.isSampleProject()) {
+        $(".menu-save-li", root).addClass('disabled');
+        $(".menu-save", root).attr('disabled', 'disabled');
+      } else {
+        $(".menu-save-li", root).removeClass('disabled');
+        $(".menu-save", root).removeAttr('disabled');
+      }
       $('#header_items_select_menu').show();
       $('#header_items_motion_check').show();
       $('#menu_sidebar_toggle').show();

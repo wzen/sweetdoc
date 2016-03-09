@@ -451,7 +451,12 @@ class Project
   # サンプルプロジェクトか
   @isSampleProject = ->
     p = PageValue.getGeneralPageValue(PageValue.Key.IS_SAMPLE_PROJECT)
-    return p? && p
+    if p?
+      if typeof p == 'string'
+        return p == 'true'
+      else
+        return p
+    return false
 
   @showError = (modalEmt, message) ->
     modalEmt.find('.error_wrapper .error:first').html(message)

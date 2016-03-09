@@ -23,8 +23,8 @@ class MotionCheckCommon
       document.run_form.action = '/motion_check'
     document.run_form.target = target
 
-    if window.isWorkTable
-      # データ保存
+    if window.isWorkTable && !Project.isSampleProject()
+      # データ保存してから実行
       ServerStorage.save( (data) ->
         if data.resultSuccess
           PageValue.setGeneralPageValue(PageValue.Key.RUNNING_USER_PAGEVALUE_ID, data.updated_user_pagevalue_id)

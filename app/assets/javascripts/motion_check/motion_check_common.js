@@ -25,7 +25,7 @@ MotionCheckCommon = (function() {
       document.run_form.action = '/motion_check';
     }
     document.run_form.target = target;
-    if (window.isWorkTable) {
+    if (window.isWorkTable && !Project.isSampleProject()) {
       return ServerStorage.save(function(data) {
         if (data.resultSuccess) {
           PageValue.setGeneralPageValue(PageValue.Key.RUNNING_USER_PAGEVALUE_ID, data.updated_user_pagevalue_id);
