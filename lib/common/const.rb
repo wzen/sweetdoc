@@ -6,6 +6,7 @@ class Const
   DEBUG_JS = ENV['RAILS_SERVE_DEBUG_JS'].present?
   BEFORE_MODIFY_VAR_SUFFIX = '__before'
   AFTER_MODIFY_VAR_SUFFIX = '__after'
+  ADMIN_USER_ID = 1
 
   # 操作モード
   class Mode

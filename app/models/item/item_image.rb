@@ -1,4 +1,5 @@
 require 'project/user_project_map'
+require 'project/project'
 
 class ItemImage < ActiveRecord::Base
   mount_uploader :file_path, ItemImageUploader
@@ -14,9 +15,15 @@ class ItemImage < ActiveRecord::Base
           url = nil
         end
 
-        upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id, del_flg: false)
-        if upm.blank?
-          return false, I18n.t('message.database.item_state.save.error'), nil
+        # UserProjectMap確認
+        p = Project.find(project_id)
+        if p.present? && !p.is_sample
+          upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id, del_flg: false)
+          if upm.blank?
+            return false, I18n.t('message.database.item_state.save.error'), nil
+          end
+        else
+          upm = UserProjectMap.find_by(user_id: Const::ADMIN_USER_ID, project_id: project_id, del_flg: false)
         end
 
         # 存在チェック

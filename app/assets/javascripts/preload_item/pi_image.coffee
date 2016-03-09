@@ -111,9 +111,13 @@ class PreloadItemImage extends ItemBase
               # モーダル非表示
               Common.hideModalView()
               d = JSON.parse(data.responseText)
-              @imagePath = d.image_url
-              @saveObj()
-              @refresh()
+              if d.resultSuccess
+                @imagePath = d.image_url
+                @saveObj()
+                @refresh()
+              else
+                WorktableCommon.removeSingleItem(@getJQueryElement())
+                FloatView.show('Upload error', FloatView.Type.ERROR, 3.0)
             )
             _initModalEvent.call(@, modalEmt)
             if callback?

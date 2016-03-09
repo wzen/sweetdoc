@@ -140,9 +140,14 @@ PreloadItemImage = (function(superClass) {
                 var d;
                 Common.hideModalView();
                 d = JSON.parse(data.responseText);
-                _this.imagePath = d.image_url;
-                _this.saveObj();
-                return _this.refresh();
+                if (d.resultSuccess) {
+                  _this.imagePath = d.image_url;
+                  _this.saveObj();
+                  return _this.refresh();
+                } else {
+                  WorktableCommon.removeSingleItem(_this.getJQueryElement());
+                  return FloatView.show('Upload error', FloatView.Type.ERROR, 3.0);
+                }
               });
               _initModalEvent.call(_this, modalEmt);
               if (callback != null) {
