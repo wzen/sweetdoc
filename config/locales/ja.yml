@@ -121,8 +121,8 @@ ja:
     show_guide: "モーションガイドを表示"
     show_page_num: "ページ番号を表示"
     show_chapter_num: "チャプター番号を表示"
-    overwrite_contents: "アップロード済コンテンツの更新"
-    upload_as_new: "新規コンテンツとしてアップロード"
+    overwrite_contents: "%{contents} の更新"
+    upload_as_new: "新規のドキュメントとして投稿"
   message:
     dialog:
       change_project: "作成中のコンテンツは削除されます。"
