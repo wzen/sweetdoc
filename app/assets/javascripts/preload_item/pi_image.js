@@ -73,7 +73,7 @@ PreloadItemImage = (function(superClass) {
       callback = null;
     }
     this.removeItemElement();
-    return this.createItemElement(show, (function(_this) {
+    return this.createItemElement((function(_this) {
       return function(_show) {
         _this.itemDraw(_show);
         if (_this.setupItemEvents != null) {
@@ -83,14 +83,14 @@ PreloadItemImage = (function(superClass) {
           return callback(_this);
         }
       };
-    })(this), false);
+    })(this), show, false);
   };
 
   PreloadItemImage.prototype.removeItemElement = function() {
     return PreloadItemImage.__super__.removeItemElement.call(this);
   };
 
-  PreloadItemImage.prototype.createItemElement = function(show, callback, showModal) {
+  PreloadItemImage.prototype.createItemElement = function(callback, show, showModal) {
     if (showModal == null) {
       showModal = true;
     }

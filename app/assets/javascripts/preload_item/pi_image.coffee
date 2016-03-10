@@ -52,14 +52,14 @@ class PreloadItemImage extends ItemBase
   # @param [Function] callback コールバック
   refresh: (show = true, callback = null) ->
     @removeItemElement()
-    @createItemElement(show, (_show) =>
+    @createItemElement((_show) =>
       @itemDraw(_show)
       if @setupItemEvents?
         # アイテムのイベント設定
         @setupItemEvents()
       if callback?
         callback(@)
-    , false)
+    , show, false)
 
   # アイテム削除 ※コールバックは無くていい
   removeItemElement: ->
@@ -69,7 +69,7 @@ class PreloadItemImage extends ItemBase
 
   # アイテム用のテンプレートHTMLを読み込み
   # @return [String] HTML
-  createItemElement: (show, callback, showModal = true) ->
+  createItemElement: (callback, show, showModal = true) ->
     _makeImageObjectIfNeed.call(@, (show) =>
       if @_image?
         if @_onloaded? && @_onloaded

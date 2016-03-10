@@ -109,7 +109,10 @@ EventDragPointingDraw = (function() {
       return results;
     };
 
-    PrivateClass.prototype.endDraw = function(callback) {
+    PrivateClass.prototype.endDraw = function(zindex, show, callback) {
+      if (show == null) {
+        show = true;
+      }
       if (callback == null) {
         callback = null;
       }

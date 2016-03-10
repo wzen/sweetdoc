@@ -61,7 +61,7 @@ class EventDragPointingRect
         @itemSize.y = cood.y
       drawingContext.strokeRect(@itemSize.x, @itemSize.y, @itemSize.w, @itemSize.h)
 
-    endDraw: (callback = null) ->
+    endDraw: (zindex, show = true, callback = null) ->
       @itemSize.x += scrollContents.scrollLeft()
       @itemSize.y += scrollContents.scrollTop()
       @zindex = Common.plusPagingZindex(constant.Zindex.EVENTFLOAT) + 1

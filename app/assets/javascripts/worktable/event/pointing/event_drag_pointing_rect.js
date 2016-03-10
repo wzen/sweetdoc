@@ -96,7 +96,10 @@ EventDragPointingRect = (function() {
       return drawingContext.strokeRect(this.itemSize.x, this.itemSize.y, this.itemSize.w, this.itemSize.h);
     };
 
-    PrivateClass.prototype.endDraw = function(callback) {
+    PrivateClass.prototype.endDraw = function(zindex, show, callback) {
+      if (show == null) {
+        show = true;
+      }
       if (callback == null) {
         callback = null;
       }

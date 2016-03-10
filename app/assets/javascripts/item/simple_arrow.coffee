@@ -65,6 +65,8 @@ class SimpleArrowItem extends ItemBase
   # @param [boolean] show 要素作成後に描画を表示するか
   endDraw: (zindex, show = true, callback = null) ->
     if !super(zindex)
+      if callback?
+        callback()
       return false
 
     # 新しいCanvasに合わせるためにrect分座標を引く
@@ -76,6 +78,8 @@ class SimpleArrowItem extends ItemBase
       l.y -= @itemSize.y
 
     @drawAndMakeConfigs(show)
+    if callback?
+      callback()
     return true
 
   # 再描画処理

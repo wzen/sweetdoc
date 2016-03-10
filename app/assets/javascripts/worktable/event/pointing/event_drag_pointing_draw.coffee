@@ -71,7 +71,7 @@ class EventDragPointingDraw
             drawingContext.lineTo(p.x, p.y)
         drawingContext.stroke()
 
-    endDraw: (callback = null) ->
+    endDraw: (zindex, show = true, callback = null) ->
       if @endDrawCallback?
         @endDrawCallback(@drawPaths)
       # コントローラ表示

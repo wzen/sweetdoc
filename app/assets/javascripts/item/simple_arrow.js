@@ -68,6 +68,9 @@ SimpleArrowItem = (function(superClass) {
       callback = null;
     }
     if (!SimpleArrowItem.__super__.endDraw.call(this, zindex)) {
+      if (callback != null) {
+        callback();
+      }
       return false;
     }
     ref = this.registCoord;
@@ -83,6 +86,9 @@ SimpleArrowItem = (function(superClass) {
       l.y -= this.itemSize.y;
     }
     this.drawAndMakeConfigs(show);
+    if (callback != null) {
+      callback();
+    }
     return true;
   };
 
