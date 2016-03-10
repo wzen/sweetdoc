@@ -144,6 +144,7 @@ en:
     show_guide: "Show Motion Guide"
     show_page_num: "Show Page Number"
     show_chapter_num: "Show Chapter Number"
+    existed_upload_contents: "The project document which has been posted exists."
     overwrite_contents: "Overwrite %{contents}"
     upload_as_new: "Post as new document"
   message:

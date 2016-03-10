@@ -74,6 +74,7 @@
                   </div>
                   <% if @uploaded_list.length > 0 %>
                     <div class="overwrite_contents_wrapper">
+                      <div class="overwrite_contents_label"><%= I18n.t('upload_confirm.existed_upload_contents') %></div>
                       <div class="overwrite_contents_contents">
                         <select class="overwrite_contents_contents_select" name="<%= Const::Gallery::Key::UPLOAD_OVERWRITE_GALLERY_TOKEN %>">
                           <option value=""><%= I18n.t('upload_confirm.upload_as_new') %></option>
