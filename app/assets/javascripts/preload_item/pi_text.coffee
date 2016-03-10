@@ -635,7 +635,7 @@ class PreloadItemText extends CanvasItemBase
           @_animationFlg['startOpenAnimation'] = false
           @resetProgress()
         )
-      else if opt.progress < opt.progressMax && @inputText? && @inputText.length > 0
+      else if opt.progress <= opt.progressMax && @inputText? && @inputText.length > 0
         if !@_writeTextRunning? || !@_writeTextRunning
           @_fixedTextAlpha = null
           adjustProgress = opt.progressMax / @inputText.length
@@ -644,6 +644,8 @@ class PreloadItemText extends CanvasItemBase
             @_beforeWriteLength = 0
           writeBlurLength = parseInt(writeLength) - parseInt(@_beforeWriteLength)
           if Math.abs(writeBlurLength) > 0
+            if parseInt(writeLength) < @inputText.length
+              @_finishedWrite = false
             @_writeTextRunning = true
             @_beforeWriteLength = writeLength
             @_writeBlurLength = Math.abs(writeBlurLength)
@@ -665,9 +667,10 @@ class PreloadItemText extends CanvasItemBase
                   _write.call(@)
               else
                 @_writeTextRunning = false
+                @_finishedWrite = true
             _write.call(@)
 
-    if opt.progress >= opt.progressMax && @showWithAnimation && (!@_animationFlg['startCloseAnimation']? || !@_animationFlg['startCloseAnimation'])
+    if opt.progress >= opt.progressMax && @_finishedWrite? && @_finishedWrite && @showWithAnimation && (!@_animationFlg['startCloseAnimation']? || !@_animationFlg['startCloseAnimation'])
       if @_writeTextTimer?
         clearTimeout(@_writeTextTimer)
         @_writeTextTimer = null

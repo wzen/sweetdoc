@@ -848,7 +848,7 @@ PreloadItemText = (function(superClass) {
             return _this.resetProgress();
           };
         })(this));
-      } else if (opt.progress < opt.progressMax && (this.inputText != null) && this.inputText.length > 0) {
+      } else if (opt.progress <= opt.progressMax && (this.inputText != null) && this.inputText.length > 0) {
         if ((this._writeTextRunning == null) || !this._writeTextRunning) {
           this._fixedTextAlpha = null;
           adjustProgress = opt.progressMax / this.inputText.length;
@@ -858,6 +858,9 @@ PreloadItemText = (function(superClass) {
           }
           writeBlurLength = parseInt(writeLength) - parseInt(this._beforeWriteLength);
           if (Math.abs(writeBlurLength) > 0) {
+            if (parseInt(writeLength) < this.inputText.length) {
+              this._finishedWrite = false;
+            }
             this._writeTextRunning = true;
             this._beforeWriteLength = writeLength;
             this._writeBlurLength = Math.abs(writeBlurLength);
@@ -880,7 +883,8 @@ PreloadItemText = (function(superClass) {
                   return _write.call(this);
                 }
               } else {
-                return this._writeTextRunning = false;
+                this._writeTextRunning = false;
+                return this._finishedWrite = true;
               }
             };
             _write.call(this);
@@ -888,7 +892,7 @@ PreloadItemText = (function(superClass) {
         }
       }
     }
-    if (opt.progress >= opt.progressMax && this.showWithAnimation && ((this._animationFlg['startCloseAnimation'] == null) || !this._animationFlg['startCloseAnimation'])) {
+    if (opt.progress >= opt.progressMax && (this._finishedWrite != null) && this._finishedWrite && this.showWithAnimation && ((this._animationFlg['startCloseAnimation'] == null) || !this._animationFlg['startCloseAnimation'])) {
       if (this._writeTextTimer != null) {
         clearTimeout(this._writeTextTimer);
         this._writeTextTimer = null;
