@@ -1018,20 +1018,24 @@ class Common
         data: data
         success: (data)->
           if data.resultSuccess
-            callbackCount = 0
-            dataIdx = 0
-            _cb = (d) ->
-              option = {}
-              Common.availJs(d.class_dist_token, d.js_src, option, =>
-                PageValue.addItemInfo(d.class_dist_token)
-                dataIdx += 1
-                if dataIdx >= data.indexes.length
-                  if callback?
-                    callback()
-                else
-                  _cb.call(@, data.indexes[dataIdx])
-              )
-            _cb.call(@, data.indexes[dataIdx])
+            if data.indexes? && data.indexes.length > 0
+              if callback?
+                callback()
+            else
+              callbackCount = 0
+              dataIdx = 0
+              _cb = (d) ->
+                option = {}
+                Common.availJs(d.class_dist_token, d.js_src, option, =>
+                  PageValue.addItemInfo(d.class_dist_token)
+                  dataIdx += 1
+                  if dataIdx >= data.indexes.length
+                    if callback?
+                      callback()
+                  else
+                    _cb.call(@, data.indexes[dataIdx])
+                )
+              _cb.call(@, data.indexes[dataIdx])
           else
             console.log('/item_js/index server error')
             Common.ajaxError(data)

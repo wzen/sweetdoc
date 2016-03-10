@@ -41,14 +41,20 @@ class Gallery < ActiveRecord::Base
     show_guide,
     show_page_num,
     show_chapter_num,
-    upload_overwrite_upm_id
+    upload_overwrite_gallery_token
   )
     begin
       ActiveRecord::Base.transaction do
-        if upload_overwrite_upm_id.present? &&
-            (pgm = ProjectGalleryMap.find_by(user_project_map_id: upload_overwrite_upm_id)).present? &&
-            (g = Gallery.find(pgm.project_id)).present?
+        if upload_overwrite_gallery_token.present? &&
+            (g = Gallery.find_by(access_token: upload_overwrite_gallery_token)).present?
           # 更新
+          # ProjectGalelryMap存在チェック
+          upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id, del_flg: false)
+          pgm = ProjectGalleryMap.new({user_project_map_id: upm.id, gallery_id: g.id})
+          if pgm.blank?
+            # エラー
+            return false, I18n.t('message.database.item_state.save.error'), nil
+          end
           p = Project.find(project_id)
           t_img = nil
           if thumbnail_img.present?
@@ -69,12 +75,8 @@ class Gallery < ActiveRecord::Base
                        show_chapter_num: show_chapter_num
                    })
           gallery_id = g.id
-          sql =<<-"SQL"
-            SELECT g
-          SQL
-
           # Pagevalue更新
-          _save_gallery_pagevalue(_get_project_pagevalues(upload_overwrite_upm_id), gallery_id)
+          _save_gallery_pagevalue(_get_project_pagevalues(upm.id), gallery_id)
           # Tag レコード追加
           _save_tag(tags, gallery_id)
         else
@@ -900,7 +902,7 @@ class Gallery < ActiveRecord::Base
 
   def self.uploaded_gallery_list(user_id, project_id)
     sql =<<-"SQL"
-      SELECT p.title as title, g.updated_at as updated_at, upm.id as upm_id
+      SELECT g.title as title, g.updated_at as updated_at, g.access_token as gallery_access_token
       FROM user_project_maps upm
       INNER JOIN project_gallery_maps pgm ON upm.id = pgm.user_project_map_id AND upm.del_flg = 0 AND pgm.del_flg = 0
       INNER JOIN projects p ON upm.project_id = p.id AND p.del_flg = 0

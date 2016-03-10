@@ -4,6 +4,7 @@ class UploadContents extends UploadBase
     # 入力値バリデーションチェック
     title = $("input[name='#{constant.Gallery.Key.TITLE}']", root).val()
     if title.length == 0
+      FloatView.show('Please input title', FloatView.Type.ERROR, 3.0)
       return
 
     # 保存処理
@@ -27,6 +28,8 @@ class UploadContents extends UploadBase
             # Gallery Detail
             window.location.href = "/gallery/detail/#{data.access_token}"
           else
+            FloatView.show('UploadError', FloatView.Type.ERROR, 3.0)
+            Common.hideModalView(true)
             console.log('gallery/save_state server error')
             Common.ajaxError(data)
         error: (data) ->

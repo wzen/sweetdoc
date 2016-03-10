@@ -18,16 +18,16 @@ class FloatView
     @FINISH = 'finish'
 
   @show = (message, type, showSeconds = -1) ->
-    if !window.initDone
+    if window.isWorkTable && !window.initDone
       # 初期化が終了していない場合は無視
       return
 
-    screenWrapper = $('#screen_wrapper')
-    root = $(".float_view.#{type}:first", screenWrapper)
+    main = $('#main')
+    root = $(".float_view.#{type}:first", main)
     if root.length == 0
-      $(".float_view", screenWrapper).remove()
-      $('.float_view_temp', screenWrapper).clone(true).attr('class', 'float_view').appendTo(screenWrapper)
-      root = $('.float_view:first', screenWrapper)
+      $(".float_view", main).remove()
+      $('.float_view_temp', main).clone(true).attr('class', 'float_view').appendTo(main)
+      root = $('.float_view:first', main)
       root.removeClass((index, className) ->
         return className != 'float_view'
       ).addClass(type)
@@ -54,11 +54,11 @@ class FloatView
     $(".float_view:not('.fixed')").fadeOut('fast')
 
   @showWithCloseButton = (message, type, closeFunc = null, withDisableOperation = false) ->
-    if !window.initDone
+    if window.isWorkTable && !window.initDone
       return
 
-    screenWrapper = $('#screen_wrapper')
-    root = $(".float_view.fixed.#{type}:first", screenWrapper)
+    main = $('#main')
+    root = $(".float_view.fixed.#{type}:first", main)
     if withDisableOperation
       # オーバーレイを被せる
       if $('#modal-overlay').length == 0
@@ -74,9 +74,9 @@ class FloatView
       root.show()
       return
 
-    $(".float_view", screenWrapper).remove()
-    $('.float_view_fixed_temp', screenWrapper).clone(true).attr('class', 'float_view fixed').appendTo(screenWrapper)
-    root = $('.float_view.fixed:first', screenWrapper)
+    $(".float_view", main).remove()
+    $('.float_view_fixed_temp', main).clone(true).attr('class', 'float_view fixed').appendTo(main)
+    root = $('.float_view.fixed:first', main)
     root.find('.close_button').off('click').on('click', (e) =>
       e.preventDefault()
       e.stopPropagation()
@@ -101,19 +101,19 @@ class FloatView
     @hidePointingController()
 
   @showPointingController = (pointintObj) ->
-    if !window.initDone
+    if window.isWorkTable && !window.initDone
       return
-    root = $(".float_view.fixed:visible", screenWrapper)
+    main = $('#main')
+    root = $(".float_view.fixed:visible", main)
     if root.length == 0
       # Fixedビューが表示されていない場合は無視
       return
 
-    screenWrapper = $('#screen_wrapper')
-    root = $(".float_view.pointing_controller:first", screenWrapper)
+    root = $(".float_view.pointing_controller:first", main)
     if root.length == 0
       # ビュー作成
-      $('.float_view_pointing_controller_temp', screenWrapper).clone(true).attr('class', 'float_view pointing_controller').appendTo(screenWrapper)
-      root = $('.float_view.pointing_controller:first', screenWrapper)
+      $('.float_view_pointing_controller_temp', main).clone(true).attr('class', 'float_view pointing_controller').appendTo(main)
+      root = $('.float_view.pointing_controller:first', main)
     # イベント設定
     root.find('.clear_button').off('click').on('click', (e) =>
       e.preventDefault()
@@ -139,7 +139,7 @@ class FloatView
     $(".float_view.pointing_controller").fadeOut('fast')
 
   @scrollMessage = (top, left) ->
-    if !window.initDone
+    if window.isWorkTable && !window.initDone
       return ''
     return "X: #{left}  Y:#{top}"
 

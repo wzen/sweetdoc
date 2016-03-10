@@ -17,6 +17,7 @@ UploadContents = (function(superClass) {
     }
     title = $("input[name='" + constant.Gallery.Key.TITLE + "']", root).val();
     if (title.length === 0) {
+      FloatView.show('Please input title', FloatView.Type.ERROR, 3.0);
       return;
     }
     _saveGallery = function() {
@@ -41,6 +42,8 @@ UploadContents = (function(superClass) {
           if (data.resultSuccess) {
             return window.location.href = "/gallery/detail/" + data.access_token;
           } else {
+            FloatView.show('UploadError', FloatView.Type.ERROR, 3.0);
+            Common.hideModalView(true);
             console.log('gallery/save_state server error');
             return Common.ajaxError(data);
           }

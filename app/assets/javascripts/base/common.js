@@ -1272,26 +1272,32 @@ Common = (function() {
       success: function(data) {
         var _cb, dataIdx;
         if (data.resultSuccess) {
-          callbackCount = 0;
-          dataIdx = 0;
-          _cb = function(d) {
-            var option;
-            option = {};
-            return Common.availJs(d.class_dist_token, d.js_src, option, (function(_this) {
-              return function() {
-                PageValue.addItemInfo(d.class_dist_token);
-                dataIdx += 1;
-                if (dataIdx >= data.indexes.length) {
-                  if (callback != null) {
-                    return callback();
+          if ((data.indexes != null) && data.indexes.length > 0) {
+            if (callback != null) {
+              return callback();
+            }
+          } else {
+            callbackCount = 0;
+            dataIdx = 0;
+            _cb = function(d) {
+              var option;
+              option = {};
+              return Common.availJs(d.class_dist_token, d.js_src, option, (function(_this) {
+                return function() {
+                  PageValue.addItemInfo(d.class_dist_token);
+                  dataIdx += 1;
+                  if (dataIdx >= data.indexes.length) {
+                    if (callback != null) {
+                      return callback();
+                    }
+                  } else {
+                    return _cb.call(_this, data.indexes[dataIdx]);
                   }
-                } else {
-                  return _cb.call(_this, data.indexes[dataIdx]);
-                }
-              };
-            })(this));
-          };
-          return _cb.call(this, data.indexes[dataIdx]);
+                };
+              })(this));
+            };
+            return _cb.call(this, data.indexes[dataIdx]);
+          }
         } else {
           console.log('/item_js/index server error');
           return Common.ajaxError(data);

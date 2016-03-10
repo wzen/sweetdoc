@@ -76,10 +76,10 @@
                     <div class="overwrite_contents_wrapper clearfix">
                       <div class="overwrite_contents_label"><%= I18n.t('upload_confirm.overwrite_contents') %></div>
                       <div class="overwrite_contents_contents">
-                        <select class="overwrite_contents_contents_select" name="<%= Const::Gallery::Key::UPLOAD_OVERWRITE_UPM_ID %>">
-                          <option value="0"><%= I18n.t('upload_confirm.upload_as_new') %></option>
+                        <select class="overwrite_contents_contents_select" name="<%= Const::Gallery::Key::UPLOAD_OVERWRITE_GALLERY_TOKEN %>">
+                          <option value=""><%= I18n.t('upload_confirm.upload_as_new') %></option>
                           <% @uploaded_list.each do |u| %>
-                            <option value="<%= u['upm_id'] %>"><%= u['title'] %> updated <%= u['updated_at'].strftime("%Y-%m-%d %H:%M:%S") %></option>
+                            <option value="<%= u['gallery_access_token'] %>"><%= u['title'] %>  [Upload <%= u['updated_at'].strftime("%Y-%m-%d %H:%M:%S") %>]</option>
                           <% end %>
                         </select>
                       </div>
@@ -100,4 +100,5 @@
           </div>
       </div>
   <% end %>
+  <%= render 'base/floatview' %>
 </div>
