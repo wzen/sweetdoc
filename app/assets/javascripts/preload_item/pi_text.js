@@ -593,6 +593,10 @@ PreloadItemText = (function(superClass) {
     if (callback == null) {
       callback = null;
     }
+    if ((this._runningBallonAnimation != null) && this._runningBallonAnimation) {
+      return;
+    }
+    this._runningBallonAnimation = true;
     this._time = 0;
     this._pertime = 1;
     this.disableHandleResponse();
@@ -682,10 +686,11 @@ PreloadItemText = (function(superClass) {
       })(this));
     } else {
       this._context.restore();
-      this.enableHandleResponse();
       if (callback != null) {
-        return callback();
+        callback();
       }
+      this.enableHandleResponse();
+      return this._runningBallonAnimation = false;
     }
   };
 
@@ -693,6 +698,10 @@ PreloadItemText = (function(superClass) {
     if (callback == null) {
       callback = null;
     }
+    if ((this._runningBallonAnimation != null) && this._runningBallonAnimation) {
+      return;
+    }
+    this._runningBallonAnimation = true;
     this._time = 0;
     this._pertime = 1;
     this.disableHandleResponse();
@@ -778,10 +787,11 @@ PreloadItemText = (function(superClass) {
       })(this));
     } else {
       this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
-      this.enableHandleResponse();
       if (callback != null) {
-        return callback();
+        callback();
       }
+      this.enableHandleResponse();
+      return this._runningBallonAnimation = false;
     }
   };
 
@@ -835,17 +845,24 @@ PreloadItemText = (function(superClass) {
       this.startOpenAnimation((function(_this) {
         return function() {
           _this._animationFlg['startOpenAnimation'] = true;
+          _this._animationFlg['startCloseAnimation'] = false;
           _this.resetProgress();
           _this.fontSize = _calcFontSizeAbout.call(_this, _this.inputText, _this._canvas.width, _this._canvas.height, _this.isFixedFontSize, _this.drawHorizontal);
-          return _setTextStyle.call(_this);
+          _setTextStyle.call(_this);
+          _this._beforeWriteLength = 0;
+          _this._writeTextRunning = false;
+          return _this._isScrollHeader = false;
         };
       })(this));
     } else {
-      if (opt.progress <= 0 && this.showWithAnimation && this._animationFlg['startOpenAnimation']) {
+      if (!this._forward && opt.progress <= 0 && this.showWithAnimation && this._animationFlg['startOpenAnimation']) {
         this.startCloseAnimation((function(_this) {
           return function() {
             _this._animationFlg['startOpenAnimation'] = false;
-            return _this.resetProgress();
+            _this._animationFlg['startCloseAnimation'] = true;
+            _this.resetProgress();
+            _this._beforeWriteLength = 0;
+            return _this._writeTextRunning = false;
           };
         })(this));
       } else if (opt.progress <= opt.progressMax && (this.inputText != null) && this.inputText.length > 0) {
@@ -853,11 +870,10 @@ PreloadItemText = (function(superClass) {
           this._fixedTextAlpha = null;
           adjustProgress = opt.progressMax / this.inputText.length;
           writeLength = this.inputText.length * (opt.progress + adjustProgress * 0.5) / opt.progressMax;
-          if (this._beforeWriteLength == null) {
-            this._beforeWriteLength = 0;
-          }
           writeBlurLength = parseInt(writeLength) - parseInt(this._beforeWriteLength);
           if (Math.abs(writeBlurLength) > 0) {
+            this._animationFlg['startOpenAnimation'] = true;
+            this._animationFlg['startCloseAnimation'] = false;
             if (parseInt(writeLength) < this.inputText.length) {
               this._finishedWrite = false;
             }
@@ -879,9 +895,7 @@ PreloadItemText = (function(superClass) {
               _drawText.call(this, this._context, this.inputText, 0, 0, this._canvas.width, this._canvas.height, this.fontSize, writeLength);
               this._alphaDiff += 0.25;
               if (this._alphaDiff <= 1) {
-                if (this._animationFlg['startCloseAnimation'] == null) {
-                  return _write.call(this);
-                }
+                return _write.call(this);
               } else {
                 this._writeTextRunning = false;
                 return this._finishedWrite = parseInt(writeLength) >= this.inputText.length;
@@ -893,14 +907,11 @@ PreloadItemText = (function(superClass) {
       }
     }
     if (opt.progress >= opt.progressMax && (this._finishedWrite != null) && this._finishedWrite && this.showWithAnimation && ((this._animationFlg['startCloseAnimation'] == null) || !this._animationFlg['startCloseAnimation'])) {
-      if (this._writeTextTimer != null) {
-        clearTimeout(this._writeTextTimer);
-        this._writeTextTimer = null;
-      }
       this._writeTextRunning = false;
       return this.startCloseAnimation((function(_this) {
         return function() {
           _this._animationFlg['startCloseAnimation'] = true;
+          _this._animationFlg['startOpenAnimation'] = false;
           if (!_this._isFinishedEvent) {
             _this.finishEvent();
             if (typeof ScrollGuide !== "undefined" && ScrollGuide !== null) {
