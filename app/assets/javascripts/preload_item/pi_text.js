@@ -884,7 +884,7 @@ PreloadItemText = (function(superClass) {
                 }
               } else {
                 this._writeTextRunning = false;
-                return this._finishedWrite = true;
+                return this._finishedWrite = parseInt(writeLength) >= this.inputText.length;
               }
             };
             _write.call(this);

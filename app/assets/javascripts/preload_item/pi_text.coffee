@@ -667,7 +667,7 @@ class PreloadItemText extends CanvasItemBase
                   _write.call(@)
               else
                 @_writeTextRunning = false
-                @_finishedWrite = true
+                @_finishedWrite = parseInt(writeLength) >= @inputText.length
             _write.call(@)
 
     if opt.progress >= opt.progressMax && @_finishedWrite? && @_finishedWrite && @showWithAnimation && (!@_animationFlg['startCloseAnimation']? || !@_animationFlg['startCloseAnimation'])
