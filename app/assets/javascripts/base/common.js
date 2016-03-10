@@ -562,8 +562,8 @@ Common = (function() {
     }
     if (immediate) {
       window.skipScrollEvent = true;
-      window.scrollContents.scrollTop(Math.round(top));
-      window.scrollContents.scrollLeft(Math.round(left));
+      window.scrollContents.scrollTop(parseInt(top));
+      window.scrollContents.scrollLeft(parseInt(left));
       if (callback != null) {
         return callback();
       }
@@ -575,16 +575,16 @@ Common = (function() {
       if (isMobileAccess) {
         per = 15;
       }
-      perTop = (top - nowTop) / per;
-      perLeft = (left - nowLeft) / per;
+      perTop = (parseInt(top) - nowTop) / per;
+      perLeft = (parseInt(left) - nowLeft) / per;
       count = 1;
       _loop = function() {
-        window.scrollContents.scrollTop(nowTop + perTop * count);
-        window.scrollContents.scrollLeft(nowLeft + perLeft * count);
+        window.scrollContents.scrollTop(parseInt(nowTop + perTop * count));
+        window.scrollContents.scrollLeft(parseInt(nowLeft + perLeft * count));
         count += 1;
         if (count > per) {
-          window.scrollContents.scrollTop(Math.round(top));
-          window.scrollContents.scrollLeft(Math.round(left));
+          window.scrollContents.scrollTop(parseInt(top));
+          window.scrollContents.scrollLeft(parseInt(left));
           window.skipScrollEventByAnimation = false;
           if (callback != null) {
             return callback();

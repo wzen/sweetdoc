@@ -37,8 +37,8 @@ itemBaseWorktableExtend =
       @restoreRefreshingSurface(@itemSize)
 
     @itemSize = {x: null, y: null, w: null, h: null}
-    @itemSize.w = Math.abs(cood.x - @_moveLoc.x);
-    @itemSize.h = Math.abs(cood.y - @_moveLoc.y);
+    @itemSize.w = Math.abs(cood.x - @_moveLoc.x)
+    @itemSize.h = Math.abs(cood.y - @_moveLoc.y)
     if cood.x > @_moveLoc.x
       @itemSize.x = @_moveLoc.x
     else
@@ -47,6 +47,10 @@ itemBaseWorktableExtend =
       @itemSize.y = @_moveLoc.y
     else
       @itemSize.y = cood.y
+    @itemSize.x = Math.round(@itemSize.x)
+    @itemSize.y = Math.round(@itemSize.y)
+    @itemSize.w = Math.round(@itemSize.w)
+    @itemSize.h = Math.round(@itemSize.h)
     drawingContext.strokeRect(@itemSize.x, @itemSize.y, @itemSize.w, @itemSize.h)
 
   # 描画終了

@@ -56,6 +56,10 @@ itemBaseWorktableExtend = {
     } else {
       this.itemSize.y = cood.y;
     }
+    this.itemSize.x = Math.round(this.itemSize.x);
+    this.itemSize.y = Math.round(this.itemSize.y);
+    this.itemSize.w = Math.round(this.itemSize.w);
+    this.itemSize.h = Math.round(this.itemSize.h);
     return drawingContext.strokeRect(this.itemSize.x, this.itemSize.y, this.itemSize.w, this.itemSize.h);
   },
   endDraw: function(zindex, show, callback) {
