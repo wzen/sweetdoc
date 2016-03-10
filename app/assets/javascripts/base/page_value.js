@@ -465,7 +465,7 @@ PageValue = (function() {
 
   _setPageValue = function(key, value, isCache, rootId, giveName, doAdded) {
     _setPageValueDebug.call(this, key, value, isCache, rootId, giveName, doAdded);
-    if (window.isWorkTable) {
+    if (window.isWorkTable && !Project.isSampleProject()) {
       return ServerStorage.startSaveIdleTimer();
     }
   };

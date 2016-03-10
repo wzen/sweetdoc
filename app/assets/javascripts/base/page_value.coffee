@@ -369,7 +369,7 @@ class PageValue
     _setPageValueDebug.call(@, key, value, isCache, rootId, giveName, doAdded)
 #    else
 #      _setPageValueProduction.call(@, key, value, isCache, rootId, giveName, doAdded)
-    if window.isWorkTable
+    if window.isWorkTable && !Project.isSampleProject()
       # 自動保存実行
       ServerStorage.startSaveIdleTimer()
 
