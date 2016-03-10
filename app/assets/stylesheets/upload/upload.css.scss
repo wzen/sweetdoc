@@ -146,7 +146,7 @@ div#main {
 
   .capture_wrapper {
     width: 400px;
-    height: 400px;
+    height: 200px;
   }
 
   .input_wrapper {
@@ -186,6 +186,26 @@ div#main {
         }
       }
     }
+
+    .select_tag_wrapper, .popular_tag_wrapper, .recommend_tag_wrapper {
+      float: left;
+    }
+
+    .popular_tag_wrapper, .recommend_tag_wrapper {
+      margin-left: 20px;
+    }
+
+    .option_wrapper, .overwrite_contents_wrapper {
+      margin-top: 10px;
+    }
+
+    .overwrite_contents_label {
+      float: left;
+    }
+    .overwrite_contents_contents {
+      float: left;
+      margin-left: 10px;
+    }
   }
 }
 
@@ -198,6 +218,7 @@ body.item {
 .button_wrapper {
   width: 100%;
   text-align: center;
+  margin-top: 30px;
 
   .upload_button {
     background: #e62e4d;

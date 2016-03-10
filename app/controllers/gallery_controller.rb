@@ -61,6 +61,7 @@ class GalleryController < ApplicationController
     show_guide = params.fetch(Const::Gallery::Key::SHOW_GUIDE, false)
     show_page_num = params.fetch(Const::Gallery::Key::SHOW_PAGE_NUM, false)
     show_chapter_num = params.fetch(Const::Gallery::Key::SHOW_CHAPTER_NUM, false)
+    upload_overwrite_upm_id = params.fetch(Const::Gallery::Key::UPLOAD_OVERWRITE_UPM_ID, 0)
     @result_success, @message, @access_token = Gallery.save_state(
         user_id,
         project_id,
@@ -74,7 +75,9 @@ class GalleryController < ApplicationController
         page_max,
         show_guide,
         show_page_num,
-        show_chapter_num)
+        show_chapter_num,
+        upload_overwrite_upm_id
+    )
   end
 
   def update_last_state

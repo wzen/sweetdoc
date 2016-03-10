@@ -1,3 +1,5 @@
+require 'gallery/gallery'
+
 class UploadController < ApplicationController
   def index
     # FIXME: ユーザ判定
@@ -5,6 +7,7 @@ class UploadController < ApplicationController
     project_id = params.require(Const::Gallery::Key::PROJECT_ID)
     @project_id = project_id.to_i
     @page_max = params.require(Const::Gallery::Key::PAGE_MAX)
+    @uploaded_list =  Gallery.uploaded_gallery_list(user_id, project_id)
   end
 
   def item

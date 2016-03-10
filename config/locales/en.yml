@@ -144,6 +144,8 @@ en:
     show_guide: "Show Motion Guide"
     show_page_num: "Show Page Number"
     show_chapter_num: "Show Chapter Number"
+    overwrite_contents: "Overwrite"
+    upload_as_new: "Upload as new one"
   message:
     dialog:
       change_project: "Your making contents will delete."
