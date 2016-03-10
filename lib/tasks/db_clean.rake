@@ -12,6 +12,7 @@ namespace :db_clean do
           User.where(id: guest_ids).update_all(del_flg: true)
           upm = UserProjectMap.where(user_id: guest_ids)
           upm.update_all(del_flg: true)
+          ItemImage.where(user_project_map_id: upm.pluck(:id)).update_all(del_flg: true)
           Project.where(id: upm.pluck(:project_id)).update_all(del_flg: true)
           UserCodingTree.where(user_id: guest_ids).update_all(del_flg: true)
           UserCoding.where(user_id: guest_ids).update_all(del_flg: true)
@@ -38,6 +39,18 @@ namespace :db_clean do
           EventPagevalue.where(id: epp.pluck(:event_pagevalue_id)).update_all(del_flg: true)
         end
       end
+    rescue => e
+      p e
+    end
+  end
+end
+
+namespace :db_clean do
+  desc "DB ItemImage delete"
+  task :erase_image => :environment do
+    begin
+      # 不要なImageのデータを削除
+      ItemImage.where(user_project_map_id: Const::SAMPLE_PROJECT_USER_PROJECT_MAP_ID).update_all(del_flg: true)
     rescue => e
       p e
     end

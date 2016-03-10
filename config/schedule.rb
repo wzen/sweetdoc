@@ -25,5 +25,6 @@ set :environment, :production
 
 every 1.day, :at => '5:00 am' do
   rake 'db_clean:erase_user_session'
+  rake 'db_clean:erase_image'
   rake 'db_clean:erase_del_flg'
 end
