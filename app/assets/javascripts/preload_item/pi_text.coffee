@@ -582,11 +582,6 @@ class PreloadItemText extends CanvasItemBase
     else
       @_context.clearRect(0, 0, @_canvas.width, @_canvas.height)
       @enableHandleResponse()
-      if !@_isFinishedEvent
-        # 終了イベント
-        @finishEvent()
-        if ScrollGuide?
-          ScrollGuide.hideGuide()
       if callback?
         callback()
 
@@ -625,7 +620,7 @@ class PreloadItemText extends CanvasItemBase
     @showWithAnimation = @showWithAnimation__after
     @showAnimationType = @showAnimationType__after
     @_forward = opt.forward
-    if @showWithAnimation && !@_animationFlg['startOpenAnimation']?
+    if @_forward && @showWithAnimation && (!@_animationFlg['startOpenAnimation']? || !@_animationFlg['startOpenAnimation'])
       #if !window.isWorkTable
       #  window.scrollHandleWrapper.removeClass('enable_inertial_scroll')
       @startOpenAnimation( =>
@@ -635,7 +630,12 @@ class PreloadItemText extends CanvasItemBase
         _setTextStyle.call(@)
       )
     else
-      if opt.progress < opt.progressMax && @inputText? && @inputText.length > 0
+      if opt.progress <= 0 && @showWithAnimation && @_animationFlg['startOpenAnimation']
+        @startCloseAnimation( =>
+          @_animationFlg['startOpenAnimation'] = false
+          @resetProgress()
+        )
+      else if opt.progress < opt.progressMax && @inputText? && @inputText.length > 0
         if !@_writeTextRunning? || !@_writeTextRunning
           @_fixedTextAlpha = null
           adjustProgress = opt.progressMax / @inputText.length
@@ -667,13 +667,19 @@ class PreloadItemText extends CanvasItemBase
                 @_writeTextRunning = false
             _write.call(@)
 
-    if opt.progress >= opt.progressMax && @showWithAnimation && !@_animationFlg['startCloseAnimation']?
+    if opt.progress >= opt.progressMax && @showWithAnimation && (!@_animationFlg['startCloseAnimation']? || !@_animationFlg['startCloseAnimation'])
       if @_writeTextTimer?
         clearTimeout(@_writeTextTimer)
         @_writeTextTimer = null
       @_writeTextRunning = false
-      @startCloseAnimation()
-      @_animationFlg['startCloseAnimation'] = true
+      @startCloseAnimation( =>
+        @_animationFlg['startCloseAnimation'] = true
+        if !@_isFinishedEvent
+          # 終了イベント
+          @finishEvent()
+          if ScrollGuide?
+            ScrollGuide.hideGuide()
+      )
       #if !window.isWorkTable
       #  window.scrollHandleWrapper.addClass('enable_inertial_scroll')
 

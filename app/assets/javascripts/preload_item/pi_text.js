@@ -779,12 +779,6 @@ PreloadItemText = (function(superClass) {
     } else {
       this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
       this.enableHandleResponse();
-      if (!this._isFinishedEvent) {
-        this.finishEvent();
-        if (typeof ScrollGuide !== "undefined" && ScrollGuide !== null) {
-          ScrollGuide.hideGuide();
-        }
-      }
       if (callback != null) {
         return callback();
       }
@@ -837,7 +831,7 @@ PreloadItemText = (function(superClass) {
     this.showWithAnimation = this.showWithAnimation__after;
     this.showAnimationType = this.showAnimationType__after;
     this._forward = opt.forward;
-    if (this.showWithAnimation && (this._animationFlg['startOpenAnimation'] == null)) {
+    if (this._forward && this.showWithAnimation && ((this._animationFlg['startOpenAnimation'] == null) || !this._animationFlg['startOpenAnimation'])) {
       this.startOpenAnimation((function(_this) {
         return function() {
           _this._animationFlg['startOpenAnimation'] = true;
@@ -847,7 +841,14 @@ PreloadItemText = (function(superClass) {
         };
       })(this));
     } else {
-      if (opt.progress < opt.progressMax && (this.inputText != null) && this.inputText.length > 0) {
+      if (opt.progress <= 0 && this.showWithAnimation && this._animationFlg['startOpenAnimation']) {
+        this.startCloseAnimation((function(_this) {
+          return function() {
+            _this._animationFlg['startOpenAnimation'] = false;
+            return _this.resetProgress();
+          };
+        })(this));
+      } else if (opt.progress < opt.progressMax && (this.inputText != null) && this.inputText.length > 0) {
         if ((this._writeTextRunning == null) || !this._writeTextRunning) {
           this._fixedTextAlpha = null;
           adjustProgress = opt.progressMax / this.inputText.length;
@@ -887,14 +888,23 @@ PreloadItemText = (function(superClass) {
         }
       }
     }
-    if (opt.progress >= opt.progressMax && this.showWithAnimation && (this._animationFlg['startCloseAnimation'] == null)) {
+    if (opt.progress >= opt.progressMax && this.showWithAnimation && ((this._animationFlg['startCloseAnimation'] == null) || !this._animationFlg['startCloseAnimation'])) {
       if (this._writeTextTimer != null) {
         clearTimeout(this._writeTextTimer);
         this._writeTextTimer = null;
       }
       this._writeTextRunning = false;
-      this.startCloseAnimation();
-      return this._animationFlg['startCloseAnimation'] = true;
+      return this.startCloseAnimation((function(_this) {
+        return function() {
+          _this._animationFlg['startCloseAnimation'] = true;
+          if (!_this._isFinishedEvent) {
+            _this.finishEvent();
+            if (typeof ScrollGuide !== "undefined" && ScrollGuide !== null) {
+              return ScrollGuide.hideGuide();
+            }
+          }
+        };
+      })(this));
     }
   };
 
