@@ -270,47 +270,54 @@ class PageValueState
   end
 
   def self._sample_project_user_pagevalue
-
-    ret = Rails.cache.fetch('sample_project_user_pagevalue') do
-      sql =<<-"SQL"
-        SELECT
-        up.id as up_id,
-        up.updated_at as up_updated_at,
-        p.id as p_id,
-        p.title as p_title,
-        p.screen_width as p_screen_width,
-        p.screen_height as p_screen_height,
-        p.is_sample as p_is_sample
-        FROM
-        user_pagevalues up
-        LEFT JOIN
-        setting_pagevalues sp ON up.setting_pagevalue_id = sp.id AND sp.del_flg = 0
-        INNER JOIN
-        user_project_maps upm ON up.user_project_map_id = upm.id
-        INNER JOIN
-        projects p ON upm.project_id = p.id
-        INNER JOIN
-        (
-          SELECT upm_sub.project_id as user_project_map_project_id, MAX(up_sub.updated_at) as user_pagevalue_updated_at_max
-          FROM user_pagevalues up_sub
-          INNER JOIN user_project_maps upm_sub ON up_sub.user_project_map_id = upm_sub.id
-          WHERE upm_sub.user_id = #{Const::ADMIN_USER_ID}
-          AND up_sub.del_flg = 0
-          AND upm_sub.del_flg = 0
-          GROUP BY upm_sub.project_id
-        ) sub ON upm.project_id = sub.user_project_map_project_id AND up.updated_at = sub.user_pagevalue_updated_at_max
-        WHERE
-        up.del_flg = 0
-        AND
-        upm.del_flg = 0
-        AND
-        p.del_flg = 0
-        AND
-        p.is_sample = 1
-      SQL
-      ActiveRecord::Base.connection.select_all(sql).to_hash
+    if Rails.env.production?
+      # Productionはキャッシュを使用
+      Rails.cache.fetch('sample_project_user_pagevalue') do
+        _sample_project_user_pagevalue_db_access
+      end
+    else
+      _sample_project_user_pagevalue_db_access
     end
-    return ret
+  end
+
+  def self._sample_project_user_pagevalue_db_access
+    sql =<<-"SQL"
+      SELECT
+      up.id as up_id,
+      up.updated_at as up_updated_at,
+      p.id as p_id,
+      p.title as p_title,
+      p.screen_width as p_screen_width,
+      p.screen_height as p_screen_height,
+      p.is_sample as p_is_sample
+      FROM
+      user_pagevalues up
+      LEFT JOIN
+      setting_pagevalues sp ON up.setting_pagevalue_id = sp.id AND sp.del_flg = 0
+      INNER JOIN
+      user_project_maps upm ON up.user_project_map_id = upm.id
+      INNER JOIN
+      projects p ON upm.project_id = p.id
+      INNER JOIN
+      (
+        SELECT upm_sub.project_id as user_project_map_project_id, MAX(up_sub.updated_at) as user_pagevalue_updated_at_max
+        FROM user_pagevalues up_sub
+        INNER JOIN user_project_maps upm_sub ON up_sub.user_project_map_id = upm_sub.id
+        WHERE upm_sub.user_id = #{Const::ADMIN_USER_ID}
+        AND up_sub.del_flg = 0
+        AND upm_sub.del_flg = 0
+        GROUP BY upm_sub.project_id
+      ) sub ON upm.project_id = sub.user_project_map_project_id AND up.updated_at = sub.user_pagevalue_updated_at_max
+      WHERE
+      up.del_flg = 0
+      AND
+      upm.del_flg = 0
+      AND
+      p.del_flg = 0
+      AND
+      p.is_sample = 1
+    SQL
+    ActiveRecord::Base.connection.select_all(sql).to_hash
   end
 
   def self._save_setting_pagevalue(save_value, update_id = nil)
@@ -633,5 +640,5 @@ class PageValueState
     end
   end
 
-  private_class_method :_user_pagevalue_sql_order_updated_desc, :_sample_project_user_pagevalue, :_save_general_pagevalue, :_save_setting_pagevalue, :_save_instance_pagevalue, :_save_event_pagevalue
+  private_class_method :_user_pagevalue_sql_order_updated_desc, :_sample_project_user_pagevalue, :_sample_project_user_pagevalue_db_access, :_save_general_pagevalue, :_save_setting_pagevalue, :_save_instance_pagevalue, :_save_event_pagevalue
 end
