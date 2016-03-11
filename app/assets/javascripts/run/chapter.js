@@ -151,18 +151,32 @@ Chapter = (function() {
     }
   };
 
-  Chapter.prototype.forwardAllEvents = function() {
-    var e, i, idx, len, ref, results;
+  Chapter.prototype.forwardAllEvents = function(callback) {
+    var count, e, i, idx, len, ref, results;
+    if (callback == null) {
+      callback = null;
+    }
     if (window.runDebug) {
       console.log('Chapter forwardAllEvents');
     }
+    count = 0;
     ref = this.eventObjList;
     results = [];
     for (idx = i = 0, len = ref.length; i < len; idx = ++i) {
       e = ref[idx];
       e.initEvent(this.eventList[idx]);
       e.updateEventAfter();
-      results.push(e.didChapter());
+      results.push(e.execLastStep((function(_this) {
+        return function() {
+          e.didChapter();
+          count += 1;
+          if (count >= _this.eventObjList.length) {
+            if (callback != null) {
+              return callback();
+            }
+          }
+        };
+      })(this)));
     }
     return results;
   };

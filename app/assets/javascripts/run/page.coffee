@@ -384,20 +384,21 @@ class Page
       # フォーカス
       @initFocus(false)
       # 最後のイベントのみリセット
-      @forwardProgressChapters()
-      @getForkChapterList()[@getForkChapterList().length - 1].resetAllEvents( =>
-        # チャプター最大値設定
-        RunCommon.setChapterMax(@getForkChapterList().length)
-        # インデックスを最後のチャプターに
-        @setChapterIndex(@getForkChapterList().length - 1)
-        # フォーク番号設定
-        RunCommon.setForkNum(RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum()))
-        # チャプター初期化
-        @resetChapter(@getChapterIndex(), =>
-          # キャッシュ保存
-          window.lStorage.saveAllPageValues()
-          if callback?
-            callback()
+      @forwardProgressChapters( =>
+        @getForkChapterList()[@getForkChapterList().length - 1].resetAllEvents( =>
+          # チャプター最大値設定
+          RunCommon.setChapterMax(@getForkChapterList().length)
+          # インデックスを最後のチャプターに
+          @setChapterIndex(@getForkChapterList().length - 1)
+          # フォーク番号設定
+          RunCommon.setForkNum(RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum()))
+          # チャプター初期化
+          @resetChapter(@getChapterIndex(), =>
+            # キャッシュ保存
+            window.lStorage.saveAllPageValues()
+            if callback?
+              callback()
+          )
         )
       )
     )
@@ -490,9 +491,16 @@ class Page
       )
 
   # フォークを含んだ動作予定のチャプターを進行
-  forwardProgressChapters: ->
-    @getProgressChapterList().forEach((chapter) ->
-      chapter.forwardAllEvents()
+  forwardProgressChapters: (callback = null) ->
+    count = 0
+    list = @getProgressChapterList()
+    list.forEach((chapter) ->
+      chapter.forwardAllEvents( =>
+        count += 1
+        if count >= list.length
+         if callback?
+           callback()
+      )
     )
 
   # 全てのチャプターのガイドを非表示

@@ -444,16 +444,17 @@ Page = (function() {
     return this.initItemDrawingInPage((function(_this) {
       return function() {
         _this.initFocus(false);
-        _this.forwardProgressChapters();
-        return _this.getForkChapterList()[_this.getForkChapterList().length - 1].resetAllEvents(function() {
-          RunCommon.setChapterMax(_this.getForkChapterList().length);
-          _this.setChapterIndex(_this.getForkChapterList().length - 1);
-          RunCommon.setForkNum(RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum()));
-          return _this.resetChapter(_this.getChapterIndex(), function() {
-            window.lStorage.saveAllPageValues();
-            if (callback != null) {
-              return callback();
-            }
+        return _this.forwardProgressChapters(function() {
+          return _this.getForkChapterList()[_this.getForkChapterList().length - 1].resetAllEvents(function() {
+            RunCommon.setChapterMax(_this.getForkChapterList().length);
+            _this.setChapterIndex(_this.getForkChapterList().length - 1);
+            RunCommon.setForkNum(RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum()));
+            return _this.resetChapter(_this.getChapterIndex(), function() {
+              window.lStorage.saveAllPageValues();
+              if (callback != null) {
+                return callback();
+              }
+            });
           });
         });
       };
@@ -601,9 +602,24 @@ Page = (function() {
     }
   };
 
-  Page.prototype.forwardProgressChapters = function() {
-    return this.getProgressChapterList().forEach(function(chapter) {
-      return chapter.forwardAllEvents();
+  Page.prototype.forwardProgressChapters = function(callback) {
+    var count, list;
+    if (callback == null) {
+      callback = null;
+    }
+    count = 0;
+    list = this.getProgressChapterList();
+    return list.forEach(function(chapter) {
+      return chapter.forwardAllEvents((function(_this) {
+        return function() {
+          count += 1;
+          if (count >= list.length) {
+            if (callback != null) {
+              return callback();
+            }
+          }
+        };
+      })(this));
     });
   };
 

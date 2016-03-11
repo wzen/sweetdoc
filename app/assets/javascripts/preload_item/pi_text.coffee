@@ -307,6 +307,24 @@ class PreloadItemText extends CanvasItemBase
       else
         _drawTextAndBalloonToCanvas.call(@ , @constructor.NO_TEXT)
 
+  # メソッド実行(ItemEventBaseのオーバーライド)
+  execMethod: (opt, callback = null) ->
+    EventBase.prototype.execMethod.call(@, opt, =>
+      methodName = @getEventMethodName()
+      if methodName != EventPageValueBase.NO_METHOD
+        if methodName == 'writeText'
+          (@constructor.prototype[methodName]).call(@, opt, callback)
+        else
+          (@constructor.prototype[methodName]).call(@, opt)
+          if callback?
+            callback()
+      else
+        # アイテム状態の表示反映
+        @updatePositionAndItemSize(@itemSize, false, false)
+        if callback?
+          callback()
+    )
+
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか
   # @param [Function] callback コールバック
@@ -446,6 +464,18 @@ class PreloadItemText extends CanvasItemBase
       if callback?
         callback()
     )
+
+  # イベント前の表示状態にする
+  updateEventBefore: ->
+    super()
+    @_animationFlg = {}
+    @_animationFlg['isOpen'] = false
+    
+  # イベント後の表示状態にする
+  updateEventAfter: ->
+    super()
+    @_animationFlg = {}
+    @_animationFlg['isOpen'] = true
 
   startOpenAnimation: (callback = null) ->
     if @_runningBallonAnimation? && @_runningBallonAnimation
@@ -595,6 +625,7 @@ class PreloadItemText extends CanvasItemBase
 
   willChapter: (callback = null) ->
     @_animationFlg = {}
+    @_animationFlg['isOpen'] = false
     super(callback)
 
   @isJapanease = (c) ->
@@ -604,11 +635,11 @@ class PreloadItemText extends CanvasItemBase
     @showWithAnimation = @showWithAnimation__after
     @showAnimationType = @showAnimationType__after
     @showAnimationType
-    if @showWithAnimation && !@_animationFlg['startOpenAnimation']?
+    if @showWithAnimation && !@_animationFlg['isOpen']?
       @startOpenAnimation( =>
         @changeText(opt)
       )
-      @_animationFlg['startOpenAnimation'] = true
+      @_animationFlg['isOpen'] = true
     else
       opa = opt.progress / opt.progressMax
       canvas = document.getElementById(@canvasElementId())
@@ -620,20 +651,19 @@ class PreloadItemText extends CanvasItemBase
       @_fixedTextAlpha = opa
       _drawTextAndBalloonToCanvas.call(@ , @inputText__after)
 
-    if opt.progress == opt.progressMax && @showWithAnimation && !@_animationFlg['startCloseAnimation']?
+    if opt.progress == opt.progressMax && @showWithAnimation && @_animationFlg['isOpen']? && @_animationFlg['isOpen']
       @startCloseAnimation()
-      @_animationFlg['startCloseAnimation'] = true
+      @_animationFlg['isOpen'] = false
 
-  writeText: (opt) ->
+  writeText: (opt, callback = null) ->
     @showWithAnimation = @showWithAnimation__after
     @showAnimationType = @showAnimationType__after
     @_forward = opt.forward
-    if @_forward && @showWithAnimation && (!@_animationFlg['startOpenAnimation']? || !@_animationFlg['startOpenAnimation'])
+    if @_forward && @showWithAnimation && (!@_animationFlg['isOpen']? || !@_animationFlg['isOpen'])
       #if !window.isWorkTable
       #  window.scrollHandleWrapper.removeClass('enable_inertial_scroll')
       @startOpenAnimation( =>
-        @_animationFlg['startOpenAnimation'] = true
-        @_animationFlg['startCloseAnimation'] = false
+        @_animationFlg['isOpen'] = true
         @resetProgress()
         @fontSize = _calcFontSizeAbout.call(@, @inputText, @_canvas.width, @_canvas.height, @isFixedFontSize, @drawHorizontal)
         _setTextStyle.call(@)
@@ -643,10 +673,9 @@ class PreloadItemText extends CanvasItemBase
 
       )
     else
-      if !@_forward && opt.progress <= 0 && @showWithAnimation && @_animationFlg['startOpenAnimation']
+      if !@_forward && opt.progress <= 0 && @showWithAnimation && @_animationFlg['isOpen']
         @startCloseAnimation( =>
-          @_animationFlg['startOpenAnimation'] = false
-          @_animationFlg['startCloseAnimation'] = true
+          @_animationFlg['isOpen'] = false
           @resetProgress()
           @_beforeWriteLength = 0
           @_writeTextRunning = false
@@ -658,8 +687,7 @@ class PreloadItemText extends CanvasItemBase
           writeLength =  @inputText.length * (opt.progress + adjustProgress * 0.5) / opt.progressMax
           writeBlurLength = parseInt(writeLength) - parseInt(@_beforeWriteLength)
           if Math.abs(writeBlurLength) > 0
-            @_animationFlg['startOpenAnimation'] = true
-            @_animationFlg['startCloseAnimation'] = false
+            @_animationFlg['isOpen'] = true
             if parseInt(writeLength) < @inputText.length
               @_finishedWrite = false
             @_writeTextRunning = true
@@ -685,17 +713,21 @@ class PreloadItemText extends CanvasItemBase
                 @_finishedWrite = parseInt(writeLength) >= @inputText.length
             _write.call(@)
 
-    if opt.progress >= opt.progressMax && @_finishedWrite? && @_finishedWrite && @showWithAnimation && (!@_animationFlg['startCloseAnimation']? || !@_animationFlg['startCloseAnimation'])
+    if opt.progress >= opt.progressMax && @_finishedWrite? && @_finishedWrite && @showWithAnimation && (@_animationFlg['isOpen']? && @_animationFlg['isOpen'])
       @_writeTextRunning = false
       @startCloseAnimation( =>
-        @_animationFlg['startCloseAnimation'] = true
-        @_animationFlg['startOpenAnimation'] = false
+        @_animationFlg['isOpen'] = false
         if !@_isFinishedEvent
           # 終了イベント
           @finishEvent()
           if ScrollGuide?
             ScrollGuide.hideGuide()
+          if callback?
+            callback()
       )
+    else
+      if callback?
+        callback()
       #if !window.isWorkTable
       #  window.scrollHandleWrapper.addClass('enable_inertial_scroll')
 

@@ -820,6 +820,7 @@ WorktableCommon = (function() {
         if (idx < tes.length - 1 || fromBlankEventConfig) {
           item.willChapter(function() {
             item.updateEventAfter();
+            item.execLastStep();
             return item.didChapter();
           });
         } else if (doRunPreview) {

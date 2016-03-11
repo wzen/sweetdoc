@@ -110,17 +110,23 @@ class Chapter
         )
 
   # チャプターのイベントを実行後にする
-  forwardAllEvents: ->
+  forwardAllEvents: (callback = null) ->
     if window.runDebug
       console.log('Chapter forwardAllEvents')
 
     # とりあえずフォーカスはなし
+    count = 0
     for e, idx in @eventObjList
       e.initEvent(@eventList[idx])
       e.updateEventAfter()
       # FIXME: 状態を後に戻す(現状didChapterにしておく)
-      #e.refresh()
-      e.didChapter()
+      e.execLastStep( =>
+        e.didChapter()
+        count += 1
+        if count >= @eventObjList.length
+          if callback?
+            callback()
+      )
 
   # ガイド表示
   # @param [Boolean] calledByWillChapter チャプター開始時に呼ばれたか

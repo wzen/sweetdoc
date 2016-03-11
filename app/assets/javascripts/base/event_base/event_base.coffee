@@ -529,6 +529,10 @@ class EventBase extends Extend
     if actionType == constant.ActionType.SCROLL
       @stepValue = @scrollLength()
     @updateInstanceParamByStep(null, true)
+    # インスタンスの状態を保存
+    @saveToFootprint(@id, false, @_event[EventPageValueBase.PageValueKey.DIST_ID])
+
+  execLastStep: (callback = null) ->
     # 最終ステップでメソッドを実行
     progressMax = @progressMax()
     @execMethod({
@@ -536,9 +540,7 @@ class EventBase extends Extend
         progress: progressMax
         progressMax: progressMax
         forward: true
-      })
-    # インスタンスの状態を保存
-    @saveToFootprint(@id, false, @_event[EventPageValueBase.PageValueKey.DIST_ID])
+      }, callback)
 
   # ステップ実行によるアイテム状態更新
   updateInstanceParamByStep: (progressValue, immediate = false)->

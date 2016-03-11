@@ -697,6 +697,8 @@ class WorktableCommon
           item.willChapter( ->
             # イベント後の状態に変更
             item.updateEventAfter()
+            # 最終ステップでメソッドを実行
+            item.execLastStep()
             item.didChapter()
           )
         else if doRunPreview

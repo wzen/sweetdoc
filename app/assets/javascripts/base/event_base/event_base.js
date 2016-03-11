@@ -625,7 +625,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.updateEventAfter = function() {
-    var actionType, progressMax;
+    var actionType;
     if (this._event == null) {
       return;
     }
@@ -637,14 +637,21 @@ EventBase = (function(superClass) {
       this.stepValue = this.scrollLength();
     }
     this.updateInstanceParamByStep(null, true);
+    return this.saveToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
+  };
+
+  EventBase.prototype.execLastStep = function(callback) {
+    var progressMax;
+    if (callback == null) {
+      callback = null;
+    }
     progressMax = this.progressMax();
-    this.execMethod({
+    return this.execMethod({
       isPreview: false,
       progress: progressMax,
       progressMax: progressMax,
       forward: true
-    });
-    return this.saveToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
+    }, callback);
   };
 
   EventBase.prototype.updateInstanceParamByStep = function(progressValue, immediate) {

@@ -18,23 +18,26 @@ ItemEventBase = (function(superClass) {
   ItemEventBase.prototype.initEventPrepare = function() {};
 
   ItemEventBase.prototype.execMethod = function(opt, callback) {
-    var methodName;
     if (callback == null) {
       callback = null;
     }
-    ItemEventBase.__super__.execMethod.call(this, opt);
-    methodName = this.getEventMethodName();
-    if (methodName !== EventPageValueBase.NO_METHOD) {
-      this.constructor.prototype[methodName].call(this, opt);
-      if (callback != null) {
-        return callback();
-      }
-    } else {
-      this.updatePositionAndItemSize(this.itemSize, false, false);
-      if (callback != null) {
-        return callback();
-      }
-    }
+    return ItemEventBase.__super__.execMethod.call(this, opt, (function(_this) {
+      return function() {
+        var methodName;
+        methodName = _this.getEventMethodName();
+        if (methodName !== EventPageValueBase.NO_METHOD) {
+          _this.constructor.prototype[methodName].call(_this, opt);
+          if (callback != null) {
+            return callback();
+          }
+        } else {
+          _this.updatePositionAndItemSize(_this.itemSize, false, false);
+          if (callback != null) {
+            return callback();
+          }
+        }
+      };
+    })(this));
   };
 
   return ItemEventBase;
