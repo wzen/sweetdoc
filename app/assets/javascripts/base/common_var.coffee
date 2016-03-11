@@ -35,8 +35,6 @@ class CommonVar
     page = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
     window.mainWrapper = $("#pages .#{page} .main-wrapper:first")
     window.scrollContents = $("#pages .#{page} .scroll_contents:first")
-    window.scrollHandleWrapper = $("#pages .#{page} .scroll_handle_wrapper:first")
-    window.scrollHandle = $("#pages .#{page} .scroll_handle:first")
     window.scrollInsideCover = $("#pages .#{page} .scroll_inside_cover:first")
     window.scrollInsideWrapper = $("#pages .#{page} .scroll_inside_wrapper:first")
     window.scrollInside = $("#pages .#{page} .scroll_inside:first")
@@ -77,9 +75,10 @@ class CommonVar
     window.distX = 0
     window.distY = 0
     window.resizeTimer = false
-    window.scrollViewSwitchZindex = {'on': Common.plusPagingZindex(constant.Zindex.EVENTFLOAT), 'off': Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM)}
     window.disabledEventHandler = false
     window.firstItemFocused = false
+    window.scrollHandleWrapper = $("#main .scroll_handle_wrapper:first")
+    window.scrollHandle = $("#main .scroll_handle:first")
     @updateRunBaseElement(PageValue.getPageNum())
 
 do ->

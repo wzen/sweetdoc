@@ -1,7 +1,14 @@
 <div id="main">
     <div id="screen_wrapper">
         <div id="project_wrapper" class="border" style="display: none">
-            <%= render 'run/contents' %>
+          <div id="project_contents">
+            <div id="<%= Const::Paging::ROOT_ID %>">
+              <%= render 'run/guide/guide' %>
+              <div class="scroll_handle_wrapper enable_inertial_scroll">
+                <div class="scroll_handle"></div>
+              </div>
+            </div>
+          </div>
         </div>
         <%= render 'base/floatview' %>
     </div>

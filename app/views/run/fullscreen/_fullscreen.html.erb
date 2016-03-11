@@ -3,8 +3,16 @@
 %>
 <div id="main" class="fullscreen">
   <div id="screen_wrapper">
+    <!-- fullscreenではスクロールビューは全画面に合わせる -->
+    <div class="scroll_handle_wrapper enable_inertial_scroll">
+      <div class="scroll_handle"></div>
+    </div>
     <div id="project_wrapper" class="fullscreen border" style="display: none">
-        <%= render 'run/contents' %>
+      <div id="project_contents">
+        <div id="<%= Const::Paging::ROOT_ID %>">
+          <%= render 'run/guide/guide' %>
+        </div>
+      </div>
     </div>
     <div class="info_wrapper">
         <a class="info_button" onclick="RunFullScreen.showPopupInfo()"><%= image_tag("run/popup_info_24.png", size:'24x24') %></a>

@@ -59,7 +59,7 @@ RunCommon = (function() {
   RunCommon.initView = function() {
     $(window.drawingCanvas).attr('width', window.canvasWrapper.width());
     $(window.drawingCanvas).attr('height', window.canvasWrapper.height());
-    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
+    window.scrollHandleWrapper.css('pointer-events', '');
     scrollInsideWrapper.width(window.scrollViewSize);
     scrollInsideWrapper.height(window.scrollViewSize);
     scrollInsideCover.width(window.scrollViewSize);

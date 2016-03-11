@@ -346,8 +346,7 @@ class Page
     if window.runDebug
       console.log('Page floatPageScrollHandleCanvas')
 
-    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
-    scrollContents.css('z-index', scrollViewSwitchZindex.off)
+    window.scrollHandleWrapper.css('pointer-events', '')
     @getForkChapterList().forEach((chapter) ->
       chapter.enableScrollHandleViewEvent()
     )

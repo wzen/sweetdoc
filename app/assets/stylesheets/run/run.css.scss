@@ -80,6 +80,12 @@ div.scroll_wrapper {
   background-color: transparent;
 }
 
+body.fullscreen {
+  div#screen_wrapper {
+    overflow: hidden;
+  }
+}
+
 div.scroll_handle_wrapper {
   position: absolute;
   top: 0;
@@ -91,6 +97,7 @@ div.scroll_handle_wrapper {
   padding-bottom: 30px;
   background-color: transparent;
   box-sizing: content-box;
+  z-index:1899999999; // FullScreen時のinfoボタン & infoポップアップより低い位置
   //&.enable_inertial_scroll {
   //  -webkit-overflow-scrolling: touch;
   //}

@@ -29,7 +29,7 @@ class RunCommon
     $(window.drawingCanvas).attr('width', window.canvasWrapper.width())
     $(window.drawingCanvas).attr('height', window.canvasWrapper.height())
     # 暫定でスクロールを上に持ってくる
-    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
+    window.scrollHandleWrapper.css('pointer-events', '')
     # スクロールビューの大きさ
     scrollInsideWrapper.width(window.scrollViewSize)
     scrollInsideWrapper.height(window.scrollViewSize)
