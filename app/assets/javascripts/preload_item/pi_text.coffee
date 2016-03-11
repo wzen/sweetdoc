@@ -308,6 +308,7 @@ class PreloadItemText extends CanvasItemBase
         _drawTextAndBalloonToCanvas.call(@ , @constructor.NO_TEXT)
 
   # メソッド実行(ItemEventBaseのオーバーライド)
+  # FIXME: アニメーション処理などで各メソッドの終了が遅れる場合があるため、全メソッドでcallbackを呼ばせるように変更するか考える
   execMethod: (opt, callback = null) ->
     EventBase.prototype.execMethod.call(@, opt, =>
       methodName = @getEventMethodName()
