@@ -532,8 +532,8 @@ class EventBase extends Extend
     # インスタンスの状態を保存
     @saveToFootprint(@id, false, @_event[EventPageValueBase.PageValueKey.DIST_ID])
 
+  # 最終ステップでメソッドを実行
   execLastStep: (callback = null) ->
-    # 最終ステップでメソッドを実行
     progressMax = @progressMax()
     @execMethod({
         isPreview: false

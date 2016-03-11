@@ -476,7 +476,14 @@ class PreloadItemText extends CanvasItemBase
   updateEventAfter: ->
     super()
     @_animationFlg = {}
-    @_animationFlg['isOpen'] = true
+    @_animationFlg['isOpen'] = false
+
+  # 最終ステップでメソッドを実行(オーバーライド)
+  execLastStep: (callback = null) ->
+    # イベント終了を呼ぶだけ(開始と終了で表示が変わらないため)
+    @finishEvent()
+    if callback?
+      callback()
 
   startOpenAnimation: (callback = null) ->
     if @_runningBallonAnimation? && @_runningBallonAnimation

@@ -625,7 +625,17 @@ PreloadItemText = (function(superClass) {
   PreloadItemText.prototype.updateEventAfter = function() {
     PreloadItemText.__super__.updateEventAfter.call(this);
     this._animationFlg = {};
-    return this._animationFlg['isOpen'] = true;
+    return this._animationFlg['isOpen'] = false;
+  };
+
+  PreloadItemText.prototype.execLastStep = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    this.finishEvent();
+    if (callback != null) {
+      return callback();
+    }
   };
 
   PreloadItemText.prototype.startOpenAnimation = function(callback) {
