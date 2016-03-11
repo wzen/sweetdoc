@@ -177,14 +177,14 @@ class Common
   @initScrollContentsPosition = ->
     updateByInitConfig = false
     if !window.isWorkTable && ScreenEvent.hasInstanceCache()
+      # Run & ScreenEventインスタンス有り
       se = new ScreenEvent()
       if se.hasInitConfig()
-        updateByInitConfig = true
-    if updateByInitConfig
-      # Run & ScreenEventのinitConfigが設定されている場合
-      se = new ScreenEvent()
-      se.setEventBaseXAndY(se.initConfigX, se.initConfigY)
-      size = @convertCenterCoodToSize(se.initConfigX, se.initConfigY, se.initConfigScale)
+        se.setEventBaseXAndY(se.initConfigX, se.initConfigY)
+        size = @convertCenterCoodToSize(se.initConfigX, se.initConfigY, se.initConfigScale)
+      else
+        # initConfigが無い場合は画面中央に設定
+        size = @convertCenterCoodToSize(0, 0, 1.0)
       scrollContentsSize = Common.scrollContentsSizeUnderViewScale();
       @updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
     else

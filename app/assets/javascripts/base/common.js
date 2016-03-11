@@ -199,13 +199,11 @@ Common = (function() {
     if (!window.isWorkTable && ScreenEvent.hasInstanceCache()) {
       se = new ScreenEvent();
       if (se.hasInitConfig()) {
-        updateByInitConfig = true;
+        se.setEventBaseXAndY(se.initConfigX, se.initConfigY);
+        size = this.convertCenterCoodToSize(se.initConfigX, se.initConfigY, se.initConfigScale);
+      } else {
+        size = this.convertCenterCoodToSize(0, 0, 1.0);
       }
-    }
-    if (updateByInitConfig) {
-      se = new ScreenEvent();
-      se.setEventBaseXAndY(se.initConfigX, se.initConfigY);
-      size = this.convertCenterCoodToSize(se.initConfigX, se.initConfigY, se.initConfigScale);
       scrollContentsSize = Common.scrollContentsSizeUnderViewScale();
       return this.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false);
     } else {
