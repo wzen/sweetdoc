@@ -30,10 +30,6 @@ input.empty:disabled {
   bottom: 0;
   right: 0;
   margin: auto;
-
-  &.fullscreen {
-    border: 0 !important;
-  }
 }
 
 #project_contents {
@@ -66,6 +62,10 @@ div#pages {
 
 div.border {
   border: 5px solid #e6deca;
+
+  &.fullscreen {
+    border: 3px solid #e6deca !important;
+  }
 }
 
 div.tagcloud ul {
