@@ -159,10 +159,9 @@ Common = (function() {
   };
 
   Common.getScreenSize = function() {
-    var height, p, width;
-    p = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
-    if (p != null) {
-      return p;
+    var height, width;
+    if (this.isFixedScreenSize()) {
+      return PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
     } else {
       width = $('#main').width();
       height = $('#main').height();
@@ -203,7 +202,7 @@ Common = (function() {
   Common.isFixedScreenSize = function() {
     var size;
     size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
-    return size != null;
+    return (size != null) && size.width && size.height;
   };
 
   Common.saveMainWrapperSize = function() {

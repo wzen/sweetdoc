@@ -137,9 +137,8 @@ class Common
 
   # スクリーンサイズを取得
   @getScreenSize = ->
-    p = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
-    if p?
-      return p
+    if @isFixedScreenSize()
+      return PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
     else
       # 画面を指定していない場合は計算した画面サイズを返す
       width = $('#main').width()
@@ -177,7 +176,7 @@ class Common
   @isFixedScreenSize = ->
     # ScreenSizeデータが存在すれば指定
     size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
-    return size?
+    return size? && size.width && size.height
 
   @saveMainWrapperSize = ->
     window.mainWrapperSize = {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
