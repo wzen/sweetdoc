@@ -148,16 +148,13 @@ ItemPreviewCommon = (function() {
   };
 
   ItemPreviewCommon.switchRun = function(callback) {
-    var height, width;
     if (callback == null) {
       callback = null;
     }
     if (window.isWorkTable) {
       window.isWorkTable = false;
       window.initDone = false;
-      width = $('#screen_wrapper').width();
-      height = $('#screen_wrapper').height();
-      Project.initProjectValue('ItemPreviewRun', width, height);
+      Project.initProjectValue('ItemPreviewRun');
       this.createdMainContainerIfNeeded();
       return this.initMainContainerAsRun((function(_this) {
         return function() {

@@ -2,10 +2,8 @@ class Project
   # プロジェクト更新
   @updateProjectInfo = (info) ->
     projectName = info.projectName
-    width = info.screenWidth
-    height = info.screenHeight
     # プロジェクト情報初期化
-    Project.initProjectValue(projectName, width, height)
+    Project.initProjectValue(projectName)
     # プロジェクト名設定
     Common.setTitle(projectName)
     # 環境更新
@@ -32,11 +30,6 @@ class Project
       $(".button_wrapper .#{$(@).val()}", modalEmt).show()
       Project.hideError(modalEmt)
     )
-    $('.display_size_wrapper input[type=radio]', modalEmt).off('click').on('click', ->
-      $('.display_size_input_wrapper', modalEmt).css('display', if $(@).val() == 'input' then 'block' else 'none')
-    )
-    # ウィンドウサイズ
-    $('.default_window_size', modalEmt).html("#{$('#screen_wrapper').width()} x #{Project.calcOriginalViewHeight()}")
     # 作成済みプロジェクト一覧取得
     Project.load_data_order_last_updated((data) =>
       user_pagevalue_list = data.user_pagevalue_list
@@ -80,19 +73,10 @@ class Project
 
       # プロジェクト新規作成
       projectName = $('.project_name').val()
-      width = $('#screen_wrapper').width()
-      height = Project.calcOriginalViewHeight()
       if !projectName? || projectName.length == 0
         # エラー
         Project.showError(modalEmt, I18n.t('message.project.error.project_name'))
         return
-      if $('.display_size_wrapper input[value=input]').is(':checked')
-        width = $('.display_size_input_width', modalEmt).val()
-        height = $('.display_size_input_height', modalEmt).val()
-        if !width? || width.length == 0 || !height? || height.length == 0
-          # エラー
-          Project.showError(modalEmt, I18n.t('message.project.error.display_size'))
-          return
 
       # Mainコンテナ作成
       Common.createdMainContainerIfNeeded(PageValue.getPageNum())
@@ -103,8 +87,6 @@ class Project
       # プロジェクト更新
       Project.updateProjectInfo({
         projectName: projectName
-        screenWidth: width
-        screenHeight: height
       })
 
       # プロジェクト作成リクエスト
@@ -182,10 +164,11 @@ class Project
   @create = (title, screenWidth, screenHeight, callback = null) ->
     data = {}
     data[constant.Project.Key.TITLE] = title
-    data[constant.Project.Key.SCREEN_SIZE] = {
-      width: screenWidth
-      height: screenHeight
-    }
+    if screenWidth? && screenHeight?
+      data[constant.Project.Key.SCREEN_SIZE] = {
+        width: screenWidth
+        height: screenHeight
+      }
     $.ajax(
       {
         url: "/project/create"
@@ -206,9 +189,11 @@ class Project
             if callback?
               callback(data)
           else
+            Common.hideModalView(true)
             console.log('project/create server error')
             Common.ajaxError(data)
         error: (data) ->
+          Common.hideModalView(true)
           console.log('project/create ajax error')
           Common.ajaxError(data)
       }
@@ -253,13 +238,11 @@ class Project
       Timeline.refreshAllTimeline()
     )
 
-  @initProjectValue = (name, width, height) ->
+  @initProjectValue = (name) ->
     # PageValue設定
     PageValue.setGeneralPageValue(PageValue.Key.PROJECT_NAME, name)
-    PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {
-      width: parseInt(width)
-      height: parseInt(height)
-    })
+    # プロジェクトのサイズは動作プレビューで指定させるため空
+    PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {})
 
   # プロジェクト管理モーダルビュー初期化
   @initAdminProjectModal = (modalEmt, params, callback = null) ->
@@ -308,8 +291,6 @@ class Project
       inputWrapper = modalEmt.find('.am_input_wrapper:first')
       data.value = {
         p_title: inputWrapper.find('.project_name:first').val()
-        p_screen_width: inputWrapper.find('.display_size_input_width:first').val()
-        p_screen_height: inputWrapper.find('.display_size_input_height:first').val()
       }
       $.ajax(
         {
@@ -365,8 +346,6 @@ class Project
           _updateActive.call(@)
           Project.updateProjectInfo({
             projectName: updated_project_info.title
-            screenWidth: updated_project_info.screen_width
-            screenHeight: updated_project_info.screen_height
           })
           # 非表示
           Common.hideModalView()
@@ -408,8 +387,6 @@ class Project
           _loadEditInput($(e.target), (project) =>
             inputWrapper = modalEmt.find('.am_input_wrapper:first')
             inputWrapper.find('.project_name:first').val(project.title)
-            inputWrapper.find('.display_size_input_width:first').val(project.screen_width)
-            inputWrapper.find('.display_size_input_height:first').val(project.screen_height)
             inputWrapper.find(".#{constant.Project.Key.PROJECT_ID}:first").val(project.id)
             _settingEditInputEvent.call(@)
             inputWrapper.show()

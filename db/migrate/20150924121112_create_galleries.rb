@@ -8,8 +8,8 @@ class CreateGalleries < ActiveRecord::Migration
       t.string :thumbnail_img_contents_type
       t.integer :thumbnail_img_width
       t.integer :thumbnail_img_height
-      t.integer :screen_width, null: false
-      t.integer :screen_height, null: false
+      t.integer :screen_width
+      t.integer :screen_height
       t.integer :page_max, default: 1
       t.boolean :show_guide, default: true
       t.boolean :show_page_num, default: false

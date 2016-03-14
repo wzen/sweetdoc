@@ -7,11 +7,9 @@ Project = (function() {
   function Project() {}
 
   Project.updateProjectInfo = function(info) {
-    var height, projectName, width;
+    var projectName;
     projectName = info.projectName;
-    width = info.screenWidth;
-    height = info.screenHeight;
-    Project.initProjectValue(projectName, width, height);
+    Project.initProjectValue(projectName);
     Common.setTitle(projectName);
     return Common.applyEnvironmentFromPagevalue();
   };
@@ -49,10 +47,6 @@ Project = (function() {
       $(".button_wrapper ." + ($(this).val()), modalEmt).show();
       return Project.hideError(modalEmt);
     });
-    $('.display_size_wrapper input[type=radio]', modalEmt).off('click').on('click', function() {
-      return $('.display_size_input_wrapper', modalEmt).css('display', $(this).val() === 'input' ? 'block' : 'none');
-    });
-    $('.default_window_size', modalEmt).html(($('#screen_wrapper').width()) + " x " + (Project.calcOriginalViewHeight()));
     Project.load_data_order_last_updated((function(_this) {
       return function(data) {
         var list, projectSelect, size, user_pagevalue_list;
@@ -100,31 +94,19 @@ Project = (function() {
       };
     })(this));
     $('.create_button', modalEmt).off('click').on('click', function() {
-      var height, projectName, width;
+      var projectName;
       Common.hideModalView(true);
       Common.showModalFlashMessage('Creating...');
       projectName = $('.project_name').val();
-      width = $('#screen_wrapper').width();
-      height = Project.calcOriginalViewHeight();
       if ((projectName == null) || projectName.length === 0) {
         Project.showError(modalEmt, I18n.t('message.project.error.project_name'));
         return;
-      }
-      if ($('.display_size_wrapper input[value=input]').is(':checked')) {
-        width = $('.display_size_input_width', modalEmt).val();
-        height = $('.display_size_input_height', modalEmt).val();
-        if ((width == null) || width.length === 0 || (height == null) || height.length === 0) {
-          Project.showError(modalEmt, I18n.t('message.project.error.display_size'));
-          return;
-        }
       }
       Common.createdMainContainerIfNeeded(PageValue.getPageNum());
       WorktableCommon.initMainContainer();
       Common.initResize(WorktableCommon.resizeEvent);
       Project.updateProjectInfo({
-        projectName: projectName,
-        screenWidth: width,
-        screenHeight: height
+        projectName: projectName
       });
       return Project.create(projectName, width, height, function(data) {
         window.initDone = true;
@@ -217,10 +199,12 @@ Project = (function() {
     }
     data = {};
     data[constant.Project.Key.TITLE] = title;
-    data[constant.Project.Key.SCREEN_SIZE] = {
-      width: screenWidth,
-      height: screenHeight
-    };
+    if ((screenWidth != null) && (screenHeight != null)) {
+      data[constant.Project.Key.SCREEN_SIZE] = {
+        width: screenWidth,
+        height: screenHeight
+      };
+    }
     return $.ajax({
       url: "/project/create",
       type: "POST",
@@ -237,11 +221,13 @@ Project = (function() {
             return callback(data);
           }
         } else {
+          Common.hideModalView(true);
           console.log('project/create server error');
           return Common.ajaxError(data);
         }
       },
       error: function(data) {
+        Common.hideModalView(true);
         console.log('project/create ajax error');
         return Common.ajaxError(data);
       }
@@ -288,12 +274,9 @@ Project = (function() {
     })(this));
   };
 
-  Project.initProjectValue = function(name, width, height) {
+  Project.initProjectValue = function(name) {
     PageValue.setGeneralPageValue(PageValue.Key.PROJECT_NAME, name);
-    return PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {
-      width: parseInt(width),
-      height: parseInt(height)
-    });
+    return PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {});
   };
 
   Project.initAdminProjectModal = function(modalEmt, params, callback) {
@@ -349,9 +332,7 @@ Project = (function() {
       data[constant.Project.Key.PROJECT_ID] = $(target).closest('.am_input_wrapper').find("." + constant.Project.Key.PROJECT_ID + ":first").val();
       inputWrapper = modalEmt.find('.am_input_wrapper:first');
       data.value = {
-        p_title: inputWrapper.find('.project_name:first').val(),
-        p_screen_width: inputWrapper.find('.display_size_input_width:first').val(),
-        p_screen_height: inputWrapper.find('.display_size_input_height:first').val()
+        p_title: inputWrapper.find('.project_name:first').val()
       };
       return $.ajax({
         url: "/project/update",
@@ -409,9 +390,7 @@ Project = (function() {
             modalEmt.find('.am_list:first').empty().html(admin_html);
             _updateActive.call(_this);
             Project.updateProjectInfo({
-              projectName: updated_project_info.title,
-              screenWidth: updated_project_info.screen_width,
-              screenHeight: updated_project_info.screen_height
+              projectName: updated_project_info.title
             });
             return Common.hideModalView();
           });
@@ -459,8 +438,6 @@ Project = (function() {
                 var inputWrapper;
                 inputWrapper = modalEmt.find('.am_input_wrapper:first');
                 inputWrapper.find('.project_name:first').val(project.title);
-                inputWrapper.find('.display_size_input_width:first').val(project.screen_width);
-                inputWrapper.find('.display_size_input_height:first').val(project.screen_height);
                 inputWrapper.find("." + constant.Project.Key.PROJECT_ID + ":first").val(project.id);
                 _settingEditInputEvent.call(_this);
                 return inputWrapper.show();

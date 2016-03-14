@@ -36,6 +36,10 @@ CommonVar = (function() {
     var page;
     page = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
     window.mainWrapper = $("#pages ." + page + " .main-wrapper:first");
+    window.mainWrapperSize = {
+      width: window.mainWrapper.width(),
+      height: window.mainWrapper.height()
+    };
     window.scrollContents = $("#pages ." + page + " .scroll_contents:first");
     window.scrollInsideCover = $("#pages ." + page + " .scroll_inside_cover:first");
     window.scrollInsideWrapper = $("#pages ." + page + " .scroll_inside_wrapper:first");

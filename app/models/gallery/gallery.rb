@@ -41,6 +41,7 @@ class Gallery < ActiveRecord::Base
     show_guide,
     show_page_num,
     show_chapter_num,
+    screen_size,
     upload_overwrite_gallery_token
   )
     begin
@@ -68,8 +69,8 @@ class Gallery < ActiveRecord::Base
                        thumbnail_img_width: thumbnail_width,
                        thumbnail_img_height: thumbnail_height,
                        page_max: page_max,
-                       screen_width: p.screen_width,
-                       screen_height: p.screen_height,
+                       screen_width: screen_size.present? ?  screen_size['width'].to_i : nil,
+                       screen_height: screen_size.present? ?  screen_size['height'].to_i : nil,
                        show_guide: show_guide,
                        show_page_num: show_page_num,
                        show_chapter_num: show_chapter_num
@@ -97,8 +98,8 @@ class Gallery < ActiveRecord::Base
                            thumbnail_img_width: thumbnail_width,
                            thumbnail_img_height: thumbnail_height,
                            page_max: page_max,
-                           screen_width: p.screen_width,
-                           screen_height: p.screen_height,
+                           screen_width: screen_size.present? ?  screen_size['width'].to_i : nil,
+                           screen_height: screen_size.present? ?  screen_size['height'].to_i : nil,
                            show_guide: show_guide,
                            show_page_num: show_page_num,
                            show_chapter_num: show_chapter_num

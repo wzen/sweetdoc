@@ -159,14 +159,16 @@ Common = (function() {
   };
 
   Common.getScreenSize = function() {
-    var p;
+    var height, p, width;
     p = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
     if (p != null) {
       return p;
     } else {
+      width = $('#main').width();
+      height = $('#main').height();
       return {
-        width: window.mainWrapper.width(),
-        height: window.mainWrapper.height()
+        width: width,
+        height: height
       };
     }
   };
@@ -176,21 +178,39 @@ Common = (function() {
     if (reset == null) {
       reset = false;
     }
-    size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
-    if (!reset && (size != null) && (size.width != null) && (size.height != null)) {
-      css = {
-        width: size.width,
-        height: size.height
-      };
-      $('#project_wrapper').css(css);
-      $('#project_wrapper').show();
-      $('#timeline').show();
-    } else {
+    if (reset) {
       $('#project_wrapper').hide();
       $('#timeline').hide();
       PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {});
+    } else {
+      if (!window.isWorkTable && this.isFixedScreenSize()) {
+        size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+        css = {
+          width: size.width,
+          height: size.height
+        };
+        $('#project_wrapper').css(css);
+      } else {
+        $('#project_wrapper').removeAttr('style');
+      }
+      $('#project_wrapper').show();
+      $('#timeline').show();
     }
+    this.saveMainWrapperSize();
     return this.updateCanvasSize();
+  };
+
+  Common.isFixedScreenSize = function() {
+    var size;
+    size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+    return size != null;
+  };
+
+  Common.saveMainWrapperSize = function() {
+    return window.mainWrapperSize = {
+      width: window.mainWrapper.width(),
+      height: window.mainWrapper.height()
+    };
   };
 
   Common.initScrollContentsPosition = function() {

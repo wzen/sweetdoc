@@ -7,7 +7,7 @@ class Project < ActiveRecord::Base
   has_many :project_gallery_maps
   has_many :user_project_maps
 
-  def self.create(user_id, title, screen_width, screen_height)
+  def self.create(user_id, title, screen_size)
     begin
       ActiveRecord::Base.transaction do
         user_project = UserProjectMap.where(user_id: user_id, del_flg: false)
@@ -16,7 +16,7 @@ class Project < ActiveRecord::Base
           return I18n.t('message.database.item_state.save.error'), null
         else
           # 作成
-          p = self.new({title: title, screen_width: screen_width, screen_height: screen_height})
+          p = self.new({title: title})
           p.save!
           upm = UserProjectMap.new({user_id: user_id, project_id: p.id})
           upm.save!
@@ -30,6 +30,19 @@ class Project < ActiveRecord::Base
       return false, I18n.t('message.database.item_state.save.error'), nil, nil
     end
   end
+
+  # def self.set_screen_size(user_id, project_id, screen_size)
+  #   if screen_size.present?
+  #     # スクリーンサイズ固定
+  #     upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id)
+  #     if upm.present?
+  #       p = Project.find(project_id)
+  #       p.screen_width = screen_size['width'].to_i
+  #       p.screen_height = screen_size['height'].to_i
+  #       p.save!
+  #     end
+  #   end
+  # end
 
   def self.get_project_by_user_pagevalue_id(user_id, user_pagevalue_id)
     begin
@@ -122,12 +135,6 @@ class Project < ActiveRecord::Base
           if p.present?
             if value['p_title'].present?
               p.title = value['p_title']
-            end
-            if value['p_screen_width'].present?
-              p.screen_width = value['p_screen_width']
-            end
-            if value['p_screen_height'].present?
-              p.screen_height = value['p_screen_height']
             end
             p.save!
           end

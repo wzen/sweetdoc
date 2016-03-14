@@ -129,9 +129,7 @@ class ItemPreviewCommon
       window.isWorkTable = false
       window.initDone = false
       # プロジェクトサイズ設定
-      width = $('#screen_wrapper').width()
-      height = $('#screen_wrapper').height()
-      Project.initProjectValue('ItemPreviewRun', width, height)
+      Project.initProjectValue('ItemPreviewRun')
       @createdMainContainerIfNeeded()
       @initMainContainerAsRun( =>
         window.eventAction = null

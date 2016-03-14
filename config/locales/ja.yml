@@ -181,8 +181,8 @@ ja:
     height: "高さ"
     project_create: "プロジェクト作成"
     project_select: "プロジェクト選択"
-    fit: "画面サイズに合わせる"
-    input: "入力"
+    not_fix_screen_size: "画面サイズ指定しない"
+    fix_screen_size: "画面サイズ指定"
     select_project: "プロジェクト"
     button:
       create: "作成"

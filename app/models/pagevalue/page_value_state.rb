@@ -109,8 +109,6 @@ class PageValueState
       up.updated_at as up_updated_at,
       p.id as p_id,
       p.title as p_title,
-      p.screen_width as p_screen_width,
-      p.screen_height as p_screen_height,
       p.is_sample as p_is_sample
     SELECT
     sql = _user_pagevalue_sql_order_updated_desc(select, user_id)
@@ -124,9 +122,7 @@ class PageValueState
       up.id as up_id,
       up.updated_at as up_updated_at,
       p.id as p_id,
-      p.title as p_title,
-      p.screen_width as p_screen_width,
-      p.screen_height as p_screen_height
+      p.title as p_title
     SELECT
     sql = _user_pagevalue_sql_order_updated_desc(select, user_id)
     ret = ActiveRecord::Base.connection.select_all(sql).to_hash
@@ -155,7 +151,7 @@ class PageValueState
   # @param [Array] loaded_class_dist_tokens 読み込み済みのアイテムID一覧
   def self.load_state(user_id, user_pagevalue_id, loaded_class_dist_tokens)
     sql = <<-"SQL"
-      SELECT p.id as project_id, p.title as project_title, p.screen_width as project_screen_width, p.screen_height as project_screen_height, p.is_sample as is_sample_project,
+      SELECT p.id as project_id, p.title as project_title, p.is_sample as is_sample_project,
              ip.data as instance_pagevalue_data,
              ep.data as event_pagevalue_data,
              gcp.data as general_common_pagevalue_data,
@@ -203,10 +199,6 @@ class PageValueState
       gpd[Const::Project::Key::PROJECT_ID] = pagevalues.first['project_id']
       gpd[Const::Project::Key::TITLE] = pagevalues.first['project_title']
       gpd[Const::Project::Key::IS_SAMPLE_PROJECT] = pagevalues.first['is_sample_project'].to_i != 0
-      gpd[Const::Project::Key::SCREEN_SIZE] = {
-          width: pagevalues.first['project_screen_width'],
-          height: pagevalues.first['project_screen_height']
-      }
       if pagevalues.first['general_common_pagevalue_data']
         # プロジェクト要素以外のGeneralを設定
         gpd.reverse_merge!(JSON.parse(pagevalues.first['general_common_pagevalue_data']))
@@ -287,8 +279,6 @@ class PageValueState
       up.updated_at as up_updated_at,
       p.id as p_id,
       p.title as p_title,
-      p.screen_width as p_screen_width,
-      p.screen_height as p_screen_height,
       p.is_sample as p_is_sample
       FROM
       user_pagevalues up

@@ -204,8 +204,8 @@ en:
     height: "Height"
     project_create: "Create"
     project_select: "Select"
-    fit: "Fit"
-    input: "Input"
+    not_fix_screen_size: "Not fix screen size"
+    fix_screen_size: "Fix screen size"
     select_project: "Select project"
     button:
       create: "Create"

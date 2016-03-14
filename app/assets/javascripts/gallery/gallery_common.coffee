@@ -50,15 +50,21 @@ class GalleryCommon
     e.preventDefault()
     e.stopPropagation()
     root = $(e.target)
-    # 実行確認ページを新規ウィンドウで表示
-    size = {
-      width: root.find(".#{constant.Gallery.Key.SCREEN_SIZE_WIDTH}").val()
-      height: root.find(".#{constant.Gallery.Key.SCREEN_SIZE_HEIGHT}").val()
-    }
-    left = Number((window.screen.width - size.width)/2)
-    top = Number((window.screen.height - (size.height))/2)
     target = "_runwindow"
-    window.open("about:blank", target, "top=#{top},left=#{left},width=#{size.width},height=#{size.height},menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=no")
+    # 実行確認ページを新規ウィンドウで表示
+    width = root.find(".#{constant.Gallery.Key.SCREEN_SIZE_WIDTH}").val()
+    height = root.find(".#{constant.Gallery.Key.SCREEN_SIZE_HEIGHT}").val()
+    if width? && height?
+      # スクリーンサイズが指定されている場合
+      size = {
+        width: width
+        height: height
+      }
+      left = Number((window.screen.width - size.width)/2)
+      top = Number((window.screen.height - (size.height))/2)
+      window.open("about:blank", target, "top=#{top},left=#{left},width=#{size.width},height=#{size.height},menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=no")
+    else
+      window.open("about:blank", target, "menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=no")
     document.send_form.action = '/gallery/detail/w/' + root.find(".#{constant.Gallery.Key.GALLERY_ACCESS_TOKEN}").val()
     document.send_form.target = target
     setTimeout( ->

@@ -137,41 +137,50 @@ class Common
 
   # スクリーンサイズを取得
   @getScreenSize = ->
-    # FIXME: リサイズでコンテンツが拡大縮小しなくなるため一旦コメントアウト
-#    if $('body').hasClass('full_window')
-#      # 全画面の場合
-#      return {
-#        width: $(window).width()
-#        height: $(window).height()
-#      }
-#    else
     p = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
     if p?
       return p
     else
-      #console.error('SCREEN_SIZE not defined')
-      return {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
+      # 画面を指定していない場合は計算した画面サイズを返す
+      width = $('#main').width()
+      height = $('#main').height()
+      return {width: width, height: height}
 
   # プロジェクト表示サイズ設定
   @initScreenSize = (reset = false) ->
-    size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
-    if !reset && size? && size.width? && size.height?
-      css = {
-        width: size.width
-        height: size.height
-      }
-      $('#project_wrapper').css(css)
-      # プロジェクトビュー & タイムラインを閉じる
-      $('#project_wrapper').show()
-      $('#timeline').show()
-    else
+    if reset
       # プロジェクトビュー & タイムラインを閉じる
       $('#project_wrapper').hide()
       $('#timeline').hide()
       PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {})
-
+    else
+      if !window.isWorkTable && @isFixedScreenSize()
+        # 画面サイズ指定
+        size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
+        css = {
+          width: size.width
+          height: size.height
+        }
+        $('#project_wrapper').css(css)
+      else
+        # 画面サイズは親ビューに合わせる
+        $('#project_wrapper').removeAttr('style')
+      # プロジェクトビュー & タイムラインを表示
+      $('#project_wrapper').show()
+      $('#timeline').show()
+    # サイズを保存
+    @saveMainWrapperSize()
     # Canvasサイズ更新
     @updateCanvasSize()
+
+  # 画面サイズが指定されているか
+  @isFixedScreenSize = ->
+    # ScreenSizeデータが存在すれば指定
+    size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
+    return size?
+
+  @saveMainWrapperSize = ->
+    window.mainWrapperSize = {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
 
   # スクロール位置初期化
   @initScrollContentsPosition = ->

@@ -42,47 +42,63 @@ class RunCommon
 
   # Mainビューのサイズ更新
   @updateMainViewSize = ->
-    # mainビュー高さ修正
-    contentsWidth = $('#contents').width()
-    contentsHeight = $('#contents').height()
-    # スクリーンサイズ修正
-    projectScreenSize = Common.getScreenSize()
-    updatedProjectScreenSize = $.extend(true, {}, projectScreenSize);
-    widthPadding = 30
-    if $('#project_wrapper').hasClass('fullscreen')
-      widthPadding = 0
-    heightPadding = 10
-    if $('#project_wrapper').hasClass('fullscreen')
-      heightPadding = 0
-    # Paddingを考慮して比較
-    if contentsWidth < projectScreenSize.width + widthPadding
-      # 縮小
-      updatedProjectScreenSize.width = contentsWidth - widthPadding
-    if contentsHeight < projectScreenSize.height + heightPadding
-      # 縮小
-      updatedProjectScreenSize.height = contentsHeight - heightPadding
-
-    # BaseScale 修正
-    widthRate = updatedProjectScreenSize.width / projectScreenSize.width
-    heightRate = updatedProjectScreenSize.height / projectScreenSize.height
-    if widthRate < heightRate
-      scaleFromViewRate = widthRate
+    if !Common.isFixedScreenSize()
+      # 画面指定しない場合は ビューの倍率1.0 & projectサイズ指定なし
+      window.runScaleFromViewRate = 1.0
+      $('#project_wrapper').removeAttr('style')
     else
-      scaleFromViewRate = heightRate
-    if scaleFromViewRate == 0.0
-      scaleFromViewRate = 0.01
-    window.runScaleFromViewRate = scaleFromViewRate
-    updatedProjectScreenSize.width = projectScreenSize.width * scaleFromViewRate
-    updatedProjectScreenSize.height = projectScreenSize.height * scaleFromViewRate
-    $('#project_wrapper').css({width: updatedProjectScreenSize.width, height: updatedProjectScreenSize.height})
-    # FIXME: 表示位置もScaleに合わせて直す
-    Common.applyViewScale()
+      # mainビュー高さ修正
+      contentsWidth = $('#contents').width()
+      contentsHeight = $('#contents').height()
+      # スクリーンサイズ修正
+      projectScreenSize = Common.getScreenSize()
+      updatedProjectScreenSize = $.extend(true, {}, projectScreenSize);
+      widthPadding = 30
+      if $('#project_wrapper').hasClass('fullscreen')
+        widthPadding = 0
+      heightPadding = 10
+      if $('#project_wrapper').hasClass('fullscreen')
+        heightPadding = 0
+      # Paddingを考慮して比較
+      if contentsWidth < projectScreenSize.width + widthPadding
+        # 縮小
+        updatedProjectScreenSize.width = contentsWidth - widthPadding
+      if contentsHeight < projectScreenSize.height + heightPadding
+        # 縮小
+        updatedProjectScreenSize.height = contentsHeight - heightPadding
+
+      # BaseScale 修正
+      widthRate = updatedProjectScreenSize.width / projectScreenSize.width
+      heightRate = updatedProjectScreenSize.height / projectScreenSize.height
+      if widthRate < heightRate
+        scaleFromViewRate = widthRate
+      else
+        scaleFromViewRate = heightRate
+      if scaleFromViewRate == 0.0
+        scaleFromViewRate = 0.01
+      window.runScaleFromViewRate = scaleFromViewRate
+      updatedProjectScreenSize.width = projectScreenSize.width * scaleFromViewRate
+      updatedProjectScreenSize.height = projectScreenSize.height * scaleFromViewRate
+      $('#project_wrapper').css({width: updatedProjectScreenSize.width, height: updatedProjectScreenSize.height})
+      Common.applyViewScale()
+    Common.saveMainWrapperSize()
 
   # 画面リサイズイベント
   @resizeMainContainerEvent = ->
-    # フォーカス後にリサイズするとずれるためスクロール位置は更新しないこと
+    _adjustScrollPosition = (beforeMainWrapperSize) ->
+      diff = {
+        width: (beforeMainWrapperSize.width - window.mainWrapper.width()) * 0.5
+        height: (beforeMainWrapperSize.height - window.mainWrapper.height()) * 0.5
+      }
+      window.scrollContents.scrollTop(window.scrollContents.scrollTop() - diff.height)
+      window.scrollContents.scrollLeft(window.scrollContents.scrollLeft() - diff.width)
+
+    beforeMainWrapperSize = window.mainWrapperSize
     @updateMainViewSize()
     Common.updateCanvasSize()
+    if !Common.isFixedScreenSize()
+      # 画面指定なしの場合はビュー倍率が1.0固定のためスクロール位置修正
+      _adjustScrollPosition.call(@, beforeMainWrapperSize)
 
   # ウィンドウリサイズイベント
   @resizeEvent = ->

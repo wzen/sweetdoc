@@ -72,47 +72,67 @@ RunCommon = (function() {
 
   RunCommon.updateMainViewSize = function() {
     var contentsHeight, contentsWidth, heightPadding, heightRate, projectScreenSize, scaleFromViewRate, updatedProjectScreenSize, widthPadding, widthRate;
-    contentsWidth = $('#contents').width();
-    contentsHeight = $('#contents').height();
-    projectScreenSize = Common.getScreenSize();
-    updatedProjectScreenSize = $.extend(true, {}, projectScreenSize);
-    widthPadding = 30;
-    if ($('#project_wrapper').hasClass('fullscreen')) {
-      widthPadding = 0;
-    }
-    heightPadding = 10;
-    if ($('#project_wrapper').hasClass('fullscreen')) {
-      heightPadding = 0;
-    }
-    if (contentsWidth < projectScreenSize.width + widthPadding) {
-      updatedProjectScreenSize.width = contentsWidth - widthPadding;
-    }
-    if (contentsHeight < projectScreenSize.height + heightPadding) {
-      updatedProjectScreenSize.height = contentsHeight - heightPadding;
-    }
-    widthRate = updatedProjectScreenSize.width / projectScreenSize.width;
-    heightRate = updatedProjectScreenSize.height / projectScreenSize.height;
-    if (widthRate < heightRate) {
-      scaleFromViewRate = widthRate;
+    if (!Common.isFixedScreenSize()) {
+      window.runScaleFromViewRate = 1.0;
+      $('#project_wrapper').removeAttr('style');
     } else {
-      scaleFromViewRate = heightRate;
+      contentsWidth = $('#contents').width();
+      contentsHeight = $('#contents').height();
+      projectScreenSize = Common.getScreenSize();
+      updatedProjectScreenSize = $.extend(true, {}, projectScreenSize);
+      widthPadding = 30;
+      if ($('#project_wrapper').hasClass('fullscreen')) {
+        widthPadding = 0;
+      }
+      heightPadding = 10;
+      if ($('#project_wrapper').hasClass('fullscreen')) {
+        heightPadding = 0;
+      }
+      if (contentsWidth < projectScreenSize.width + widthPadding) {
+        updatedProjectScreenSize.width = contentsWidth - widthPadding;
+      }
+      if (contentsHeight < projectScreenSize.height + heightPadding) {
+        updatedProjectScreenSize.height = contentsHeight - heightPadding;
+      }
+      widthRate = updatedProjectScreenSize.width / projectScreenSize.width;
+      heightRate = updatedProjectScreenSize.height / projectScreenSize.height;
+      if (widthRate < heightRate) {
+        scaleFromViewRate = widthRate;
+      } else {
+        scaleFromViewRate = heightRate;
+      }
+      if (scaleFromViewRate === 0.0) {
+        scaleFromViewRate = 0.01;
+      }
+      window.runScaleFromViewRate = scaleFromViewRate;
+      updatedProjectScreenSize.width = projectScreenSize.width * scaleFromViewRate;
+      updatedProjectScreenSize.height = projectScreenSize.height * scaleFromViewRate;
+      $('#project_wrapper').css({
+        width: updatedProjectScreenSize.width,
+        height: updatedProjectScreenSize.height
+      });
+      Common.applyViewScale();
     }
-    if (scaleFromViewRate === 0.0) {
-      scaleFromViewRate = 0.01;
-    }
-    window.runScaleFromViewRate = scaleFromViewRate;
-    updatedProjectScreenSize.width = projectScreenSize.width * scaleFromViewRate;
-    updatedProjectScreenSize.height = projectScreenSize.height * scaleFromViewRate;
-    $('#project_wrapper').css({
-      width: updatedProjectScreenSize.width,
-      height: updatedProjectScreenSize.height
-    });
-    return Common.applyViewScale();
+    return Common.saveMainWrapperSize();
   };
 
   RunCommon.resizeMainContainerEvent = function() {
+    var _adjustScrollPosition, beforeMainWrapperSize;
+    _adjustScrollPosition = function(beforeMainWrapperSize) {
+      var diff;
+      diff = {
+        width: (beforeMainWrapperSize.width - window.mainWrapper.width()) * 0.5,
+        height: (beforeMainWrapperSize.height - window.mainWrapper.height()) * 0.5
+      };
+      window.scrollContents.scrollTop(window.scrollContents.scrollTop() - diff.height);
+      return window.scrollContents.scrollLeft(window.scrollContents.scrollLeft() - diff.width);
+    };
+    beforeMainWrapperSize = window.mainWrapperSize;
     this.updateMainViewSize();
-    return Common.updateCanvasSize();
+    Common.updateCanvasSize();
+    if (!Common.isFixedScreenSize()) {
+      return _adjustScrollPosition.call(this, beforeMainWrapperSize);
+    }
   };
 
   RunCommon.resizeEvent = function() {

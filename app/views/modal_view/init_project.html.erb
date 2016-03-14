@@ -18,29 +18,6 @@
                 <input name="project_name" class="project_name" type="text" required="required"><br />
             </div>
         </div>
-        <div class="display_project_new_wrapper">
-            <div class="label_div">
-                <label><%= I18n.t('modal.display_size') %>:</label>
-            </div>
-            <div>
-                <div class="display_size_wrapper">
-                    <label>
-                        <input type="radio" name="project_size" value="default" checked><%= I18n.t('modal.fit') %> (<span class="default_window_size"></span>)
-                    </label>
-                    <label>
-                        <input type="radio" name="project_size" value="input"><%= I18n.t('modal.input') %>
-                    </label>
-                </div>
-                <div class="display_size_input_wrapper" style="display: none">
-                    <div style="display: inline-block">
-                        <%= I18n.t('modal.width') %>:<input class="display_size_input_width" type="number" value="" maxlength="4" style="max-width: 50px">
-                    </div>
-                    <div style="display: inline-block">
-                      <%= I18n.t('modal.height') %>:<input class="display_size_input_height" type="number" value="" maxlength="4" style="max-width: 50px">
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="display_project_select_wrapper">
             <div class="label_div">
                 <label><%= I18n.t('modal.select_project') %>:</label>

@@ -51,8 +51,8 @@ ActiveRecord::Schema.define(version: 20151209141157) do
     t.string   "thumbnail_img_contents_type"
     t.integer  "thumbnail_img_width"
     t.integer  "thumbnail_img_height"
-    t.integer  "screen_width",                                                 null: false
-    t.integer  "screen_height",                                                null: false
+    t.integer  "screen_width"
+    t.integer  "screen_height"
     t.integer  "page_max",                                     default: 1
     t.boolean  "show_guide",                                   default: true
     t.boolean  "show_page_num",                                default: false
@@ -297,10 +297,8 @@ ActiveRecord::Schema.define(version: 20151209141157) do
 
   create_table "projects", force: true do |t|
     t.string   "title"
-    t.integer  "screen_width",                  null: false
-    t.integer  "screen_height",                 null: false
-    t.boolean  "is_sample",     default: false
-    t.boolean  "del_flg",       default: false
+    t.boolean  "is_sample",  default: false
+    t.boolean  "del_flg",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

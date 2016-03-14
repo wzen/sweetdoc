@@ -61,6 +61,7 @@ class GalleryController < ApplicationController
     show_guide = params.fetch(Const::Gallery::Key::SHOW_GUIDE, false)
     show_page_num = params.fetch(Const::Gallery::Key::SHOW_PAGE_NUM, false)
     show_chapter_num = params.fetch(Const::Gallery::Key::SHOW_CHAPTER_NUM, false)
+    screen_size = params.fetch(Const::Gallery::Key::SCREEN_SIZE, nil)
     upload_overwrite_gallery_token = params.fetch(Const::Gallery::Key::UPLOAD_OVERWRITE_GALLERY_TOKEN, '')
     @result_success, @message, @access_token = Gallery.save_state(
         user_id,
@@ -76,6 +77,7 @@ class GalleryController < ApplicationController
         show_guide,
         show_page_num,
         show_chapter_num,
+        screen_size,
         upload_overwrite_gallery_token
     )
   end

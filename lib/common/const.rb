@@ -249,6 +249,7 @@ class Const
       TITLE = 'title'
       IS_SAMPLE_PROJECT = 'is_sample_project'
       SCREEN_SIZE = 'screen_size'
+      FIXED_SCREEN_SIZE = 'fixed_screen_size'
       USER_PAGEVALUE_ID = 'user_pagevalue_id'
       USER_PAGEVALUE_UPDATED_AT = 'user_pagevalue_updated_at'
     end
@@ -262,6 +263,7 @@ class Const
       GALLERY_ID = 'gid'
       GALLERY_ACCESS_TOKEN = 'g_at'
       PROJECT_ID = 'pid'
+      SCREEN_SIZE = 'screen_size'
       SCREEN_SIZE_WIDTH = 'scrren_size_w'
       SCREEN_SIZE_HEIGHT = 'scrren_size_h'
       TAGS = 'tags'
