@@ -85,20 +85,20 @@ class RunCommon
 
   # 画面リサイズイベント
   @resizeMainContainerEvent = ->
-    _adjustScrollPosition = (beforeMainWrapperSize) ->
-      diff = {
-        width: (beforeMainWrapperSize.width - window.mainWrapper.width()) * 0.5
-        height: (beforeMainWrapperSize.height - window.mainWrapper.height()) * 0.5
-      }
-      window.scrollContents.scrollTop(window.scrollContents.scrollTop() + diff.height)
-      window.scrollContents.scrollLeft(window.scrollContents.scrollLeft() + diff.width)
-
     beforeMainWrapperSize = window.mainWrapperSize
     @updateMainViewSize()
     Common.updateCanvasSize()
     if !Common.isFixedScreenSize()
       # 画面指定なしの場合はビュー倍率が1.0固定のためスクロール位置修正
-      _adjustScrollPosition.call(@, beforeMainWrapperSize)
+      @adjustScrollPositionWhenScreenSizeChanging(beforeMainWrapperSize, Common.getScreenSize())
+
+  @adjustScrollPositionWhenScreenSizeChanging = (beforeSize, afterSize) ->
+    diff = {
+      width: (beforeSize.width - afterSize.width) * 0.5
+      height: (beforeSize.height - afterSize.height) * 0.5
+    }
+    window.scrollContents.scrollTop(window.scrollContents.scrollTop() + diff.height)
+    window.scrollContents.scrollLeft(window.scrollContents.scrollLeft() + diff.width)
 
   # ウィンドウリサイズイベント
   @resizeEvent = ->
@@ -407,6 +407,8 @@ class RunCommon
     window.open("about:blank", target)
     root = $('#nav')
     $("input[name='#{constant.Gallery.Key.PROJECT_ID}']", root).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID))
+    if Common.isFixedScreenSize()
+      $("input[name='#{constant.Gallery.Key.SCREEN_SIZE}']", root).val(JSON.stringify(PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)))
     $("input[name='#{constant.Gallery.Key.PAGE_MAX}']", root).val(PageValue.getPageCount())
     document.upload_gallery_form.target = target
     document.upload_gallery_form.submit()

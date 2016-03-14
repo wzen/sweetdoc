@@ -140,10 +140,8 @@ class Common
     if @isFixedScreenSize()
       return PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
     else
-      # 画面を指定していない場合は計算した画面サイズを返す
-      width = $('#main').width()
-      height = $('#main').height()
-      return {width: width, height: height}
+      # 画面を指定していない場合はMainWrapperビューの画面サイズを返す
+      return {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
 
   # プロジェクト表示サイズ設定
   @initScreenSize = (reset = false) ->

@@ -117,22 +117,23 @@ RunCommon = (function() {
   };
 
   RunCommon.resizeMainContainerEvent = function() {
-    var _adjustScrollPosition, beforeMainWrapperSize;
-    _adjustScrollPosition = function(beforeMainWrapperSize) {
-      var diff;
-      diff = {
-        width: (beforeMainWrapperSize.width - window.mainWrapper.width()) * 0.5,
-        height: (beforeMainWrapperSize.height - window.mainWrapper.height()) * 0.5
-      };
-      window.scrollContents.scrollTop(window.scrollContents.scrollTop() + diff.height);
-      return window.scrollContents.scrollLeft(window.scrollContents.scrollLeft() + diff.width);
-    };
+    var beforeMainWrapperSize;
     beforeMainWrapperSize = window.mainWrapperSize;
     this.updateMainViewSize();
     Common.updateCanvasSize();
     if (!Common.isFixedScreenSize()) {
-      return _adjustScrollPosition.call(this, beforeMainWrapperSize);
+      return this.adjustScrollPositionWhenScreenSizeChanging(beforeMainWrapperSize, Common.getScreenSize());
     }
+  };
+
+  RunCommon.adjustScrollPositionWhenScreenSizeChanging = function(beforeSize, afterSize) {
+    var diff;
+    diff = {
+      width: (beforeSize.width - afterSize.width) * 0.5,
+      height: (beforeSize.height - afterSize.height) * 0.5
+    };
+    window.scrollContents.scrollTop(window.scrollContents.scrollTop() + diff.height);
+    return window.scrollContents.scrollLeft(window.scrollContents.scrollLeft() + diff.width);
   };
 
   RunCommon.resizeEvent = function() {
@@ -479,6 +480,9 @@ RunCommon = (function() {
     window.open("about:blank", target);
     root = $('#nav');
     $("input[name='" + constant.Gallery.Key.PROJECT_ID + "']", root).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
+    if (Common.isFixedScreenSize()) {
+      $("input[name='" + constant.Gallery.Key.SCREEN_SIZE + "']", root).val(JSON.stringify(PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)));
+    }
     $("input[name='" + constant.Gallery.Key.PAGE_MAX + "']", root).val(PageValue.getPageCount());
     document.upload_gallery_form.target = target;
     return document.upload_gallery_form.submit();

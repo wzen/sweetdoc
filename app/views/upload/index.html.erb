@@ -88,6 +88,9 @@
               </div>
           </div>
           <input name="<%= Const::Gallery::Key::PROJECT_ID %>" type="hidden" value="<%= @project_id %>">
+          <% if @screen_size.present? %>
+            <input name="<%= Const::Gallery::Key::SCREEN_SIZE %>" type="hidden" value="<%= @screen_size %>">
+          <% end %>
           <input name="<%= Const::Gallery::Key::PAGE_MAX %>" type="hidden" value="<%= @page_max %>">
           <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG %>" type="hidden" value="">
           <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_CONTENTSTYPE %>" type="hidden" value="">

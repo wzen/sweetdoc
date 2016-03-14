@@ -97,7 +97,7 @@ div.scroll_handle_wrapper {
   padding-bottom: 30px;
   background-color: transparent;
   box-sizing: content-box;
-  z-index:1899999999; // FullScreen時のinfoボタン & infoポップアップより低い位置
+  z-index:99999999; // FullScreen時のinfoボタン & infoポップアップより低い位置
   //&.enable_inertial_scroll {
   //  -webkit-overflow-scrolling: touch;
   //}
@@ -185,6 +185,7 @@ div#guide_right{
 }
 
 .guide-view {
+  pointer-events: none;
   z-index: 999999999;
   display: none;
 

@@ -143,6 +143,7 @@ class Navbar
           $('.display_size_input_wrapper', modalEmt).css('display', if radio.filter(':checked').val() == 'input' then 'block' else 'none')
         ).trigger('change')
         $('.update_button', modalEmt).off('click').on('click', =>
+          beforeSize = Common.getScreenSize()
           # PageValueに設定
           if radio.filter(':checked').val() == 'input'
             width = $('.display_size_input_width:first', modalEmt).val()
@@ -159,8 +160,8 @@ class Navbar
             PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {})
           # 変更反映
           Common.initScreenSize()
-          # FIXME: スクリーン位置調整
-
+          # スクリーン位置調整
+          RunCommon.adjustScrollPositionWhenScreenSizeChanging(beforeSize, Common.getScreenSize())
           Common.hideModalView()
         )
         $('.cancel_button', modalEmt).off('click').on('click', =>

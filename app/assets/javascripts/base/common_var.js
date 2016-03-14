@@ -16,7 +16,7 @@ CommonVar = (function() {
   CommonVar.initCommonVar = function() {
     window.appName = 'Sweetdoc';
     window.scrollViewSize = 30000;
-    return window.pageNumMax = 10000;
+    return window.pageNumMax = 100;
   };
 
   CommonVar.updateWorktableBaseElement = function(pageNum) {

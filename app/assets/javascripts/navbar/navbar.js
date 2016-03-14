@@ -172,7 +172,8 @@ Navbar = (function() {
             return $('.display_size_input_wrapper', modalEmt).css('display', radio.filter(':checked').val() === 'input' ? 'block' : 'none');
           }).trigger('change');
           $('.update_button', modalEmt).off('click').on('click', function() {
-            var height, width;
+            var beforeSize, height, width;
+            beforeSize = Common.getScreenSize();
             if (radio.filter(':checked').val() === 'input') {
               width = $('.display_size_input_width:first', modalEmt).val();
               height = $('.display_size_input_height:first', modalEmt).val();
@@ -189,6 +190,7 @@ Navbar = (function() {
               PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {});
             }
             Common.initScreenSize();
+            RunCommon.adjustScrollPositionWhenScreenSizeChanging(beforeSize, Common.getScreenSize());
             return Common.hideModalView();
           });
           $('.cancel_button', modalEmt).off('click').on('click', function() {

@@ -35,7 +35,7 @@ class Const
     # @porperty EVENTBOTTOM イベントz-idex最小値
     EVENTBOTTOM = 10
     # @porperty EVENTFLOAT イベントz-index最大値
-    EVENTFLOAT = 9999
+    EVENTFLOAT = 999
   end
 
   # アイテム種別

@@ -14,7 +14,7 @@ class CommonVar
   @initCommonVar = ->
     window.appName = 'Sweetdoc'
     window.scrollViewSize = 30000
-    window.pageNumMax = 10000
+    window.pageNumMax = 100
 
   # 作業テーブルのJQueryオブジェクト保存
   # @param [Integer] pageNum ページ番号
