@@ -90,7 +90,7 @@ class Project
       })
 
       # プロジェクト作成リクエスト
-      Project.create(projectName, width, height, (data) ->
+      Project.create(projectName, (data) ->
         # 初期化終了
         window.initDone = true
         # モーダルを削除
@@ -161,14 +161,9 @@ class Project
     )
 
   # プロジェクト新規作成リクエスト
-  @create = (title, screenWidth, screenHeight, callback = null) ->
+  @create = (title, callback = null) ->
     data = {}
     data[constant.Project.Key.TITLE] = title
-    if screenWidth? && screenHeight?
-      data[constant.Project.Key.SCREEN_SIZE] = {
-        width: screenWidth
-        height: screenHeight
-      }
     $.ajax(
       {
         url: "/project/create"

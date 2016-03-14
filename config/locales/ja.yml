@@ -42,7 +42,8 @@ ja:
       back_to_gallery: "ギャラリーに戻る"
       last_update_date: "最新更新時間"
     setting:
-      show_guide: "モーションガイド切り替え"
+      show_guide: "モーションガイド表示/非表示"
+      screen_size: "スクリーンサイズ変更"
   context_menu:
     new_file: "新規ファイル"
     new_folder: "新規フォルダ"
@@ -175,7 +176,7 @@ ja:
     logout: 'ログアウト'
     continue_as_guest: 'ゲストのまま継続'
   modal:
-    project_name: "名前"
+    project_name: "プロジェクト名"
     display_size: "サイズ"
     width: "幅"
     height: "高さ"

@@ -124,8 +124,8 @@ RunCommon = (function() {
         width: (beforeMainWrapperSize.width - window.mainWrapper.width()) * 0.5,
         height: (beforeMainWrapperSize.height - window.mainWrapper.height()) * 0.5
       };
-      window.scrollContents.scrollTop(window.scrollContents.scrollTop() - diff.height);
-      return window.scrollContents.scrollLeft(window.scrollContents.scrollLeft() - diff.width);
+      window.scrollContents.scrollTop(window.scrollContents.scrollTop() + diff.height);
+      return window.scrollContents.scrollLeft(window.scrollContents.scrollLeft() + diff.width);
     };
     beforeMainWrapperSize = window.mainWrapperSize;
     this.updateMainViewSize();

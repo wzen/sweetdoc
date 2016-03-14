@@ -108,7 +108,7 @@ Project = (function() {
       Project.updateProjectInfo({
         projectName: projectName
       });
-      return Project.create(projectName, width, height, function(data) {
+      return Project.create(projectName, function(data) {
         window.initDone = true;
         Common.hideModalView();
         return FloatView.show('Project created', FloatView.Type.APPLY, 3.0);
@@ -192,19 +192,13 @@ Project = (function() {
     });
   };
 
-  Project.create = function(title, screenWidth, screenHeight, callback) {
+  Project.create = function(title, callback) {
     var data;
     if (callback == null) {
       callback = null;
     }
     data = {};
     data[constant.Project.Key.TITLE] = title;
-    if ((screenWidth != null) && (screenHeight != null)) {
-      data[constant.Project.Key.SCREEN_SIZE] = {
-        width: screenWidth,
-        height: screenHeight
-      };
-    }
     return $.ajax({
       url: "/project/create",
       type: "POST",

@@ -154,6 +154,52 @@ Navbar = (function() {
   Navbar.initRunNavbar = function() {
     var navEmt;
     navEmt = $('#nav');
+    $('.menu-screenSize', navEmt).off('click').on('click', function() {
+      return Common.showModalView(constant.ModalViewType.CHANGE_SCREEN_SIZE, false, (function(_this) {
+        return function(modalEmt, params, callback) {
+          var radio, size;
+          if (callback == null) {
+            callback = null;
+          }
+          radio = $('.display_size_wrapper input[type=radio]', modalEmt);
+          radio.val(Common.isFixedScreenSize() ? ['input'] : ['default']);
+          if (Common.isFixedScreenSize()) {
+            size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+            $('.display_size_input_width', modalEmt).val(size.width);
+            $('.display_size_input_height', modalEmt).val(size.height);
+          }
+          radio.off('change').on('change', function() {
+            return $('.display_size_input_wrapper', modalEmt).css('display', radio.filter(':checked').val() === 'input' ? 'block' : 'none');
+          }).trigger('change');
+          $('.update_button', modalEmt).off('click').on('click', function() {
+            var height, width;
+            if (radio.filter(':checked').val() === 'input') {
+              width = $('.display_size_input_width:first', modalEmt).val();
+              height = $('.display_size_input_height:first', modalEmt).val();
+              if ((width != null) && (height != null) && width > 0 && height > 0) {
+                size = {
+                  width: width,
+                  height: height
+                };
+                PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, size);
+              } else {
+                FloatView.show('Please input size', FloatView.Type.ERROR, 3.0);
+              }
+            } else {
+              PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {});
+            }
+            Common.initScreenSize();
+            return Common.hideModalView();
+          });
+          $('.cancel_button', modalEmt).off('click').on('click', function() {
+            return Common.hideModalView();
+          });
+          if (callback != null) {
+            return callback();
+          }
+        };
+      })(this));
+    });
     $('.menu-showguide', navEmt).off('click').on('click', function() {
       return RunSetting.toggleShowGuide();
     });

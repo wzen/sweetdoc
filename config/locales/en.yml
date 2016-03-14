@@ -64,6 +64,7 @@ en:
       last_update_date: "Last update"
     setting:
       show_guide: "Toggle Guide"
+      screen_size: "Change screen size"
   context_menu:
     new_file: "New File"
     new_folder: "New Folder"

@@ -1,0 +1,34 @@
+<div class="modal-content <%= Const::ModalViewType::CHANGE_SCREEN_SIZE %>">
+  <div class="content">
+    <div>
+      <div>
+        <div class="display_size_wrapper">
+          <div>
+            <label>
+              <input type="radio" name="project_size" value="default" checked><%= I18n.t('modal.not_fix_screen_size') %>
+            </label>
+          </div>
+          <div>
+            <label>
+              <input type="radio" name="project_size" value="input"><%= I18n.t('modal.fix_screen_size') %>
+            </label>
+          </div>
+        </div>
+        <div class="display_size_input_wrapper" style="display: none">
+          <div style="display: inline-block">
+            <%= I18n.t('modal.width') %>:<input class="display_size_input_width" type="number" value="" maxlength="4" style="max-width: 50px">
+          </div>
+          <div style="display: inline-block">
+            <%= I18n.t('modal.height') %>:<input class="display_size_input_height" type="number" value="" maxlength="4" style="max-width: 50px">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="button_wrapper">
+      <div>
+        <button class="update_button width90per" value="Update">Update</button>
+        <button class="cancel_button width90per" value="Cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

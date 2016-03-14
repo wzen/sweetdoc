@@ -394,6 +394,7 @@ class Const
     MESSAGE = 'message'
     FLASH_MESSAGE = 'flash_message'
     ENVIRONMENT_NOT_SUPPORT = 'environment_not_support'
+    CHANGE_SCREEN_SIZE = 'change_screen_size'
   end
 
   class Paging

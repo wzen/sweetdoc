@@ -130,6 +130,46 @@ class Navbar
   # Runナビバー初期化
   @initRunNavbar = ->
     navEmt = $('#nav')
+    $('.menu-screenSize', navEmt).off('click').on('click', ->
+      Common.showModalView(constant.ModalViewType.CHANGE_SCREEN_SIZE, false, (modalEmt, params, callback = null) =>
+        # 設定
+        radio = $('.display_size_wrapper input[type=radio]', modalEmt)
+        radio.val(if Common.isFixedScreenSize() then ['input'] else ['default'])
+        if Common.isFixedScreenSize()
+          size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
+          $('.display_size_input_width', modalEmt).val(size.width)
+          $('.display_size_input_height', modalEmt).val(size.height)
+        radio.off('change').on('change', ->
+          $('.display_size_input_wrapper', modalEmt).css('display', if radio.filter(':checked').val() == 'input' then 'block' else 'none')
+        ).trigger('change')
+        $('.update_button', modalEmt).off('click').on('click', =>
+          # PageValueに設定
+          if radio.filter(':checked').val() == 'input'
+            width = $('.display_size_input_width:first', modalEmt).val()
+            height = $('.display_size_input_height:first', modalEmt).val()
+            if width? && height? && width > 0 && height > 0
+              size = {
+                width: width
+                height: height
+              }
+              PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, size)
+            else
+              FloatView.show('Please input size', FloatView.Type.ERROR, 3.0)
+          else
+            PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {})
+          # 変更反映
+          Common.initScreenSize()
+          # FIXME: スクリーン位置調整
+
+          Common.hideModalView()
+        )
+        $('.cancel_button', modalEmt).off('click').on('click', =>
+          Common.hideModalView()
+        )
+        if callback?
+          callback()
+      )
+    )
     $('.menu-showguide', navEmt).off('click').on('click', ->
       RunSetting.toggleShowGuide()
     )

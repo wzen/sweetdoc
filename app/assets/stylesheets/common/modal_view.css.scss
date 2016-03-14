@@ -201,7 +201,7 @@
     }
   }
 
-  &.create_user_code, &.notice_login {
+  &.create_user_code, &.notice_login, &.change_screen_size  {
     .content {
       > div {
         display: table;
