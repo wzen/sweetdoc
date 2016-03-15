@@ -1558,6 +1558,12 @@ Common = (function() {
     return ret;
   };
 
+  Common.getContentsAccessTokenFromUrl = function() {
+    var locationPaths;
+    locationPaths = window.location.pathname.split('/');
+    return locationPaths[locationPaths.length - 1].split('?')[0];
+  };
+
   return Common;
 
 })();

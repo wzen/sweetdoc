@@ -272,6 +272,23 @@ class Gallery < ActiveRecord::Base
     end
   end
 
+  def self.remove_bookmark(user_id, gallery_access_token)
+    begin
+      ActiveRecord::Base.transaction do
+        # 現状Statisticは減算しない仕様とする
+        g = self.find_by({access_token: gallery_access_token, del_flg: false})
+        if g.present?
+          gb = GalleryBookmark.find_by(user_id: user_id, gallery_id: g.id)
+          if gb.present?
+            gb.update!(del_flg: true)
+          end
+        end
+      end
+    rescue => e
+      # 更新失敗
+      return I18n.t('message.database.item_state.save.error')
+    end
+  end
 
   def self.update_last_state(user_id, tags, i_page_values, e_page_values)
     begin
@@ -462,7 +479,8 @@ class Gallery < ActiveRecord::Base
         gep.data as event_pagevalue_data,
         gbs.count as bookmark_count,
         gvs.count as view_count,
-        ugf.page_num as footprint_page_num
+        ugf.page_num as footprint_page_num,
+        gb.id as bookmark_id
       FROM galleries g
       INNER JOIN project_gallery_maps pgm ON g.id = pgm.gallery_id AND pgm.del_flg = 0
       INNER JOIN user_project_maps upm ON pgm.user_project_map_id = upm.id AND upm.del_flg = 0
@@ -476,6 +494,7 @@ class Gallery < ActiveRecord::Base
       LEFT JOIN gallery_bookmark_statistics gbs ON g.id = gbs.gallery_id AND gbs.del_flg = 0
       LEFT JOIN gallery_view_statistics gvs ON g.id = gvs.gallery_id AND gvs.del_flg = 0
       LEFT JOIN user_gallery_footprints ugf ON ugf.user_id = u.id AND ugf.gallery_id = g.id AND ugf.del_flg = 0
+      LEFT JOIN gallery_bookmarks gb ON g.id = gb.gallery_id AND gb.del_flg = 0
       WHERE g.access_token = '#{access_token}'
       AND g.del_flg = 0
       LIMIT 1
@@ -523,8 +542,9 @@ class Gallery < ActiveRecord::Base
       message = I18n.t('message.database.item_state.load.success')
       string_link = self.string_link(access_token, hostname, ret['title'])
       embed_link = self.embed_link(gpd, access_token, hostname)
+      bookmarked = ret['bookmark_id'].present?
 
-      return pagevalues, message, ret['title'], ret['caption'], gpd[Const::Project::Key::SCREEN_SIZE], creator, item_js_list, gallery_view_count, gallery_bookmark_count, show_options, string_link, embed_link
+      return pagevalues, message, ret['title'], ret['caption'], gpd[Const::Project::Key::SCREEN_SIZE], creator, item_js_list, gallery_view_count, gallery_bookmark_count, show_options, string_link, embed_link, bookmarked
     end
   end
 

@@ -1241,6 +1241,11 @@ class Common
 
     return ret
 
+  # 現在の表示URLからアクセストークンを取得
+  @getContentsAccessTokenFromUrl = ->
+    locationPaths = window.location.pathname.split('/')
+    return locationPaths[locationPaths.length - 1].split('?')[0]
+
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->
   window.classMap = {}

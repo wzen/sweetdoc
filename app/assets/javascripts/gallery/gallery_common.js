@@ -76,6 +76,77 @@ GalleryCommon = (function() {
     }, 200);
   };
 
+  GalleryCommon.addBookmark = function(note, callback) {
+    var data;
+    if (callback == null) {
+      callback = null;
+    }
+    data = {};
+    data[constant.Gallery.Key.GALLERY_ACCESS_TOKEN] = Common.getContentsAccessTokenFromUrl();
+    data[constant.Gallery.Key.NOTE] = note;
+    return $.ajax({
+      url: "/project/remove",
+      type: "POST",
+      dataType: "json",
+      data: data,
+      success: function(data) {
+        if (data.resultSuccess) {
+          if (callback != null) {
+            return callback(true);
+          }
+        } else {
+          console.log('/project/remove server error');
+          Common.ajaxError(data);
+          if (callback != null) {
+            return callback(false);
+          }
+        }
+      },
+      error: function(data) {
+        console.log('/project/remove ajax error');
+        Common.ajaxError(data);
+        if (callback != null) {
+          return callback(false);
+        }
+      }
+    });
+  };
+
+  GalleryCommon.removeBookmark = function(callback) {
+    var data;
+    if (callback == null) {
+      callback = null;
+    }
+    data = {};
+    data[constant.Gallery.Key.GALLERY_ACCESS_TOKEN] = Common.getContentsAccessTokenFromUrl();
+    return $.ajax({
+      url: "/gallery/remove_bookmark",
+      type: "POST",
+      dataType: "json",
+      data: data,
+      success: function(data) {
+        if (data.resultSuccess) {
+          if (callback != null) {
+            return callback(true);
+          }
+        } else {
+          console.log('/project/remove server error');
+          Common.ajaxError(data);
+          if (callback != null) {
+            return callback(false);
+          }
+        }
+      },
+      error: function(data) {
+        console.log('/project/remove ajax error');
+        Common.ajaxError(data);
+        if (callback != null) {
+          return callback(false);
+        }
+      }
+    });
+  };
+
   return GalleryCommon;
 
 })();

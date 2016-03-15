@@ -191,22 +191,42 @@ RunCommon = (function() {
         }
       };
     })(this));
-    $('#contents .contents_share_show_button:first').off('click').on('click', (function(_this) {
-      return function(e) {
-        if (!share.is(':visible')) {
+    if (!window.isMotionCheck) {
+      $('#contents .bookmark_button:first').off('click').on('click', (function(_this) {
+        return function(e) {
           e.preventDefault();
           e.stopPropagation();
-          return share.fadeIn('200', function() {
-            return _setClose.call(_this);
-          });
-        }
-      };
-    })(this));
-    return share.find('textarea, input').off('click.close').on('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      return $(this).select();
-    });
+          if ($(e.target).find('bookmarked:visible').length === 0) {
+            return console.log('');
+          } else {
+            if (window.confirm(I18n.t('message.dialog.change_project'))) {
+              return GalleryCommon.removeBookmark(function(result) {
+                if (result) {
+                  $(e.target).find('bookmarked').hide();
+                  return $(e.target).find('bookmark').show();
+                }
+              });
+            }
+          }
+        };
+      })(this));
+      $('#contents .contents_share_show_button:first').off('click').on('click', (function(_this) {
+        return function(e) {
+          if (!share.is(':visible')) {
+            e.preventDefault();
+            e.stopPropagation();
+            return share.fadeIn('200', function() {
+              return _setClose.call(_this);
+            });
+          }
+        };
+      })(this));
+      return share.find('textarea, input').off('click.close').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return $(this).select();
+      });
+    }
   };
 
   RunCommon.initEventAction = function() {
@@ -326,7 +346,7 @@ RunCommon = (function() {
   };
 
   RunCommon.loadPagingPageValue = function(loadPageNum, doLoadFootprint, callback, forceUpdate) {
-    var className, data, i, k, lastPageNum, locationPaths, ref, ref1, section, targetPages;
+    var className, data, i, k, lastPageNum, ref, ref1, section, targetPages;
     if (doLoadFootprint == null) {
       doLoadFootprint = false;
     }
@@ -358,8 +378,7 @@ RunCommon = (function() {
     data = {};
     data[RunCommon.Key.TARGET_PAGES] = targetPages;
     data[RunCommon.Key.LOADED_CLASS_DIST_TOKENS] = JSON.stringify(PageValue.getLoadedclassDistTokens());
-    locationPaths = window.location.pathname.split('/');
-    data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0];
+    data[RunCommon.Key.ACCESS_TOKEN] = Common.getContentsAccessTokenFromUrl();
     data[RunCommon.Key.RUNNING_USER_PAGEVALUE_ID] = PageValue.getGeneralPageValue(PageValue.Key.RUNNING_USER_PAGEVALUE_ID);
     if (window.isMotionCheck && doLoadFootprint) {
       data[RunCommon.Key.LOAD_FOOTPRINT] = false;
@@ -585,7 +604,7 @@ RunCommon = (function() {
   };
 
   RunCommon.saveFootprint = function(callback) {
-    var data, locationPaths;
+    var data;
     if (callback == null) {
       callback = null;
     }
@@ -596,8 +615,7 @@ RunCommon = (function() {
       }
     } else {
       data = {};
-      locationPaths = window.location.pathname.split('/');
-      data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0];
+      data[RunCommon.Key.ACCESS_TOKEN] = Common.getContentsAccessTokenFromUrl();
       data[RunCommon.Key.FOOTPRINT_PAGE_VALUE] = JSON.stringify(PageValue.getFootprintPageValue(PageValue.Key.F_PREFIX));
       return $.ajax({
         url: "/run/save_gallery_footprint",
@@ -623,7 +641,7 @@ RunCommon = (function() {
   };
 
   RunCommon.loadCommonFootprint = function(callback) {
-    var data, locationPaths;
+    var data;
     if (callback == null) {
       callback = null;
     }
@@ -634,8 +652,7 @@ RunCommon = (function() {
       }
     } else {
       data = {};
-      locationPaths = window.location.pathname.split('/');
-      data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0];
+      data[RunCommon.Key.ACCESS_TOKEN] = Common.getContentsAccessTokenFromUrl();
       return $.ajax({
         url: "/run/load_common_gallery_footprint",
         type: "POST",

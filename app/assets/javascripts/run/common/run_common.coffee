@@ -143,21 +143,38 @@ class RunCommon
             _setClose.call(@)
         })
     )
-
-    # Share情報表示
-    $('#contents .contents_share_show_button:first').off('click').on('click', (e)=>
-      if !share.is(':visible')
+    if !window.isMotionCheck
+      # ブックマークボタン
+      $('#contents .bookmark_button:first').off('click').on('click', (e) =>
         e.preventDefault()
         e.stopPropagation()
-        share.fadeIn('200', =>
-          _setClose.call(@)
-        )
-    )
-    share.find('textarea, input').off('click.close').on('click', (e) ->
-      e.preventDefault()
-      e.stopPropagation()
-      $(@).select()
-    )
+        if $(e.target).find('bookmarked:visible').length == 0
+          # ブックマークなし
+          # TODO: コメント入力欄表示
+          console.log('')
+        else
+          # ブックマーク済み
+          if window.confirm(I18n.t('message.dialog.change_project'))
+            GalleryCommon.removeBookmark((result) =>
+              if result
+                $(e.target).find('bookmarked').hide()
+                $(e.target).find('bookmark').show()
+            )
+      )
+      # Share情報表示
+      $('#contents .contents_share_show_button:first').off('click').on('click', (e)=>
+        if !share.is(':visible')
+          e.preventDefault()
+          e.stopPropagation()
+          share.fadeIn('200', =>
+            _setClose.call(@)
+          )
+      )
+      share.find('textarea, input').off('click.close').on('click', (e) ->
+        e.preventDefault()
+        e.stopPropagation()
+        $(@).select()
+      )
 
   # イベント作成
   @initEventAction = ->
@@ -289,8 +306,7 @@ class RunCommon
     data = {}
     data[RunCommon.Key.TARGET_PAGES] = targetPages
     data[RunCommon.Key.LOADED_CLASS_DIST_TOKENS] = JSON.stringify(PageValue.getLoadedclassDistTokens())
-    locationPaths = window.location.pathname.split('/')
-    data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0]
+    data[RunCommon.Key.ACCESS_TOKEN] = Common.getContentsAccessTokenFromUrl()
     data[RunCommon.Key.RUNNING_USER_PAGEVALUE_ID] = PageValue.getGeneralPageValue(PageValue.Key.RUNNING_USER_PAGEVALUE_ID)
     if window.isMotionCheck && doLoadFootprint
       # 動作確認の場合はLocalStorageから操作履歴を取得
@@ -509,8 +525,7 @@ class RunCommon
     else
       # Serverに保存
       data = {}
-      locationPaths = window.location.pathname.split('/')
-      data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0]
+      data[RunCommon.Key.ACCESS_TOKEN] = Common.getContentsAccessTokenFromUrl()
       data[RunCommon.Key.FOOTPRINT_PAGE_VALUE] = JSON.stringify(PageValue.getFootprintPageValue(PageValue.Key.F_PREFIX))
       $.ajax(
         {
@@ -541,8 +556,7 @@ class RunCommon
     else
       # Serverから読み込み
       data = {}
-      locationPaths = window.location.pathname.split('/')
-      data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0]
+      data[RunCommon.Key.ACCESS_TOKEN] = Common.getContentsAccessTokenFromUrl()
       $.ajax(
         {
           url: "/run/load_common_gallery_footprint"

@@ -78,6 +78,17 @@
 <div class="contents_info_show_button">
   <%= image_tag("run/popup_info_32.png", size:'32x32') %>
 </div>
+<div class="bookmark_button">
+  <% if @bookmarked %>
+      <div class="bookmarked">
+        <%= image_tag("run/bookmarked.png", size:'32x32') %>
+      </div>
+  <% else %>
+      <div class="bookmark">
+        <%= image_tag("run/bookmark.png", size:'32x32') %>
+      </div>
+  <% end %>
+</div>
 <div class="contents_share_show_button clearfix">
   <div>
     <%= render 'base/social_button', twitter_title: @title %>

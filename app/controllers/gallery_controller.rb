@@ -44,7 +44,7 @@ class GalleryController < ApplicationController
     # ViewCountをupdate
     Gallery.add_view_statistic_count(@access_token, Date.today)
     # データを取得
-    @pagevalues, @message, @title, @caption, @screen_size, @creator, @item_js_list, @gallery_view_count, @gallery_bookmark_count, @show_options, @string_link, @embed_link = Gallery.firstload_contents(@access_token, request.host)
+    @pagevalues, @message, @title, @caption, @screen_size, @creator, @item_js_list, @gallery_view_count, @gallery_bookmark_count, @show_options, @string_link, @embed_link, @bookmarked = Gallery.firstload_contents(@access_token, request.host)
   end
 
   def save_state
@@ -112,8 +112,14 @@ class GalleryController < ApplicationController
   def add_bookmark
     user_id = current_or_guest_user.id
     gallery_access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
-    note = params[Const::Gallery::Key::NOTE]
+    note = params.fetch(Const::Gallery::Key::NOTE, '')
     Gallery.add_bookmark(user_id, gallery_access_token, note, Date.today)
+  end
+
+  def remove_bookmark
+    user_id = current_or_guest_user.id
+    gallery_access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
+    Gallery.remove_bookmark(user_id, gallery_access_token)
   end
 
   def thumbnail

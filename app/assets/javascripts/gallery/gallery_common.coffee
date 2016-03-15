@@ -71,3 +71,56 @@ class GalleryCommon
       document.send_form.submit()
     , 200)
 
+  @addBookmark = (note, callback = null) ->
+    data = {}
+    data[constant.Gallery.Key.GALLERY_ACCESS_TOKEN] = Common.getContentsAccessTokenFromUrl()
+    data[constant.Gallery.Key.NOTE] = note
+    $.ajax(
+      {
+        url: "/project/remove"
+        type: "POST"
+        dataType: "json"
+        data: data
+        success: (data)->
+          if data.resultSuccess
+            if callback?
+              callback(true)
+          else
+            console.log('/project/remove server error')
+            Common.ajaxError(data)
+            if callback?
+              callback(false)
+        error: (data)->
+          console.log('/project/remove ajax error')
+          Common.ajaxError(data)
+          if callback?
+            callback(false)
+      }
+    )
+
+  @removeBookmark = (callback = null) ->
+    data = {}
+    data[constant.Gallery.Key.GALLERY_ACCESS_TOKEN] = Common.getContentsAccessTokenFromUrl()
+    $.ajax(
+      {
+        url: "/gallery/remove_bookmark"
+        type: "POST"
+        dataType: "json"
+        data: data
+        success: (data)->
+          if data.resultSuccess
+            if callback?
+              callback(true)
+          else
+            console.log('/project/remove server error')
+            Common.ajaxError(data)
+            if callback?
+              callback(false)
+        error: (data)->
+          console.log('/project/remove ajax error')
+          Common.ajaxError(data)
+          if callback?
+            callback(false)
+      }
+    )
+
