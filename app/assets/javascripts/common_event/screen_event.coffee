@@ -111,15 +111,13 @@ class ScreenEvent extends CommonEvent
 
     # 画面移動イベント
     changeScreenPosition: (opt) =>
-      p = Common.calcScrollTopLeftPosition(@_specificMethodValues.afterY, @_specificMethodValues.afterX)
       @_progressScale = (parseFloat(@_specificMethodValues.afterZ) - @eventBaseScale) * (opt.progress / opt.progressMax) + @eventBaseScale
-      @_progressX = ((parseFloat(p.left) - @eventBaseX) * (opt.progress / opt.progressMax)) + @eventBaseX
-      @_progressY = ((parseFloat(p.top) - @eventBaseY) * (opt.progress / opt.progressMax)) + @eventBaseY
+      @_progressX = ((parseFloat(@_specificMethodValues.afterX) - @eventBaseX) * (opt.progress / opt.progressMax)) + @eventBaseX
+      @_progressY = ((parseFloat(@_specificMethodValues.afterY) - @eventBaseY) * (opt.progress / opt.progressMax)) + @eventBaseY
       if window.isWorkTable && opt.isPreview
         _overlay.call(@, @_progressX, @_progressY, @_progressScale)
         if @_keepDispMag
           _setScaleAndUpdateViewing.call(@, WorktableCommon.getWorktableViewScale())
-
       if !@_keepDispMag
         _setScaleAndUpdateViewing.call(@, @_progressScale)
         size = Common.convertCenterCoodToSize(@_progressX, @_progressY, @_progressScale)
@@ -215,10 +213,9 @@ class ScreenEvent extends CommonEvent
           z = screenSize.width / pointingSize.w
         else
           z = screenSize.height / pointingSize.h
-        center = Common.calcScrollCenterPosition(y, x)
-        emt.find('.afterX:first').removeClass('empty').val(center.left)
-        emt.find('.afterY:first').removeClass('empty').val(center.top)
-        emt.find('.afterZ:first').removeClass('empty').val(z)
+        emt.find('.afterX:first').val(x)
+        emt.find('.afterY:first').val(y)
+        emt.find('.afterZ:first').val(z)
 
       emt = specificRoot['changeScreenPosition']
       x = emt.find('.afterX:first')
@@ -226,28 +223,21 @@ class ScreenEvent extends CommonEvent
       yVal = null
       zVal = null
       size = null
-      if x.val().length == 0
-        x.attr('disabled', 'disabled').addClass('empty')
-      else
+      if x.val().length > 0
         xVal = parseFloat(x.val())
       y = emt.find('.afterY:first')
-      if y.val().length == 0
-        y.attr('disabled', 'disabled').addClass('empty')
-      else
+      if y.val().length > 0
         yVal = parseFloat(y.val())
       z = emt.find('.afterZ:first')
-      if z.val().length == 0
-        z.attr('disabled', 'disabled').addClass('empty')
-      else
+      if z.val().length > 0
         zVal = parseFloat(z.val())
       if xVal? && yVal? && zVal?
-        c = Common.calcScrollTopLeftPosition(yVal, xVal)
         screenSize = Common.getScreenSize()
         w = screenSize.width / zVal
         h = screenSize.height / zVal
         size = {
-          x: c.left - w * 0.5
-          y: c.top - h * 0.5
+          x: xVal - w * 0.5
+          y: yVal- h * 0.5
           w: w
           h: h
         }

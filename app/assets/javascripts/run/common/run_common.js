@@ -127,10 +127,11 @@ RunCommon = (function() {
   };
 
   RunCommon.adjustScrollPositionWhenScreenSizeChanging = function(beforeSize, afterSize) {
-    var diff;
+    var diff, scale;
+    scale = Common.getViewScale();
     diff = {
-      width: (beforeSize.width - afterSize.width) * 0.5,
-      height: (beforeSize.height - afterSize.height) * 0.5
+      width: (beforeSize.width - afterSize.width) * 0.5 / scale,
+      height: (beforeSize.height - afterSize.height) * 0.5 / scale
     };
     window.scrollContents.scrollTop(window.scrollContents.scrollTop() + diff.height);
     return window.scrollContents.scrollLeft(window.scrollContents.scrollLeft() + diff.width);

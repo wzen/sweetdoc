@@ -143,11 +143,10 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.prototype.changeScreenPosition = function(opt) {
-      var p, scrollContentsSize, size;
-      p = Common.calcScrollTopLeftPosition(this._specificMethodValues.afterY, this._specificMethodValues.afterX);
+      var scrollContentsSize, size;
       this._progressScale = (parseFloat(this._specificMethodValues.afterZ) - this.eventBaseScale) * (opt.progress / opt.progressMax) + this.eventBaseScale;
-      this._progressX = ((parseFloat(p.left) - this.eventBaseX) * (opt.progress / opt.progressMax)) + this.eventBaseX;
-      this._progressY = ((parseFloat(p.top) - this.eventBaseY) * (opt.progress / opt.progressMax)) + this.eventBaseY;
+      this._progressX = ((parseFloat(this._specificMethodValues.afterX) - this.eventBaseX) * (opt.progress / opt.progressMax)) + this.eventBaseX;
+      this._progressY = ((parseFloat(this._specificMethodValues.afterY) - this.eventBaseY) * (opt.progress / opt.progressMax)) + this.eventBaseY;
       if (window.isWorkTable && opt.isPreview) {
         _overlay.call(this, this._progressX, this._progressY, this._progressScale);
         if (this._keepDispMag) {
@@ -262,9 +261,9 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.initSpecificConfig = function(specificRoot) {
-      var _updateConfigInput, c, emt, h, screenSize, size, w, x, xVal, y, yVal, z, zVal;
+      var _updateConfigInput, emt, h, screenSize, size, w, x, xVal, y, yVal, z, zVal;
       _updateConfigInput = function(emt, pointingSize) {
-        var center, screenSize, x, y, z;
+        var screenSize, x, y, z;
         x = pointingSize.x + pointingSize.w * 0.5;
         y = pointingSize.y + pointingSize.h * 0.5;
         z = null;
@@ -274,10 +273,9 @@ ScreenEvent = (function(superClass) {
         } else {
           z = screenSize.height / pointingSize.h;
         }
-        center = Common.calcScrollCenterPosition(y, x);
-        emt.find('.afterX:first').removeClass('empty').val(center.left);
-        emt.find('.afterY:first').removeClass('empty').val(center.top);
-        return emt.find('.afterZ:first').removeClass('empty').val(z);
+        emt.find('.afterX:first').val(x);
+        emt.find('.afterY:first').val(y);
+        return emt.find('.afterZ:first').val(z);
       };
       emt = specificRoot['changeScreenPosition'];
       x = emt.find('.afterX:first');
@@ -285,31 +283,24 @@ ScreenEvent = (function(superClass) {
       yVal = null;
       zVal = null;
       size = null;
-      if (x.val().length === 0) {
-        x.attr('disabled', 'disabled').addClass('empty');
-      } else {
+      if (x.val().length > 0) {
         xVal = parseFloat(x.val());
       }
       y = emt.find('.afterY:first');
-      if (y.val().length === 0) {
-        y.attr('disabled', 'disabled').addClass('empty');
-      } else {
+      if (y.val().length > 0) {
         yVal = parseFloat(y.val());
       }
       z = emt.find('.afterZ:first');
-      if (z.val().length === 0) {
-        z.attr('disabled', 'disabled').addClass('empty');
-      } else {
+      if (z.val().length > 0) {
         zVal = parseFloat(z.val());
       }
       if ((xVal != null) && (yVal != null) && (zVal != null)) {
-        c = Common.calcScrollTopLeftPosition(yVal, xVal);
         screenSize = Common.getScreenSize();
         w = screenSize.width / zVal;
         h = screenSize.height / zVal;
         size = {
-          x: c.left - w * 0.5,
-          y: c.top - h * 0.5,
+          x: xVal - w * 0.5,
+          y: yVal - h * 0.5,
           w: w,
           h: h
         };

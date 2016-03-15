@@ -93,9 +93,10 @@ class RunCommon
       @adjustScrollPositionWhenScreenSizeChanging(beforeMainWrapperSize, Common.getScreenSize())
 
   @adjustScrollPositionWhenScreenSizeChanging = (beforeSize, afterSize) ->
+    scale = Common.getViewScale()
     diff = {
-      width: (beforeSize.width - afterSize.width) * 0.5
-      height: (beforeSize.height - afterSize.height) * 0.5
+      width: (beforeSize.width - afterSize.width) * 0.5 / scale
+      height: (beforeSize.height - afterSize.height) * 0.5 / scale
     }
     window.scrollContents.scrollTop(window.scrollContents.scrollTop() + diff.height)
     window.scrollContents.scrollLeft(window.scrollContents.scrollLeft() + diff.width)

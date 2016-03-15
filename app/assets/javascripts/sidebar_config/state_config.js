@@ -52,9 +52,9 @@ StateConfig = (function() {
           };
           EventDragPointingRect.draw(size);
         } else {
-          $('.initConfigX:first', emt).attr('disabled', 'disabled').addClass('empty').val('');
-          $('.initConfigY:first', emt).attr('disabled', 'disabled').addClass('empty').val('');
-          $('.initConfigScale:first', emt).attr('disabled', 'disabled').addClass('empty').val('');
+          $('.initConfigX:first', emt).val('');
+          $('.initConfigY:first', emt).val('');
+          $('.initConfigScale:first', emt).val('');
           $('.clear_pointing:first', emt).hide();
         }
         _updateConfigInput = function(emt, pointingSize) {
@@ -68,10 +68,6 @@ StateConfig = (function() {
           } else {
             z = screenSize.height / pointingSize.h;
           }
-          center = Common.calcScrollCenterPosition(y, x);
-          $('.initConfigX:first', emt).attr('disabled', '').removeClass('empty').val(center.left);
-          $('.initConfigY:first', emt).attr('disabled', '').removeClass('empty').val(center.top);
-          $('.initConfigScale:first', emt).attr('disabled', '').removeClass('empty').val(z);
           $('.clear_pointing:first', emt).show();
           se = new ScreenEvent();
           return se.setInitConfig(x, y, z);
