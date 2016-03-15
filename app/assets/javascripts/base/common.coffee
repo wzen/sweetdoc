@@ -177,7 +177,8 @@ class Common
     return size? && size.width && size.height
 
   @saveMainWrapperSize = ->
-    window.mainWrapperSize = {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
+    if window.mainWrapper?
+      window.mainWrapperSize = {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
 
   # スクロール位置初期化
   @initScrollContentsPosition = ->

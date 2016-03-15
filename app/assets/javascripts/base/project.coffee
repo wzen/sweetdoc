@@ -346,7 +346,7 @@ class Project
           Common.hideModalView()
         )
       )
-      modalEmt.find('.button_wrapper .cancel_button').off('click').on('click', (e) =>
+      modalEmt.find('.am_input_wrapper .button_wrapper .cancel_button').off('click').on('click', (e) =>
         # 左にスライド
         modalEmt.find('.am_scroll_wrapper:first').animate({scrollLeft: 0}, 200)
       )
@@ -406,6 +406,9 @@ class Project
                 modalEmt.find('.am_list:first').empty().html(admin_html)
                 _setEvent.call(@)
             )
+        )
+        modalEmt.find('.am_list_wrapper .cancel_button').off('click').on('click', (e) =>
+          Common.hideModalView()
         )
       _setEvent.call(@)
       Common.modalCentering()

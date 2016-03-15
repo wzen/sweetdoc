@@ -81,7 +81,7 @@
     }
   }
 
-  &.init_project, &.admin_projects {
+  &.init_project, &.admin_projects, &.change_screen_size {
     .content {
       > div {
         display: table;
@@ -128,7 +128,7 @@
         display: none;
       }
       .create_button, .open_button, .update_button {
-        width: 25%;
+        width: 40%;
       }
       .back_button, .cancel_button {
         width: 40%;
@@ -147,7 +147,7 @@
 
 
   &.admin_projects {
-    width: 40% !important;
+    width: 30% !important;
     .am_scroll_wrapper {
       overflow: hidden;
       .am_wrapper {
@@ -201,7 +201,11 @@
     }
   }
 
-  &.create_user_code, &.notice_login, &.change_screen_size  {
+  &.change_screen_size {
+    width: 30% !important;
+  }
+
+  &.create_user_code, &.notice_login {
     .content {
       > div {
         display: table;

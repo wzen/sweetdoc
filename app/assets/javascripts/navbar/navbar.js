@@ -44,7 +44,7 @@ Navbar = (function() {
       }
     });
     $('.menu-adminproject', fileMenuEmt).off('click').on('click', function() {
-      return Common.showModalView(constant.ModalViewType.ADMIN_PROJECTS, true, Project.initAdminProjectModal);
+      return Common.showModalView(constant.ModalViewType.ADMIN_PROJECTS, false, Project.initAdminProjectModal);
     });
     menuSave = $('.menu-save', fileMenuEmt);
     menuSave.off('click').on('click', function() {

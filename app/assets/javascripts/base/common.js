@@ -203,10 +203,12 @@ Common = (function() {
   };
 
   Common.saveMainWrapperSize = function() {
-    return window.mainWrapperSize = {
-      width: window.mainWrapper.width(),
-      height: window.mainWrapper.height()
-    };
+    if (window.mainWrapper != null) {
+      return window.mainWrapperSize = {
+        width: window.mainWrapper.width(),
+        height: window.mainWrapper.height()
+      };
+    }
   };
 
   Common.initScrollContentsPosition = function() {

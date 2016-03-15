@@ -36,7 +36,7 @@ class Navbar
     )
     $('.menu-adminproject', fileMenuEmt).off('click').on('click', ->
       # モーダル表示
-      Common.showModalView(constant.ModalViewType.ADMIN_PROJECTS, true, Project.initAdminProjectModal)
+      Common.showModalView(constant.ModalViewType.ADMIN_PROJECTS, false, Project.initAdminProjectModal)
     )
     menuSave = $('.menu-save', fileMenuEmt)
     menuSave.off('click').on('click', ->

@@ -390,7 +390,7 @@ Project = (function() {
           });
         };
       })(this));
-      return modalEmt.find('.button_wrapper .cancel_button').off('click').on('click', (function(_this) {
+      return modalEmt.find('.am_input_wrapper .button_wrapper .cancel_button').off('click').on('click', (function(_this) {
         return function(e) {
           return modalEmt.find('.am_scroll_wrapper:first').animate({
             scrollLeft: 0
@@ -438,7 +438,7 @@ Project = (function() {
               });
             };
           })(this));
-          return modalEmt.find('.am_row .remove_button').off('click').on('click', (function(_this) {
+          modalEmt.find('.am_row .remove_button').off('click').on('click', (function(_this) {
             return function(e) {
               var deletedProjectId;
               if (window.confirm(I18n.t('message.dialog.delete_project'))) {
@@ -455,6 +455,11 @@ Project = (function() {
                   }
                 });
               }
+            };
+          })(this));
+          return modalEmt.find('.am_list_wrapper .cancel_button').off('click').on('click', (function(_this) {
+            return function(e) {
+              return Common.hideModalView();
             };
           })(this));
         };
