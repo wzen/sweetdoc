@@ -7,7 +7,7 @@
     <% params.each do |k, v| %>
         <input type="hidden" name="<%= k %>" value="<%= v %>">
     <% end %>
-    <%= button_tag(class:'remove_button image_button', style: 'margin-top: 5px;margin-bottom: 5px') do %>
+    <%= button_tag(class:'remove_button button_black image_button', style: 'margin-top: 5px;margin-bottom: 5px') do %>
         <%= image_tag 'etc/remove.png', size: mini ? '16x16' : '24x24' %>
     <% end %>
 <% end %>

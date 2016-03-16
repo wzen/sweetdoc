@@ -42,6 +42,7 @@ ja:
       back_to_gallery: "ギャラリーに戻る"
       last_update_date: "最新更新時間"
     setting:
+      view_setting: "表示設定"
       show_guide: "モーションガイド表示/非表示"
       screen_size: "スクリーンサイズ変更"
   context_menu:
@@ -112,6 +113,9 @@ ja:
       display_state:
         display_state: "表示状態"
         applied_state: "画面をイベント適用後に変更"
+  gallery:
+    bookmark_button: "ブックマークする"
+    input_note: "コメントを入力"
   upload_confirm:
     title: "タイトル名"
     caption: "説明"
@@ -124,7 +128,7 @@ ja:
     show_chapter_num: "チャプター番号を表示"
     existed_upload_contents: "このプロジェクトで作成された投稿済みドキュメントがあります"
     overwrite_contents: "%{contents} の更新"
-    upload_as_new: "新規のドキュメントとして投稿"
+    posting_new: "新規のドキュメントとして投稿"
   message:
     dialog:
       change_project: "作成中のコンテンツは削除されます。"

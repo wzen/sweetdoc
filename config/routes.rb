@@ -78,6 +78,7 @@ Rails.application.routes.draw do
   get 'gallery/get_contents'
   get 'gallery/get_popular_and_recommend_tags'
   post 'gallery/add_bookmark'
+  post 'gallery/remove_bookmark'
   resources :gallery ,only: [:thumbnail] ,param: :access_token do
     member do
       get 'thumbnail'

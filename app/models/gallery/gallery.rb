@@ -232,28 +232,38 @@ class Gallery < ActiveRecord::Base
         gvs.count += 1
       end
       gvs.save!
+      return true, I18n.t('message.database.item_state.save.success')
     rescue => e
       # 更新失敗
-      return I18n.t('message.database.item_state.save.error')
+      return false, I18n.t('message.database.item_state.save.error')
     end
   end
 
   def self.add_bookmark(user_id, gallery_access_token, note, date)
     begin
       ActiveRecord::Base.transaction do
+        update_statistic = false
         g = self.find_by({access_token: gallery_access_token, del_flg: false})
         gallery_id = g.id
-        gb = GalleryBookmark.where(gallery_id: gallery_id, user_id: user_id, del_flg: false)
-        # 既にブックマークが存在する場合は処理なし
+        gb = GalleryBookmark.where(gallery_id: gallery_id, user_id: user_id)
         if gb.blank?
+          # ブックマークが存在しない場合作成
           gb = GalleryBookmark.new({
                                        gallery_id: gallery_id,
                                        user_id: user_id,
                                        note: note
                                    })
           gb.save!
+          update_statistic = true
+        elsif gb.first.del_flg
+          # ブックマーク有りでdel_flgが立ってる場合は戻す
+          gb.update_all(del_flg: false)
+          update_statistic = true
+        end
 
-          gbs = GalleryBookmarkStatistic.where(gallery_id: gallery_id, view_day: date, del_flg: false)
+        if update_statistic
+          # 統計情報更新
+          gbs = GalleryBookmarkStatistic.find_by(gallery_id: gallery_id, view_day: date, del_flg: false)
           if gbs.blank?
             # 新規作成
             gbs = GalleryBookmarkStatistic.new({
@@ -266,27 +276,35 @@ class Gallery < ActiveRecord::Base
           gbs.save!
         end
       end
+      return true, I18n.t('message.database.item_state.save.success')
     rescue => e
       # 更新失敗
-      return I18n.t('message.database.item_state.save.error')
+      return false, I18n.t('message.database.item_state.save.error')
     end
   end
 
-  def self.remove_bookmark(user_id, gallery_access_token)
+  def self.remove_bookmark(user_id, gallery_access_token, date)
     begin
       ActiveRecord::Base.transaction do
-        # 現状Statisticは減算しない仕様とする
         g = self.find_by({access_token: gallery_access_token, del_flg: false})
         if g.present?
+          # del_flgを立てる
           gb = GalleryBookmark.find_by(user_id: user_id, gallery_id: g.id)
           if gb.present?
             gb.update!(del_flg: true)
+            # 統計情報更新
+            gbs = GalleryBookmarkStatistic.find_by(gallery_id: g.id, view_day: date, del_flg: false)
+            if gbs.present? && gbs.count > 0
+              gbs.count -= 1
+              gbs.save!
+            end
           end
         end
       end
+      return true, I18n.t('message.database.item_state.save.success')
     rescue => e
       # 更新失敗
-      return I18n.t('message.database.item_state.save.error')
+      return false, I18n.t('message.database.item_state.save.error')
     end
   end
 
@@ -460,7 +478,7 @@ class Gallery < ActiveRecord::Base
     end
   end
 
-  def self.firstload_contents(access_token, hostname, page_num = 1)
+  def self.firstload_contents(user_id, access_token, hostname, page_num = 1)
     sql = <<-"SQL".strip_heredoc
       SELECT
         g.title as title,
@@ -494,7 +512,7 @@ class Gallery < ActiveRecord::Base
       LEFT JOIN gallery_bookmark_statistics gbs ON g.id = gbs.gallery_id AND gbs.del_flg = 0
       LEFT JOIN gallery_view_statistics gvs ON g.id = gvs.gallery_id AND gvs.del_flg = 0
       LEFT JOIN user_gallery_footprints ugf ON ugf.user_id = u.id AND ugf.gallery_id = g.id AND ugf.del_flg = 0
-      LEFT JOIN gallery_bookmarks gb ON g.id = gb.gallery_id AND gb.del_flg = 0
+      LEFT JOIN gallery_bookmarks gb ON gb.user_id = #{user_id} AND g.id = gb.gallery_id AND gb.del_flg = 0
       WHERE g.access_token = '#{access_token}'
       AND g.del_flg = 0
       LIMIT 1

@@ -77,7 +77,7 @@
                       <div class="overwrite_contents_label"><%= I18n.t('upload_confirm.existed_upload_contents') %></div>
                       <div class="overwrite_contents_contents">
                         <select class="overwrite_contents_contents_select" name="<%= Const::Gallery::Key::UPLOAD_OVERWRITE_GALLERY_TOKEN %>">
-                          <option value=""><%= I18n.t('upload_confirm.upload_as_new') %></option>
+                          <option value=""><%= I18n.t('upload_confirm.posting_new') %></option>
                           <% @uploaded_list.each do |u| %>
                             <option value="<%= u['gallery_access_token'] %>"><%= I18n.t('upload_confirm.overwrite_contents', contents: "#{u['title']} [Upload Date #{u['updated_at'].strftime("%Y-%m-%d %H:%M:%S")}]") %></option>
                           <% end %>

@@ -85,7 +85,7 @@ GalleryCommon = (function() {
     data[constant.Gallery.Key.GALLERY_ACCESS_TOKEN] = Common.getContentsAccessTokenFromUrl();
     data[constant.Gallery.Key.NOTE] = note;
     return $.ajax({
-      url: "/project/remove",
+      url: "/gallery/add_bookmark",
       type: "POST",
       dataType: "json",
       data: data,

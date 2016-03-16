@@ -64,7 +64,7 @@
                                 <%= render 'base/button/remove', link_url: "/item_gallery/remove_user_used", params:{Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN.to_sym => content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN]}  %>
                             <% end %>
                         </div>
-                        <div class="edit_button">
+                        <div class="edit_button button_green">
                             <%= render 'base/button/edit', link_url: "/item_gallery/edit", params:{Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN.to_sym => content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN]} %>
                         </div>
                         <div class="delete_button">

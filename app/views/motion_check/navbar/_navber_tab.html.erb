@@ -11,17 +11,21 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li id="header_menu_setting">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#header_menu_setting">
-                        <%= t('header_menu.file.setting') %>
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a class="menu-screenSize"><%= t('header_menu.setting.screen_size') %></a></li>
-                      <li><a class="menu-showguide"><%= t('header_menu.setting.show_guide') %></a></li>
-                    </ul>
-                </li>
-                <li><a onclick="MotionCheckCommon.run(true)"><%= t('header_menu.motion_check.newwindow') %></a></li>
+              <li>
+                <a class="menu-screenSize">
+                  <%= t('header_menu.setting.screen_size') %>
+                </a>
+              </li>
+              <li id="header_menu_setting">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#header_menu_setting">
+                      <%= t('header_menu.setting.view_setting') %>
+                      <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a class="menu-showguide"><%= t('header_menu.setting.show_guide') %></a></li>
+                  </ul>
+              </li>
+              <li><a onclick="MotionCheckCommon.run(true)"><%= t('header_menu.motion_check.newwindow') %></a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li><a class="menu-control-rewind-page" title="Rewind Page"><%= image_tag("nav/rewind_page.png", size:'20x20') %></a></li>

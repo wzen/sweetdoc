@@ -110,6 +110,7 @@ class RunCommon
     info = $('#contents').find('.contents_info:first')
     operation = $('#contents').find('.operation_parent:first')
     share = $('#contents').find('.share_info:first')
+    bookmark = $('#contents').find('.bookmark_input:first')
 
     _setClose = ->
       # ビュークリックで非表示
@@ -122,6 +123,8 @@ class RunCommon
           $('#contents').off('click.contents_info')
         if share.is(':visible')
           share.fadeOut('200')
+        if bookmark.is(':visible')
+          bookmark.fadeOut('200')
       )
 
     info.fadeIn('500', ->
@@ -148,17 +151,40 @@ class RunCommon
       $('#contents .bookmark_button:first').off('click').on('click', (e) =>
         e.preventDefault()
         e.stopPropagation()
-        if $(e.target).find('bookmarked:visible').length == 0
+        bookmarkButtonWrapper = $(e.target).closest('.bookmark_button')
+        if bookmarkButtonWrapper.find('.bookmarked:visible').length == 0
           # ブックマークなし
-          # TODO: コメント入力欄表示
-          console.log('')
+          if !bookmark.is(':visible')
+            bookmark.find('textarea.note').val('')
+            bookmark.find('textarea, input').off('click.close').on('click.close', (ee) ->
+              # テキストエリア選択でビューを閉じさせない
+              ee.preventDefault()
+              ee.stopPropagation()
+            )
+            bookmark.fadeIn('200', =>
+              _setClose.call(@)
+              bookmark.find('.post_button:first').off('click').on('click', (ee) =>
+                ee.preventDefault()
+                ee.stopPropagation()
+                Common.showModalFlashMessage('Please wait...', true)
+                GalleryCommon.addBookmark(bookmark.find('textarea.note').val(), (result) =>
+                  if result
+                    bookmarkButtonWrapper.find('.bookmarked').show()
+                    bookmarkButtonWrapper.find('.bookmark').hide()
+                    bookmark.fadeOut('200')
+                  Common.hideModalView()
+                )
+              )
+            )
         else
           # ブックマーク済み
           if window.confirm(I18n.t('message.dialog.change_project'))
+            Common.showModalFlashMessage('Please wait...', true)
             GalleryCommon.removeBookmark((result) =>
               if result
-                $(e.target).find('bookmarked').hide()
-                $(e.target).find('bookmark').show()
+                bookmarkButtonWrapper.find('.bookmarked').hide()
+                bookmarkButtonWrapper.find('.bookmark').show()
+                Common.hideModalView()
             )
       )
       # Share情報表示
@@ -170,7 +196,8 @@ class RunCommon
             _setClose.call(@)
           )
       )
-      share.find('textarea, input').off('click.close').on('click', (e) ->
+      share.find('textarea, input').off('click.close').on('click.close', (e) ->
+        # テキストエリア選択でビューを閉じない & 選択状態に
         e.preventDefault()
         e.stopPropagation()
         $(@).select()

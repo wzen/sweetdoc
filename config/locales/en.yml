@@ -63,6 +63,7 @@ en:
       back_to_gallery: "Back to gallery"
       last_update_date: "Last update"
     setting:
+      view_setting: "View setting"
       show_guide: "Toggle Guide"
       screen_size: "Change screen size"
   context_menu:
@@ -135,6 +136,9 @@ en:
       display_state:
         display_state: "Display state"
         applied_state: "Update display into events applied"
+  gallery:
+    bookmark_button: "Bookmark"
+    input_note: "Comment..."
   upload_confirm:
     title: "Title name"
     caption: "Caption"
@@ -147,7 +151,7 @@ en:
     show_chapter_num: "Show Chapter Number"
     existed_upload_contents: "The project document which has been posted exists."
     overwrite_contents: "Overwrite %{contents}"
-    upload_as_new: "Post as new document"
+    posting_new: "Posting new document"
   message:
     dialog:
       change_project: "Your making contents will delete."

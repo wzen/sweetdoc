@@ -77,7 +77,7 @@ class GalleryCommon
     data[constant.Gallery.Key.NOTE] = note
     $.ajax(
       {
-        url: "/project/remove"
+        url: "/gallery/add_bookmark"
         type: "POST"
         dataType: "json"
         data: data

@@ -142,10 +142,11 @@ RunCommon = (function() {
   };
 
   RunCommon.showCreatorInfo = function() {
-    var _setClose, info, operation, share;
+    var _setClose, bookmark, info, operation, share;
     info = $('#contents').find('.contents_info:first');
     operation = $('#contents').find('.operation_parent:first');
     share = $('#contents').find('.share_info:first');
+    bookmark = $('#contents').find('.bookmark_input:first');
     _setClose = function() {
       return $('#contents').off('click.contents_info').on('click.contents_info', function(e) {
         if (info.is(':visible')) {
@@ -162,7 +163,10 @@ RunCommon = (function() {
           $('#contents').off('click.contents_info');
         }
         if (share.is(':visible')) {
-          return share.fadeOut('200');
+          share.fadeOut('200');
+        }
+        if (bookmark.is(':visible')) {
+          return bookmark.fadeOut('200');
         }
       });
     };
@@ -194,16 +198,42 @@ RunCommon = (function() {
     if (!window.isMotionCheck) {
       $('#contents .bookmark_button:first').off('click').on('click', (function(_this) {
         return function(e) {
+          var bookmarkButtonWrapper;
           e.preventDefault();
           e.stopPropagation();
-          if ($(e.target).find('bookmarked:visible').length === 0) {
-            return console.log('');
+          bookmarkButtonWrapper = $(e.target).closest('.bookmark_button');
+          if (bookmarkButtonWrapper.find('.bookmarked:visible').length === 0) {
+            if (!bookmark.is(':visible')) {
+              bookmark.find('textarea.note').val('');
+              bookmark.find('textarea, input').off('click.close').on('click.close', function(ee) {
+                ee.preventDefault();
+                return ee.stopPropagation();
+              });
+              return bookmark.fadeIn('200', function() {
+                _setClose.call(_this);
+                return bookmark.find('.post_button:first').off('click').on('click', function(ee) {
+                  ee.preventDefault();
+                  ee.stopPropagation();
+                  Common.showModalFlashMessage('Please wait...', true);
+                  return GalleryCommon.addBookmark(bookmark.find('textarea.note').val(), function(result) {
+                    if (result) {
+                      bookmarkButtonWrapper.find('.bookmarked').show();
+                      bookmarkButtonWrapper.find('.bookmark').hide();
+                      bookmark.fadeOut('200');
+                    }
+                    return Common.hideModalView();
+                  });
+                });
+              });
+            }
           } else {
             if (window.confirm(I18n.t('message.dialog.change_project'))) {
+              Common.showModalFlashMessage('Please wait...', true);
               return GalleryCommon.removeBookmark(function(result) {
                 if (result) {
-                  $(e.target).find('bookmarked').hide();
-                  return $(e.target).find('bookmark').show();
+                  bookmarkButtonWrapper.find('.bookmarked').hide();
+                  bookmarkButtonWrapper.find('.bookmark').show();
+                  return Common.hideModalView();
                 }
               });
             }
@@ -221,7 +251,7 @@ RunCommon = (function() {
           }
         };
       })(this));
-      return share.find('textarea, input').off('click.close').on('click', function(e) {
+      return share.find('textarea, input').off('click.close').on('click.close', function(e) {
         e.preventDefault();
         e.stopPropagation();
         return $(this).select();

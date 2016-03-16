@@ -75,19 +75,27 @@
   </div>
 </div>
 
+<div class="bookmark_input">
+  <div>
+    <div class="note">
+      <textarea class="note" placeholder="<%= I18n.t('gallery.input_note') %>"></textarea>
+    </div>
+    <div class="button_wrapper">
+      <button class="post_button button_blue" value="Post"><%= I18n.t('gallery.bookmark_button') %></button>
+    </div>
+  </div>
+</div>
+
 <div class="contents_info_show_button">
   <%= image_tag("run/popup_info_32.png", size:'32x32') %>
 </div>
 <div class="bookmark_button">
-  <% if @bookmarked %>
-      <div class="bookmarked">
-        <%= image_tag("run/bookmarked.png", size:'32x32') %>
-      </div>
-  <% else %>
-      <div class="bookmark">
-        <%= image_tag("run/bookmark.png", size:'32x32') %>
-      </div>
-  <% end %>
+  <div class="bookmarked" style="display: <%= @bookmarked ? 'block' : 'none'%>">
+    <%= image_tag("run/bookmarked.png", size:'32x32') %>
+  </div>
+  <div class="bookmark" style="display: <%= @bookmarked ? 'none' : 'block'%>">
+    <%= image_tag("run/bookmark.png", size:'32x32') %>
+  </div>
 </div>
 <div class="contents_share_show_button clearfix">
   <div>

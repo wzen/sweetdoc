@@ -575,6 +575,45 @@ div.share_info {
     }
   }
 }
+div.bookmark_input {
+  position: absolute;
+  padding-left: 5px;
+  padding-right: 5px;
+  bottom: 0;
+  z-index:1999999999;
+  width: 100%;
+  display: none;
+  > div {
+    color: white;
+    margin: 5px;
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 7px;
+    > div {
+      width: 100%;
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+    textarea.note {
+      color: black;
+      font-size: 12px;
+      width: 100%;
+    }
+    .button_wrapper {
+      display: table;
+      width: 100%;
+      text-align: right;
+      margin-top: 5px;
+      > div {
+        display: table-cell;
+      }
+
+      span {
+        display: none;
+      }
+    }
+  }
+}
 div.contents_info_show_button {
   position: absolute;
   left: 5px;
@@ -583,7 +622,7 @@ div.contents_info_show_button {
 }
 div.bookmark_button {
   position: absolute;
-  left: 35px;
+  left: 38px;
   bottom: 5px;
   z-index:1999999998;
 }
