@@ -448,6 +448,11 @@ class Common
   # @param [Float] top Y中央値
   # @param [Float] left X中央値
   @updateScrollContentsPosition: (top, left, immediate = true, withUpdateScreenEventVar = true, callback = null) ->
+    if isNaN(top) || isNaN(left)
+      if window.debug
+        console.log('updateScrollContentsPosition isNaN')
+      @resetScrollContentsPositionToCenter()
+      return
     if withUpdateScreenEventVar
       focusDiff = @focusDiff()
       @saveDisplayPosition(top - focusDiff.top, left - focusDiff.left, true)
@@ -1245,6 +1250,10 @@ class Common
   @getContentsAccessTokenFromUrl = ->
     locationPaths = window.location.pathname.split('/')
     return locationPaths[locationPaths.length - 1].split('?')[0]
+
+  # スクロール位置が初期化されているか
+  @isinitedScrollContentsPosition = ->
+    return window.scrollContents.scrollTop() > 0
 
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->

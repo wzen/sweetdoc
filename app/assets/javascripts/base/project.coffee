@@ -104,6 +104,9 @@ class Project
       # プロジェクト選択
       user_pagevalue_id = $('.project_select', modalEmt).val()
       Project.load(user_pagevalue_id, (data) ->
+        if !Common.isinitedScrollContentsPosition()
+          # スクロール位置が更新されていない場合は更新させる ※保険としてチェック
+          WorktableCommon.initScrollContentsPosition()
         # 初期化終了
         window.initDone = true
       )

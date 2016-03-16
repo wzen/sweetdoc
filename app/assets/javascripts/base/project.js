@@ -118,6 +118,9 @@ Project = (function() {
       var user_pagevalue_id;
       user_pagevalue_id = $('.project_select', modalEmt).val();
       return Project.load(user_pagevalue_id, function(data) {
+        if (!Common.isinitedScrollContentsPosition()) {
+          WorktableCommon.initScrollContentsPosition();
+        }
         return window.initDone = true;
       });
     });

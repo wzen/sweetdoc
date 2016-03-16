@@ -563,6 +563,13 @@ Common = (function() {
     if (callback == null) {
       callback = null;
     }
+    if (isNaN(top) || isNaN(left)) {
+      if (window.debug) {
+        console.log('updateScrollContentsPosition isNaN');
+      }
+      this.resetScrollContentsPositionToCenter();
+      return;
+    }
     if (withUpdateScreenEventVar) {
       focusDiff = this.focusDiff();
       this.saveDisplayPosition(top - focusDiff.top, left - focusDiff.left, true);
@@ -1562,6 +1569,10 @@ Common = (function() {
     var locationPaths;
     locationPaths = window.location.pathname.split('/');
     return locationPaths[locationPaths.length - 1].split('?')[0];
+  };
+
+  Common.isinitedScrollContentsPosition = function() {
+    return window.scrollContents.scrollTop() > 0;
   };
 
   return Common;
