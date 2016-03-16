@@ -672,7 +672,7 @@ class Gallery < ActiveRecord::Base
       SQL
       contents = ActiveRecord::Base.connection.select_all(sql)
       if contents.present? && contents.count > 0
-        return contents.to_hash.map{|c| c['category']}
+        return contents.to_hash.map{|c| c['category']}.compact
       end
     end
     return nil
