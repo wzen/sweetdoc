@@ -1,3 +1,7 @@
+div#myTabContent .border > *{
+  opacity: 0;
+}
+
 body.my_page {
   .nav {
     > li {
@@ -441,4 +445,23 @@ div.contents_top, div.contents_bottom {
 
 div.contents_row {
   margin-top: 10px;
+}
+
+div.blank {
+  display: table;
+  width: 100%;
+  height: 100%;
+  > div {
+    display: table-cell;
+    //height: 180px;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .description {
+    margin-top: 7px;
+    font-size: 18px;
+  }
+  .link {
+    font-size: 14px;
+  }
 }

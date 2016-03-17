@@ -1,3 +1,8 @@
-<% @contents.each do |content| %>
-    <%= render 'item_gallery/parts/item_contents_row', content: content, editable: true %>
+<% if @contents.length > 0 %>
+    <% @contents.each do |content| %>
+        <%= render 'item_gallery/parts/item_contents_row', content: content, editable: true %>
+    <% end %>
+<% else %>
+    <%= render 'my_page/blank' %>
 <% end %>
+

@@ -1,3 +1,8 @@
-<% @contents.each do |content| %>
-    <%= render 'item_gallery/parts/user_using_contents_row', content: content %>
+<% if @contents.length > 0 %>
+    <% @contents.each do |content| %>
+        <%= render 'item_gallery/parts/user_using_contents_row', content: content %>
+    <% end %>
+<% else %>
+    <%= render 'my_page/blank' %>
 <% end %>
+

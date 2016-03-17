@@ -150,8 +150,18 @@ en:
     show_page_num: "Show Page Number"
     show_chapter_num: "Show Chapter Number"
     existed_upload_contents: "The project document which has been posted exists."
-    overwrite_contents: "Overwrite %{contents}"
+    overwrite_contents: "Overwrite : %{contents}"
     posting_new: "Posting new document"
+  mypage:
+    empty:
+      bookmarks_description: "There is no bookmarks"
+      created_contents_description: "There is no written documents"
+      created_items_description: "There is no made items"
+      using_items_description: "There is no using items"
+      bookmarks_link_description: "Don't want to check documents in gallery?"
+      created_contents_link_description: "Don't want to write a document?"
+      created_items_link_description: "Don't want to make a item?"
+      using_items_link_description: "Don't want to use a made item?"
   message:
     dialog:
       change_project: "Your making contents will delete."

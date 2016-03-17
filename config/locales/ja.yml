@@ -129,6 +129,16 @@ ja:
     existed_upload_contents: "このプロジェクトで作成された投稿済みドキュメントがあります"
     overwrite_contents: "%{contents} の更新"
     posting_new: "新規のドキュメントとして投稿"
+  mypage:
+    empty:
+      bookmarks_description: "ブックマークがありません"
+      created_contents_description: "作成したドキュメントはありません"
+      created_items_description: "作成したアイテムはありません"
+      using_items_description: "使用中のアイテムはありません"
+      bookmarks_link_description: "ギャラリーに移動する"
+      created_contents_link_description: "ドキュメントを作成する"
+      created_items_link_description: "アイテムを作成する"
+      using_items_link_description: "アイテムを使用する"
   message:
     dialog:
       change_project: "作成中のコンテンツは削除されます。"

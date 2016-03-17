@@ -1,0 +1,36 @@
+<%
+  description = ''
+  link = '#'
+  link_discription = ''
+  if action_name == 'bookmarks'
+    description = I18n.t('mypage.empty.bookmarks_description')
+    link = '/'
+    link_discription = I18n.t('mypage.empty.bookmarks_link_description')
+  elsif action_name == 'created_contents'
+    description = I18n.t('mypage.empty.created_contents_description')
+    link = '/worktable'
+    link_discription = I18n.t('mypage.empty.created_contents_link_description')
+  elsif action_name == 'created_items'
+    description = I18n.t('mypage.empty.created_items_description')
+    link = '/coding/item'
+    link_discription = I18n.t('mypage.empty.created_items_link_description')
+  elsif action_name == 'using_items'
+    description = I18n.t('mypage.empty.using_items_description')
+    link = '/item_gallery'
+    link_discription = I18n.t('mypage.empty.using_items_link_description')
+  end
+%>
+
+<div class="blank">
+  <div>
+    <div class="image">
+      <%= image_tag 'mypage/empty.png', size: '128x128' %>
+    </div>
+    <div class="description">
+      <%= description %>
+    </div>
+    <div class="link">
+      <%= link_to link_discription, link %>
+    </div>
+  </div>
+</div>
