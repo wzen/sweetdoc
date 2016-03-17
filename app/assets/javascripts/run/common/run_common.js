@@ -138,7 +138,11 @@ RunCommon = (function() {
   };
 
   RunCommon.resizeEvent = function() {
-    return RunCommon.resizeMainContainerEvent();
+    if ((window.skipResizeEvent != null) && window.skipResizeEvent) {
+      return window.skipResizeEvent = false;
+    } else {
+      return RunCommon.resizeMainContainerEvent();
+    }
   };
 
   RunCommon.showCreatorInfo = function() {

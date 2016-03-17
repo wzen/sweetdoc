@@ -357,12 +357,15 @@ class WorktableCommon
   @resizeMainContainerEvent = ->
     @updateMainViewSize()
     Common.updateCanvasSize()
-    Common.updateScrollContentsFromScreenEventVar()
+    Common.initScrollContentsPositionByWorktableConfig()
     Sidebar.resizeConfigHeight()
 
   # ウィンドウリサイズイベント
   @resizeEvent = ->
-    WorktableCommon.resizeMainContainerEvent()
+    if window.skipResizeEvent? && window.skipResizeEvent
+      window.skipResizeEvent = false
+    else
+      WorktableCommon.resizeMainContainerEvent()
 
   # アイテムを削除
   @removeSingleItem = (itemElement) ->

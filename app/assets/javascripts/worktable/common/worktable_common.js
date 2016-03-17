@@ -402,12 +402,16 @@ WorktableCommon = (function() {
   WorktableCommon.resizeMainContainerEvent = function() {
     this.updateMainViewSize();
     Common.updateCanvasSize();
-    Common.updateScrollContentsFromScreenEventVar();
+    Common.initScrollContentsPositionByWorktableConfig();
     return Sidebar.resizeConfigHeight();
   };
 
   WorktableCommon.resizeEvent = function() {
-    return WorktableCommon.resizeMainContainerEvent();
+    if ((window.skipResizeEvent != null) && window.skipResizeEvent) {
+      return window.skipResizeEvent = false;
+    } else {
+      return WorktableCommon.resizeMainContainerEvent();
+    }
   };
 
   WorktableCommon.removeSingleItem = function(itemElement) {

@@ -220,8 +220,8 @@ class Paging
         oldSection.hide()
         if window.debug
           console.log('[selectPage] deleted pageNum:' + beforePageNum)
-        # 隠したビューのアイテムを削除
-        Common.removeAllItem(beforePageNum)
+        # 隠したビューのアイテムを削除(インスタンスは消さない)
+        Common.removeAllItem(beforePageNum, false)
         if created
           # 履歴に画面初期時状態を保存
           OperationHistory.add(true)

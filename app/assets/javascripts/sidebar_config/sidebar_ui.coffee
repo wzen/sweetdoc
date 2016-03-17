@@ -18,10 +18,12 @@ class Sidebar
         WorktableCommon.changeMode(constant.Mode.OPTION)
         main = $('#main')
         if !Sidebar.isOpenedConfigSidebar()
+          # リサイズイベントを発生させない
+          window.skipResizeEvent = true
           main.removeClass('col-xs-12')
           main.addClass('col-xs-9')
-          $('#sidebar').fadeIn('500', ->
-            WorktableCommon.resizeMainContainerEvent()
+          $('#sidebar').fadeIn('100', ->
+            Common.updateCanvasSize()
           )
 #          if target != null
 #            WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType, true)
@@ -50,10 +52,12 @@ class Sidebar
       @closeAllWidget()
       if !Sidebar.isClosedConfigSidebar()
         main = $('#main')
-        $('#sidebar').fadeOut('200', ->
+        $('#sidebar').fadeOut('100', ->
+          # リサイズイベントを発生させない
+          window.skipResizeEvent = true
           main.removeClass('col-xs-9')
           main.addClass('col-xs-12')
-          WorktableCommon.resizeMainContainerEvent()
+          Common.updateCanvasSize()
           # モード再設定
           if window.mode == constant.Mode.OPTION
             WorktableCommon.changeMode(window.beforeMode)

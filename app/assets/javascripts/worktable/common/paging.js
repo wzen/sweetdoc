@@ -221,7 +221,7 @@ Paging = (function() {
           if (window.debug) {
             console.log('[selectPage] deleted pageNum:' + beforePageNum);
           }
-          Common.removeAllItem(beforePageNum);
+          Common.removeAllItem(beforePageNum, false);
           if (created) {
             OperationHistory.add(true);
           }

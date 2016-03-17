@@ -36,10 +36,11 @@ Sidebar = (function() {
         WorktableCommon.changeMode(constant.Mode.OPTION);
         main = $('#main');
         if (!Sidebar.isOpenedConfigSidebar()) {
+          window.skipResizeEvent = true;
           main.removeClass('col-xs-12');
           main.addClass('col-xs-9');
-          $('#sidebar').fadeIn('500', function() {
-            return WorktableCommon.resizeMainContainerEvent();
+          $('#sidebar').fadeIn('100', function() {
+            return Common.updateCanvasSize();
           });
         }
         return $('#screen_wrapper').off('click.sidebar_close').on('click.sidebar_close', (function(_this) {
@@ -68,10 +69,11 @@ Sidebar = (function() {
       this.closeAllWidget();
       if (!Sidebar.isClosedConfigSidebar()) {
         main = $('#main');
-        return $('#sidebar').fadeOut('200', function() {
+        return $('#sidebar').fadeOut('100', function() {
+          window.skipResizeEvent = true;
           main.removeClass('col-xs-9');
           main.addClass('col-xs-12');
-          WorktableCommon.resizeMainContainerEvent();
+          Common.updateCanvasSize();
           if (window.mode === constant.Mode.OPTION) {
             WorktableCommon.changeMode(window.beforeMode);
           } else {

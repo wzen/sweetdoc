@@ -103,7 +103,10 @@ class RunCommon
 
   # ウィンドウリサイズイベント
   @resizeEvent = ->
-    RunCommon.resizeMainContainerEvent()
+    if window.skipResizeEvent? && window.skipResizeEvent
+      window.skipResizeEvent = false
+    else
+      RunCommon.resizeMainContainerEvent()
 
   # 詳細情報を表示
   @showCreatorInfo = ->

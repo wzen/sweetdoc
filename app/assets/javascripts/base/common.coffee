@@ -141,7 +141,12 @@ class Common
       return PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
     else
       # 画面を指定していない場合はMainWrapperビューの画面サイズを返す
-      return {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
+#      scale = @getViewScale()
+#      return {width: window.mainWrapper.width() / scale, height: window.mainWrapper.height() / scale}
+      width = $('#main').width()
+      height = $('#main').height()
+      return {width: width, height: height}
+
 
   # プロジェクト表示サイズ設定
   @initScreenSize = (reset = false) ->
@@ -289,6 +294,7 @@ class Common
         w = screen.width * scaleFromViewRate - borderPadding
     scale = @getViewScale()
     if window.isWorkTable
+      # FIXME: 上のgetViewScaleを使用する場合、諸々の計算修正が必要になるため現状1.0で固定する
       scale = 1.0
     return {
       width: w / scale

@@ -159,12 +159,15 @@ Common = (function() {
   };
 
   Common.getScreenSize = function() {
+    var height, width;
     if (this.isFixedScreenSize()) {
       return PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
     } else {
+      width = $('#main').width();
+      height = $('#main').height();
       return {
-        width: window.mainWrapper.width(),
-        height: window.mainWrapper.height()
+        width: width,
+        height: height
       };
     }
   };
