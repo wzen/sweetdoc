@@ -901,6 +901,7 @@ class Gallery < ActiveRecord::Base
         g.screen_width as #{Const::Gallery::Key::SCREEN_SIZE_WIDTH},
         g.screen_height as #{Const::Gallery::Key::SCREEN_SIZE_HEIGHT},
         u.name as #{Const::User::Key::NAME},
+        gb.note as #{Const::Gallery::Key::NOTE},
         u.access_token as #{Const::User::Key::USER_ACCESS_TOKEN},
         group_concat(gt.name separator ',') as #{Const::Gallery::Key::TAGS}
       FROM gallery_bookmarks gb
