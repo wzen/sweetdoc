@@ -23,7 +23,18 @@
         <div id="contents_wrapper" class="sidebar_overlay_parent">
             <div class="wrapper">
                 <div class="tabview_wrapper">
-                    <ul class="nav nav-tabs">
+                  <div class="header_title">
+                    <% if action_name == 'bookmarks' %>
+                        <%= I18n.t('mypage.header_title.bookmarks') %>
+                    <% elsif action_name == 'created_contents' %>
+                        <%= I18n.t('mypage.header_title.created_contents') %>
+                    <% elsif action_name == 'created_items' %>
+                        <%= I18n.t('mypage.header_title.created_items') %>
+                    <% elsif action_name == 'using_items' %>
+                        <%= I18n.t('mypage.header_title.using_items') %>
+                    <% end %>
+                  </div>
+                    <ul class="nav nav-tabs navbar-right">
                         <li class="<%= action_name == 'bookmarks'? 'active': '' %>"><%= link_to image_tag('mypage/bookmarked.png', size: '32x32'), '/my_page/bookmarks', disabled: action_name == 'bookmarks' %></li>
                         <li class="<%= action_name == 'created_contents'? 'active': '' %>"><%= link_to image_tag('mypage/document_upload.png', size: '32x32'), '/my_page/created_contents', disabled: action_name == 'created_contents' %></li>
                         <li class="<%= action_name == 'created_items'? 'active': '' %>"><%= link_to image_tag('mypage/item_upload.png', size: '32x32'), '/my_page/created_items', disabled: action_name == 'created_items' %></li>

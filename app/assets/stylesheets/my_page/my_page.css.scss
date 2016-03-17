@@ -27,7 +27,7 @@ div#user_wrapper {
   width: 150px;
   height: 100%;
   float: left;
-  margin-top: 51px;
+  #margin-top: 51px;
   position: relative;
 
   &.my {
@@ -77,10 +77,18 @@ div#contents_wrapper {
     width: 100%;
     height: 100%;
     padding: 10px;
+    .header_title {
+      float: left;
+      font-size: 20px;
+      margin-top: 3px;
+      margin-left: 10px;
+      font-weight: bold;
+      color: #D80027;
+    }
   }
 
   div.tab-content {
-    background-color: white;
+    //background-color: white;
   }
   
   ul.nav-tabs {

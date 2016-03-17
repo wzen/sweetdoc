@@ -153,6 +153,11 @@ en:
     overwrite_contents: "Overwrite : %{contents}"
     posting_new: "Posting new document"
   mypage:
+    header_title:
+      bookmarks: "Your Bookmarks"
+      created_contents: "Your written documents"
+      created_items: "Your making items"
+      using_items: "Now using items"
     empty:
       bookmarks_description: "There is no bookmarks"
       created_contents_description: "There is no written documents"

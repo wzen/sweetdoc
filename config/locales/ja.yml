@@ -130,6 +130,11 @@ ja:
     overwrite_contents: "%{contents} の更新"
     posting_new: "新規のドキュメントとして投稿"
   mypage:
+    header_title:
+      bookmarks: "ブックマーク一覧"
+      created_contents: "作成したドキュメント一覧"
+      created_items: "作成したアイテム一覧"
+      using_items: "使用中アイテム一覧"
     empty:
       bookmarks_description: "ブックマークがありません"
       created_contents_description: "作成したドキュメントはありません"
