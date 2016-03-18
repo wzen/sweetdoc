@@ -158,7 +158,7 @@ class Gallery < ActiveRecord::Base
       page_num = pagevalue['page_num']
       g_pagevalue_data = pagevalue['g_pagevalue_data']
       if g_pagevalue_data.present?
-        gpp = GalleryGeneralPagevaluePaging.find_by(gallery_id: gallery_id)
+        gpp = GalleryGeneralPagevaluePaging.find_by(gallery_id: gallery_id, page_num: page_num)
         if gpp.present? && (gp = GalleryGeneralPagevalue.find_by(gpp.gallery_general_pagevalue_id)).present?
           # update
           gp.data = g_pagevalue_data
@@ -178,7 +178,7 @@ class Gallery < ActiveRecord::Base
 
       i_pagevalue_data = pagevalue['i_pagevalue_data']
       if i_pagevalue_data.present?
-        ipp = GalleryInstancePagevaluePaging.find_by(gallery_id: gallery_id)
+        ipp = GalleryInstancePagevaluePaging.find_by(gallery_id: gallery_id, page_num: page_num)
         if ipp.present? && (ip = GalleryInstancePagevalue.find(ipp.gallery_instance_pagevalue_id)).present?
           # update
           ip.data = i_pagevalue_data
@@ -198,7 +198,7 @@ class Gallery < ActiveRecord::Base
 
       e_pagevalue_data = pagevalue['e_pagevalue_data']
       if e_pagevalue_data.present?
-        epp = GalleryEventPagevaluePaging.find_by(gallery_id: gallery_id)
+        epp = GalleryEventPagevaluePaging.find_by(gallery_id: gallery_id, page_num: page_num)
         if epp.present? && (ep = GalleryEventPagevalue.find(epp.gallery_event_pagevalue_id)).present?
           # update
           ep.data = e_pagevalue_data
