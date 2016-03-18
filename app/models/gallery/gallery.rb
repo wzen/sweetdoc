@@ -216,6 +216,27 @@ class Gallery < ActiveRecord::Base
         end
       end
     end
+
+    # ページ数を減らしてアップロードした場合のレコードが余りを削除
+    after_page_max = pagevalues.count
+    before_page_max = GalleryGeneralPagevaluePaging.where(gallery_id: gallery_id).count
+    if before_page_max > after_page_max
+      gp = GalleryGeneralPagevaluePaging.where('gallery_id = ? AND page_num > ?', gallery_id, after_page_max)
+      if gp.present?
+        gp..update_all(del_flg:true)
+        GalleryGeneralPagevalue.where(id: gp.pluck(:gallery_general_pagevalue_id)).update_all(del_flg:true)
+      end
+      ip = GalleryInstancePagevaluePaging.where('gallery_id = ? AND page_num > ?', gallery_id, after_page_max)
+      if ip.present?
+        ip..update_all(del_flg:true)
+        GalleryInstancePagevalue.where(id: ip.pluck(:gallery_instance_pagevalue_id)).update_all(del_flg:true)
+      end
+      ep = GalleryEventPagevaluePaging.where('gallery_id = ? AND page_num > ?', gallery_id, after_page_max)
+      if ep.present?
+        ep..update_all(del_flg:true)
+        GalleryEventPagevalue.where(id: ep.pluck(:gallery_event_pagevalue_id)).update_all(del_flg:true)
+      end
+    end
   end
 
   def self.add_view_statistic_count(access_token, date)
