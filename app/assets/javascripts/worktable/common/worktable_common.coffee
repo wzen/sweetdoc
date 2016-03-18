@@ -617,24 +617,24 @@ class WorktableCommon
       items = Common.itemInstancesInPage(pageNum, true, true)
       # Worktable設定によるアイテム表示状態取得
       itemHideState = PageValue.getWorktableItemHide()
+
+      _cbk = (i) ->
+        if itemHideState[i.id]? && itemHideState[i.id]
+          # 非表示にする
+          i.getJQueryElement().hide()
+        count += 1
+        if count >= items.length
+          # コールバック
+          if callback?
+            callback()
+
       for item in items
         if item.drawAndMakeConfigs?
           item.drawAndMakeConfigs(true, (i) =>
-            if itemHideState[i.id]? && itemHideState[i.id]
-              # 非表示にする
-              i.getJQueryElement().hide()
-            count += 1
-            if count >= items.length
-              # コールバック
-              if callback?
-                callback()
+            _cbk.call(@, i)
           )
         else
-          count += 1
-          if count >= items.length
-            # コールバック
-            if callback?
-              callback()
+          _cbk.call(@, item)
     , pageNum)
 
   # イベント進行ルートを取得

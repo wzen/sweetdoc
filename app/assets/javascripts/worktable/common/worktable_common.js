@@ -693,37 +693,31 @@ WorktableCommon = (function() {
     }
     count = 0;
     return Common.loadJsFromInstancePageValue(function() {
-      var item, itemHideState, items, l, len, results;
+      var _cbk, item, itemHideState, items, l, len, results;
       items = Common.itemInstancesInPage(pageNum, true, true);
       itemHideState = PageValue.getWorktableItemHide();
+      _cbk = function(i) {
+        if ((itemHideState[i.id] != null) && itemHideState[i.id]) {
+          i.getJQueryElement().hide();
+        }
+        count += 1;
+        if (count >= items.length) {
+          if (callback != null) {
+            return callback();
+          }
+        }
+      };
       results = [];
       for (l = 0, len = items.length; l < len; l++) {
         item = items[l];
         if (item.drawAndMakeConfigs != null) {
           results.push(item.drawAndMakeConfigs(true, (function(_this) {
             return function(i) {
-              if ((itemHideState[i.id] != null) && itemHideState[i.id]) {
-                i.getJQueryElement().hide();
-              }
-              count += 1;
-              if (count >= items.length) {
-                if (callback != null) {
-                  return callback();
-                }
-              }
+              return _cbk.call(_this, i);
             };
           })(this)));
         } else {
-          count += 1;
-          if (count >= items.length) {
-            if (callback != null) {
-              results.push(callback());
-            } else {
-              results.push(void 0);
-            }
-          } else {
-            results.push(void 0);
-          }
+          results.push(_cbk.call(this, item));
         }
       }
       return results;
