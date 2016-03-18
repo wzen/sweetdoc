@@ -117,12 +117,16 @@ RunCommon = (function() {
   };
 
   RunCommon.resizeMainContainerEvent = function() {
-    var beforeMainWrapperSize;
+    var beforeMainWrapperSize, nowMainWrapperSize;
     beforeMainWrapperSize = window.mainWrapperSize;
     this.updateMainViewSize();
     Common.updateCanvasSize();
     if (!Common.isFixedScreenSize()) {
-      return this.adjustScrollPositionWhenScreenSizeChanging(beforeMainWrapperSize, Common.getScreenSize());
+      nowMainWrapperSize = {
+        width: window.mainWrapper.width(),
+        height: window.mainWrapper.height()
+      };
+      return this.adjustScrollPositionWhenScreenSizeChanging(beforeMainWrapperSize, nowMainWrapperSize);
     }
   };
 
@@ -133,6 +137,8 @@ RunCommon = (function() {
       width: (beforeSize.width - afterSize.width) * 0.5 / scale,
       height: (beforeSize.height - afterSize.height) * 0.5 / scale
     };
+    diff.width = diff.width >= 0 ? Math.ceil(diff.width) : Math.floor(diff.width);
+    diff.height = diff.height >= 0 ? Math.ceil(diff.height) : Math.floor(diff.height);
     window.scrollContents.scrollTop(window.scrollContents.scrollTop() + diff.height);
     return window.scrollContents.scrollLeft(window.scrollContents.scrollLeft() + diff.width);
   };

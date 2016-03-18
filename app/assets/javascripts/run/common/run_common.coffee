@@ -90,7 +90,8 @@ class RunCommon
     Common.updateCanvasSize()
     if !Common.isFixedScreenSize()
       # 画面指定なしの場合はビュー倍率が1.0固定のためスクロール位置修正
-      @adjustScrollPositionWhenScreenSizeChanging(beforeMainWrapperSize, Common.getScreenSize())
+      nowMainWrapperSize = {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
+      @adjustScrollPositionWhenScreenSizeChanging(beforeMainWrapperSize, nowMainWrapperSize)
 
   @adjustScrollPositionWhenScreenSizeChanging = (beforeSize, afterSize) ->
     scale = Common.getViewScale()
@@ -98,6 +99,9 @@ class RunCommon
       width: (beforeSize.width - afterSize.width) * 0.5 / scale
       height: (beforeSize.height - afterSize.height) * 0.5 / scale
     }
+    # 小数点を切り上げor切り下げ
+    diff.width = if diff.width >= 0 then Math.ceil(diff.width) else Math.floor(diff.width)
+    diff.height = if diff.height >= 0 then Math.ceil(diff.height) else Math.floor(diff.height)
     window.scrollContents.scrollTop(window.scrollContents.scrollTop() + diff.height)
     window.scrollContents.scrollLeft(window.scrollContents.scrollLeft() + diff.width)
 
