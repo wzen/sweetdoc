@@ -45,6 +45,8 @@ class PageValue
     @LAST_SAVE_TIME = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}last_save_time"
     # @property [String] LAST_SAVE_TIME 最終保存時刻
     @RUNNING_USER_PAGEVALUE_ID = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{constant.Project.Key.USER_PAGEVALUE_ID}"
+    # @property [String] WORKTABLE_ITEM_HIDE_BY_SETTING Worktable設定によるアイテム非表示
+    @WORKTABLE_ITEM_HIDE_BY_SETTING = constant.PageValueKey.WORKTABLE_ITEM_HIDE_BY_SETTING
     # @property [String] INSTANCE_PREFIX インスタンスプレフィックス
     @INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX
     # @property [return] インスタンスページプレフィックスを取得
@@ -662,6 +664,25 @@ class PageValue
       # 初期表示時のページ総数は1
       page_count = 1
     @setGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_COUNT}", page_count)
+
+
+  # Worktable設定による非表示状態の取得
+  @getWorktableItemHide: ->
+    state = @getGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.WORKTABLE_ITEM_HIDE_BY_SETTING}")
+    if !state
+      state = {}
+    return state
+
+  # Worktable設定による非表示状態の設定
+  @setWorktableItemHide: (itemObjId, showState) ->
+    state = @getGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.WORKTABLE_ITEM_HIDE_BY_SETTING}")
+    if !state?
+      state = {}
+    if showState
+      delete state[itemObjId]
+    else
+      state[itemObjId] = true
+    @setGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.WORKTABLE_ITEM_HIDE_BY_SETTING}", state)
 
   # フォーク総数カウント
   @updateForkCount = (pn = PageValue.getPageNum()) ->

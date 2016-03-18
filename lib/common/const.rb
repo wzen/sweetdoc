@@ -197,6 +197,8 @@ class Const
     F_PREFIX = 'footprints'
     # @property [String] F_PREFIX 履歴情報イベント一意IDプレフィックス
     FED_PREFIX = 'event_dists'
+    # @property [String] WORKTABLE_ITEM_HIDE_BY_SETTING Worktable設定によるアイテム非表示
+    WORKTABLE_ITEM_HIDE_BY_SETTING = 'worktable_item_hide_by_setting'
   end
 
   class StateConfig

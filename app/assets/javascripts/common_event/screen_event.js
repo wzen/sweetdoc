@@ -14,7 +14,7 @@ ScreenEvent = (function(superClass) {
   ScreenEvent.instance = {};
 
   ScreenEvent.PrivateClass = (function(superClass1) {
-    var _getInitScale, _overlay, _setScaleAndUpdateViewing;
+    var _clearSpecificValue, _getInitScale, _overlay, _setScaleAndUpdateViewing;
 
     extend(PrivateClass, superClass1);
 
@@ -275,7 +275,8 @@ ScreenEvent = (function(superClass) {
         }
         emt.find('.afterX:first').val(x);
         emt.find('.afterY:first').val(y);
-        return emt.find('.afterZ:first').val(z);
+        emt.find('.afterZ:first').val(z);
+        return $('.clear_pointing:first', emt).show();
       };
       emt = specificRoot['changeScreenPosition'];
       x = emt.find('.afterX:first');
@@ -305,10 +306,12 @@ ScreenEvent = (function(superClass) {
           h: h
         };
         EventDragPointingRect.draw(size);
+        $('.clear_pointing:first', emt).show();
       } else {
         EventDragPointingRect.clear();
+        $('.clear_pointing:first', emt).hide();
       }
-      return emt.find('.event_pointing:first').eventDragPointingRect({
+      emt.find('.event_pointing:first').eventDragPointingRect({
         applyDrawCallback: (function(_this) {
           return function(pointingSize) {
             return _updateConfigInput.call(_this, emt, pointingSize);
@@ -320,6 +323,20 @@ ScreenEvent = (function(superClass) {
           };
         })(this)
       });
+      return emt.find('clear_pointing:first').off('click').on('click', (function(_this) {
+        return function(e) {
+          e.preventDefault();
+          return _clearSpecificValue.call(_this, emt);
+        };
+      })(this));
+    };
+
+    _clearSpecificValue = function(emt) {
+      emt.find('.afterX:first').val('');
+      emt.find('.afterY:first').val('');
+      emt.find('.afterZ:first').val('');
+      $('.clear_pointing:first', emt).hide();
+      return EventDragPointingRect.clear();
     };
 
     _overlay = function(x, y, scale) {

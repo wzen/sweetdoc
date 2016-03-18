@@ -7,7 +7,6 @@ class ItemStateConfig
   # 設定値初期化
   @initConfig: ->
     rootEmt = $("##{@ROOT_ID_NAME}")
-
     # 作成アイテム一覧
     createdItemList = $('.created_item_list', rootEmt)
     createdItemList.children().remove()
@@ -21,6 +20,13 @@ class ItemStateConfig
         if !$("##{k}").is(':visible')
           temp.find('.item_visible').hide()
           temp.find('.item_invisible').show()
+          temp.find('.focus_enabled').hide()
+          temp.find('.focus_disabled').show()
+        else
+          temp.find('.item_visible').show()
+          temp.find('.item_invisible').hide()
+          temp.find('.focus_enabled').show()
+          temp.find('.focus_disabled').hide()
         createdItemList.append(temp)
 
       $('.focus_enabled > a', rootEmt).off('click').on('click', (e) ->
@@ -28,23 +34,22 @@ class ItemStateConfig
         # アイテムにフォーカス
         Common.focusToTarget($("##{objId}"), null, true)
       )
-
       $('a.item_edit', rootEmt).off('click').on('click', (e) ->
         e.preventDefault()
         objId = $(@).closest('.wrapper').find('.item_obj_id').val()
         WorktableCommon.editItem(objId)
       )
-
       $('.item_visible > a, .item_invisible > a', rootEmt).off('click').on('click', (e) ->
         e.preventDefault()
         ItemStateConfig.clickToggleVisible(@)
       )
 
-
   @clickToggleVisible = (target) ->
     objId = $(target).closest('.wrapper').find('.item_obj_id').val()
     emt = $("##{objId}")
     emt.toggle()
+    PageValue.setWorktableItemHide(objId, emt.is(':visible'))
+    window.lStorage.saveGeneralPageValue()
     parent = $(target.closest('.buttons'))
     if emt.is(':visible')
       parent.find('.item_visible').show()

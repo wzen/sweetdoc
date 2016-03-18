@@ -122,10 +122,13 @@ itemBaseWorktableExtend = {
     if (window.runDebug) {
       console.log('ItemBase drawAndMakeConfigs');
     }
-    this.refresh(show);
-    if (callback != null) {
-      return callback();
-    }
+    return this.refresh(show, (function(_this) {
+      return function() {
+        if (callback != null) {
+          return callback(_this);
+        }
+      };
+    })(this));
   },
   showOptionMenu: function() {
     var sc;

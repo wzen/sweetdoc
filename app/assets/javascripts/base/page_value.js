@@ -58,6 +58,8 @@ PageValue = (function() {
 
     Key.RUNNING_USER_PAGEVALUE_ID = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + constant.Project.Key.USER_PAGEVALUE_ID;
 
+    Key.WORKTABLE_ITEM_HIDE_BY_SETTING = constant.PageValueKey.WORKTABLE_ITEM_HIDE_BY_SETTING;
+
     Key.INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX;
 
     Key.instancePagePrefix = function(pn) {
@@ -777,6 +779,29 @@ PageValue = (function() {
       page_count = 1;
     }
     return this.setGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.PAGE_COUNT, page_count);
+  };
+
+  PageValue.getWorktableItemHide = function() {
+    var state;
+    state = this.getGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.WORKTABLE_ITEM_HIDE_BY_SETTING);
+    if (!state) {
+      state = {};
+    }
+    return state;
+  };
+
+  PageValue.setWorktableItemHide = function(itemObjId, showState) {
+    var state;
+    state = this.getGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.WORKTABLE_ITEM_HIDE_BY_SETTING);
+    if (state == null) {
+      state = {};
+    }
+    if (showState) {
+      delete state[itemObjId];
+    } else {
+      state[itemObjId] = true;
+    }
+    return this.setGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.WORKTABLE_ITEM_HIDE_BY_SETTING, state);
   };
 
   PageValue.updateForkCount = function(pn) {

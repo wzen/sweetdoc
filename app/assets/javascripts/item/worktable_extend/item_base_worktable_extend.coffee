@@ -103,9 +103,10 @@ itemBaseWorktableExtend =
     if window.runDebug
       console.log('ItemBase drawAndMakeConfigs')
     # アイテム描画
-    @refresh(show)
-    if callback?
-      callback()
+    @refresh(show, =>
+      if callback?
+        callback(@)
+    )
 
   # オプションメニューを開く
   showOptionMenu: ->

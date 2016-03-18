@@ -28,6 +28,13 @@ ItemStateConfig = (function() {
         if (!$("#" + k).is(':visible')) {
           temp.find('.item_visible').hide();
           temp.find('.item_invisible').show();
+          temp.find('.focus_enabled').hide();
+          temp.find('.focus_disabled').show();
+        } else {
+          temp.find('.item_visible').show();
+          temp.find('.item_invisible').hide();
+          temp.find('.focus_enabled').show();
+          temp.find('.focus_disabled').hide();
         }
         createdItemList.append(temp);
       }
@@ -54,6 +61,8 @@ ItemStateConfig = (function() {
     objId = $(target).closest('.wrapper').find('.item_obj_id').val();
     emt = $("#" + objId);
     emt.toggle();
+    PageValue.setWorktableItemHide(objId, emt.is(':visible'));
+    window.lStorage.saveGeneralPageValue();
     parent = $(target.closest('.buttons'));
     if (emt.is(':visible')) {
       parent.find('.item_visible').show();

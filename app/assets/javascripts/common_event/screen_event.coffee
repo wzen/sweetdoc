@@ -216,6 +216,7 @@ class ScreenEvent extends CommonEvent
         emt.find('.afterX:first').val(x)
         emt.find('.afterY:first').val(y)
         emt.find('.afterZ:first').val(z)
+        $('.clear_pointing:first', emt).show()
 
       emt = specificRoot['changeScreenPosition']
       x = emt.find('.afterX:first')
@@ -242,14 +243,27 @@ class ScreenEvent extends CommonEvent
           h: h
         }
         EventDragPointingRect.draw(size)
+        $('.clear_pointing:first', emt).show()
       else
         EventDragPointingRect.clear()
+        $('.clear_pointing:first', emt).hide()
       emt.find('.event_pointing:first').eventDragPointingRect({
         applyDrawCallback: (pointingSize) =>
           _updateConfigInput.call(@, emt, pointingSize)
         closeCallback: =>
           EventDragPointingRect.draw(size)
       })
+      emt.find('clear_pointing:first').off('click').on('click', (e) =>
+        e.preventDefault()
+        _clearSpecificValue.call(@, emt)
+      )
+
+    _clearSpecificValue = (emt) ->
+      emt.find('.afterX:first').val('')
+      emt.find('.afterY:first').val('')
+      emt.find('.afterZ:first').val('')
+      $('.clear_pointing:first', emt).hide()
+      EventDragPointingRect.clear()
 
     _overlay = (x, y, scale) ->
       _drawOverlay = (context, x, y, width, height, scale) ->

@@ -611,16 +611,30 @@ class WorktableCommon
   # @param [Function] callback コールバック
   # @param [Integer] pageNum 描画するPageValueのページ番号
   @createAllInstanceAndDrawFromInstancePageValue: (callback = null, pageNum = PageValue.getPageNum()) ->
+    count = 0
     Common.loadJsFromInstancePageValue( ->
       # インスタンス取得 & PageValueの値で初期化
       items = Common.itemInstancesInPage(pageNum, true, true)
+      # Worktable設定によるアイテム表示状態取得
+      itemHideState = PageValue.getWorktableItemHide()
       for item in items
         if item.drawAndMakeConfigs?
-          item.drawAndMakeConfigs()
-
-      # コールバック
-      if callback?
-        callback()
+          item.drawAndMakeConfigs(true, (i) =>
+            if itemHideState[i.id]? && itemHideState[i.id]
+              # 非表示にする
+              i.getJQueryElement().hide()
+            count += 1
+            if count >= items.length
+              # コールバック
+              if callback?
+                callback()
+          )
+        else
+          count += 1
+          if count >= items.length
+            # コールバック
+            if callback?
+              callback()
     , pageNum)
 
   # イベント進行ルートを取得
