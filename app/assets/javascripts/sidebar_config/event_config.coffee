@@ -399,6 +399,16 @@ class EventConfig
   _setupFromPageValues = ->
     if EventPageValueBase.readFromPageValue(@)
       @selectItem()
+    else
+      # 表示初期化
+      _clearInput.call(@)
+
+  _clearInput = ->
+    $('.update_event_after', @emt).prop('checked', false)
+    itemSelect = $('.te_item_select', @emt)
+    itemSelect.prev('.btn').text(I18n.t('config.event.target_select.default'))
+    itemSelect.next('input[type=hidden]').val('')
+    $(".config.te_div", @emt).hide()
 
   # 「Preview」ボタンの切り替え
   @switchPreviewButton: (enabled) ->

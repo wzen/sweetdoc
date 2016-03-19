@@ -2,7 +2,7 @@
 var EventConfig;
 
 EventConfig = (function() {
-  var _setApplyClickEvent, _setCommonStateEvent, _setForkSelect, _setHandlerRadioEvent, _setItemCommonEvent, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues, constant;
+  var _clearInput, _setApplyClickEvent, _setCommonStateEvent, _setForkSelect, _setHandlerRadioEvent, _setItemCommonEvent, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues, constant;
 
   constant = gon["const"];
 
@@ -427,7 +427,18 @@ EventConfig = (function() {
   _setupFromPageValues = function() {
     if (EventPageValueBase.readFromPageValue(this)) {
       return this.selectItem();
+    } else {
+      return _clearInput.call(this);
     }
+  };
+
+  _clearInput = function() {
+    var itemSelect;
+    $('.update_event_after', this.emt).prop('checked', false);
+    itemSelect = $('.te_item_select', this.emt);
+    itemSelect.prev('.btn').text(I18n.t('config.event.target_select.default'));
+    itemSelect.next('input[type=hidden]').val('');
+    return $(".config.te_div", this.emt).hide();
   };
 
   EventConfig.switchPreviewButton = function(enabled) {
