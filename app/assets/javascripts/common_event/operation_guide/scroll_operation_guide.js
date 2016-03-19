@@ -35,7 +35,7 @@ ScrollOperationGuide = (function() {
     if (this.type === this.constructor.Type.PAGING) {
       this.runScrollDist = 50;
     } else if (this.type === this.constructor.Type.REWIND) {
-      this.runScrollDist = 90;
+      this.runScrollDist = 80;
     }
     this.perWidth = this.iconWidth / this.runScrollDist;
     this.finishedScrollDistSum = 0;

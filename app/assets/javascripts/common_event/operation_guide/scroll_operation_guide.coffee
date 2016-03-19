@@ -14,7 +14,7 @@ class ScrollOperationGuide
     if @type == @constructor.Type.PAGING
       @runScrollDist = 50
     else if @type == @constructor.Type.REWIND
-      @runScrollDist = 90
+      @runScrollDist = 80
     @perWidth = @iconWidth / @runScrollDist
     @finishedScrollDistSum = 0
     @stopTimer = null
