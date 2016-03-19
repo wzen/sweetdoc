@@ -108,13 +108,34 @@ Navbar = (function() {
       return WorktableCommon.changeMode(constant.Mode.EDIT);
     });
     return $('#menu_sidebar_toggle').off('click').on('click', function() {
+      var activeConfig, navTab;
       if (Sidebar.isOpenedConfigSidebar()) {
         return Sidebar.closeSidebar();
       } else {
         Sidebar.switchSidebarConfig(Sidebar.Type.STATE);
-        StateConfig.initConfig();
-        WorktableSetting.initConfig();
-        ItemStateConfig.initConfig();
+        navTab = $('#tab-config .nav-tabs');
+        activeConfig = navTab.find('li.active');
+        if (activeConfig.hasClass('beginning_event_state')) {
+          StateConfig.initConfig();
+        } else if (activeConfig.hasClass('worktable_setting')) {
+          WorktableSetting.initConfig();
+        } else if (activeConfig.hasClass('item_state')) {
+          ItemStateConfig.initConfig();
+        }
+        navTab.find('li > a').off('click.init').on('click.init', (function(_this) {
+          return function(e) {
+            WorktableCommon.clearSelectedBorder();
+            WorktableCommon.clearEventPointer();
+            activeConfig = $(e.target).closest('li');
+            if (activeConfig.hasClass('beginning_event_state')) {
+              return StateConfig.initConfig();
+            } else if (activeConfig.hasClass('worktable_setting')) {
+              return WorktableSetting.initConfig();
+            } else if (activeConfig.hasClass('item_state')) {
+              return ItemStateConfig.initConfig();
+            }
+          };
+        })(this));
         return Sidebar.openStateConfig();
       }
     });

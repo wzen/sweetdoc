@@ -93,9 +93,29 @@ class Navbar
         Sidebar.closeSidebar()
       else
         Sidebar.switchSidebarConfig(Sidebar.Type.STATE)
-        StateConfig.initConfig()
-        WorktableSetting.initConfig()
-        ItemStateConfig.initConfig()
+        navTab = $('#tab-config .nav-tabs')
+        # コンフィグ初期化
+        activeConfig = navTab.find('li.active')
+        if activeConfig.hasClass('beginning_event_state')
+          StateConfig.initConfig()
+        else if activeConfig.hasClass('worktable_setting')
+          WorktableSetting.initConfig()
+        else if activeConfig.hasClass('item_state')
+          ItemStateConfig.initConfig()
+        # タブ選択時イベントの設定
+        navTab.find('li > a').off('click.init').on('click.init', (e) =>
+          # 選択枠を削除
+          WorktableCommon.clearSelectedBorder()
+          # イベントポインタ削除
+          WorktableCommon.clearEventPointer()
+          activeConfig = $(e.target).closest('li')
+          if activeConfig.hasClass('beginning_event_state')
+            StateConfig.initConfig()
+          else if activeConfig.hasClass('worktable_setting')
+            WorktableSetting.initConfig()
+          else if activeConfig.hasClass('item_state')
+            ItemStateConfig.initConfig()
+        )
         Sidebar.openStateConfig()
     )
 
