@@ -667,27 +667,21 @@ class PreloadItemText extends CanvasItemBase
     @showWithAnimation = @showWithAnimation__after
     @showAnimationType = @showAnimationType__after
     @_forward = opt.forward
-    if @_forward && @showWithAnimation && (!@_animationFlg['isOpen']? || !@_animationFlg['isOpen'])
-      #if !window.isWorkTable
-      #  window.scrollHandleWrapper.removeClass('enable_inertial_scroll')
-      @startOpenAnimation( =>
-        @_animationFlg['isOpen'] = true
-        @resetProgress()
-        @fontSize = _calcFontSizeAbout.call(@, @inputText, @_canvas.width, @_canvas.height, @isFixedFontSize, @drawHorizontal)
-        _setTextStyle.call(@)
-        @_beforeWriteLength = 0
-        @_writeTextRunning = false
-        @_isScrollHeader = false
-
-      )
-    else
-      if !@_forward && opt.progress <= 0 && @showWithAnimation && @_animationFlg['isOpen']
-        @startCloseAnimation( =>
-          @_animationFlg['isOpen'] = false
-          @resetProgress()
-          @_beforeWriteLength = 0
-          @_writeTextRunning = false
+    if @_forward && (!@_animationFlg['isOpen']? || !@_animationFlg['isOpen'])
+      if @showWithAnimation
+        @startOpenAnimation( =>
+          _openCbk.call(@)
         )
+      else
+        _openCbk.call(@)
+    else
+      if !@_forward && opt.progress <= 0 && @_animationFlg['isOpen']
+        if @showWithAnimation
+          @startCloseAnimation( =>
+            _oCbk.call(@)
+          )
+        else
+          _oCbk.call(@)
       else if opt.progress <= opt.progressMax && @inputText? && @inputText.length > 0
         if !@_writeTextRunning? || !@_writeTextRunning
           @_fixedTextAlpha = null
@@ -721,23 +715,45 @@ class PreloadItemText extends CanvasItemBase
                 @_finishedWrite = parseInt(writeLength) >= @inputText.length
             _write.call(@)
 
-    if opt.progress >= opt.progressMax && @_finishedWrite? && @_finishedWrite && @showWithAnimation && (@_animationFlg['isOpen']? && @_animationFlg['isOpen'])
+    if opt.progress >= opt.progressMax && @_finishedWrite? && @_finishedWrite && (@_animationFlg['isOpen']? && @_animationFlg['isOpen'])
       @_writeTextRunning = false
-      @startCloseAnimation( =>
-        @_animationFlg['isOpen'] = false
-        if !@_isFinishedEvent
-          # 終了イベント
-          @finishEvent()
-          if ScrollGuide?
-            ScrollGuide.hideGuide()
-          if callback?
-            callback()
-      )
+      if @showWithAnimation
+        @startCloseAnimation( =>
+          _closeCbk.call(@)
+        )
+      else
+        _closeCbk.call(@)
     else
       if callback?
         callback()
-      #if !window.isWorkTable
-      #  window.scrollHandleWrapper.addClass('enable_inertial_scroll')
+
+  _openCbk = ->
+    if !@_canvas?
+      @_canvas = document.getElementById(@canvasElementId())
+      @_context = @_canvas.getContext('2d')
+    @_animationFlg['isOpen'] = true
+    @resetProgress()
+    @fontSize = _calcFontSizeAbout.call(@, @inputText, @_canvas.width, @_canvas.height, @isFixedFontSize, @drawHorizontal)
+    _setTextStyle.call(@)
+    @_beforeWriteLength = 0
+    @_writeTextRunning = false
+    @_isScrollHeader = false
+
+  _oCbk = ->
+    @_animationFlg['isOpen'] = false
+    @resetProgress()
+    @_beforeWriteLength = 0
+    @_writeTextRunning = false
+
+  _closeCbk = ->
+    @_animationFlg['isOpen'] = false
+    if !@_isFinishedEvent
+      # 終了イベント
+      @finishEvent()
+      if ScrollGuide?
+        ScrollGuide.hideGuide()
+      if callback?
+        callback()
 
   _setTextStyle = ->
     canvas = document.getElementById(@canvasElementId())

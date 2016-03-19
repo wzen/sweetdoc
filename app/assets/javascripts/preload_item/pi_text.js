@@ -4,7 +4,7 @@ var PreloadItemText,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemText = (function(superClass) {
-  var _adjustFreeHandPath, _balloonStyle, _calcFontSizeAbout, _calcHorizontalColumnHeightMax, _calcHorizontalColumnHeightSum, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcRowWordLength, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _calcWordMeasure, _defaultWorkWidth, _drawBalloon, _drawText, _drawTextAndBalloonToCanvas, _freeHandBalloonDraw, _getRandomInt, _isWordNeedRotate, _isWordSmallJapanease, _measureImage, _prepareEditModal, _setNoTextStyle, _setTextAlpha, _setTextStyle, _settingTextDbclickEvent, _showInputModal, _startCloseAnimation, _startOpenAnimation, _writeLength, constant;
+  var _adjustFreeHandPath, _balloonStyle, _calcFontSizeAbout, _calcHorizontalColumnHeightMax, _calcHorizontalColumnHeightSum, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcRowWordLength, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _calcWordMeasure, _closeCbk, _defaultWorkWidth, _drawBalloon, _drawText, _drawTextAndBalloonToCanvas, _freeHandBalloonDraw, _getRandomInt, _isWordNeedRotate, _isWordSmallJapanease, _measureImage, _oCbk, _openCbk, _prepareEditModal, _setNoTextStyle, _setTextAlpha, _setTextStyle, _settingTextDbclickEvent, _showInputModal, _startCloseAnimation, _startOpenAnimation, _writeLength, constant;
 
   extend(PreloadItemText, superClass);
 
@@ -894,28 +894,27 @@ PreloadItemText = (function(superClass) {
     this.showWithAnimation = this.showWithAnimation__after;
     this.showAnimationType = this.showAnimationType__after;
     this._forward = opt.forward;
-    if (this._forward && this.showWithAnimation && ((this._animationFlg['isOpen'] == null) || !this._animationFlg['isOpen'])) {
-      this.startOpenAnimation((function(_this) {
-        return function() {
-          _this._animationFlg['isOpen'] = true;
-          _this.resetProgress();
-          _this.fontSize = _calcFontSizeAbout.call(_this, _this.inputText, _this._canvas.width, _this._canvas.height, _this.isFixedFontSize, _this.drawHorizontal);
-          _setTextStyle.call(_this);
-          _this._beforeWriteLength = 0;
-          _this._writeTextRunning = false;
-          return _this._isScrollHeader = false;
-        };
-      })(this));
-    } else {
-      if (!this._forward && opt.progress <= 0 && this.showWithAnimation && this._animationFlg['isOpen']) {
-        this.startCloseAnimation((function(_this) {
+    if (this._forward && ((this._animationFlg['isOpen'] == null) || !this._animationFlg['isOpen'])) {
+      if (this.showWithAnimation) {
+        this.startOpenAnimation((function(_this) {
           return function() {
-            _this._animationFlg['isOpen'] = false;
-            _this.resetProgress();
-            _this._beforeWriteLength = 0;
-            return _this._writeTextRunning = false;
+            return _openCbk.call(_this);
           };
         })(this));
+      } else {
+        _openCbk.call(this);
+      }
+    } else {
+      if (!this._forward && opt.progress <= 0 && this._animationFlg['isOpen']) {
+        if (this.showWithAnimation) {
+          this.startCloseAnimation((function(_this) {
+            return function() {
+              return _oCbk.call(_this);
+            };
+          })(this));
+        } else {
+          _oCbk.call(this);
+        }
       } else if (opt.progress <= opt.progressMax && (this.inputText != null) && this.inputText.length > 0) {
         if ((this._writeTextRunning == null) || !this._writeTextRunning) {
           this._fixedTextAlpha = null;
@@ -956,24 +955,53 @@ PreloadItemText = (function(superClass) {
         }
       }
     }
-    if (opt.progress >= opt.progressMax && (this._finishedWrite != null) && this._finishedWrite && this.showWithAnimation && ((this._animationFlg['isOpen'] != null) && this._animationFlg['isOpen'])) {
+    if (opt.progress >= opt.progressMax && (this._finishedWrite != null) && this._finishedWrite && ((this._animationFlg['isOpen'] != null) && this._animationFlg['isOpen'])) {
       this._writeTextRunning = false;
-      return this.startCloseAnimation((function(_this) {
-        return function() {
-          _this._animationFlg['isOpen'] = false;
-          if (!_this._isFinishedEvent) {
-            _this.finishEvent();
-            if (typeof ScrollGuide !== "undefined" && ScrollGuide !== null) {
-              ScrollGuide.hideGuide();
-            }
-            if (callback != null) {
-              return callback();
-            }
-          }
-        };
-      })(this));
+      if (this.showWithAnimation) {
+        return this.startCloseAnimation((function(_this) {
+          return function() {
+            return _closeCbk.call(_this);
+          };
+        })(this));
+      } else {
+        return _closeCbk.call(this);
+      }
     } else {
       if (callback != null) {
+        return callback();
+      }
+    }
+  };
+
+  _openCbk = function() {
+    if (this._canvas == null) {
+      this._canvas = document.getElementById(this.canvasElementId());
+      this._context = this._canvas.getContext('2d');
+    }
+    this._animationFlg['isOpen'] = true;
+    this.resetProgress();
+    this.fontSize = _calcFontSizeAbout.call(this, this.inputText, this._canvas.width, this._canvas.height, this.isFixedFontSize, this.drawHorizontal);
+    _setTextStyle.call(this);
+    this._beforeWriteLength = 0;
+    this._writeTextRunning = false;
+    return this._isScrollHeader = false;
+  };
+
+  _oCbk = function() {
+    this._animationFlg['isOpen'] = false;
+    this.resetProgress();
+    this._beforeWriteLength = 0;
+    return this._writeTextRunning = false;
+  };
+
+  _closeCbk = function() {
+    this._animationFlg['isOpen'] = false;
+    if (!this._isFinishedEvent) {
+      this.finishEvent();
+      if (typeof ScrollGuide !== "undefined" && ScrollGuide !== null) {
+        ScrollGuide.hideGuide();
+      }
+      if (typeof callback !== "undefined" && callback !== null) {
         return callback();
       }
     }
