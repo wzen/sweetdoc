@@ -40,8 +40,11 @@ $ ->
 #      $('body').css({width: window.screen.width + 'px', height: window.screen.height + 'px'})
     RunCommon.start()
 
-
   $('.gallery.embed').ready ->
+    # 作成者情報を表示
+    #RunFullScreen.showCreatorInfo()
+
+  $('.gallery.embed_with_run').ready ->
     # 作成者情報を表示
     RunFullScreen.showCreatorInfo()
     RunCommon.start()

@@ -35,6 +35,12 @@ class GalleryController < ApplicationController
   end
 
   def embed
+    @access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
+    g = Gallery.find_by(access_token: @access_token)
+    @is_exist_gallery = g.present?
+    render layout: 'gallery_fullwindow'
+  end
+  def embed_with_run
     _take_gallery_data
     render layout: 'gallery_fullwindow'
   end

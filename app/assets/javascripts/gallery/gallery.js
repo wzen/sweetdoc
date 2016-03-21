@@ -40,7 +40,8 @@ $(function() {
     RunFullScreen.showCreatorInfo();
     return RunCommon.start();
   });
-  return $('.gallery.embed').ready(function() {
+  $('.gallery.embed').ready(function() {});
+  return $('.gallery.embed_with_run').ready(function() {
     RunFullScreen.showCreatorInfo();
     return RunCommon.start();
   });
