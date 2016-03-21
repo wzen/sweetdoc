@@ -19,7 +19,7 @@ html, body {
 body {
   //background-color: #ebe9dc;
   background-color: #FAFAFA;
-  &.embed #contents .new_window{
+  &.embed_with_run #contents .new_window{
     position: absolute;
     top: 5px;
     right: 5px;
@@ -265,7 +265,8 @@ body.detail {
     }
   }
 }
-body.full_window, body.embed {
+
+body.full_window, body.embed, body.embed_with_run {
   div#contents {
     top: 0 !important;
   }
@@ -273,6 +274,68 @@ body.full_window, body.embed {
     padding-right: 0 !important;
     .wrapper {
       padding: 0 !important;
+    }
+  }
+}
+
+body.embed {
+  #main_wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  #thumbnail_wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    .thumbnail_img {
+    }
+  }
+  #popup_wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    div.button_wrapper {
+      z-index: 5;
+      div.play_in_embed_wrapper, div.play_in_site_wrapper {
+        width: 100%;
+        height: 50%;
+        display: table;
+        div.caption_wrapper {
+          color: white;
+          font-size: 18px;
+          font-weight: bold;
+          width: 100%;
+          text-align: center;
+        }
+      }
+      div.play_in_embed, div.play_in_site  {
+        width: 100px;
+        height: 70px;
+        border: 5px solid;
+        border-color: white;
+        border-radius: 7px;
+        display: table-cell;
+        position: relative;
+      }
+      div.play_in_embed {
+        > img {
+
+        }
+      }
+      div.play_in_site {
+        > img {
+
+        }
+      }
     }
   }
 }

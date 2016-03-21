@@ -307,7 +307,7 @@
   }
 }
 
-body.full_window, body.embed{
+body.full_window, body.embed_with_run{
   .modal-content {
     &.flash_message {
       top: 0 !important;

@@ -167,6 +167,9 @@ en:
       created_contents_link_description: "Don't want to write a document?"
       created_items_link_description: "Don't want to make a item?"
       using_items_link_description: "Don't want to use a made item?"
+  embed:
+    caption:
+      play_in_site: "Read in Sweetdoc"
   message:
     dialog:
       change_project: "Your making contents will delete."

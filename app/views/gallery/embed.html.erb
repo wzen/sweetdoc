@@ -3,21 +3,28 @@
     <%= render 'base/deleted_page', new_tab_link: true %>
 <% else %>
   <%= javascript_include_tag 'pipeline/gallery', 'data-turbolinks-track' => true %>
-  <div id="main">
+  <div id="main_wrapper">
     <div id="thumbnail_wrapper">
-      <%= image_tag(thumbnail_gallery_path(@access_token), class: 'thumbnail_img', style: thumbnail_style)%>
+      <%= image_tag(thumbnail_gallery_path(@access_token), class: 'thumbnail_img')%>
     </div>
     <div id="popup_wrapper">
-      <div id="button_wrapper">
-        <div class="play_in_embed">
-          <% link_to "gallery/embed_with_run?#{Const::Gallery::Key::GALLERY_ACCESS_TOKEN}=#{@access_token}" do %>
-              <%= image_tag 'gallery/embed/play_in_embed.png', size: '64x64' %>
-          <% end %>
+      <div class="button_wrapper">
+        <div class="play_in_embed_wrapper">
+          <div class="play_in_embed">
+            <% link_to "gallery/embed_with_run?#{Const::Gallery::Key::GALLERY_ACCESS_TOKEN}=#{@access_token}" do %>
+                <%= image_tag 'gallery/embed/play_in_embed.png', size: '64x64', class: 'put_center' %>
+            <% end %>
+          </div>
         </div>
-        <div class="play_in_site">
-          <%= link_to "/gallery/detail/#{@access_token}", target: '_newwindow' do %>
-              <%= image_tag 'gallery/embed/play_in_site.png.png', size: '64x64' %>
-          <% end %>
+        <div class="play_in_site_wrapper">
+          <div class="play_in_site">
+            <%= link_to "/gallery/detail/#{@access_token}", target: '_newwindow' do %>
+                <%= image_tag 'gallery/embed/play_in_site.png.png', size: '64x64', class: 'put_center' %>
+            <% end %>
+          </div>
+          <div class="caption_wrapper">
+            <%= I18n.t('embed.caption.play_in_site') %>
+          </div>
         </div>
       </div>
     </div>

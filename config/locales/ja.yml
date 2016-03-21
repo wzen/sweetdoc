@@ -144,6 +144,9 @@ ja:
       created_contents_link_description: "ドキュメントを作成する"
       created_items_link_description: "アイテムを作成する"
       using_items_link_description: "アイテムを使用する"
+  embed:
+    caption:
+      play_in_site: "元サイトで閲覧"
   message:
     dialog:
       change_project: "作成中のコンテンツは削除されます。"

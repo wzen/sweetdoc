@@ -30,7 +30,7 @@ div#main {
   //background-image: image_url('base/back2.jpg');
   //background-repeat: repeat;
 
-  &.fullscreen, &.embed {
+  &.fullscreen, &.embed_with_run {
     padding: 0;
 
     .info_wrapper {
