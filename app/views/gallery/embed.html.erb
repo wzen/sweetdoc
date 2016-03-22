@@ -12,24 +12,18 @@
         <div class="powered_by_link">
           Powered by
           <div class="powered_thumbnail">
-            <%= link_to '/', target: '_newwindow' do %>
-                <%= image_tag 'base/logo64.png', size: '50x50' %>
-            <% end %>
+            <%= image_tag 'base/logo64.png', size: '50x50' %>
           </div>
         </div>
           <div class="play_in_embed_wrapper">
             <div class="play_in_embed put_center">
-              <%= link_to "/gallery/embed_with_run?#{Const::Gallery::Key::GALLERY_ACCESS_TOKEN}=#{@access_token}" do %>
-                  <%= image_tag 'gallery/embed/play_in_embed.png', size: '64x64', class: 'put_center' %>
-              <% end %>
+              <%= image_tag 'gallery/embed/play_in_embed.png', size: '64x64', class: 'put_center' %>
             </div>
           </div>
           <div class="play_in_site_wrapper">
             <div class="play_in_site put_center">
-              <div>
-                <%= link_to "/gallery/detail/#{@access_token}", target: '_newwindow' do %>
-                    <%= image_tag 'gallery/embed/play_in_site.png', size: '64x64', class: 'put_center' %>
-                <% end %>
+              <div class="play_in_site_link">
+                <%= image_tag 'gallery/embed/play_in_site.png', size: '64x64', class: 'put_center' %>
               </div>
               <div class="caption_wrapper">
                 <%= I18n.t('embed.caption.play_in_site') %>
@@ -39,5 +33,6 @@
 
       </div>
     </div>
+    <input class="<%= Const::Gallery::Key::GALLERY_ACCESS_TOKEN %>" type="hidden" value="<%= @access_token %>">
   </div>
 <% end %>

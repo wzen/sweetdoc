@@ -40,7 +40,30 @@ $(function() {
     RunFullScreen.showCreatorInfo();
     return RunCommon.start();
   });
-  $('.gallery.embed').ready(function() {});
+  $('.gallery.embed').ready(function() {
+    $('.powered_thumbnail:first').off('click').on('click', (function(_this) {
+      return function(e) {
+        e.preventDefault();
+        return window.open("/", "_newwindow");
+      };
+    })(this));
+    $('.play_in_embed:first').off('click').on('click', (function(_this) {
+      return function(e) {
+        var accessToken;
+        e.preventDefault();
+        accessToken = $("#main_wrapper ." + constant.Gallery.Key.GALLERY_ACCESS_TOKEN + ":first").val();
+        return window.location.href = "/gallery/embed_with_run?" + constant.Gallery.Key.GALLERY_ACCESS_TOKEN + "=" + accessToken;
+      };
+    })(this));
+    return $('.play_in_site_link:first').off('click').on('click', (function(_this) {
+      return function(e) {
+        var accessToken;
+        e.preventDefault();
+        accessToken = $("#main_wrapper ." + constant.Gallery.Key.GALLERY_ACCESS_TOKEN + ":first").val();
+        return window.open("/gallery/detail/" + accessToken, "_newwindow");
+      };
+    })(this));
+  });
   return $('.gallery.embed_with_run').ready(function() {
     RunFullScreen.showCreatorInfo();
     return RunCommon.start();

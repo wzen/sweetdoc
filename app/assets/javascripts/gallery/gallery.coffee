@@ -41,7 +41,23 @@ $ ->
     RunCommon.start()
 
   $('.gallery.embed').ready ->
-    # 作成者情報を表示
+    $('.powered_thumbnail:first').off('click').on('click', (e) =>
+      e.preventDefault()
+      window.open( "/", "_newwindow" )
+    )
+    $('.play_in_embed:first').off('click').on('click', (e) =>
+      e.preventDefault()
+      accessToken = $("#main_wrapper .#{constant.Gallery.Key.GALLERY_ACCESS_TOKEN}:first").val()
+      window.location.href = "/gallery/embed_with_run?#{constant.Gallery.Key.GALLERY_ACCESS_TOKEN}=#{accessToken}"
+    )
+    $('.play_in_site_link:first').off('click').on('click', (e) =>
+      e.preventDefault()
+      accessToken = $("#main_wrapper .#{constant.Gallery.Key.GALLERY_ACCESS_TOKEN}:first").val()
+      window.open( "/gallery/detail/#{accessToken}", "_newwindow" )
+    )
+
+
+  # 作成者情報を表示
     #RunFullScreen.showCreatorInfo()
 
   $('.gallery.embed_with_run').ready ->
