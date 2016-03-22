@@ -9,23 +9,27 @@
     </div>
     <div id="popup_wrapper">
       <div class="button_wrapper">
-        <div class="play_in_embed_wrapper">
-          <div class="play_in_embed">
-            <% link_to "gallery/embed_with_run?#{Const::Gallery::Key::GALLERY_ACCESS_TOKEN}=#{@access_token}" do %>
-                <%= image_tag 'gallery/embed/play_in_embed.png', size: '64x64', class: 'put_center' %>
-            <% end %>
+
+          <div class="play_in_embed_wrapper">
+            <div class="play_in_embed put_center">
+              <%= link_to "/gallery/embed_with_run?#{Const::Gallery::Key::GALLERY_ACCESS_TOKEN}=#{@access_token}" do %>
+                  <%= image_tag 'gallery/embed/play_in_embed.png', size: '64x64', class: 'put_center' %>
+              <% end %>
+            </div>
           </div>
-        </div>
-        <div class="play_in_site_wrapper">
-          <div class="play_in_site">
-            <%= link_to "/gallery/detail/#{@access_token}", target: '_newwindow' do %>
-                <%= image_tag 'gallery/embed/play_in_site.png.png', size: '64x64', class: 'put_center' %>
-            <% end %>
+          <div class="play_in_site_wrapper">
+            <div class="play_in_site put_center">
+              <div>
+                <%= link_to "/gallery/detail/#{@access_token}", target: '_newwindow' do %>
+                    <%= image_tag 'gallery/embed/play_in_site.png', size: '64x64', class: 'put_center' %>
+                <% end %>
+              </div>
+              <div class="caption_wrapper">
+                <%= I18n.t('embed.caption.play_in_site') %>
+              </div>
+            </div>
           </div>
-          <div class="caption_wrapper">
-            <%= I18n.t('embed.caption.play_in_site') %>
-          </div>
-        </div>
+
       </div>
     </div>
   </div>
