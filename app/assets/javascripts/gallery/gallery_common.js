@@ -49,12 +49,13 @@ GalleryCommon = (function() {
     return $('#grid_wrapper').find('.grid_contents_wrapper').css('opacity', '');
   };
 
-  GalleryCommon.showWithFullScreen = function() {
-    var e, height, left, root, size, target, top, width;
-    e = event;
+  GalleryCommon.showWithFullScreen = function(e) {
+    var height, left, root, rootTarget, size, target, top, width;
+    e = e || window.event;
+    rootTarget = e.target || e.srcElement;
     e.preventDefault();
     e.stopPropagation();
-    root = $(e.target);
+    root = $(rootTarget);
     target = "_runwindow";
     width = root.find("." + constant.Gallery.Key.SCREEN_SIZE_WIDTH).val();
     height = root.find("." + constant.Gallery.Key.SCREEN_SIZE_HEIGHT).val();

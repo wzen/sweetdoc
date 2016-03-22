@@ -45,11 +45,12 @@ class GalleryCommon
   @showAllGrid = ->
     $('#grid_wrapper').find('.grid_contents_wrapper').css('opacity', '')
 
-  @showWithFullScreen = ->
-    e = event
+  @showWithFullScreen = (e) ->
+    e = e || window.event
+    rootTarget = e.target || e.srcElement
     e.preventDefault()
     e.stopPropagation()
-    root = $(e.target)
+    root = $(rootTarget)
     target = "_runwindow"
     # 実行確認ページを新規ウィンドウで表示
     width = root.find(".#{constant.Gallery.Key.SCREEN_SIZE_WIDTH}").val()

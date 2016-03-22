@@ -56,10 +56,6 @@ $ ->
       window.open( "/gallery/detail/#{accessToken}", "_newwindow" )
     )
 
-
-  # 作成者情報を表示
-    #RunFullScreen.showCreatorInfo()
-
   $('.gallery.embed_with_run').ready ->
     # 作成者情報を表示
     RunFullScreen.showCreatorInfo()

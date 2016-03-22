@@ -3,7 +3,7 @@
 %>
 
 <% if open_with_newwindow %>
-  <div class="new_window" onclick="GalleryCommon.showWithFullScreen(this); return false;">
+  <div class="new_window" onclick="GalleryCommon.showWithFullScreen(event); return false;">
     <input type="hidden" class="<%= Const::Gallery::Key::GALLERY_ACCESS_TOKEN %>" value="<%= access_token %>" />
     <% if screen_size_width.present? && screen_size_height.present? %>
       <input type="hidden" class="<%= Const::Gallery::Key::SCREEN_SIZE_WIDTH %>" value="<%= screen_size_width %>" />
