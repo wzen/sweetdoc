@@ -308,6 +308,17 @@ body.embed {
       position: relative;
       width: 100%;
       height: 100%;
+      div.powered_by_link {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        color: #E91E63;
+        font-size: 18px;
+        z-index: 10;
+        div.powered_thumbnail {
+          display: inline-block;
+        }
+      }
       div.play_in_embed_wrapper, div.play_in_site_wrapper {
         width: 100%;
         height: 50%;

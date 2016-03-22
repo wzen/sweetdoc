@@ -9,7 +9,14 @@
     </div>
     <div id="popup_wrapper">
       <div class="button_wrapper">
-
+        <div class="powered_by_link">
+          Powered by
+          <div class="powered_thumbnail">
+            <%= link_to '/' do %>
+                <%= image_tag 'base/logo64.png', size: '50x50' %>
+            <% end %>
+          </div>
+        </div>
           <div class="play_in_embed_wrapper">
             <div class="play_in_embed put_center">
               <%= link_to "/gallery/embed_with_run?#{Const::Gallery::Key::GALLERY_ACCESS_TOKEN}=#{@access_token}" do %>
