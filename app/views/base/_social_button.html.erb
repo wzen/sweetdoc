@@ -1,52 +1,71 @@
 <%
   twitter_title = '' if twitter_title.nil?
   url = request.original_url
+  is_smartphone = false if is_smartphone.nil?
 %>
 
-<div class="social clearfix">
-
-  <!-- Facebook -->
-  <div class="button facebook">
-    <div id="fb-root"></div>
-    <div class="fb-like"
-         data-href="<%= url %>"
-         data-layout="button_count"
-         data-send="false"
-         data-width="120"
-         data-show-faces="false">
+<% if is_smartphone %>
+    <div class="ninja_onebutton">
+      <script type="text/javascript">
+        //<![CDATA[
+        (function(d){
+          if(typeof(window.NINJA_CO_JP_ONETAG_BUTTON_9c9b935e03e2e098d91dde6f7f4940a1)=='undefined'){
+            document.write("<sc"+"ript type='text\/javascript' src='\/\/omt.shinobi.jp\/b\/9c9b935e03e2e098d91dde6f7f4940a1'><\/sc"+"ript>");
+          }else{
+            window.NINJA_CO_JP_ONETAG_BUTTON_9c9b935e03e2e098d91dde6f7f4940a1.ONETAGButton_Load();}
+        })(document);
+        //]]>
+      </script>
+      <span class="ninja_onebutton_hidden" style="display:none;"></span><span style="display:none;" class="ninja_onebutton_hidden"></span>
     </div>
-  </div>
+<% else %>
 
-  <!-- Twitter -->
-  <div class="button twitter">
-    <a href="https://twitter.com/share" class="twitter-share-button"
-       data-lang="en"
-       data-url="<%= url %>"
-       data-text="<%= twitter_title %>"
-    ></a>
-  </div>
+    <div class="social clearfix">
 
-  <!-- Pocket -->
-  <div class="button pocket">
-    <a href="https://getpocket.com/save" class="pocket-btn"
-       data-lang="en"
-       data-save-url="<%= url %>"
-       data-pocket-count="horizontal"
-       data-pocket-align="left"
-    ></a>
-  </div>
+      <!-- Facebook -->
+      <div class="button facebook">
+        <div id="fb-root"></div>
+        <div class="fb-like"
+             data-href="<%= url %>"
+             data-layout="button_count"
+             data-send="false"
+             data-width="120"
+             data-show-faces="false">
+        </div>
+      </div>
 
-  <!-- Google plusone -->
-  <div class="button google">
-    <div class="g-plusone"
-         data-size="medium"
-         data-href="<%= url %>">
+      <!-- Twitter -->
+      <div class="button twitter">
+        <a href="https://twitter.com/share" class="twitter-share-button"
+           data-lang="en"
+           data-url="<%= url %>"
+           data-text="<%= twitter_title %>"
+        ></a>
+      </div>
+
+      <!-- Pocket -->
+      <div class="button pocket">
+        <a href="https://getpocket.com/save" class="pocket-btn"
+           data-lang="en"
+           data-save-url="<%= url %>"
+           data-pocket-count="horizontal"
+           data-pocket-align="left"
+        ></a>
+      </div>
+
+      <!-- Google plusone -->
+      <div class="button google">
+        <div class="g-plusone"
+             data-size="medium"
+             data-href="<%= url %>">
+        </div>
+      </div>
+
+      <!-- Hatena -->
+      <div class="button hatena">
+        <a href="http://b.hatena.ne.jp/entry/<%= url %>" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a>
+        <script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+      </div>
     </div>
-  </div>
 
-  <!-- Hatena -->
-  <div class="button hatena">
-    <a href="http://b.hatena.ne.jp/entry/<%= url %>" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a>
-    <script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
-  </div>
-</div>
+<% end %>
