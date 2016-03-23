@@ -4,6 +4,9 @@
             <% @contents.each do |content| %>
                 <%= render 'gallery/grid_contents', content: content %>
             <% end %>
+          <% @dummy_contents_length.times do %>
+            <%= render 'gallery/grid_contents', is_blink: true %>
+          <% end %>
         </div>
     </div>
 </form>

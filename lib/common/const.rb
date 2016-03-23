@@ -8,6 +8,7 @@ class Const
   AFTER_MODIFY_VAR_SUFFIX = '__after'
   ADMIN_USER_ID = 1
   SAMPLE_PROJECT_USER_PROJECT_MAP_ID = 2147483647 # MySQL Int max
+  GRID_CONTENTS_DISPLAY_MIN = 30
 
   # 操作モード
   class Mode

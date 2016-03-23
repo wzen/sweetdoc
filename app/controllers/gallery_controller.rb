@@ -18,6 +18,10 @@ class GalleryController < ApplicationController
     else
       @contents = {}
     end
+    @dummy_contents_length = 0
+    if @contents.length < Const::GRID_CONTENTS_DISPLAY_MIN
+      @dummy_contents_length = Const::GRID_CONTENTS_DISPLAY_MIN - @contents.length
+    end
   end
 
   def detail

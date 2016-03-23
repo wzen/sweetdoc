@@ -1,12 +1,25 @@
 <%# coding: UTF-8 %>
 
+<%
+  is_blink = false if is_blink.nil?
+  if is_blink
+    content = {}
+  end
+%>
+
 <div class="grid_contents_wrapper border" style="opacity: 0">
     <div class="grid_img_wrapper">
         <div class="loading_wrapper" style="display:none">
             <img class="loading" />
         </div>
         <div class="thumbnail_img_wrapper">
-          <% if content[Const::Gallery::Key::THUMBNAIL_IMG].present? %>
+          <% if is_blink %>
+              <div style="display: table;width: 100%;height: 100%">
+                <div style="display: table-cell;vertical-align: middle;text-align: center">
+                  <%= image_tag '/images/gallery/blink_contents.png', size: '64x64' %>
+                </div>
+              </div>
+          <% elsif content[Const::Gallery::Key::THUMBNAIL_IMG].present? %>
             <%= image_tag(thumbnail_gallery_path(content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]), class: 'thumbnail_img')%>
           <% else %>
             <div style="display: table;width: 100%;height: 100%">
@@ -17,15 +30,21 @@
           <% end %>
         </div>
         <div class="hover_overlay">
-          <%= render 'run/fullscreen/fullscreen_button', access_token: content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN], screen_size_width: content[Const::Gallery::Key::SCREEN_SIZE_WIDTH], screen_size_height: content[Const::Gallery::Key::SCREEN_SIZE_HEIGHT] %>
+          <% if !is_blink %>
+            <%= render 'run/fullscreen/fullscreen_button', access_token: content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN], screen_size_width: content[Const::Gallery::Key::SCREEN_SIZE_WIDTH], screen_size_height: content[Const::Gallery::Key::SCREEN_SIZE_HEIGHT] %>
+          <% end %>
           <div class="info">
             <div class="title_wrapper">
-                <% if !content[Const::Gallery::Key::TITLE].nil? %>
+                <% if is_blink %>
+                    Empty contents
+                <% elsif !content[Const::Gallery::Key::TITLE].nil? %>
                     <%= content[Const::Gallery::Key::TITLE] %>
                 <% end %>
             </div>
           </div>
-          <a class="detail_link" href="<%= "/gallery/detail/#{content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]}" %>" ></a>
+          <% if !is_blink %>
+            <a class="detail_link" href="<%= "/gallery/detail/#{content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]}" %>" ></a>
+          <% end %>
         </div>
     </div>
   <input class="<%= Const::Gallery::Key::THUMBNAIL_IMG_WIDTH %>" type="hidden" value="<%= content[Const::Gallery::Key::THUMBNAIL_IMG_WIDTH].to_i %>" >
