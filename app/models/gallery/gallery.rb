@@ -845,43 +845,6 @@ class Gallery < ActiveRecord::Base
     return gallery_view_statistic_count, gallery_bookmark_statistic_count
   end
 
-  def self.grid_contents_size_and_style(img_width, img_height)
-    r = Random.new.rand(0..15).to_i
-    class_name = nil
-    style = nil
-    # img_wrapper サイズ
-    w = 180 - (3 * 2)
-    h = 180 - 20 - (3 * 2)
-    if r == 0
-      class_name = 'grid-item-width2 grid-item-height2'
-      w *= 2
-      h *= 2
-    elsif r == 1 || r == 2
-      class_name = 'grid-item-width2'
-      w *= 2
-    elsif r == 3 || r == 4
-      class_name = 'grid-item-height2'
-      h *= 2
-    else
-      class_name = ''
-    end
-
-    if img_height / img_width > h / w
-      style = 'width:100%;height:auto;'
-    else
-      style = 'width:auto;height:100%;'
-    end
-
-    if img_width / img_height > 1.5 && class_name == 'grid-item-height2'
-      class_name, style = grid_contents_size_and_style(img_width, img_height)
-    elsif img_height / img_width > 1.5 && class_name == 'grid-item-width2'
-      class_name, style = grid_contents_size_and_style(img_width, img_height)
-    end
-
-    return class_name, style
-
-  end
-
   def self.created_contents(user_id, head = 0, limit = 30)
     sql =<<-"SQL"
       SELECT

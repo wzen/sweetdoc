@@ -15,6 +15,7 @@ class GalleryCommon
   # グリッド初期化
   @initGridView: (callback = null) ->
     # Masonry初期化
+    @addGridContentsStyle($('.grid_contents_wrapper'))
     grid = new Masonry('#grid_wrapper', {
       itemSelector: '.grid_contents_wrapper'
       columnWidth: 180
@@ -123,5 +124,45 @@ class GalleryCommon
           if callback?
             callback(false)
       }
+    )
+
+  @calcGridContentsSizeAndStyle = (imgWidth, imgHeight) ->
+    r = parseInt(Math.random() * 15)
+    className = ''
+    style = null
+    w = 180 - (3 * 2)
+    h = 180 - 20 - (3 * 2)
+    if r == 0
+      className = 'grid-item-width2 grid-item-height2'
+      w *= 2
+      h *= 2
+    else if r == 1 || r == 2
+      className = 'grid-item-width2'
+      w *= 2
+    else if r == 3 || r == 4
+      className = 'grid-item-height2'
+      h *= 2
+
+    if imgHeight / imgWidth > h / w
+      style = 'width:100%;height:auto;'
+    else
+      style = 'width:auto;height:100%;'
+    if imgWidth / imgHeight > 1.5 && className == 'grid-item-height2'
+      ret = @calcGridContentsSizeAndStyle(imgWidth, imgHeight)
+      className = ret.className
+      style = ret.style
+    else  if imgHeight / imgWidth > 1.5 && className == 'grid-item-width2'
+      className = ret.className
+      style = ret.style
+    return {className: className, style: style}
+
+  @addGridContentsStyle = (contents) ->
+    contents.each((idx, content) =>
+      if $(content).attr('class').split(' ').length <= 2
+        w = $(content).find(".#{constant.Gallery.Key.THUMBNAIL_IMG_WIDTH}:first").val()
+        h = $(content).find(".#{constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT}:first").val()
+        calcStyle = @calcGridContentsSizeAndStyle(w, h)
+        $(content).addClass(calcStyle.className)
+        $(content).find('.thumbnail_img:first').attr('style', calcStyle.style)
     )
 
