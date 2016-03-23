@@ -38,6 +38,11 @@ class GalleryController < ApplicationController
     @access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
     g = Gallery.find_by(access_token: @access_token)
     @is_exist_gallery = g.present?
+    if @is_exist_gallery
+      @title = g.title
+      @caption = g.caption
+      ret, message, @creator = Gallery.get_creator_info_by_gallery_id(g.id)
+    end
     render layout: 'gallery_fullwindow'
   end
   def embed_with_run

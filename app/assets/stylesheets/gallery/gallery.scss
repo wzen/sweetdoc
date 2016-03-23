@@ -310,7 +310,7 @@ body.embed {
     padding: 10px;
     border-radius: 5px;
     overflow: hidden;
-    div.button_wrapper {
+    div.wrapper {
       z-index: 5;
       position: relative;
       width: 100%;
@@ -326,30 +326,63 @@ body.embed {
           display: inline-block;
         }
       }
-      div.play_in_embed_wrapper, div.play_in_site_wrapper {
+      div.contents_wrapper {
+        position: absolute;
+        top: 3px;
+        left: 0;
         width: 100%;
-        height: 50%;
-        position: relative;
-        div.caption_wrapper {
+        height: 100%;
+        padding: 10px;
+        div.title_wrapper {
           color: white;
-          font-size: 18px;
-          font-weight: bold;
           width: 100%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
           text-align: center;
+          .title {
+            font-size: 22px;
+            span {
+              font-size: 14px;
+            }
+          }
+          .creator, .caption {
+            font-size: 14px;
+          }
+          .caption {
+            width: 50%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 0 auto;
+          }
         }
-      }
-      div.play_in_embed, div.play_in_site  {
-        width: 100%;
-        height: 70px;
-        //position: relative;
-      }
-      div.play_in_embed {
-      }
-      div.play_in_site {
-        > div {
+        div.button_wrapper {
+          margin-top: 3px;
           width: 100%;
-          height: 70px;
-
+          height: 100%;
+          div.play_in_embed_wrapper, div.play_in_site_wrapper {
+            width: 100%;
+            height: 45%;
+            position: relative;
+            div.caption_wrapper {
+              color: white;
+              font-size: 18px;
+              font-weight: bold;
+              width: 100%;
+              text-align: center;
+            }
+          }
+          div.play_in_embed {
+            width: 100%;
+            height: 70px;
+            text-align: center;
+          }
+          div.play_in_site {
+            width: 100%;
+            height: 100px;
+            text-align: center;
+          }
         }
       }
     }

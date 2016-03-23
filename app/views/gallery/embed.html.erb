@@ -8,29 +8,36 @@
       <%= image_tag(thumbnail_gallery_path(@access_token), class: 'thumbnail_img')%>
     </div>
     <div id="popup_wrapper">
-      <div class="button_wrapper">
+      <div class="wrapper position_relative_parent">
         <div class="powered_by_link">
           Powered by
           <div class="powered_thumbnail">
             <%= image_tag 'base/logo64.png', size: '50x50' %>
           </div>
         </div>
-          <div class="play_in_embed_wrapper">
-            <div class="play_in_embed put_center">
-              <%= image_tag 'gallery/embed/play_in_embed.png', size: '64x64', class: 'put_center' %>
-            </div>
+        <div class="contents_wrapper">
+          <div class="title_wrapper">
+            <div class="title"><%= @title %> <span>by <%= @creator[:name] %></span></div>
+            <div class="caption"><%= @caption %></div>
           </div>
-          <div class="play_in_site_wrapper">
-            <div class="play_in_site put_center">
-              <div class="play_in_site_link">
-                <%= image_tag 'gallery/embed/play_in_site.png', size: '64x64', class: 'put_center' %>
-              </div>
-              <div class="caption_wrapper">
-                <%= I18n.t('embed.caption.play_in_site') %>
+          <div class="button_wrapper">
+            <div class="play_in_embed_wrapper">
+              <div class="play_in_embed put_center">
+                <%= image_tag 'gallery/embed/play_in_embed.png', size: '64x64'%>
               </div>
             </div>
+            <div class="play_in_site_wrapper">
+              <div class="play_in_site put_center">
+                <div class="play_in_site_link">
+                  <%= image_tag 'gallery/embed/play_in_site.png', size: '64x64' %>
+                </div>
+                <div class="caption_wrapper">
+                  <%= I18n.t('embed.caption.play_in_site') %>
+                </div>
+              </div>
+            </div>
           </div>
-
+        </div>
       </div>
     </div>
     <input class="<%= Const::Gallery::Key::GALLERY_ACCESS_TOKEN %>" type="hidden" value="<%= @access_token %>">

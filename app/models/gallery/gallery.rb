@@ -977,5 +977,29 @@ class Gallery < ActiveRecord::Base
     return ret_sql.to_hash
   end
 
+  def self.get_creator_info_by_gallery_id(gallery_id)
+    begin
+      sql =<<-"SQL"
+        SELECT u.id as user_id, u.name as user_name
+        FROM users u
+        INNER JOIN user_project_maps upm ON u.id = upm.user_id AND upm.del_flg = 0
+        INNER JOIN project_gallery_maps pgm ON pgm.user_project_map_id = upm.id AND pgm.gallery_id = #{gallery_id} AND pgm.del_flg = 0
+        WHERE u.del_flg = 0
+      SQL
+      ret_sql = ActiveRecord::Base.connection.select_all(sql).to_hash
+      ret = nil
+      if ret_sql.length > 0
+        ret = {
+            id: ret_sql.first['user_id'],
+            name: ret_sql.first['user_name']
+        }
+      end
+      return true, I18n.t('message.database.item_state.save.success'), ret
+    rescue => e
+      # 失敗
+      return false, I18n.t('message.database.item_state.save.error'), nil
+    end
+  end
+
   private_class_method :_save_tag, :_load_viewcount_and_bookmarkcount, :_update_item_images_column, :_get_project_pagevalues, :_save_gallery_pagevalue
 end
