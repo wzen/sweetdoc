@@ -3,18 +3,7 @@ $(function() {
   $('.upload.index').ready(function() {
     var u;
     u = new UploadContents();
-    UploadCommon.initEvent(u);
-    if (window.opener != null) {
-      return setTimeout(function() {
-        var body;
-        body = $(window.opener.document.getElementById('project_contents'));
-        return html2canvas(body, {
-          onrendered: function(canvas) {
-            return UploadCommon.makeCapture(canvas);
-          }
-        });
-      });
-    }
+    return UploadCommon.initEvent(u);
   });
   return $('.upload.item').ready(function() {
     var u;

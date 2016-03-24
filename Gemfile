@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.1.12'
 gem 'i18n', '0.7.0'
 gem "i18n-js", '2.1.2'
+
 # Mysql
 gem 'mysql2', '~> 0.3.20'
 # Use SCSS for stylesheets

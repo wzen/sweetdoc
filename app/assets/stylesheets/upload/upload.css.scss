@@ -154,9 +154,13 @@ div#main {
     vertical-align: top;
   }
 
+  .error_message {
+    display: none;
+    color: red;
+  }
+
   .capture_wrapper {
     width: 400px;
-    height: 200px;
   }
 
   .input_wrapper {

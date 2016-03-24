@@ -152,6 +152,8 @@ en:
     existed_upload_contents: "The project document which has been posted exists."
     overwrite_contents: "Overwrite : %{contents}"
     posting_new: "Posting new document"
+    thumbnail_warn: "Maximum thumbnail size is %{size}MB."
+    thumbnail_size_error: "This thumbnail size exceed %{size}MB."
   mypage:
     header_title:
       bookmarks: "Your Bookmarks"

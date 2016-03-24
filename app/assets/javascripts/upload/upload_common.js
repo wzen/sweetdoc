@@ -5,35 +5,45 @@ UploadCommon = (function() {
   function UploadCommon() {}
 
   UploadCommon.initEvent = function(upload) {
-    var mark, root;
+    var _setThumbnailChangeEvent, mark, root;
     root = $('#upload_wrapper');
-    $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).off('change').on('change', (function(_this) {
-      return function() {
-        var f;
-        f = $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).val().split('.');
-        if ((f != null) && f.length > 0) {
-          window.uploadFileExt = f[f.length - 1];
-          if (window.uploadFileExt === 'gif' || window.uploadFileExt === 'png' || (window.uploadFileExt = 'jpg')) {
-            return $('.thumbnail_upload_form', root).submit();
+    _setThumbnailChangeEvent = function() {
+      return $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).off('change').on('change', (function(_this) {
+        return function() {
+          var f;
+          f = $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).val().split('.');
+          if ((f != null) && f.length > 0) {
+            window.uploadFileExt = f[f.length - 1];
+            if (window.uploadFileExt === 'gif' || window.uploadFileExt === 'png' || (window.uploadFileExt = 'jpg')) {
+              return $('.thumbnail_upload_form', root).submit();
+            }
           }
-        }
-      };
-    })(this));
+        };
+      })(this));
+    };
+    _setThumbnailChangeEvent.call(this);
     $('.thumbnail_upload_form', root).off().on('ajax:complete', (function(_this) {
       return function(e, data, status, error) {
         var d, ext;
         d = JSON.parse(data.responseText);
-        if ((d != null) && (d.image_url != null)) {
-          ext = window.uploadFileExt;
-          if (ext != null) {
-            if (ext === 'gif') {
-              ext = 'png';
-            } else if (ext === 'jpg') {
-              ext = 'jpeg';
+        if (d != null) {
+          if (d.resultSuccess) {
+            ext = window.uploadFileExt;
+            if (ext != null) {
+              if (ext === 'gif') {
+                ext = 'png';
+              } else if (ext === 'jpg') {
+                ext = 'jpeg';
+              }
+              $('.error_message', root).hide();
+              $('.capture', root).attr('src', "data:image/" + ext + ";base64," + d.image_url);
             }
-            return $('.capture', root).attr('src', "data:image/" + ext + ";base64," + d.image_url);
+          } else {
+            $('.error_message', root).text(d.message);
+            $('.error_message', root).show();
           }
         }
+        return _setThumbnailChangeEvent.call(_this);
       };
     })(this));
     mark = $('.markItUp', root);

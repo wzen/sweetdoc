@@ -8,11 +8,16 @@
                 <%= image_tag 'base/no_image.jpg', size: '250x250', class: 'capture' %>
               </div>
               <div>
+                <div class="warn_message">
+                  <%= I18n.t('upload_confirm.thumbnail_warn', size: Const::THUMBNAIL_FILESIZE_MAX_MB) %>
+                </div>
                 <div>
                   <%= file_field_tag :file_path, class: Const::PreloadItemImage::Key::SELECT_FILE %>
                 </div>
                 <div style="text-align: right;display: none">
                   <input type="button" class="<%= Const::PreloadItemImage::Key::SELECT_FILE_DELETE %>" value="Delete">
+                </div>
+                <div class="error_message">
                 </div>
               </div>
             <% end %>

@@ -4,25 +4,34 @@ class UploadCommon
   @initEvent = (upload) ->
     root = $('#upload_wrapper')
 
-    # サムネイル選択時にアップロード
-    $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).off('change').on('change', =>
-      f = $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).val().split('.')
-      if f? && f.length > 0
-        window.uploadFileExt = f[f.length - 1]
-        if window.uploadFileExt == 'gif' || window.uploadFileExt == 'png' || window.uploadFileExt = 'jpg'
-          $('.thumbnail_upload_form', root).submit()
-    )
+    _setThumbnailChangeEvent = ->
+      # サムネイル選択時にアップロード
+      $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).off('change').on('change', =>
+        f = $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).val().split('.')
+        if f? && f.length > 0
+          window.uploadFileExt = f[f.length - 1]
+          if window.uploadFileExt == 'gif' || window.uploadFileExt == 'png' || window.uploadFileExt = 'jpg'
+            $('.thumbnail_upload_form', root).submit()
+      )
+    _setThumbnailChangeEvent.call(@)
     # サムネイルアップロード
     $('.thumbnail_upload_form', root).off().on('ajax:complete', (e, data, status, error) =>
       d = JSON.parse(data.responseText)
-      if d? && d.image_url?
-        ext = window.uploadFileExt
-        if ext?
-          if ext == 'gif'
-            ext = 'png'
-          else if ext == 'jpg'
-            ext = 'jpeg'
-          $('.capture', root).attr('src', "data:image/#{ext};base64,#{d.image_url}")
+      if d?
+        if d.resultSuccess
+          ext = window.uploadFileExt
+          if ext?
+            if ext == 'gif'
+              ext = 'png'
+            else if ext == 'jpg'
+              ext = 'jpeg'
+            $('.error_message', root).hide()
+            $('.capture', root).attr('src', "data:image/#{ext};base64,#{d.image_url}")
+        else
+          $('.error_message', root).text(d.message)
+          $('.error_message', root).show()
+      # アップロード後に設定したイベントが消えるため、ここで再設定
+      _setThumbnailChangeEvent.call(@)
     )
 
     # マークアップ入力フォーム初期化
