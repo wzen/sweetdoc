@@ -16,4 +16,10 @@ class UploadController < ApplicationController
     user_id = current_or_guest_user.id
     @user_coding_id = params.require(Const::ItemGallery::Key::USER_CODING_ID)
   end
+
+  def upload_thumbnail
+    user_id = current_or_guest_user.id
+    file_path = params[:file_path]
+    @result_success, @message, @image_url =  true, '', Base64.encode64(file_path.read)
+  end
 end

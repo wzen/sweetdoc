@@ -1,12 +1,24 @@
+<%= render 'upload/navbar/navber' %>
+
 <div id="main">
-  <%= form_tag('', method: :post, id: 'upload_form') do  %>
       <div id="upload_wrapper">
           <div class="left">
+            <%= form_tag 'upload/upload_thumbnail.json', method: :post, remote: true, class: "form-horizontal thumbnail_upload_form", multipart: true, format: :json, authenticity_token: true  do |f| %>
               <div class="capture_wrapper">
-                  <img class="capture" src="" >
+                <%= image_tag 'base/no_image.jpg', size: '250x250', class: 'capture' %>
               </div>
+              <div>
+                <div>
+                  <%= file_field_tag :file_path, class: Const::PreloadItemImage::Key::SELECT_FILE %>
+                </div>
+                <div style="text-align: right;display: none">
+                  <input type="button" class="<%= Const::PreloadItemImage::Key::SELECT_FILE_DELETE %>" value="Delete">
+                </div>
+              </div>
+            <% end %>
           </div>
           <div class="right">
+            <%= form_tag('', method: :post, id: 'upload_form') do  %>
               <div class="input_wrapper">
                   <div class="title_wrapper">
                       <div>
@@ -96,12 +108,12 @@
           <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_CONTENTSTYPE %>" type="hidden" value="">
           <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_WIDTH %>" type="hidden" value="">
           <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_HEIGHT %>" type="hidden" value="">
+        <% end %>
       </div>
       <div class="button_wrapper">
           <div>
               <button class="upload_button" value="Upload">Upload</button>
           </div>
       </div>
-  <% end %>
-  <%= render 'base/floatview' %>
+    <%= render 'base/floatview' %>
 </div>

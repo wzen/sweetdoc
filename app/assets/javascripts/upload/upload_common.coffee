@@ -3,6 +3,28 @@ class UploadCommon
   # ギャラリーアップロードビュー表示前処理
   @initEvent = (upload) ->
     root = $('#upload_wrapper')
+
+    # サムネイル選択時にアップロード
+    $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).off('change').on('change', =>
+      f = $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).val().split('.')
+      if f? && f.length > 0
+        window.uploadFileExt = f[f.length - 1]
+        if window.uploadFileExt == 'gif' || window.uploadFileExt == 'png' || window.uploadFileExt = 'jpg'
+          $('.thumbnail_upload_form', root).submit()
+    )
+    # サムネイルアップロード
+    $('.thumbnail_upload_form', root).off().on('ajax:complete', (e, data, status, error) =>
+      d = JSON.parse(data.responseText)
+      if d? && d.image_url?
+        ext = window.uploadFileExt
+        if ext?
+          if ext == 'gif'
+            ext = 'png'
+          else if ext == 'jpg'
+            ext = 'jpeg'
+          $('.capture', root).attr('src', "data:image/#{ext};base64,#{d.image_url}")
+    )
+
     # マークアップ入力フォーム初期化
     mark = $('.markItUp', root)
     if mark? && mark.length > 0
@@ -21,7 +43,7 @@ class UploadCommon
     )
 
     # Updateイベント
-    $('.upload_button').off('click').on('click', ->
+    $('.upload_button', root).off('click').on('click', ->
       upload.upload(root)
       return false
     )

@@ -4,6 +4,7 @@
 
 //= require jquery-1.9.1.min
 //= require jquery_ujs
+//= require jquery.remotipart
 //= require i18n
 //= require markitup
 //= require ../../../../vendor/assets/bootstrap/bootstrap.min

@@ -7,6 +7,35 @@ UploadCommon = (function() {
   UploadCommon.initEvent = function(upload) {
     var mark, root;
     root = $('#upload_wrapper');
+    $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).off('change').on('change', (function(_this) {
+      return function() {
+        var f;
+        f = $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).val().split('.');
+        if ((f != null) && f.length > 0) {
+          window.uploadFileExt = f[f.length - 1];
+          if (window.uploadFileExt === 'gif' || window.uploadFileExt === 'png' || (window.uploadFileExt = 'jpg')) {
+            return $('.thumbnail_upload_form', root).submit();
+          }
+        }
+      };
+    })(this));
+    $('.thumbnail_upload_form', root).off().on('ajax:complete', (function(_this) {
+      return function(e, data, status, error) {
+        var d, ext;
+        d = JSON.parse(data.responseText);
+        if ((d != null) && (d.image_url != null)) {
+          ext = window.uploadFileExt;
+          if (ext != null) {
+            if (ext === 'gif') {
+              ext = 'png';
+            } else if (ext === 'jpg') {
+              ext = 'jpeg';
+            }
+            return $('.capture', root).attr('src', "data:image/" + ext + ";base64," + d.image_url);
+          }
+        }
+      };
+    })(this));
     mark = $('.markItUp', root);
     if ((mark != null) && mark.length > 0) {
       $('.caption_markup', root).markItUpRemove();
@@ -19,7 +48,7 @@ UploadCommon = (function() {
         return $(this).val('');
       }
     });
-    return $('.upload_button').off('click').on('click', function() {
+    return $('.upload_button', root).off('click').on('click', function() {
       upload.upload(root);
       return false;
     });
