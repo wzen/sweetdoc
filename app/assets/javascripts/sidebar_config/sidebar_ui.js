@@ -40,16 +40,18 @@ Sidebar = (function() {
           main.removeClass('col-xs-12');
           main.addClass('col-xs-9');
           $('#sidebar').fadeIn('100', function() {
-            return Common.updateCanvasSize();
+            Common.updateCanvasSize();
+            return window.sidebarOpen = true;
           });
         }
         return $('#screen_wrapper').off('click.sidebar_close').on('click.sidebar_close', (function(_this) {
           return function(e) {
             if (Sidebar.isOpenedConfigSidebar()) {
               if (window.eventPointingMode === constant.EventInputPointingMode.NOT_SELECT) {
-                Sidebar.closeSidebar();
-                WorktableCommon.putbackMode();
-                return $(window.drawingCanvas).off('click.sidebar_close');
+                Sidebar.closeSidebar(function() {
+                  return window.sidebarOpen = false;
+                });
+                return WorktableCommon.putbackMode();
               }
             }
           };
@@ -67,6 +69,7 @@ Sidebar = (function() {
       WorktableCommon.clearSelectedBorder();
       WorktableCommon.clearEventPointer();
       this.closeAllWidget();
+      $('#screen_wrapper').off('click.sidebar_close');
       if (!Sidebar.isClosedConfigSidebar()) {
         main = $('#main');
         return $('#sidebar').fadeOut('100', function() {
@@ -89,11 +92,11 @@ Sidebar = (function() {
   };
 
   Sidebar.isOpenedConfigSidebar = function() {
-    return $('#main').hasClass('col-xs-9');
+    return (window.sidebarOpen != null) && window.sidebarOpen;
   };
 
   Sidebar.isClosedConfigSidebar = function() {
-    return $('#main').hasClass('col-xs-12');
+    return !this.isOpenedConfigSidebar();
   };
 
   Sidebar.closeAllWidget = function() {

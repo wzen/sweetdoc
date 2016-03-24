@@ -681,6 +681,19 @@ div.css_item_base {
   pointer-events: none;
 }
 
+.editButtonOnEditSelected {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 25px;
+  height: 25px;
+  pointer-events: auto !important;
+  background-image: image_url('worktable/edit.png');
+  background-repeat: no-repeat;
+  background-size: 25px 25px;
+  cursor: pointer !important;
+}
+
 .timelineSelected {
   position: absolute;
   top: 0;

@@ -24,6 +24,7 @@ class Sidebar
           main.addClass('col-xs-9')
           $('#sidebar').fadeIn('100', ->
             Common.updateCanvasSize()
+            window.sidebarOpen = true
           )
 #          if target != null
 #            WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType, true)
@@ -33,11 +34,11 @@ class Sidebar
           if Sidebar.isOpenedConfigSidebar()
             # イベント用選択モードの場合は閉じない
             if window.eventPointingMode == constant.EventInputPointingMode.NOT_SELECT
-              Sidebar.closeSidebar()
+              Sidebar.closeSidebar( =>
+                window.sidebarOpen = false
+              )
               # モードを変更以前に戻す
               WorktableCommon.putbackMode()
-              # イベントを消去
-              $(window.drawingCanvas).off('click.sidebar_close')
         )
 
   # サイドバーをクローズ
@@ -50,6 +51,8 @@ class Sidebar
       WorktableCommon.clearEventPointer()
       # サイドビューのWidgetを全て非表示
       @closeAllWidget()
+      # イベントを消去
+      $('#screen_wrapper').off('click.sidebar_close')
       if !Sidebar.isClosedConfigSidebar()
         main = $('#main')
         $('#sidebar').fadeOut('100', ->
@@ -71,12 +74,12 @@ class Sidebar
   # サイドバーがオープンしているか
   # @return [Boolean] 判定結果
   @isOpenedConfigSidebar = ->
-    return $('#main').hasClass('col-xs-9')
+    return window.sidebarOpen? && window.sidebarOpen
 
   # サイドバーがクローズしているか
   # @return [Boolean] 判定結果
   @isClosedConfigSidebar = ->
-    return $('#main').hasClass('col-xs-12')
+    !@isOpenedConfigSidebar()
 
   # 全Widget非表示
   @closeAllWidget = ->

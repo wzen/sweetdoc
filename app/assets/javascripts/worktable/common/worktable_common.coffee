@@ -11,8 +11,22 @@ class WorktableCommon
 
     # 選択枠を取る
     $(target).find(".#{className}").remove()
+    if selectedBorderType == 'edit'
+      targetZindex = parseInt($(target).css('z-index'))
+      if !targetZindex?
+        targetZindex = 0
+      targetZindex += 99
+      append = "<div class=#{className}><div class='editButtonOnEditSelected' style='z-index:#{targetZindex}'></div></div>"
+    else
+      append = "<div class=#{className} />"
     # 設定
-    $(target).append("<div class=#{className} />")
+    $(target).append(append).find('.editButtonOnEditSelected:first').off('mousedown.edit').on('mousedown.edit', (e) =>
+      e.preventDefault()
+      e.stopPropagation()
+      target = $(e.target).closest('.item')
+      if target? && target.length > 0
+        WorktableCommon.editItem(target.attr('id'))
+    )
 
     # 選択アイテムID保存
     if selectedBorderType == "edit"

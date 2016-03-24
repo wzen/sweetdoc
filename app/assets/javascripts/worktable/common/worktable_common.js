@@ -7,7 +7,7 @@ WorktableCommon = (function() {
   function WorktableCommon() {}
 
   WorktableCommon.setSelectedBorder = function(target, selectedBorderType) {
-    var className;
+    var append, className, targetZindex;
     if (selectedBorderType == null) {
       selectedBorderType = "edit";
     }
@@ -18,7 +18,26 @@ WorktableCommon = (function() {
       className = 'timelineSelected';
     }
     $(target).find("." + className).remove();
-    $(target).append("<div class=" + className + " />");
+    if (selectedBorderType === 'edit') {
+      targetZindex = parseInt($(target).css('z-index'));
+      if (targetZindex == null) {
+        targetZindex = 0;
+      }
+      targetZindex += 99;
+      append = "<div class=" + className + "><div class='editButtonOnEditSelected' style='z-index:" + targetZindex + "'></div></div>";
+    } else {
+      append = "<div class=" + className + " />";
+    }
+    $(target).append(append).find('.editButtonOnEditSelected:first').off('mousedown.edit').on('mousedown.edit', (function(_this) {
+      return function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        target = $(e.target).closest('.item');
+        if ((target != null) && target.length > 0) {
+          return WorktableCommon.editItem(target.attr('id'));
+        }
+      };
+    })(this));
     if (selectedBorderType === "edit") {
       return window.selectedObjId = $(target).attr('id');
     }
