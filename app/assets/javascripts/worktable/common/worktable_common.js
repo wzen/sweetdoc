@@ -7,28 +7,21 @@ WorktableCommon = (function() {
   function WorktableCommon() {}
 
   WorktableCommon.setSelectedBorder = function(target, selectedBorderType) {
-    var append, className, targetZindex;
+    var append, className;
     if (selectedBorderType == null) {
       selectedBorderType = "edit";
     }
+    if (selectedBorderType === 'edit') {
+      this.setEditSelectedBorder(target);
+      return;
+    }
     className = null;
-    if (selectedBorderType === "edit") {
-      className = 'editSelected';
-    } else if (selectedBorderType === "timeline") {
+    if (selectedBorderType === "timeline") {
       className = 'timelineSelected';
     }
     $(target).find("." + className).remove();
-    if (selectedBorderType === 'edit') {
-      targetZindex = parseInt($(target).css('z-index'));
-      if (targetZindex == null) {
-        targetZindex = 0;
-      }
-      targetZindex += 99;
-      append = "<div class=" + className + "><div class='editButtonOnEditSelected' style='z-index:" + targetZindex + "'></div></div>";
-    } else {
-      append = "<div class=" + className + " />";
-    }
-    $(target).append(append).find('.editButtonOnEditSelected:first').off('mousedown.edit').on('mousedown.edit', (function(_this) {
+    append = "<div class=" + className + " />";
+    return $(target).append(append).find('.editButtonOnEditSelected:first').off('mousedown.edit').on('mousedown.edit', (function(_this) {
       return function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -38,8 +31,43 @@ WorktableCommon = (function() {
         }
       };
     })(this));
-    if (selectedBorderType === "edit") {
-      return window.selectedObjId = $(target).attr('id');
+  };
+
+  WorktableCommon.setEditSelectedBorder = function(target) {
+    var append, className, height, left, targetZindex, top, width;
+    className = 'editSelected';
+    window.scrollInside.find("." + className).remove();
+    targetZindex = parseInt($(target).css('z-index'));
+    if (targetZindex == null) {
+      targetZindex = 0;
+    }
+    targetZindex += 99;
+    top = $(target).position().top;
+    left = $(target).position().left;
+    width = $(target).width();
+    height = $(target).height();
+    append = "<div class=" + className + " style='top:" + top + "px;left:" + left + "px;width:" + width + "px;height:" + height + "px;'><div class='editButtonOnEditSelected' style='z-index:" + targetZindex + "'></div></div>";
+    window.scrollInside.append(append).find('.editButtonOnEditSelected:first').off('mousedown.edit').on('mousedown.edit', (function(_this) {
+      return function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return WorktableCommon.editItem($(target).attr('id'));
+      };
+    })(this));
+    return window.selectedObjId = $(target).attr('id');
+  };
+
+  WorktableCommon.updateEditSelectBorderSize = function(target) {
+    var border, height, left, top, width;
+    top = $(target).position().top;
+    left = $(target).position().left;
+    width = $(target).width();
+    height = $(target).height();
+    console.log('width:' + width);
+    console.log('height:' + height);
+    border = window.scrollInside.find(".editSelected:first");
+    if (border.length > 0) {
+      return border.attr('style', "top:" + top + "px;left:" + left + "px;width:" + width + "px;height:" + height + "px;");
     }
   };
 

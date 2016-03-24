@@ -673,12 +673,13 @@ div.css_item_base {
 .editSelected {
   //padding: 1px !important;
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  //top: 0;
+  //left: 0;
+  //width: 100%;
+  //height: 100%;
   border: 3px solid $editSelectedBorderColor;
   pointer-events: none;
+  z-index: 9999999;
 }
 
 .editButtonOnEditSelected {
@@ -692,6 +693,7 @@ div.css_item_base {
   background-repeat: no-repeat;
   background-size: 25px 25px;
   cursor: pointer !important;
+  z-index: 9999999;
 }
 
 .timelineSelected {

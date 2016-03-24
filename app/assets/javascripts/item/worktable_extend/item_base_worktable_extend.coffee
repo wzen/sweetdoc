@@ -208,6 +208,7 @@ itemBaseWorktableExtend =
     position.left /= scale
     position.top /= scale
     @updateItemPosition(position.left, position.top)
+    WorktableCommon.updateEditSelectBorderSize(@getJQueryElement())
     if window.debug
       console.log("drag: position:")
       console.log(position)
@@ -223,6 +224,7 @@ itemBaseWorktableExtend =
     size.width = originalSize.width + diff.width
     size.height = originalSize.height + diff.height
     @updateItemSize(size.width, size.height)
+    WorktableCommon.updateEditSelectBorderSize(@getJQueryElement())
     if window.debug
       console.log("resize: size:")
       console.log(size)

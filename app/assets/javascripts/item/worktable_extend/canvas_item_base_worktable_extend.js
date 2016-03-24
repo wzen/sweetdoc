@@ -45,6 +45,7 @@ canvasItemBaseWorktableExtend = {
     size.width = originalSize.width + diff.width;
     size.height = originalSize.height + diff.height;
     this.updateItemSize(size.width, size.height);
+    WorktableCommon.updateEditSelectBorderSize(this.getJQueryElement());
     this.refresh();
     if (window.debug) {
       console.log("resize: size:");

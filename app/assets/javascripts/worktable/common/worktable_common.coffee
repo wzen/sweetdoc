@@ -3,22 +3,15 @@ class WorktableCommon
   # @param [Object] target 対象のオブジェクト
   # @param [String] selectedBorderType 選択タイプ
   @setSelectedBorder = (target, selectedBorderType = "edit") ->
+    if selectedBorderType == 'edit'
+      @setEditSelectedBorder(target)
+      return
     className = null
-    if selectedBorderType == "edit"
-      className = 'editSelected'
-    else if selectedBorderType == "timeline"
+    if selectedBorderType == "timeline"
       className = 'timelineSelected'
-
     # 選択枠を取る
     $(target).find(".#{className}").remove()
-    if selectedBorderType == 'edit'
-      targetZindex = parseInt($(target).css('z-index'))
-      if !targetZindex?
-        targetZindex = 0
-      targetZindex += 99
-      append = "<div class=#{className}><div class='editButtonOnEditSelected' style='z-index:#{targetZindex}'></div></div>"
-    else
-      append = "<div class=#{className} />"
+    append = "<div class=#{className} />"
     # 設定
     $(target).append(append).find('.editButtonOnEditSelected:first').off('mousedown.edit').on('mousedown.edit', (e) =>
       e.preventDefault()
@@ -28,9 +21,37 @@ class WorktableCommon
         WorktableCommon.editItem(target.attr('id'))
     )
 
-    # 選択アイテムID保存
-    if selectedBorderType == "edit"
-      window.selectedObjId = $(target).attr('id')
+  @setEditSelectedBorder = (target) ->
+    className = 'editSelected'
+    # 選択枠を取る
+    window.scrollInside.find(".#{className}").remove()
+    targetZindex = parseInt($(target).css('z-index'))
+    if !targetZindex?
+      targetZindex = 0
+    targetZindex += 99
+    top = $(target).position().top
+    left = $(target).position().left
+    width = $(target).width()
+    height = $(target).height()
+    append = "<div class=#{className} style='top:#{top}px;left:#{left}px;width:#{width}px;height:#{height}px;'><div class='editButtonOnEditSelected' style='z-index:#{targetZindex}'></div></div>"
+    # 設定
+    window.scrollInside.append(append).find('.editButtonOnEditSelected:first').off('mousedown.edit').on('mousedown.edit', (e) =>
+      e.preventDefault()
+      e.stopPropagation()
+      WorktableCommon.editItem($(target).attr('id'))
+    )
+    window.selectedObjId = $(target).attr('id')
+
+  @updateEditSelectBorderSize = (target) ->
+    top = $(target).position().top
+    left = $(target).position().left
+    width = $(target).width()
+    height = $(target).height()
+    console.log('width:' + width)
+    console.log('height:' + height)
+    border = window.scrollInside.find(".editSelected:first")
+    if border.length > 0
+      border.attr('style', "top:#{top}px;left:#{left}px;width:#{width}px;height:#{height}px;")
 
   # 全ての選択枠を外す
   @clearSelectedBorder = ->

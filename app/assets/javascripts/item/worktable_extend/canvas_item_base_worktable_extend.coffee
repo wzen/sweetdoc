@@ -35,6 +35,7 @@ canvasItemBaseWorktableExtend =
     size.width = originalSize.width + diff.width
     size.height = originalSize.height + diff.height
     @updateItemSize(size.width, size.height)
+    WorktableCommon.updateEditSelectBorderSize(@getJQueryElement())
     # キャンパスはリサイズ時に再描画する
     @refresh()
     if window.debug
