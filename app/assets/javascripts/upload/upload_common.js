@@ -41,6 +41,10 @@ UploadCommon = (function() {
             };
             $("." + constant.PreloadItemImage.Key.SELECT_FILE_DELETE, root).off('click').on('click', function(e) {
               $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).val('').trigger('change');
+              $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG + "']", root).val('');
+              $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE + "']", root).val('');
+              $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_WIDTH + "']", root).val('');
+              $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT + "']", root).val('');
               return $('.file_select_delete', root).hide();
             });
             $('.file_select_delete', root).show();
