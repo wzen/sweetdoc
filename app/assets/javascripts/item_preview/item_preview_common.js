@@ -70,6 +70,7 @@ ItemPreviewCommon = (function() {
     ItemPreviewHandwrite.initHandwrite();
     this.applyEnvironmentFromPagevalue();
     WorktableCommon.updateMainViewSize();
+    $('.scroll_handle_wrapper').hide();
     if (callback != null) {
       return callback();
     }
@@ -88,6 +89,7 @@ ItemPreviewCommon = (function() {
     RunCommon.initHandleScrollView();
     Common.applyEnvironmentFromPagevalue();
     $('#project_wrapper').removeAttr('style');
+    $('.scroll_handle_wrapper').show();
     if (callback != null) {
       return callback();
     }

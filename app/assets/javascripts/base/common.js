@@ -317,7 +317,9 @@ Common = (function() {
 
   Common.getViewScale = function() {
     var scaleFromViewRate, se, seScale;
-    if (window.isWorkTable && !window.previewRunning) {
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      return 1.0;
+    } else if (window.isWorkTable && !window.previewRunning) {
       return WorktableCommon.getWorktableViewScale();
     } else {
       scaleFromViewRate = window.runScaleFromViewRate;

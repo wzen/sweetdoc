@@ -253,7 +253,9 @@ class Common
 
   # 画面スケールの取得
   @getViewScale = ->
-    if window.isWorkTable && !window.previewRunning
+    if window.isItemPreview? && window.isItemPreview
+      return 1.0
+    else if window.isWorkTable && !window.previewRunning
       # ワークテーブルの倍率
       return WorktableCommon.getWorktableViewScale()
     else

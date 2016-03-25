@@ -66,3 +66,11 @@ div.config_overlay {
 div.tab-content {
   position: relative;
 }
+
+#sidebar_container {
+  .tab-pane {
+    > div {
+      padding-top: 0 !important;
+    }
+  }
+}

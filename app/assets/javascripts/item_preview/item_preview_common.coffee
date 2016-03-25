@@ -61,6 +61,8 @@ class ItemPreviewCommon
     @applyEnvironmentFromPagevalue()
     # Mainビュー高さ設定
     WorktableCommon.updateMainViewSize()
+    # ScrollHandler非表示
+    $('.scroll_handle_wrapper').hide()
 
     if callback?
       callback()
@@ -76,6 +78,8 @@ class ItemPreviewCommon
     Common.applyEnvironmentFromPagevalue()
     # ProjectWrapperの幅、高さは親に合わせる
     $('#project_wrapper').removeAttr('style')
+    # ScrollHandler表示
+    $('.scroll_handle_wrapper').show()
     if callback?
       callback()
 
