@@ -1,0 +1,15 @@
+<% if !is_blink %>
+    <%= render 'run/fullscreen/fullscreen_button', access_token: content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN], screen_size_width: content[Const::Gallery::Key::SCREEN_SIZE_WIDTH], screen_size_height: content[Const::Gallery::Key::SCREEN_SIZE_HEIGHT] %>
+<% end %>
+<div class="info <%= content[Const::Gallery::Key::SEARCH_TYPE] %>">
+  <div class="title_wrapper">
+    <% if is_blink %>
+        Empty contents
+    <% elsif !content[Const::Gallery::Key::TITLE].nil? %>
+        <%= content[Const::Gallery::Key::TITLE] %>
+    <% end %>
+  </div>
+</div>
+<% if !is_blink %>
+    <a class="detail_link" href="<%= "/gallery/detail/#{content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]}" %>" ></a>
+<% end %>

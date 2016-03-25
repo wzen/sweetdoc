@@ -129,6 +129,7 @@ ja:
     existed_upload_contents: "このプロジェクトで作成された投稿済みドキュメントがあります"
     overwrite_contents: "%{contents} の更新"
     posting_new: "新規のドキュメントとして投稿"
+    thumbnail: "サムネイル"
     thumbnail_warn: "設定可能なファイルサイズは%{size}MB以下です"
     thumbnail_size_error: "ファイルサイズが%{size}MBを超過しています"
   mypage:

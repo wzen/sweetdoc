@@ -11,9 +11,12 @@ UploadCommon = (function() {
       return function() {
         var f;
         window.uploadContents = upload;
-        f = $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).val().split('.');
+        f = $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).val();
         if ((f != null) && f.length > 0) {
           return $('.thumbnail_upload_form', root).submit();
+        } else {
+          $('.capture', root).hide();
+          return $('.default_thumbnail', root).show();
         }
       };
     })(this));
@@ -24,7 +27,8 @@ UploadCommon = (function() {
         if (d != null) {
           if (d.resultSuccess) {
             $('.error_message', root).hide();
-            $('.capture', root).attr('src', d.image_url);
+            $('.capture', root).attr('src', d.image_url).show();
+            $('.default_thumbnail', root).hide();
             imageData = d.image_url.split('base64,')[1];
             contentType = d.image_url.split(';base64')[0].replace('data:', '');
             $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG + "']", root).val(imageData.replace(/^.*,/, ''));
@@ -35,6 +39,11 @@ UploadCommon = (function() {
               $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_WIDTH + "']", root).val(image.width);
               return $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT + "']", root).val(image.height);
             };
+            $("." + constant.PreloadItemImage.Key.SELECT_FILE_DELETE, root).off('click').on('click', function(e) {
+              $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).val('').trigger('change');
+              return $('.file_select_delete', root).hide();
+            });
+            $('.file_select_delete', root).show();
           } else {
             $('.error_message', root).text(d.message);
             $('.error_message', root).show();

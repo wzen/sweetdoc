@@ -7,9 +7,13 @@ class UploadCommon
     # サムネイル選択時にアップロード
     $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).off('change').on('change', =>
       window.uploadContents = upload
-      f = $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).val().split('.')
+      f = $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).val()
       if f? && f.length > 0
         $('.thumbnail_upload_form', root).submit()
+      else
+        # 画像をデフォルトに戻す
+        $('.capture', root).hide()
+        $('.default_thumbnail', root).show()
     )
     # サムネイルアップロード
     $('.thumbnail_upload_form', root).off().on('ajax:complete', (e, data, status, error) =>
@@ -17,7 +21,8 @@ class UploadCommon
       if d?
         if d.resultSuccess
           $('.error_message', root).hide()
-          $('.capture', root).attr('src', d.image_url)
+          $('.capture', root).attr('src', d.image_url).show()
+          $('.default_thumbnail', root).hide()
           imageData = d.image_url.split('base64,')[1]
           contentType = d.image_url.split(';base64')[0].replace('data:', '')
           $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG}']", root).val(imageData.replace(/^.*,/, ''))
@@ -27,6 +32,11 @@ class UploadCommon
           image.onload = ->
             $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_WIDTH}']", root).val(image.width)
             $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT}']", root).val(image.height)
+          $(".#{constant.PreloadItemImage.Key.SELECT_FILE_DELETE}", root).off('click').on('click', (e) =>
+            $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).val('').trigger('change')
+            $('.file_select_delete', root).hide()
+          )
+          $('.file_select_delete', root).show()
         else
           $('.error_message', root).text(d.message)
           $('.error_message', root).show()
