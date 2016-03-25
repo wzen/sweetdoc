@@ -12,7 +12,7 @@
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a class="menu-upload-item" title="Upload Document"><%= image_tag("nav/upload.png", size:'24x24') %></a>
+          <a class="menu-upload-item" title="Upload Document"><%= image_tag("nav/upload.png", size:'36x36') %></a>
           <div style="display: none">
             <%= form_tag('/upload/item', method: :post, name: 'upload_item_form') do %>
                 <input name="<%= Const::ItemGallery::Key::USER_CODING_ID %>" type="hidden" value="<%= @user_coding_id %>">

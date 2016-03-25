@@ -74,3 +74,8 @@ div.tab-content {
     }
   }
 }
+
+.editButtonOnEditSelected {
+  display: none !important;
+  pointer-events: none !important;
+}
