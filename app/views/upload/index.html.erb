@@ -1,124 +1,121 @@
 <%= render 'upload/navbar/navber' %>
-
-<div id="main">
-      <div id="upload_wrapper">
-          <div class="left">
-            <%= form_tag 'upload/upload_thumbnail.json', method: :post, remote: true, class: "form-horizontal thumbnail_upload_form", multipart: true, format: :json, authenticity_token: true  do |f| %>
-              <div class="capture_wrapper">
-                <%= image_tag 'base/no_image.jpg', size: '250x250', class: 'capture' %>
+<div id="upload_wrapper">
+  <div class="left">
+    <%= form_tag 'upload/upload_thumbnail.json', method: :post, remote: true, class: "form-horizontal thumbnail_upload_form", multipart: true, format: :json, authenticity_token: true  do |f| %>
+      <div class="capture_wrapper">
+        <%= image_tag 'base/no_image.jpg', size: '250x250', class: 'capture' %>
+      </div>
+      <div>
+        <div class="warn_message">
+          <%= I18n.t('upload_confirm.thumbnail_warn', size: Const::THUMBNAIL_FILESIZE_MAX_MB) %>
+        </div>
+        <div>
+          <%= file_field_tag :file_path, class: Const::PreloadItemImage::Key::SELECT_FILE %>
+        </div>
+        <div style="text-align: right;display: none">
+          <input type="button" class="<%= Const::PreloadItemImage::Key::SELECT_FILE_DELETE %>" value="Delete">
+        </div>
+        <div class="error_message">
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="right">
+    <%= form_tag('', method: :post, id: 'upload_form') do  %>
+      <div class="input_wrapper">
+          <div class="title_wrapper">
+              <div>
+                  <label><%= I18n.t('upload_confirm.title') %></label>
               </div>
               <div>
-                <div class="warn_message">
-                  <%= I18n.t('upload_confirm.thumbnail_warn', size: Const::THUMBNAIL_FILESIZE_MAX_MB) %>
-                </div>
-                <div>
-                  <%= file_field_tag :file_path, class: Const::PreloadItemImage::Key::SELECT_FILE %>
-                </div>
-                <div style="text-align: right;display: none">
-                  <input type="button" class="<%= Const::PreloadItemImage::Key::SELECT_FILE_DELETE %>" value="Delete">
-                </div>
-                <div class="error_message">
-                </div>
+                  <input name="<%= Const::Gallery::Key::TITLE %>" required>
               </div>
-            <% end %>
           </div>
-          <div class="right">
-            <%= form_tag('', method: :post, id: 'upload_form') do  %>
-              <div class="input_wrapper">
-                  <div class="title_wrapper">
-                      <div>
-                          <label><%= I18n.t('upload_confirm.title') %></label>
-                      </div>
-                      <div>
-                          <input name="<%= Const::Gallery::Key::TITLE %>" required>
-                      </div>
-                  </div>
 
-                  <div class="caption">
-                      <div class="caption_label_warpper">
-                          <label><%= I18n.t('upload_confirm.caption') %></label>
-                      </div>
-                      <div>
-                          <textarea class="caption_markup" name="<%= Const::Gallery::Key::CAPTION %>"></textarea>
-                      </div>
-                  </div>
-                  <div class="clearfix">
-                    <div class="select_tag_wrapper">
-                        <div class="select_tag_label"><%= I18n.t('upload_confirm.tags') %></div>
-                        <div class="select_tag_table">
-                            <div class="select_tag tagcloud" style="float: left">
-                                <ul>
-                                </ul>
-                            </div>
-                            <div class="select_tag_input_wrapper">
-                                <input class="select_tag_input" name="<%= Const::Gallery::Key::TAGS %>" value="" >
-                            </div>
-                        </div>
+          <div class="caption">
+              <div class="caption_label_warpper">
+                  <label><%= I18n.t('upload_confirm.caption') %></label>
+              </div>
+              <div>
+                  <textarea class="caption_markup" name="<%= Const::Gallery::Key::CAPTION %>"></textarea>
+              </div>
+          </div>
+          <div class="clearfix">
+            <div class="select_tag_wrapper">
+                <div class="select_tag_label"><%= I18n.t('upload_confirm.tags') %></div>
+                <div class="select_tag_table">
+                    <div class="select_tag tagcloud" style="float: left">
+                        <ul>
+                        </ul>
                     </div>
+                    <div class="select_tag_input_wrapper">
+                        <input class="select_tag_input" name="<%= Const::Gallery::Key::TAGS %>" value="" >
+                    </div>
+                </div>
+            </div>
 
-                    <div class="popular_tag_wrapper">
-                        <div class="popular_tag_label"><%= I18n.t('upload_confirm.popular_tags') %></div>
-                        <div class="popular_tag tagcloud">
-                            <ul>
-                                <li><a href="#">tag1</a></li>
-                                <li><a href="#">tag2</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="recommend_tag_wrapper">
-                        <div class="recommend_tag_label"><%= I18n.t('upload_confirm.recommend_tags') %></div>
-                        <div class="recommend_tag tagcloud">
-                            <ul>
-                                <li><a href="#">tag3</a></li>
-                                <li><a href="#">tag4</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="option_wrapper">
-                      <div class="form-item">
-                          <%= check_box_tag Const::Gallery::Key::SHOW_GUIDE, true, true %>
-                          <%= label_tag I18n.t('upload_confirm.show_guide') %>
-                      </div>
-                      <div class="form-item">
-                          <%= check_box_tag Const::Gallery::Key::SHOW_PAGE_NUM %>
-                          <%= label_tag I18n.t('upload_confirm.show_page_num') %>
-                      </div>
-                      <div class="form-item">
-                          <%= check_box_tag Const::Gallery::Key::SHOW_CHAPTER_NUM %>
-                          <%= label_tag I18n.t('upload_confirm.show_chapter_num') %>
-                      </div>
-                  </div>
-                  <% if @uploaded_list.length > 0 %>
-                    <div class="overwrite_contents_wrapper">
-                      <div class="overwrite_contents_label"><%= I18n.t('upload_confirm.existed_upload_contents') %></div>
-                      <div class="overwrite_contents_contents">
-                        <select class="overwrite_contents_contents_select" name="<%= Const::Gallery::Key::UPLOAD_OVERWRITE_GALLERY_TOKEN %>">
-                          <option value=""><%= I18n.t('upload_confirm.posting_new') %></option>
-                          <% @uploaded_list.each do |u| %>
-                            <option value="<%= u['gallery_access_token'] %>"><%= I18n.t('upload_confirm.overwrite_contents', contents: "#{u['title']} [Upload Date #{u['updated_at'].strftime("%Y-%m-%d %H:%M:%S")}]") %></option>
-                          <% end %>
-                        </select>
-                      </div>
-                    </div>
+            <div class="popular_tag_wrapper">
+                <div class="popular_tag_label"><%= I18n.t('upload_confirm.popular_tags') %></div>
+                <div class="popular_tag tagcloud">
+                    <ul>
+                        <li><a href="#">tag1</a></li>
+                        <li><a href="#">tag2</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="recommend_tag_wrapper">
+                <div class="recommend_tag_label"><%= I18n.t('upload_confirm.recommend_tags') %></div>
+                <div class="recommend_tag tagcloud">
+                    <ul>
+                        <li><a href="#">tag3</a></li>
+                        <li><a href="#">tag4</a></li>
+                    </ul>
+                </div>
+            </div>
+          </div>
+          <div class="option_wrapper">
+              <div class="form-item">
+                  <%= check_box_tag Const::Gallery::Key::SHOW_GUIDE, true, true %>
+                  <%= label_tag I18n.t('upload_confirm.show_guide') %>
+              </div>
+              <div class="form-item">
+                  <%= check_box_tag Const::Gallery::Key::SHOW_PAGE_NUM %>
+                  <%= label_tag I18n.t('upload_confirm.show_page_num') %>
+              </div>
+              <div class="form-item">
+                  <%= check_box_tag Const::Gallery::Key::SHOW_CHAPTER_NUM %>
+                  <%= label_tag I18n.t('upload_confirm.show_chapter_num') %>
+              </div>
+          </div>
+          <% if @uploaded_list.length > 0 %>
+            <div class="overwrite_contents_wrapper">
+              <div class="overwrite_contents_label"><%= I18n.t('upload_confirm.existed_upload_contents') %></div>
+              <div class="overwrite_contents_contents">
+                <select class="overwrite_contents_contents_select" name="<%= Const::Gallery::Key::UPLOAD_OVERWRITE_GALLERY_TOKEN %>">
+                  <option value=""><%= I18n.t('upload_confirm.posting_new') %></option>
+                  <% @uploaded_list.each do |u| %>
+                    <option value="<%= u['gallery_access_token'] %>"><%= I18n.t('upload_confirm.overwrite_contents', contents: "#{u['title']} [Upload Date #{u['updated_at'].strftime("%Y-%m-%d %H:%M:%S")}]") %></option>
                   <% end %>
+                </select>
               </div>
-          </div>
-          <input name="<%= Const::Gallery::Key::PROJECT_ID %>" type="hidden" value="<%= @project_id %>">
-          <% if @screen_size.present? %>
-            <input name="<%= Const::Gallery::Key::SCREEN_SIZE %>" type="hidden" value="<%= @screen_size %>">
+            </div>
           <% end %>
-          <input name="<%= Const::Gallery::Key::PAGE_MAX %>" type="hidden" value="<%= @page_max %>">
-          <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG %>" type="hidden" value="">
-          <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_CONTENTSTYPE %>" type="hidden" value="">
-          <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_WIDTH %>" type="hidden" value="">
-          <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_HEIGHT %>" type="hidden" value="">
-        <% end %>
       </div>
-      <div class="button_wrapper">
-          <div>
-              <button class="upload_button" value="Upload">Upload</button>
-          </div>
-      </div>
-    <%= render 'base/floatview' %>
+      <input name="<%= Const::Gallery::Key::PROJECT_ID %>" type="hidden" value="<%= @project_id %>">
+      <% if @screen_size.present? %>
+        <input name="<%= Const::Gallery::Key::SCREEN_SIZE %>" type="hidden" value="<%= @screen_size %>">
+      <% end %>
+      <input name="<%= Const::Gallery::Key::PAGE_MAX %>" type="hidden" value="<%= @page_max %>">
+      <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG %>" type="hidden" value="">
+      <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_CONTENTSTYPE %>" type="hidden" value="">
+      <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_WIDTH %>" type="hidden" value="">
+      <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_HEIGHT %>" type="hidden" value="">
+    <% end %>
+  </div>
 </div>
+<div class="button_wrapper">
+  <div>
+    <button class="upload_button" value="Upload">Upload</button>
+  </div>
+</div>
+<%= render 'base/floatview' %>

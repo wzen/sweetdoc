@@ -4,34 +4,35 @@ class UploadCommon
   @initEvent = (upload) ->
     root = $('#upload_wrapper')
 
-    _setThumbnailChangeEvent = ->
-      # サムネイル選択時にアップロード
-      $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).off('change').on('change', =>
-        f = $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).val().split('.')
-        if f? && f.length > 0
-          window.uploadFileExt = f[f.length - 1]
-          if window.uploadFileExt == 'gif' || window.uploadFileExt == 'png' || window.uploadFileExt = 'jpg'
-            $('.thumbnail_upload_form', root).submit()
-      )
-    _setThumbnailChangeEvent.call(@)
+    # サムネイル選択時にアップロード
+    $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).off('change').on('change', =>
+      window.uploadContents = upload
+      f = $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).val().split('.')
+      if f? && f.length > 0
+        $('.thumbnail_upload_form', root).submit()
+    )
     # サムネイルアップロード
     $('.thumbnail_upload_form', root).off().on('ajax:complete', (e, data, status, error) =>
       d = JSON.parse(data.responseText)
       if d?
         if d.resultSuccess
-          ext = window.uploadFileExt
-          if ext?
-            if ext == 'gif'
-              ext = 'png'
-            else if ext == 'jpg'
-              ext = 'jpeg'
-            $('.error_message', root).hide()
-            $('.capture', root).attr('src', "data:image/#{ext};base64,#{d.image_url}")
+          $('.error_message', root).hide()
+          $('.capture', root).attr('src', d.image_url)
+          imageData = d.image_url.split('base64,')[1]
+          contentType = d.image_url.split(';base64')[0].replace('data:', '')
+          $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG}']", root).val(imageData.replace(/^.*,/, ''))
+          $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE}']", root).val(contentType)
+          image = new Image()
+          image.src = d.image_url
+          image.onload = ->
+            $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_WIDTH}']", root).val(image.width)
+            $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT}']", root).val(image.height)
         else
           $('.error_message', root).text(d.message)
           $('.error_message', root).show()
       # アップロード後に設定したイベントが消えるため、ここで再設定
-      _setThumbnailChangeEvent.call(@)
+      @initEvent(window.uploadContents)
+      window.uploadContents = null
     )
 
     # マークアップ入力フォーム初期化
@@ -52,7 +53,7 @@ class UploadCommon
     )
 
     # Updateイベント
-    $('.upload_button', root).off('click').on('click', ->
+    $('#upload_wrapper').next('.button_wrapper').find('.upload_button').off('click').on('click', ->
       upload.upload(root)
       return false
     )

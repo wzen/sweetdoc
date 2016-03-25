@@ -25,7 +25,7 @@ class UploadController < ApplicationController
     if file_path.size > 1000000 * Const::THUMBNAIL_FILESIZE_MAX_MB
       @result_success, @message, @image_url = false, I18n.t('upload_confirm.thumbnail_size_error', size: Const::THUMBNAIL_FILESIZE_MAX_MB), nil
     else
-      @result_success, @message, @image_url =  true, '', Base64.encode64(file_path.read)
+      @result_success, @message, @image_url =  true, '', "data:#{file_path.content_type};base64,#{Base64.encode64(file_path.read)}"
     end
   end
 end

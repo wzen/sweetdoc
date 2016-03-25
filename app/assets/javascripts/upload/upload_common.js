@@ -5,45 +5,43 @@ UploadCommon = (function() {
   function UploadCommon() {}
 
   UploadCommon.initEvent = function(upload) {
-    var _setThumbnailChangeEvent, mark, root;
+    var mark, root;
     root = $('#upload_wrapper');
-    _setThumbnailChangeEvent = function() {
-      return $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).off('change').on('change', (function(_this) {
-        return function() {
-          var f;
-          f = $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).val().split('.');
-          if ((f != null) && f.length > 0) {
-            window.uploadFileExt = f[f.length - 1];
-            if (window.uploadFileExt === 'gif' || window.uploadFileExt === 'png' || (window.uploadFileExt = 'jpg')) {
-              return $('.thumbnail_upload_form', root).submit();
-            }
-          }
-        };
-      })(this));
-    };
-    _setThumbnailChangeEvent.call(this);
+    $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).off('change').on('change', (function(_this) {
+      return function() {
+        var f;
+        window.uploadContents = upload;
+        f = $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).val().split('.');
+        if ((f != null) && f.length > 0) {
+          return $('.thumbnail_upload_form', root).submit();
+        }
+      };
+    })(this));
     $('.thumbnail_upload_form', root).off().on('ajax:complete', (function(_this) {
       return function(e, data, status, error) {
-        var d, ext;
+        var contentType, d, image, imageData;
         d = JSON.parse(data.responseText);
         if (d != null) {
           if (d.resultSuccess) {
-            ext = window.uploadFileExt;
-            if (ext != null) {
-              if (ext === 'gif') {
-                ext = 'png';
-              } else if (ext === 'jpg') {
-                ext = 'jpeg';
-              }
-              $('.error_message', root).hide();
-              $('.capture', root).attr('src', "data:image/" + ext + ";base64," + d.image_url);
-            }
+            $('.error_message', root).hide();
+            $('.capture', root).attr('src', d.image_url);
+            imageData = d.image_url.split('base64,')[1];
+            contentType = d.image_url.split(';base64')[0].replace('data:', '');
+            $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG + "']", root).val(imageData.replace(/^.*,/, ''));
+            $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE + "']", root).val(contentType);
+            image = new Image();
+            image.src = d.image_url;
+            image.onload = function() {
+              $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_WIDTH + "']", root).val(image.width);
+              return $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT + "']", root).val(image.height);
+            };
           } else {
             $('.error_message', root).text(d.message);
             $('.error_message', root).show();
           }
         }
-        return _setThumbnailChangeEvent.call(_this);
+        _this.initEvent(window.uploadContents);
+        return window.uploadContents = null;
       };
     })(this));
     mark = $('.markItUp', root);
@@ -58,7 +56,7 @@ UploadCommon = (function() {
         return $(this).val('');
       }
     });
-    return $('.upload_button', root).off('click').on('click', function() {
+    return $('#upload_wrapper').next('.button_wrapper').find('.upload_button').off('click').on('click', function() {
       upload.upload(root);
       return false;
     });
