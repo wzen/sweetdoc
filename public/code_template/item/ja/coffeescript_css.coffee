@@ -271,7 +271,7 @@ class ItemPreviewTemp extends CssItemBase
 
     return keyframe
 
-Common.setClassToMap(PreloadItemButton.CLASS_DIST_TOKEN, PreloadItemButton)
+Common.setClassToMap(ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp)
 
 # Don't Delete
 if window.itemInitFuncList? && !window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN]?

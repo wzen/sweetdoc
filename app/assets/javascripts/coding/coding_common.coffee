@@ -137,7 +137,7 @@ class CodingCommon
     root.off('dblclick.jstree.my')
     root.on('dblclick.jstree.my', (event) ->
       node = $(event.target).closest("li")
-      path = _userCodingClassNameByNodePath(_parentNodePath(node))
+      path = _userCodingClassNameByNodePath(_nodePath(node))
       if node.hasClass('js') || node.hasClass('coffee')
         # エディタ表示
         CodingCommon.activeTabEditor(parseInt($('#tree_wrapper').find(".user_coding_id.#{path}").val()))
@@ -418,7 +418,7 @@ class CodingCommon
     )
 
   @initAddNewFileModal = (modalEmt, params, callback = null) ->
-    $('.node_path', modalEmt).html(_parentNodePath(params.target) + '/')
+    $('.node_path', modalEmt).html(_nodePath(params.target) + '/')
     $('.file_name:first', modalEmt).val(CodingCommon.DEFAULT_FILENAME + '.js')
     $('.lang_select:first', modalEmt).val('')
     $('.draw_select:first', modalEmt).val('')
@@ -474,7 +474,7 @@ class CodingCommon
   @addNewFile = (parentNode, name, lang_type, draw_type, successCallback = null, errorCallback = null) ->
     data = {}
     data[@Key.LANG] = lang_type
-    node_path = _parentNodePath(parentNode) + '/' + name
+    node_path = _nodePath(parentNode) + '/' + name
     data[@Key.NODE_PATH] = node_path
     data[@Key.DRAW_TYPE] = draw_type
     $.ajax(
@@ -531,7 +531,7 @@ class CodingCommon
 
   @addNewFolder =(parentNode, name, successCallback = null, errorCallback = null) ->
     data = {}
-    nodePath = _parentNodePath(parentNode) + '/' + name
+    nodePath = _nodePath(parentNode) + '/' + name
     data[@Key.NODE_PATH] = nodePath
     $.ajax(
       {
@@ -574,7 +574,7 @@ class CodingCommon
 
   @deleteNode =(selectNode, successCallback = null, errorCallback = null) ->
     data = {}
-    data[@Key.NODE_PATH] = _parentNodePath(selectNode) + '/' + $(selectNode).text()
+    data[@Key.NODE_PATH] = _nodePath(selectNode)
     $.ajax(
       {
         url: "/coding/delete_node"
@@ -679,7 +679,7 @@ class CodingCommon
       )
     , idleSeconds * 1000)
 
-  _parentNodePath = (select_node) ->
+  _nodePath = (select_node) ->
     path = $(select_node).parents('.jstree-children').prev('.jstree-anchor').map((n) -> $(@).text()).get()
     path.unshift($(select_node).text())
     reversePath = path.reverse()
@@ -691,7 +691,7 @@ class CodingCommon
     root = $('#tree')
     jt = root.jstree(true)
     $('.jstree-node', root).each((i) ->
-      node_path = _parentNodePath($(@).children('.jstree-anchor:first'))
+      node_path = _nodePath($(@).children('.jstree-anchor:first'))
       user_coding_id = $('#tree_wrapper').find(".user_coding_id.#{_userCodingClassNameByNodePath(node_path)}").val()
       if user_coding_id?
         user_coding_id = parseInt(user_coding_id)

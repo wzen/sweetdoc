@@ -2,7 +2,7 @@
 var CodingCommon;
 
 CodingCommon = (function() {
-  var _activeEditorId, _codes, _countSameFilename, _deactiveEditor, _parentNodePath, _treeState, _userCodingClassNameByNodePath, constant;
+  var _activeEditorId, _codes, _countSameFilename, _deactiveEditor, _nodePath, _treeState, _userCodingClassNameByNodePath, constant;
 
   function CodingCommon() {}
 
@@ -174,7 +174,7 @@ CodingCommon = (function() {
     root.on('dblclick.jstree.my', function(event) {
       var node, path;
       node = $(event.target).closest("li");
-      path = _userCodingClassNameByNodePath(_parentNodePath(node));
+      path = _userCodingClassNameByNodePath(_nodePath(node));
       if (node.hasClass('js') || node.hasClass('coffee')) {
         return CodingCommon.activeTabEditor(parseInt($('#tree_wrapper').find(".user_coding_id." + path).val()));
       }
@@ -582,7 +582,7 @@ CodingCommon = (function() {
     if (callback == null) {
       callback = null;
     }
-    $('.node_path', modalEmt).html(_parentNodePath(params.target) + '/');
+    $('.node_path', modalEmt).html(_nodePath(params.target) + '/');
     $('.file_name:first', modalEmt).val(CodingCommon.DEFAULT_FILENAME + '.js');
     $('.lang_select:first', modalEmt).val('');
     $('.draw_select:first', modalEmt).val('');
@@ -648,7 +648,7 @@ CodingCommon = (function() {
     }
     data = {};
     data[this.Key.LANG] = lang_type;
-    node_path = _parentNodePath(parentNode) + '/' + name;
+    node_path = _nodePath(parentNode) + '/' + name;
     data[this.Key.NODE_PATH] = node_path;
     data[this.Key.DRAW_TYPE] = draw_type;
     return $.ajax({
@@ -719,7 +719,7 @@ CodingCommon = (function() {
       errorCallback = null;
     }
     data = {};
-    nodePath = _parentNodePath(parentNode) + '/' + name;
+    nodePath = _nodePath(parentNode) + '/' + name;
     data[this.Key.NODE_PATH] = nodePath;
     return $.ajax({
       url: "/coding/add_new_folder",
@@ -775,7 +775,7 @@ CodingCommon = (function() {
       errorCallback = null;
     }
     data = {};
-    data[this.Key.NODE_PATH] = _parentNodePath(selectNode) + '/' + $(selectNode).text();
+    data[this.Key.NODE_PATH] = _nodePath(selectNode);
     return $.ajax({
       url: "/coding/delete_node",
       type: "POST",
@@ -892,7 +892,7 @@ CodingCommon = (function() {
     }, idleSeconds * 1000);
   };
 
-  _parentNodePath = function(select_node) {
+  _nodePath = function(select_node) {
     var joinPath, path, reversePath;
     path = $(select_node).parents('.jstree-children').prev('.jstree-anchor').map(function(n) {
       return $(this).text();
@@ -910,7 +910,7 @@ CodingCommon = (function() {
     jt = root.jstree(true);
     $('.jstree-node', root).each(function(i) {
       var is_opened, node_path, user_coding_id;
-      node_path = _parentNodePath($(this).children('.jstree-anchor:first'));
+      node_path = _nodePath($(this).children('.jstree-anchor:first'));
       user_coding_id = $('#tree_wrapper').find(".user_coding_id." + (_userCodingClassNameByNodePath(node_path))).val();
       if (user_coding_id != null) {
         user_coding_id = parseInt(user_coding_id);

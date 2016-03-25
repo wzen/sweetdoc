@@ -124,10 +124,14 @@ class Coding
   def self.delete_node(user_id, node_path)
     begin
       ActiveRecord::Base.transaction do
-        uct = UserCodingTree.where('user_id = ? AND node_path LIKE ? AND del_flg = 0', user_id, "%#{escape_like(node_path)}%")
+        uct = UserCodingTree.where('user_id = ? AND node_path LIKE ? AND del_flg = 0', user_id, "%#{_escape_like(node_path)}%")
         uct.each do |u|
           if u['user_coding_id']
-            UserCoding.update_all({del_flg: true}, {id: u['user_coding_id']})
+            uc = UserCoding.find(u['user_coding_id'])
+            if uc.present?
+              uc.del_flg = true
+              uc.save!
+            end
           end
         end
         uct.update_all(del_flg: true)
@@ -446,6 +450,11 @@ class Coding
     UserCoding.find_by(user_id: user_id, code_filename: tmp_token, del_flg: false).blank? ? tmp_token : generate_filename(user_id)
   end
 
-  private_class_method :_mk_path_treedata, :_mk_tree_path_html, :_replace_all_tree, :_add_code
+  # ActiveRecord Like エスケープ
+  def self._escape_like(string)
+    string.gsub(/[\\%_]/){|m| "\\#{m}"}
+  end
+
+  private_class_method :_mk_path_treedata, :_mk_tree_path_html, :_replace_all_tree, :_add_code, :_escape_like
 
 end

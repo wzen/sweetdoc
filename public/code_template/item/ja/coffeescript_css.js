@@ -244,7 +244,7 @@ ItemPreviewTemp = (function(superClass) {
 
 })(CssItemBase);
 
-Common.setClassToMap(PreloadItemButton.CLASS_DIST_TOKEN, PreloadItemButton);
+Common.setClassToMap(ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp);
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] == null)) {
   window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] = function(option) {

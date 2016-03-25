@@ -135,11 +135,6 @@ class ApplicationController < ActionController::Base
     I18n.locale = (I18n::available_locales.include? locale.to_sym) ? locale.to_sym : I18n.default_locale
   end
 
-  # ActiveRecord Like エスケープ
-  def escape_like(string)
-    string.gsub(/[\\%_]/){|m| "\\#{m}"}
-  end
-
   # 未ログインの場合はリダイレクト
   def redirect_if_not_login
     return if do_through
