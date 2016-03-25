@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 20151209141157) do
     t.boolean  "show_guide",                                   default: true
     t.boolean  "show_page_num",                                default: false
     t.boolean  "show_chapter_num",                             default: false
+    t.integer  "created_user_id",                                              null: false
     t.integer  "version",                                      default: 1
     t.boolean  "del_flg",                                      default: false
     t.datetime "created_at"
@@ -64,6 +65,7 @@ ActiveRecord::Schema.define(version: 20151209141157) do
   end
 
   add_index "galleries", ["access_token"], name: "index_galleries_on_access_token", unique: true, using: :btree
+  add_index "galleries", ["created_user_id"], name: "index_galleries_on_created_user_id", using: :btree
 
   create_table "gallery_bookmark_statistics", force: true do |t|
     t.integer  "gallery_id",                 null: false

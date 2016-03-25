@@ -14,6 +14,7 @@ class CreateGalleries < ActiveRecord::Migration
       t.boolean :show_guide, default: true
       t.boolean :show_page_num, default: false
       t.boolean :show_chapter_num, default: false
+      t.integer :created_user_id, null: false
       t.integer :version, default: 1
       t.boolean :del_flg, :default => false
 
@@ -21,5 +22,6 @@ class CreateGalleries < ActiveRecord::Migration
     end
 
     add_index :galleries, :access_token,         unique: true
+    add_index :galleries, :created_user_id
   end
 end

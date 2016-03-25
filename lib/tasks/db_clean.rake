@@ -8,8 +8,7 @@ namespace :db_clean do
         guests = User.where("guest = ? AND updated_at < ?", true, from)
         if guests.present? && guests.length > 0
           guest_ids = guests.pluck(:id)
-          # 削除フラグを立てる
-          User.where(id: guest_ids).update_all(del_flg: true)
+          # 削除フラグを立てて、erase_del_flgタスクで削除させる
           upm = UserProjectMap.where(user_id: guest_ids)
           upm.update_all(del_flg: true)
           ItemImage.where(user_project_map_id: upm.pluck(:id)).update_all(del_flg: true)
@@ -37,6 +36,9 @@ namespace :db_clean do
           epp = EventPagevaluePaging.where(user_pagevalue_id: up_ids)
           epp.update_all(del_flg: true)
           EventPagevalue.where(id: epp.pluck(:event_pagevalue_id)).update_all(del_flg: true)
+          # 退会処理などでUserテーブル内にdel_flg=tureのレコードが存在するため、
+          # Userテーブルはdel_flgを立てずに直接削除する
+          User.where(id: guest_ids).destroy_all
         end
       end
     rescue => e
@@ -61,7 +63,7 @@ namespace :db_clean do
   desc "DB delete flg clean task"
   task :erase_del_flg => :environment do
     begin
-      # テーブルの削除フラグtrueを消去
+      # テーブルの削除フラグtrueを消去(Userテーブルのレコードは残すので削除しないこと)
       EventPagevaluePaging.destroy_all(del_flg: true)
       EventPagevalue.destroy_all(del_flg: true)
       Gallery.destroy_all(del_flg: true)
@@ -97,7 +99,6 @@ namespace :db_clean do
       UserItemGalleryMap.destroy_all(del_flg: true)
       UserPagevalue.destroy_all(del_flg: true)
       UserProjectMap.destroy_all(del_flg: true)
-      User.destroy_all(del_flg: true)
     rescue => e
       p e
     end
