@@ -173,7 +173,7 @@ class RunCommon
               bookmark.find('.post_button:first').off('click').on('click', (ee) =>
                 ee.preventDefault()
                 ee.stopPropagation()
-                Common.showModalFlashMessage('Please wait...', true)
+                Common.showModalFlashMessage('Please wait...')
                 GalleryCommon.addBookmark(bookmark.find('textarea.note').val(), (result) =>
                   if result
                     bookmarkButtonWrapper.find('.bookmarked').show()
@@ -186,7 +186,7 @@ class RunCommon
         else
           # ブックマーク済み
           if window.confirm(I18n.t('message.dialog.change_project'))
-            Common.showModalFlashMessage('Please wait...', true)
+            Common.showModalFlashMessage('Please wait...')
             GalleryCommon.removeBookmark((result) =>
               if result
                 bookmarkButtonWrapper.find('.bookmarked').hide()

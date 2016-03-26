@@ -805,7 +805,9 @@ class Common
     )
 
   # フラッシュメッセージモーダル表示
-  @showModalFlashMessage = (message, isModalFlush = false, immediately = true, enableOverlayClose = false) ->
+  @showModalFlashMessage = (message) ->
+    _showModalFlashMessage.call(@, message, false, true, false)
+  _showModalFlashMessage = (message, isModalFlush = false, immediately = true, enableOverlayClose = false) ->
     type = constant.ModalViewType.FLASH_MESSAGE
     _showModalView.call(@, type, null, isModalFlush, {}, ->
       $("body").append( '<div id="modal-overlay"></div>' )
@@ -863,7 +865,7 @@ class Common
     if !emt? || emt.length == 0
       # サーバから表示内容読み込み
       # ローディング表示
-      @showModalFlashMessage('Please Wait', true)
+      _showModalFlashMessage.call(@, 'Please Wait', true)
       $.ajax(
         {
           url: "/modal_view/show"

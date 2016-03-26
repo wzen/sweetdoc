@@ -9,6 +9,7 @@ class UploadCommon
       window.uploadContents = upload
       f = $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).val()
       if f? && f.length > 0
+        Common.showModalFlashMessage('Thumbnail changing')
         $('.thumbnail_upload_form', root).submit()
       else
         # 画像をデフォルトに戻す
@@ -46,18 +47,16 @@ class UploadCommon
           $('.error_message', root).show()
       # アップロード後に設定したイベントが消えるため、ここで再設定
       @initEvent(window.uploadContents)
+      Common.hideModalView(true)
       window.uploadContents = null
     )
-
     # マークアップ入力フォーム初期化
     mark = $('.markItUp', root)
     if mark? && mark.length > 0
       $('.caption_markup', root).markItUpRemove()
     $('.caption_markup', root).markItUp(mySettings)
-
     # タグクリックイベント設定
     upload.prepareUploadTagEvent(root)
-
     # Inputイベント
     $('.select_tag_input', root).off('keypress').on('keypress', (e) ->
       if e.keyCode == constant.KeyboardKeyCode.ENTER
@@ -65,9 +64,8 @@ class UploadCommon
         upload.addUploadSelectTag(root, $(@).val())
         $(@).val('')
     )
-
     # Updateイベント
-    $('#upload_wrapper').next('.button_wrapper').find('.upload_button').off('click').on('click', ->
+    root.next('.button_wrapper').find('.upload_button').off('click').on('click', ->
       upload.upload(root)
       return false
     )

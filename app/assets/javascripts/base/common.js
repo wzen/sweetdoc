@@ -2,7 +2,7 @@
 var Common;
 
 Common = (function() {
-  var _showModalView, constant;
+  var _showModalFlashMessage, _showModalView, constant;
 
   function Common() {}
 
@@ -991,7 +991,11 @@ Common = (function() {
     });
   };
 
-  Common.showModalFlashMessage = function(message, isModalFlush, immediately, enableOverlayClose) {
+  Common.showModalFlashMessage = function(message) {
+    return _showModalFlashMessage.call(this, message, false, true, false);
+  };
+
+  _showModalFlashMessage = function(message, isModalFlush, immediately, enableOverlayClose) {
     var type;
     if (isModalFlush == null) {
       isModalFlush = false;
@@ -1055,7 +1059,7 @@ Common = (function() {
       }
     };
     if ((emt == null) || emt.length === 0) {
-      this.showModalFlashMessage('Please Wait', true);
+      _showModalFlashMessage.call(this, 'Please Wait', true);
       return $.ajax({
         url: "/modal_view/show",
         type: "GET",

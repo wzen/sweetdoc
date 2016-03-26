@@ -224,7 +224,7 @@ RunCommon = (function() {
                 return bookmark.find('.post_button:first').off('click').on('click', function(ee) {
                   ee.preventDefault();
                   ee.stopPropagation();
-                  Common.showModalFlashMessage('Please wait...', true);
+                  Common.showModalFlashMessage('Please wait...');
                   return GalleryCommon.addBookmark(bookmark.find('textarea.note').val(), function(result) {
                     if (result) {
                       bookmarkButtonWrapper.find('.bookmarked').show();
@@ -238,7 +238,7 @@ RunCommon = (function() {
             }
           } else {
             if (window.confirm(I18n.t('message.dialog.change_project'))) {
-              Common.showModalFlashMessage('Please wait...', true);
+              Common.showModalFlashMessage('Please wait...');
               return GalleryCommon.removeBookmark(function(result) {
                 if (result) {
                   bookmarkButtonWrapper.find('.bookmarked').hide();

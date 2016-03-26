@@ -13,7 +13,7 @@
       </div>
       <div>
         <div class="warn_message">
-          <%= I18n.t('upload_confirm.thumbnail_warn', size: Const::THUMBNAIL_FILESIZE_MAX_MB) %>
+          <%= I18n.t('upload_confirm.thumbnail_warn', size: Const::THUMBNAIL_FILESIZE_MAX_KB) %>
         </div>
         <div>
           <%= file_field_tag :file_path, class: Const::PreloadItemImage::Key::SELECT_FILE %>
@@ -34,7 +34,8 @@
                   <label><%= I18n.t('upload_confirm.title') %></label>
               </div>
               <div>
-                  <input name="<%= Const::Gallery::Key::TITLE %>" required>
+                <input name="<%= Const::Gallery::Key::TITLE %>" required>
+                <span class="title_error"><%= I18n.t('upload_confirm.title_input_error') %></span>
               </div>
           </div>
 

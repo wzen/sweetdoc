@@ -17,7 +17,7 @@ UploadContents = (function(superClass) {
     }
     title = $("input[name='" + constant.Gallery.Key.TITLE + "']", root).val();
     if (title.length === 0) {
-      FloatView.show('Please input title', FloatView.Type.ERROR, 3.0);
+      $('.title_error', root).show();
       return;
     }
     _saveGallery = function() {

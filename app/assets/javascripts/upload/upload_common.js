@@ -13,6 +13,7 @@ UploadCommon = (function() {
         window.uploadContents = upload;
         f = $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).val();
         if ((f != null) && f.length > 0) {
+          Common.showModalFlashMessage('Thumbnail changing');
           return $('.thumbnail_upload_form', root).submit();
         } else {
           $('.capture', root).hide();
@@ -54,6 +55,7 @@ UploadCommon = (function() {
           }
         }
         _this.initEvent(window.uploadContents);
+        Common.hideModalView(true);
         return window.uploadContents = null;
       };
     })(this));
@@ -69,7 +71,7 @@ UploadCommon = (function() {
         return $(this).val('');
       }
     });
-    return $('#upload_wrapper').next('.button_wrapper').find('.upload_button').off('click').on('click', function() {
+    return root.next('.button_wrapper').find('.upload_button').off('click').on('click', function() {
       upload.upload(root);
       return false;
     });

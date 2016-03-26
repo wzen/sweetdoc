@@ -4,6 +4,7 @@ class UploadItem extends UploadBase
     # 入力値バリデーションチェック
     title = $("input[name='#{constant.ItemGallery.Key.TITLE}']", root).val()
     if title.length == 0
+      $('.title_error', root).show()
       return
 
     # 保存処理

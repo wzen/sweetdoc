@@ -4,7 +4,7 @@ class UploadContents extends UploadBase
     # 入力値バリデーションチェック
     title = $("input[name='#{constant.Gallery.Key.TITLE}']", root).val()
     if title.length == 0
-      FloatView.show('Please input title', FloatView.Type.ERROR, 3.0)
+      $('.title_error', root).show()
       return
 
     # 保存処理
