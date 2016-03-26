@@ -16,6 +16,13 @@ class MyPageController < ApplicationController
     end
   end
 
+  def remove_contents
+    user_id = _get_user_id
+    gallery_access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
+    Gallery.remove_contents(user_id, gallery_access_token)
+    redirect_to action: 'created_contents'
+  end
+
   def created_items
     user_id = _get_user_id
     head = params.fetch(Const::MyPage::Key::HEAD, 0)
@@ -38,6 +45,13 @@ class MyPageController < ApplicationController
     else
       # エラー
     end
+  end
+
+  def remove_bookmark
+    user_id = _get_user_id
+    gallery_access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
+    @result_success, @message = Gallery.remove_bookmark(user_id, gallery_access_token, Date.today)
+    redirect_to action: 'bookmarks'
   end
 
   def using_items

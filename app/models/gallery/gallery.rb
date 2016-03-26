@@ -13,6 +13,7 @@ require 'gallery/gallery_event_pagevalue_paging'
 require 'gallery/gallery_view_statistic'
 require 'gallery/gallery_bookmark'
 require 'gallery/gallery_bookmark_statistic'
+require 'item/item_image'
 require 'pagevalue/page_value_state'
 require 'item/preload_item'
 
@@ -852,13 +853,54 @@ class Gallery < ActiveRecord::Base
       LEFT JOIN gallery_tag_maps gtm ON gtm.gallery_id = g.id AND gtm.del_flg = 0
       LEFT JOIN gallery_tags gt ON gtm.gallery_tag_id = gt.id AND gt.del_flg = 0
       WHERE u.id = #{user_id}
-      AND u.del_flg = 0 AND pgm.del_flg = 0 AND upm.del_flg = 0 AND g.del_flg = 0
+      AND u.del_flg = 0 AND g.del_flg = 0
       GROUP BY g.id
       ORDER BY g.updated_at DESC
       LIMIT #{head}, #{limit}
     SQL
     ret_sql = ActiveRecord::Base.connection.select_all(sql)
     return ret_sql.to_hash
+  end
+
+  def self.remove_contents(user_id, gallery_access_token)
+    begin
+      ActiveRecord::Base.transaction do
+        g = Gallery.find_by(access_token: gallery_access_token, created_user_id: user_id)
+        if g.present?
+          g.del_flg = true
+          g.save!
+          GalleryBookmarkStatistic.where(gallery_id: g.id).update_all(del_flg: true)
+          GalleryBookmark.where(gallery_id: g.id).update_all(del_flg: true)
+          gepp = GalleryEventPagevaluePaging.where(gallery_id: g.id)
+          if gepp.present?
+            GalleryEventPagevalue.where(id: gepp.pluck(:gallery_event_pagevalue_id)).update_all(del_flg: true)
+            gepp.update_all(del_flg: true)
+          end
+          gipp = GalleryInstancePagevaluePaging.where(gallery_id: g.id)
+          if gipp.present?
+            GalleryInstancePagevalue.where(id: gipp.pluck(:gallery_instance_pagevalue_id)).update_all(del_flg: true)
+            gipp.update_all(del_flg: true)
+          end
+          ggpp = GalleryGeneralPagevaluePaging.where(gallery_id: g.id)
+          if ggpp.present?
+            GalleryGeneralPagevalue.where(id: ggpp.pluck(:gallery_general_pagevalue_id)).update_all(del_flg: true)
+            ggpp.update_all(del_flg: true)
+          end
+          gtm = GalleryTagMap.where(gallery_id: g.id)
+          if gtm.present?
+            GalleryTag.where(id: gtm.pluck(:gallery_tag_id)).update_all(del_flg: true)
+            gtm.update_all(del_flg: true)
+          end
+          GalleryViewStatistic.where(gallery_id: g.id).update_all(del_flg: true)
+          ProjectGalleryMap.where(gallery_id: g.id).update_all(del_flg: true)
+          ItemImage.remove_gallery_img(user_id, g.id)
+        end
+        return true, I18n.t('message.database.item_state.save.success')
+      end
+    rescue => e
+      # 更新失敗
+      return false, I18n.t('message.database.item_state.save.error')
+    end
   end
 
   def self.bookmarks(user_id, head = 0, limit = 30)

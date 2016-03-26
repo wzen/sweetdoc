@@ -9,8 +9,10 @@ Rails.application.routes.draw do
   # MyPage
   get 'my_page' => 'my_page#bookmarks'
   get 'my_page/created_contents'
+  post 'my_page/remove_contents'
   get 'my_page/created_items'
   get 'my_page/bookmarks'
+  post 'my_page/remove_bookmark'
   get 'my_page/using_items'
 
   # Worktable

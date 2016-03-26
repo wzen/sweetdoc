@@ -147,6 +147,8 @@ ja:
       created_contents_link_description: "ドキュメントを作成する"
       created_items_link_description: "アイテムを作成する"
       using_items_link_description: "アイテムを使用する"
+    message:
+      default_delete_message: "削除してよろしいですか？"
   embed:
     caption:
       play_in_site: "元サイトで閲覧"

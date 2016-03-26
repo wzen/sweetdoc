@@ -170,6 +170,8 @@ en:
       created_contents_link_description: "Don't want to write a document?"
       created_items_link_description: "Don't want to make a item?"
       using_items_link_description: "Don't want to use a made item?"
+    message:
+      default_delete_message: "This operation can't undo"
   embed:
     caption:
       play_in_site: "Read in Sweetdoc"

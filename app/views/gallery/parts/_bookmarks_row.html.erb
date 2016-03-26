@@ -56,7 +56,7 @@
                             <div>
                                 <div class="contents_right">
                                     <div class="delete_button">
-                                        <%= render 'base/button/delete' %>
+                                      <%= render 'base/button/delete', link_url: '/my_page/remove_bookmark', params:{Const::Gallery::Key::GALLERY_ACCESS_TOKEN.to_sym => content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]} %>
                                     </div>
                                 </div>
                             </div>
