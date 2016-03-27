@@ -249,3 +249,9 @@ div.float_view {
     }
   }
 }
+
+body.detail {
+  div.float_view {
+    background-color: rgba(33, 33, 33, 0.8) !important;
+  }
+}
