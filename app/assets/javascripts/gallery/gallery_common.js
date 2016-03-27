@@ -150,23 +150,11 @@ GalleryCommon = (function() {
   };
 
   GalleryCommon.calcGridContentsSizeAndStyle = function(imgWidth, imgHeight) {
-    var className, h, r, ret, style, w;
-    r = parseInt(Math.random() * 15);
+    var className, h, ret, style, w;
     className = '';
     style = null;
     w = 180 - (3 * 2);
     h = 180 - 20 - (3 * 2);
-    if (r === 0) {
-      className = 'grid-item-width2 grid-item-height2';
-      w *= 2;
-      h *= 2;
-    } else if (r === 1 || r === 2) {
-      className = 'grid-item-width2';
-      w *= 2;
-    } else if (r === 3 || r === 4) {
-      className = 'grid-item-height2';
-      h *= 2;
-    }
     if (imgHeight / imgWidth > h / w) {
       style = 'width:100%;height:auto;';
     } else {

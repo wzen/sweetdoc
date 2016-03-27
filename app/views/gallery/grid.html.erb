@@ -2,10 +2,10 @@
     <div id="grid_centering_wrapper">
         <div id="grid_wrapper">
             <% @contents.each do |content| %>
-                <%= render 'gallery/grid_contents', content: content %>
+                <%= render 'gallery/grid/grid_contents', content: content %>
             <% end %>
           <% @dummy_contents_length.times do %>
-            <%= render 'gallery/grid_contents', is_blink: true %>
+            <%= render 'gallery/grid/grid_contents', is_blink: true %>
           <% end %>
         </div>
     </div>

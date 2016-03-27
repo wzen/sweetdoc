@@ -1634,7 +1634,9 @@ pre {
 
 @media (min-width: $mediaMinWidth2) {
   .container {
-    width: 970px;
+    width: 100% !important;
+    padding-left: 50px;
+    padding-right: 50px;
   }
 }
 
