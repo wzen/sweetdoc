@@ -252,9 +252,9 @@ div#gallery_contents_wrapper {
     padding: 7px;
   }
 }
-body.grid {
+body.grid, body.detail {
   div#gallery_contents_wrapper {
-    background-image: image_url('base/back3.jpg') !important;
+    background-image: image_url('base/back2.jpg') !important;
   }
 }
 body.detail {
@@ -271,6 +271,9 @@ body.detail {
       background-color: rgba(0, 0, 0, 0.7);
       border-radius: 7px;
     }
+  }
+  #main {
+    background-color: transparent !important;
   }
 }
 
