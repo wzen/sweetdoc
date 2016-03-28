@@ -56,6 +56,9 @@ div#main_gallery_wrapper {
 }
 
 @media (min-width: $mediaMinWidth1) {
+  div#header_wrapper {
+    display: none;
+  }
   div#sidebar_wrapper {
     position: absolute;
     display: block;
@@ -235,7 +238,49 @@ div#main_gallery_wrapper {
 }
 
 @media (max-width: $mediaMaxWidth1) {
-  #sidebar_wrapper {
+  div#header_wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    background-color: #1C1C1C;
+    z-index: 10000;
+    .wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      .left {
+        float: left;
+        .logo_wrapper {
+          display: inline-block;
+          text-align: center;
+          .circle {
+            background-image: image-url("gallery/sidebar/logo.png");
+            background-repeat: no-repeat;
+            -moz-background-size: 24px 24px;
+            background-size: 24px 24px;
+          }
+        }
+        .title_wrapper {
+          display: inline-block;
+          color: #e91e63;
+          font-weight: bold;
+          height: 100%;
+        }
+      }
+      .right {
+        float: right;
+        .menu_wrapper {
+          display: inline-block;
+        }
+        .user_wrapper {
+          display: inline-block;
+        }
+      }
+    }
+  }
+  div#sidebar_wrapper {
     display: none;
   }
 }
@@ -248,9 +293,11 @@ div#gallery_contents_wrapper {
   height: 100%;
   @media (min-width: $mediaMinWidth1) {
     padding-right: 70px;
+    padding-top: 0;
   }
   @media (max-width: $mediaMaxWidth1) {
     padding-right: 0;
+    padding-top: 30px;
   }
 
   overflow: scroll;

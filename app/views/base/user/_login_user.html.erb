@@ -1,6 +1,10 @@
 <%
-   is_gallery = false if is_gallery.nil?
-   size = is_gallery ? 50 : 40
+  is_gallery = false if is_gallery.nil?
+  is_smartphone = false if is_smartphone.nil?
+  size = is_gallery ? 50 : 40
+  size = is_smartphone ? 24 : size
+  sp_class = is_smartphone ? 'sp' : ''
+  show_login_modal = true if show_login_modal.nil?
 %>
 
 <div style="<%= !is_gallery ? 'padding: 5px' : '' %>">
@@ -8,19 +12,27 @@
       <%= link_to '/my_page' do %>
         <!-- ログイン済み -->
         <% if current_user.thumbnail_img.nil? %>
-            <div class="circle <%= Const::Gallery::Sidebar::USER %>">
+            <div class="circle <%= sp_class %> <%= Const::Gallery::Sidebar::USER %>">
               <%= image_tag 'gallery/sidebar/default_user.png' ,size:"#{size}x#{size}" %>
             </div>
         <% else %>
-            <div class="circle <%= Const::Gallery::Sidebar::USER %>">
+            <div class="circle <%= sp_class %> <%= Const::Gallery::Sidebar::USER %>">
               <img src="<%= current_user.thumbnail_img %>" width="<%= size %>" height="<%= size %>" />
             </div>
         <% end %>
       <% end %>
   <% else %>
       <!-- 未ログイン-->
-      <div class="circle <%= Const::Gallery::Sidebar::USER %> guest" onclick="Common.showModalView(constant.ModalViewType.NOTICE_LOGIN); return false;">
-        <%= image_tag 'gallery/sidebar/guest_user.png', size:"#{size}x#{size}" %>
-      </div>
+      <% if show_login_modal %>
+        <div class="circle <%= sp_class %> <%= Const::Gallery::Sidebar::USER %> guest" onclick="Common.showModalView(constant.ModalViewType.NOTICE_LOGIN); return false;">
+          <%= image_tag 'gallery/sidebar/guest_user.png', size:"#{size}x#{size}" %>
+        </div>
+      <% else %>
+          <div class="circle <%= sp_class %> <%= Const::Gallery::Sidebar::USER %> guest">
+            <%= link_to '/user/sign_in' do %>
+                <%= image_tag 'gallery/sidebar/guest_user.png', size:"#{size}x#{size}" %>
+            <% end %>
+          </div>
+      <% end %>
   <% end %>
 </div>

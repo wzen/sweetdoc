@@ -21,15 +21,18 @@
     </script>
 
     <div id="main_gallery_wrapper">
+      <div id="header_wrapper">
+        <%= render 'gallery/header' %>
+      </div>
         <div id="gallery_contents_wrapper" class="sidebar_overlay_parent">
             <div class="wrapper">
                 <%= yield %>
             </div>
         </div>
-        <div id="sidebar_wrapper" class="collapse">
-            <%= render 'gallery/sidebar/sidebar' %>
-            <%= render 'gallery/sidebar/popup' %>
-        </div>
+      <div id="sidebar_wrapper" class="collapse">
+          <%= render 'gallery/sidebar/sidebar' %>
+          <%= render 'gallery/sidebar/popup' %>
+      </div>
     </div>
 
     <%= render 'base/js_init' %>

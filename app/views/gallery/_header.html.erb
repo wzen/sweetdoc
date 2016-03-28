@@ -1,0 +1,24 @@
+<div class="wrapper clearfix">
+  <div class="left">
+    <div class="logo_wrapper">
+      <!-- logo -->
+      <div class="circle sp <%= Const::Gallery::Sidebar::LOGO %>" onclick="Common.showModalView(constant.ModalViewType.ABOUT); return false;"></div>
+    </div>
+    <div class="title_wrapper">
+      Sweetdoc
+    </div>
+  </div>
+  <div class="right">
+    <div class="menu_wrapper">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <%= image_tag 'nav/sp/menu.png' %>
+      </a>
+      <ul class="dropdown-menu" role="menu">
+      </ul>
+    </div>
+    <div class="user_wrapper">
+      <!-- User -->
+      <%= render 'base/user/login_user', is_smartphone: true, show_login_modal: false %>
+    </div>
+  </div>
+</div>
