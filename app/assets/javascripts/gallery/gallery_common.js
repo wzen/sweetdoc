@@ -64,10 +64,10 @@ GalleryCommon = (function() {
   GalleryCommon.resizeMainContainerEvent = function() {};
 
   GalleryCommon.windowWidthType = function() {
-    var mediaMaxWidth2, w;
+    var mediaMaxWidth1, w;
     w = $(window).width();
-    mediaMaxWidth2 = 691;
-    if (w <= mediaMaxWidth2) {
+    mediaMaxWidth1 = 699;
+    if (w <= mediaMaxWidth1) {
       return 0;
     } else {
       return 1;

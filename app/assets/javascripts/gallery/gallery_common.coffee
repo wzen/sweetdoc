@@ -56,9 +56,9 @@ class GalleryCommon
 
   @windowWidthType = ->
     w = $(window).width()
-    # SCSSのmediaMaxWidth2と合わせる
-    mediaMaxWidth2 = 691
-    if w <= mediaMaxWidth2
+    # SCSSのmediaMaxWidth1と合わせる
+    mediaMaxWidth1 = 699
+    if w <= mediaMaxWidth1
       return 0
     else
       return 1
