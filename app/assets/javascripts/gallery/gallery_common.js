@@ -16,35 +16,63 @@ GalleryCommon = (function() {
   };
 
   GalleryCommon.initGridView = function(callback) {
-    var grid;
     if (callback == null) {
       callback = null;
     }
     this.addGridContentsStyle($('.grid_contents_wrapper'));
-    grid = new Masonry('#grid_wrapper', {
+    return this.setupMasonry(this.windowWidthType());
+  };
+
+  GalleryCommon.setupMasonry = function(windowWidthType) {
+    var columnWidth;
+    columnWidth = windowWidthType === 0 ? 100 : 180;
+    if (window.grid != null) {
+      grid.destroy();
+    }
+    window.grid = new Masonry('#grid_wrapper', {
       itemSelector: '.grid_contents_wrapper',
-      columnWidth: 180,
+      columnWidth: columnWidth,
       isAnimated: true,
       animationOptions: {
         duration: 400
       },
       isFitWidth: true
     });
-    grid.on('layoutComplete', (function(_this) {
+    window.grid.on('layoutComplete', (function(_this) {
       return function() {
         return _this.showAllGrid();
       };
     })(this));
-    return grid.layout();
+    return window.grid.layout();
   };
 
   GalleryCommon.initResize = function() {
-    return $(window).resize(function() {
-      return GalleryCommon.resizeMainContainerEvent();
-    });
+    $(window).resize((function(_this) {
+      return function() {
+        var wt;
+        GalleryCommon.resizeMainContainerEvent();
+        wt = _this.windowWidthType();
+        if (window.nowWindowWidthType !== wt) {
+          _this.setupMasonry(wt);
+          return window.nowWindowWidthType = wt;
+        }
+      };
+    })(this));
+    return window.nowWindowWidthType = this.windowWidthType();
   };
 
   GalleryCommon.resizeMainContainerEvent = function() {};
+
+  GalleryCommon.windowWidthType = function() {
+    var mediaMaxWidth2, w;
+    w = $(window).width();
+    mediaMaxWidth2 = 991;
+    if (w <= mediaMaxWidth2) {
+      return 0;
+    } else {
+      return 1;
+    }
+  };
 
   GalleryCommon.showAllGrid = function() {
     return $('#grid_wrapper').find('.grid_contents_wrapper').css('opacity', '');

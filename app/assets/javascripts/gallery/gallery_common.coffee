@@ -16,9 +16,16 @@ class GalleryCommon
   @initGridView: (callback = null) ->
     # Masonry初期化
     @addGridContentsStyle($('.grid_contents_wrapper'))
-    grid = new Masonry('#grid_wrapper', {
+    @setupMasonry(@windowWidthType())
+
+  @setupMasonry: (windowWidthType) ->
+    columnWidth = if windowWidthType == 0 then 100 else 180
+    #console.log('columnWidth:' + columnWidth)
+    if window.grid?
+      grid.destroy()
+    window.grid = new Masonry('#grid_wrapper', {
       itemSelector: '.grid_contents_wrapper'
-      columnWidth: 180
+      columnWidth: columnWidth
       isAnimated: true
       animationOptions: {
         duration: 400
@@ -26,21 +33,34 @@ class GalleryCommon
       isFitWidth: true
     })
     # 描画後イベント
-    grid.on('layoutComplete', =>
+    window.grid.on('layoutComplete', =>
       # 描画実行
       @showAllGrid()
     )
     # 描画実行
-    grid.layout()
+    window.grid.layout()
 
   # リサイズ初期化
   @initResize: ->
-    $(window).resize( ->
+    $(window).resize( =>
       GalleryCommon.resizeMainContainerEvent()
+      wt = @windowWidthType()
+      if window.nowWindowWidthType != wt
+        @setupMasonry(wt)
+        window.nowWindowWidthType = wt
     )
+    window.nowWindowWidthType = @windowWidthType()
 
   # 画面サイズ設定
   @resizeMainContainerEvent = ->
+
+  @windowWidthType = ->
+    w = $(window).width()
+    mediaMaxWidth2 = 991
+    if w <= mediaMaxWidth2
+      return 0
+    else
+      return 1
 
   # グリッド表示
   @showAllGrid = ->

@@ -1,17 +1,4 @@
-/*
-@bgDefault      : #9b59b6;
-@bgHighlight    : #8e44ad;
-@colDefault     : #ecf0f1;
-@colHover   : #ecdbff;
-*/
-
-$mediaMinWidth1 : 300px;
-$mediaMinWidth2 : 992px;
-$mediaMinWidth3 : 1200px;
-$mediaMaxWidth1 : 299px;
-$mediaMaxWidth2 : 991px;
-$mediaMaxWidth3 : 1199px;
-
+@import "common/const";
 
 html {
   //font-family: sans-serif;
