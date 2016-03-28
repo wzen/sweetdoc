@@ -141,6 +141,16 @@ div#main_gallery_wrapper {
         height: 50px !important;
       }
 
+      .title_wrapper {
+        position: absolute;
+        bottom: 100px;
+        left: -26px;
+        color: #e91e63;
+        font-size: 45px;
+        font-family: 'DK_Hangmans_Delight';
+        transform: rotate(-90deg);
+      }
+
       .logo_wrapper {
         position: absolute;
         bottom: 10px;
@@ -252,9 +262,12 @@ div#main_gallery_wrapper {
       height: 100%;
       .left {
         float: left;
+        height: 100%;
         .logo_wrapper {
-          display: inline-block;
+          float: left;
           text-align: center;
+          margin-top: 5px;
+          margin-left: 10px;
           .circle {
             background-image: image-url("gallery/sidebar/logo.png");
             background-repeat: no-repeat;
@@ -263,14 +276,18 @@ div#main_gallery_wrapper {
           }
         }
         .title_wrapper {
-          display: inline-block;
+          float: left;
           color: #e91e63;
+          font-size: 45px;
+          font-family: 'DK_Hangmans_Delight';
           font-weight: bold;
           height: 100%;
+          margin-left: 10px;
         }
       }
       .right {
         float: right;
+        height: 100%;
         .menu_wrapper {
           display: inline-block;
         }

@@ -8,6 +8,11 @@ a {
   cursor: pointer;
 }
 
+@font-face {
+  font-family: 'DK_Hangmans_Delight';
+  src: font-url('DK_Hangmans_Delight.otf');
+}
+
 input.empty:disabled {
   background-color: gray;
 }

@@ -305,6 +305,14 @@
       }
     }
   }
+
+  &.about {
+    .title {
+      font-size: 25px;
+      color: #e91e63;
+      font-family: 'DK_Hangmans_Delight';
+    }
+  }
 }
 
 body.full_window, body.embed_with_run{
