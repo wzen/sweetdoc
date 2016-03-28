@@ -66,7 +66,7 @@ GalleryCommon = (function() {
   GalleryCommon.windowWidthType = function() {
     var mediaMaxWidth2, w;
     w = $(window).width();
-    mediaMaxWidth2 = 991;
+    mediaMaxWidth2 = 691;
     if (w <= mediaMaxWidth2) {
       return 0;
     } else {
