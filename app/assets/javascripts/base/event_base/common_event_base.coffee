@@ -12,3 +12,4 @@ class CommonEventBase extends EventBase
       if callback?
         callback()
     )
+    
