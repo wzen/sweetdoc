@@ -357,6 +357,7 @@ body.full_window, body.embed, body.embed_with_run {
   }
   div#gallery_contents_wrapper {
     padding-right: 0 !important;
+    padding-top: 0 !important;
     .wrapper {
       padding: 0 !important;
     }
@@ -475,6 +476,14 @@ div#detail_wrapper {
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+div#option_wrapper {
+  width: 100%;
+  div.filter_wrapper {
+    float: right;
+    margin-right: 5px;
+  }
 }
 
 div#grid_centering_wrapper {
