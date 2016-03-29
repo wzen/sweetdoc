@@ -661,15 +661,23 @@ class Gallery < ActiveRecord::Base
     return nil
   end
 
-  def self.grid_index(show_head, show_limit, date, tag_ids)
+  def self.grid_index(show_head, show_limit, date, tag_ids, filter_type)
     # TODO: リコメンド取得追加
-    sql =<<-"SQL"
-      (#{grid_contents_sorted_by_createdate_sql(show_head, show_limit)})
-      UNION ALL
-      (#{grid_contents_sorted_by_viewcount_sql(show_head, show_limit, date)})
-      UNION ALL
-      (#{grid_contents_sorted_by_bookmarkcount_sql(show_head, show_limit, date, tag_ids)})
-    SQL
+    if filter_type == Const::Gallery::SearchType::ALL
+      sql =<<-"SQL"
+        (#{grid_contents_sorted_by_createdate_sql(show_head, show_limit)})
+        UNION ALL
+        (#{grid_contents_sorted_by_viewcount_sql(show_head, show_limit, date)})
+        UNION ALL
+        (#{grid_contents_sorted_by_bookmarkcount_sql(show_head, show_limit, date, tag_ids)})
+      SQL
+    elsif filter_type == Const::Gallery::SearchType::CREATED
+      sql = grid_contents_sorted_by_createdate_sql(show_head, show_limit)
+    elsif filter_type == Const::Gallery::SearchType::VIEW_COUNT
+      sql = grid_contents_sorted_by_viewcount_sql(show_head, show_limit, date, tag_ids)
+    elsif filter_type == Const::Gallery::SearchType::BOOKMARK_COUNT
+      sql = grid_contents_sorted_by_bookmarkcount_sql(show_head, show_limit, date, tag_ids)
+    end
     contents = ActiveRecord::Base.connection.select_all(sql)
     if contents.present? && contents.count > 0
       return contents.to_hash

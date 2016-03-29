@@ -10,10 +10,10 @@ class GalleryController < ApplicationController
     # ブックマークしたコンテンツ & タグからの関連コンテンツ & 今日のアクセスTopコンテンツ
     show_head = 0
     show_limit = 50
-    @filter_type = params.fetch(Const::Gallery::Key::FILTER, nil)
+    @filter_type = params.fetch(Const::Gallery::Key::FILTER, Const::Gallery::SearchType::ALL)
     tag_ids = Gallery.get_bookmarked_tag(current_or_guest_user.id)
     date = Date.today
-    contents = Gallery.grid_index(show_head, show_limit, date, tag_ids)
+    contents = Gallery.grid_index(show_head, show_limit, date, tag_ids, @filter_type)
     if contents.present?
       @contents = contents.uniq{|u| u[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]}
     else
