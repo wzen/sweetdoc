@@ -379,6 +379,8 @@ body.embed {
     overflow: hidden;
     > div {
       display: table;
+      width: 100%;
+      height: 100%;
       > div {
         display: table-cell;
         text-align: center;
