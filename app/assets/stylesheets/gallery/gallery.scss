@@ -291,6 +291,8 @@ div#main_gallery_wrapper {
         height: 100%;
         .menu_wrapper {
           display: inline-block;
+          width: 60px;
+          text-align: center;
         }
         .user_wrapper {
           display: inline-block;
@@ -487,6 +489,10 @@ div#detail_wrapper {
 
 div#option_wrapper {
   width: 100%;
+  margin-bottom: 7px;
+  @media (max-width: $mediaMaxWidth1) {
+    display: none !important;
+  }
   div.filter_wrapper {
     float: right;
     margin-right: 5px;
@@ -632,7 +638,7 @@ div#grid_wrapper {
             font-weight: bold;
             color: white;
           }
-          &.view_count {
+          &.vc {
             background-color: rgba(255, 0, 0, 0.5);
             .title_wrapper {
               font-size: 16px;
@@ -640,7 +646,7 @@ div#grid_wrapper {
               color: white;
             }
           }
-          &.bookmark_count {
+          &.bc {
             background-color: rgba(255, 0, 0, 0.5);
             .title_wrapper {
               font-size: 16px;
@@ -648,7 +654,7 @@ div#grid_wrapper {
               color: white;
             }
           }
-          &.user_bookmark {
+          &.rc {
             background-color: rgba(0, 0, 255, 0.5);
             .title_wrapper {
               font-size: 16px;
@@ -656,7 +662,7 @@ div#grid_wrapper {
               color: white;
             }
           }
-          &.created {
+          &.cr {
             background-color: rgba(0, 255, 0, 0.5);
             .title_wrapper {
               font-size: 16px;

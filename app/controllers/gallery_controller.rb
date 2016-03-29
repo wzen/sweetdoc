@@ -10,6 +10,7 @@ class GalleryController < ApplicationController
     # ブックマークしたコンテンツ & タグからの関連コンテンツ & 今日のアクセスTopコンテンツ
     show_head = 0
     show_limit = 50
+    @filter_type = params.fetch(Const::Gallery::Key::FILTER, nil)
     tag_ids = Gallery.get_bookmarked_tag(current_or_guest_user.id)
     date = Date.today
     contents = Gallery.grid_index(show_head, show_limit, date, tag_ids)

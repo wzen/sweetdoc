@@ -1,14 +1,43 @@
+<%
+  if @filter_type.present?
+    filter_type = @filter_type
+  else
+    filter_type = Const::Gallery::SearchType::ALL
+  end
+%>
+
 <form name="send_form">
-    <div id="grid_centering_wrapper">
-        <div id="grid_wrapper">
-            <% @contents.each do |content| %>
-                <%= render 'gallery/grid/grid_contents', content: content %>
-            <% end %>
-          <% @dummy_contents_length.times do %>
-            <%= render 'gallery/grid/grid_contents', is_blink: true %>
+  <div id="option_wrapper" class="clearfix">
+    <div class="filter_wrapper">
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+          <% if filter_type == Const::Gallery::SearchType::ALL %>
+              <%= image_tag 'gallery/filter.png' %>
+          <% elsif filter_type == Const::Gallery::SearchType::CREATED %>
+              <%= image_tag 'gallery/filtered.png' %> <%= I18n.t('gallery.filter.new') %>
+          <% elsif filter_type == Const::Gallery::SearchType::VIEW_COUNT %>
+              <%= image_tag 'gallery/filtered.png' %> <%= I18n.t('gallery.filter.view_count') %>
+          <% elsif filter_type == Const::Gallery::SearchType::BOOKMARK_COUNT %>
+              <%= image_tag 'gallery/filtered.png' %> <%= I18n.t('gallery.filter.bookmark_count') %>
+          <% elsif filter_type == Const::Gallery::SearchType::RECOMMEND %>
+              <%= image_tag 'gallery/filtered.png' %> <%= I18n.t('gallery.filter.recommend') %>
           <% end %>
-        </div>
+          <span class="caret"></span>
+        </button>
+        <%= render 'gallery/grid/filter_dropdown_list' %>
+      </div>
     </div>
+  </div>
+  <div id="grid_centering_wrapper">
+      <div id="grid_wrapper">
+          <% @contents.each do |content| %>
+              <%= render 'gallery/grid/grid_contents', content: content %>
+          <% end %>
+        <% @dummy_contents_length.times do %>
+          <%= render 'gallery/grid/grid_contents', is_blink: true %>
+        <% end %>
+      </div>
+  </div>
 </form>
 
 <%= javascript_include_tag 'pipeline/gallery', 'data-turbolinks-track' => true %>

@@ -281,8 +281,6 @@ class Const
       TITLE = 'title'
       CAPTION = 'caption'
       ITEM_JS_LIST = 'item_js_list'
-      VIEW_COUNT = 'view_count'
-      BOOKMARK_COUNT = 'bookmark_count'
       RECOMMEND_SOURCE_WORD = 'recommend_source_word'
       NOTE = 'note'
       SHOW_GUIDE = 'show_guide'
@@ -294,6 +292,7 @@ class Const
       TAG_ID = 'tag_id'
       TAG_NAME = 'tag_name'
       UPLOAD_OVERWRITE_GALLERY_TOKEN = 'upload_overwrite_gallery_token'
+      FILTER = 'ft'
     end
 
     class SearchKey
@@ -305,10 +304,12 @@ class Const
     end
 
     class SearchType
-      VIEW_COUNT = 'view_count'
-      BOOKMARK_COUNT = 'bookmark_count'
-      USER_BOOKMARK = 'user_bookmark'
-      CREATED = 'created'
+      ALL = 'all'
+      VIEW_COUNT = 'vc'
+      BOOKMARK_COUNT = 'bc'
+      USER_BOOKMARK = 'ub'
+      CREATED = 'cr'
+      RECOMMEND = 'rc'
     end
 
     class Sidebar

@@ -1,5 +1,4 @@
 class GalleryCommon
-
   # ビュー初期化
   @initView: ->
     # 変数初期化

@@ -569,8 +569,8 @@ class Gallery < ActiveRecord::Base
       item_js_list = ItemJs.get_item_gallery(class_dist_tokens)
 
       # 閲覧数 & ブックマーク数を取得
-      gallery_view_count = ret['bookmark_count']
-      gallery_bookmark_count = ret['view_count']
+      gallery_view_count = ret['view_count']
+      gallery_bookmark_count = ret['bookmark_count']
 
       pagevalues, creator = Run.setup_data(ret['user_id'].to_i, gpd, ipd, epd, fpd, page_num)
 
@@ -662,6 +662,7 @@ class Gallery < ActiveRecord::Base
   end
 
   def self.grid_index(show_head, show_limit, date, tag_ids)
+    # TODO: リコメンド取得追加
     sql =<<-"SQL"
       (#{grid_contents_sorted_by_createdate_sql(show_head, show_limit)})
       UNION ALL

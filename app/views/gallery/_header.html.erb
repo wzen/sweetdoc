@@ -13,10 +13,9 @@
   <div class="right">
     <div class="menu_wrapper">
       <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-        <%= image_tag 'nav/sp/menu.png' %>
+        <%= image_tag 'nav/sp/menu.png', size: '50x50' %>
       </a>
-      <ul class="dropdown-menu" role="menu">
-      </ul>
+      <%= render 'gallery/grid/filter_dropdown_list' %>
     </div>
     <div class="user_wrapper">
       <!-- User -->

@@ -139,6 +139,13 @@ en:
   gallery:
     bookmark_button: "Bookmark"
     input_note: "Comment..."
+    filter:
+      label: "Filter"
+      all: "None"
+      new: "New post"
+      view_count: "Most views"
+      bookmark_count: "Most bookmarks"
+      recommend: "Recommend"
   upload_confirm:
     title: "Title name"
     caption: "Caption"

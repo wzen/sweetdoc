@@ -116,6 +116,13 @@ ja:
   gallery:
     bookmark_button: "ブックマークする"
     input_note: "コメントを入力"
+    filter:
+      label: "表示フィルター"
+      all: "無し"
+      new: "新着"
+      view_count: "閲覧数"
+      bookmark_count: "ブックマーク数"
+      recommend: "リコメンド"
   upload_confirm:
     title: "タイトル名"
     caption: "説明"

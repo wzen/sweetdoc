@@ -13,8 +13,8 @@
             <%= image_tag 'gallery/default_thumbnail/new.png', size: '64x64' %>
         <% elsif content[Const::Gallery::Key::SEARCH_TYPE] == Const::Gallery::SearchType::VIEW_COUNT || content[Const::Gallery::Key::SEARCH_TYPE] == Const::Gallery::SearchType::BOOKMARK_COUNT %>
             <%= image_tag 'gallery/default_thumbnail/hot.png', size: '64x64' %>
-        <% elsif content[Const::Gallery::Key::SEARCH_TYPE] == Const::Gallery::SearchType::USER_BOOKMARK %>
-            <%= image_tag 'gallery/default_thumbnail/bookmark.png', size: '64x64' %>
+        <% elsif content[Const::Gallery::Key::SEARCH_TYPE] == Const::Gallery::SearchType::RECOMMEND %>
+            <%= image_tag 'gallery/default_thumbnail/recommend.png', size: '64x64' %>
         <% else %>
             <%= image_tag 'gallery/default_thumbnail/normal.png', size: '64x64' %>
         <% end %>

@@ -1,0 +1,37 @@
+<%
+  if @filter_type.present?
+    filter_type = @filter_type
+  else
+    filter_type = Const::Gallery::SearchType::ALL
+  end
+%>
+
+<ul class="dropdown-menu dropdown-menu-right grid_filter">
+  <li class="dropdown-header"><%= I18n.t('gallery.filter.label') %></li>
+  <li class="<%= 'active' if filter_type == Const::Gallery::SearchType::ALL  %>">
+    <a href='/gallery/grid'>
+      <%= I18n.t('gallery.filter.all') %>
+    </a>
+  </li>
+  <li class="<%= 'active' if filter_type == Const::Gallery::SearchType::CREATED  %>">
+    <span></span>
+    <a href="/gallery/grid?<%= Const::Gallery::Key::FILTER %>=<%= Const::Gallery::SearchType::CREATED %>">
+      <%= I18n.t('gallery.filter.new') %>
+    </a>
+  </li>
+  <li class="<%= 'active' if filter_type == Const::Gallery::SearchType::VIEW_COUNT  %>">
+    <a href="/gallery/grid?<%= Const::Gallery::Key::FILTER %>=<%= Const::Gallery::SearchType::VIEW_COUNT %>">
+      <%= I18n.t('gallery.filter.view_count') %>
+    </a>
+  </li>
+  <li class="<%= 'active' if filter_type == Const::Gallery::SearchType::BOOKMARK_COUNT  %>">
+    <a href="/gallery/grid?<%= Const::Gallery::Key::FILTER %>=<%= Const::Gallery::SearchType::BOOKMARK_COUNT %>">
+      <%= I18n.t('gallery.filter.bookmark_count') %>
+    </a>
+  </li>
+  <li class="<%= 'active' if filter_type == Const::Gallery::SearchType::RECOMMEND  %>">
+    <a href="/gallery/grid?<%= Const::Gallery::Key::FILTER %>=<%= Const::Gallery::SearchType::RECOMMEND %>">
+      <%= I18n.t('gallery.filter.recommend') %>
+    </a>
+  </li>
+</ul>
