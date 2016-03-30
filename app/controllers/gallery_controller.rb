@@ -1,4 +1,5 @@
 require 'gallery/gallery'
+require 'gallery/gallery_grid_contents'
 
 class GalleryController < ApplicationController
   #before_action :authenticate_user!
@@ -8,17 +9,12 @@ class GalleryController < ApplicationController
 
   def grid
     # ブックマークしたコンテンツ & タグからの関連コンテンツ & 今日のアクセスTopコンテンツ
-    show_head = 0
-    show_limit = 50
+    page = params[:page] || 1
     @filter_type = params.fetch(Const::Gallery::Key::FILTER, Const::Gallery::SearchType::ALL)
     tag_ids = Gallery.get_bookmarked_tag(current_or_guest_user.id)
     date = Date.today
-    contents = Gallery.grid_index(show_head, show_limit, date, tag_ids, @filter_type)
-    if contents.present?
-      @contents = contents.uniq{|u| u[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]}
-    else
-      @contents = {}
-    end
+    @ggc = GalleryGridContents.new(page, date, tag_ids, @filter_type)
+    @contents = @ggc.all
     @dummy_contents_length = 0
     if @contents.length < Const::GRID_CONTENTS_DISPLAY_MIN
       @dummy_contents_length = Const::GRID_CONTENTS_DISPLAY_MIN - @contents.length
@@ -108,16 +104,6 @@ class GalleryController < ApplicationController
     i_page_values = params.require(Const::Gallery::Key::INSTANCE_PAGE_VALUE)
     e_page_values = params.require(Const::Gallery::Key::EVENT_PAGE_VALUE)
     @result_success, @message = Gallery.update_last_state(user_id, tags, i_page_values, e_page_values)
-  end
-
-  def get_contents(show_head, show_limit, tag_id)
-    show_head = params.require(Const::Gallery::SearchKey::SHOW_HEAD).to_i
-    show_limit = params.require(Const::Gallery::SearchKey::SHOW_LIMIT).to_i
-    search_type = params.require(Const::Gallery::SearchKey::SEARCH_TYPE)
-    tag_id = params.require(Const::Gallery::SearchKey::TAG_ID).to_i
-    date = params.require(Const::Gallery::SearchKey::DATE)
-    contents = Gallery.get_list_contents(search_type, show_head, show_limit, tag_id, date)
-    @result_success, @contents = true, contents.uniq{|u| u[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]}
   end
 
   def get_popular_and_recommend_tags

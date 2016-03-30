@@ -493,6 +493,15 @@ div#option_wrapper {
   @media (max-width: $mediaMaxWidth1) {
     display: none !important;
   }
+  div.paging_wrapper {
+    float: left;
+    width: 100%;
+    text-align: center;
+    margin-right: -100px;
+    .pagination {
+      margin: 10px;
+    }
+  }
   div.filter_wrapper {
     float: right;
     margin-right: 5px;

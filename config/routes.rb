@@ -79,7 +79,6 @@ Rails.application.routes.draw do
   post 'gallery/embed_with_run'
   post 'gallery/save_state'
   post 'gallery/update_last_state'
-  get 'gallery/get_contents'
   get 'gallery/get_popular_and_recommend_tags'
   post 'gallery/add_bookmark'
   post 'gallery/remove_bookmark'
