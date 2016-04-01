@@ -51,6 +51,76 @@ class GalleryCommon
     )
     window.nowWindowWidthType = @windowWidthType()
 
+  @initContentsHover = ->
+    $('.grid_contents_wrapper').off('mouseenter').on('mouseenter', (e) ->
+      e.preventDefault()
+      $(@).find('.hover_overlay').stop(true, true).fadeIn('100')
+    )
+    $('.grid_contents_wrapper').off('mouseleave').on('mouseleave', (e) ->
+      e.preventDefault()
+      $(@).find('.hover_overlay').stop(true, true).fadeOut('300')
+    )
+
+  @initLoadMoreButtonEvent = ->
+    $(".footer_button > button").click( =>
+      if !window.contentsTakeCount? || !window.contentsTotalCount?
+        $('#footer_button_wrapper').hide()
+        Common.hideModalView(true)
+        return false
+      if !window.gridPage?
+        window.gridPage = 1
+      Common.showModalFlashMessage('Loading...')
+      data = {}
+      data['page'] = window.gridPage
+      data[constant.Gallery.Key.FILTER] = @getFilterType()
+      $.ajax(
+        {
+          url: "/gallery/grid_ajax"
+          type: "GET"
+          dataType: "html"
+          data: data
+          success: (data) ->
+            if data?
+              d = GalleryCommon.addGridContentsStyle($(data.trim()).filter('.grid_contents_wrapper'))
+              if d? && d.length > 0
+                $grid = $('#grid_wrapper')
+                $grid.append(d).masonry('appended' ,d)
+                window.contentsTakeCount += d.length
+                if window.contentsTakeCount >= window.contentsTotalCount
+                  $('#footer_button_wrapper').hide()
+                window.gridPage += 1
+              else
+                $('#footer_button_wrapper').hide()
+              Common.hideModalView(true)
+            else
+              console.log('/gallery/grid_ajax server error')
+              Common.ajaxError(data)
+              Common.hideModalView(true)
+          error: (data)->
+            console.log('/gallery/grid_ajax ajax error')
+            Common.ajaxError(data)
+            Common.hideModalView(true)
+        }
+      )
+      return false
+    )
+
+  @getFilterType = ->
+    locationPaths = window.location.href.split('/')
+    l = locationPaths[locationPaths.length - 1].split('?')
+    if l.length < 2
+      # フィルタ無し
+      return null
+    else
+      params = l[1].split('&')
+      ret = null
+      for param in params
+        p = param.split('=')
+        if p[0] == constant.Gallery.Key.FILTER
+          ret = p[1]
+          break
+      return ret
+
   # 画面サイズ設定
   @resizeMainContainerEvent = ->
 

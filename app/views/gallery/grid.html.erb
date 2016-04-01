@@ -39,14 +39,22 @@
           <%= render 'gallery/grid/grid_contents', is_blink: true %>
         <% end %>
     </div>
-    <div id="footer_button_wrapper">
-      <div class="footer_button">
-        <button class="button_white withSeeThough">
-          Load more
-        </button>
+    <% if @contents.length < @total_count %>
+      <div id="footer_button_wrapper">
+        <div class="footer_button">
+          <button class="button_white withSeeThough">
+            Load more
+          </button>
+        </div>
       </div>
-    </div>
+    <% end %>
   </div>
 </form>
 
 <%= javascript_include_tag 'pipeline/gallery', 'data-turbolinks-track' => true %>
+
+<script type="text/javascript">
+  window.contentsTotalCount = <%= @total_count %>
+  window.contentsTakeCount = <%= @contents.length %>
+  window.gridPage = 1
+</script>

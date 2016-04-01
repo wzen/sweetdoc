@@ -9,12 +9,12 @@ class GalleryController < ApplicationController
 
   def grid
     _get_grid_contents(params[:page] || 1)
+    @total_count = @ggc.total_pages
   end
 
   def grid_ajax
     # ブックマークしたコンテンツ & タグからの関連コンテンツ & 今日のアクセスTopコンテンツ
-    #page = params[:page]
-    page = 1
+    page = params[:page]
     if page.present?
       _get_grid_contents(page)
     end
@@ -24,6 +24,9 @@ class GalleryController < ApplicationController
   def _get_grid_contents(page)
     # ブックマークしたコンテンツ & タグからの関連コンテンツ & 今日のアクセスTopコンテンツ
     @filter_type = params.fetch(Const::Gallery::Key::FILTER, Const::Gallery::SearchType::ALL)
+    if @filter_type.blank?
+      @filter_type = Const::Gallery::SearchType::ALL
+    end
     tag_ids = Gallery.get_bookmarked_tag(current_or_guest_user.id)
     date = Date.today
     @ggc = GalleryGridContents.new(page, date, tag_ids, @filter_type)

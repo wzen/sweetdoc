@@ -62,6 +62,92 @@ GalleryCommon = (function() {
     return window.nowWindowWidthType = this.windowWidthType();
   };
 
+  GalleryCommon.initContentsHover = function() {
+    $('.grid_contents_wrapper').off('mouseenter').on('mouseenter', function(e) {
+      e.preventDefault();
+      return $(this).find('.hover_overlay').stop(true, true).fadeIn('100');
+    });
+    return $('.grid_contents_wrapper').off('mouseleave').on('mouseleave', function(e) {
+      e.preventDefault();
+      return $(this).find('.hover_overlay').stop(true, true).fadeOut('300');
+    });
+  };
+
+  GalleryCommon.initLoadMoreButtonEvent = function() {
+    return $(".footer_button > button").click((function(_this) {
+      return function() {
+        var data;
+        if ((window.contentsTakeCount == null) || (window.contentsTotalCount == null)) {
+          $('#footer_button_wrapper').hide();
+          Common.hideModalView(true);
+          return false;
+        }
+        if (window.gridPage == null) {
+          window.gridPage = 1;
+        }
+        Common.showModalFlashMessage('Loading...');
+        data = {};
+        data['page'] = window.gridPage;
+        data[constant.Gallery.Key.FILTER] = _this.getFilterType();
+        $.ajax({
+          url: "/gallery/grid_ajax",
+          type: "GET",
+          dataType: "html",
+          data: data,
+          success: function(data) {
+            var $grid, d;
+            if (data != null) {
+              d = GalleryCommon.addGridContentsStyle($(data.trim()).filter('.grid_contents_wrapper'));
+              if ((d != null) && d.length > 0) {
+                $grid = $('#grid_wrapper');
+                $grid.append(d).masonry('appended', d);
+                window.contentsTakeCount += d.length;
+                if (window.contentsTakeCount >= window.contentsTotalCount) {
+                  $('#footer_button_wrapper').hide();
+                }
+                window.gridPage += 1;
+              } else {
+                $('#footer_button_wrapper').hide();
+              }
+              return Common.hideModalView(true);
+            } else {
+              console.log('/gallery/grid_ajax server error');
+              Common.ajaxError(data);
+              return Common.hideModalView(true);
+            }
+          },
+          error: function(data) {
+            console.log('/gallery/grid_ajax ajax error');
+            Common.ajaxError(data);
+            return Common.hideModalView(true);
+          }
+        });
+        return false;
+      };
+    })(this));
+  };
+
+  GalleryCommon.getFilterType = function() {
+    var i, l, len, locationPaths, p, param, params, ret;
+    locationPaths = window.location.href.split('/');
+    l = locationPaths[locationPaths.length - 1].split('?');
+    if (l.length < 2) {
+      return null;
+    } else {
+      params = l[1].split('&');
+      ret = null;
+      for (i = 0, len = params.length; i < len; i++) {
+        param = params[i];
+        p = param.split('=');
+        if (p[0] === constant.Gallery.Key.FILTER) {
+          ret = p[1];
+          break;
+        }
+      }
+      return ret;
+    }
+  };
+
   GalleryCommon.resizeMainContainerEvent = function() {};
 
   GalleryCommon.windowWidthType = function() {
