@@ -20,9 +20,10 @@ class GalleryCommon
   @setupMasonry: (windowWidthType) ->
     columnWidth = if windowWidthType == 0 then 100 else 180
     #console.log('columnWidth:' + columnWidth)
-    if window.grid?
-      grid.destroy()
-    window.grid = new Masonry('#grid_wrapper', {
+    $grid = $('#grid_wrapper')
+    if $grid.data('masonry')?
+      $grid.masonry('destroy')
+    $grid.masonry({
       itemSelector: '.grid_contents_wrapper'
       columnWidth: columnWidth
       isAnimated: true
@@ -32,12 +33,12 @@ class GalleryCommon
       isFitWidth: true
     })
     # 描画後イベント
-    window.grid.on('layoutComplete', =>
+    $grid.one('layoutComplete', =>
       # 描画実行
       @showAllGrid()
     )
     # 描画実行
-    window.grid.layout()
+    $grid.masonry('layout')
 
   # リサイズ初期化
   @initResize: ->
@@ -108,12 +109,12 @@ class GalleryCommon
             if callback?
               callback(true)
           else
-            console.log('/project/remove server error')
+            console.log('/gallery/add_bookmark server error')
             Common.ajaxError(data)
             if callback?
               callback(false)
         error: (data)->
-          console.log('/project/remove ajax error')
+          console.log('/gallery/add_bookmark ajax error')
           Common.ajaxError(data)
           if callback?
             callback(false)

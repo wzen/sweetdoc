@@ -24,12 +24,13 @@ GalleryCommon = (function() {
   };
 
   GalleryCommon.setupMasonry = function(windowWidthType) {
-    var columnWidth;
+    var $grid, columnWidth;
     columnWidth = windowWidthType === 0 ? 100 : 180;
-    if (window.grid != null) {
-      grid.destroy();
+    $grid = $('#grid_wrapper');
+    if ($grid.data('masonry') != null) {
+      $grid.masonry('destroy');
     }
-    window.grid = new Masonry('#grid_wrapper', {
+    $grid.masonry({
       itemSelector: '.grid_contents_wrapper',
       columnWidth: columnWidth,
       isAnimated: true,
@@ -38,12 +39,12 @@ GalleryCommon = (function() {
       },
       isFitWidth: true
     });
-    window.grid.on('layoutComplete', (function(_this) {
+    $grid.one('layoutComplete', (function(_this) {
       return function() {
         return _this.showAllGrid();
       };
     })(this));
-    return window.grid.layout();
+    return $grid.masonry('layout');
   };
 
   GalleryCommon.initResize = function() {
@@ -125,7 +126,7 @@ GalleryCommon = (function() {
             return callback(true);
           }
         } else {
-          console.log('/project/remove server error');
+          console.log('/gallery/add_bookmark server error');
           Common.ajaxError(data);
           if (callback != null) {
             return callback(false);
@@ -133,7 +134,7 @@ GalleryCommon = (function() {
         }
       },
       error: function(data) {
-        console.log('/project/remove ajax error');
+        console.log('/gallery/add_bookmark ajax error');
         Common.ajaxError(data);
         if (callback != null) {
           return callback(false);

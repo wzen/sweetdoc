@@ -8,7 +8,7 @@
 //= require ../../../../vendor/assets/bootstrap/bootstrap.min.js
 //= require ../../../../vendor/assets/masonry/masonry.pkgd.min.js
 //= require ../../../../vendor/assets/jquery_readyselector/jquery.readyselector
-//= require ../../../../vendor/assets/infinitescroll/jquery.infinitescroll.min.js
+// require ../../../../vendor/assets/infinitescroll/jquery.infinitescroll.js
 //= require_directory ./../i18n
 //= require base/constant
 //= require base/common

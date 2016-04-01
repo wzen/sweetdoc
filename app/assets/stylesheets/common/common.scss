@@ -419,6 +419,24 @@ div.item_wrapper {
   margin: auto;
 }
 
+.button_white {
+  background: #fff;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  font-family: Arial;
+  color: #1115c2;
+  font-size: 13px;
+  padding: 5px 10px 5px 10px;
+  border: solid #1115c2 1px;
+  &.width90per {
+    width: 90%;
+  }
+  &.withSeeThough {
+    background-color: rgba(255, 255, 255, 0.5) !important;
+  }
+}
+
 .button_red {
   background: #e62e4d;
   background-image: -webkit-linear-gradient(top, #e62e4d, #c91414);

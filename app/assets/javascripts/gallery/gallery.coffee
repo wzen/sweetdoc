@@ -2,6 +2,7 @@ class GalleryGrid
 
   @initEvent = ->
     @initContentsHover()
+    @initLoadMoreButtonEvent()
 
   @initContentsHover = ->
     $('.grid_contents_wrapper').off('mouseenter').on('mouseenter', (e) ->
@@ -11,6 +12,31 @@ class GalleryGrid
     $('.grid_contents_wrapper').off('mouseleave').on('mouseleave', (e) ->
       e.preventDefault()
       $(@).find('.hover_overlay').stop(true, true).fadeOut('300')
+    )
+
+  @initLoadMoreButtonEvent = ->
+    $(".footer_button > button").click( ->
+      Common.showModalFlashMessage('Loading...')
+      $.ajax(
+        {
+          url: "/gallery/grid_ajax"
+          type: "GET"
+          dataType: "html"
+          success: (data)->
+            if data?
+              d = GalleryCommon.addGridContentsStyle($(data.trim()).filter('.grid_contents_wrapper'))
+              $grid = $('#grid_wrapper')
+              $grid.append(d).masonry('appended' ,d)
+              Common.hideModalView(true)
+            else
+              console.log('/gallery/grid_ajax server error')
+              Common.ajaxError(data)
+          error: (data)->
+            console.log('/gallery/grid_ajax ajax error')
+            Common.ajaxError(data)
+        }
+      )
+      return false
     )
 
 $ ->

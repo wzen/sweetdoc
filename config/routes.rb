@@ -69,6 +69,7 @@ Rails.application.routes.draw do
   # Gallery
   get 'gallery/index'
   get 'gallery/grid'
+  get 'gallery/grid_ajax'
   get 'gallery/detail'
   match 'gallery/detail/:g_at' => 'gallery#detail', via: :get
   get 'gallery/full_window'

@@ -12,7 +12,7 @@ class GalleryGridContents
   end
 
   def total_pages
-    0
+    100
   end
 
   def limit_value

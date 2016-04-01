@@ -5,7 +5,8 @@ GalleryGrid = (function() {
   function GalleryGrid() {}
 
   GalleryGrid.initEvent = function() {
-    return this.initContentsHover();
+    this.initContentsHover();
+    return this.initLoadMoreButtonEvent();
   };
 
   GalleryGrid.initContentsHover = function() {
@@ -16,6 +17,34 @@ GalleryGrid = (function() {
     return $('.grid_contents_wrapper').off('mouseleave').on('mouseleave', function(e) {
       e.preventDefault();
       return $(this).find('.hover_overlay').stop(true, true).fadeOut('300');
+    });
+  };
+
+  GalleryGrid.initLoadMoreButtonEvent = function() {
+    return $(".footer_button > button").click(function() {
+      Common.showModalFlashMessage('Loading...');
+      $.ajax({
+        url: "/gallery/grid_ajax",
+        type: "GET",
+        dataType: "html",
+        success: function(data) {
+          var $grid, d;
+          if (data != null) {
+            d = GalleryCommon.addGridContentsStyle($(data.trim()).filter('.grid_contents_wrapper'));
+            $grid = $('#grid_wrapper');
+            $grid.append(d).masonry('appended', d);
+            return Common.hideModalView(true);
+          } else {
+            console.log('/gallery/grid_ajax server error');
+            return Common.ajaxError(data);
+          }
+        },
+        error: function(data) {
+          console.log('/gallery/grid_ajax ajax error');
+          return Common.ajaxError(data);
+        }
+      });
+      return false;
     });
   };
 

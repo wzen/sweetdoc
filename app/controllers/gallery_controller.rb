@@ -8,8 +8,21 @@ class GalleryController < ApplicationController
   end
 
   def grid
+    _get_grid_contents(params[:page] || 1)
+  end
+
+  def grid_ajax
     # ブックマークしたコンテンツ & タグからの関連コンテンツ & 今日のアクセスTopコンテンツ
-    page = params[:page] || 1
+    #page = params[:page]
+    page = 1
+    if page.present?
+      _get_grid_contents(page)
+    end
+    render layout: false
+  end
+
+  def _get_grid_contents(page)
+    # ブックマークしたコンテンツ & タグからの関連コンテンツ & 今日のアクセスTopコンテンツ
     @filter_type = params.fetch(Const::Gallery::Key::FILTER, Const::Gallery::SearchType::ALL)
     tag_ids = Gallery.get_bookmarked_tag(current_or_guest_user.id)
     date = Date.today
@@ -138,6 +151,6 @@ class GalleryController < ApplicationController
     end
   end
 
-  private :_take_gallery_data
+  private :_take_gallery_data, :_get_grid_contents
 
 end

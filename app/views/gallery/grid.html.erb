@@ -31,14 +31,21 @@
     </div>
   </div>
   <div id="grid_centering_wrapper">
-      <div id="grid_wrapper">
-          <% @contents.each do |content| %>
-              <%= render 'gallery/grid/grid_contents', content: content %>
-          <% end %>
+    <div id="grid_wrapper">
+        <% @contents.each do |content| %>
+            <%= render 'gallery/grid/grid_contents', content: content %>
+        <% end %>
         <% @dummy_contents_length.times do %>
           <%= render 'gallery/grid/grid_contents', is_blink: true %>
         <% end %>
+    </div>
+    <div id="footer_button_wrapper">
+      <div class="footer_button">
+        <button class="button_white withSeeThough">
+          Load more
+        </button>
       </div>
+    </div>
   </div>
 </form>
 
