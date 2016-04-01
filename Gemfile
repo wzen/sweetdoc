@@ -107,7 +107,7 @@ gem 'whenever', '0.9.4'
 gem 'geoip'
 
 # For Paging
-gem 'kaminari', '0.16.3'
+#gem 'kaminari', '0.16.3'
 
 #gem 'ruby-debug-ide'
 
