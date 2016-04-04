@@ -1097,6 +1097,20 @@ div#nav {
   }
 }
 
+#menu-action-item_gallery {
+  > div {
+    display: inline-block;
+  }
+  .icon {
+    vertical-align: bottom;
+    background-image: image-url("nav/item_gallery.png");
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
 #menu-action-coding {
   > div {
     display: inline-block;

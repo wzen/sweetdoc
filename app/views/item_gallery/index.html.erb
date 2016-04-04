@@ -26,6 +26,8 @@
             <% @contents.each do |content| %>
                 <%= render 'item_gallery/parts/item_contents_row', content: content, editable: false, show_caption: false %>
             <% end %>
+        <% else %>
+          <%= render 'item_gallery/blank' %>
         <% end %>
     </div>
 </div>

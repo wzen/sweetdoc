@@ -42,7 +42,8 @@ en:
       preload_item: "Default items"
       added_item: "Added items"
       edit: "Edit"
-      item_coding: "Create Item(For Dev)"
+      item_gallery: "Item gallery"
+      item_coding: "Create item(for dev)"
     motion_check:
       title: "Motion Check"
       newtab: "New Tab"
@@ -180,6 +181,9 @@ en:
       using_items_link_description: "Don't want to use a made item?"
     message:
       default_delete_message: "This operation can't undo"
+  item_gallery:
+    description: "There is no updated items"
+    link_description : "Don't want to make a item?"
   embed:
     caption:
       play_in_site: "Read in Sweetdoc"

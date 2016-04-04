@@ -56,9 +56,18 @@
                          <li class="divider"></li>
                         <li><a id="menu-action-edit" class="menu-item"><%= t('header_menu.action.edit') %></a></li>
                         <li class="divider"></li>
+                        <li>
+                          <a id="menu-action-item_gallery" class="menu-item href" href="/item_gallery/">
+                            <div class="icon">
+                            </div>
+                            <div>
+                              <%= t('header_menu.action.item_gallery') %>
+                            </div>
+                          </a>
+                        </li>
                         <% if user_signed_in? %>
                           <li>
-                            <a id="menu-action-coding" class="menu-item href" href="coding/item" target="_coding">
+                            <a id="menu-action-coding" class="menu-item href" href="/coding/item">
                               <div class="icon">
                               </div>
                               <div>

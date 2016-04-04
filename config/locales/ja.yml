@@ -21,6 +21,7 @@ ja:
       preload_item: "標準アイテム"
       added_item: "追加アイテム"
       edit: "編集"
+      item_gallery: "アイテムギャラリー"
       item_coding: "アイテム作成(開発者向け)"
     motion_check:
       title: "動作確認"
@@ -157,6 +158,9 @@ ja:
       using_items_link_description: "アイテムを使用する"
     message:
       default_delete_message: "削除してよろしいですか？"
+  item_gallery:
+    description: "アップロードされたアイテムはありません"
+    link_description: "アイテムを作成する"
   embed:
     caption:
       play_in_site: "元サイトで閲覧"

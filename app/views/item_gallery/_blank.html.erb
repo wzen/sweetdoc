@@ -1,0 +1,18 @@
+<%
+  description = I18n.t('item_gallery.description')
+  link = '/coding/item'
+  link_discription = I18n.t('item_gallery.link_description')
+%>
+<div class="blank">
+  <div>
+    <div class="image">
+      <%= image_tag 'mypage/empty.png', size: '128x128' %>
+    </div>
+    <div class="description">
+      <%= description %>
+    </div>
+    <div class="link">
+      <%= link_to link_discription, link %>
+    </div>
+  </div>
+</div>
