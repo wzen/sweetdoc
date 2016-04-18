@@ -298,9 +298,9 @@ ActiveRecord::Schema.define(version: 20151209141157) do
   add_index "project_gallery_maps", ["user_project_map_id", "gallery_id"], name: "index_project_gallery_maps_on_user_project_map_id_and_gallery_id", unique: true, using: :btree
 
   create_table "projects", force: true do |t|
-    t.string   "title"
-    t.boolean  "is_sample",  default: false
-    t.boolean  "del_flg",    default: false
+    t.string   "title",      limit: 100,                 null: false
+    t.boolean  "is_sample",              default: false
+    t.boolean  "del_flg",                default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
