@@ -48,7 +48,10 @@ gem 'unicorn'
 gem 'ace-rails-ap', '4.0.1'
 
 # Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
+group :development do
+  gem 'capistrano-rails', '1.1.6'
+  gem 'capistrano3-unicorn', '0.2.1'
+end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
@@ -57,25 +60,32 @@ gem 'ace-rails-ap', '4.0.1'
 gem 'cells', '3.11.2'
 gem 'gon', '6.0.1'
 
-# Use RSpec
-group :development, :test do
+# Test
+group :test do
   gem 'rspec', '3.4.0'
   gem 'rspec-rails', '3.4.0'
   gem 'rspec-cells', '0.2.5'
 
   gem 'rails-erd', github: 'paulwittmann/rails-erd', branch: 'mavericks'
+
+  gem 'shoulda-matchers', '3.1.1'
+  gem 'factory_girl_rails', '4.7.0'
+  gem 'capybara', '2.7.0'
+  gem 'nokogiri', '1.6.7.2'
+  gem 'poltergeist', '1.9.0'
+  gem 'database_cleaner', '1.5.1'
 end
 
-# Redisクライアント
+# Redis
 gem 'redis', '3.2.2'
 gem 'redis-rails', '4.0.0'
 
-# Metaタグ
+# Meta tag
 gem 'meta-tags', '2.1.0'
-# マルチスレッド
+# Thread
 gem 'parallel', '1.6.1'
 
-# ユーザ登録
+# User
 gem 'devise', '3.5.3'
 # OAuth
 gem 'omniauth', '1.2.2'
@@ -83,7 +93,7 @@ gem 'omniauth-facebook', '3.0.0'
 gem 'omniauth-twitter', '1.2.1'
 gem 'omniauth-google-oauth2', '0.2.10'
 
-# 画像アップロード
+# Upload Image
 gem 'ruby-filemagic', '0.7.1'
 gem 'carrierwave', '0.10.0'
 gem 'carrierwave-magic', '0.0.4'
@@ -91,22 +101,23 @@ gem 'rmagick', '2.15.4', require: 'RMagick'
 gem 'mini_magick', '4.3.6'
 gem 'remotipart', '1.2.1'
 
-# メンテナンス画面の表示
+# Maintenance page
 gem 'turnout'
 
-# 環境変数管理
+# Environment Var
 gem 'dotenv-rails'
 
-# Use HBase
+# HBase
 #normalgem 'massive_record'
 #normal
 
-# For Batch
+# Batch
 gem 'whenever', '0.9.4'
 
+# Access IP Check
 gem 'geoip'
 
-# For Paging
+# Paging
 #gem 'kaminari', '0.16.3'
 
 #gem 'ruby-debug-ide'
