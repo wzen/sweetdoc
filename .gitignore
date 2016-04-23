@@ -19,8 +19,6 @@
 /public/user_code
 /public/update_user_item_gallery
 /public/uploads
-.idea/dataSources.local.xml
-.idea/watcherTasks.xml
-.idea/workspace.xml
+.idea/
 .env
 *.rdb
