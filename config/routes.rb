@@ -104,7 +104,6 @@ Rails.application.routes.draw do
   # Upload
   post 'upload' => 'upload#index'
   post 'upload/item'
-  post 'upload/upload_thumbnail'
 
   # ConfigMenu
   post 'config_menu/design_config'

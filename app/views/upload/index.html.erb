@@ -1,30 +1,28 @@
 <%= render 'upload/navbar/navber' %>
 <div id="upload_wrapper">
   <div class="left">
-    <%= form_tag 'upload/upload_thumbnail.json', method: :post, remote: true, class: "form-horizontal thumbnail_upload_form", multipart: true, format: :json, authenticity_token: true  do |f| %>
+    <div>
+      <%= I18n.t('upload_confirm.thumbnail') %>
+    </div>
+    <div class="capture_wrapper">
       <div>
-        <%= I18n.t('upload_confirm.thumbnail') %>
+        <%= image_tag 'gallery/default_thumbnail/normal.png', class: 'default_thumbnail' %>
+        <%= image_tag 'gallery/default_thumbnail/normal.png', class: 'capture', style: 'display:none' %>
       </div>
-      <div class="capture_wrapper">
-        <div>
-          <%= image_tag 'gallery/default_thumbnail/normal.png', class: 'default_thumbnail' %>
-          <%= image_tag 'gallery/default_thumbnail/normal.png', class: 'capture', style: 'display:none' %>
-        </div>
+    </div>
+    <div>
+      <div class="warn_message">
+        <%= I18n.t('upload_confirm.thumbnail_warn', size: Const::THUMBNAIL_FILESIZE_MAX_KB) %>
       </div>
       <div>
-        <div class="warn_message">
-          <%= I18n.t('upload_confirm.thumbnail_warn', size: Const::THUMBNAIL_FILESIZE_MAX_KB) %>
-        </div>
-        <div>
-          <%= file_field_tag :file_path, class: Const::PreloadItemImage::Key::SELECT_FILE %>
-        </div>
-        <div class="file_select_delete" style="text-align: right;display: none">
-          <input type="button" class="<%= Const::PreloadItemImage::Key::SELECT_FILE_DELETE %>" value="Delete">
-        </div>
-        <div class="error_message">
-        </div>
+        <%= file_field_tag :file_path, class: Const::PreloadItemImage::Key::SELECT_FILE %>
       </div>
-    <% end %>
+      <div class="file_select_delete" style="text-align: right;display: none">
+        <input type="button" class="<%= Const::PreloadItemImage::Key::SELECT_FILE_DELETE %>" value="Delete">
+      </div>
+      <div class="error_message">
+      </div>
+    </div>
   </div>
   <div class="right">
     <%= form_tag('', method: :post, id: 'upload_form') do  %>

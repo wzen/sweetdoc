@@ -4,51 +4,52 @@ class UploadCommon
   @initEvent = (upload) ->
     root = $('#upload_wrapper')
 
+    readImage = (input) ->
+      if input.files && input.files[0]
+        FR = new FileReader()
+        FR.onload = (e) ->
+          $('.capture', root).attr( "src", e.target.result).show()
+          $('.default_thumbnail', root).hide()
+          $('.file_select_delete', root).show()
+          image = new Image()
+          image.src = e.target.result
+          image.onload = ->
+            imageData = e.target.result.split('base64,')[1]
+            contentType = e.target.result.split(';base64')[0].replace('data:', '')
+            $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG}']", root).val(imageData.replace(/^.*,/, ''))
+            $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE}']", root).val(contentType)
+            $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_WIDTH}']", root).val(image.width)
+            $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT}']", root).val(image.height)
+        FR.readAsDataURL(input.files[0])
+      else
+        removeImage.call(@)
+    removeImage = ->
+      # 画像をデフォルトに戻す
+      $('.capture', root).attr("src", "").hide()
+      $('.default_thumbnail', root).show()
+      $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG}']", root).val('')
+    $('#remove_image').click( ->
+      removeImage.call(@)
+    )
     # サムネイル選択時にアップロード
-    $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).off('change').on('change', =>
+    $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).off('change').on('change', (e) =>
       window.uploadContents = upload
       f = $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).val()
       if f? && f.length > 0
-        Common.showModalFlashMessage('Thumbnail changing')
-        $('.thumbnail_upload_form', root).submit()
+        #Common.showModalFlashMessage('Thumbnail changing')
+        #$('.thumbnail_upload_form', root).submit()
+        readImage.call(@, e.target)
       else
-        # 画像をデフォルトに戻す
-        $('.capture', root).hide()
-        $('.default_thumbnail', root).show()
+        removeImage.call(@)
     )
-    # サムネイルアップロード
-    $('.thumbnail_upload_form', root).off().on('ajax:complete', (e, data, status, error) =>
-      d = JSON.parse(data.responseText)
-      if d?
-        if d.resultSuccess
-          $('.error_message', root).hide()
-          $('.capture', root).attr('src', d.image_url).show()
-          $('.default_thumbnail', root).hide()
-          imageData = d.image_url.split('base64,')[1]
-          contentType = d.image_url.split(';base64')[0].replace('data:', '')
-          $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG}']", root).val(imageData.replace(/^.*,/, ''))
-          $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE}']", root).val(contentType)
-          image = new Image()
-          image.src = d.image_url
-          image.onload = ->
-            $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_WIDTH}']", root).val(image.width)
-            $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT}']", root).val(image.height)
-          $(".#{constant.PreloadItemImage.Key.SELECT_FILE_DELETE}", root).off('click').on('click', (e) =>
-            $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).val('').trigger('change')
-            $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG}']", root).val('')
-            $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE}']", root).val('')
-            $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_WIDTH}']", root).val('')
-            $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT}']", root).val('')
-            $('.file_select_delete', root).hide()
-          )
-          $('.file_select_delete', root).show()
-        else
-          $('.error_message', root).text(d.message)
-          $('.error_message', root).show()
-      # アップロード後に設定したイベントが消えるため、ここで再設定
-      @initEvent(window.uploadContents)
-      Common.hideModalView(true)
-      window.uploadContents = null
+    # サムネイル削除ボタン
+    $(".#{constant.PreloadItemImage.Key.SELECT_FILE_DELETE}", root).off('click').on('click', (e) =>
+      $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).val('').trigger('change')
+      $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG}']", root).val('')
+      $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE}']", root).val('')
+      $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_WIDTH}']", root).val('')
+      $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT}']", root).val('')
+      $('.file_select_delete', root).hide()
     )
     # マークアップ入力フォーム初期化
     mark = $('.markItUp', root)
