@@ -27,12 +27,25 @@
   <div class="right">
     <%= form_tag('', method: :post, id: 'upload_form') do  %>
       <div class="input_wrapper">
+          <% if @uploaded_list.length > 0 %>
+            <div class="overwrite_contents_wrapper">
+              <div class="overwrite_contents_label"><%= I18n.t('upload_confirm.existed_upload_contents') %></div>
+              <div class="overwrite_contents_contents">
+                <select class="<%= Const::Gallery::Key::OVERWRITE_CONTENTS_SELECT %>" name="<%= Const::Gallery::Key::UPLOAD_OVERWRITE_GALLERY_TOKEN %>">
+                  <option value=""><%= I18n.t('upload_confirm.posting_new') %></option>
+                  <% @uploaded_list.each do |u| %>
+                      <option value="<%= u['gallery_access_token'] %>"><%= I18n.t('upload_confirm.overwrite_contents', contents: "#{u['title']} [Upload Date #{u['updated_at'].strftime("%Y-%m-%d %H:%M:%S")}]") %></option>
+                  <% end %>
+                </select>
+              </div>
+            </div>
+          <% end %>
           <div class="title_wrapper">
               <div>
                   <label><%= I18n.t('upload_confirm.title') %></label>
               </div>
               <div>
-                <input name="<%= Const::Gallery::Key::TITLE %>" required>
+                <input class="<%= Const::Gallery::Key::TITLE %>" name="<%= Const::Gallery::Key::TITLE %>" required>
                 <span class="title_error"><%= I18n.t('upload_confirm.title_input_error') %></span>
               </div>
           </div>
@@ -42,7 +55,7 @@
                   <label><%= I18n.t('upload_confirm.caption') %></label>
               </div>
               <div>
-                  <textarea class="caption_markup" name="<%= Const::Gallery::Key::CAPTION %>"></textarea>
+                  <textarea class="<%= Const::Gallery::Key::MARKUPCAPTION %>" name="<%= Const::Gallery::Key::CAPTION %>"></textarea>
               </div>
           </div>
           <div class="clearfix">
@@ -92,19 +105,7 @@
                   <%= label_tag I18n.t('upload_confirm.show_chapter_num') %>
               </div>
           </div>
-          <% if @uploaded_list.length > 0 %>
-            <div class="overwrite_contents_wrapper">
-              <div class="overwrite_contents_label"><%= I18n.t('upload_confirm.existed_upload_contents') %></div>
-              <div class="overwrite_contents_contents">
-                <select class="overwrite_contents_contents_select" name="<%= Const::Gallery::Key::UPLOAD_OVERWRITE_GALLERY_TOKEN %>">
-                  <option value=""><%= I18n.t('upload_confirm.posting_new') %></option>
-                  <% @uploaded_list.each do |u| %>
-                    <option value="<%= u['gallery_access_token'] %>"><%= I18n.t('upload_confirm.overwrite_contents', contents: "#{u['title']} [Upload Date #{u['updated_at'].strftime("%Y-%m-%d %H:%M:%S")}]") %></option>
-                  <% end %>
-                </select>
-              </div>
-            </div>
-          <% end %>
+
       </div>
       <input name="<%= Const::Gallery::Key::PROJECT_ID %>" type="hidden" value="<%= @project_id %>">
       <% if @screen_size.present? %>

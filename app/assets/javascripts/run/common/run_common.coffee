@@ -454,14 +454,11 @@ class RunCommon
 
   # ギャラリーアップロードビュー表示処理
   @showUploadGalleryConfirm = ->
-    target = '_uploadgallery'
-    window.open("about:blank", target)
     root = $('#nav')
     $("input[name='#{constant.Gallery.Key.PROJECT_ID}']", root).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID))
     if Common.isFixedScreenSize()
       $("input[name='#{constant.Gallery.Key.SCREEN_SIZE}']", root).val(JSON.stringify(PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)))
     $("input[name='#{constant.Gallery.Key.PAGE_MAX}']", root).val(PageValue.getPageCount())
-    document.upload_gallery_form.target = target
     document.upload_gallery_form.submit()
 
   # Mainコンテナ初期化

@@ -162,9 +162,9 @@ class ItemPreviewCommon
     )
 
   @showUploadItemConfirm = ->
-    target = '_uploaditem'
-    window.open("about:blank", target)
-    document.upload_item_form.target = target
+    #target = '_uploaditem'
+    #window.open("about:blank", target)
+    #document.upload_item_form.target = target
     document.upload_item_form.submit()
 
   @showAddItemConfirm = ->

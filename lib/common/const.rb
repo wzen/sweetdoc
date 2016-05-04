@@ -277,9 +277,11 @@ class Const
       THUMBNAIL_IMG_CONTENTSTYPE = 'tbimgcnt'
       THUMBNAIL_IMG_WIDTH = 'tbimg_w'
       THUMBNAIL_IMG_HEIGHT = 'tbimg_h'
+      THUMBNAIL_EXISTED = 'tbimg_existed'
       PAGE_MAX = 'pagemax'
       TITLE = 'title'
       CAPTION = 'caption'
+      MARKUPCAPTION = 'markup_caption'
       ITEM_JS_LIST = 'item_js_list'
       RECOMMEND_SOURCE_WORD = 'recommend_source_word'
       NOTE = 'note'
@@ -293,6 +295,7 @@ class Const
       TAG_NAME = 'tag_name'
       UPLOAD_OVERWRITE_GALLERY_TOKEN = 'upload_overwrite_gallery_token'
       FILTER = 'ft'
+      OVERWRITE_CONTENTS_SELECT =  'overwrite_contents_contents_select'
     end
 
     class SearchKey

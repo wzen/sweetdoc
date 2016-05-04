@@ -224,8 +224,12 @@ input:-webkit-autofill {
       margin-left: 20px;
     }
 
-    .option_wrapper, .overwrite_contents_wrapper {
+    .option_wrapper {
       margin-top: 10px;
+    }
+
+    .overwrite_contents_wrapper {
+      margin-bottom: 10px;
     }
 
     .overwrite_contents_label {

@@ -5,41 +5,70 @@ UploadCommon = (function() {
   function UploadCommon() {}
 
   UploadCommon.initEvent = function(upload) {
-    var mark, readImage, removeImage, root;
+    var _getThumbnailBlob, _readImage, _removeImage, _setImage, mark, root;
     root = $('#upload_wrapper');
-    readImage = function(input) {
+    _setImage = function(path) {
       var FR;
-      if (input.files && input.files[0]) {
-        FR = new FileReader();
-        FR.onload = function(e) {
-          var image;
-          $('.capture', root).attr("src", e.target.result).show();
-          $('.default_thumbnail', root).hide();
-          $('.file_select_delete', root).show();
-          image = new Image();
-          image.src = e.target.result;
-          return image.onload = function() {
-            var contentType, imageData;
-            imageData = e.target.result.split('base64,')[1];
-            contentType = e.target.result.split(';base64')[0].replace('data:', '');
-            $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG + "']", root).val(imageData.replace(/^.*,/, ''));
-            $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE + "']", root).val(contentType);
-            $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_WIDTH + "']", root).val(image.width);
-            return $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT + "']", root).val(image.height);
-          };
+      FR = new FileReader();
+      FR.onload = function(e) {
+        var image, src;
+        src = e.target.result;
+        $('.capture', root).attr("src", src).show();
+        $('.default_thumbnail', root).hide();
+        $('.file_select_delete', root).show();
+        image = new Image();
+        image.src = src;
+        return image.onload = function() {
+          var contentType, imageData;
+          imageData = src.split('base64,')[1];
+          contentType = src.split(';base64')[0].replace('data:', '');
+          $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG + "']", root).val(imageData.replace(/^.*,/, ''));
+          $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE + "']", root).val(contentType);
+          $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_WIDTH + "']", root).val(image.width);
+          return $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT + "']", root).val(image.height);
         };
-        return FR.readAsDataURL(input.files[0]);
+      };
+      return FR.readAsDataURL(path);
+    };
+    _readImage = function(input) {
+      if (input.files && input.files[0]) {
+        return _setImage.call(this, input.files[0]);
       } else {
-        return removeImage.call(this);
+        return _removeImage.call(this);
       }
     };
-    removeImage = function() {
+    _removeImage = function() {
+      var selectFile;
+      selectFile = $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).val();
+      if ((selectFile != null) && selectFile.length > 0) {
+        $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).val('').trigger('change');
+      }
+      $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG + "']", root).val('');
+      $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE + "']", root).val('');
+      $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_WIDTH + "']", root).val('');
+      $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT + "']", root).val('');
+      $('.file_select_delete', root).hide();
       $('.capture', root).attr("src", "").hide();
       $('.default_thumbnail', root).show();
       return $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG + "']", root).val('');
     };
+    _getThumbnailBlob = function(src) {
+      var xhr;
+      xhr = new XMLHttpRequest();
+      xhr.open("GET", src, true);
+      xhr.responseType = "arraybuffer";
+      xhr.onload = function(e) {
+        var arrayBufferView, blob;
+        arrayBufferView = new Uint8Array(this.response);
+        blob = new Blob([arrayBufferView], {
+          type: "image/jpeg"
+        });
+        return _setImage(blob);
+      };
+      return xhr.send();
+    };
     $('#remove_image').click(function() {
-      return removeImage.call(this);
+      return _removeImage.call(this);
     });
     $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).off('change').on('change', (function(_this) {
       return function(e) {
@@ -47,27 +76,76 @@ UploadCommon = (function() {
         window.uploadContents = upload;
         f = $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).val();
         if ((f != null) && f.length > 0) {
-          return readImage.call(_this, e.target);
+          return _readImage.call(_this, e.target);
         } else {
-          return removeImage.call(_this);
+          return _removeImage.call(_this);
         }
       };
     })(this));
     $("." + constant.PreloadItemImage.Key.SELECT_FILE_DELETE, root).off('click').on('click', (function(_this) {
       return function(e) {
-        $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).val('').trigger('change');
-        $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG + "']", root).val('');
-        $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE + "']", root).val('');
-        $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_WIDTH + "']", root).val('');
-        $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT + "']", root).val('');
-        return $('.file_select_delete', root).hide();
+        return _removeImage.call(_this);
+      };
+    })(this));
+    $("." + constant.Gallery.Key.OVERWRITE_CONTENTS_SELECT, root).off('change').on('change', (function(_this) {
+      return function(e) {
+        var _cbk, data, src, token;
+        token = $(e.target).val();
+        if (token.length === 0) {
+          $("." + constant.Gallery.Key.TITLE, root).val('');
+          $("." + constant.Gallery.Key.MARKUPCAPTION, root).val('');
+          $("." + constant.Gallery.Key.SHOW_GUIDE, root).prop('checked', true);
+          $("." + constant.Gallery.Key.SHOW_PAGE_NUM, root).prop('checked', false);
+          $("." + constant.Gallery.Key.SHOW_CHAPTER_NUM, root).prop('checked', false);
+          _removeImage.call(_this);
+          return;
+        }
+        src = "/gallery/" + token + "/thumbnail";
+        _cbk = function(dataList) {
+          $("." + constant.Gallery.Key.TITLE, root).val(dataList[constant.Gallery.Key.TITLE]);
+          $("." + constant.Gallery.Key.MARKUPCAPTION, root).val(dataList[constant.Gallery.Key.CAPTION]);
+          $("." + constant.Gallery.Key.SHOW_GUIDE, root).prop('checked', dataList[constant.Gallery.Key.SHOW_GUIDE]);
+          $("." + constant.Gallery.Key.SHOW_PAGE_NUM, root).prop('checked', dataList[constant.Gallery.Key.SHOW_PAGE_NUM]);
+          $("." + constant.Gallery.Key.SHOW_CHAPTER_NUM, root).prop('checked', dataList[constant.Gallery.Key.SHOW_CHAPTER_NUM]);
+          if (dataList[constant.Gallery.Key.THUMBNAIL_EXISTED]) {
+            return _getThumbnailBlob.call(this, src);
+          } else {
+            return _removeImage.call(this);
+          }
+        };
+        if (window.galleryDataList == null) {
+          window.galleryDataList = {};
+        }
+        if (window.galleryDataList[token] != null) {
+          return _cbk.call(_this, window.galleryDataList[token]);
+        } else {
+          Common.showModalFlashMessage('Loading...');
+          data = {};
+          data[constant.Gallery.Key.GALLERY_ACCESS_TOKEN] = token;
+          return $.ajax({
+            url: "/gallery/get_info",
+            type: "GET",
+            dataType: "json",
+            data: data,
+            success: function(data) {
+              if (data != null) {
+                window.galleryDataList[token] = data;
+                _cbk.call(this, window.galleryDataList[token]);
+              }
+              return Common.hideModalView();
+            },
+            error: function(data) {
+              return console.log('/gallery/get_info ajax error');
+            }
+          });
+        }
       };
     })(this));
     mark = $('.markItUp', root);
     if ((mark != null) && mark.length > 0) {
-      $('.caption_markup', root).markItUpRemove();
+      $("." + constant.Gallery.Key.MARKUPCAPTION, root).markItUpRemove();
     }
-    $('.caption_markup', root).markItUp(mySettings);
+    $("." + constant.Gallery.Key.MARKUPCAPTION, root).markItUp(mySettings);
     upload.prepareUploadTagEvent(root);
     $('.select_tag_input', root).off('keypress').on('keypress', function(e) {
       if (e.keyCode === constant.KeyboardKeyCode.ENTER) {
