@@ -102,12 +102,9 @@ class GalleryController < ApplicationController
     project_id = params.require(Const::Gallery::Key::PROJECT_ID).to_i
     caption = params.fetch(Const::Gallery::Key::CAPTION, '').force_encoding('utf-8')
     thumbnail_img = params.fetch(Const::Gallery::Key::THUMBNAIL_IMG, nil)
-
-    size = thumbnail_img.size
-    if file_path.size > 1000 * Const::THUMBNAIL_FILESIZE_MAX_KB
+    if thumbnail_img.size > 1000 * Const::THUMBNAIL_FILESIZE_MAX_KB
       @result_success, @message = false, ""
     end
-
     thumbnail_img_contents_type = params.fetch(Const::Gallery::Key::THUMBNAIL_IMG_CONTENTSTYPE, nil)
     thumbnail_img_width = params.fetch(Const::Gallery::Key::THUMBNAIL_IMG_WIDTH, nil)
     thumbnail_img_height = params.fetch(Const::Gallery::Key::THUMBNAIL_IMG_HEIGHT, nil)

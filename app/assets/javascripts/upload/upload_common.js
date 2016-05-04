@@ -15,6 +15,7 @@ UploadCommon = (function() {
         src = e.target.result;
         $('.capture', root).attr("src", src).show();
         $('.default_thumbnail', root).hide();
+        $('.error_message', root).hide();
         $('.file_select_delete', root).show();
         image = new Image();
         image.src = src;
@@ -49,6 +50,7 @@ UploadCommon = (function() {
       $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT + "']", root).val('');
       $('.file_select_delete', root).hide();
       $('.capture', root).attr("src", "").hide();
+      $('.error_message', root).hide();
       $('.default_thumbnail', root).show();
       return $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG + "']", root).val('');
     };
@@ -72,11 +74,19 @@ UploadCommon = (function() {
     });
     $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).off('change').on('change', (function(_this) {
       return function(e) {
-        var f;
+        var f, size;
         window.uploadContents = upload;
         f = $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).val();
         if ((f != null) && f.length > 0) {
-          return _readImage.call(_this, e.target);
+          size = e.target.files[0].size;
+          if (size <= constant.THUMBNAIL_FILESIZE_MAX_KB * 1000) {
+            return _readImage.call(_this, e.target);
+          } else {
+            $('.error_message', root).text(I18n.t('upload_confirm.thumbnail_size_error', {
+              size: constant.THUMBNAIL_FILESIZE_MAX_KB
+            }));
+            return $('.error_message', root).show();
+          }
         } else {
           return _removeImage.call(_this);
         }
