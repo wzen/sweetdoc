@@ -143,14 +143,8 @@ input:-webkit-autofill {
 }
 
 #upload_wrapper {
-  display: table;
   width: 100%;
-  //height: 100%;
-  padding: 5px;
-
-  > div {
-    display: table-cell;
-  }
+  margin-top: 30px;
 
   .right {
     vertical-align: top;
@@ -179,18 +173,6 @@ input:-webkit-autofill {
   }
 
   .input_wrapper {
-
-    .title, .caption {
-      &:before {
-        content: '';
-        display: table;
-        line-height: 0;
-      }
-      > div {
-        display: table-cell;
-      }
-    }
-
     .caption {
       .caption_label_warpper {
         vertical-align: top;
@@ -235,12 +217,6 @@ input:-webkit-autofill {
     .overwrite_contents_label {
       color: blue;
     }
-  }
-}
-
-body.item {
-  #upload_wrapper {
-    margin: 0 auto;
   }
 }
 

@@ -10,6 +10,7 @@
 //= require ../../../../vendor/assets/jquery_readyselector/jquery.readyselector
 // require ../../../../vendor/assets/infinitescroll/jquery.infinitescroll.js
 //= require_directory ./../i18n
+//= require markdown
 //= require base/constant
 //= require base/common
 //= require base/common_var

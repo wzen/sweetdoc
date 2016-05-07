@@ -164,6 +164,8 @@ en:
     thumbnail_warn: "Maximum thumbnail size is %{size}KB."
     thumbnail_size_error: "This thumbnail size exceed %{size}KB."
     title_input_error: "Required"
+    tag_place_holder: "Input tag"
+    tag_add: "Add by click"
   mypage:
     header_title:
       bookmarks: "Your Bookmarks"

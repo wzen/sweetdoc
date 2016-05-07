@@ -11,8 +11,7 @@
  * file per style scope.
  *
  *= require bootstrap_custom
- *= require markitup/skins/markitup/style
- *= require markitup/sets/html/style
+ *= require bootstrap-markdown
  *= require common/common
  *= require common/float_view
  *= require common/modal_view.css

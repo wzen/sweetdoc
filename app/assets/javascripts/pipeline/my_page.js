@@ -9,6 +9,7 @@
 //= require ../../../../vendor/assets/masonry/masonry.pkgd.min.js
 //= require ../../../../vendor/assets/jquery_readyselector/jquery.readyselector
 //= require_directory ./../i18n
+//= require markdown
 //= require base/constant
 //= require base/common
 //= require base/common_var

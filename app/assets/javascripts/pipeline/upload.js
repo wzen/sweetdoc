@@ -6,12 +6,12 @@
 //= require jquery_ujs
 //= require jquery.remotipart
 //= require i18n
-//= require markitup
 //= require ../../../../vendor/assets/bootstrap/bootstrap.min
 //= require ../../../../vendor/assets/jquery_readyselector/jquery.readyselector
 //= require_directory ./../i18n
 //= require ../../../../vendor/assets/html2canvas/html2canvas_custom.min
-//= require markitup/sets/html/set
+//= require markdown
+//= require bootstrap-markdown
 //= require base/constant
 //= require base/common
 //= require base/common_var

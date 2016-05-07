@@ -80,7 +80,7 @@ class UploadCommon
       if token.length == 0
         # デフォルト値の選択は全て空に
         $(".#{constant.Gallery.Key.TITLE}", root).val('')
-        $(".#{constant.Gallery.Key.MARKUPCAPTION}", root).val('')
+        $(".#{constant.Gallery.Key.MARKDOWN_CAPTION}", root).val('')
         $(".#{constant.Gallery.Key.SHOW_GUIDE}",root).prop('checked', true)
         $(".#{constant.Gallery.Key.SHOW_PAGE_NUM}",root).prop('checked', false)
         $(".#{constant.Gallery.Key.SHOW_CHAPTER_NUM}",root).prop('checked', false)
@@ -91,7 +91,7 @@ class UploadCommon
       _cbk = (dataList) ->
         # 画面に設定
         $(".#{constant.Gallery.Key.TITLE}", root).val(dataList[constant.Gallery.Key.TITLE])
-        $(".#{constant.Gallery.Key.MARKUPCAPTION}", root).val(dataList[constant.Gallery.Key.CAPTION])
+        $(".#{constant.Gallery.Key.MARKDOWN_CAPTION}", root).val(dataList[constant.Gallery.Key.CAPTION])
         $(".#{constant.Gallery.Key.SHOW_GUIDE}",root).prop('checked', dataList[constant.Gallery.Key.SHOW_GUIDE])
         $(".#{constant.Gallery.Key.SHOW_PAGE_NUM}",root).prop('checked', dataList[constant.Gallery.Key.SHOW_PAGE_NUM])
         $(".#{constant.Gallery.Key.SHOW_CHAPTER_NUM}",root).prop('checked', dataList[constant.Gallery.Key.SHOW_CHAPTER_NUM])
@@ -126,11 +126,6 @@ class UploadCommon
           }
         )
     )
-    # マークアップ入力フォーム初期化
-    mark = $('.markItUp', root)
-    if mark? && mark.length > 0
-      $(".#{constant.Gallery.Key.MARKUPCAPTION}", root).markItUpRemove()
-    $(".#{constant.Gallery.Key.MARKUPCAPTION}", root).markItUp(mySettings)
     # タグクリックイベント設定
     upload.prepareUploadTagEvent(root)
     # Inputイベント

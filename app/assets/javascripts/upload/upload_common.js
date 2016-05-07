@@ -5,7 +5,7 @@ UploadCommon = (function() {
   function UploadCommon() {}
 
   UploadCommon.initEvent = function(upload) {
-    var _getThumbnailBlob, _readImage, _removeImage, _setImage, mark, root;
+    var _getThumbnailBlob, _readImage, _removeImage, _setImage, root;
     root = $('#upload_wrapper');
     _setImage = function(path) {
       var FR;
@@ -103,7 +103,7 @@ UploadCommon = (function() {
         token = $(e.target).val();
         if (token.length === 0) {
           $("." + constant.Gallery.Key.TITLE, root).val('');
-          $("." + constant.Gallery.Key.MARKUPCAPTION, root).val('');
+          $("." + constant.Gallery.Key.MARKDOWN_CAPTION, root).val('');
           $("." + constant.Gallery.Key.SHOW_GUIDE, root).prop('checked', true);
           $("." + constant.Gallery.Key.SHOW_PAGE_NUM, root).prop('checked', false);
           $("." + constant.Gallery.Key.SHOW_CHAPTER_NUM, root).prop('checked', false);
@@ -113,7 +113,7 @@ UploadCommon = (function() {
         src = "/gallery/" + token + "/thumbnail";
         _cbk = function(dataList) {
           $("." + constant.Gallery.Key.TITLE, root).val(dataList[constant.Gallery.Key.TITLE]);
-          $("." + constant.Gallery.Key.MARKUPCAPTION, root).val(dataList[constant.Gallery.Key.CAPTION]);
+          $("." + constant.Gallery.Key.MARKDOWN_CAPTION, root).val(dataList[constant.Gallery.Key.CAPTION]);
           $("." + constant.Gallery.Key.SHOW_GUIDE, root).prop('checked', dataList[constant.Gallery.Key.SHOW_GUIDE]);
           $("." + constant.Gallery.Key.SHOW_PAGE_NUM, root).prop('checked', dataList[constant.Gallery.Key.SHOW_PAGE_NUM]);
           $("." + constant.Gallery.Key.SHOW_CHAPTER_NUM, root).prop('checked', dataList[constant.Gallery.Key.SHOW_CHAPTER_NUM]);
@@ -151,11 +151,6 @@ UploadCommon = (function() {
         }
       };
     })(this));
-    mark = $('.markItUp', root);
-    if ((mark != null) && mark.length > 0) {
-      $("." + constant.Gallery.Key.MARKUPCAPTION, root).markItUpRemove();
-    }
-    $("." + constant.Gallery.Key.MARKUPCAPTION, root).markItUp(mySettings);
     upload.prepareUploadTagEvent(root);
     $('.select_tag_input', root).off('keypress').on('keypress', function(e) {
       if (e.keyCode === constant.KeyboardKeyCode.ENTER) {

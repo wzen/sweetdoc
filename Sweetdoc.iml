@@ -32,7 +32,9 @@
     <orderEntry type="library" scope="PROVIDED" name="activesupport (v4.1.12, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="addressable (v2.4.0, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="arel (v5.0.1.20140414130214, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="autoprefixer-rails (v6.3.6, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="bcrypt (v3.1.10, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="bootstrap-sass (v3.3.5, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="builder (v3.2.2, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="bundler (v1.10.6, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="capistrano (v3.4.1, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
@@ -73,7 +75,7 @@
     <orderEntry type="library" scope="PROVIDED" name="kgio (v2.10.0, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="libv8 (v3.16.14.7, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="mail (v2.6.4, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="markitup-rails (v1.1.3, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="markdown-rails (v0.2.1, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="meta-tags (v2.1.0, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="mime-types (v3.0, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="mime-types-data (v3.2016.0221, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
@@ -102,10 +104,12 @@
     <orderEntry type="library" scope="PROVIDED" name="rack-accept (v0.4.5, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rack-test (v0.6.3, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rails (v4.1.12, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rails-bootstrap-markdown (v2.6.0, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rails-erd (v1.1.0@9ccb09, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="railties (v4.1.12, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="raindrops (v0.16.0, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rake (v11.1.2, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rdiscount (v1.6.8, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rdoc (v4.2.2, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="redis (v3.2.2, RVM: ruby-2.2.3 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="redis-actionpack (v4.0.1, RVM: ruby-2.2.3 [global]) [gem]" level="application" />

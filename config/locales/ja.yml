@@ -141,6 +141,8 @@ ja:
     thumbnail_warn: "設定可能なファイルサイズは%{size}KB以下です"
     thumbnail_size_error: "ファイルサイズが%{size}KBを超過しています"
     title_input_error: "タイトルを入力してください"
+    tag_place_holder: "タグを入力"
+    tag_add: "クリックで追加"
   mypage:
     header_title:
       bookmarks: "ブックマーク一覧"

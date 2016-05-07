@@ -24,6 +24,7 @@
 //= require_directory ../../../../vendor/assets/deflate
 //= require ../../../../vendor/assets/jquery_readyselector/jquery.readyselector
 //= require_directory ./../i18n
+//= require markdown
 //= require item/generator.jquery.color.js
 //= require base/constant
 //= require base/common

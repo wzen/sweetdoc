@@ -1,50 +1,58 @@
 <%= render 'upload/navbar/navber' %>
 <%= form_tag('', method: :post, id: 'upload_form') do  %>
     <div id="upload_wrapper">
-        <div>
-            <div class="input_wrapper">
-                <div class="title_wrapper">
-                    <div>
-                        <label><%= I18n.t('upload_confirm.title') %></label>
-                    </div>
-                    <div>
-                      <input name="<%= Const::ItemGallery::Key::TITLE %>" required>
-                      <span class="title_error"><%= I18n.t('upload_confirm.title_input_error') %></span>
-                    </div>
-                </div>
+      <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+          <div>
+              <div class="input_wrapper">
 
-                <div class="caption">
-                    <div class="caption_label_warpper">
+                <div class="form-group">
+                  <div class="title_wrapper">
+                      <label><%= I18n.t('upload_confirm.title') %></label>
+                      <div>
+                        <input name="<%= Const::ItemGallery::Key::TITLE %>" class="form-control" required>
+                        <span class="title_error"><%= I18n.t('upload_confirm.title_input_error') %></span>
+                      </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="caption">
+                      <div class="caption_label_warpper">
                         <label><%= I18n.t('upload_confirm.caption') %></label>
-                    </div>
-                    <div>
-                        <textarea class="<%= Const::Gallery::Key::MARKUPCAPTION %>" name="<%= Const::ItemGallery::Key::CAPTION %>"></textarea>
-                    </div>
+                      </div>
+                      <div>
+                        <textarea class="<%= Const::Gallery::Key::MARKDOWN_CAPTION %> form-control" name="<%= Const::ItemGallery::Key::CAPTION %>" data-provide="markdown" rows="5" ></textarea>
+                      </div>
+                  </div>
                 </div>
-                <div class="select_tag_wrapper">
-                    <div class="select_tag_label"><%= I18n.t('upload_confirm.tags') %></div>
-                    <div class="select_tag_table">
-                        <div class="select_tag tagcloud" style="float: left">
-                            <ul>
-                            </ul>
-                        </div>
-                        <div class="select_tag_input_wrapper">
-                            <input class="select_tag_input" name="<%= Const::ItemGallery::Key::TAGS %>" value="" >
-                        </div>
-                    </div>
+                <div class="form-group">
+                  <div class="select_tag_wrapper">
+                      <label class="select_tag_label"><%= I18n.t('upload_confirm.tags') %></label>
+                      <div class="select_tag_table">
+                          <div class="select_tag tagcloud" style="float: left">
+                              <ul>
+                              </ul>
+                          </div>
+                          <div class="select_tag_input_wrapper">
+                              <input class="select_tag_input" name="<%= Const::ItemGallery::Key::TAGS %>" value="" placeholder="<%= I18n.t('upload_confirm.tag_place_holder') %>" >
+                          </div>
+                      </div>
+                  </div>
+                  <div class="recommend_tag_wrapper">
+                      <label class="recommend_tag_label"><%= I18n.t('upload_confirm.recommend_tags') %></label>
+                      <div class="recommend_tag tagcloud">
+                          <ul>
+                              <li><a href="#">tag3</a></li>
+                              <li><a href="#">tag4</a></li>
+                          </ul>
+                      </div>
+                  </div>
                 </div>
-                <div class="recommend_tag_wrapper">
-                    <div class="recommend_tag_label"><%= I18n.t('upload_confirm.recommend_tags') %></div>
-                    <div class="recommend_tag tagcloud">
-                        <ul>
-                            <li><a href="#">tag3</a></li>
-                            <li><a href="#">tag4</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <input name="<%= Const::ItemGallery::Key::USER_CODING_ID %>" type="hidden" value="<%= @user_coding_id %>">
+              </div>
+          </div>
+          <input name="<%= Const::ItemGallery::Key::USER_CODING_ID %>" type="hidden" value="<%= @user_coding_id %>">
+         </div>
+      </div>
     </div>
     <div class="button_wrapper">
         <div>

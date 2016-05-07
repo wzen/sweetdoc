@@ -281,7 +281,7 @@ class Const
       PAGE_MAX = 'pagemax'
       TITLE = 'title'
       CAPTION = 'caption'
-      MARKUPCAPTION = 'markup_caption'
+      MARKDOWN_CAPTION = 'markdown_caption'
       ITEM_JS_LIST = 'item_js_list'
       RECOMMEND_SOURCE_WORD = 'recommend_source_word'
       NOTE = 'note'

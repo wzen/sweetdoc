@@ -10,7 +10,7 @@ class UploadBase
     # マウスオーバーイベント
     tags.off('mouseenter').on('mouseenter', (e) =>
       li = $(e.target).closest('li')
-      $(li).append($("<div class='add_pop pop' style='display:none'><p>Add tag(click)</p></div>"))
+      $(li).append($("<div class='add_pop pop' style='display:none'><p>#{I18n.t('upload_confirm.tag_add')}</p></div>"))
       $('.add_pop', li).css({top: $(li).height(), left: $(li).width()})
       $('.add_pop', li).show()
     )
