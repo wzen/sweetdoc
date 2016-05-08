@@ -158,7 +158,7 @@ UploadCommon = (function() {
         return $(this).val('');
       }
     });
-    return root.next('.button_wrapper').find('.upload_button').off('click').on('click', function() {
+    return root.find('.upload_button').off('click').on('click', function() {
       upload.upload(root);
       return false;
     });

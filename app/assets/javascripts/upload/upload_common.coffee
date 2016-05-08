@@ -136,7 +136,7 @@ class UploadCommon
         $(@).val('')
     )
     # Updateイベント
-    root.next('.button_wrapper').find('.upload_button').off('click').on('click', ->
+    root.find('.upload_button').off('click').on('click', ->
       upload.upload(root)
       return false
     )

@@ -1,5 +1,8 @@
 class RunFullScreen
   @showCreatorInfo = ->
+    # Markdownを設定
+    Common.markdownToHtml()
+    
     #@showModalOverlay()
     #$('#main').find('.popup_creator_wrapper').fadeIn('200')
 #    setTimeout(->

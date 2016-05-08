@@ -119,6 +119,9 @@ class RunCommon
     share = $('#contents').find('.share_info:first')
     bookmark = $('#contents').find('.bookmark_input:first')
 
+    # Markdownを設定
+    Common.markdownToHtml()
+
     _setClose = ->
       # ビュークリックで非表示
       $('#contents').off('click.contents_info').on('click.contents_info', (e) ->

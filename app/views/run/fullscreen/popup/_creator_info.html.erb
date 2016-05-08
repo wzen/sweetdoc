@@ -8,7 +8,7 @@
   </div>
     <% if @caption.nil? == false %>
         <div class="caption">
-            <span class="<%= Const::Run::AttributeName::CONTENTS_CAPTION_CLASSNAME %>"><%= @caption %></span>
+            <span class="<%= Const::Run::AttributeName::CONTENTS_CAPTION_CLASSNAME %> markdown"><%= @caption %></span>
         </div>
     <% end %>
 </div>

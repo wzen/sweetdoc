@@ -41,7 +41,7 @@
 
     <% if @caption.nil? == false %>
         <div class="caption">
-            <div class="<%= Const::Run::AttributeName::CONTENTS_CAPTION_CLASSNAME %>"><%= @caption %></div>
+          <div class="<%= Const::Run::AttributeName::CONTENTS_CAPTION_CLASSNAME %> markdown"><%= @caption %></div>
         </div>
     <% end %>
     <% if @tags.nil? == false && @tags.length > 0 %>

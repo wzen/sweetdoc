@@ -157,6 +157,7 @@ RunCommon = (function() {
     operation = $('#contents').find('.operation_parent:first');
     share = $('#contents').find('.share_info:first');
     bookmark = $('#contents').find('.bookmark_input:first');
+    Common.markdownToHtml();
     _setClose = function() {
       return $('#contents').off('click.contents_info').on('click.contents_info', function(e) {
         if (info.is(':visible')) {

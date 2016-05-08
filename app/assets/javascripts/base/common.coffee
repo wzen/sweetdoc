@@ -1265,6 +1265,14 @@ class Common
   @isinitedScrollContentsPosition = ->
     return window.scrollContents.scrollTop() > 0
 
+  # MarkdownをHTMLに変換
+  @markdownToHtml = ->
+    md = $('.markdown')
+    md.each((m) ->
+      v = $(@).html()
+      $(@).html(markdown.toHTML(v))
+    )
+
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->
   window.classMap = {}
