@@ -8,7 +8,9 @@ class UploadController < ApplicationController
     @project_id = project_id.to_i
     @screen_size = params.fetch(Const::Gallery::Key::SCREEN_SIZE, nil)
     @page_max = params.require(Const::Gallery::Key::PAGE_MAX)
-    @uploaded_list =  Gallery.uploaded_gallery_list(user_id, project_id)
+    @uploaded_list = Gallery.uploaded_gallery_list(user_id, project_id)
+    @recommend_tags = []
+    @popular_tags = []
   end
 
   def item

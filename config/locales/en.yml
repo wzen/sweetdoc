@@ -166,6 +166,7 @@ en:
     title_input_error: "Required"
     tag_place_holder: "Input tag"
     tag_add: "Add by click"
+    tag_remove: "Remove by click"
   mypage:
     header_title:
       bookmarks: "Your Bookmarks"

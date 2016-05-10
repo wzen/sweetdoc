@@ -188,22 +188,17 @@ input:-webkit-autofill {
     .select_tag_wrapper {
       .select_tag_input_wrapper {
         vertical-align: middle;
-      }
-      .select_tag_table {
-        display: table;
-
-        > div {
-          display: table-cell;
+        margin-right: 10px;
+        font-size: 20px;
+        .select_tag_input {
+          width: 150px;
         }
       }
-    }
-
-    .select_tag_wrapper, .popular_tag_wrapper, .recommend_tag_wrapper {
-      float: left;
-    }
-
-    .popular_tag_wrapper, .recommend_tag_wrapper {
-      margin-left: 20px;
+      .select_tag_table {
+        > div {
+          float: left;
+        }
+      }
     }
 
     .option_wrapper {

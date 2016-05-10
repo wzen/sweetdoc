@@ -42,7 +42,7 @@ class UploadBase
     $('a', ul).off('mouseenter')
     $('a', ul).on('mouseenter', (e) ->
       li = @closest('li')
-      $(li).append($("<div class='delete_pop pop' style='display:none'><p>Delete tag(click)</p></div>"))
+      $(li).append($("<div class='delete_pop pop' style='display:none'><p>#{I18n.t('upload_confirm.tag_remove')}</p></div>"))
       $('.delete_pop', li).css({top: $(li).height(), left: $(li).width()})
       $('.delete_pop', li).show()
     )

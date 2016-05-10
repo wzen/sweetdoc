@@ -54,7 +54,7 @@ UploadBase = (function() {
     $('a', ul).on('mouseenter', function(e) {
       var li;
       li = this.closest('li');
-      $(li).append($("<div class='delete_pop pop' style='display:none'><p>Delete tag(click)</p></div>"));
+      $(li).append($("<div class='delete_pop pop' style='display:none'><p>" + (I18n.t('upload_confirm.tag_remove')) + "</p></div>"));
       $('.delete_pop', li).css({
         top: $(li).height(),
         left: $(li).width()

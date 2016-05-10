@@ -143,6 +143,7 @@ ja:
     title_input_error: "タイトルを入力してください"
     tag_place_holder: "タグを入力"
     tag_add: "クリックで追加"
+    tag_remove: "クリックで削除"
   mypage:
     header_title:
       bookmarks: "ブックマーク一覧"
