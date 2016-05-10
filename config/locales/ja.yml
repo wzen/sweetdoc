@@ -251,3 +251,6 @@ ja:
     send_me_reset_password_instructions: 'パスワードリセットをリクエスト'
     resend_confirmation_instructions: 'アカウント確認メールを再送信する'
     do_resend_confirmation_instructions: '再送信'
+  tag:
+    contents_recommend: 'プレゼンテーション,漫画,メモ'
+    item_recommend: 'ボタン,矢印,テキスト'

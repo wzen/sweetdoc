@@ -274,3 +274,6 @@ en:
     send_me_reset_password_instructions: 'Send me reset password instructions'
     resend_confirmation_instructions: 'Resend confirmation instructions'
     do_resend_confirmation_instructions: 'Resend'
+  tag:
+    contents_recommend: 'Presentation,Comic,Memo'
+    item_recommend: 'Button,Arrow,Text'
