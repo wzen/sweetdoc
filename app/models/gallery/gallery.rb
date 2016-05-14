@@ -522,7 +522,9 @@ class Gallery < ActiveRecord::Base
         gbs.count as bookmark_count,
         gvs.count as view_count,
         ugf.page_num as footprint_page_num,
-        gb.id as bookmark_id
+        gb.id as bookmark_id,
+        group_concat(DISTINCT gt.id separator ',') as #{Const::Gallery::Key::TAG_ID},
+        group_concat(DISTINCT gt.name separator ',') as #{Const::Gallery::Key::TAG_NAME}
       FROM galleries g
       INNER JOIN users u ON g.created_user_id = u.id
       LEFT JOIN gallery_general_pagevalue_pagings ggpp ON g.id = ggpp.gallery_id AND ggpp.page_num = #{page_num} AND ggpp.del_flg = 0
@@ -535,8 +537,11 @@ class Gallery < ActiveRecord::Base
       LEFT JOIN gallery_view_statistics gvs ON g.id = gvs.gallery_id AND gvs.del_flg = 0
       LEFT JOIN user_gallery_footprints ugf ON ugf.user_id = u.id AND ugf.gallery_id = g.id AND ugf.del_flg = 0
       LEFT JOIN gallery_bookmarks gb ON gb.user_id = #{user_id} AND g.id = gb.gallery_id AND gb.del_flg = 0
+      LEFT JOIN gallery_tag_maps gtm ON g.id = gtm.gallery_id AND gtm.del_flg = 0
+      LEFT JOIN gallery_tags gt ON gt.id = gtm.gallery_tag_id AND gt.del_flg = 0
       WHERE g.access_token = '#{access_token}'
       AND g.del_flg = 0
+      GROUP BY g.id
       LIMIT 1
     SQL
     ret_sql = ActiveRecord::Base.connection.select_all(sql)
@@ -583,8 +588,15 @@ class Gallery < ActiveRecord::Base
       string_link = self.string_link(access_token, hostname, ret['title'])
       embed_link = self.embed_link(gpd, access_token, hostname)
       bookmarked = ret['bookmark_id'].present?
+      tags = []
+      if ret[Const::Gallery::Key::TAG_ID].present?
+        tag_names = ret[Const::Gallery::Key::TAG_NAME].split(',')
+        ret[Const::Gallery::Key::TAG_ID].split(',').each_with_index do |t, idx|
+          tags.push({id: t, name: tag_names[idx]})
+        end
+      end
 
-      return pagevalues, message, ret['title'], ret['caption'], gpd[Const::Project::Key::SCREEN_SIZE], creator, item_js_list, gallery_view_count, gallery_bookmark_count, show_options, string_link, embed_link, bookmarked
+      return pagevalues, message, ret['title'], ret['caption'], gpd[Const::Project::Key::SCREEN_SIZE], creator, item_js_list, gallery_view_count, gallery_bookmark_count, show_options, string_link, embed_link, bookmarked, tags
     end
   end
 

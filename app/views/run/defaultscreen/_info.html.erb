@@ -1,6 +1,6 @@
 <%
   show_page_num = true if defined?(show_page_num) == nil || show_page_num.nil?
-  show_chapter_num =  true if defined?(show_chapter_num) == nil || show_chapter_num.nil?
+  show_chapter_num = true if defined?(show_chapter_num) == nil || show_chapter_num.nil?
 %>
 
 <div class="contents_info">
@@ -39,20 +39,21 @@
         </div>
     <% end %>
 
-    <% if @caption.nil? == false %>
+    <% if @caption.present? %>
         <div class="caption">
           <div class="<%= Const::Run::AttributeName::CONTENTS_CAPTION_CLASSNAME %> markdown"><%= @caption %></div>
         </div>
     <% end %>
-    <% if @tags.nil? == false && @tags.length > 0 %>
+    <% if @tags.present? %>
         <div class="<%= Const::Run::AttributeName::CONTENTS_TAGS_CLASSNAME %>">
-            <div class="tags tagcloud">
-                <ul>
-                    <% @tags.each do |tag| %>
-                        <li><a href=""><%= tag %></a></li>
-                    <% end %>
-                </ul>
-            </div>
+          <div class="tags tagcloud">
+            <ul>
+              <% @tags.each do |tag| %>
+                  <li><a href=""><%= tag[:name] %></a></li>
+                  <input type="hidden" value="<%= tag[:id] %>">
+              <% end %>
+            </ul>
+          </div>
         </div>
     <% end %>
   </div>
@@ -64,7 +65,7 @@
       <div class="label">
         Link:
       </div>
-      <input type="text" class="link" readonly data-ga="link" value='<%= @string_link %>' />
+      <input type="text" class="link" readonly data-ga="link" value='<%= @string_link %>'/>
     </div>
     <div class="embed_wrapper">
       <div class="label">
@@ -87,14 +88,14 @@
 </div>
 
 <div class="contents_info_show_button">
-  <%= image_tag("run/popup_info_32.png", size:'32x32') %>
+  <%= image_tag("run/popup_info_32.png", size: '32x32') %>
 </div>
 <div class="bookmark_button">
-  <div class="bookmarked" style="display: <%= @bookmarked ? 'block' : 'none'%>">
-    <%= image_tag("run/bookmarked.png", size:'32x32') %>
+  <div class="bookmarked" style="display: <%= @bookmarked ? 'block' : 'none' %>">
+    <%= image_tag("run/bookmarked.png", size: '32x32') %>
   </div>
-  <div class="bookmark" style="display: <%= @bookmarked ? 'none' : 'block'%>">
-    <%= image_tag("run/bookmark.png", size:'32x32') %>
+  <div class="bookmark" style="display: <%= @bookmarked ? 'none' : 'block' %>">
+    <%= image_tag("run/bookmark.png", size: '32x32') %>
   </div>
 </div>
 <div class="contents_share_show_button clearfix">
@@ -102,6 +103,6 @@
     <%= render 'base/social_button', twitter_title: @title %>
   </div>
   <div>
-    <%= image_tag("run/share32.png", size:'32x32') %>
+    <%= image_tag("run/share32.png", size: '32x32') %>
   </div>
 </div>
