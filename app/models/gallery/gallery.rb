@@ -513,16 +513,16 @@ class Gallery < ActiveRecord::Base
         g.show_guide as #{Const::Gallery::Key::SHOW_GUIDE},
         g.show_page_num as #{Const::Gallery::Key::SHOW_PAGE_NUM},
         g.show_chapter_num as #{Const::Gallery::Key::SHOW_CHAPTER_NUM},
-        u.id as user_id,
-        u.name as username,
-        u.thumbnail_img as user_thumbnail_img,
-        ggp.data as general_pagevalue_data,
-        gip.data as instance_pagevalue_data,
-        gep.data as event_pagevalue_data,
-        gbs.count as bookmark_count,
-        gvs.count as view_count,
-        ugf.page_num as footprint_page_num,
-        gb.id as bookmark_id,
+        u.id as #{Const::Gallery::Key::USER_ID},
+        u.name as #{Const::Gallery::Key::USER_NAME},
+        u.thumbnail_img as #{Const::Gallery::Key::USER_THUMBNAIL_IMG},
+        ggp.data as #{Const::Gallery::Key::GENERAL_PAGEVALUE_DATA},
+        gip.data as #{Const::Gallery::Key::INSTANCE_PAGEVALUE_DATA},
+        gep.data as #{Const::Gallery::Key::EVENT_PAGEVALUE_DATA},
+        gbs.count as #{Const::Gallery::Key::BOOKMARK_COUNT},
+        gvs.count as #{Const::Gallery::Key::VIEW_COUNT},
+        ugf.page_num as #{Const::Gallery::Key::FOOTPRINT_PAGE_NUM},
+        gb.id as #{Const::Gallery::Key::BOOKMARK_ID},
         group_concat(DISTINCT gt.id separator ',') as #{Const::Gallery::Key::TAG_ID},
         group_concat(DISTINCT gt.name separator ',') as #{Const::Gallery::Key::TAG_NAME}
       FROM galleries g
@@ -557,27 +557,27 @@ class Gallery < ActiveRecord::Base
           height: ret[Const::Gallery::Key::SCREEN_SIZE_HEIGHT]
       }
       gpd[Const::PageValueKey::PAGE_COUNT] = ret[Const::Gallery::Key::PAGE_MAX]
-      gpd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(ret['general_pagevalue_data'])
+      gpd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(ret[Const::Gallery::Key::GENERAL_PAGEVALUE_DATA])
       ipd = {}
-      ipd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(ret['instance_pagevalue_data'])
+      ipd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(ret[Const::Gallery::Key::INSTANCE_PAGEVALUE_DATA])
       epd = {}
-      epd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(ret['event_pagevalue_data'])
+      epd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(ret[Const::Gallery::Key::EVENT_PAGEVALUE_DATA])
       fpd = {}
-      if ret['footprint_page_num'].present?
-        fpd[Const::PageValueKey::PAGE_NUM] = ret['footprint_page_num']
+      if ret[Const::Gallery::Key::FOOTPRINT_PAGE_NUM].present?
+        fpd[Const::PageValueKey::PAGE_NUM] = ret[Const::Gallery::Key::FOOTPRINT_PAGE_NUM]
       else
         fpd[Const::PageValueKey::PAGE_NUM] = 1
       end
 
       # 必要なItemを調査
-      class_dist_tokens = PageValueState.extract_need_load_itemclassdisttokens(ret['event_pagevalue_data'])
+      class_dist_tokens = PageValueState.extract_need_load_itemclassdisttokens(ret[Const::Gallery::Key::EVENT_PAGEVALUE_DATA])
       item_js_list = ItemJs.get_item_gallery(class_dist_tokens)
 
       # 閲覧数 & ブックマーク数を取得
-      gallery_view_count = ret['view_count']
-      gallery_bookmark_count = ret['bookmark_count']
+      gallery_view_count = ret[Const::Gallery::Key::VIEW_COUNT]
+      gallery_bookmark_count = ret[Const::Gallery::Key::BOOKMARK_COUNT]
 
-      pagevalues, creator = Run.setup_data(ret['user_id'].to_i, gpd, ipd, epd, fpd, page_num)
+      pagevalues, creator = Run.setup_data(ret[Const::Gallery::Key::USER_ID].to_i, gpd, ipd, epd, fpd, page_num)
 
       show_options = {}
       show_options[Const::Gallery::Key::SHOW_GUIDE] = ret[Const::Gallery::Key::SHOW_GUIDE]
@@ -587,7 +587,7 @@ class Gallery < ActiveRecord::Base
       message = I18n.t('message.database.item_state.load.success')
       string_link = self.string_link(access_token, hostname, ret[Const::Gallery::Key::TITLE])
       embed_link = self.embed_link(gpd, access_token, hostname)
-      bookmarked = ret['bookmark_id'].present?
+      bookmarked = ret[Const::Gallery::Key::BOOKMARK_ID].present?
       tags = []
       if ret[Const::Gallery::Key::TAG_ID].present?
         tag_names = ret[Const::Gallery::Key::TAG_NAME].split(',')
