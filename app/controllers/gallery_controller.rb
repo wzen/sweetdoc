@@ -24,31 +24,20 @@ class GalleryController < ApplicationController
   def get_info
     user_id = current_or_guest_user.id
     @access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
-    g = Gallery.find_by(access_token: @access_token)
-    unless g.created_user_id == user_id
-      # コンテンツの作成者で無い場合は取得不可
-      render json: nil
-      return
-    end
-    render json: {
-        Const::Gallery::Key::TITLE.to_sym => g.title,
-        Const::Gallery::Key::CAPTION.to_sym => g.caption,
-        Const::Gallery::Key::SHOW_GUIDE.to_sym => g.show_guide,
-        Const::Gallery::Key::SHOW_PAGE_NUM.to_sym => g.show_page_num,
-        Const::Gallery::Key::SHOW_CHAPTER_NUM.to_sym => g.show_chapter_num,
-        Const::Gallery::Key::THUMBNAIL_EXISTED.to_sym => g.thumbnail_img.present?
-    }
+    g = Gallery.get_contents_with_tags(user_id, @access_token).first
+    #g = Gallery.find_by(access_token: @access_token)
+    render json: g.present? ? g : nil
   end
 
   def _get_grid_contents(page)
     # ブックマークしたコンテンツ & タグからの関連コンテンツ & 今日のアクセスTopコンテンツ
-    @filter_type = params.fetch(Const::Gallery::Key::FILTER, Const::Gallery::SearchType::ALL)
+    @filter_type = params.fetch(Const::Gallery::Key::FILTER_TYPE, Const::Gallery::SearchType::ALL)
     if @filter_type.blank?
       @filter_type = Const::Gallery::SearchType::ALL
     end
-    tag_ids = Gallery.get_bookmarked_tag(current_or_guest_user.id)
-    date = Date.today
-    @ggc = GalleryGridContents.new(page, date, tag_ids, @filter_type)
+    @filter_date = params.fetch(Const::Gallery::Key::FILTER_DATE, nil)
+    @filter_tags = params.fetch(Const::Gallery::Key::FILTER_TAGS, nil)
+    @ggc = GalleryGridContents.new(page, @filter_date, @filter_tags, @filter_type)
     @contents = @ggc.all
     @dummy_contents_length = 0
     if @contents.length < Const::GRID_CONTENTS_DISPLAY_MIN

@@ -505,14 +505,14 @@ class Gallery < ActiveRecord::Base
   def self.firstload_contents(user_id, access_token, hostname, page_num = 1)
     sql = <<-"SQL".strip_heredoc
       SELECT
-        g.title as title,
-        g.caption as caption,
-        g.screen_width as screen_width,
-        g.screen_height as screen_height,
-        g.page_max as page_max,
-        g.show_guide as show_guide,
-        g.show_page_num as show_page_num,
-        g.show_chapter_num as show_chapter_num,
+        g.title as #{Const::Gallery::Key::TITLE},
+        g.caption as #{Const::Gallery::Key::CAPTION},
+        g.screen_width as #{Const::Gallery::Key::SCREEN_SIZE_WIDTH},
+        g.screen_height as #{Const::Gallery::Key::SCREEN_SIZE_HEIGHT},
+        g.page_max as #{Const::Gallery::Key::PAGE_MAX},
+        g.show_guide as #{Const::Gallery::Key::SHOW_GUIDE},
+        g.show_page_num as #{Const::Gallery::Key::SHOW_PAGE_NUM},
+        g.show_chapter_num as #{Const::Gallery::Key::SHOW_CHAPTER_NUM},
         u.id as user_id,
         u.name as username,
         u.thumbnail_img as user_thumbnail_img,
@@ -553,10 +553,10 @@ class Gallery < ActiveRecord::Base
       ret = ret.first
       gpd = {}
       gpd[Const::Project::Key::SCREEN_SIZE] = {
-          width: ret['screen_width'],
-          height: ret['screen_height']
+          width: ret[Const::Gallery::Key::SCREEN_SIZE_WIDTH],
+          height: ret[Const::Gallery::Key::SCREEN_SIZE_HEIGHT]
       }
-      gpd[Const::PageValueKey::PAGE_COUNT] = ret['page_max']
+      gpd[Const::PageValueKey::PAGE_COUNT] = ret[Const::Gallery::Key::PAGE_MAX]
       gpd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(ret['general_pagevalue_data'])
       ipd = {}
       ipd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(ret['instance_pagevalue_data'])
@@ -580,12 +580,12 @@ class Gallery < ActiveRecord::Base
       pagevalues, creator = Run.setup_data(ret['user_id'].to_i, gpd, ipd, epd, fpd, page_num)
 
       show_options = {}
-      show_options[Const::Gallery::Key::SHOW_GUIDE] = ret['show_guide']
-      show_options[Const::Gallery::Key::SHOW_PAGE_NUM] = ret['show_page_num']
-      show_options[Const::Gallery::Key::SHOW_CHAPTER_NUM] = ret['show_chapter_num']
+      show_options[Const::Gallery::Key::SHOW_GUIDE] = ret[Const::Gallery::Key::SHOW_GUIDE]
+      show_options[Const::Gallery::Key::SHOW_PAGE_NUM] = ret[Const::Gallery::Key::SHOW_PAGE_NUM]
+      show_options[Const::Gallery::Key::SHOW_CHAPTER_NUM] = ret[Const::Gallery::Key::SHOW_CHAPTER_NUM]
 
       message = I18n.t('message.database.item_state.load.success')
-      string_link = self.string_link(access_token, hostname, ret['title'])
+      string_link = self.string_link(access_token, hostname, ret[Const::Gallery::Key::TITLE])
       embed_link = self.embed_link(gpd, access_token, hostname)
       bookmarked = ret['bookmark_id'].present?
       tags = []
@@ -596,7 +596,7 @@ class Gallery < ActiveRecord::Base
         end
       end
 
-      return pagevalues, message, ret['title'], ret['caption'], gpd[Const::Project::Key::SCREEN_SIZE], creator, item_js_list, gallery_view_count, gallery_bookmark_count, show_options, string_link, embed_link, bookmarked, tags
+      return pagevalues, message, ret[Const::Gallery::Key::TITLE], ret[Const::Gallery::Key::CAPTION], gpd[Const::Project::Key::SCREEN_SIZE], creator, item_js_list, gallery_view_count, gallery_bookmark_count, show_options, string_link, embed_link, bookmarked, tags
     end
   end
 
@@ -662,22 +662,29 @@ class Gallery < ActiveRecord::Base
     end
   end
 
-  def self.get_bookmarked_tag(user_id)
+  def self.get_contents_with_tags(user_id, access_token)
     if user_id
       sql =<<-"SQL"
-      SELECT gt.category as category
-      FROM gallery_bookmarks gb
-      INNER JOIN galleries g ON g.id = gb.gallery_id AND g.del_flg = 0
+      SELECT
+        g.title as #{Const::Gallery::Key::TITLE},
+        g.caption as #{Const::Gallery::Key::CAPTION},
+        g.screen_width as #{Const::Gallery::Key::SCREEN_SIZE_WIDTH},
+        g.screen_height as #{Const::Gallery::Key::SCREEN_SIZE_HEIGHT},
+        g.page_max as #{Const::Gallery::Key::PAGE_MAX},
+        g.show_guide as #{Const::Gallery::Key::SHOW_GUIDE},
+        g.show_page_num as #{Const::Gallery::Key::SHOW_PAGE_NUM},
+        g.show_chapter_num as #{Const::Gallery::Key::SHOW_CHAPTER_NUM},
+        group_concat(DISTINCT gt.id separator ',') as #{Const::Gallery::Key::TAG_ID},
+        group_concat(DISTINCT gt.name separator ',') as #{Const::Gallery::Key::TAG_NAME}
+      FROM galleries g
       INNER JOIN users u ON g.created_user_id = u.id
       LEFT JOIN gallery_tag_maps gtm ON g.id = gtm.gallery_id AND gtm.del_flg = 0
       LEFT JOIN gallery_tags gt ON gtm.gallery_tag_id = gt.id AND gt.del_flg = 0
-      WHERE gb.user_id = #{user_id}
-      AND gb.del_flg = 0
+      WHERE g.access_token = '#{access_token}' AND g.created_user_id = #{user_id}
+      AND g.del_flg = 0
+      LIMIT 1
       SQL
-      contents = ActiveRecord::Base.connection.select_all(sql)
-      if contents.present? && contents.count > 0
-        return contents.to_hash.map{|c| c['category']}.compact
-      end
+      return ActiveRecord::Base.connection.select_all(sql)
     end
     return nil
   end
@@ -688,7 +695,7 @@ class Gallery < ActiveRecord::Base
     return gallery_view_statistic_count, gallery_bookmark_statistic_count
   end
 
-  def self.created_contents(user_id, head = 0, limit = 30)
+  def self.created_contents_list(user_id, head = 0, limit = 30)
     sql =<<-"SQL"
       SELECT
         g.access_token as #{Const::Gallery::Key::GALLERY_ACCESS_TOKEN},
@@ -756,7 +763,7 @@ class Gallery < ActiveRecord::Base
     end
   end
 
-  def self.bookmarks(user_id, head = 0, limit = 30)
+  def self.bookmarks_list(user_id, head = 0, limit = 30)
     sql =<<-"SQL"
       SELECT
         g.access_token as #{Const::Gallery::Key::GALLERY_ACCESS_TOKEN},

@@ -294,7 +294,9 @@ class Const
       TAG_ID = 'tag_id'
       TAG_NAME = 'tag_name'
       UPLOAD_OVERWRITE_GALLERY_TOKEN = 'upload_overwrite_gallery_token'
-      FILTER = 'ft'
+      FILTER_TYPE = 'ft'
+      FILTER_DATE = 'fd'
+      FILTER_TAGS = 'ftg'
       OVERWRITE_CONTENTS_SELECT =  'overwrite_contents_contents_select'
     end
 

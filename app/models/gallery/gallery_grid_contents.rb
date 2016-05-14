@@ -2,7 +2,9 @@ class GalleryGridContents
   def initialize(page, date, tag_ids, filter_type)
     @page = page.to_i
     @limit = 30
+    # TODO: DATEvalidate
     @date = date
+    # TODO: IDのリストvalidate
     @tag_ids = tag_ids
     @filter_type = filter_type
   end

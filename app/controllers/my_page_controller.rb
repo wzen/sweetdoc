@@ -10,7 +10,7 @@ class MyPageController < ApplicationController
     limit = params.fetch(Const::MyPage::Key::LIMIT, 30)
     if user_id
       @user = User.find(user_id)
-      @contents = Gallery.created_contents(user_id, head, limit)
+      @contents = Gallery.created_contents_list(user_id, head, limit)
     else
       # エラー
     end
@@ -41,7 +41,7 @@ class MyPageController < ApplicationController
     limit = params.fetch(Const::MyPage::Key::LIMIT, 30)
     if user_id
       @user = User.find(user_id)
-      @contents = Gallery.bookmarks(user_id, head, limit)
+      @contents = Gallery.bookmarks_list(user_id, head, limit)
     else
       # エラー
     end

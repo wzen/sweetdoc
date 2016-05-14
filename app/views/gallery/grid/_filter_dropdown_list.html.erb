@@ -15,22 +15,22 @@
   </li>
   <li class="<%= 'active' if filter_type == Const::Gallery::SearchType::CREATED  %>">
     <span></span>
-    <a href="/gallery/grid?<%= Const::Gallery::Key::FILTER %>=<%= Const::Gallery::SearchType::CREATED %>">
+    <a href="/gallery/grid?<%= Const::Gallery::Key::FILTER_TYPE %>=<%= Const::Gallery::SearchType::CREATED %>">
       <%= I18n.t('gallery.filter.new') %>
     </a>
   </li>
   <li class="<%= 'active' if filter_type == Const::Gallery::SearchType::VIEW_COUNT  %>">
-    <a href="/gallery/grid?<%= Const::Gallery::Key::FILTER %>=<%= Const::Gallery::SearchType::VIEW_COUNT %>">
+    <a href="/gallery/grid?<%= Const::Gallery::Key::FILTER_TYPE %>=<%= Const::Gallery::SearchType::VIEW_COUNT %>">
       <%= I18n.t('gallery.filter.view_count') %>
     </a>
   </li>
   <li class="<%= 'active' if filter_type == Const::Gallery::SearchType::BOOKMARK_COUNT  %>">
-    <a href="/gallery/grid?<%= Const::Gallery::Key::FILTER %>=<%= Const::Gallery::SearchType::BOOKMARK_COUNT %>">
+    <a href="/gallery/grid?<%= Const::Gallery::Key::FILTER_TYPE %>=<%= Const::Gallery::SearchType::BOOKMARK_COUNT %>">
       <%= I18n.t('gallery.filter.bookmark_count') %>
     </a>
   </li>
   <li class="disabled <%= 'active' if filter_type == Const::Gallery::SearchType::RECOMMEND  %>">
-    <a onclick="return false" href="/gallery/grid?<%= Const::Gallery::Key::FILTER %>=<%= Const::Gallery::SearchType::RECOMMEND %>">
+    <a onclick="return false" href="/gallery/grid?<%= Const::Gallery::Key::FILTER_TYPE %>=<%= Const::Gallery::SearchType::RECOMMEND %>">
       <%= I18n.t('gallery.filter.recommend') %>
     </a>
   </li>
