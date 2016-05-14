@@ -385,6 +385,7 @@ div#popup_info_wrapper {
   .wrapper {
     width: 100%;
     height: 100%;
+    position: relative;
 
     .close_wrapper {
       text-align: right;
@@ -398,7 +399,9 @@ div#popup_info_wrapper {
       color: white;
     }
     .tags {
-
+      position: absolute;
+      top: 20px;
+      right: 5px;
     }
   }
 }
@@ -506,6 +509,7 @@ div.contents_info {
     padding: 5px;
     background-color: rgba(0, 0, 0, 0.7);
     border-radius: 7px;
+    position: relative;
   }
 
   &.expand {
@@ -536,6 +540,11 @@ div.contents_info {
     margin-left: 5px;
     //display: inline-block;
     display: none;
+  }
+  .tags {
+    position: absolute;
+    right: 3px;
+    top: 7px;
   }
 }
 div.share_info {

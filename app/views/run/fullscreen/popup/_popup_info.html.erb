@@ -1,53 +1,54 @@
 <%
   show_page_num = true if defined?(show_page_num) == nil || show_page_num.nil?
-  show_chapter_num =  true if defined?(show_chapter_num) == nil || show_chapter_num.nil?
+  show_chapter_num = true if defined?(show_chapter_num) == nil || show_chapter_num.nil?
 %>
 
 <div id="popup_info_wrapper">
-    <div class="wrapper">
-        <div class="info_contents">
-          <div class="close_wrapper">
-            <a title="Close" onclick="RunFullScreen.hidePopupInfo()"><%= image_tag("run/close_24.png", size:'24x24') %></a>
-          </div>
-          <div class="info_parent put_center">
-            <%= render 'run/fullscreen/popup/creator_info' %>
-            <% if show_page_num %>
-                <div class="page">
-                  <span><%= I18n.t('contents_info.page') %>:</span>
-                  <span class="<%= Const::Run::AttributeName::CONTENTS_PAGE_NUM_CLASSNAME %>"></span>
-                  <span>/</span>
-                  <span class="<%= Const::Run::AttributeName::CONTENTS_PAGE_MAX_CLASSNAME %>"><%= @page_max %></span>
-                </div>
-            <% end %>
-            <% if show_chapter_num %>
-                <div>
-                  <div class="chapter">
-                    <span><%= I18n.t('contents_info.chapter') %>:</span>
-                    <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_NUM_CLASSNAME %>"></span>
-                    <span>/</span>
-                    <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_MAX_CLASSNAME %>"><%= @chapter_max %></span>
-                  </div>
-                  <div class="fork">
-                    <span><%= I18n.t('contents_info.fork') %>:</span>
-                    <span class="<%= Const::Run::AttributeName::CONTENTS_FORK_NUM_CLASSNAME %>"></span>
-                  </div>
-                </div>
-            <% end %>
-            <% if @tags.nil? == false && @tags.length > 0 %>
-                <div class="<%= Const::Run::AttributeName::CONTENTS_TAGS_CLASSNAME %>">
-                    <div class="tags tagcloud">
-                        <ul>
-                        <% @tags.each do |tag| %>
-                            <li><a href=""><%= tag %></a></li>
-                        <% end %>
-                        </ul>
-                    </div>
-                </div>
-            <% end %>
-          </div>
-          <div class="operation_parent">
-            <%= render 'run/operation' %>
-          </div>
-        </div>
+  <div class="wrapper">
+    <div class="info_contents">
+      <div class="close_wrapper">
+        <a title="Close" onclick="RunFullScreen.hidePopupInfo()"><%= image_tag("run/close_24.png", size: '24x24') %></a>
+      </div>
+      <div class="info_parent put_center">
+        <%= render 'run/fullscreen/popup/creator_info' %>
+        <% if show_page_num %>
+            <div class="page">
+              <span><%= I18n.t('contents_info.page') %>:</span>
+              <span class="<%= Const::Run::AttributeName::CONTENTS_PAGE_NUM_CLASSNAME %>"></span>
+              <span>/</span>
+              <span class="<%= Const::Run::AttributeName::CONTENTS_PAGE_MAX_CLASSNAME %>"><%= @page_max %></span>
+            </div>
+        <% end %>
+        <% if show_chapter_num %>
+            <div>
+              <div class="chapter">
+                <span><%= I18n.t('contents_info.chapter') %>:</span>
+                <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_NUM_CLASSNAME %>"></span>
+                <span>/</span>
+                <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_MAX_CLASSNAME %>"><%= @chapter_max %></span>
+              </div>
+              <div class="fork">
+                <span><%= I18n.t('contents_info.fork') %>:</span>
+                <span class="<%= Const::Run::AttributeName::CONTENTS_FORK_NUM_CLASSNAME %>"></span>
+              </div>
+            </div>
+        <% end %>
+        <% if @tags.present? %>
+            <div class="<%= Const::Run::AttributeName::CONTENTS_TAGS_CLASSNAME %>">
+              <div class="tags tagcloud">
+                <ul>
+                  <% @tags.each do |tag| %>
+                      <li><a href=""><%= tag[:name] %></a></li>
+                      <input type="hidden" value="<%= tag[:id] %>">
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+        <% end %>
+      </div>
+      <div class="operation_parent">
+        <%= render 'run/operation' %>
+      </div>
     </div>
+  </div>
 </div>
