@@ -55,6 +55,10 @@ class UploadBase
       # タグ数が最大数になった場合, Inputを非表示
       $('.select_tag_input', root).hide()
 
+  removeAllUploadSelectTag: (root) ->
+    $('.select_tag ul li', root).remove()
+    $('.select_tag_input', root).show()
+
   # アップロード
   # @abstract
   upload: (root, callback = null) ->

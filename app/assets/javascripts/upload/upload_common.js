@@ -108,20 +108,30 @@ UploadCommon = (function() {
           $("." + constant.Gallery.Key.SHOW_PAGE_NUM, root).prop('checked', false);
           $("." + constant.Gallery.Key.SHOW_CHAPTER_NUM, root).prop('checked', false);
           _removeImage.call(_this);
+          upload.removeAllUploadSelectTag(root);
           return;
         }
         src = "/gallery/" + token + "/thumbnail";
         _cbk = function(dataList) {
+          var i, len, name, names;
           $("." + constant.Gallery.Key.TITLE, root).val(dataList[constant.Gallery.Key.TITLE]);
           $("." + constant.Gallery.Key.MARKDOWN_CAPTION, root).val(dataList[constant.Gallery.Key.CAPTION]);
           $("." + constant.Gallery.Key.SHOW_GUIDE, root).prop('checked', dataList[constant.Gallery.Key.SHOW_GUIDE]);
           $("." + constant.Gallery.Key.SHOW_PAGE_NUM, root).prop('checked', dataList[constant.Gallery.Key.SHOW_PAGE_NUM]);
           $("." + constant.Gallery.Key.SHOW_CHAPTER_NUM, root).prop('checked', dataList[constant.Gallery.Key.SHOW_CHAPTER_NUM]);
           if (dataList[constant.Gallery.Key.THUMBNAIL_EXISTED]) {
-            return _getThumbnailBlob.call(this, src);
+            _getThumbnailBlob.call(this, src);
           } else {
-            return _removeImage.call(this);
+            _removeImage.call(this);
           }
+          if (dataList[constant.Gallery.Key.TAG_ID] != null) {
+            names = dataList[constant.Gallery.Key.TAG_NAME].split(',');
+            for (i = 0, len = names.length; i < len; i++) {
+              name = names[i];
+              upload.addUploadSelectTag(root, name);
+            }
+          }
+          return upload.prepareUploadTagEvent(root);
         };
         if (window.galleryDataList == null) {
           window.galleryDataList = {};

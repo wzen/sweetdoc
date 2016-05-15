@@ -85,6 +85,7 @@ class UploadCommon
         $(".#{constant.Gallery.Key.SHOW_PAGE_NUM}",root).prop('checked', false)
         $(".#{constant.Gallery.Key.SHOW_CHAPTER_NUM}",root).prop('checked', false)
         _removeImage.call(@)
+        upload.removeAllUploadSelectTag(root)
         return
 
       src = "/gallery/#{token}/thumbnail"
@@ -101,6 +102,13 @@ class UploadCommon
         else
           # サムネイル無し
           _removeImage.call(@)
+        if dataList[constant.Gallery.Key.TAG_ID]?
+          # タグ設定
+          names = dataList[constant.Gallery.Key.TAG_NAME].split(',')
+          for name in names
+            upload.addUploadSelectTag(root, name)
+        # タグクリックイベント設定
+        upload.prepareUploadTagEvent(root)
 
       if !window.galleryDataList?
         window.galleryDataList = {}

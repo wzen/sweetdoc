@@ -70,6 +70,11 @@ UploadBase = (function() {
     }
   };
 
+  UploadBase.prototype.removeAllUploadSelectTag = function(root) {
+    $('.select_tag ul li', root).remove();
+    return $('.select_tag_input', root).show();
+  };
+
   UploadBase.prototype.upload = function(root, callback) {
     if (callback == null) {
       callback = null;
