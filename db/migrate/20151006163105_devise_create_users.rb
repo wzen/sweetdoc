@@ -13,7 +13,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.string :encrypted_password, null: false
       t.boolean :guest, default: false
       t.string :provider
-      t.binary :thumbnail_img, limit: 10.megabyte
+      t.string :thumbnail_img
       t.string :provider_token
 
       ## Recoverable

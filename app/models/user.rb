@@ -11,6 +11,9 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable, :confirmable, :omniauthable, omniauth_providers: [:twitter, :facebook, :google_oauth2]
 
+  mount_uploader :thumbnail_img, UserThumbnailUploader
+
+
   def self.generate_access_token
     return SecureRandom.urlsafe_base64(20)
   end

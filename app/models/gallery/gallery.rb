@@ -27,6 +27,13 @@ class Gallery < ActiveRecord::Base
   has_many :gallery_bookmark_statistics
   has_many :projects
   has_many :project_gallery_mapsX
+  belongs_to :user, foreign_key: :created_user_id
+
+  mount_uploader :thumbnail_img, GalleryThumbnailUploader
+  validates :thumbnail_img,
+            file_size: {
+                maximum: (Const::THUMBNAIL_FILESIZE_MAX_KB * 0.001).megabytes.to_i
+            }
 
   def self.save_state(
     user_id,
@@ -57,16 +64,10 @@ class Gallery < ActiveRecord::Base
             # エラー
             return false, I18n.t('message.database.item_state.save.error'), nil
           end
-          p = Project.find(project_id)
-          t_img = nil
-          if thumbnail_img.present?
-            t_img = Base64.decode64(thumbnail_img)
-          end
           g.update!({
                        title: title,
                        caption: caption,
-                       thumbnail_img: t_img,
-                       thumbnail_img_contents_type: thumbnail_img_contents_type,
+                       thumbnail_img: thumbnail_img,
                        thumbnail_img_width: thumbnail_width,
                        thumbnail_img_height: thumbnail_height,
                        page_max: page_max,
@@ -84,8 +85,6 @@ class Gallery < ActiveRecord::Base
           _save_tag(tags, gallery_id)
         else
           # 新規作成
-          # Project取得
-          p = Project.find(project_id)
           # Gallery レコード追加
           t_img = nil
           if thumbnail_img.present?

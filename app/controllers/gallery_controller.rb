@@ -39,6 +39,12 @@ class GalleryController < ApplicationController
     @filter_tags = params.fetch(Const::Gallery::Key::FILTER_TAGS, nil)
     @ggc = GalleryGridContents.new(page, @filter_date, @filter_tags, @filter_type)
     @contents = @ggc.all
+    @thumbnails = {}
+    @contents.each do |g|
+      if g[Const::Gallery::Key::THUMBNAIL_IMG].present?
+        @thumbnails[g[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]] = send_data(g[Const::Gallery::Key::THUMBNAIL_IMG], type: g[Const::Gallery::Key::THUMBNAIL_IMG_CONTENTSTYPE], disposition: :inline)
+      end
+    end
     @dummy_contents_length = 0
     if @contents.length < Const::GRID_CONTENTS_DISPLAY_MIN
       @dummy_contents_length = Const::GRID_CONTENTS_DISPLAY_MIN - @contents.length
@@ -93,8 +99,8 @@ class GalleryController < ApplicationController
     thumbnail_img = params.fetch(Const::Gallery::Key::THUMBNAIL_IMG, nil)
     if thumbnail_img.size > 1000 * Const::THUMBNAIL_FILESIZE_MAX_KB
       @result_success, @message = false, ""
+      return
     end
-    thumbnail_img_contents_type = params.fetch(Const::Gallery::Key::THUMBNAIL_IMG_CONTENTSTYPE, nil)
     thumbnail_img_width = params.fetch(Const::Gallery::Key::THUMBNAIL_IMG_WIDTH, nil)
     thumbnail_img_height = params.fetch(Const::Gallery::Key::THUMBNAIL_IMG_HEIGHT, nil)
     page_max = params.require(Const::Gallery::Key::PAGE_MAX)
@@ -153,16 +159,16 @@ class GalleryController < ApplicationController
   end
 
   def thumbnail
-    begin
-      g = Gallery.find_by(access_token: params[:access_token], del_flg: false)
-      if g.blank? || g.thumbnail_img.blank?
-        send_file(Rails.root.join("public", 'images/gallery/image_notfound.png'), type: 'image/png', disposition: :inline)
-      else
-        send_data(g.thumbnail_img, type: g.thumbnail_img_contents_type, disposition: :inline)
-      end
-    rescue => e
-      p e
-    end
+    # begin
+    #   g = Gallery.find_by(access_token: params[:access_token], del_flg: false)
+    #   if g.blank? || g.thumbnail_img.blank?
+    #     send_file(Rails.root.join("public", 'images/gallery/image_notfound.png'), type: 'image/png', disposition: :inline)
+    #   else
+    #     send_data(g.thumbnail_img, type: g.thumbnail_img_contents_type, disposition: :inline)
+    #   end
+    # rescue => e
+    #   p e
+    # end
   end
 
   private :_take_gallery_data, :_get_grid_contents

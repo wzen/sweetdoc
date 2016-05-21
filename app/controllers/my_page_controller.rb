@@ -66,6 +66,32 @@ class MyPageController < ApplicationController
     end
   end
 
+  def thumbnail
+    begin
+      user_id = _get_user_id
+      user = User.find(user_id)
+      if user.blank? || user.thumbnail_img.blank?
+        send_file('gallery/sidebar/default_user.png', type: 'image/png', disposition: :inline)
+      else
+        send_data(user.thumbnail_img, type: user.thumbnail_img_contents_type, disposition: :inline)
+      end
+    rescue => e
+      p e
+    end
+  end
+
+  def upload_thumbnail
+    user_id = current_or_guest_user.id
+    file_path = params[:file_path]
+    # ファイルサイズ確認
+    size = file_path.size
+    if file_path.size > 1000 * Const::THUMBNAIL_FILESIZE_MAX_KB
+      @result_success, @message, @image_url = false, I18n.t('upload_confirm.thumbnail_size_error', size: Const::THUMBNAIL_FILESIZE_MAX_KB), nil
+    else
+      @result_success, @message, @image_url =  true, '', "data:#{file_path.content_type};base64,#{Base64.encode64(file_path.read)}"
+    end
+  end
+
   private
   def _get_user_id
     user_access_token = params.fetch(Const::User::Key::USER_ACCESS_TOKEN, nil)

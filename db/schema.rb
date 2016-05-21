@@ -44,22 +44,21 @@ ActiveRecord::Schema.define(version: 20151209141157) do
   end
 
   create_table "galleries", force: true do |t|
-    t.string   "access_token",                                                 null: false
-    t.string   "title",                                                        null: false
+    t.string   "access_token",                         null: false
+    t.string   "title",                                null: false
     t.text     "caption"
-    t.binary   "thumbnail_img",               limit: 16777215
-    t.string   "thumbnail_img_contents_type"
+    t.string   "thumbnail_img"
     t.integer  "thumbnail_img_width"
     t.integer  "thumbnail_img_height"
     t.integer  "screen_width"
     t.integer  "screen_height"
-    t.integer  "page_max",                                     default: 1
-    t.boolean  "show_guide",                                   default: true
-    t.boolean  "show_page_num",                                default: false
-    t.boolean  "show_chapter_num",                             default: false
-    t.integer  "created_user_id",                                              null: false
-    t.integer  "version",                                      default: 1
-    t.boolean  "del_flg",                                      default: false
+    t.integer  "page_max",             default: 1
+    t.boolean  "show_guide",           default: true
+    t.boolean  "show_page_num",        default: false
+    t.boolean  "show_chapter_num",     default: false
+    t.integer  "created_user_id",                      null: false
+    t.integer  "version",              default: 1
+    t.boolean  "del_flg",              default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -402,20 +401,20 @@ ActiveRecord::Schema.define(version: 20151209141157) do
   add_index "user_project_maps", ["user_id", "project_id"], name: "index_user_project_maps_on_user_id_and_project_id", unique: true, using: :btree
 
   create_table "users", force: true do |t|
-    t.string   "access_token",                                            null: false
-    t.string   "name",                                                    null: false
+    t.string   "access_token",                           null: false
+    t.string   "name",                                   null: false
     t.string   "uid"
-    t.integer  "user_auth_id",                            default: 4,     null: false
-    t.string   "email",                                                   null: false
-    t.string   "encrypted_password",                                      null: false
-    t.boolean  "guest",                                   default: false
+    t.integer  "user_auth_id",           default: 4,     null: false
+    t.string   "email",                                  null: false
+    t.string   "encrypted_password",                     null: false
+    t.boolean  "guest",                  default: false
     t.string   "provider"
-    t.binary   "thumbnail_img",          limit: 16777215
+    t.string   "thumbnail_img"
     t.string   "provider_token"
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                           default: 0,     null: false
+    t.integer  "sign_in_count",          default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -424,7 +423,7 @@ ActiveRecord::Schema.define(version: 20151209141157) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
-    t.boolean  "del_flg",                                 default: false
+    t.boolean  "del_flg",                default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

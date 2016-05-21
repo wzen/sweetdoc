@@ -278,6 +278,7 @@ class Const
       THUMBNAIL_IMG_WIDTH = 'tbimg_w'
       THUMBNAIL_IMG_HEIGHT = 'tbimg_h'
       THUMBNAIL_EXISTED = 'tbimg_existed'
+      THUMBNAIL = 'thumbnail'
       PAGE_MAX = 'pagemax'
       TITLE = 'title'
       CAPTION = 'caption'
