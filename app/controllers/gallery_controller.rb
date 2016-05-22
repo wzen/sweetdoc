@@ -119,7 +119,6 @@ class GalleryController < ApplicationController
         ApplicationController.helpers.sanitize(title),
         ApplicationController.helpers.sanitize(caption),
         thumbnail_img,
-        thumbnail_img_contents_type,
         thumbnail_img_width,
         thumbnail_img_height,
         page_max,

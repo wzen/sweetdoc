@@ -11,7 +11,7 @@
   <% if user_signed_in? %>
       <%= link_to '/my_page' do %>
         <!-- ログイン済み -->
-        <% if current_user.thumbnail_img.nil? %>
+        <% unless current_user.thumbnail_img? %>
             <div class="circle <%= sp_class %> <%= Const::Gallery::Sidebar::USER %>">
               <%= image_tag 'gallery/sidebar/default_user.png' ,size:"#{size}x#{size}" %>
             </div>

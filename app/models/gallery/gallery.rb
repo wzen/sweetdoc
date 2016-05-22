@@ -42,7 +42,6 @@ class Gallery < ActiveRecord::Base
     title,
     caption,
     thumbnail_img,
-    thumbnail_img_contents_type,
     thumbnail_width,
     thumbnail_height,
     page_max,
@@ -86,15 +85,11 @@ class Gallery < ActiveRecord::Base
         else
           # 新規作成
           # Gallery レコード追加
-          t_img = nil
-          if thumbnail_img.present?
-            t_img = Base64.decode64(thumbnail_img)
-          end
           g = self.new({
                            access_token: SecureRandom.uuid,
                            title: title,
                            caption: caption,
-                           thumbnail_img: t_img,
+                           thumbnail_img: thumbnail_img,
                            thumbnail_img_contents_type: thumbnail_img_contents_type,
                            thumbnail_img_width: thumbnail_width,
                            thumbnail_img_height: thumbnail_height,

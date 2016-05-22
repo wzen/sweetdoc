@@ -70,7 +70,7 @@ class MyPageController < ApplicationController
     begin
       user_id = _get_user_id
       user = User.find(user_id)
-      if user.blank? || user.thumbnail_img.blank?
+      if user.blank? || !user.thumbnail_img?
         send_file('gallery/sidebar/default_user.png', type: 'image/png', disposition: :inline)
       else
         send_data(user.thumbnail_img, type: user.thumbnail_img_contents_type, disposition: :inline)
