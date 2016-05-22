@@ -5,6 +5,7 @@ class CreateGalleries < ActiveRecord::Migration
       t.string :title, null: false
       t.text :caption
       t.string :thumbnail_img
+      t.string :thumbnail_url
       t.integer :thumbnail_img_width
       t.integer :thumbnail_img_height
       t.integer :screen_width

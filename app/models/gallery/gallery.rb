@@ -29,7 +29,7 @@ class Gallery < ActiveRecord::Base
   has_many :project_gallery_mapsX
   belongs_to :user, foreign_key: :created_user_id
 
-  mount_uploader :thumbnail_img, GalleryThumbnailUploader
+  mount_uploader :thumbnail_img, GalleryThumbnailImageUploader
   validates :thumbnail_img,
             file_size: {
                 maximum: (Const::THUMBNAIL_FILESIZE_MAX_KB * 0.001).megabytes.to_i
@@ -77,6 +77,17 @@ class Gallery < ActiveRecord::Base
                        show_chapter_num: show_chapter_num,
                        created_user_id: user_id
                    })
+          if thumbnail_img.present?
+            # サムネイル画像のURL設定
+            g.update!({thumbnail_url: g.thumbnail_img.url})
+          else
+            # サムネイルを削除
+            g.remove_thumbnail_img!
+            g.thumbnail_url = nil
+            g.thumbnail_img_width = nil
+            g.thumbnail_img_height = nil
+            g.save!
+          end
           gallery_id = g.id
           # Pagevalue更新
           _save_gallery_pagevalue(_get_project_pagevalues(upm.id), gallery_id)
@@ -101,6 +112,10 @@ class Gallery < ActiveRecord::Base
                            created_user_id: user_id
                        })
           g.save!
+          if thumbnail_img.present?
+            # サムネイル画像を絶対パスURLに置き換え
+            g.update!({thumbnail_url: g.thumbnail_img.url})
+          end
           gallery_id = g.id
           # UserProjectMap取得
           upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id, del_flg: false)

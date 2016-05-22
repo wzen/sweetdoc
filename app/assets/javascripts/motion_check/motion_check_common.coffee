@@ -19,6 +19,8 @@ class MotionCheckCommon
     else
       # 実行確認ページを新規タブで表示
       target = "_runtab"
+      if window.name == target
+        target = "_runtab2"
       window.open("about:blank", target)
       document.run_form.action = '/motion_check'
     document.run_form.target = target

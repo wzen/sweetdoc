@@ -14,6 +14,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.boolean :guest, default: false
       t.string :provider
       t.string :thumbnail_img
+      t.string :thumbnail_url
       t.string :provider_token
 
       ## Recoverable

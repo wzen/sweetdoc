@@ -1,11 +1,11 @@
-<% if is_blink %>
+<% if is_blank %>
     <div style="display: table;width: 100%;height: 100%">
       <div style="display: table-cell;vertical-align: middle;text-align: center">
         <%= image_tag '/images/gallery/blink_contents.png', size: '64x64' %>
       </div>
     </div>
-<% elsif @thumbnails[content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]].present? %>
-    <%= image_tag(@thumbnails[content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]], class: 'thumbnail_img')%>
+<% elsif content[Const::Gallery::Key::THUMBNAIL_URL].present? %>
+    <%= image_tag(content[Const::Gallery::Key::THUMBNAIL_URL], class: 'thumbnail_img')%>
 <% else %>
     <div style="display: table;width: 100%;height: 100%">
       <div style="display: table-cell;vertical-align: middle;text-align: center">

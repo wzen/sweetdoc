@@ -274,7 +274,7 @@ class Const
       INSTANCE_PAGE_VALUE = 'i'
       EVENT_PAGE_VALUE = 'e'
       THUMBNAIL_IMG = 'tbimg'
-      THUMBNAIL_IMG_CONTENTSTYPE = 'tbimgcnt'
+      THUMBNAIL_URL = 'tburl'
       THUMBNAIL_IMG_WIDTH = 'tbimg_w'
       THUMBNAIL_IMG_HEIGHT = 'tbimg_h'
       THUMBNAIL_EXISTED = 'tbimg_existed'

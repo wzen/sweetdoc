@@ -1,6 +1,6 @@
 <%= render 'upload/navbar/navber' %>
 <div id="upload_wrapper">
-  <%= form_tag '', method: :post, id: 'upload_form' do %>
+  <%= form_tag '', method: :post, id: 'upload_form', multipart: 'true' do %>
       <div class="row">
         <div class="col-sm-10 col-sm-offset-1">
           <div class="row">
@@ -22,7 +22,7 @@
                         <%= I18n.t('upload_confirm.thumbnail_warn', size: Const::THUMBNAIL_FILESIZE_MAX_KB) %>
                       </div>
                       <div>
-                        <%= file_field_tag :thumbnail_img, class: Const::PreloadItemImage::Key::SELECT_FILE %>
+                        <%= file_field_tag Const::Gallery::Key::THUMBNAIL_IMG.to_sym, class: Const::PreloadItemImage::Key::SELECT_FILE %>
                       </div>
                       <div class="file_select_delete" style="text-align: right;display: none">
                         <input type="button" class="<%= Const::PreloadItemImage::Key::SELECT_FILE_DELETE %>" value="Delete">
@@ -150,8 +150,6 @@
           <input name="<%= Const::Gallery::Key::SCREEN_SIZE %>" type="hidden" value="<%= @screen_size %>">
       <% end %>
       <input name="<%= Const::Gallery::Key::PAGE_MAX %>" type="hidden" value="<%= @page_max %>">
-      <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG %>" type="hidden" value="">
-      <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_CONTENTSTYPE %>" type="hidden" value="">
       <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_WIDTH %>" type="hidden" value="">
       <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_HEIGHT %>" type="hidden" value="">
   <% end %>

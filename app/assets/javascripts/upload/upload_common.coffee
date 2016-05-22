@@ -17,8 +17,6 @@ class UploadCommon
         image.onload = ->
           imageData = src.split('base64,')[1]
           contentType = src.split(';base64')[0].replace('data:', '')
-          $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG}']", root).val(imageData.replace(/^.*,/, ''))
-          $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE}']", root).val(contentType)
           $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_WIDTH}']", root).val(image.width)
           $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT}']", root).val(image.height)
       FR.readAsDataURL(path)
@@ -33,15 +31,12 @@ class UploadCommon
       selectFile = $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).val()
       if selectFile? && selectFile.length > 0
         $(".#{constant.PreloadItemImage.Key.SELECT_FILE}", root).val('').trigger('change')
-      $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG}']", root).val('')
-      $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE}']", root).val('')
       $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_WIDTH}']", root).val('')
       $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT}']", root).val('')
       $('.file_select_delete', root).hide()
       $('.capture', root).attr("src", "").hide()
       $('.error_message', root).hide()
       $('.default_thumbnail', root).show()
-      $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG}']", root).val('')
 
     _getThumbnailBlob = (src) ->
       xhr = new XMLHttpRequest()
@@ -148,22 +143,3 @@ class UploadCommon
       upload.upload(root)
       return false
     )
-
-  # 前画面のキャプチャ作成
-  @makeCapture = (canvas) ->
-    root = $('#upload_wrapper')
-    try
-      png = canvas.toDataURL('image/png')
-      $(".capture", root).attr('src', png)
-      $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG}']", root).val(png.replace(/^.*,/, ''))
-    catch
-      $(".capture", root).attr('src', '')
-    $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE}']", root).val('image/png')
-    width = parseInt($(canvas).attr('width'))
-    height = parseInt($(canvas).attr('height'))
-    $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_WIDTH}']", root).val(width)
-    $("input[name='#{constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT}']", root).val(height)
-    if width > height
-      $(".capture", root).css({width: '100%', height: 'auto'})
-    else
-      $(".capture", root).css({width: 'auto', height: '100%'})

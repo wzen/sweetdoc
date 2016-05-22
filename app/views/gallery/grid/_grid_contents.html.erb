@@ -1,6 +1,6 @@
 <%
-  is_blink = false if is_blink.nil?
-  if is_blink
+  is_blank = false if is_blank.nil?
+  if is_blank
     content = {}
   end
 %>
@@ -11,10 +11,10 @@
             <img class="loading" />
         </div>
         <div class="thumbnail_img_wrapper">
-          <%= render 'gallery/grid/thumbnail', is_blink: is_blink, content: content %>
+          <%= render 'gallery/grid/thumbnail', is_blank: is_blank, content: content %>
         </div>
         <div class="hover_overlay">
-          <%= render 'gallery/grid/overlay', is_blink: is_blink, content: content %>
+          <%= render 'gallery/grid/overlay', is_blank: is_blank, content: content %>
         </div>
     </div>
   <input class="<%= Const::Gallery::Key::THUMBNAIL_IMG_WIDTH %>" type="hidden" value="<%= content[Const::Gallery::Key::THUMBNAIL_IMG_WIDTH].to_i %>" >

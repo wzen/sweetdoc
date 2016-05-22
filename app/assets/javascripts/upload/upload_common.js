@@ -23,8 +23,6 @@ UploadCommon = (function() {
           var contentType, imageData;
           imageData = src.split('base64,')[1];
           contentType = src.split(';base64')[0].replace('data:', '');
-          $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG + "']", root).val(imageData.replace(/^.*,/, ''));
-          $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE + "']", root).val(contentType);
           $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_WIDTH + "']", root).val(image.width);
           return $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT + "']", root).val(image.height);
         };
@@ -44,15 +42,12 @@ UploadCommon = (function() {
       if ((selectFile != null) && selectFile.length > 0) {
         $("." + constant.PreloadItemImage.Key.SELECT_FILE, root).val('').trigger('change');
       }
-      $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG + "']", root).val('');
-      $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE + "']", root).val('');
       $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_WIDTH + "']", root).val('');
       $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT + "']", root).val('');
       $('.file_select_delete', root).hide();
       $('.capture', root).attr("src", "").hide();
       $('.error_message', root).hide();
-      $('.default_thumbnail', root).show();
-      return $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG + "']", root).val('');
+      return $('.default_thumbnail', root).show();
     };
     _getThumbnailBlob = function(src) {
       var xhr;
@@ -172,34 +167,6 @@ UploadCommon = (function() {
       upload.upload(root);
       return false;
     });
-  };
-
-  UploadCommon.makeCapture = function(canvas) {
-    var error, height, png, root, width;
-    root = $('#upload_wrapper');
-    try {
-      png = canvas.toDataURL('image/png');
-      $(".capture", root).attr('src', png);
-      $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG + "']", root).val(png.replace(/^.*,/, ''));
-    } catch (error) {
-      $(".capture", root).attr('src', '');
-    }
-    $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE + "']", root).val('image/png');
-    width = parseInt($(canvas).attr('width'));
-    height = parseInt($(canvas).attr('height'));
-    $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_WIDTH + "']", root).val(width);
-    $("input[name='" + constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT + "']", root).val(height);
-    if (width > height) {
-      return $(".capture", root).css({
-        width: '100%',
-        height: 'auto'
-      });
-    } else {
-      return $(".capture", root).css({
-        width: 'auto',
-        height: '100%'
-      });
-    }
   };
 
   return UploadCommon;

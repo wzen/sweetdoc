@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20151209141157) do
     t.string   "title",                                null: false
     t.text     "caption"
     t.string   "thumbnail_img"
+    t.string   "thumbnail_url"
     t.integer  "thumbnail_img_width"
     t.integer  "thumbnail_img_height"
     t.integer  "screen_width"
@@ -410,6 +411,7 @@ ActiveRecord::Schema.define(version: 20151209141157) do
     t.boolean  "guest",                  default: false
     t.string   "provider"
     t.string   "thumbnail_img"
+    t.string   "thumbnail_url"
     t.string   "provider_token"
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"

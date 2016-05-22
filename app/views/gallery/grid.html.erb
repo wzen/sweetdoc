@@ -36,7 +36,7 @@
             <%= render 'gallery/grid/grid_contents', content: content %>
         <% end %>
         <% @dummy_contents_length.times do %>
-          <%= render 'gallery/grid/grid_contents', is_blink: true %>
+          <%= render 'gallery/grid/grid_contents', is_blank: true %>
         <% end %>
     </div>
     <% if @contents.length < @total_count %>

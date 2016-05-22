@@ -39,12 +39,6 @@ class GalleryController < ApplicationController
     @filter_tags = params.fetch(Const::Gallery::Key::FILTER_TAGS, nil)
     @ggc = GalleryGridContents.new(page, @filter_date, @filter_tags, @filter_type)
     @contents = @ggc.all
-    @thumbnails = {}
-    @contents.each do |g|
-      if g[Const::Gallery::Key::THUMBNAIL_IMG].present?
-        @thumbnails[g[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]] = send_data(g[Const::Gallery::Key::THUMBNAIL_IMG], type: g[Const::Gallery::Key::THUMBNAIL_IMG_CONTENTSTYPE], disposition: :inline)
-      end
-    end
     @dummy_contents_length = 0
     if @contents.length < Const::GRID_CONTENTS_DISPLAY_MIN
       @dummy_contents_length = Const::GRID_CONTENTS_DISPLAY_MIN - @contents.length

@@ -102,7 +102,7 @@ class GalleryGridContents
       g.title as #{Const::Gallery::Key::TITLE},
       g.caption as #{Const::Gallery::Key::CAPTION},
       g.thumbnail_img as #{Const::Gallery::Key::THUMBNAIL_IMG},
-      g.thumbnail_img_contents_type as #{Const::Gallery::Key::THUMBNAIL_IMG_CONTENTSTYPE},
+      g.thumbnail_url as #{Const::Gallery::Key::THUMBNAIL_URL},
       g.thumbnail_img_width as #{Const::Gallery::Key::THUMBNAIL_IMG_WIDTH},
       g.thumbnail_img_height as #{Const::Gallery::Key::THUMBNAIL_IMG_HEIGHT},
       g.screen_width as #{Const::Gallery::Key::SCREEN_SIZE_WIDTH},
