@@ -22,3 +22,4 @@
 .idea/
 .env
 *.rdb
+*.iml
