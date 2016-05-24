@@ -39,8 +39,12 @@ div#user_wrapper {
 
   .user_icon {
     margin-top: 15px;
+    position: relative;
 
     > div {
+      position: absolute;
+      top: 0;
+      left: 25px;
       background-color: white;
       width: 100px;
       height: 100px;
@@ -48,6 +52,13 @@ div#user_wrapper {
       -webkit-border-radius: 15px;
       -moz-border-radius: 15px;
       border-radius: 15px;;
+    }
+    .icon_wrapper {
+
+    }
+    .icon_change_cover {
+      background-color: rgba(0,0,0,0.7);
+      opacity: 0;
     }
   }
   .footer_wrapper {

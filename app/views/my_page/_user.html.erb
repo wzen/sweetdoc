@@ -1,23 +1,26 @@
 <div>
-    <div class="user_icon">
-        <div>
-            <%= image_tag 'gallery/sidebar/default_user.png' ,size:'100x100' %>
-        </div>
+  <div class="user_icon">
+    <div class="icon_wrapper">
+      <%= image_tag 'gallery/sidebar/default_user.png', size: '100x100' %>
     </div>
-    <% if @is_accessed_myself_page %>
+    <div class="icon_change_cover">
+      <%= image_tag 'mypage/icon_change.png', size: '100x100' %>
+    </div>
+  </div>
+  <% if @is_accessed_myself_page %>
       <div class="footer_wrapper">
         <div class="edit">
           <%= link_to edit_user_registration_path do %>
-              <%= image_tag 'gallery/sidebar/edit64.png' ,size:'45x45' %>
+              <%= image_tag 'gallery/sidebar/edit64.png', size: '45x45' %>
           <% end %>
         </div>
         <div class="logout">
           <%= link_to destroy_user_session_path, method: :delete do %>
-              <%= image_tag 'gallery/sidebar/logout64.png' ,size:'45x45' %>
+              <%= image_tag 'gallery/sidebar/logout64.png', size: '45x45' %>
           <% end %>
         </div>
       </div>
-    <% end %>
+  <% end %>
 
-    <!-- ソーシャルボタン等追加予定 -->
+  <!-- ソーシャルボタン等追加予定 -->
 </div>
