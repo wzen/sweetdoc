@@ -7,7 +7,9 @@
     <div id="thumbnail_wrapper">
       <div>
         <div>
-          <%= image_tag(thumbnail_gallery_path(@access_token), class: 'thumbnail_img')%>
+          <% if @thumbnail_url.present? %>
+              <%= image_tag(@thumbnail_url, class: 'thumbnail_img')%>
+          <% end %>
         </div>
       </div>
     </div>

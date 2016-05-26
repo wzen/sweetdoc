@@ -66,6 +66,7 @@ class GalleryController < ApplicationController
     if @is_exist_gallery
       @title = g.title
       @caption = g.caption
+      @thumbnail_url = g.thumbnail_url
       ret, message, @creator = Gallery.get_creator_info_by_gallery_id(g.id)
     end
     render layout: 'gallery_fullwindow'
