@@ -49,8 +49,7 @@ div#user_wrapper {
       width: 100px;
       height: 100px;
       margin: 0 auto;
-      -webkit-border-radius: 15px;
-      -moz-border-radius: 15px;
+      overflow: hidden;
       border-radius: 15px;;
     }
     .icon_wrapper {
@@ -59,6 +58,9 @@ div#user_wrapper {
     .icon_change_cover {
       background-color: rgba(0,0,0,0.7);
       opacity: 0;
+    }
+    .upload_form_wrapper {
+      display: none;
     }
   }
   .footer_wrapper {

@@ -508,6 +508,7 @@ class Const
       USER_ACCESS_TOKEN = 'u'
       NAME = 'name'
       USER_COUNT = 'count'
+      THUMBNAIL = 'thumbnail'
     end
   end
 

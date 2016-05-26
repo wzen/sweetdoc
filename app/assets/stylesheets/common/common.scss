@@ -235,11 +235,8 @@ div.pop {
   width: 40px;
   height: 40px;
   background: #FAFAFA;
-  -moz-border-radius: 50px;
-  -webkit-border-radius: 50px;
-  -o-border-radius: 50px;
-  -ms-border-radius: 50px;
   border-radius: 50px;
+  overflow: hidden;
   &.sp {
     width: 50px !important;
     height: 50px !important;

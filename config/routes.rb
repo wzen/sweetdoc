@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # User
+  post 'user/update_thumbnail'
+
   root to: 'gallery#grid'
   devise_for :user, controllers: {
       sessions: 'users/sessions',

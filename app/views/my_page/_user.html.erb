@@ -1,10 +1,19 @@
 <div>
   <div class="user_icon">
     <div class="icon_wrapper">
-      <%= image_tag 'gallery/sidebar/default_user.png', size: '100x100' %>
+      <% if @user.thumbnail_img? %>
+          <%= image_tag @user.thumbnail_img.url, size: '100x100', class: 'user_thumbnail' %>
+      <% else %>
+          <%= image_tag 'gallery/sidebar/default_user.png', size: '100x100', class: 'user_thumbnail' %>
+      <% end %>
     </div>
     <div class="icon_change_cover">
       <%= image_tag 'mypage/icon_change.png', size: '100x100' %>
+    </div>
+    <div class="upload_form_wrapper">
+      <%= form_tag user_update_thumbnail_path, method: :post, remote: true, class: "form-horizontal", id: 'thumbnail_upload_form', multipart: true, format: :json, authenticity_token: true  do |f| %>
+        <%= file_field_tag Const::User::Key::THUMBNAIL.to_sym %>
+      <% end %>
     </div>
   </div>
   <% if @is_accessed_myself_page %>
