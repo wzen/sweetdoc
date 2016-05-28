@@ -144,8 +144,9 @@ class PreloadItemArrow extends CanvasItemBase
     r = opt.progress / opt.progressMax
     _resetDrawPath.call(@)
     @restoreAllNewDrawingSurface()
-    for r in @registCoord.slice(0, parseInt((@registCoord.length - 1) * r))
-      _drawPath.call(@, r)
+    console.log(r)
+    for reg in @registCoord.slice(0, parseInt(@registCoord.length * r))
+      _drawPath.call(@, reg)
     # 尾と体の座標をCanvasに描画
     _drawNewCanvas.call(@)
 

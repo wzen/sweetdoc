@@ -161,7 +161,7 @@ class ItemPreviewTemp extends CanvasItemBase
 
     _resetDrawPath.call(@)
     @restoreAllNewDrawingSurface()
-    for r in @registCoord.slice(0, parseInt((@registCoord.length - 1) * r))
+    for r in @registCoord.slice(0, parseInt(@registCoord.length * r))
       _drawPath.call(@, r)
     # 尾と体の座標をCanvasに描画
     _drawNewCanvas.call(@)
