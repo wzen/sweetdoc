@@ -23,9 +23,9 @@ class MotionCheck
     LEFT JOIN event_pagevalue_pagings epp ON up.id = epp.user_pagevalue_id AND ipp.page_num = epp.page_num AND epp.del_flg = 0
     LEFT JOIN event_pagevalues ep ON epp.event_pagevalue_id = ep.id AND ep.del_flg = 0
     WHERE
-      u.id = #{user_id}
+      u.id = #{user_id.to_i}
     AND
-      up.id = #{user_pagevalue_id}
+      up.id = #{user_pagevalue_id.to_i}
     AND
       u.del_flg = 0
     AND

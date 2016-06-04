@@ -46,7 +46,7 @@ class PageValueState
             SELECT up.id as user_pagevalue_id, up.user_project_map_id as user_project_map_id, up.setting_pagevalue_id as setting_pagevalue_id
             FROM user_pagevalues up
             INNER JOIN user_project_maps upm ON up.user_project_map_id = upm.id
-            WHERE upm.user_id = #{user_id} AND upm.project_id = #{project_id}
+            WHERE upm.user_id = #{user_id.to_i} AND upm.project_id = #{project_id.to_i}
             ORDER BY up.updated_at DESC
             LIMIT 1
           SQL
@@ -137,7 +137,7 @@ class PageValueState
       user_pagevalues up
       INNER JOIN
       user_project_maps upm ON up.user_project_map_id = upm.id
-      WHERE upm.user_id = #{user_id} AND upm.project_id = #{project_id}
+      WHERE upm.user_id = #{user_id.to_i} AND upm.project_id = #{project_id.to_i}
       AND up.del_flg = 0
       AND upm.del_flg = 0
       ORDER BY up.updated_at DESC
@@ -172,7 +172,7 @@ class PageValueState
       LEFT JOIN general_pagevalues gp ON gpp.general_pagevalue_id = gp.id AND gp.del_flg = 0
 
       WHERE
-        up.id = #{user_pagevalue_id}
+        up.id = #{user_pagevalue_id.to_i}
       AND
         up.del_flg = 0
       AND
@@ -246,7 +246,7 @@ class PageValueState
         SELECT upm_sub.project_id as user_project_map_project_id, MAX(up_sub.updated_at) as user_pagevalue_updated_at_max
         FROM user_pagevalues up_sub
         INNER JOIN user_project_maps upm_sub ON up_sub.user_project_map_id = upm_sub.id
-        WHERE upm_sub.user_id = #{user_id}
+        WHERE upm_sub.user_id = #{user_id.to_i}
         AND up_sub.del_flg = 0
         AND upm_sub.del_flg = 0
         GROUP BY upm_sub.project_id

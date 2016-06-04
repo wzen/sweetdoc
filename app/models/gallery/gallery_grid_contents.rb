@@ -142,7 +142,7 @@ class GalleryGridContents
       where += " AND DATEDIFF(#{@date}, gbs.view_day) = 0"
     end
     if @tag_ids.present? && @tag_ids.length > 0
-      tags_in = "(#{@tag_ids.join(',')})"
+      tags_in = "(#{@tag_ids.map{|m| m.to_i}.join(',')})"
       where += " AND gt.id IN #{tags_in}"
     end
     select = total_count ? 'count(*)' : grid_contents_select(Const::Gallery::SearchType::BOOKMARK_COUNT)
@@ -164,7 +164,7 @@ class GalleryGridContents
       where += " AND DATEDIFF(#{@date}, gbs.view_day) = 0"
     end
     if @tag_ids.present? && @tag_ids.length > 0
-      tags_in = "(#{@tag_ids.join(',')})"
+      tags_in = "(#{@tag_ids.map{|m| m.to_i}.join(',')})"
       where += " AND gt.id IN #{tags_in}"
     end
     select = total_count ? 'count(*)' : grid_contents_select(Const::Gallery::SearchType::VIEW_COUNT)
@@ -183,7 +183,7 @@ class GalleryGridContents
   def _createdate_sql(total_count = false)
     table = nil
     if @tag_ids.present? && @tag_ids.length > 0
-      tags_in = "(#{@tag_ids.join(',')})"
+      tags_in = "(#{@tag_ids.map{|m| m.to_i}.join(',')})"
       table =<<-"TABLE"
         (
         SELECT g2.*

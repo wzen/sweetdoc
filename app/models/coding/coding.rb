@@ -160,7 +160,7 @@ class Coding
       ActiveRecord::Base.transaction do
         u_sql = ''
         if user_coding_id
-          u_sql = "AND uc.id = #{user_coding_id}"
+          u_sql = "AND uc.id = #{user_coding_id.to_i}"
         end
         sql =<<-"SQL"
           SELECT uc.code_filename as code_filename, uct.node_path as node_path, uc.lang_type as lang_type, uc.id as id, u.access_token as user_access_token
@@ -169,7 +169,7 @@ class Coding
           INNER JOIN users u ON uc.user_id = u.id
           AND uc.id = uct.user_coding_id
           AND u.del_flg = 0
-          WHERE u.id = #{user_id} #{u_sql}
+          WHERE u.id = #{user_id.to_i} #{u_sql}
         SQL
         ret_sql = ActiveRecord::Base.connection.select_all(sql)
         ret = ret_sql.to_hash
@@ -210,7 +210,7 @@ class Coding
           INNER JOIN users u ON uc.user_id = u.id
           AND uc.id = uct.user_coding_id
           AND u.del_flg = 0
-          WHERE u.id = #{user_id}
+          WHERE u.id = #{user_id.to_i}
         SQL
         ret_sql = ActiveRecord::Base.connection.select_all(sql)
         uc = ret_sql.to_hash
@@ -250,9 +250,9 @@ class Coding
           SELECT uc.code_filename as code_filename, uc.lang_type as lang_type, u.access_token as user_access_token
           FROM user_codings uc
           INNER JOIN users u ON uc.user_id = u.id
-          WHERE u.id = #{user_id}
+          WHERE u.id = #{user_id.to_i}
           AND u.del_flg = 0
-          AND uc.id = #{user_coding_id}
+          AND uc.id = #{user_coding_id.to_i}
           AND uc.del_flg = 0
         SQL
         ret_sql = ActiveRecord::Base.connection.select_all(sql)

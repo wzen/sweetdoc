@@ -24,7 +24,7 @@ class ItemGallery < ActiveRecord::Base
             LEFT JOIN item_gallery_tag_maps igtm ON igtm.item_gallery_id = ig.id AND igtm.del_flg = 0
             LEFT JOIN item_gallery_tags igt ON igtm.item_gallery_tag_id = igt.id AND igt.del_flg = 0
             LEFT JOIN item_gallery_using_statistics igus ON ig.id = igus.item_gallery_id AND igus.del_flg = 0
-            LEFT JOIN user_item_gallery_maps uigm ON uigm.item_gallery_id = ig.id AND uigm.user_id = #{user_id}
+            LEFT JOIN user_item_gallery_maps uigm ON uigm.item_gallery_id = ig.id AND uigm.user_id = #{user_id.to_i}
             WHERE u.del_flg = 0 AND ig.del_flg = 0
             GROUP BY ig.id
             ORDER BY igus.count DESC
@@ -41,7 +41,7 @@ class ItemGallery < ActiveRecord::Base
 
   def self.popular_tags(limit)
     begin
-      # TODO: 不可対策のため統計テーブル等作る
+      # TODO: 負荷対策のため統計テーブル等作る
       ActiveRecord::Base.transaction do
         sql =<<-"SQL"
             SELECT
@@ -84,7 +84,7 @@ class ItemGallery < ActiveRecord::Base
       INNER JOIN users u ON uigm.user_id = u.id
       LEFT JOIN item_gallery_tag_maps igtm ON igtm.item_gallery_id = ig.id AND igtm.del_flg = 0
       LEFT JOIN item_gallery_tags igt ON igtm.item_gallery_tag_id = igt.id AND igt.del_flg = 0
-      WHERE u.id = #{user_id}
+      WHERE u.id = #{user_id.to_i}
       AND u.del_flg = 0 AND ig.del_flg = 0 AND uigm.del_flg = 0
       GROUP BY ig.id
       ORDER BY uigm.updated_at DESC
@@ -120,8 +120,8 @@ class ItemGallery < ActiveRecord::Base
         INNER JOIN users u ON ig.created_user_id = u.id
         LEFT JOIN item_gallery_tag_maps igtm ON igtm.item_gallery_id = ig.id AND igtm.del_flg = 0
         LEFT JOIN item_gallery_tags igt ON igtm.item_gallery_tag_id = igt.id AND igt.del_flg = 0
-        LEFT JOIN user_item_gallery_maps uigm ON uigm.item_gallery_id = ig.id AND uigm.user_id = #{user_id}
-        WHERE u.id = #{user_id}
+        LEFT JOIN user_item_gallery_maps uigm ON uigm.item_gallery_id = ig.id AND uigm.user_id = #{user_id.to_i}
+        WHERE u.id = #{user_id.to_i}
         AND u.del_flg = 0 AND ig.del_flg = 0
         AND ig.del_flg = 0
         GROUP BY ig.id
@@ -149,9 +149,9 @@ class ItemGallery < ActiveRecord::Base
           SELECT uc.code_filename as code_filename, uc.lang_type as lang_type, uc.id as id, u.access_token as user_access_token
           FROM user_codings uc
           INNER JOIN users u ON uc.user_id = u.id
-          WHERE u.id = #{user_id}
+          WHERE u.id = #{user_id.to_i}
           AND uc.del_flg = 0
-          AND uc.id = #{user_coding_id}
+          AND uc.id = #{user_coding_id.to_i}
         SQL
         ret_sql = ActiveRecord::Base.connection.select_all(sql)
         ret = ret_sql.to_hash.first
@@ -272,7 +272,7 @@ class ItemGallery < ActiveRecord::Base
         sql =<<-"SQL"
           SELECT u.access_token as created_user_access_token, ig.file_name as code_filename, ig.class_name as item_class_name
           FROM users u INNER JOIN item_galleries ig ON u.id = ig.created_user_id
-          WHERE ig.access_token = '#{item_gallery_access_token}'
+          WHERE ig.access_token = #{ActiveRecord::Base.connection.quote(item_gallery_access_token)}
           AND u.del_flg = 0
           AND ig.del_flg = 0
         SQL
@@ -297,8 +297,8 @@ class ItemGallery < ActiveRecord::Base
           SELECT ig.id as item_gallery_id, uigm.id as user_item_gallery_id
           FROM user_item_gallery_maps uigm
           INNER JOIN item_galleries ig ON uigm.item_gallery_id = ig.id
-          WHERE uigm.user_id = #{user_id}
-          AND ig.access_token = '#{item_gallery_access_token}'
+          WHERE uigm.user_id = #{user_id.to_i}
+          AND ig.access_token = #{ActiveRecord::Base.connection.quote(item_gallery_access_token)}
           AND uigm.del_flg = 0
           AND ig.del_flg = 0
         SQL

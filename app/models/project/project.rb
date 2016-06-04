@@ -53,9 +53,9 @@ class Project < ActiveRecord::Base
           INNER JOIN user_pagevalues up ON upm.id = up.user_project_map_id
           INNER JOIN projects p ON p.id = upm.project_id
           WHERE
-            upm.user_id = #{user_id}
+            upm.user_id = #{user_id.to_i}
           AND
-            up.id = #{user_pagevalue_id}
+            up.id = #{user_pagevalue_id.to_i}
           AND
             upm.del_flg = 0
           AND
@@ -80,7 +80,7 @@ class Project < ActiveRecord::Base
       INNER JOIN user_pagevalues up ON upm.id = up.user_project_map_id
       INNER JOIN projects p ON p.id = upm.project_id
       WHERE
-        upm.user_id = #{user_id}
+        upm.user_id = #{user_id.to_i}
       AND
         upm.del_flg = 0
       AND

@@ -34,7 +34,7 @@ class ItemJs
         unless access_tokens.class == Array
           at = [access_tokens]
         end
-        at = "'#{at.join("','")}'"
+        at = "#{at.map{|m| ActiveRecord::Base.connection.quote(m)}.join(",")}"
 
         sql =<<-"SQL"
           SELECT ig.access_token as item_gallery_access_token, ig.file_name as file_name, ig.class_name as class_name, u.access_token as created_user_access_token
