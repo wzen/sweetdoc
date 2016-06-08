@@ -11,7 +11,7 @@
  * file per style scope.
  *
  *= require jquery-ui
- *= require bootstrap.min
+ * require bootstrap.min
  *= require bootstrap_custom
  *= require css/layout
  *= require non-responsive

@@ -1,5 +1,5 @@
 class GalleryGridContents
-  def initialize(page, date, tag_ids, filter_type)
+  def initialize(page, date, tag_ids, filter_type, word)
     @page = page.to_i
     @limit = 30
     # TODO: DATEvalidate
@@ -7,6 +7,7 @@ class GalleryGridContents
     # TODO: IDのリストvalidate
     @tag_ids = tag_ids
     @filter_type = filter_type
+    @word = word
   end
 
   def current_page
@@ -98,6 +99,7 @@ class GalleryGridContents
 
   def grid_contents_select(search_type)
     return <<-"VALUE"
+      DISTINCT g.id as #{Const::Gallery::Key::GALLERY_ID},
       g.access_token as #{Const::Gallery::Key::GALLERY_ACCESS_TOKEN},
       g.title as #{Const::Gallery::Key::TITLE},
       g.caption as #{Const::Gallery::Key::CAPTION},
@@ -145,6 +147,10 @@ class GalleryGridContents
       tags_in = "(#{@tag_ids.map{|m| m.to_i}.join(',')})"
       where += " AND gt.id IN #{tags_in}"
     end
+    if @word.present?
+      word =  ActiveRecord::Base.connection.quote(@word)
+      where += " AND (g.title LIKE '%#{word}%' OR gt.name LIKE '%#{word}%')"
+    end
     select = total_count ? 'count(*)' : grid_contents_select(Const::Gallery::SearchType::BOOKMARK_COUNT)
     sql =<<-"SQL"
       SELECT #{select}
@@ -167,6 +173,10 @@ class GalleryGridContents
       tags_in = "(#{@tag_ids.map{|m| m.to_i}.join(',')})"
       where += " AND gt.id IN #{tags_in}"
     end
+    if @word.present?
+      word =  ActiveRecord::Base.connection.quote(@word)
+      where += " AND (g.title LIKE '%#{word}%' OR gt.name LIKE '%#{word}%')"
+    end
     select = total_count ? 'count(*)' : grid_contents_select(Const::Gallery::SearchType::VIEW_COUNT)
     sql =<<-"SQL"
       SELECT #{select}
@@ -184,13 +194,14 @@ class GalleryGridContents
     table = nil
     if @tag_ids.present? && @tag_ids.length > 0
       tags_in = "(#{@tag_ids.map{|m| m.to_i}.join(',')})"
+      word_filter = "AND (g2.title LIKE '%#{word}%' OR gt2.name LIKE '%#{word}%')"
       table =<<-"TABLE"
         (
         SELECT g2.*
         FROM galleries g2
         LEFT JOIN gallery_tag_maps as gtm2 ON g2.id = gtm2.gallery_id AND gtm2.del_flg = 0
         LEFT JOIN gallery_tags as gt2 ON gtm2.gallery_tag_id = gt2.id AND gt2.del_flg = 0
-        WHERE gt2.id IN #{tags_in}
+        WHERE gt2.id IN #{tags_in} #{word_filter}
         AND g2.del_flg = 0
         ORDER BY g.created_at DESC LIMIT #{offset}, #{@limit}
         )

@@ -37,7 +37,8 @@ class GalleryController < ApplicationController
     end
     @filter_date = params.fetch(Const::Gallery::Key::FILTER_DATE, nil)
     @filter_tags = params.fetch(Const::Gallery::Key::FILTER_TAGS, nil)
-    @ggc = GalleryGridContents.new(page, @filter_date, @filter_tags, @filter_type)
+    @word = params.fetch(Const::Gallery::Key::WORD, nil)
+    @ggc = GalleryGridContents.new(page, @filter_date, @filter_tags, @filter_type, @word)
     @contents = @ggc.all
     @dummy_contents_length = 0
     if @contents.length < Const::GRID_CONTENTS_DISPLAY_MIN
@@ -150,19 +151,6 @@ class GalleryController < ApplicationController
     user_id = current_or_guest_user.id
     gallery_access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
     @result_success, @message = Gallery.remove_bookmark(user_id, gallery_access_token, Date.today)
-  end
-
-  def thumbnail
-    # begin
-    #   g = Gallery.find_by(access_token: params[:access_token], del_flg: false)
-    #   if g.blank? || g.thumbnail_img.blank?
-    #     send_file(Rails.root.join("public", 'images/gallery/image_notfound.png'), type: 'image/png', disposition: :inline)
-    #   else
-    #     send_data(g.thumbnail_img, type: g.thumbnail_img_contents_type, disposition: :inline)
-    #   end
-    # rescue => e
-    #   p e
-    # end
   end
 
   private :_take_gallery_data, :_get_grid_contents

@@ -15,6 +15,7 @@ Rails.application.config.assets.precompile = [
     precompile_target,
     /(?:\/|\\|\A)application\.(css|js)$/
 ]
+Rails.application.config.assets.paths << "#{Rails.root}/vendor/assets/fonts"
 Rails.application.config.assets.precompile += %w(*.eot *.svg *.ttf *.woff)
 
 #Rails.application.config.assets.prefix = '/assets'

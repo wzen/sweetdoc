@@ -309,6 +309,7 @@ class Const
       FILTER_DATE = 'fd'
       FILTER_TAGS = 'ftg'
       OVERWRITE_CONTENTS_SELECT =  'overwrite_contents_contents_select'
+      WORD = 'word'
     end
 
     class SearchKey

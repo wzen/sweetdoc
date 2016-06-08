@@ -29,24 +29,36 @@
         <%= render 'gallery/grid/filter_dropdown_list' %>
       </div>
     </div>
+    <div class="search_wrapper">
+      <div id="custom-search-input">
+        <div class="input-group">
+          <input type="text" placeholder="Buscar"/>
+          <span class="input-group-btn">
+              <button class="btn btn-info btn-lg" type="button">
+                  <i class="glyphicon glyphicon-search"></i>
+              </button>
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
   <div id="grid_centering_wrapper">
     <div id="grid_wrapper">
-        <% @contents.each do |content| %>
-            <%= render 'gallery/grid/grid_contents', content: content %>
-        <% end %>
-        <% @dummy_contents_length.times do %>
+      <% @contents.each do |content| %>
+          <%= render 'gallery/grid/grid_contents', content: content %>
+      <% end %>
+      <% @dummy_contents_length.times do %>
           <%= render 'gallery/grid/grid_contents', is_blank: true %>
-        <% end %>
+      <% end %>
     </div>
     <% if @contents.length < @total_count %>
-      <div id="footer_button_wrapper">
-        <div class="footer_button">
-          <button class="button_white withSeeThough">
-            Load more
-          </button>
+        <div id="footer_button_wrapper">
+          <div class="footer_button">
+            <button class="button_white withSeeThough">
+              Load more
+            </button>
+          </div>
         </div>
-      </div>
     <% end %>
   </div>
 </form>
@@ -55,6 +67,6 @@
 
 <script type="text/javascript">
   window.contentsTotalCount = <%= @total_count %>
-  window.contentsTakeCount = <%= @contents.length %>
-  window.gridPage = 1
+      window.contentsTakeCount = <%= @contents.length %>
+          window.gridPage = 1
 </script>

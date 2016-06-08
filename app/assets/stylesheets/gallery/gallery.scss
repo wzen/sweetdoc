@@ -493,6 +493,62 @@ div#option_wrapper {
   @media (max-width: $mediaMaxWidth1) {
     display: none !important;
   }
+
+  div.search_wrapper {
+    float: right;
+    margin-right: 5px;
+    width: 250px;
+    height: 38px;
+    #custom-search-input{
+      padding: 3px;
+      border: solid 1px #357ebd;
+      border-radius: 6px;
+      background-color: #428bca;
+      div.input-group {
+        height: 30px;
+        margin-left: 5px;
+
+        input {
+          width: 100%;
+          height: 30px;
+          border: 0;
+          box-shadow: none;
+          background-color: transparent;
+          color: white;
+          font-size: 15px;
+          padding-left: 3px;
+        }
+        ::-webkit-input-placeholder {
+          color: rgba(255, 255, 255, 0.5)
+        }
+        ::-moz-placeholder {
+          color: white; opacity: 1;
+        }
+        :-ms-input-placeholder {
+          color: white;
+        }
+
+        button {
+          margin: 2px 0 0 0;
+          background: none;
+          box-shadow: none;
+          border: 0;
+          color: #666666;
+          padding: 0 8px 0 10px;
+          border-left: solid 1px #ccc;
+          &:hover {
+            border: 0;
+            box-shadow: none;
+            border-left: solid 1px #ccc;
+          }
+        }
+      }
+      .glyphicon-search{
+        font-size: 18px;
+      }
+    }
+  }
+
   div.paging_wrapper {
     float: left;
     width: 100%;
@@ -721,4 +777,3 @@ div.overlay {
   z-index: 9999;
   margin-right: 70px;
 }
-
