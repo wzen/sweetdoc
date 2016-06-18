@@ -282,3 +282,5 @@ en:
   tag:
     contents_recommend: 'Presentation,Comic,Memo'
     item_recommend: 'Button,Arrow,Text'
+  search:
+    placeholder: 'Search...'

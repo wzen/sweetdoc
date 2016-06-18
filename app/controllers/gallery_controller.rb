@@ -4,6 +4,9 @@ require 'gallery/gallery_grid_contents'
 class GalleryController < ApplicationController
   #before_action :authenticate_user!
 
+  include GalleryGet
+  include GallerySave
+
   def index
   end
 
@@ -24,8 +27,7 @@ class GalleryController < ApplicationController
   def get_info
     user_id = current_or_guest_user.id
     @access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
-    g = Gallery.get_contents_with_tags(user_id, @access_token).first
-    #g = Gallery.find_by(access_token: @access_token)
+    g = get_contents_with_tags(user_id, @access_token).first
     render json: g.present? ? g : nil
   end
 
@@ -108,7 +110,7 @@ class GalleryController < ApplicationController
       screen_size = JSON.parse(screen_size)
     end
     upload_overwrite_gallery_token = params.fetch(Const::Gallery::Key::UPLOAD_OVERWRITE_GALLERY_TOKEN, '')
-    @result_success, @message, @access_token = Gallery.save_state(
+    @result_success, @message, @access_token = _save_state(
         user_id,
         project_id,
         tags,
@@ -131,26 +133,26 @@ class GalleryController < ApplicationController
     tags = params.require(Const::Gallery::Key::TAGS)
     i_page_values = params.require(Const::Gallery::Key::INSTANCE_PAGE_VALUE)
     e_page_values = params.require(Const::Gallery::Key::EVENT_PAGE_VALUE)
-    @result_success, @message = Gallery.update_last_state(user_id, tags, i_page_values, e_page_values)
+    @result_success, @message = _update_last_state(user_id, tags, i_page_values, e_page_values)
   end
 
   def get_popular_and_recommend_tags
     recommend_source_word = params.require(Const::Gallery::Key::RECOMMEND_SOURCE_WORD)
-    @popular_tags = GalleryTag.get_popular_tags
-    @recommend_tags = GalleryTag.get_recommend_tags(@popular_tags, recommend_source_word)
+    @popular_tags = get_popular_tags
+    @recommend_tags = get_recommend_tags(@popular_tags, recommend_source_word)
   end
 
   def add_bookmark
     user_id = current_or_guest_user.id
     gallery_access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
     note = params.fetch(Const::Gallery::Key::NOTE, '')
-    @result_success, @message = Gallery.add_bookmark(user_id, gallery_access_token, note, Date.today)
+    @result_success, @message = _add_bookmark(user_id, gallery_access_token, note, Date.today)
   end
 
   def remove_bookmark
     user_id = current_or_guest_user.id
     gallery_access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
-    @result_success, @message = Gallery.remove_bookmark(user_id, gallery_access_token, Date.today)
+    @result_success, @message = _remove_bookmark(user_id, gallery_access_token, Date.today)
   end
 
   private :_take_gallery_data, :_get_grid_contents
