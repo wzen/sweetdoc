@@ -1,7 +1,6 @@
 GIT
   remote: git://github.com/paulwittmann/rails-erd.git
-  revision: 9ccb094fa29b095d5549271f48c65af8bb53f749
-  branch: mavericks
+  revision: d29b0c29fcfa9783c1070a915e7549a4e66d8441
   specs:
     rails-erd (1.1.0)
       activerecord (>= 3.0)
@@ -383,4 +382,4 @@ DEPENDENCIES
   whenever (= 0.9.4)
 
 BUNDLED WITH
-   1.10.6
+   1.12.4

@@ -5,6 +5,7 @@ require 'pagevalue/page_value_state'
 class RunController < ApplicationController
 
   include GalleryConcern::Get
+  include MotionCheckConcern::Get
 
   def markitup_preview
     render layout: false
@@ -24,7 +25,7 @@ class RunController < ApplicationController
     else
       user_id = current_or_guest_user.id
       user_pagevalue_id = params.require(Const::Run::Key::RUNNING_USER_PAGEVALUE_ID)
-      @result_success, @pagevalues, @item_js_list = MotionCheck.paging(user_id, user_pagevalue_id, target_pages, loaded_class_dist_tokens)
+      @result_success, @pagevalues, @item_js_list = motion_check_paging(user_id, user_pagevalue_id, target_pages, loaded_class_dist_tokens)
     end
   end
 

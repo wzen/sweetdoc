@@ -60,14 +60,7 @@ body {
   width: 100%;
   height: 100%;
   .content_wrapper {
-    position: absolute;
-    top: -80px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    width: 640px;
-    height: 300px;
+    height: 100%;
   }
 }
 
@@ -455,12 +448,13 @@ input:-webkit-autofill {
 
 #new-wrapper {
   position: absolute;
-  top: -20px;
+  top: 0;
+  bottom: 0;
   left: 0;
   right: 0;
   margin: auto;
-  height: 115px;
   width: 290px;
+  height: 545px;
 }
 
 /*

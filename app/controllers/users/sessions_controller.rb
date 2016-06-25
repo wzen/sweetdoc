@@ -4,9 +4,11 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def create
-    # login
-    set_current_user(current_user)
-    @do_login = true
+    if current_user.present?
+      # login
+      set_current_user(current_user)
+      @do_login = true
+    end
     super
   end
 
