@@ -1,67 +1,77 @@
 <div id="wrapper">
-    <div class="content_wrapper">
+  <div class="content_wrapper">
+    <div id="parent-wrapper">
+      <div id="header-wrapper">
         <div id="login-wrapper">
-            <div id="header"><%= I18n.t('user.sign_in') %></div>
-            <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-                <div class="form-item">
-                    <%= f.label :email %><br />
-                    <%= f.email_field :email, autofocus: true %>
-                </div>
+          <div id="header"><%= I18n.t('user.sign_in') %></div>
+          <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+              <div class="form-item">
+                <%= f.label :email %><br/>
+                <%= f.email_field :email, autofocus: true %>
+              </div>
 
-                <div class="form-item">
-                    <%= f.label :password %><br />
-                    <%= f.password_field :password, autocomplete: "off" %>
-                </div>
+              <div class="form-item">
+                <%= f.label :password %><br/>
+                <%= f.password_field :password, autocomplete: "off" %>
+              </div>
 
-                <% if devise_mapping.rememberable? -%>
-                    <div class="form-item">
-                        <%= f.check_box :remember_me %>
-                        <%= f.label :remember_me %>
-                    </div>
-                <% end -%>
+              <% if devise_mapping.rememberable? -%>
+                  <div class="form-item">
+                    <%= f.check_box :remember_me %>
+                    <%= f.label :remember_me %>
+                  </div>
+              <% end -%>
 
-                <div class="button-panel submit">
-                    <%= f.submit I18n.t('user.do_sign_in'), class:'button', title:'Sign In' %>
-                </div>
-            <% end %>
+              <div class="button-panel submit">
+                <%= f.submit I18n.t('user.do_sign_in'), class: 'button', title: 'Sign In' %>
+              </div>
+          <% end %>
         </div>
 
         <div id="orSeparator">
-            <div class="socialSeparatorTop"></div>
-            <div class="or">or</div>
-            <div class="socialSeparatorBottom"></div>
+          <div class="socialSeparatorTop"></div>
+          <div class="or">or</div>
+          <div class="socialSeparatorBottom"></div>
         </div>
 
         <div id="socialLogin">
-            <div id="header">
-                <%= I18n.t('user.sign_in_with_social') %>
-            </div>
+          <div id="header">
+            <%= I18n.t('user.sign_in_with_social') %>
+          </div>
 
+          <div class="social_parent_wrapper">
             <div class="social_wrapper">
-              <%= form_tag(user_omniauth_authorize_path(:facebook)) do %>
-                  <%= button_tag id: 'fblogin', type: 'submit' do %>
-                      f&nbsp;&nbsp;&nbsp;<em id="fbname"></em>
-                      <span id="fbtext">Sign In with Facebook</span>
-                  <% end %>
-              <% end %>
-
-              <%= form_tag(user_omniauth_authorize_path(:google_oauth2)) do %>
-                  <%= button_tag id: 'gpluslogin', type: 'submit' do %>
-                      g+<em id="gpname"></em>
-                      <span id="gptext">Sign In with Google</span>
-                  <% end %>
-              <% end %>
-
-              <%= form_tag(user_omniauth_authorize_path(:twitter)) do %>
-                  <%= button_tag id: 'twtrlogin', type: 'submit' do %>
-                      t&nbsp;&nbsp;&nbsp;<em id="twtrname"></em>
-                      <span id="twtrtext">Sign In with Twitter</span>
-                  <% end %>
-              <% end %>
+              <div class="each_button_wrapper">
+                <%= form_tag(user_omniauth_authorize_path(:facebook)) do %>
+                    <%= button_tag id: 'fblogin', type: 'submit' do %>
+                        f&nbsp;&nbsp;&nbsp;<em id="fbname"></em>
+                        <span id="fbtext">Sign In with Facebook</span>
+                    <% end %>
+                <% end %>
+              </div>
+              <div class="each_button_wrapper">
+                <%= form_tag(user_omniauth_authorize_path(:google_oauth2)) do %>
+                    <%= button_tag id: 'gpluslogin', type: 'submit' do %>
+                        g+<em id="gpname"></em>
+                        <span id="gptext">Sign In with Google</span>
+                    <% end %>
+                <% end %>
+              </div>
+              <div class="each_button_wrapper">
+                <%= form_tag(user_omniauth_authorize_path(:twitter)) do %>
+                    <%= button_tag id: 'twtrlogin', type: 'submit' do %>
+                        t&nbsp;&nbsp;&nbsp;<em id="twtrname"></em>
+                        <span id="twtrtext">Sign In with Twitter</span>
+                    <% end %>
+                <% end %>
+              </div>
             </div>
+          </div>
         </div>
-        <div class="sign_up_footer">
-            <%= render "user/shared/links" %>
-        </div>
+      </div>
+      <div class="sign_up_footer">
+        <%= render "user/shared/links" %>
+      </div>
     </div>
+  </div>
 </div>

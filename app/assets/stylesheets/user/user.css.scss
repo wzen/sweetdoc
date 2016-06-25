@@ -76,12 +76,17 @@ body {
 
 }
 
+#header-wrapper {
+  height: 315px;
+  width: 640px;
+}
+
 /* Form Layout */
 #login-wrapper {
   position: absolute;
   top: 0;
   left: 0;
-  height: 115px;
+  height: 315px;
   width: 290px;
 }
 
@@ -96,14 +101,14 @@ body {
     position: absolute;
     top: 0;
     left: 29px;
-    height: 115px;
+    height: 132px;
     width: 3px;
     background-color: #666;
   }
 
   .or {
     position: absolute;
-    top: 115px;
+    top: 132px;
     left: 11px;
     width: 40px;
     display: inline-block;
@@ -117,9 +122,9 @@ body {
 
   .socialSeparatorBottom {
     position: absolute;
-    top: 160px;
+    top: 181px;
     left: 29px;
-    height: 130px;
+    height: 132px;
     width: 3px;
     background-color: #666;
   }
@@ -130,12 +135,22 @@ body {
   top: 0;
   left: 350px;
   height: 300px;
-  width: 290px;
+  width: 315px;
 
-  .social_wrapper {
-    position: relative;
-    height: 270px;
-    line-height: 270px;
+  .social_parent_wrapper {
+    width: 100%;
+    text-align: center;
+    .social_wrapper {
+      width: 290px;
+      height: 250px;
+      margin: auto;
+
+      .each_button_wrapper {
+        height: 70px;
+        position: relative;
+        margin-top: 10px;
+      }
+    }
   }
 }
 
@@ -235,7 +250,7 @@ body {
   cursor: pointer;
   display: block;
   float: left;
-  top: 80px;
+  top: 10px;
   left: 0px;
   height: 50px;
   position: absolute;
@@ -310,7 +325,7 @@ body {
   cursor: pointer;
   display: block;
   float: left;
-  top: 150px;
+  top: 10px;
   left: 0px;
   height: 50px;
   position: absolute;
@@ -439,13 +454,6 @@ input:-webkit-autofill {
   border-bottom: 1px dotted black;
 }
 
-.sign_up_footer {
-  position: absolute;
-  top: 300px;
-  left: 0;
-  right: 0;
-}
-
 #new-wrapper {
   position: absolute;
   top: 0;
@@ -455,6 +463,17 @@ input:-webkit-autofill {
   margin: auto;
   width: 290px;
   height: 545px;
+}
+
+#parent-wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 640px;
+  height: 430px;
 }
 
 /*
