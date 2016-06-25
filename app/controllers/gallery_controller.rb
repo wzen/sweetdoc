@@ -1,11 +1,8 @@
-require 'gallery/gallery'
-require 'gallery/gallery_grid_contents'
-
 class GalleryController < ApplicationController
   #before_action :authenticate_user!
 
-  include GalleryGet
-  include GallerySave
+  include GalleryConcern::Get
+  include GalleryConcern::Save
 
   def index
   end
@@ -27,7 +24,7 @@ class GalleryController < ApplicationController
   def get_info
     user_id = current_or_guest_user.id
     @access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
-    g = get_contents_with_tags(user_id, @access_token).first
+    g = get_gallery_contents_with_tags(user_id, @access_token).first
     render json: g.present? ? g : nil
   end
 
@@ -70,7 +67,7 @@ class GalleryController < ApplicationController
       @title = g.title
       @caption = g.caption
       @thumbnail_url = g.thumbnail_url
-      ret, message, @creator = Gallery.get_creator_info_by_gallery_id(g.id)
+      ret, message, @creator = get_gallery_creator_info_by_gallery_id(g.id)
     end
     render layout: 'gallery_fullwindow'
   end
@@ -83,9 +80,9 @@ class GalleryController < ApplicationController
     user_id = current_or_guest_user.id
     @access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
     # ViewCountをupdate
-    Gallery.add_view_statistic_count(@access_token, Date.today)
+    add_gallery_view_statistic_count(@access_token, Date.today)
     # データを取得
-    @pagevalues, @message, @title, @caption, @screen_size, @creator, @item_js_list, @gallery_view_count, @gallery_bookmark_count, @show_options, @string_link, @embed_link, @bookmarked, @tags = Gallery.firstload_contents(user_id, @access_token, request.host)
+    @pagevalues, @message, @title, @caption, @screen_size, @creator, @item_js_list, @gallery_view_count, @gallery_bookmark_count, @show_options, @string_link, @embed_link, @bookmarked, @tags = firstload_gallery_contents(user_id, @access_token, request.host)
   end
 
   def save_state
@@ -110,7 +107,7 @@ class GalleryController < ApplicationController
       screen_size = JSON.parse(screen_size)
     end
     upload_overwrite_gallery_token = params.fetch(Const::Gallery::Key::UPLOAD_OVERWRITE_GALLERY_TOKEN, '')
-    @result_success, @message, @access_token = _save_state(
+    @result_success, @message, @access_token = save_gallery_state(
         user_id,
         project_id,
         tags,
@@ -133,7 +130,7 @@ class GalleryController < ApplicationController
     tags = params.require(Const::Gallery::Key::TAGS)
     i_page_values = params.require(Const::Gallery::Key::INSTANCE_PAGE_VALUE)
     e_page_values = params.require(Const::Gallery::Key::EVENT_PAGE_VALUE)
-    @result_success, @message = _update_last_state(user_id, tags, i_page_values, e_page_values)
+    @result_success, @message = update_gallery_last_state(user_id, tags, i_page_values, e_page_values)
   end
 
   def get_popular_and_recommend_tags
@@ -146,13 +143,13 @@ class GalleryController < ApplicationController
     user_id = current_or_guest_user.id
     gallery_access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
     note = params.fetch(Const::Gallery::Key::NOTE, '')
-    @result_success, @message = _add_bookmark(user_id, gallery_access_token, note, Date.today)
+    @result_success, @message = add_gallery_bookmark(user_id, gallery_access_token, note, Date.today)
   end
 
   def remove_bookmark
     user_id = current_or_guest_user.id
     gallery_access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
-    @result_success, @message = _remove_bookmark(user_id, gallery_access_token, Date.today)
+    @result_success, @message = remove_gallery_bookmark(user_id, gallery_access_token, Date.today)
   end
 
   private :_take_gallery_data, :_get_grid_contents

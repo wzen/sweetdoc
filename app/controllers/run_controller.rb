@@ -4,6 +4,8 @@ require 'pagevalue/page_value_state'
 
 class RunController < ApplicationController
 
+  include GalleryConcern::Get
+
   def markitup_preview
     render layout: false
   end
@@ -18,7 +20,7 @@ class RunController < ApplicationController
     if Rails.application.routes.recognize_path(request.referer)[:controller] == "gallery"
       access_token = params.require(Const::Run::Key::ACCESS_TOKEN)
       load_footprint = params.fetch(Const::Run::Key::LOAD_FOOTPRINT, false)
-      @result_success, @pagevalues, @item_js_list = Gallery.paging(user_id, access_token, target_pages, loaded_class_dist_tokens, load_footprint)
+      @result_success, @pagevalues, @item_js_list = gallery_paging(user_id, access_token, target_pages, loaded_class_dist_tokens, load_footprint)
     else
       user_id = current_or_guest_user.id
       user_pagevalue_id = params.require(Const::Run::Key::RUNNING_USER_PAGEVALUE_ID)

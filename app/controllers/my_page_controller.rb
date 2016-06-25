@@ -1,8 +1,8 @@
-require 'gallery/gallery'
-require 'item_gallery/item_gallery'
-
 class MyPageController < ApplicationController
   before_action :redirect_if_not_login
+
+  include GalleryConcern::Get
+  include GalleryConcern::Save
 
   def created_contents
     user_id = _get_user_id
@@ -10,7 +10,7 @@ class MyPageController < ApplicationController
     limit = params.fetch(Const::MyPage::Key::LIMIT, 30)
     if user_id
       @user = User.find(user_id)
-      @contents = Gallery.created_contents_list(user_id, head, limit)
+      @contents = created_gallery_contents(user_id, head, limit)
     else
       # エラー
     end
@@ -19,7 +19,7 @@ class MyPageController < ApplicationController
   def remove_contents
     user_id = _get_user_id
     gallery_access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
-    Gallery.remove_contents(user_id, gallery_access_token)
+    remove_gallery_contents(user_id, gallery_access_token)
     redirect_to action: 'created_contents'
   end
 
@@ -41,7 +41,7 @@ class MyPageController < ApplicationController
     limit = params.fetch(Const::MyPage::Key::LIMIT, 30)
     if user_id
       @user = User.find(user_id)
-      @contents = Gallery.bookmarks_list(user_id, head, limit)
+      @contents = gallery_bookmarks(user_id, head, limit)
     else
       # エラー
     end
@@ -50,7 +50,7 @@ class MyPageController < ApplicationController
   def remove_bookmark
     user_id = _get_user_id
     gallery_access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
-    @result_success, @message = Gallery.remove_bookmark(user_id, gallery_access_token, Date.today)
+    @result_success, @message = remove_gallery_bookmark(user_id, gallery_access_token, Date.today)
     redirect_to action: 'bookmarks'
   end
 

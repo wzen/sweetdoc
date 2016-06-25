@@ -50,7 +50,9 @@ html, body {
 body {
   background: #FAFAFA;
   color: black;
-  font: 400 87.5%/1.5em 'Open Sans', sans-serif;
+  &:not(#sidebar_wrapper *) {
+    font: 400 87.5%/1.5em 'Open Sans', sans-serif;
+  }
 }
 
 #wrapper {
