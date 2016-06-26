@@ -1,6 +1,8 @@
 module PageValueStateConcern
   module Get
 
+    include ItemJsConcern::Get
+
     def load_created_projects_state(user_id)
       # ユーザ作成プロジェクト + サンプルプロジェクト
       select =<<-"SELECT"
@@ -123,7 +125,7 @@ module PageValueStateConcern
           end
         end
 
-        item_js_list = ItemJs.get_item_gallery(class_dist_tokens)
+        item_js_list = get_item_gallery(class_dist_tokens)
         return true, item_js_list, gpd, ipd, epd, spd, message, pagevalues.first['user_pagevalues_updated_at']
       end
     end

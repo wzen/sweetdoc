@@ -5,6 +5,7 @@ require 'pagevalue/page_value_state'
 module MotionCheckConcern
   module Get
     include PageValueStateConcern::Get
+    include ItemJsConcern::Get
 
     def motion_check_paging(user_id, user_pagevalue_id, target_pages, loaded_class_dist_tokens = [])
       gen = {}
@@ -54,7 +55,7 @@ module MotionCheckConcern
         end
       end
 
-      item_js_list = ItemJs.get_item_gallery(class_dist_tokens)
+      item_js_list = get_item_gallery(class_dist_tokens)
       return true, {
           general_pagevalue: gen,
           instance_pagevalue: ins,

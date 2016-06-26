@@ -6,6 +6,7 @@ module GalleryConcern
     extend ActiveSupport::Concern
 
     include RunConcern::Run
+    include ItemJsConcern::Get
 
     def get_gallery_project_pagevalues(upm_id)
       # Pagevalueレコード取得(UserPagevaluesテーブルの最新データ)
@@ -103,7 +104,7 @@ module GalleryConcern
 
         # 必要なItemを調査
         class_dist_tokens = extract_need_load_itemclassdisttokens(ret[Const::Gallery::Key::EVENT_PAGEVALUE_DATA])
-        item_js_list = ItemJs.get_item_gallery(class_dist_tokens)
+        item_js_list = get_item_gallery(class_dist_tokens)
 
         # 閲覧数 & ブックマーク数を取得
         gallery_view_count = ret[Const::Gallery::Key::VIEW_COUNT]
@@ -280,7 +281,7 @@ module GalleryConcern
           need_load_class_dist_tokens = extract_need_load_itemclassdisttokens(epd)
           class_dist_tokens = need_load_class_dist_tokens - loaded_class_dist_tokens
         end
-        item_js_list = ItemJs.get_item_gallery(class_dist_tokens)
+        item_js_list = get_item_gallery(class_dist_tokens)
 
         return true, {
             general_pagevalue: gen,
