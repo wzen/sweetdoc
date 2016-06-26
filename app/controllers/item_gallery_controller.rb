@@ -44,7 +44,8 @@ class ItemGalleryController < ApplicationController
   end
 
   def edit
-    # TODO:
+    # FIXME: 現状はコーディングに飛ばす
+    redirect_to '/coding/item'
   end
 
   def delete
