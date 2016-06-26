@@ -1,6 +1,8 @@
 require 'item/item_image'
 
 class ConfigMenuController < ApplicationController
+  include ConfigMenuConcern::Get
+
   def ret
   end
 
@@ -14,7 +16,7 @@ class ConfigMenuController < ApplicationController
     end
     item_type = params.fetch('itemType', 'other')
     @result_success = true
-    @html = ConfigMenu.design_config(self, design_config, item_type, modifiables)
+    @html = design_config_element(self, design_config, item_type, modifiables)
     render 'ret'
   end
 
@@ -28,8 +30,8 @@ class ConfigMenuController < ApplicationController
       modifiables = {}
     end
     @result_success = true
-    @modify_html = ConfigMenu.event_var_modify_config(self, modifiables)
-    @specific_html = ConfigMenu.event_specific_config(self, class_dist_token, method_name)
+    @modify_html = event_var_modify_config(self, modifiables)
+    @specific_html = event_specific_config(self, class_dist_token, method_name)
   end
 
   def preload_image_path_select_config
