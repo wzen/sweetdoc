@@ -5,6 +5,8 @@ module GalleryConcern
   module Get
     extend ActiveSupport::Concern
 
+    include RunConcern::Run
+
     def get_gallery_project_pagevalues(upm_id)
       # Pagevalueレコード取得(UserPagevaluesテーブルの最新データ)
       sql = <<-"SQL"
@@ -107,7 +109,7 @@ module GalleryConcern
         gallery_view_count = ret[Const::Gallery::Key::VIEW_COUNT]
         gallery_bookmark_count = ret[Const::Gallery::Key::BOOKMARK_COUNT]
 
-        pagevalues, creator = Run.setup_data(ret[Const::Gallery::Key::USER_ID].to_i, gpd, ipd, epd, fpd, page_num)
+        pagevalues, creator = setup_run_data(ret[Const::Gallery::Key::USER_ID].to_i, gpd, ipd, epd, fpd, page_num)
 
         show_options = {}
         show_options[Const::Gallery::Key::SHOW_GUIDE] = ret[Const::Gallery::Key::SHOW_GUIDE]
