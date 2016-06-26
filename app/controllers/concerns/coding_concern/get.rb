@@ -1,6 +1,3 @@
-require 'coding/user_coding'
-require 'coding/user_coding_tree'
-
 module CodingConcern
   module Get
 

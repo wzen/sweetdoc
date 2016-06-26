@@ -1,6 +1,3 @@
-require 'item/preload_item'
-require 'item/item_js'
-
 class ItemJsController < ApplicationController
   include ItemJsConcern::Get
 

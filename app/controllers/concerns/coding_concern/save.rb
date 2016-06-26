@@ -1,6 +1,3 @@
-require 'coding/user_coding'
-require 'coding/user_coding_tree'
-
 module CodingConcern
   module Save
     def save_coding_all(user_id, codes, tree_data)

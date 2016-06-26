@@ -1,5 +1,3 @@
-require 'item_gallery/item_gallery'
-
 class ItemGalleryController < ApplicationController
   before_action :redirect_if_not_login
 

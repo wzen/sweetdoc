@@ -1,8 +1,3 @@
-require 'project/project'
-require 'item/preload_item'
-require 'item_gallery/item_gallery'
-require 'action_event/common_action'
-
 class WorktableController < ApplicationController
   include ItemGalleryConcern::Get
 

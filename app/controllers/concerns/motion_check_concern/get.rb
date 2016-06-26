@@ -1,7 +1,3 @@
-require 'item/preload_item'
-require 'item/item_js'
-require 'pagevalue/page_value_state'
-
 module MotionCheckConcern
   module Get
     include PageValueStateConcern::Get

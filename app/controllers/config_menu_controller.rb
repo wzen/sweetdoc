@@ -1,5 +1,3 @@
-require 'item/item_image'
-
 class ConfigMenuController < ApplicationController
   include ConfigMenuConcern::Get
 

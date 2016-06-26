@@ -1,7 +1,3 @@
-require 'motion_check/motion_check'
-require 'gallery/gallery'
-require 'pagevalue/page_value_state'
-
 class RunController < ApplicationController
 
   include GalleryConcern::Get

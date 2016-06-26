@@ -1,6 +1,3 @@
-require 'gallery/gallery'
-require 'gallery/gallery_grid_contents'
-
 module GalleryConcern
   module Get
     extend ActiveSupport::Concern

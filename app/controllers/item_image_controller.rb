@@ -1,5 +1,3 @@
-require 'item/item_image'
-
 class ItemImageController < ApplicationController
   include ItemImageConcern::Save
 
