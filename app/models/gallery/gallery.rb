@@ -1,22 +1,3 @@
-require 'xmlrpc/client'
-require 'project/project'
-require 'project/project_gallery_map'
-require 'project/user_project_map'
-require 'gallery/gallery_tag'
-require 'gallery/gallery_tag_map'
-require 'gallery/gallery_general_pagevalue'
-require 'gallery/gallery_general_pagevalue_paging'
-require 'gallery/gallery_instance_pagevalue'
-require 'gallery/gallery_instance_pagevalue_paging'
-require 'gallery/gallery_event_pagevalue'
-require 'gallery/gallery_event_pagevalue_paging'
-require 'gallery/gallery_view_statistic'
-require 'gallery/gallery_bookmark'
-require 'gallery/gallery_bookmark_statistic'
-require 'item/item_image'
-require 'pagevalue/page_value_state'
-require 'item/preload_item'
-
 class Gallery < ActiveRecord::Base
   belongs_to :user_project_map
   has_many :gallery_instance_pagevalue_pagings

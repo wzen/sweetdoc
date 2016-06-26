@@ -135,8 +135,8 @@ class GalleryController < ApplicationController
 
   def get_popular_and_recommend_tags
     recommend_source_word = params.require(Const::Gallery::Key::RECOMMEND_SOURCE_WORD)
-    @popular_tags = get_popular_tags
-    @recommend_tags = get_recommend_tags(@popular_tags, recommend_source_word)
+    @popular_tags = get_popular_gallery_tags
+    @recommend_tags = get_recommend_gallery_tags(@popular_tags, recommend_source_word)
   end
 
   def add_bookmark

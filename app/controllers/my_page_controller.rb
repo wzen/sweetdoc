@@ -3,6 +3,7 @@ class MyPageController < ApplicationController
 
   include GalleryConcern::Get
   include GalleryConcern::Save
+  include ItemGalleryConcern::Get
 
   def created_contents
     user_id = _get_user_id
@@ -29,7 +30,7 @@ class MyPageController < ApplicationController
     limit = params.fetch(Const::MyPage::Key::LIMIT, 30)
     if user_id
       @user = User.find(user_id)
-      @contents = ItemGallery.created_items(user_id, head, limit)
+      @contents = created_item_galleries(user_id, head, limit)
     else
       # エラー
     end
@@ -60,7 +61,7 @@ class MyPageController < ApplicationController
     limit = params.fetch(Const::MyPage::Key::LIMIT, 30)
     if user_id
       @user = User.find(user_id)
-      @contents = ItemGallery.using_items(user_id, head, limit)
+      @contents = using_item_galleries(user_id, head, limit)
     else
       # エラー
     end
