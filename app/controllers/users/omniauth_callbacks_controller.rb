@@ -1,7 +1,9 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+  include UserConcern::Utils
+
   def facebook
     # You need to implement the method below in your model (e.g. app/models/user.rb)
-    @user = User.find_for_facebook_oauth(request.env["omniauth.auth"], current_user)
+    @user = find_for_facebook_oauth(request.env["omniauth.auth"], current_user)
 
     if @user.persisted?
       set_current_user(@user)
@@ -16,7 +18,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   def twitter
     # You need to implement the method below in your model
-    @user = User.find_for_twitter_oauth(request.env["omniauth.auth"], current_user)
+    @user = find_for_twitter_oauth(request.env["omniauth.auth"], current_user)
 
     if @user.persisted?
       set_current_user(@user)
@@ -30,7 +32,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def google_oauth2
-    @user = User.find_for_google_oauth2(request.env["omniauth.auth"])
+    @user = find_for_google_oauth2(request.env["omniauth.auth"])
 
     if @user.persisted?
       set_current_user(@user)

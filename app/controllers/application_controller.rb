@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  include UserConcern::Utils
+
   # action
   before_action :set_locale
   before_action :init_const
@@ -80,7 +82,7 @@ class ApplicationController < ActionController::Base
 
   # Guestユーザーを作成する
   def create_guest_user
-    guest = User.new_guest
+    guest = new_guest_user
     guest.save!(:validate => false)
     session[:guest_user_id] = guest.id
     session[:guest_expire_date] = Time.now + ENV['GUEST_SESSION_EXPIRE_MINUTES'].to_i.minutes
