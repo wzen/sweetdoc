@@ -141,7 +141,7 @@ class ApplicationController < ActionController::Base
 
     if !user_signed_in?
       # ゲストの場合リダイレクト
-      redirect_to 'gallery/grid'
+      redirect_to '/gallery/grid'
     end
   end
 
