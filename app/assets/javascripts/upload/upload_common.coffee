@@ -83,7 +83,6 @@ class UploadCommon
         upload.removeAllUploadSelectTag(root)
         return
 
-      src = "/gallery/#{token}/thumbnail"
       _cbk = (dataList) ->
         # 画面に設定
         $(".#{constant.Gallery.Key.TITLE}", root).val(dataList[constant.Gallery.Key.TITLE])
@@ -91,9 +90,9 @@ class UploadCommon
         $(".#{constant.Gallery.Key.SHOW_GUIDE}",root).prop('checked', dataList[constant.Gallery.Key.SHOW_GUIDE])
         $(".#{constant.Gallery.Key.SHOW_PAGE_NUM}",root).prop('checked', dataList[constant.Gallery.Key.SHOW_PAGE_NUM])
         $(".#{constant.Gallery.Key.SHOW_CHAPTER_NUM}",root).prop('checked', dataList[constant.Gallery.Key.SHOW_CHAPTER_NUM])
-        if dataList[constant.Gallery.Key.THUMBNAIL_EXISTED]
+        if dataList[constant.Gallery.Key.THUMBNAIL]?
           # サムネイルを設定
-          _getThumbnailBlob.call(@, src)
+          _getThumbnailBlob.call(@, dataList[constant.Gallery.Key.THUMBNAIL])
         else
           # サムネイル無し
           _removeImage.call(@)

@@ -4,6 +4,7 @@ module GalleryConcern
 
     include RunConcern::Run
     include ItemJsConcern::Get
+    include PageValueStateConcern::Get
 
     def get_gallery_project_pagevalues(upm_id)
       # Pagevalueレコード取得(UserPagevaluesテーブルの最新データ)
@@ -301,6 +302,7 @@ module GalleryConcern
         g.show_guide as #{Const::Gallery::Key::SHOW_GUIDE},
         g.show_page_num as #{Const::Gallery::Key::SHOW_PAGE_NUM},
         g.show_chapter_num as #{Const::Gallery::Key::SHOW_CHAPTER_NUM},
+        g.thumbnail_url as #{Const::Gallery::Key::THUMBNAIL},
         group_concat(DISTINCT gt.id separator ',') as #{Const::Gallery::Key::TAG_ID},
         group_concat(DISTINCT gt.name separator ',') as #{Const::Gallery::Key::TAG_NAME}
       FROM galleries g

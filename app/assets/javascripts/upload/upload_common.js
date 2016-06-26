@@ -94,7 +94,7 @@ UploadCommon = (function() {
     })(this));
     $("." + constant.Gallery.Key.OVERWRITE_CONTENTS_SELECT, root).off('change').on('change', (function(_this) {
       return function(e) {
-        var _cbk, data, src, token;
+        var _cbk, data, token;
         token = $(e.target).val();
         if (token.length === 0) {
           $("." + constant.Gallery.Key.TITLE, root).val('');
@@ -106,7 +106,6 @@ UploadCommon = (function() {
           upload.removeAllUploadSelectTag(root);
           return;
         }
-        src = "/gallery/" + token + "/thumbnail";
         _cbk = function(dataList) {
           var i, len, name, names;
           $("." + constant.Gallery.Key.TITLE, root).val(dataList[constant.Gallery.Key.TITLE]);
@@ -114,8 +113,8 @@ UploadCommon = (function() {
           $("." + constant.Gallery.Key.SHOW_GUIDE, root).prop('checked', dataList[constant.Gallery.Key.SHOW_GUIDE]);
           $("." + constant.Gallery.Key.SHOW_PAGE_NUM, root).prop('checked', dataList[constant.Gallery.Key.SHOW_PAGE_NUM]);
           $("." + constant.Gallery.Key.SHOW_CHAPTER_NUM, root).prop('checked', dataList[constant.Gallery.Key.SHOW_CHAPTER_NUM]);
-          if (dataList[constant.Gallery.Key.THUMBNAIL_EXISTED]) {
-            _getThumbnailBlob.call(this, src);
+          if (dataList[constant.Gallery.Key.THUMBNAIL] != null) {
+            _getThumbnailBlob.call(this, dataList[constant.Gallery.Key.THUMBNAIL]);
           } else {
             _removeImage.call(this);
           }
