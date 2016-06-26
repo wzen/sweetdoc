@@ -1,6 +1,8 @@
 module ProjectConcern
   module Save
 
+    include ItemImageConcern::Save
+
     def create_project(user_id, title, screen_size)
       begin
         ActiveRecord::Base.transaction do
@@ -51,7 +53,7 @@ module ProjectConcern
       begin
         ActiveRecord::Base.transaction do
           # アイテム画像の削除
-          ret, mes = ItemImage.remove_worktable_img(user_id, project_id)
+          ret, mes = remove_worktable_item_image(user_id, project_id)
           unless ret
             # 更新失敗
             return false, I18n.t('message.database.item_state.save.error')

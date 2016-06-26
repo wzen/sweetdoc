@@ -486,7 +486,7 @@ module GalleryConcern
             end
             GalleryViewStatistic.where(gallery_id: g.id).update_all(del_flg: true)
             ProjectGalleryMap.where(gallery_id: g.id).update_all(del_flg: true)
-            ItemImage.remove_gallery_img(user_id, g.id)
+            remove_gallery_item_image(user_id, g.id)
           end
           return true, I18n.t('message.database.item_state.save.success')
         end
