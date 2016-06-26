@@ -1304,7 +1304,7 @@ Common = (function() {
       success: function(data) {
         var _cb, dataIdx;
         if (data.resultSuccess) {
-          if ((data.indexes != null) && data.indexes.length > 0) {
+          if ((data.indexes == null) || data.indexes.length === 0) {
             if (callback != null) {
               return callback();
             }

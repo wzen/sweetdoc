@@ -2,6 +2,8 @@ module GalleryConcern
   module Save
     extend ActiveSupport::Concern
 
+    include ItemImageConcern::Save
+
     def save_gallery_state(
         user_id,
         project_id,

@@ -1040,7 +1040,7 @@ class Common
         data: data
         success: (data)->
           if data.resultSuccess
-            if data.indexes? && data.indexes.length > 0
+            if !data.indexes? || data.indexes.length == 0
               if callback?
                 callback()
             else

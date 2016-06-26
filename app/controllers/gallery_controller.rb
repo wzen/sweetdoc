@@ -92,7 +92,7 @@ class GalleryController < ApplicationController
     project_id = params.require(Const::Gallery::Key::PROJECT_ID).to_i
     caption = params.fetch(Const::Gallery::Key::CAPTION, '').force_encoding('utf-8')
     thumbnail_img = params.fetch(Const::Gallery::Key::THUMBNAIL_IMG, nil)
-    if thumbnail_img.size > 1000 * Const::THUMBNAIL_FILESIZE_MAX_KB
+    if thumbnail_img.present? && thumbnail_img.size > 1000 * Const::THUMBNAIL_FILESIZE_MAX_KB
       @result_success, @message = false, ""
       return
     end
