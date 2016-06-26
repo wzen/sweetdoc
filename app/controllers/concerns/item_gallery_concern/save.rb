@@ -22,11 +22,11 @@ module ItemGalleryConcern
             end
 
             loop_count = 0
-            gallery_tag = self.find(tag.id)
+            gallery_tag = ItemGalleryTag.find(tag.id)
             while gallery_tag.blank? && loop_count <= loop_max
               sleep 0.1
               loop_count += 1
-              gallery_tag = self.find(tag.id)
+              gallery_tag = ItemGalleryTag.find(tag.id)
             end
 
             if gallery_tag
@@ -217,7 +217,7 @@ module ItemGalleryConcern
     end
 
     def delete_item(user_id, item_gallery_access_token)
-      ig = self.find_by(created_user_id: user_id, access_token: item_gallery_access_token, del_flg: false)
+      ig = ItemGallery.find_by(created_user_id: user_id, access_token: item_gallery_access_token, del_flg: false)
       if ig.present?
         ig.del_flg = 1
         ig.save!

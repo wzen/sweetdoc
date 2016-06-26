@@ -343,7 +343,7 @@ module GalleryConcern
       limit = 50
       take_num = 3
 
-      ordered = self.order('weight DESC').limit(limit)
+      ordered = GalleryTag.order('weight DESC').limit(limit)
       get_row = []
       # ランダムに取得
       while get_row.length <= take_num
@@ -379,7 +379,7 @@ module GalleryConcern
         limit = 30
         take_num = 3
 
-        ordered = self.find_by(category: category, del_flg: false).order('weight DESC').limit(limit)
+        ordered = GalleryTag.find_by(category: category, del_flg: false).order('weight DESC').limit(limit)
         get_row = []
         # ランダムに取得
         while get_row.length <= take_num

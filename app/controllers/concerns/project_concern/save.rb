@@ -33,7 +33,7 @@ module ProjectConcern
         ActiveRecord::Base.transaction do
           upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id, del_flg: false)
           if upm.present?
-            p = self.find(project_id)
+            p = Project.find(project_id)
             if p.present?
               if value['p_title'].present?
                 p.title = value['p_title']
@@ -74,7 +74,7 @@ module ProjectConcern
           if upm.present?
             upm.del_flg = true
             upm.save!
-            p = self.find(project_id)
+            p = Project.find(project_id)
             if p.present?
               p.del_flg = true
               p.save!

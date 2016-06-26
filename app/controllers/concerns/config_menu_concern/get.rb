@@ -44,7 +44,7 @@ module ConfigMenuConcern
     end
 
     private
-    def self._modifiables_vars_config(controller, modifiables, is_design)
+    def _modifiables_vars_config(controller, modifiables, is_design)
       ret = nil
       dir = is_design ? 'design' : 'event'
       modifiables.each do |var, v|
