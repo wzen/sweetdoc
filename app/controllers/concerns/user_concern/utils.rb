@@ -5,7 +5,7 @@ module UserConcern
     end
 
     def new_guest_user
-      new do |u|
+      User.new do |u|
         u.name = "Guest"
         u.email    = "guest_#{Time.now.to_i}#{rand(100)}@example.com"
         u.encrypted_password = [*1..9, *'A'..'Z', *'a'..'z'].sample(10).join
