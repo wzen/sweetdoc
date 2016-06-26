@@ -6,6 +6,8 @@ class RunController < ApplicationController
 
   include GalleryConcern::Get
   include MotionCheckConcern::Get
+  include PageValueStateConcern::Get
+  include PageValueStateConcern::Save
 
   def markitup_preview
     render layout: false
@@ -36,13 +38,13 @@ class RunController < ApplicationController
     if footprint_page_values.present?
       footprint_page_values = JSON.parse(footprint_page_values)
     end
-    @result_success, @message = PageValueState.save_gallery_footprint(user_id, gallery_access_token, footprint_page_values)
+    @result_success, @message = save_gallery_footprint_state(user_id, gallery_access_token, footprint_page_values)
   end
 
   def load_common_gallery_footprint
     user_id = current_or_guest_user.id
     gallery_access_token = params.require(Const::Run::Key::ACCESS_TOKEN)
-    @result_success, @message, @pagevalue_data = PageValueState.load_common_gallery_footprint(user_id, gallery_access_token)
+    @result_success, @message, @pagevalue_data = load_common_gallery_footprint_state(user_id, gallery_access_token)
   end
 
 end

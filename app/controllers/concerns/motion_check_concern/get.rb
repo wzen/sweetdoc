@@ -4,6 +4,8 @@ require 'pagevalue/page_value_state'
 
 module MotionCheckConcern
   module Get
+    include PageValueStateConcern::Get
+
     def motion_check_paging(user_id, user_pagevalue_id, target_pages, loaded_class_dist_tokens = [])
       gen = {}
       ins = {}
@@ -47,7 +49,7 @@ module MotionCheckConcern
           ent[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = epd
 
           # 必要なClassDistTokenを調査
-          need_load_class_dist_tokens = PageValueState.extract_need_load_itemclassdisttokens(epd)
+          need_load_class_dist_tokens = extract_need_load_itemclassdisttokens(epd)
           class_dist_tokens = need_load_class_dist_tokens - loaded_class_dist_tokens
         end
       end

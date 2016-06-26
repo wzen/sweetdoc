@@ -1,7 +1,7 @@
 module PageValueStateConcern
   module Get
 
-    def self.load_created_projects(user_id)
+    def load_created_projects_state(user_id)
       # ユーザ作成プロジェクト + サンプルプロジェクト
       select =<<-"SELECT"
       up.id as up_id,
@@ -16,7 +16,7 @@ module PageValueStateConcern
       return true, ret
     end
 
-    def self.user_pagevalues_and_projects_sorted_updated(user_id)
+    def user_pagevalues_and_projects_sorted_updated(user_id)
       select =<<-"SELECT"
       up.id as up_id,
       up.updated_at as up_updated_at,
@@ -28,7 +28,7 @@ module PageValueStateConcern
       return true, ret
     end
 
-    def self.user_pagevalue_list_sorted_update(user_id, project_id)
+    def user_pagevalues_sorted_update(user_id, project_id)
       sql =<<-"SQL"
       SELECT
       up.*
@@ -48,7 +48,7 @@ module PageValueStateConcern
     # ユーザの保存データを読み込む
     # @param [String] user_id ユーザID
     # @param [Array] loaded_class_dist_tokens 読み込み済みのアイテムID一覧
-    def self.load_state(user_id, user_pagevalue_id, loaded_class_dist_tokens)
+    def load_page_value_state(user_id, user_pagevalue_id, loaded_class_dist_tokens)
       sql = <<-"SQL"
       SELECT p.id as project_id, p.title as project_title, p.is_sample as is_sample_project,
              ip.data as instance_pagevalue_data,
@@ -118,7 +118,7 @@ module PageValueStateConcern
             epd[key] = JSON.parse(pagevalue['event_pagevalue_data'])
 
             # 必要なClassDistTokenを調査
-            class_dist_tokens = PageValueState.extract_need_load_itemclassdisttokens(epd[key])
+            class_dist_tokens = extract_need_load_itemclassdisttokens(epd[key])
             class_dist_tokens -= loaded_class_dist_tokens
           end
         end
@@ -128,7 +128,49 @@ module PageValueStateConcern
       end
     end
 
-    def self._user_pagevalue_sql_order_updated_desc(select_str, user_id)
+    def extract_need_load_itemclassdisttokens(event_page_value)
+      dist_tokens = []
+      epv = event_page_value.kind_of?(String)? JSON.parse(event_page_value) : event_page_value
+      epv.each do |kk, vv|
+        if kk.index(Const::PageValueKey::E_MASTER_ROOT) || kk.index(Const::PageValueKey::EF_PREFIX)
+          vv.each do |k, v|
+            if k.index(Const::PageValueKey::E_NUM_PREFIX).present?
+              token = v[Const::EventPageValueKey::CLASS_DIST_TOKEN]
+              if token.present?
+                unless dist_tokens.include?(token)
+                  dist_tokens << token
+                end
+              end
+            end
+          end
+        end
+      end
+      return dist_tokens
+    end
+
+    def load_common_gallery_footprint_state(user_id, gallery_access_token)
+      # 履歴情報取得
+      begin
+        data = {}
+        ActiveRecord::Base.transaction do
+
+          g = Gallery.find_by(access_token: gallery_access_token, del_flg: false)
+          gallery_id = g.id
+
+          fp = UserGalleryFootprint.find_by(user_id: user_id, gallery_id: gallery_id, del_flg: false)
+          if fp
+            data[Const::PageValueKey::PAGE_NUM] = fp.page_num
+          end
+        end
+        return true, I18n.t('message.database.item_state.save.success'), data
+      rescue => e
+        # 失敗
+        return false, I18n.t('message.database.item_state.save.error'), nil
+      end
+    end
+
+    private
+    def _user_pagevalue_sql_order_updated_desc(select_str, user_id)
       return <<-"SQL"
       SELECT
       #{select_str}
@@ -160,9 +202,7 @@ module PageValueStateConcern
       SQL
     end
 
-
-
-    def self._sample_project_user_pagevalue
+    def _sample_project_user_pagevalue
       if Rails.env.production?
         # Productionはキャッシュを使用
         Rails.cache.fetch('sample_project_user_pagevalue') do
@@ -173,7 +213,7 @@ module PageValueStateConcern
       end
     end
 
-    def self._sample_project_user_pagevalue_db_access
+    def _sample_project_user_pagevalue_db_access
       sql =<<-"SQL"
       SELECT
       up.id as up_id,
@@ -210,47 +250,5 @@ module PageValueStateConcern
       SQL
       ActiveRecord::Base.connection.select_all(sql).to_hash
     end
-
-    def self.extract_need_load_itemclassdisttokens(event_page_value)
-      dist_tokens = []
-      epv = event_page_value.kind_of?(String)? JSON.parse(event_page_value) : event_page_value
-      epv.each do |kk, vv|
-        if kk.index(Const::PageValueKey::E_MASTER_ROOT) || kk.index(Const::PageValueKey::EF_PREFIX)
-          vv.each do |k, v|
-            if k.index(Const::PageValueKey::E_NUM_PREFIX).present?
-              token = v[Const::EventPageValueKey::CLASS_DIST_TOKEN]
-              if token.present?
-                unless dist_tokens.include?(token)
-                  dist_tokens << token
-                end
-              end
-            end
-          end
-        end
-      end
-      return dist_tokens
-    end
-
-    def self.load_common_gallery_footprint(user_id, gallery_access_token)
-      # 履歴情報取得
-      begin
-        data = {}
-        ActiveRecord::Base.transaction do
-
-          g = Gallery.find_by(access_token: gallery_access_token, del_flg: false)
-          gallery_id = g.id
-
-          fp = UserGalleryFootprint.find_by(user_id: user_id, gallery_id: gallery_id, del_flg: false)
-          if fp
-            data[Const::PageValueKey::PAGE_NUM] = fp.page_num
-          end
-        end
-        return true, I18n.t('message.database.item_state.save.success'), data
-      rescue => e
-        # 失敗
-        return false, I18n.t('message.database.item_state.save.error'), nil
-      end
-    end
-
   end
 end

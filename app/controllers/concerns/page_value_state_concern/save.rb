@@ -1,7 +1,7 @@
 module PageValueStateConcern
   module Save
 
-    def self.save_state(user_id,
+    def save_page_value_state(user_id,
         project_id,
         page_count,
         g_page_values,
@@ -88,206 +88,7 @@ module PageValueStateConcern
     end
 
 
-    def self._save_setting_pagevalue(save_value, update_id = nil)
-      ret_sp = nil
-
-      # 共通設定作成
-      if save_value != 'null'
-
-        grid_enable = save_value[Const::Setting::Key::GRID_ENABLE]
-        if grid_enable
-          grid_enable = grid_enable == 'true'
-        else
-          grid_enable = false
-        end
-        grid_step = save_value[Const::Setting::Key::GRID_STEP]
-        unless grid_step
-          grid_step = grid_step.to_i
-        end
-        autosave = save_value[Const::Setting::Key::AUTOSAVE]
-        if autosave
-          autosave = autosave == 'true'
-        else
-          autosave = false
-        end
-        autosave_time = save_value[Const::Setting::Key::AUTOSAVE_TIME]
-        unless autosave_time
-          autosave_time = autosave_time.to_f
-        end
-
-        if update_id.blank?
-          # Insert
-          sp = SettingPagevalue.new({
-                                        autosave: autosave,
-                                        autosave_time: autosave_time,
-                                        grid_enable: grid_enable,
-                                        grid_step: grid_step
-                                    })
-          sp.save!
-          ret_sp = sp
-        else
-          # Update
-          sp = SettingPagevalue.find(update_id)
-          if sp.present?
-            sp.autosave = autosave
-            sp.autosave_time = autosave_time
-            sp.grid_enable = grid_enable
-            sp.grid_step = grid_step
-            sp.save!
-            ret_sp = sp
-          end
-        end
-      end
-
-      return ret_sp
-    end
-
-    def self._save_general_pagevalue(save_value, page_count, update_user_pagevalue_id = nil)
-      if save_value != 'null'
-
-        common = {}
-        page = {}
-        save_value.each do |k, v|
-          if k.index(Const::PageValueKey::P_PREFIX)
-            page_num = k.gsub(Const::PageValueKey::P_PREFIX, '')
-            page[page_num.to_s] = v
-          else
-            common[k] = v
-          end
-        end
-
-        # 保存済みデータ取得
-        updated = false
-        if update_user_pagevalue_id.present?
-          gc = GeneralCommonPagevalue.find_by(user_pagevalue_id: update_user_pagevalue_id, del_flg: false)
-          if gc
-            gc.data = common.to_json
-            gc.save!
-            updated = true
-          end
-        end
-        unless updated
-          gc = GeneralCommonPagevalue.new({
-                                              user_pagevalue_id: update_user_pagevalue_id,
-                                              data: common.to_json
-                                          })
-          gc.save!
-        end
-
-        # 保存済みデータ取得
-        if update_user_pagevalue_id.blank?
-          saved_record = []
-        else
-          saved_record = GeneralPagevaluePaging.where(user_pagevalue_id: update_user_pagevalue_id, del_flg: false)
-        end
-
-        # 新規データをInsert
-        (1..page_count).each do |page_num|
-          pagevalue = page[page_num.to_s]
-          if pagevalue.present?
-            select_saved_record = saved_record.select{|s| s['page_num'] == page_num}.first
-            if select_saved_record.blank?
-              # 新規作成
-              ip = GeneralPagevalue.new({data: pagevalue.to_json})
-              ip.save!
-              ipp = GeneralPagevaluePaging.new({
-                                                   user_pagevalue_id: update_user_pagevalue_id,
-                                                   page_num: page_num,
-                                                   general_pagevalue_id: ip.id
-                                               })
-              ipp.save!
-
-            else
-              # 更新
-              general_pagevalue_id = select_saved_record['general_pagevalue_id']
-              ip = GeneralPagevalue.find(general_pagevalue_id)
-              ip.data = pagevalue.to_json
-              ip.save!
-            end
-          end
-        end
-      end
-    end
-
-    def self._save_instance_pagevalue(save_value, page_count, update_user_pagevalue_id = nil)
-      if save_value != 'null'
-        # 保存済みデータ取得
-        if update_user_pagevalue_id.blank?
-          saved_record = []
-        else
-          saved_record = InstancePagevaluePaging.where(user_pagevalue_id: update_user_pagevalue_id, del_flg: false)
-        end
-
-        # 新規データをInsert
-        (1..page_count).each do |page_num|
-          pagevalue = save_value[page_num.to_s]
-          select_saved_record = saved_record.select{|s| s['page_num'] == page_num}.first
-
-          if select_saved_record.blank?
-            # 新規作成
-            ip = InstancePagevalue.new({data: pagevalue})
-            ip.save!
-            ipp = InstancePagevaluePaging.new({
-                                                  user_pagevalue_id: update_user_pagevalue_id,
-                                                  page_num: page_num,
-                                                  instance_pagevalue_id: ip.id
-                                              })
-            ipp.save!
-
-          else
-            # 既存レコードに存在 & 送信されたpagevalueがnilの場合は更新しない
-            if pagevalue.present?
-              # 更新
-              instance_pagevalue_id = select_saved_record['instance_pagevalue_id']
-              ip = InstancePagevalue.find(instance_pagevalue_id)
-              ip.data = pagevalue
-              ip.save!
-            end
-          end
-        end
-      end
-    end
-
-    def self._save_event_pagevalue(save_value, page_count, update_user_pagevalue_id = nil)
-      if save_value != 'null'
-        # 保存済みデータ取得
-        if update_user_pagevalue_id.blank?
-          saved_record = []
-        else
-          saved_record = EventPagevaluePaging.where(user_pagevalue_id: update_user_pagevalue_id, del_flg: false)
-        end
-
-        # 新規データをInsert
-        (1..page_count).each do |page_num|
-          pagevalue = save_value[page_num.to_s]
-          select_saved_record = saved_record.select{|s| s['page_num'] == page_num}.first
-
-          if select_saved_record.blank?
-            # 新規作成
-            ep = EventPagevalue.new({data: pagevalue})
-            ep.save!
-            epp = EventPagevaluePaging.new({
-                                               user_pagevalue_id: update_user_pagevalue_id,
-                                               page_num: page_num,
-                                               event_pagevalue_id: ep.id
-                                           })
-            epp.save!
-
-          else
-            # 既存レコードに存在 & 送信されたpagevalueがnilの場合は更新しない
-            if pagevalue.present?
-              # 更新
-              event_pagevalue_id = select_saved_record['event_pagevalue_id']
-              ep = EventPagevalue.find(event_pagevalue_id)
-              ep.data = pagevalue
-              ep.save!
-            end
-          end
-        end
-      end
-    end
-
-    def self.save_gallery_footprint(user_id, gallery_access_token, page_value)
+    def save_gallery_footprint_state(user_id, gallery_access_token, page_value)
       begin
         if page_value.present? && page_value != 'null'
           ActiveRecord::Base.transaction do
@@ -364,6 +165,206 @@ module PageValueStateConcern
       rescue => e
         # 更新失敗
         return false, I18n.t('message.database.item_state.save.error')
+      end
+    end
+
+    private
+    def _save_setting_pagevalue(save_value, update_id = nil)
+      ret_sp = nil
+
+      # 共通設定作成
+      if save_value != 'null'
+
+        grid_enable = save_value[Const::Setting::Key::GRID_ENABLE]
+        if grid_enable
+          grid_enable = grid_enable == 'true'
+        else
+          grid_enable = false
+        end
+        grid_step = save_value[Const::Setting::Key::GRID_STEP]
+        unless grid_step
+          grid_step = grid_step.to_i
+        end
+        autosave = save_value[Const::Setting::Key::AUTOSAVE]
+        if autosave
+          autosave = autosave == 'true'
+        else
+          autosave = false
+        end
+        autosave_time = save_value[Const::Setting::Key::AUTOSAVE_TIME]
+        unless autosave_time
+          autosave_time = autosave_time.to_f
+        end
+
+        if update_id.blank?
+          # Insert
+          sp = SettingPagevalue.new({
+                                        autosave: autosave,
+                                        autosave_time: autosave_time,
+                                        grid_enable: grid_enable,
+                                        grid_step: grid_step
+                                    })
+          sp.save!
+          ret_sp = sp
+        else
+          # Update
+          sp = SettingPagevalue.find(update_id)
+          if sp.present?
+            sp.autosave = autosave
+            sp.autosave_time = autosave_time
+            sp.grid_enable = grid_enable
+            sp.grid_step = grid_step
+            sp.save!
+            ret_sp = sp
+          end
+        end
+      end
+
+      return ret_sp
+    end
+
+    def _save_general_pagevalue(save_value, page_count, update_user_pagevalue_id = nil)
+      if save_value != 'null'
+
+        common = {}
+        page = {}
+        save_value.each do |k, v|
+          if k.index(Const::PageValueKey::P_PREFIX)
+            page_num = k.gsub(Const::PageValueKey::P_PREFIX, '')
+            page[page_num.to_s] = v
+          else
+            common[k] = v
+          end
+        end
+
+        # 保存済みデータ取得
+        updated = false
+        if update_user_pagevalue_id.present?
+          gc = GeneralCommonPagevalue.find_by(user_pagevalue_id: update_user_pagevalue_id, del_flg: false)
+          if gc
+            gc.data = common.to_json
+            gc.save!
+            updated = true
+          end
+        end
+        unless updated
+          gc = GeneralCommonPagevalue.new({
+                                              user_pagevalue_id: update_user_pagevalue_id,
+                                              data: common.to_json
+                                          })
+          gc.save!
+        end
+
+        # 保存済みデータ取得
+        if update_user_pagevalue_id.blank?
+          saved_record = []
+        else
+          saved_record = GeneralPagevaluePaging.where(user_pagevalue_id: update_user_pagevalue_id, del_flg: false)
+        end
+
+        # 新規データをInsert
+        (1..page_count).each do |page_num|
+          pagevalue = page[page_num.to_s]
+          if pagevalue.present?
+            select_saved_record = saved_record.select{|s| s['page_num'] == page_num}.first
+            if select_saved_record.blank?
+              # 新規作成
+              ip = GeneralPagevalue.new({data: pagevalue.to_json})
+              ip.save!
+              ipp = GeneralPagevaluePaging.new({
+                                                   user_pagevalue_id: update_user_pagevalue_id,
+                                                   page_num: page_num,
+                                                   general_pagevalue_id: ip.id
+                                               })
+              ipp.save!
+
+            else
+              # 更新
+              general_pagevalue_id = select_saved_record['general_pagevalue_id']
+              ip = GeneralPagevalue.find(general_pagevalue_id)
+              ip.data = pagevalue.to_json
+              ip.save!
+            end
+          end
+        end
+      end
+    end
+
+    def _save_instance_pagevalue(save_value, page_count, update_user_pagevalue_id = nil)
+      if save_value != 'null'
+        # 保存済みデータ取得
+        if update_user_pagevalue_id.blank?
+          saved_record = []
+        else
+          saved_record = InstancePagevaluePaging.where(user_pagevalue_id: update_user_pagevalue_id, del_flg: false)
+        end
+
+        # 新規データをInsert
+        (1..page_count).each do |page_num|
+          pagevalue = save_value[page_num.to_s]
+          select_saved_record = saved_record.select{|s| s['page_num'] == page_num}.first
+
+          if select_saved_record.blank?
+            # 新規作成
+            ip = InstancePagevalue.new({data: pagevalue})
+            ip.save!
+            ipp = InstancePagevaluePaging.new({
+                                                  user_pagevalue_id: update_user_pagevalue_id,
+                                                  page_num: page_num,
+                                                  instance_pagevalue_id: ip.id
+                                              })
+            ipp.save!
+
+          else
+            # 既存レコードに存在 & 送信されたpagevalueがnilの場合は更新しない
+            if pagevalue.present?
+              # 更新
+              instance_pagevalue_id = select_saved_record['instance_pagevalue_id']
+              ip = InstancePagevalue.find(instance_pagevalue_id)
+              ip.data = pagevalue
+              ip.save!
+            end
+          end
+        end
+      end
+    end
+
+    def _save_event_pagevalue(save_value, page_count, update_user_pagevalue_id = nil)
+      if save_value != 'null'
+        # 保存済みデータ取得
+        if update_user_pagevalue_id.blank?
+          saved_record = []
+        else
+          saved_record = EventPagevaluePaging.where(user_pagevalue_id: update_user_pagevalue_id, del_flg: false)
+        end
+
+        # 新規データをInsert
+        (1..page_count).each do |page_num|
+          pagevalue = save_value[page_num.to_s]
+          select_saved_record = saved_record.select{|s| s['page_num'] == page_num}.first
+
+          if select_saved_record.blank?
+            # 新規作成
+            ep = EventPagevalue.new({data: pagevalue})
+            ep.save!
+            epp = EventPagevaluePaging.new({
+                                               user_pagevalue_id: update_user_pagevalue_id,
+                                               page_num: page_num,
+                                               event_pagevalue_id: ep.id
+                                           })
+            epp.save!
+
+          else
+            # 既存レコードに存在 & 送信されたpagevalueがnilの場合は更新しない
+            if pagevalue.present?
+              # 更新
+              event_pagevalue_id = select_saved_record['event_pagevalue_id']
+              ep = EventPagevalue.find(event_pagevalue_id)
+              ep.data = pagevalue
+              ep.save!
+            end
+          end
+        end
       end
     end
   end

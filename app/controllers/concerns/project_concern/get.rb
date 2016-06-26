@@ -31,7 +31,7 @@ module ProjectConcern
     end
 
     def admin_project_list(controller, user_id)
-      result_success, list = PageValueState.user_pagevalues_and_projects_sorted_updated(user_id)
+      result_success, list = user_pagevalues_and_projects_sorted_updated(user_id)
       admin_html = []
       if result_success
         if list.present?

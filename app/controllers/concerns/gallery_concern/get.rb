@@ -102,7 +102,7 @@ module GalleryConcern
         end
 
         # 必要なItemを調査
-        class_dist_tokens = PageValueState.extract_need_load_itemclassdisttokens(ret[Const::Gallery::Key::EVENT_PAGEVALUE_DATA])
+        class_dist_tokens = extract_need_load_itemclassdisttokens(ret[Const::Gallery::Key::EVENT_PAGEVALUE_DATA])
         item_js_list = ItemJs.get_item_gallery(class_dist_tokens)
 
         # 閲覧数 & ブックマーク数を取得
@@ -277,7 +277,7 @@ module GalleryConcern
           epd = JSON.parse(pagevalue['event_pagevalue_data'])
           ent[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = epd
 
-          need_load_class_dist_tokens = PageValueState.extract_need_load_itemclassdisttokens(epd)
+          need_load_class_dist_tokens = extract_need_load_itemclassdisttokens(epd)
           class_dist_tokens = need_load_class_dist_tokens - loaded_class_dist_tokens
         end
         item_js_list = ItemJs.get_item_gallery(class_dist_tokens)
