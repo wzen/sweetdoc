@@ -6,62 +6,62 @@
   end
 %>
 
-<form name="send_form">
-  <div id="option_wrapper" class="clearfix">
-    <div class="paging_wrapper">
+<div id="option_wrapper" class="clearfix">
+  <div class="paging_wrapper">
+  </div>
+  <div class="filter_wrapper">
+    <div class="dropdown">
+      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+        <% if filter_type == Const::Gallery::SearchType::ALL %>
+            <%= image_tag 'gallery/filter.png' %>
+        <% elsif filter_type == Const::Gallery::SearchType::CREATED %>
+            <%= image_tag 'gallery/filtered.png' %> <%= I18n.t('gallery.filter.new') %>
+        <% elsif filter_type == Const::Gallery::SearchType::VIEW_COUNT %>
+            <%= image_tag 'gallery/filtered.png' %> <%= I18n.t('gallery.filter.view_count') %>
+        <% elsif filter_type == Const::Gallery::SearchType::BOOKMARK_COUNT %>
+            <%= image_tag 'gallery/filtered.png' %> <%= I18n.t('gallery.filter.bookmark_count') %>
+        <% elsif filter_type == Const::Gallery::SearchType::RECOMMEND %>
+            <%= image_tag 'gallery/filtered.png' %> <%= I18n.t('gallery.filter.recommend') %>
+        <% end %>
+        <span class="caret"></span>
+      </button>
+      <%= render 'gallery/grid/filter_dropdown_list' %>
     </div>
-    <div class="filter_wrapper">
-      <div class="dropdown">
-        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-          <% if filter_type == Const::Gallery::SearchType::ALL %>
-              <%= image_tag 'gallery/filter.png' %>
-          <% elsif filter_type == Const::Gallery::SearchType::CREATED %>
-              <%= image_tag 'gallery/filtered.png' %> <%= I18n.t('gallery.filter.new') %>
-          <% elsif filter_type == Const::Gallery::SearchType::VIEW_COUNT %>
-              <%= image_tag 'gallery/filtered.png' %> <%= I18n.t('gallery.filter.view_count') %>
-          <% elsif filter_type == Const::Gallery::SearchType::BOOKMARK_COUNT %>
-              <%= image_tag 'gallery/filtered.png' %> <%= I18n.t('gallery.filter.bookmark_count') %>
-          <% elsif filter_type == Const::Gallery::SearchType::RECOMMEND %>
-              <%= image_tag 'gallery/filtered.png' %> <%= I18n.t('gallery.filter.recommend') %>
-          <% end %>
-          <span class="caret"></span>
-        </button>
-        <%= render 'gallery/grid/filter_dropdown_list' %>
-      </div>
-    </div>
-    <div class="search_wrapper">
-      <div id="custom-search-input">
-        <div class="input-group">
-          <input type="text" placeholder="<%= I18n.t('search.placeholder') %>"/>
-          <span class="input-group-btn">
-              <button class="btn btn-info btn-lg" type="button">
+  </div>
+  <%= form_tag gallery_grid_path, method: :get do %>
+      <div class="search_wrapper">
+        <div id="custom-search-input">
+          <div class="input-group">
+            <%= text_field_tag Const::Gallery::Key::WORD, params[Const::Gallery::Key::WORD.to_sym], placeholder: I18n.t('search.placeholder') %>
+            <span class="input-group-btn">
+              <button class="btn btn-info btn-lg" type="submit">
                   <i class="glyphicon glyphicon-search"></i>
               </button>
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div id="grid_centering_wrapper">
-    <div id="grid_wrapper">
-      <% @contents.each do |content| %>
-          <%= render 'gallery/grid/grid_contents', content: content %>
-      <% end %>
-      <% @dummy_contents_length.times do %>
-          <%= render 'gallery/grid/grid_contents', is_blank: true %>
-      <% end %>
-    </div>
-    <% if @contents.length < @total_count %>
-        <div id="footer_button_wrapper">
-          <div class="footer_button">
-            <button class="button_white withSeeThough">
-              Load more
-            </button>
+            </span>
           </div>
         </div>
+      </div>
+  <% end %>
+</div>
+<div id="grid_centering_wrapper">
+  <div id="grid_wrapper">
+    <% @contents.each do |content| %>
+        <%= render 'gallery/grid/grid_contents', content: content %>
+    <% end %>
+    <% @dummy_contents_length.times do %>
+        <%= render 'gallery/grid/grid_contents', is_blank: true %>
     <% end %>
   </div>
-</form>
+  <% if @contents.length < @total_count %>
+      <div id="footer_button_wrapper">
+        <div class="footer_button">
+          <button class="button_white withSeeThough">
+            Load more
+          </button>
+        </div>
+      </div>
+  <% end %>
+</div>
 
 <%= javascript_include_tag 'pipeline/gallery', 'data-turbolinks-track' => true %>
 

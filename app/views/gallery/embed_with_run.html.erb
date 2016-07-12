@@ -7,9 +7,7 @@
       <div id="gallery_contents_wrapper">
           <div class="wrapper">
               <div id="contents">
-                <form name="send_form">
-                  <%= render 'run/fullscreen/fullscreen_button', access_token: @access_token, open_with_newwindow: false %>
-                </form>
+                <%= render 'run/fullscreen/fullscreen_button', access_token: @access_token, open_with_newwindow: false %>
                 <%= render 'run/fullscreen/fullscreen' %>
                 <%= render 'base/csscode' %>
                 <%= render 'base/values', pagevalues: @pagevalues, is_runwindow_reload: @is_runwindow_reload %>
