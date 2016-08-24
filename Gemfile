@@ -99,6 +99,7 @@ gem 'omniauth', '1.2.2'
 gem 'omniauth-facebook', '3.0.0'
 gem 'omniauth-twitter', '1.2.1'
 gem 'omniauth-google-oauth2', '0.2.10'
+gem 'omniauth-line', '0.0.2'
 
 # Upload Image
 gem 'ruby-filemagic', '0.7.1'

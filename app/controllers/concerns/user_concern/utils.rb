@@ -68,6 +68,24 @@ module UserConcern
       return user
     end
 
+    def find_for_line(auth)
+      user = User.where(:provider => auth.provider, :uid => auth.uid).first
+      unless user
+        user = User.create(
+            access_token: generate_user_access_token,
+            name:     auth.info.name,
+            user_auth_id: 2,
+            provider: auth.provider,
+            uid:      auth.uid,
+            email:    dummy_email(auth),
+            provider_token:    auth.credentials.token,
+            password: Devise.friendly_token[0, 20],
+            encrypted_password:[*1..9, *'A'..'Z', *'a'..'z'].sample(10).join
+        )
+      end
+      return user
+    end
+
     private
     def dummy_email(auth)
       #email = auth.info.email

@@ -240,6 +240,7 @@ Devise.setup do |config|
   config.omniauth :twitter, ENV['OMNIAUTH_TWITTER_KEY'], ENV['OMNIAUTH_TWITTER_SEC_KEY']
   config.omniauth :facebook, ENV['OMNIAUTH_FACEBOOK_KEY'], ENV['OMNIAUTH_FACEBOOK_SEC_KEY']
   config.omniauth :google_oauth2, ENV['OMNIAUTH_GOOGLE_KEY'], ENV['OMNIAUTH_GOOGLE_SEC_KEY']
+  config.omniauth :line, ENV['OMNIAUTH_LINE_CHANNEL_ID'], ENV['OMNIAUTH_LINE_CHANNEL_SEC_KEY']
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

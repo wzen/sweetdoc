@@ -65,6 +65,14 @@
                     <% end %>
                 <% end %>
               </div>
+              <div class="each_button_wrapper">
+                <%= form_tag(user_omniauth_authorize_path(:line)) do %>
+                    <%= button_tag id: 'linelogin', type: 'submit' do %>
+                        l&nbsp;&nbsp;&nbsp;<em id="linename"></em>
+                        <span id="linetext">Sign In with LINE</span>
+                    <% end %>
+                <% end %>
+              </div>
             </div>
           </div>
         </div>
