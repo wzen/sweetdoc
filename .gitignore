@@ -24,3 +24,5 @@
 *.rdb
 *.iml
 /doc
+/node_modules
+/app/assets/javascripts/webpack/*
