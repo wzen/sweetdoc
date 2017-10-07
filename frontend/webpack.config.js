@@ -1,10 +1,11 @@
 const path = require('path');
+const parentPath = __dirname.split('/').slice(0, -1).join('/');
 module.exports = {
     entry: {
-        application: path.join(__dirname, '/frontend/src/javascripts/greet.jsx')
+        application: path.join(__dirname, '/src/javascripts/greet.jsx')
     },
     output: {
-        path: path.join(__dirname, '/app/assets/javascripts/webpack'),
+        path: path.join(parentPath, '/app/assets/javascripts/webpack'),
         filename: 'greet.js'
     },
     module: {
