@@ -26,3 +26,4 @@
 /doc
 /frontend/node_modules
 /app/assets/javascripts/webpack/*
+/frontend/node_test.js

@@ -1,12 +1,14 @@
 const path = require('path');
+const glob = require("glob");
 const parentPath = __dirname.split('/').slice(0, -1).join('/');
+const railsRootPath = __dirname.split('/').slice(0, -2).join('/');
 module.exports = {
     entry: {
-        application: path.join(__dirname, '/src/javascripts/greet.jsx')
+        javascripts: glob.sync(path.join(parentPath, '/src/javascripts/*.jsx'))
     },
     output: {
-        path: path.join(parentPath, '/app/assets/javascripts/webpack'),
-        filename: 'greet.js'
+        path: path.join(railsRootPath, '/app/assets/javascripts/webpack'),
+        filename: 'test.js'
     },
     module: {
         loaders: [
