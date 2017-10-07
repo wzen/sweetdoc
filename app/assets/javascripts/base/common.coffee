@@ -103,14 +103,7 @@ class Common
         window.webkitRequestAnimationFrame ||
         window.mozRequestAnimationFrame    ||
         window.oRequestAnimationFrame      ||
-        window.msRequestAnimationFrame     ||
-        (callback, element) =>
-          window.setTimeout( =>
-            start = +new Date()
-            callback(start)
-            finish = +new Date()
-            @timeout = 1000 / 60 - (finish - start)
-          , @timeout)
+        window.msRequestAnimationFrame
 
   # Pagevalueから環境を反映
   @applyEnvironmentFromPagevalue = ->
