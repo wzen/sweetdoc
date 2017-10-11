@@ -8,7 +8,7 @@
  * DS207: Consider shorter variations of null checks
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
-if(gon.run_pagevalue != null) {
+if(gon.run_pagevalue !== null) {
   window.pageValue = gon.run_pagevalue;
 } else {
   window.pageValue = {};
@@ -294,7 +294,7 @@ var PageValue = (function() {
         var takeValue = function(element) {
           let ret = null;
           const c = $(element).children();
-          if((c != null) && (c.length > 0)) {
+          if((c !== null) && (c.length > 0)) {
             $(c).each(function(e) {
               let cList = this.classList;
               if($(this).hasClass(PageValue.Key.UPDATED)) {
@@ -379,7 +379,7 @@ var PageValue = (function() {
         var takeValue = function(element) {
           let ret = null;
           const c = $(element).children();
-          if((c != null) && (c.length > 0)) {
+          if((c !== null) && (c.length > 0)) {
             $(c).each(function(e) {
               let cList = this.classList;
               if($(this).hasClass(PageValue.Key.UPDATED)) {
@@ -492,7 +492,7 @@ var PageValue = (function() {
             return '';
           }
 
-          if(kyName != null) {
+          if(kyName !== null) {
             kyName += `[${ky}]`;
           } else {
             kyName = ky;
@@ -545,7 +545,7 @@ var PageValue = (function() {
               return parentClassName += `[${k}]`;
             }
           } else {
-            if((root != null) && (root.length > 0)) {
+            if((root !== null) && (root.length > 0)) {
               // 要素が存在する場合は消去して上書き
               root.remove();
             }
@@ -581,7 +581,7 @@ var PageValue = (function() {
             return '';
           }
 
-          if(kyName != null) {
+          if(kyName !== null) {
             kyName += `[${ky}]`;
           } else {
             kyName = ky;
@@ -634,7 +634,7 @@ var PageValue = (function() {
               return parentClassName += `[${k}]`;
             }
           } else {
-            if((root != null) && (root.length > 0)) {
+            if((root !== null) && (root.length > 0)) {
               // 要素が存在する場合は消去して上書き
               root.remove();
             }
@@ -878,7 +878,7 @@ var PageValue = (function() {
       const instanceObjIds = [];
       for(var k in iPageValues) {
         v = iPageValues[k];
-        if((v.value != null) && (v.value.id != null) && ($.inArray(v.value.id, instanceObjIds) < 0)) {
+        if((v.value !== null) && (v.value.id !== null) && ($.inArray(v.value.id, instanceObjIds) < 0)) {
           // IDが存在する & 重複してない
           instanceObjIds.push(v.value.id);
         } else {
@@ -924,7 +924,7 @@ var PageValue = (function() {
             if(min <= max) {
               for(let i = min, end = max, asc = min <= end; asc ? i <= end : i >= end; asc ? i++ : i--) {
                 const obj = ePageValues[this.Key.E_NUM_PREFIX + i];
-                if((obj != null) &&
+                if((obj !== null) &&
                   ($.inArray(obj[EventPageValueBase.PageValueKey.ID], instanceObjIds) >= 0)) {
                   teCount += 1;
                   // 番号を連番に振り直し
@@ -1009,7 +1009,7 @@ var PageValue = (function() {
     // @return [Integer] ページ総数
     static getPageCount() {
       const ret = PageValue.getGeneralPageValue(`${this.Key.G_PREFIX}${this.Key.PAGE_VALUES_SEPERATOR}${this.Key.PAGE_COUNT}`);
-      if(ret != null) {
+      if(ret !== null) {
         return parseInt(ret);
       } else {
         return 1;
@@ -1025,7 +1025,7 @@ var PageValue = (function() {
       } else {
         ret = PageValue.getFootprintPageValue(`${this.Key.F_PREFIX}${this.Key.PAGE_VALUES_SEPERATOR}${this.Key.PAGE_NUM}`);
       }
-      if(ret != null) {
+      if(ret !== null) {
         ret = parseInt(ret);
       } else {
         ret = 1;
@@ -1057,7 +1057,7 @@ var PageValue = (function() {
         pn = this.getPageNum();
       }
       const ret = PageValue.getEventPageValue(`${this.Key.eventPageRoot(pn)}${this.Key.PAGE_VALUES_SEPERATOR}${this.Key.FORK_NUM}`);
-      if(ret != null) {
+      if(ret !== null) {
         return parseInt(ret);
       } else {
         return parseInt(this.Key.EF_MASTER_FORKNUM);
@@ -1077,7 +1077,7 @@ var PageValue = (function() {
         pn = this.getPageNum();
       }
       const ret = PageValue.getEventPageValue(`${this.Key.eventPageRoot(pn)}${this.Key.PAGE_VALUES_SEPERATOR}${this.Key.FORK_COUNT}`);
-      if(ret != null) {
+      if(ret !== null) {
         return parseInt(ret);
       } else {
         return 0;
@@ -1135,7 +1135,7 @@ var PageValue = (function() {
       const ret = {};
       for(let k in instances) {
         const v = instances[k];
-        if((window.instanceMap[k] != null) && window.instanceMap[k] instanceof ItemBase) {
+        if((window.instanceMap[k] !== null) && window.instanceMap[k] instanceof ItemBase) {
           ret[k] = v;
         }
       }
@@ -1145,7 +1145,7 @@ var PageValue = (function() {
 
     // ワークテーブル画面表示位置を取得する
     static getWorktableScrollContentsPosition() {
-      if(window.scrollContents != null) {
+      if(window.scrollContents !== null) {
         const key = this.Key.worktableDisplayPosition();
         let position = this.getGeneralPageValue(key);
         if((position == null)) {

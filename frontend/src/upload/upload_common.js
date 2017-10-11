@@ -41,7 +41,7 @@ class UploadCommon {
     var _removeImage = function() {
       // 画像をデフォルトに戻す
       const selectFile = $(`.${constant.PreloadItemImage.Key.SELECT_FILE}`, root).val();
-      if((selectFile != null) && (selectFile.length > 0)) {
+      if((selectFile !== null) && (selectFile.length > 0)) {
         $(`.${constant.PreloadItemImage.Key.SELECT_FILE}`, root).val('').trigger('change');
       }
       $(`input[name='${constant.Gallery.Key.THUMBNAIL_IMG_WIDTH}']`, root).val('');
@@ -71,7 +71,7 @@ class UploadCommon {
     $(`.${constant.PreloadItemImage.Key.SELECT_FILE}`, root).off('change').on('change', e => {
       window.uploadContents = upload;
       const f = $(`.${constant.PreloadItemImage.Key.SELECT_FILE}`, root).val();
-      if((f != null) && (f.length > 0)) {
+      if((f !== null) && (f.length > 0)) {
         const {size} = e.target.files[0];
         if(size <= (constant.THUMBNAIL_FILESIZE_MAX_KB * 1000)) {
           return _readImage.call(this, e.target);
@@ -109,14 +109,14 @@ class UploadCommon {
         $(`.${constant.Gallery.Key.SHOW_GUIDE}`, root).prop('checked', dataList[constant.Gallery.Key.SHOW_GUIDE]);
         $(`.${constant.Gallery.Key.SHOW_PAGE_NUM}`, root).prop('checked', dataList[constant.Gallery.Key.SHOW_PAGE_NUM]);
         $(`.${constant.Gallery.Key.SHOW_CHAPTER_NUM}`, root).prop('checked', dataList[constant.Gallery.Key.SHOW_CHAPTER_NUM]);
-        if(dataList[constant.Gallery.Key.THUMBNAIL] != null) {
+        if(dataList[constant.Gallery.Key.THUMBNAIL] !== null) {
           // サムネイルを設定
           _getThumbnailBlob.call(this, dataList[constant.Gallery.Key.THUMBNAIL]);
         } else {
           // サムネイル無し
           _removeImage.call(this);
         }
-        if(dataList[constant.Gallery.Key.TAG_ID] != null) {
+        if(dataList[constant.Gallery.Key.TAG_ID] !== null) {
           // タグ設定
           const names = dataList[constant.Gallery.Key.TAG_NAME].split(',');
           for(let name of Array.from(names)) {
@@ -130,7 +130,7 @@ class UploadCommon {
       if((window.galleryDataList == null)) {
         window.galleryDataList = {};
       }
-      if(window.galleryDataList[token] != null) {
+      if(window.galleryDataList[token] !== null) {
         return _cbk.call(this, window.galleryDataList[token]);
       } else {
         Common.showModalFlashMessage('Loading...');
@@ -143,7 +143,7 @@ class UploadCommon {
             dataType: "json",
             data,
             success(data) {
-              if(data != null) {
+              if(data !== null) {
                 window.galleryDataList[token] = data;
                 _cbk.call(this, window.galleryDataList[token]);
               }

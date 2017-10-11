@@ -83,7 +83,7 @@ class PageFlip {
             this.render(point);
             clearInterval(timer);
             $('#pageflip-root').remove();
-            if(callback != null) {
+            if(callback !== null) {
               callback();
             }
           }
@@ -105,7 +105,7 @@ class PageFlip {
             this.render(point);
             clearInterval(timer);
             $('#pageflip-root').remove();
-            if(callback != null) {
+            if(callback !== null) {
               callback();
             }
           }

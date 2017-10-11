@@ -205,7 +205,7 @@ var zip_deflate_start = function(level) {
     zip_compr_level = level;
     zip_initflag = false;
     zip_eofile = false;
-    if(zip_outbuf != null)
+    if(zip_outbuf !== null)
 	return;
 
     zip_free_queue = zip_qhead = zip_qtail = null;
@@ -275,7 +275,7 @@ var zip_reuse_queue = function(p) {
 var zip_new_queue = function() {
     var p;
 
-    if(zip_free_queue != null)
+    if(zip_free_queue !== null)
     {
 	p = zip_free_queue;
 	zip_free_queue = zip_free_queue.next;
@@ -813,7 +813,7 @@ var zip_qcopy = function(buff, off, buff_size) {
     var n, i, j;
 
     n = 0;
-    while(zip_qhead != null && n < buff_size)
+    while(zip_qhead !== null && n < buff_size)
     {
 	i = buff_size - n;
 	if(i > zip_qhead.len)
@@ -1046,7 +1046,7 @@ var zip_gen_bitlen = function(desc) { // the tree descriptor
 	    xbits = extra[n - base];
 	f = tree[n].fc;
 	zip_opt_len += f * (bits + xbits);
-	if(stree != null)
+	if(stree !== null)
 	    zip_static_len += f * (stree[n].dl + xbits);
     }
     if(overflow == 0)
@@ -1171,7 +1171,7 @@ var zip_build_tree = function(desc) { // the tree descriptor
 	tree[xnew].fc = 1;
 	zip_depth[xnew] = 0;
 	zip_opt_len--;
-	if(stree != null)
+	if(stree !== null)
 	    zip_static_len -= stree[xnew].dl;
 	// new is 0 or 1 so it does not have extra bits
     }

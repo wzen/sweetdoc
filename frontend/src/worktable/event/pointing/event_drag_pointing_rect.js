@@ -31,7 +31,7 @@ var EventDragPointingRect = (function() {
         }
 
         applyDraw() {
-          if(this.applyCallback != null) {
+          if(this.applyCallback !== null) {
             return this.applyCallback(this.itemSize);
           }
         }
@@ -42,7 +42,7 @@ var EventDragPointingRect = (function() {
           // アイテム削除
           this.removeItemElement();
           this.saveDrawingSurface();
-          if(callback != null) {
+          if(callback !== null) {
             return callback();
           }
         }
@@ -54,7 +54,7 @@ var EventDragPointingRect = (function() {
         }
 
         startCood(cood) {
-          if(cood != null) {
+          if(cood !== null) {
             this._moveLoc = {x: cood.x, y: cood.y};
           }
           return this.itemSize = null;
@@ -95,7 +95,7 @@ var EventDragPointingRect = (function() {
               this.getJQueryElement().addClass('drag_pointing');
               // コントローラ表示
               FloatView.showPointingController(this);
-              if(callback != null) {
+              if(callback !== null) {
                 return callback();
               }
             }
@@ -158,7 +158,7 @@ var EventDragPointingRect = (function() {
       PointingHandwrite.initHandwrite(this);
       WorktableCommon.changeEventPointingMode(constant.EventInputPointingMode.DRAW);
       FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, () => {
-        if(closeCallback != null) {
+        if(closeCallback !== null) {
           closeCallback();
         } else {
           // 画面上のポイントアイテムを削除
@@ -172,7 +172,7 @@ var EventDragPointingRect = (function() {
     }
 
     static draw(size) {
-      if(size != null) {
+      if(size !== null) {
         const pointing = new (this)();
         pointing.itemSize = size;
         pointing.zindex = Common.plusPagingZindex(constant.Zindex.EVENTFLOAT) + 1;

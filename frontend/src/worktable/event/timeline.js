@@ -94,7 +94,7 @@ class Timeline {
               return afterNum = idx + 1;
             }
           });
-          if(afterNum != null) {
+          if(afterNum !== null) {
             return Timeline.changeSortTimeline(beforeNum, afterNum);
           }
         }
@@ -218,7 +218,7 @@ class Timeline {
       $(teEmt).removeClass(v);
     }
 
-    if(actionType != null) {
+    if(actionType !== null) {
       return $(teEmt).addClass(Common.getActionTypeClassNameByActionType(actionType));
     } else {
       return $(teEmt).addClass(constant.TimelineActionTypeClassName.BLANK);

@@ -58,11 +58,11 @@ var ConfigMenu = (function() {
                   $('#design-config').append(html);
                   designConfigRoot = $(`#${obj.getDesignConfigId()}`);
                 }
-                if(successCallback != null) {
+                if(successCallback !== null) {
                   return successCallback(designConfigRoot);
                 }
               } else {
-                if(errorCallback != null) {
+                if(errorCallback !== null) {
                   errorCallback(data);
                 }
                 console.log('/config_menu/design_config server error');
@@ -70,7 +70,7 @@ var ConfigMenu = (function() {
               }
             },
             error(data) {
-              if(errorCallback != null) {
+              if(errorCallback !== null) {
                 errorCallback(data);
               }
               console.log('/config_menu/design_config ajax error');
@@ -80,7 +80,7 @@ var ConfigMenu = (function() {
         );
 
       } else {
-        if(successCallback != null) {
+        if(successCallback !== null) {
           return successCallback(designConfigRoot);
         }
       }
@@ -90,7 +90,7 @@ var ConfigMenu = (function() {
     static loadEventMethodValueConfig(eventConfigObj, itemObjClass, successCallback = null, errorCallback = null) {
       if((itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]] == null)) {
         // メソッド無し
-        if(successCallback != null) {
+        if(successCallback !== null) {
           successCallback();
         }
         return;
@@ -103,7 +103,7 @@ var ConfigMenu = (function() {
         // 変数編集コンフィグの初期化
         eventConfigObj.initEventVarModifyConfig(itemObjClass);
         eventConfigObj.initEventSpecificConfig(itemObjClass);
-        if(successCallback != null) {
+        if(successCallback !== null) {
           successCallback();
         }
         return;
@@ -126,11 +126,11 @@ var ConfigMenu = (function() {
               // コンフィグの初期化
               eventConfigObj.initEventVarModifyConfig(itemObjClass);
               eventConfigObj.initEventSpecificConfig(itemObjClass);
-              if(successCallback != null) {
+              if(successCallback !== null) {
                 return successCallback(data);
               }
             } else {
-              if(errorCallback != null) {
+              if(errorCallback !== null) {
                 errorCallback(data);
               }
               console.log('/config_menu/method_values_config server error');
@@ -138,7 +138,7 @@ var ConfigMenu = (function() {
             }
           },
           error(data) {
-            if(errorCallback != null) {
+            if(errorCallback !== null) {
               errorCallback(data);
             }
             console.log('/config_menu/method_values_config ajax error');
@@ -152,8 +152,8 @@ var ConfigMenu = (function() {
     static loadConfig(serverActionName, sendData, successCallback = null, errorCallback = null) {
       // 存在チェック
       let emt = $(`#${this.ROOT_ID} .${serverActionName}`);
-      if((emt != null) && (emt.length > 0)) {
-        if(successCallback != null) {
+      if((emt !== null) && (emt.length > 0)) {
+        if(successCallback !== null) {
           successCallback(emt.children(':first'));
         }
         return;
@@ -170,18 +170,18 @@ var ConfigMenu = (function() {
               // コンフィグ追加
               $(`#${this.ROOT_ID}`).append(`<div class='${serverActionName}'>${data.html}</div>`);
               emt = $(`#${this.ROOT_ID} .${serverActionName}`);
-              if(successCallback != null) {
+              if(successCallback !== null) {
                 return successCallback(emt.children(':first'));
               }
             } else {
-              if(errorCallback != null) {
+              if(errorCallback !== null) {
                 errorCallback(data);
               }
               return console.log(`/config_menu/${serverActionName} server error`);
             }
           },
           error(data) {
-            if(errorCallback != null) {
+            if(errorCallback !== null) {
               errorCallback(data);
             }
             return console.log(`/config_menu/${serverActionName} ajax error`);

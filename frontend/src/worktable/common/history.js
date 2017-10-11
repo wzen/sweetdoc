@@ -52,16 +52,16 @@ var OperationHistory = (function() {
           hIndex -= 1;
         }
 
-        if((window.operationHistories[this.operationHistoryIndex()] != null) && (window.operationHistories[this.operationHistoryIndex()][hIndex] != null)) {
+        if((window.operationHistories[this.operationHistoryIndex()] !== null) && (window.operationHistories[this.operationHistoryIndex()][hIndex] !== null)) {
           const obj = window.operationHistories[this.operationHistoryIndex()][hIndex];
           // 全描画を消去
           WorktableCommon.removeAllItemAndEventOnThisPage(() => {
             const instancePageValue = obj[this.Key.INSTANCE];
             const eventPageValue = obj[this.Key.EVENT];
-            if(instancePageValue != null) {
+            if(instancePageValue !== null) {
               PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), instancePageValue);
             }
-            if(eventPageValue != null) {
+            if(eventPageValue !== null) {
               PageValue.setEventPageValueByPageRootHash(eventPageValue);
             }
             window.operationHistoryIndexes[this.operationHistoryIndex()] = hIndex;
@@ -85,16 +85,16 @@ var OperationHistory = (function() {
         }
 
         const hIndex = (window.operationHistoryIndexes[this.operationHistoryIndex()] + 1) % this.OPERATION_STORE_MAX;
-        if((window.operationHistories[this.operationHistoryIndex()] != null) && (window.operationHistories[this.operationHistoryIndex()][hIndex] != null)) {
+        if((window.operationHistories[this.operationHistoryIndex()] !== null) && (window.operationHistories[this.operationHistoryIndex()][hIndex] !== null)) {
           const obj = window.operationHistories[this.operationHistoryIndex()][hIndex];
           // 全描画を消去
           WorktableCommon.removeAllItemAndEventOnThisPage(() => {
             const instancePageValue = obj[this.Key.INSTANCE];
             const eventPageValue = obj[this.Key.EVENT];
-            if(instancePageValue != null) {
+            if(instancePageValue !== null) {
               PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), instancePageValue);
             }
-            if(eventPageValue != null) {
+            if(eventPageValue !== null) {
               PageValue.setEventPageValueByPageRootHash(eventPageValue);
             }
             window.operationHistoryIndexes[this.operationHistoryIndex()] = hIndex;

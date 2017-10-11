@@ -45,7 +45,7 @@ var Sidebar = (function() {
               return window.sidebarOpen = true;
             });
           }
-          //          if target != null
+          //          if target !== null
           //            WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType, true)
 
           // 閉じるイベント設定
@@ -91,7 +91,7 @@ var Sidebar = (function() {
             } else {
               WorktableCommon.changeMode(window.mode);
             }
-            if(callback != null) {
+            if(callback !== null) {
               callback();
             }
             return $('.sidebar-config').hide();
@@ -103,7 +103,7 @@ var Sidebar = (function() {
     // サイドバーがオープンしているか
     // @return [Boolean] 判定結果
     static isOpenedConfigSidebar() {
-      return (window.sidebarOpen != null) && window.sidebarOpen;
+      return (window.sidebarOpen !== null) && window.sidebarOpen;
     }
 
     // サイドバーがクローズしているか
@@ -146,7 +146,7 @@ var Sidebar = (function() {
       const obj = instanceMap[emt.attr('id')];
       // アイテム編集メニュー初期化
       return this.initItemEditConfig(obj, () => {
-        if((obj != null) && (obj.showOptionMenu != null)) {
+        if((obj !== null) && (obj.showOptionMenu !== null)) {
           // オプションメニュー表示処理
           obj.showOptionMenu();
         }
@@ -207,7 +207,7 @@ var Sidebar = (function() {
       // カラーピッカー値を初期化
       ColorPickerUtil.initColorPickerValue();
       // オプションメニューの値を初期化
-      if((obj != null) && (obj.setupOptionMenu != null)) {
+      if((obj !== null) && (obj.setupOptionMenu !== null)) {
         // 初期化関数を呼び出す
         return obj.setupOptionMenu(callback);
       }

@@ -51,7 +51,7 @@ class Chapter {
             this.focusToActorIfNeed(false);
             // イベント反応有効
             this.enableEventHandle();
-            if(callback != null) {
+            if(callback !== null) {
               return callback();
             }
           }
@@ -71,7 +71,7 @@ class Chapter {
       return event.didChapter(() => {
         count += 1;
         if(count >= this.eventObjList.length) {
-          if(callback != null) {
+          if(callback !== null) {
             return callback();
           }
         }
@@ -96,7 +96,7 @@ class Chapter {
       }
     });
 
-    if(item != null) {
+    if(item !== null) {
       // TODO: center以外も?
       if(type === 'center') {
         return Common.focusToTarget(item.getJQueryElement(), () => window.disabledEventHandler = false
@@ -134,7 +134,7 @@ class Chapter {
     let count = 0;
     const max = this.eventObjList.length;
     if(max === 0) {
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     } else {
@@ -148,7 +148,7 @@ class Chapter {
           result.push(e.refresh(e.visible, () => {
             count += 1;
             if(count >= max) {
-              if(callback != null) {
+              if(callback !== null) {
                 return callback();
               }
             }
@@ -178,7 +178,7 @@ class Chapter {
           e.didChapter();
           count += 1;
           if(count >= this.eventObjList.length) {
-            if(callback != null) {
+            if(callback !== null) {
               return callback();
             }
           }

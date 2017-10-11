@@ -42,16 +42,16 @@ var ServerStorage = (function() {
     // サーバにアイテムの情報を保存
     static save(callback = null) {
       let pageNum, v;
-      if((window.previewRunning != null) && window.previewRunning) {
+      if((window.previewRunning !== null) && window.previewRunning) {
         // プレビュー時は処理しない
-        if(callback != null) {
+        if(callback !== null) {
           callback();
         }
         return;
       }
-      if((window.isItemPreview != null) && window.isItemPreview) {
+      if((window.isItemPreview !== null) && window.isItemPreview) {
         // アイテムプレビュー画面では処理しない
-        if(callback != null) {
+        if(callback !== null) {
           callback();
         }
         return;
@@ -82,7 +82,7 @@ var ServerStorage = (function() {
       }
       data[this.Key.EVENT_PAGE_VALUE] = Object.keys(eventPagevalues).length > 0 ? eventPagevalues : null;
       data[this.Key.SETTING_PAGE_VALUE] = PageValue.getSettingPageValue(PageValue.Key.ST_PREFIX);
-      if((data[this.Key.INSTANCE_PAGE_VALUE] != null) || (data[this.Key.EVENT_PAGE_VALUE] != null) || (data[this.Key.SETTING_PAGE_VALUE] != null)) {
+      if((data[this.Key.INSTANCE_PAGE_VALUE] !== null) || (data[this.Key.EVENT_PAGE_VALUE] !== null) || (data[this.Key.SETTING_PAGE_VALUE] !== null)) {
         return $.ajax(
           {
             url: "/page_value_state/save_state",
@@ -99,14 +99,14 @@ var ServerStorage = (function() {
                 if(window.debug) {
                   console.log(data.message);
                 }
-                if(callback != null) {
+                if(callback !== null) {
                   callback(data);
                 }
                 return window.workingAutoSave = false;
               } else {
                 console.log('/page_value_state/save_state server error');
                 // 保存エラー時にもコールバックは呼ぶ
-                if(callback != null) {
+                if(callback !== null) {
                   callback(data);
                 }
                 return Common.ajaxError(data);
@@ -115,7 +115,7 @@ var ServerStorage = (function() {
             error(data) {
               console.log('/page_value_state/save_state ajax error');
               // 保存エラー時にもコールバックは呼ぶ
-              if(callback != null) {
+              if(callback !== null) {
                 callback(data);
               }
               return Common.ajaxError(data);
@@ -123,7 +123,7 @@ var ServerStorage = (function() {
           }
         );
       } else {
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       }
@@ -132,7 +132,7 @@ var ServerStorage = (function() {
     // サーバからアイテムの情報を取得して描画
     // @param [Integer] user_pagevalue_id 取得するUserPageValueのID
     static load(user_pagevalue_id, callback = null) {
-      if((window.isItemPreview != null) && window.isItemPreview) {
+      if((window.isItemPreview !== null) && window.isItemPreview) {
         // アイテムプレビュー時は処理しない
         return;
       }
@@ -152,23 +152,23 @@ var ServerStorage = (function() {
               return Common.setupJsByList(data.itemJsList, () =>
                 WorktableCommon.removeAllItemAndEvent(() => {
                   // Pagevalue設置
-                  if(data.general_pagevalue_data != null) {
+                  if(data.general_pagevalue_data !== null) {
                     PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, data.general_pagevalue_data);
                     Common.setTitle(data.general_pagevalue_data.title);
                   }
-                  if(data.instance_pagevalue_data != null) {
+                  if(data.instance_pagevalue_data !== null) {
                     PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, data.instance_pagevalue_data);
                   }
-                  if(data.event_pagevalue_data != null) {
+                  if(data.event_pagevalue_data !== null) {
                     PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT, data.event_pagevalue_data);
                   }
-                  if(data.setting_pagevalue_data != null) {
+                  if(data.setting_pagevalue_data !== null) {
                     PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, data.setting_pagevalue_data);
                   }
 
                   PageValue.adjustInstanceAndEventOnPage();
                   window.lStorage.saveAllPageValues();
-                  if(callback != null) {
+                  if(callback !== null) {
                     return callback(data);
                   }
                 })
@@ -189,7 +189,7 @@ var ServerStorage = (function() {
     }
 
     static get_load_data(successCallback = null, errorCallback = null) {
-      if((window.isItemPreview != null) && window.isItemPreview) {
+      if((window.isItemPreview !== null) && window.isItemPreview) {
         // アイテムプレビュー時は処理しない
         return;
       }
@@ -204,13 +204,13 @@ var ServerStorage = (function() {
           data,
           success(data) {
             if(data.resultSuccess) {
-              if(successCallback != null) {
+              if(successCallback !== null) {
                 return successCallback(data);
               }
             } else {
               console.log('/page_value_state/user_pagevalue_list_sorted_update server error');
               Common.ajaxError(data);
-              if(errorCallback != null) {
+              if(errorCallback !== null) {
                 return errorCallback();
               }
             }
@@ -218,7 +218,7 @@ var ServerStorage = (function() {
           error(data) {
             console.log('/page_value_state/user_pagevalue_list_sorted_update ajax error');
             Common.ajaxError(data);
-            if(errorCallback != null) {
+            if(errorCallback !== null) {
               return errorCallback();
             }
           }
@@ -227,17 +227,17 @@ var ServerStorage = (function() {
     }
 
     static startSaveIdleTimer() {
-      if((window.isItemPreview != null) && window.isItemPreview) {
+      if((window.isItemPreview !== null) && window.isItemPreview) {
         // アイテムプレビュー時は処理しない
         return;
       }
 
-      if(((window.workingAutoSave != null) && window.workingAutoSave) || !window.initDone) {
+      if(((window.workingAutoSave !== null) && window.workingAutoSave) || !window.initDone) {
         // AutoSave実行中 or 画面初期化時は実行しない
         return;
       }
 
-      if(window.saveIdleTimer != null) {
+      if(window.saveIdleTimer !== null) {
         clearTimeout(window.saveIdleTimer);
       }
       if(WorktableSetting.IdleSaveTimer.isEnabled()) {

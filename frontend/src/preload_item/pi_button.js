@@ -299,7 +299,7 @@ PreloadItemButton.initClass();
 Common.setClassToMap(PreloadItemButton.CLASS_DIST_TOKEN, PreloadItemButton);
 
 // 初期化
-if((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemButton.CLASS_DIST_TOKEN] == null)) {
+if((window.itemInitFuncList !== null) && (window.itemInitFuncList[PreloadItemButton.CLASS_DIST_TOKEN] == null)) {
   if(window.debug) {
     console.log('button loaded');
   }
@@ -307,7 +307,7 @@ if((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemButt
     if(option == null) {
       option = {};
     }
-    if(window.isWorkTable && (PreloadItemButton.jsLoaded != null)) {
+    if(window.isWorkTable && (PreloadItemButton.jsLoaded !== null)) {
       PreloadItemButton.jsLoaded(option);
     }
     //JS読み込み完了

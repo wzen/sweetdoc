@@ -12,7 +12,7 @@ ItemPreviewTemp = (function(superClass) {
 
   ItemPreviewTemp.NAME_PREFIX = "ItemPreviewTemp";
 
-  if (window.loadedClassDistToken != null) {
+  if (window.loadedClassDistToken !== null) {
     ItemPreviewTemp.CLASS_DIST_TOKEN = window.loadedClassDistToken;
   }
 
@@ -164,7 +164,7 @@ ItemPreviewTemp = (function(superClass) {
     return this.getJQueryElement().on('webkitAnimationEnd animationend', (function(_this) {
       return function(e) {
         _this.getJQueryElement().find('.item_contents:first').removeClass('defaultClick_' + _this.id);
-        if (opt.complete != null) {
+        if (opt.complete !== null) {
           return opt.complete();
         }
       };
@@ -173,14 +173,14 @@ ItemPreviewTemp = (function(superClass) {
 
   ItemPreviewTemp.prototype.changeColorScroll = function(opt) {
     this.getJQueryElement().find('.css_item_base').css('background', "#" + this.backgroundColor);
-    if (opt.complete != null) {
+    if (opt.complete !== null) {
       return opt.complete();
     }
   };
 
   ItemPreviewTemp.prototype.changeColorClick = function(opt) {
     this.getJQueryElement().find('.css_item_base').css('background', "#" + this.backgroundColor);
-    if (opt.complete != null) {
+    if (opt.complete !== null) {
       return opt.complete();
     }
   };
@@ -205,12 +205,12 @@ ItemPreviewTemp = (function(superClass) {
 
 Common.setClassToMap(ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp);
 
-if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] == null)) {
+if ((window.itemInitFuncList !== null) && (window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] == null)) {
   window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] = function(option) {
     if (option == null) {
       option = {};
     }
-    if (window.isWorkTable && (ItemPreviewTemp.jsLoaded != null)) {
+    if (window.isWorkTable && (ItemPreviewTemp.jsLoaded !== null)) {
       return ItemPreviewTemp.jsLoaded(option);
     }
   };

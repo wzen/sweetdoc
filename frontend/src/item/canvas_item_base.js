@@ -36,7 +36,7 @@ class CanvasItemBase extends ItemBase {
   createItemElement(callback) {
     // 新規キャンパス存在チェック
     const canvas = document.getElementById(this.canvasElementId());
-    if(canvas != null) {
+    if(canvas !== null) {
       // 存在している場合は追加しない
       callback();
       return;
@@ -88,7 +88,7 @@ class CanvasItemBase extends ItemBase {
   // 描画時のキャンパスの画面を保存
   saveNewDrawingSurface() {
     const canvas = document.getElementById(this.canvasElementId());
-    if(canvas != null) {
+    if(canvas !== null) {
       const context = canvas.getContext('2d');
       return this._newDrawingSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height);
     }
@@ -97,7 +97,7 @@ class CanvasItemBase extends ItemBase {
   // 描画済みの新規キャンパスの画面を保存
   saveNewDrawedSurface() {
     const canvas = document.getElementById(this.canvasElementId());
-    if(canvas != null) {
+    if(canvas !== null) {
       const context = canvas.getContext('2d');
       return this._newDrawedSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height);
     }
@@ -105,9 +105,9 @@ class CanvasItemBase extends ItemBase {
 
   // 保存した画面を新規キャンパスの全画面に再設定
   restoreAllNewDrawingSurface() {
-    if(this._newDrawingSurfaceImageData != null) {
+    if(this._newDrawingSurfaceImageData !== null) {
       const canvas = document.getElementById(this.canvasElementId());
-      if(canvas != null) {
+      if(canvas !== null) {
         const context = canvas.getContext('2d');
         return context.putImageData(this._newDrawingSurfaceImageData, 0, 0);
       }
@@ -118,7 +118,7 @@ class CanvasItemBase extends ItemBase {
   restoreAllNewDrawedSurface() {
     if(this._newDrawedSurfaceImageData) {
       const canvas = document.getElementById(this.canvasElementId());
-      if(canvas != null) {
+      if(canvas !== null) {
         const context = canvas.getContext('2d');
         return context.putImageData(this._newDrawedSurfaceImageData, 0, 0);
       }
@@ -128,7 +128,7 @@ class CanvasItemBase extends ItemBase {
   // 描画を削除
   removeItemElement() {
     const canvas = document.getElementById(this.canvasElementId());
-    if(canvas != null) {
+    if(canvas !== null) {
       const context = canvas.getContext('2d');
       context.clearRect(0, 0, canvas.width, canvas.height);
       // キャンパスに対する初期化

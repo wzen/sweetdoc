@@ -63,10 +63,10 @@ class ScrollOperationGuide {
   // @param [Int] x X軸の動作値
   // @param [Int] y Y軸の動作値
   scrollEventByDistSum(distSum, target = null) {
-    if((target != null) && (this.runningTargetId != null) && (this.runningTargetId !== target.id)) {
+    if((target !== null) && (this.runningTargetId !== null) && (this.runningTargetId !== target.id)) {
       return;
     }
-    if(target != null) {
+    if(target !== null) {
       this.runningTargetId = target.id;
     }
     this.wrapper.show();
@@ -127,7 +127,7 @@ class ScrollOperationGuide {
   }
 
   clear(target = null) {
-    if((target != null) && (this.runningTargetId != null) && (this.runningTargetId !== target.id)) {
+    if((target !== null) && (this.runningTargetId !== null) && (this.runningTargetId !== target.id)) {
       return;
     }
     this.update(0);

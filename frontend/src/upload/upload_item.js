@@ -19,7 +19,7 @@ class UploadItem extends UploadBase {
       Common.showModalFlashMessage('Updating...');
       const fd = new FormData(document.getElementById('upload_form'));
       const tags = $.map($('.select_tag a', root), n => $(n).html());
-      if(tags != null) {
+      if(tags !== null) {
         fd.append(constant.ItemGallery.Key.TAGS, tags);
       } else {
         fd.append(constant.ItemGallery.Key.TAGS, null);

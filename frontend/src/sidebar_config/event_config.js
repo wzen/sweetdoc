@@ -53,7 +53,7 @@ var EventConfig = (function() {
           const parent = $(e.target).closest('.radio');
           this[EventPageValueBase.PageValueKey.METHODNAME] = parent.find('input.method_name:first').val();
           this.clickMethod(e.target);
-          if(this[EventPageValueBase.PageValueKey.ACTIONTYPE] != null) {
+          if(this[EventPageValueBase.PageValueKey.ACTIONTYPE] !== null) {
             // Buttonフォーム表示
             return $('.button_div', this.emt).show();
           }
@@ -150,7 +150,7 @@ var EventConfig = (function() {
             const select = $('.fork_select', handler);
             select.children().remove();
             select.append($(selectOptions));
-            const enabled = (this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] != null) && (this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] > 0);
+            const enabled = (this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] !== null) && (this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] > 0);
             const fn = enabled ? this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] : 1;
             select.val(Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', fn));
             select.parent('div').css('display', enabled ? 'block' : 'none');
@@ -233,7 +233,7 @@ var EventConfig = (function() {
     // イベントタイプ選択
     // @param [Object] e 選択オブジェクト
     selectItem(e = null) {
-      if(e != null) {
+      if(e !== null) {
         const value = $(e).children('input:first').val();
         // デフォルト選択時
         if(value === "") {
@@ -301,7 +301,7 @@ var EventConfig = (function() {
     clickMethod(e = null) {
       const _callback = function() {
         $(".value_forms", this.emt).children("div").hide();
-        if(this[EventPageValueBase.PageValueKey.METHODNAME] != null) {
+        if(this[EventPageValueBase.PageValueKey.METHODNAME] !== null) {
           // 変更値表示
           const valueClassName = this.methodClassName();
           $(`.value_forms .${valueClassName}`, this.emt).show();
@@ -314,7 +314,7 @@ var EventConfig = (function() {
       if(!this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
         // アイテム選択時
         const item = window.instanceMap[this[EventPageValueBase.PageValueKey.ID]];
-        if((item != null) && (this[EventPageValueBase.PageValueKey.METHODNAME] != null)) {
+        if((item !== null) && (this[EventPageValueBase.PageValueKey.METHODNAME] !== null)) {
           // 変数変更コンフィグ読み込み
           return ConfigMenu.loadEventMethodValueConfig(this, item.constructor, () => {
             return _callback.call(this);
@@ -357,10 +357,10 @@ var EventConfig = (function() {
       };
 
       let checked = $('.show_will_chapter:first', this.emt).is(':checked');
-      this[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER] = (checked != null) && checked;
+      this[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER] = (checked !== null) && checked;
       this[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION] = $('.show_will_chapter_duration:first', this.emt).val();
       checked = $('.hide_did_chapter:first', this.emt).is(':checked');
-      this[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER] = (checked != null) && checked;
+      this[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER] = (checked !== null) && checked;
       this[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER_DURATION] = $('.hide_did_chapter_duration:first', this.emt).val();
 
       this[EventPageValueBase.PageValueKey.FINISH_PAGE] = $('.finish_page', this.emt).is(":checked");
@@ -368,7 +368,7 @@ var EventConfig = (function() {
       this[EventPageValueBase.PageValueKey.DO_FOCUS] = $('.do_focus', this.emt).prop('checked');
       this[EventPageValueBase.PageValueKey.IS_SYNC] = false;
       const parallel = $(".parallel_div .parallel", this.emt);
-      if(parallel != null) {
+      if(parallel !== null) {
         this[EventPageValueBase.PageValueKey.IS_SYNC] = parallel.is(":checked");
       }
 
@@ -400,7 +400,7 @@ var EventConfig = (function() {
         this[EventPageValueBase.PageValueKey.EVENT_DURATION] = handlerDiv.find('.click_duration:first').val();
         this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = 0;
         checked = handlerDiv.find('.enable_fork:first').is(':checked');
-        if((checked != null) && checked) {
+        if((checked !== null) && checked) {
           const prefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '');
           this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''));
         }
@@ -418,7 +418,7 @@ var EventConfig = (function() {
       this[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES] = specificValues;
 
       const errorMes = EventPageValueBase.writeToPageValue(this);
-      if((errorMes != null) && (errorMes.length > 0)) {
+      if((errorMes !== null) && (errorMes.length > 0)) {
         // エラー発生時
         this.showError(errorMes);
         return false;
@@ -464,7 +464,7 @@ var EventConfig = (function() {
       const keepDispMag = $(e.target).closest('div').find('.keep_disp_mag').is(':checked');
       return WorktableCommon.stopAllEventPreview(() =>
         WorktableCommon.stopPreview(keepDispMag, function() {
-          if(callback != null) {
+          if(callback !== null) {
             return callback();
           }
         })
@@ -518,7 +518,7 @@ var EventConfig = (function() {
     // @param [Integer] distToken アイテム識別ID
     static addEventConfigContents(distToken) {
       const itemClass = Common.getContentClass(distToken);
-      if((itemClass != null) && (itemClass.actionProperties != null)) {
+      if((itemClass !== null) && (itemClass.actionProperties !== null)) {
         const className = EventConfig.ITEM_ACTION_CLASS.replace('@classdisttoken', distToken);
         const action_forms = $('#event-config .action_forms');
         if(action_forms.find(`.${className}`).length === 0) {
@@ -540,7 +540,7 @@ var EventConfig = (function() {
             actionParent.append(methodClone);
           }
           const methods = props[EventBase.ActionPropertiesKey.METHODS];
-          if(methods != null) {
+          if(methods !== null) {
             for(let methodName in methods) {
               const prop = methods[methodName];
               methodClone = $('#event-config .method_temp').children(':first').clone(true);
@@ -568,7 +568,7 @@ var EventConfig = (function() {
       }
 
       const mod = objClass.actionPropertiesModifiableVars(this[EventPageValueBase.PageValueKey.METHODNAME]);
-      if(mod != null) {
+      if(mod !== null) {
         return (() => {
           const result = [];
           for(let varName in mod) {
@@ -578,10 +578,10 @@ var EventConfig = (function() {
               defaultValue = this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
             } else {
               objClass = null;
-              if(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] != null) {
+              if(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] !== null) {
                 objClass = Common.getContentClass(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
               }
-              if(objClass.actionPropertiesModifiableVars()[varName] != null) {
+              if(objClass.actionPropertiesModifiableVars()[varName] !== null) {
                 defaultValue = objClass.actionPropertiesModifiableVars()[varName].default;
               }
             }
@@ -641,9 +641,9 @@ var EventConfig = (function() {
 
     // 変数変更値が存在するか
     hasModifiableVar(varName = null) {
-      const ret = (this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && ((this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) !== 'undefined');
-      if(varName != null) {
-        return ret && (this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null);
+      const ret = (this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] !== null) && ((this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] !== null) !== 'undefined');
+      if(varName !== null) {
+        return ret && (this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] !== null);
       } else {
         return ret;
       }
@@ -651,9 +651,9 @@ var EventConfig = (function() {
 
     // 変数変更値が存在するか
     hasSpecificVar(varName = null) {
-      const ret = (this[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES] != null) && ((this[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES] != null) !== 'undefined');
-      if(varName != null) {
-        return ret && (this[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES][varName] != null);
+      const ret = (this[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES] !== null) && ((this[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES] !== null) !== 'undefined');
+      if(varName !== null) {
+        return ret && (this[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES][varName] !== null);
       } else {
         return ret;
       }
@@ -746,7 +746,7 @@ var EventConfig = (function() {
             this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
           }
           let value = `#${b}`;
-          if((colorType != null) && (colorType === 'rgb')) {
+          if((colorType !== null) && (colorType === 'rgb')) {
             value = Common.colorFormatChangeHexToRgb(value);
           }
           this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value;

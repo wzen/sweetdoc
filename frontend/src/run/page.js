@@ -13,7 +13,7 @@ class Page {
   constructor(eventPageValueArray) {
 
     const _setupChapterList = function(eventPageValueList, chapterList) {
-      if(eventPageValueList != null) {
+      if(eventPageValueList !== null) {
         let eventList = [];
         return $.each(eventPageValueList, (idx, obj) => {
           eventList.push(obj);
@@ -59,7 +59,7 @@ class Page {
   // @return [Array] チャプターリスト
   getForkChapterList() {
     const lastForkNum = RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum());
-    if(lastForkNum != null) {
+    if(lastForkNum !== null) {
       return this.forkChapterList[lastForkNum];
     } else {
       return [];
@@ -76,7 +76,7 @@ class Page {
       const s = stack[sIndex];
       for(let cIndex = 0; cIndex < this.forkChapterList[s.forkNum].length; cIndex++) {
         const chapter = this.forkChapterList[s.forkNum][cIndex];
-        if((stack[sIndex + 1] != null) && (cIndex > stack[sIndex + 1].changedChapterIndex)) {
+        if((stack[sIndex + 1] !== null) && (cIndex > stack[sIndex + 1].changedChapterIndex)) {
           break;
         }
         ret.push(chapter);
@@ -103,7 +103,7 @@ class Page {
   // @return [Integer] チャプターインデックス
   getChapterIndex() {
     const lastForkNum = RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum());
-    if(lastForkNum != null) {
+    if(lastForkNum !== null) {
       return this.forkChapterIndex[lastForkNum];
     } else {
       return 0;
@@ -114,7 +114,7 @@ class Page {
   // @param [Integer] num 設定値
   setChapterIndex(num) {
     const lastForkNum = RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum());
-    if(lastForkNum != null) {
+    if(lastForkNum !== null) {
       return this.forkChapterIndex[lastForkNum] = num;
     }
   }
@@ -123,7 +123,7 @@ class Page {
   // @param [Integer] addNum 追加値
   addChapterIndex(addNum) {
     const lastForkNum = RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum());
-    if(lastForkNum != null) {
+    if(lastForkNum !== null) {
       return this.forkChapterIndex[lastForkNum] = this.forkChapterIndex[lastForkNum] + addNum;
     }
   }
@@ -149,7 +149,7 @@ class Page {
     RunCommon.setChapterNum(this.thisChapterNum());
     // チャプター前処理
     this.floatPageScrollHandleCanvas();
-    if(this.thisChapter() != null) {
+    if(this.thisChapter() !== null) {
       return this.thisChapter().willChapter();
     } else {
       // チャプター無し -> 終了
@@ -166,7 +166,7 @@ class Page {
 
   // 次のチャプター処理
   nextChapter() {
-    if((this.thisChapter().changeForkNum != null) && (this.thisChapter().changeForkNum !== RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum()))) {
+    if((this.thisChapter().changeForkNum !== null) && (this.thisChapter().changeForkNum !== RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum()))) {
       // フォーク変更
       return this.switchFork();
     } else {
@@ -201,7 +201,7 @@ class Page {
     // チャプター後処理
     return this.thisChapter().didChapter(() => {
       // フォーク番号変更
-      if(this.thisChapter().changeForkNum != null) {
+      if(this.thisChapter().changeForkNum !== null) {
         const nfn = this.thisChapter().changeForkNum;
         if(RunCommon.addForkNumToStack(nfn, this.getChapterIndex(), window.eventAction.thisPageNum())) {
           RunCommon.setForkNum(nfn);
@@ -221,7 +221,7 @@ class Page {
     if(window.runDebug) {
       console.log('Page rewindChapter');
     }
-    if((window.runningOperation != null) && window.runningOperation) {
+    if((window.runningOperation !== null) && window.runningOperation) {
       // 二重実行防止
       return;
     }
@@ -233,7 +233,7 @@ class Page {
       window.eventAction.rewindPage(() => {
         FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0);
         window.runningOperation = false;
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       });
@@ -250,7 +250,7 @@ class Page {
             return this.thisChapter().willChapter(() => {
               FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
               window.runningOperation = false;
-              if(callback != null) {
+              if(callback !== null) {
                 return callback();
               }
             });
@@ -276,19 +276,19 @@ class Page {
               return this.thisChapter().willChapter(() => {
                 FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
                 window.runningOperation = false;
-                if(callback != null) {
+                if(callback !== null) {
                   return callback();
                 }
               });
             });
           } else {
             const beforePage = window.eventAction.beforePage();
-            if(beforePage != null) {
+            if(beforePage !== null) {
               // ページ戻し
               return window.eventAction.rewindPage(() => {
                 FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0);
                 window.runningOperation = false;
-                if(callback != null) {
+                if(callback !== null) {
                   return callback();
                 }
               });
@@ -296,7 +296,7 @@ class Page {
               return this.thisChapter().willChapter(() => {
                 FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
                 window.runningOperation = false;
-                if(callback != null) {
+                if(callback !== null) {
                   return callback();
                 }
               });
@@ -308,7 +308,7 @@ class Page {
         return this.thisChapter().willChapter(() => {
           FloatView.show('Rewind event', FloatView.Type.REWIND_CHAPTER, 1.0);
           window.runningOperation = false;
-          if(callback != null) {
+          if(callback !== null) {
             return callback();
           }
         });
@@ -327,10 +327,10 @@ class Page {
     this.finishedAllChapters = false;
     this.finishedScrollDistSum = 0;
     const chapterList = this.getForkChapterList()[chapterIndex];
-    if(chapterList != null) {
+    if(chapterList !== null) {
       return chapterList.resetAllEvents(callback);
     } else {
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     }
@@ -344,7 +344,7 @@ class Page {
     if(window.runDebug) {
       console.log('Page rewindAllChapters');
     }
-    if(rewindPageIfNeed && (window.runningOperation != null) && window.runningOperation) {
+    if(rewindPageIfNeed && (window.runningOperation !== null) && window.runningOperation) {
       // 二重実行防止
       return;
     }
@@ -355,19 +355,19 @@ class Page {
     if((chapter == null) || (!chapter.doMoveChapter && rewindPageIfNeed)) {
       // 前ページを先頭チャプターに戻す
       const beforePage = window.eventAction.beforePage();
-      if(beforePage != null) {
+      if(beforePage !== null) {
         return window.eventAction.rewindPage(() => {
           return beforePage.rewindAllChapters(false, () => {
             FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0);
             window.runningOperation = false;
-            if(callback != null) {
+            if(callback !== null) {
               return callback();
             }
           });
         });
       } else {
         window.runningOperation = false;
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       }
@@ -385,7 +385,7 @@ class Page {
           FloatView.show('Rewind all events', FloatView.Type.REWIND_ALL_CHAPTER, 1.0);
           window.runningOperation = false;
         }
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       };
@@ -434,7 +434,7 @@ class Page {
 
   // スクロールチャプターか判定
   isScrollChapter() {
-    return (this.thisChapter().scrollEvent != null);
+    return (this.thisChapter().scrollEvent !== null);
   }
 
   // 全てのイベントアイテムをFrontから落とす
@@ -464,7 +464,7 @@ class Page {
         RunCommon.setChapterMax(this.getForkChapterList().length);
         // キャッシュ保存
         window.lStorage.saveAllPageValues();
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       });
@@ -496,7 +496,7 @@ class Page {
           return this.resetChapter(this.getChapterIndex(), () => {
             // キャッシュ保存
             window.lStorage.saveAllPageValues();
-            if(callback != null) {
+            if(callback !== null) {
               return callback();
             }
           });
@@ -578,7 +578,7 @@ class Page {
     // アイテムインスタンス取得(無い場合は作成 & 初期化もする)
     const objs = Common.itemInstancesInPage(PageValue.getPageNum(), true, true);
     if(objs.length === 0) {
-      if(callback != null) {
+      if(callback !== null) {
         callback();
       }
       return;
@@ -596,7 +596,7 @@ class Page {
         }
         finishCount += 1;
         if(finishCount >= objs.length) {
-          if(callback != null) {
+          if(callback !== null) {
             return callback();
           }
         }
@@ -611,7 +611,7 @@ class Page {
     let count = 0;
     const max = this.getAllChapterList().length;
     if(max === 0) {
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     } else {
@@ -619,7 +619,7 @@ class Page {
         chapter.resetAllEvents(() => {
           count += 1;
           if(count >= max) {
-            if(callback != null) {
+            if(callback !== null) {
               return callback();
             }
           }
@@ -636,7 +636,7 @@ class Page {
       chapter.forwardAllEvents(() => {
         count += 1;
         if(count >= list.length) {
-          if(callback != null) {
+          if(callback !== null) {
             return callback();
           }
         }
@@ -653,11 +653,11 @@ class Page {
   finishAllChapters(nextPageIndex = null) {
     if(window.runDebug) {
       console.log('Page finishAllChapters');
-      if(nextPageIndex != null) {
+      if(nextPageIndex !== null) {
         console.log(`nextPageIndex: ${nextPageIndex}`);
       }
     }
-    if(nextPageIndex != null) {
+    if(nextPageIndex !== null) {
       window.eventAction.nextPageIndex = nextPageIndex;
     }
     this.finishedAllChapters = true;

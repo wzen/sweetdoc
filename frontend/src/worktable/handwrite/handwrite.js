@@ -131,7 +131,7 @@ class Handwrite {
   // マウスドラッグ時の描画イベント
   // @param [Array] loc Canvas座標
   static mouseMoveDrawing(loc) {
-    if(window.handwritingItem != null) {
+    if(window.handwritingItem !== null) {
       if(this.enableMoveEvent) {
         this.enableMoveEvent = false;
         this.drag = true;
@@ -154,7 +154,7 @@ class Handwrite {
 
   // マウスアップ時の描画イベント
   static mouseUpDrawing() {
-    if(window.handwritingItem != null) {
+    if(window.handwritingItem !== null) {
       return window.handwritingItem.mouseUpDrawing(this.zindex, () => {
         this.zindex += 1;
         return window.handwritingItem = null;

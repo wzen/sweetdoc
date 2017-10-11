@@ -30,7 +30,7 @@ var RunSetting = (function() {
     // ガイド切り替え
     static toggleShowGuide() {
       PageValue.setSettingPageValue(this.PageValueKey.SHOW_GUIDE, !this.isShowGuide());
-      if(window.eventAction != null) {
+      if(window.eventAction !== null) {
         if(this.isShowGuide()) {
           return window.eventAction.thisPage().thisChapter().showGuide();
         } else {

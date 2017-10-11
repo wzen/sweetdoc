@@ -88,7 +88,7 @@ class Paging {
           return forkNum = parseInt(c.replace(forkPrefix, ''));
         }
       });
-      if(pageNum != null) {
+      if(pageNum !== null) {
         return this.selectPage(pageNum, forkNum);
       } else {
         return Common.hideModalView();
@@ -186,7 +186,7 @@ class Paging {
       if(selectedForkNum === PageValue.getForkNum()) {
         // 同じページ & 同じフォークの場合は変更しない
         Common.hideModalView();
-        if(callback != null) {
+        if(callback !== null) {
           callback();
         }
         return;
@@ -200,7 +200,7 @@ class Paging {
           this.createPageSelectMenu();
           // モーダルを削除
           Common.hideModalView();
-          if(callback != null) {
+          if(callback !== null) {
             return callback();
           }
         });
@@ -211,14 +211,14 @@ class Paging {
       console.log(`[selectPage] selectedNum:${selectedPageNum}`);
     }
     if(selectedPageNum <= 0) {
-      if(callback != null) {
+      if(callback !== null) {
         callback();
       }
       return;
     }
     const pageCount = PageValue.getPageCount();
     if((selectedPageNum < 0) || (selectedPageNum > pageCount)) {
-      if(callback != null) {
+      if(callback !== null) {
         callback();
       }
       return;
@@ -267,7 +267,7 @@ class Paging {
         this.createPageSelectMenu();
         // モーダルを削除
         Common.hideModalView();
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       });
@@ -297,7 +297,7 @@ class Paging {
   static selectFork(selectedForkNum, callback = null) {
     if((selectedForkNum == null) || (selectedForkNum === PageValue.getForkNum())) {
       // フォーク番号が同じ場合は処理なし
-      if(callback != null) {
+      if(callback !== null) {
         callback();
       }
       return;
@@ -308,14 +308,14 @@ class Paging {
     if(selectedForkNum === PageValue.Key.EF_MASTER_FORKNUM) {
       // Masterに変更する場合
       // とりあえず何もしない
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     } else {
       // Forkに変更
       // フォークのアイテムを描画
       return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       });
@@ -325,7 +325,7 @@ class Paging {
   static removePage(pageNum, callback = null) {
     if(pageNum <= 1) {
       // 1ページ目は消去しない
-      if(callback != null) {
+      if(callback !== null) {
         callback();
       }
       return;
@@ -337,7 +337,7 @@ class Paging {
         window.lStorage.saveAllPageValues();
         // 選択メニューの更新
         this.createPageSelectMenu();
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       });

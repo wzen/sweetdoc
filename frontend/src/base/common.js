@@ -64,13 +64,13 @@
         }
 
         $(this).blur();
-        if($("#modal-overlay")[0] != null) {
+        if($("#modal-overlay")[0] !== null) {
           return false;
         }
 
         // 表示
         const _show = function() {
-          if(showFunc != null) {
+          if(showFunc !== null) {
             return showFunc();
           }
         };
@@ -94,7 +94,7 @@
                   $('body').append(data.modalHtml);
                   emt = $('body').children(`.modal-content.${type}`);
                   emt.hide();
-                  if(prepareShowFunc != null) {
+                  if(prepareShowFunc !== null) {
                     return prepareShowFunc(emt, prepareShowFuncParams, () => {
                       return _show.call(this);
                     });
@@ -116,7 +116,7 @@
             }
           );
         } else {
-          if(prepareShowFunc != null) {
+          if(prepareShowFunc !== null) {
             return prepareShowFunc(emt, prepareShowFuncParams, () => {
               return _show.call(this);
             });
@@ -189,7 +189,7 @@
 
     // オブジェクトがHTML要素か判定
     static isElement(obj) {
-      return (typeof obj === "object") && (obj.length === 1) && (obj.get != null) && (obj.get(0).nodeType === 1) && (typeof obj.get(0).style === "object") && (typeof obj.get(0).ownerDocument === "object");
+      return (typeof obj === "object") && (obj.length === 1) && (obj.get !== null) && (obj.get(0).nodeType === 1) && (typeof obj.get(0).style === "object") && (typeof obj.get(0).ownerDocument === "object");
     }
 
     static ajaxError(responseData) {
@@ -261,7 +261,7 @@
 
     // タイトルを設定
     static setTitle(title_name) {
-      if(title_name != null) {
+      if(title_name !== null) {
         Navbar.setTitle(title_name);
         if(!window.isWorkTable) {
           return RunCommon.setTitle(title_name);
@@ -321,11 +321,11 @@
     static isFixedScreenSize() {
       // ScreenSizeデータが存在すれば指定
       const size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
-      return (size != null) && size.width && size.height;
+      return (size !== null) && size.width && size.height;
     }
 
     static saveMainWrapperSize() {
-      if(window.mainWrapper != null) {
+      if(window.mainWrapper !== null) {
         return window.mainWrapperSize = {
           width: window.mainWrapper.width(),
           height: window.mainWrapper.height()
@@ -358,7 +358,7 @@
     // Worktableの設定を使用してスクロール位置初期化
     static initScrollContentsPositionByWorktableConfig() {
       const position = PageValue.getWorktableScrollContentsPosition();
-      if(position != null) {
+      if(position !== null) {
         // Worktableの画面状態にセット
         return this.updateScrollContentsPosition(position.top, position.left);
       } else {
@@ -412,7 +412,7 @@
 
     // 画面スケールの取得
     static getViewScale() {
-      if((window.isItemPreview != null) && window.isItemPreview) {
+      if((window.isItemPreview !== null) && window.isItemPreview) {
         return 1.0;
       } else if(window.isWorkTable && !window.previewRunning) {
         // ワークテーブルの倍率
@@ -461,7 +461,7 @@
       if(!window.isWorkTable && (w <= 0)) {
         // 幅0 (ページ遷移前のビューが閉じている状態)の時はScreenから取得
         const screen = this.getScreenSize();
-        if(screen != null) {
+        if(screen !== null) {
           const borderPadding = 5 * 2;
           const scaleFromViewRate = window.runScaleFromViewRate;
           w = (screen.width * scaleFromViewRate) - borderPadding;
@@ -480,7 +480,7 @@
 
     // Canvasサイズ更新
     static updateCanvasSize() {
-      if(window.drawingCanvas != null) {
+      if(window.drawingCanvas !== null) {
         const scale = this.getViewScale();
         $(window.drawingCanvas).attr('width', $('#pages').width() / scale);
         return $(window.drawingCanvas).attr('height', $('#pages').height() / scale);
@@ -492,7 +492,7 @@
       return $(window).resize(function() {
         // モーダル中央寄せ
         Common.modalCentering();
-        if(resizeEvent != null) {
+        if(resizeEvent !== null) {
           return resizeEvent();
         }
       });
@@ -510,16 +510,16 @@
       }
       if(obj instanceof RegExp) {
         let flags = '';
-        if(obj.global != null) {
+        if(obj.global !== null) {
           flags += 'g';
         }
-        if(obj.ignoreCase != null) {
+        if(obj.ignoreCase !== null) {
           flags += 'i';
         }
-        if(obj.multiline != null) {
+        if(obj.multiline !== null) {
           flags += 'm';
         }
-        if(obj.sticky != null) {
+        if(obj.sticky !== null) {
           flags += 'y';
         }
         return new RegExp(obj.source, flags);
@@ -645,7 +645,7 @@
         return;
       }
       const focusDiff = this.focusDiff();
-      if($(target).get(0).offsetParent != null) {
+      if($(target).get(0).offsetParent !== null) {
         //        if window.runDebug
         //          console.log('window.runScaleFromViewRate:' + window.runScaleFromViewRate)
         //          console.log('original scrollContents.scrollTop():' + scrollContents.scrollTop())
@@ -661,7 +661,7 @@
         return this.updateScrollContentsPosition(top, left, immediate, true, callback);
       } else {
         // offsetが取得できない場合は処理なし
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       }
@@ -675,7 +675,7 @@
           // 倍率1.0以下の場合にスクロール値に調整が必要
           const scale = this.getViewScale();
           const scrollContentsSize = this.scrollContentsSizeUnderViewScale();
-          if(scrollContentsSize != null) {
+          if(scrollContentsSize !== null) {
             diff = {
               top: scrollContentsSize.height * 0.5 * (1 - scale),
               left: scrollContentsSize.width * 0.5 * (1 - scale)
@@ -726,7 +726,7 @@
         window.skipScrollEvent = true;
         window.scrollContents.scrollTop(parseInt(top));
         window.scrollContents.scrollLeft(parseInt(left));
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       } else {
@@ -748,7 +748,7 @@
             window.scrollContents.scrollTop(parseInt(top));
             window.scrollContents.scrollLeft(parseInt(left));
             window.skipScrollEventByAnimation = false;
-            if(callback != null) {
+            if(callback !== null) {
               return callback();
             }
           } else {
@@ -802,7 +802,7 @@
           PageValue.setWorktableScrollContentsPosition(top, left);
         }
         window.lStorage.saveAllPageValues();
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       };
@@ -810,7 +810,7 @@
       if(immediate) {
         return _save.call(this);
       } else {
-        if(window.scrollContentsScrollTimer != null) {
+        if(window.scrollContentsScrollTimer !== null) {
           clearTimeout(window.scrollContentsScrollTimer);
         }
         return window.scrollContentsScrollTimer = setTimeout(function() {
@@ -828,7 +828,7 @@
     static updateScrollContentsFromScreenEventVar() {
       if(ScreenEvent.hasInstanceCache()) {
         const se = new ScreenEvent();
-        if((se.eventBaseX != null) && (se.eventBaseY != null)) {
+        if((se.eventBaseX !== null) && (se.eventBaseY !== null)) {
           return this.updateScrollContentsPosition(se.eventBaseY, se.eventBaseX);
         }
       }
@@ -838,7 +838,7 @@
     // @property [String] str 対象文字列
     // @return [String] 変換後文字列
     static sanitaizeEncode(str) {
-      if((str != null) && (typeof str === "string")) {
+      if((str !== null) && (typeof str === "string")) {
         return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
       } else {
         return str;
@@ -849,7 +849,7 @@
     // @property [String] str 対象文字列
     // @return [String] 変換後文字列
     static sanitaizeDecode(str) {
-      if((str != null) && (typeof str === "string")) {
+      if((str !== null) && (typeof str === "string")) {
         return str.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, '\'').replace(/&amp;/g, '&');
       } else {
         return str;
@@ -1068,8 +1068,8 @@
 
     // 最終更新日時の時間差を取得
     static displayLastUpdateDiffAlmostTime(update_at = null) {
-      const lastSaveTime = (update_at != null) ? update_at : PageValue.getGeneralPageValue(PageValue.Key.LAST_SAVE_TIME);
-      if(lastSaveTime != null) {
+      const lastSaveTime = (update_at !== null) ? update_at : PageValue.getGeneralPageValue(PageValue.Key.LAST_SAVE_TIME);
+      if(lastSaveTime !== null) {
         const n = $.now();
         const d = new Date(lastSaveTime);
         return Common.displayDiffAlmostTime(n, d.getTime());
@@ -1168,7 +1168,7 @@
       } else {
         emt = $('body').children(`.modal-content.${type}`);
       }
-      if(emt != null) {
+      if(emt !== null) {
         let h, w;
         if($('#main').length > 0) {
           w = $('#main').width();
@@ -1181,7 +1181,7 @@
         let callback = null;
         let width = emt.outerWidth();
         let height = emt.outerHeight();
-        if(b != null) {
+        if(b !== null) {
           if($.type(b) === 'function') {
             callback = b;
           } else if($.type(b) === 'object') {
@@ -1189,7 +1189,7 @@
             ({height} = b);
           }
         }
-        if(c != null) {
+        if(c !== null) {
           callback = c;
         }
         const cw = width;
@@ -1251,12 +1251,12 @@
       if(withDeleteInstanceMap == null) {
         withDeleteInstanceMap = true;
       }
-      if(pageNum != null) {
+      if(pageNum !== null) {
         const items = this.instancesInPage(pageNum);
         return (() => {
           const result = [];
           for(let item of Array.from(items)) {
-            if(item != null) {
+            if(item !== null) {
               if(item instanceof CommonEventBase === false) {
                 // アイテム表示削除
                 item.removeItemElement();
@@ -1286,7 +1286,7 @@
         const object = Common.allItemInstances();
         for(let k in object) {
           const v = object[k];
-          if(v != null) {
+          if(v !== null) {
             // アイテム表示削除
             v.removeItemElement();
           }
@@ -1324,7 +1324,7 @@
       );
       // 読み込むIDがない場合はコールバック実行して終了
       if(classDistTokens.length === 0) {
-        if(callback != null) {
+        if(callback !== null) {
           callback();
         }
         return;
@@ -1333,13 +1333,13 @@
       let callbackCount = 0;
       const needReadclassDistTokens = [];
       for(let classDistToken of Array.from(classDistTokens)) {
-        if(classDistToken != null) {
-          if(window.itemInitFuncList[classDistToken] != null) {
+        if(classDistToken !== null) {
+          if(window.itemInitFuncList[classDistToken] !== null) {
             // 読み込み済みなアイテムIDの場合
             window.itemInitFuncList[classDistToken]();
             callbackCount += 1;
             if(callbackCount >= classDistTokens.length) {
-              if(callback != null) {
+              if(callback !== null) {
                 // 既に全て読み込まれている場合はコールバック実行して終了
                 callback();
               }
@@ -1366,7 +1366,7 @@
           success(data) {
             if(data.resultSuccess) {
               if((data.indexes == null) || (data.indexes.length === 0)) {
-                if(callback != null) {
+                if(callback !== null) {
                   return callback();
                 }
               } else {
@@ -1378,7 +1378,7 @@
                     PageValue.addItemInfo(d.class_dist_token);
                     dataIdx += 1;
                     if(dataIdx >= data.indexes.length) {
-                      if(callback != null) {
+                      if(callback !== null) {
                         return callback();
                       }
                     } else {
@@ -1421,7 +1421,7 @@
 
       return this.loadItemJs(needclassDistTokens, function() {
         // コールバック
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       });
@@ -1444,11 +1444,11 @@
       const firstScript = document.getElementsByTagName('script')[0];
       firstScript.parentNode.insertBefore(s, firstScript);
       return t = setInterval(function() {
-          if(window.itemInitFuncList[classDistToken] != null) {
+          if(window.itemInitFuncList[classDistToken] !== null) {
             clearInterval(t);
             window.itemInitFuncList[classDistToken](option);
             window.loadedClassDistToken = null;
-            if(callback != null) {
+            if(callback !== null) {
               return callback();
             }
           }
@@ -1472,13 +1472,13 @@
     static setupJsByList(itemJsList, callback = null) {
 
       const _addItem = function(class_dist_token = null) {
-        if(class_dist_token != null) {
+        if(class_dist_token !== null) {
           return PageValue.addItemInfo(class_dist_token);
         }
       };
 
       if(itemJsList.length === 0) {
-        if(callback != null) {
+        if(callback !== null) {
           callback();
         }
         return;
@@ -1488,14 +1488,14 @@
       let d = itemJsList[loadedIndex];
       var _func = function() {
         const classDistToken = d.class_dist_token;
-        if(window.itemInitFuncList[classDistToken] != null) {
+        if(window.itemInitFuncList[classDistToken] !== null) {
           // 既に読み込まれている場合
           window.itemInitFuncList[classDistToken]();
           //_addItem.call(@, classDistToken)
           loadedIndex += 1;
           if(loadedIndex >= itemJsList.length) {
             // 全て読み込んだ後
-            if(callback != null) {
+            if(callback !== null) {
               callback();
             }
           } else {
@@ -1511,7 +1511,7 @@
           loadedIndex += 1;
           if(loadedIndex >= itemJsList.length) {
             // 全て読み込んだ後
-            if(callback != null) {
+            if(callback !== null) {
               return callback();
             }
           } else {

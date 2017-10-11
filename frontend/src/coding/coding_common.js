@@ -62,7 +62,7 @@ var CodingCommon = (function() {
         $('.jstree-node', root).each(function(i) {
           const node_path = _nodePath($(this).children('.jstree-anchor:first'));
           let user_coding_id = $('#tree_wrapper').find(`.user_coding_id.${_userCodingClassNameByNodePath(node_path)}`).val();
-          if(user_coding_id != null) {
+          if(user_coding_id !== null) {
             user_coding_id = parseInt(user_coding_id);
           }
           const is_opened = jt.is_open(this);
@@ -83,7 +83,7 @@ var CodingCommon = (function() {
           const editorWrapperId = t.find('a:first').attr('href').replace('#', '');
           const editorId = editorWrapperId.replace('_wrapper', '');
 
-          if((targetEditorId != null) && (editorId !== targetEditorId)) {
+          if((targetEditorId !== null) && (editorId !== targetEditorId)) {
             // 対象外のEditorはパス
             return true;
           }
@@ -205,7 +205,7 @@ var CodingCommon = (function() {
       });
 
       editor.setKeyboardHandler('ace/keyboard/emacs');
-      if(defaultValue != null) {
+      if(defaultValue !== null) {
         editor.setValue(defaultValue);
       }
 
@@ -288,11 +288,11 @@ var CodingCommon = (function() {
             return (() => {
               const result = [];
               for(let v of Array.from(menuArray)) {
-                if(v.children != null) {
+                if(v.children !== null) {
                   _exec_func.call(this, v.children);
                 }
                 if(v.cmd === ui.cmd) {
-                  if(v.func != null) {
+                  if(v.func !== null) {
                     result.push(v.func(event, ui));
                   } else {
                     result.push(undefined);
@@ -413,11 +413,11 @@ var CodingCommon = (function() {
               });
 
               if(data.resultSuccess) {
-                if(successCallback != null) {
+                if(successCallback !== null) {
                   return successCallback(data);
                 }
               } else {
-                if(errorCallback != null) {
+                if(errorCallback !== null) {
                   errorCallback(data);
                 }
                 console.log('/coding/save_all server error');
@@ -425,7 +425,7 @@ var CodingCommon = (function() {
               }
             },
             error(data) {
-              if(errorCallback != null) {
+              if(errorCallback !== null) {
                 errorCallback(data);
               }
               console.log('/coding/save_all ajax error');
@@ -447,13 +447,13 @@ var CodingCommon = (function() {
           data,
           success(data) {
             if(data.resultSuccess) {
-              if(successCallback != null) {
+              if(successCallback !== null) {
                 return successCallback(data);
               }
             } else {
               console.log('/coding/save_tree server error');
               Common.ajaxError(data);
-              if(errorCallback != null) {
+              if(errorCallback !== null) {
                 return errorCallback(data);
               }
             }
@@ -461,7 +461,7 @@ var CodingCommon = (function() {
           error(data) {
             console.log('/coding/save_tree ajax error');
             Common.ajaxError(data);
-            if(errorCallback != null) {
+            if(errorCallback !== null) {
               return errorCallback(data);
             }
           }
@@ -499,13 +499,13 @@ var CodingCommon = (function() {
               });
 
               if(data.resultSuccess) {
-                if(successCallback != null) {
+                if(successCallback !== null) {
                   return successCallback(data);
                 }
               } else {
                 console.log('/coding/save_code server error');
                 Common.ajaxError(data);
-                if(errorCallback != null) {
+                if(errorCallback !== null) {
                   return errorCallback(data);
                 }
               }
@@ -513,7 +513,7 @@ var CodingCommon = (function() {
             error(data) {
               console.log('/coding/save_code ajax error');
               Common.ajaxError(data);
-              if(errorCallback != null) {
+              if(errorCallback !== null) {
                 return errorCallback(data);
               }
             }
@@ -524,7 +524,7 @@ var CodingCommon = (function() {
 
     static saveActiveCode(successCallback = null, errorCallback = null) {
       const editorId = _activeEditorId();
-      if((window.editing[editorId] != null) && window.editing[editorId]) {
+      if((window.editing[editorId] !== null) && window.editing[editorId]) {
         const data = {};
         data[this.Key.CODES] = _codes(editorId);
         return $.ajax(
@@ -545,13 +545,13 @@ var CodingCommon = (function() {
                   }
                 });
 
-                if(successCallback != null) {
+                if(successCallback !== null) {
                   return successCallback(data);
                 }
               } else {
                 console.log('/coding/save_code server error');
                 Common.ajaxError(data);
-                if(errorCallback != null) {
+                if(errorCallback !== null) {
                   return errorCallback(data);
                 }
               }
@@ -559,7 +559,7 @@ var CodingCommon = (function() {
             error(data) {
               console.log('/coding/save_code ajax error');
               Common.ajaxError(data);
-              if(errorCallback != null) {
+              if(errorCallback !== null) {
                 return errorCallback(data);
               }
             }
@@ -579,13 +579,13 @@ var CodingCommon = (function() {
           data,
           success(data) {
             if(data.resultSuccess) {
-              if(successCallback != null) {
+              if(successCallback !== null) {
                 return successCallback(data);
               }
             } else {
               console.log('coding/load_code server error');
               Common.ajaxError(data);
-              if(errorCallback != null) {
+              if(errorCallback !== null) {
                 return errorCallback(data);
               }
             }
@@ -593,7 +593,7 @@ var CodingCommon = (function() {
           error(data) {
             console.log('coding/load_code ajax error');
             Common.ajaxError(data);
-            if(errorCallback != null) {
+            if(errorCallback !== null) {
               return errorCallback(data);
             }
           }
@@ -609,13 +609,13 @@ var CodingCommon = (function() {
           dataType: "json",
           success(data) {
             if(data.resultSuccess) {
-              if(successCallback != null) {
+              if(successCallback !== null) {
                 return successCallback(data);
               }
             } else {
               console.log('/coding/load_tree server error');
               Common.ajaxError(data);
-              if(errorCallback != null) {
+              if(errorCallback !== null) {
                 return errorCallback(data);
               }
             }
@@ -623,7 +623,7 @@ var CodingCommon = (function() {
           error(data) {
             console.log('/coding/load_tree ajax error');
             Common.ajaxError(data);
-            if(errorCallback != null) {
+            if(errorCallback !== null) {
               return errorCallback(data);
             }
           }
@@ -685,7 +685,7 @@ var CodingCommon = (function() {
         return Common.hideModalView();
       });
 
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     }
@@ -737,13 +737,13 @@ var CodingCommon = (function() {
                   return CodingCommon.activeTabEditor(parseInt($('#tree_wrapper').find(`.user_coding_id.${_userCodingClassNameByNodePath(node_path)}`).val()));
                 });
               });
-              if(successCallback != null) {
+              if(successCallback !== null) {
                 return successCallback(data);
               }
             } else {
               console.log('/coding/add_new_file server error');
               Common.ajaxError(data);
-              if(errorCallback != null) {
+              if(errorCallback !== null) {
                 return errorCallback(data);
               }
             }
@@ -751,7 +751,7 @@ var CodingCommon = (function() {
           error(data) {
             console.log('/coding/add_new_file ajax error');
             Common.ajaxError(data);
-            if(errorCallback != null) {
+            if(errorCallback !== null) {
               return errorCallback(data);
             }
           }
@@ -788,13 +788,13 @@ var CodingCommon = (function() {
                   return CodingCommon.saveEditorState(true);
                 });
               });
-              if(successCallback != null) {
+              if(successCallback !== null) {
                 return successCallback(data);
               }
             } else {
               console.log('/coding/add_new_folder server error');
               Common.ajaxError(data);
-              if(errorCallback != null) {
+              if(errorCallback !== null) {
                 return errorCallback(data);
               }
             }
@@ -802,7 +802,7 @@ var CodingCommon = (function() {
           error(data) {
             console.log('/coding/add_new_folder ajax error');
             Common.ajaxError(data);
-            if(errorCallback != null) {
+            if(errorCallback !== null) {
               return errorCallback(data);
             }
           }
@@ -821,13 +821,13 @@ var CodingCommon = (function() {
           data,
           success(data) {
             if(data.resultSuccess) {
-              if(successCallback != null) {
+              if(successCallback !== null) {
                 return successCallback(data);
               }
             } else {
               console.log('/coding/delete_node server error');
               Common.ajaxError(data);
-              if(errorCallback != null) {
+              if(errorCallback !== null) {
                 return errorCallback(data);
               }
             }
@@ -835,7 +835,7 @@ var CodingCommon = (function() {
           error(data) {
             console.log('/coding/delete_node ajax error');
             Common.ajaxError(data);
-            if(errorCallback != null) {
+            if(errorCallback !== null) {
               return errorCallback(data);
             }
           }
@@ -901,12 +901,12 @@ var CodingCommon = (function() {
       if(immediate == null) {
         immediate = false;
       }
-      if((window.saveEditorStateNowSaving != null) && window.saveEditorStateNowSaving) {
+      if((window.saveEditorStateNowSaving !== null) && window.saveEditorStateNowSaving) {
         return;
       }
 
       const idleSeconds = immediate ? 0 : 5;
-      if(saveEditorStateTimer != null) {
+      if(saveEditorStateTimer !== null) {
         clearTimeout(saveEditorStateTimer);
       }
       return saveEditorStateTimer = setTimeout(function() {

@@ -91,7 +91,7 @@ var Project = (function() {
           modalEmt.css({width: size.width, height: size.height});
           $('.project_create_wrapper', modalEmt).show();
           Common.modalCentering();
-          if(callback != null) {
+          if(callback !== null) {
             return callback();
           }
         } else {
@@ -106,7 +106,7 @@ var Project = (function() {
           modalEmt.css({width: size.width, height: size.height});
           $('.project_create_wrapper', modalEmt).hide();
           Common.modalCentering();
-          if(callback != null) {
+          if(callback !== null) {
             return callback();
           }
         }
@@ -176,11 +176,11 @@ var Project = (function() {
           dataType: "json",
           success(data) {
             if(data.resultSuccess) {
-              if(successCallback != null) {
+              if(successCallback !== null) {
                 return successCallback(data);
               }
             } else {
-              if(errorCallback != null) {
+              if(errorCallback !== null) {
                 errorCallback();
               }
               console.log('/page_value_state/load_created_projects server error');
@@ -188,7 +188,7 @@ var Project = (function() {
             }
           },
           error(data) {
-            if(errorCallback != null) {
+            if(errorCallback !== null) {
               errorCallback();
             }
             console.log('/page_value_state/load_created_projects ajax error');
@@ -219,7 +219,7 @@ var Project = (function() {
               Navbar.setLastUpdateTime(data.updated_at);
               // ナビバーをプロジェクト作成後状態に
               Navbar.switchWorktableNavbarWhenProjectCreated(true);
-              if(callback != null) {
+              if(callback !== null) {
                 return callback(data);
               }
             } else {
@@ -273,7 +273,7 @@ var Project = (function() {
           Common.hideModalView();
           // 通知
           FloatView.show('Project loaded', FloatView.Type.APPLY, 3.0);
-          if(callback != null) {
+          if(callback !== null) {
             return callback(data);
           }
         });
@@ -484,7 +484,7 @@ var Project = (function() {
         };
         _setEvent.call(this);
         Common.modalCentering();
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       });
@@ -501,7 +501,7 @@ var Project = (function() {
     // サンプルプロジェクトか
     static isSampleProject() {
       const p = PageValue.getGeneralPageValue(PageValue.Key.IS_SAMPLE_PROJECT);
-      if(p != null) {
+      if(p !== null) {
         if(typeof p === 'string') {
           return p === 'true';
         } else {

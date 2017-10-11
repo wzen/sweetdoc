@@ -70,7 +70,7 @@ class LocalStorage {
 
     let key = this.userToken;
     let time = 0;
-    if((window.isItemPreview != null) && window.isItemPreview) {
+    if((window.isItemPreview !== null) && window.isItemPreview) {
       // アイテムプレビュー時
       return true;
     }
@@ -98,7 +98,7 @@ class LocalStorage {
   generalKey() {
     let key = this.userToken;
 
-    if((window.isItemPreview != null) && window.isItemPreview) {
+    if((window.isItemPreview !== null) && window.isItemPreview) {
       // アイテムプレビュー時は保存しない
       return '';
     }
@@ -114,7 +114,7 @@ class LocalStorage {
   instanceKey() {
     let key = this.userToken;
 
-    if((window.isItemPreview != null) && window.isItemPreview) {
+    if((window.isItemPreview !== null) && window.isItemPreview) {
       // アイテムプレビュー時は保存しない
       return '';
     }
@@ -130,7 +130,7 @@ class LocalStorage {
   eventKey() {
     let key = this.userToken;
 
-    if((window.isItemPreview != null) && window.isItemPreview) {
+    if((window.isItemPreview !== null) && window.isItemPreview) {
       // アイテムプレビュー時は保存しない
       return '';
     }
@@ -146,7 +146,7 @@ class LocalStorage {
   settingKey() {
     let key = this.userToken;
 
-    if((window.isItemPreview != null) && window.isItemPreview) {
+    if((window.isItemPreview !== null) && window.isItemPreview) {
       // アイテムプレビュー時は保存しない
       return '';
     }
@@ -162,7 +162,7 @@ class LocalStorage {
   footprintKey() {
     let key = this.userToken;
 
-    if((window.isItemPreview != null) && window.isItemPreview) {
+    if((window.isItemPreview !== null) && window.isItemPreview) {
       // アイテムプレビュー時は保存しない
       return '';
     }
@@ -176,7 +176,7 @@ class LocalStorage {
   savetimeKey() {
     let key = this.userToken;
 
-    if((window.isItemPreview != null) && window.isItemPreview) {
+    if((window.isItemPreview !== null) && window.isItemPreview) {
       // アイテムプレビュー時は保存しない
       return '';
     }
@@ -261,7 +261,7 @@ class LocalStorage {
   loadGeneralValue() {
     if(typeof localStorage !== 'undefined' && localStorage !== null) {
       const l = localStorage.getItem(this.generalKey());
-      if(l != null) {
+      if(l !== null) {
         return JSON.parse(l);
       } else {
         return null;
@@ -271,7 +271,7 @@ class LocalStorage {
 
   loadGeneralPageValue() {
     const h = this.loadGeneralValue();
-    if(h != null) {
+    if(h !== null) {
       return PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, h);
     }
   }
@@ -298,7 +298,7 @@ class LocalStorage {
   loadInstancePageValue() {
     if(typeof localStorage !== 'undefined' && localStorage !== null) {
       const l = localStorage.getItem(this.instanceKey());
-      if(l != null) {
+      if(l !== null) {
         const h = JSON.parse(l);
         return PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, h);
       }
@@ -325,7 +325,7 @@ class LocalStorage {
   loadEventPageValue() {
     if(typeof localStorage !== 'undefined' && localStorage !== null) {
       const l = localStorage.getItem(this.eventKey());
-      if(l != null) {
+      if(l !== null) {
         const h = JSON.parse(l);
         return PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT, h);
       }
@@ -350,7 +350,7 @@ class LocalStorage {
   loadSettingPageValue() {
     if(typeof localStorage !== 'undefined' && localStorage !== null) {
       const l = localStorage.getItem(this.settingKey());
-      if(l != null) {
+      if(l !== null) {
         const h = JSON.parse(l);
         return PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, h);
       }
@@ -375,7 +375,7 @@ class LocalStorage {
   loadCommonFootprintPageValue() {
     if(typeof localStorage !== 'undefined' && localStorage !== null) {
       const l = localStorage.getItem(this.footprintKey());
-      if(l != null) {
+      if(l !== null) {
         const h = JSON.parse(l);
         const ret = {};
         for(let k in h) {
@@ -392,7 +392,7 @@ class LocalStorage {
   loadPagingFootprintPageValue(pageNum) {
     if(typeof localStorage !== 'undefined' && localStorage !== null) {
       const l = localStorage.getItem(this.footprintKey());
-      if(l != null) {
+      if(l !== null) {
         const h = JSON.parse(l);
         const ret = {};
         for(let k in h) {

@@ -15,7 +15,7 @@ class ScrollChapter extends Chapter {
       RunCommon.initHandleScrollView();
       // ガイド表示
       this.showGuide(true);
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     });
@@ -25,7 +25,7 @@ class ScrollChapter extends Chapter {
   didChapter(callback = null) {
     return super.didChapter(() => {
       this.hideGuide();
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     });
@@ -39,10 +39,10 @@ class ScrollChapter extends Chapter {
       return;
     }
     this.eventObjList.forEach(event => {
-      if(event.scrollEvent != null) {
+      if(event.scrollEvent !== null) {
         return event.scrollEvent(x, y, () => {
           this.hideGuide();
-          if(window.eventAction != null) {
+          if(window.eventAction !== null) {
             return window.eventAction.thisPage().nextChapterIfFinishedAllEvent();
           }
         });
@@ -64,7 +64,7 @@ class ScrollChapter extends Chapter {
     }
     this.hideGuide();
     let idleTime = ScrollGuide.IDLE_TIMER;
-    if((window.isItemPreview != null) && window.isItemPreview) {
+    if((window.isItemPreview !== null) && window.isItemPreview) {
       // アイテムプレビュー時は即表示
       idleTime = 0;
     }
@@ -79,7 +79,7 @@ class ScrollChapter extends Chapter {
 
   // ガイド非表示
   hideGuide() {
-    if(this.constructor.guideTimer != null) {
+    if(this.constructor.guideTimer !== null) {
       clearTimeout(this.constructor.guideTimer);
       this.constructor.guideTimer = null;
     }
@@ -122,10 +122,10 @@ class ScrollChapter extends Chapter {
         }
 
         if(!calledByWillChapter) {
-          if((event.canForward != null) && event.canForward) {
+          if((event.canForward !== null) && event.canForward) {
             this.canForward = true;
           }
-          if((event.canReverse != null) && event.canReverse) {
+          if((event.canReverse !== null) && event.canReverse) {
             return this.canReverse = true;
           }
         }
@@ -145,7 +145,7 @@ class ScrollChapter extends Chapter {
     if(cached == null) {
       cached = false;
     }
-    if(cached && (this._isFinishedAllEventCache != null)) {
+    if(cached && (this._isFinishedAllEventCache !== null)) {
       return this._isFinishedAllEventCache;
     }
     let ret = true;

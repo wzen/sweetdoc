@@ -16,7 +16,7 @@ class CommonEventBase extends EventBase {
   execMethod(opt, callback = null) {
     return super.execMethod(opt, () => {
       (this.constructor.prototype[this.getEventMethodName()]).call(this, opt);
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     });

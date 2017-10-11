@@ -33,7 +33,7 @@ var PreloadItemImage = (function() {
         };
 
       _makeImageObjectIfNeed = function(callback, show) {
-        if(this._image != null) {
+        if(this._image !== null) {
           // 作成済みの場合
           callback(show);
           return;
@@ -125,11 +125,11 @@ var PreloadItemImage = (function() {
       this.removeItemElement();
       return this.createItemElement(_show => {
           this.itemDraw(_show);
-          if(this.setupItemEvents != null) {
+          if(this.setupItemEvents !== null) {
             // アイテムのイベント設定
             this.setupItemEvents();
           }
-          if(callback != null) {
+          if(callback !== null) {
             return callback(this);
           }
         }
@@ -151,8 +151,8 @@ var PreloadItemImage = (function() {
         showModal = true;
       }
       return _makeImageObjectIfNeed.call(this, show => {
-          if(this._image != null) {
-            if((this._onloaded != null) && this._onloaded) {
+          if(this._image !== null) {
+            if((this._onloaded !== null) && this._onloaded) {
               let height, width;
               if(this.isKeepAspect) {
                 const size = _sizeOfKeepAspect.call(this);
@@ -170,13 +170,13 @@ var PreloadItemImage = (function() {
               const top = (this.itemSize.h - height) * 0.5;
               imageContext.drawImage(this._image, left, top, width, height);
               return this.addContentsToScrollInside(imageCanvas, function() {
-                if(callback != null) {
+                if(callback !== null) {
                   return callback(show);
                 }
               });
             } else {
               // @_image有り & @_onloaded無し -> 別スレッドで描画中の場合はadd処理なし
-              if(callback != null) {
+              if(callback !== null) {
                 return callback(show);
               }
             }
@@ -186,7 +186,7 @@ var PreloadItemImage = (function() {
 <div class='no_image'><div class='center_image put_center'></div></div>\
 `;
             this.addContentsToScrollInside(contents, function() {
-              if(callback != null) {
+              if(callback !== null) {
                 return callback(show);
               }
             });
@@ -207,7 +207,7 @@ var PreloadItemImage = (function() {
                   }
                 });
                 _initModalEvent.call(this, modalEmt);
-                if(callback != null) {
+                if(callback !== null) {
                   return callback(show);
                 }
               });
@@ -223,7 +223,7 @@ var PreloadItemImage = (function() {
 
 Common.setClassToMap(PreloadItemImage.CLASS_DIST_TOKEN, PreloadItemImage);
 
-if((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemImage.CLASS_DIST_TOKEN] == null)) {
+if((window.itemInitFuncList !== null) && (window.itemInitFuncList[PreloadItemImage.CLASS_DIST_TOKEN] == null)) {
   if(window.debug) {
     console.log('PreloadImage loaded');
   }
@@ -231,7 +231,7 @@ if((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemImag
     if(option == null) {
       option = {};
     }
-    if(window.isWorkTable && (PreloadItemImage.jsLoaded != null)) {
+    if(window.isWorkTable && (PreloadItemImage.jsLoaded !== null)) {
       PreloadItemArrow.jsLoaded(option);
     }
     //JS読み込み完了後の処理

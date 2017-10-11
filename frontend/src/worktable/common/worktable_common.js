@@ -14,7 +14,7 @@ var WorktableCommon = (function() {
     static initClass() {
 
       _updatePrevEventsToAfterAndRunPreview = function(teNum, keepDispMag, fromBlankEventConfig, doRunPreview, callback = null) {
-        if(doRunPreview && (window.previewRunning != null) && window.previewRunning) {
+        if(doRunPreview && (window.previewRunning !== null) && window.previewRunning) {
           // プレビュー二重実行は無視
           return;
         }
@@ -37,7 +37,7 @@ var WorktableCommon = (function() {
         for(let idx = 0; idx < tes.length; idx++) {
           const te = tes[idx];
           var item = window.instanceMap[te.id];
-          if(item != null) {
+          if(item !== null) {
             item.initEvent(te, keepDispMag);
             if(item instanceof ItemBase && te[EventPageValueBase.PageValueKey.DO_FOCUS]) {
               // アイテムにフォーカス
@@ -63,7 +63,7 @@ var WorktableCommon = (function() {
             }
           }
         }
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       };
@@ -92,7 +92,7 @@ var WorktableCommon = (function() {
         e.preventDefault();
         e.stopPropagation();
         target = $(e.target).closest('.item');
-        if((target != null) && (target.length > 0)) {
+        if((target !== null) && (target.length > 0)) {
           return WorktableCommon.editItem(target.attr('id'));
         }
       });
@@ -153,7 +153,7 @@ var WorktableCommon = (function() {
         // キャッシュ期限切れ
         return false;
       }
-      if((window.changeUser != null) && window.changeUser) {
+      if((window.changeUser !== null) && window.changeUser) {
         // ユーザが変更された場合
         return false;
       }
@@ -176,9 +176,9 @@ var WorktableCommon = (function() {
       if(isCopyOperation == null) {
         isCopyOperation = true;
       }
-      if(objId != null) {
+      if(objId !== null) {
         const pageValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId));
-        if(pageValue != null) {
+        if(pageValue !== null) {
           const instance = window.instanceMap[objId];
           if(instance instanceof ItemBase) {
             window.copiedInstance = Common.makeClone(instance.getMinimumObject());
@@ -202,20 +202,20 @@ var WorktableCommon = (function() {
 
     // アイテムの貼り付け (Ctrl + v)
     static pasteItem() {
-      if(window.copiedInstance != null) {
+      if(window.copiedInstance !== null) {
         const instance = new (Common.getClassFromMap(window.copiedInstance.classDistToken))();
         window.instanceMap[instance.id] = instance;
         const obj = Common.makeClone(window.copiedInstance);
         obj.id = instance.id;
         instance.setMiniumObject(obj);
-        if((obj.isCopy != null) && obj.isCopy) {
+        if((obj.isCopy !== null) && obj.isCopy) {
           instance.name = instance.name + ' (Copy)';
         }
         // 画面中央に貼り付け
         const scrollContentsSize = Common.scrollContentsSizeUnderViewScale();
         instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + ((scrollContentsSize.width - instance.itemSize.w) * 0.5));
         instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + ((scrollContentsSize.height - instance.itemSize.h) * 0.5));
-        if(instance.drawAndMakeConfigs != null) {
+        if(instance.drawAndMakeConfigs !== null) {
           instance.drawAndMakeConfigs();
         }
         instance.setItemAllPropToPageValue();
@@ -304,7 +304,7 @@ var WorktableCommon = (function() {
     // アイテム編集
     static editItem(objId) {
       const item = window.instanceMap[objId];
-      if((item != null) && (item.launchEdit != null)) {
+      if((item !== null) && (item.launchEdit !== null)) {
         // launchEditメソッドが宣言されている場合は呼ぶ
         return item.launchEdit();
       } else {
@@ -355,7 +355,7 @@ var WorktableCommon = (function() {
         return (() => {
           const result = [];
           for(let item of Array.from(items)) {
-            if(item.changeMode != null) {
+            if(item.changeMode !== null) {
               result.push(item.changeMode(afterMode));
             } else {
               result.push(undefined);
@@ -386,10 +386,10 @@ var WorktableCommon = (function() {
 
     // イベントポインタ表示削除
     static clearEventPointer() {
-      if((typeof EventDragPointingDraw !== 'undefined' && EventDragPointingDraw !== null) && (EventDragPointingDraw.clear != null)) {
+      if((typeof EventDragPointingDraw !== 'undefined' && EventDragPointingDraw !== null) && (EventDragPointingDraw.clear !== null)) {
         EventDragPointingDraw.clear();
       }
-      if((typeof EventDragPointingRect !== 'undefined' && EventDragPointingRect !== null) && (EventDragPointingRect.clear != null)) {
+      if((typeof EventDragPointingRect !== 'undefined' && EventDragPointingRect !== null) && (EventDragPointingRect.clear !== null)) {
         return EventDragPointingRect.clear();
       }
     }
@@ -413,7 +413,7 @@ var WorktableCommon = (function() {
 
     // モードを一つ前に戻す
     static putbackMode() {
-      if(window.beforeMode != null) {
+      if(window.beforeMode !== null) {
         this.changeMode(window.beforeMode);
         return window.beforeMode = null;
       }
@@ -438,7 +438,7 @@ var WorktableCommon = (function() {
                 if(callbackCount >= items.length) {
                   // アイテム状態変更フラグOFF
                   window.worktableItemsChangedState = false;
-                  if(callback != null) {
+                  if(callback !== null) {
                     return callback();
                   }
                 }
@@ -454,12 +454,12 @@ var WorktableCommon = (function() {
           // Footprint履歴削除
           PageValue.removeAllFootprint();
           if(items.length === 0) {
-            if(callback != null) {
+            if(callback !== null) {
               return callback();
             }
           }
         } else {
-          if(callback != null) {
+          if(callback !== null) {
             return callback();
           }
         }
@@ -579,7 +579,7 @@ var WorktableCommon = (function() {
 
     // ウィンドウリサイズイベント
     static resizeEvent() {
-      if((window.skipResizeEvent != null) && window.skipResizeEvent) {
+      if((window.skipResizeEvent !== null) && window.skipResizeEvent) {
         return window.skipResizeEvent = false;
       } else {
         return WorktableCommon.resizeMainContainerEvent();
@@ -591,7 +591,7 @@ var WorktableCommon = (function() {
       const targetId = $(itemElement).attr('id');
       PageValue.removeInstancePageValue(targetId);
       PageValue.removeEventPageValueSync(targetId);
-      if(window.instanceMap[targetId] != null) {
+      if(window.instanceMap[targetId] !== null) {
         window.instanceMap[targetId].getJQueryElement().remove();
       }
       PageValue.adjustInstanceAndEventOnPage();
@@ -626,7 +626,7 @@ var WorktableCommon = (function() {
       PageValue.updatePageCount();
       // PageValue調整
       PageValue.adjustInstanceAndEventOnPage();
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     }
@@ -647,11 +647,11 @@ var WorktableCommon = (function() {
       window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM + 1));
       // スクロールイベント設定
       window.scrollContents.off('scroll').on('scroll', function(e) {
-        if((window.skipScrollEvent != null) && window.skipScrollEvent) {
+        if((window.skipScrollEvent !== null) && window.skipScrollEvent) {
           window.skipScrollEvent = false;
           return;
         }
-        if((window.skipScrollEventByAnimation != null) && window.skipScrollEventByAnimation) {
+        if((window.skipScrollEventByAnimation !== null) && window.skipScrollEventByAnimation) {
           return;
         }
         e.preventDefault();
@@ -660,7 +660,7 @@ var WorktableCommon = (function() {
         const top = window.scrollContents.scrollTop() + (scrollContentsSize.height * 0.5);
         const left = window.scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5);
         const centerPosition = Common.calcScrollCenterPosition(top, left);
-        if(centerPosition != null) {
+        if(centerPosition !== null) {
           FloatView.show(FloatView.scrollMessage(centerPosition.top.toFixed(1), centerPosition.left.toFixed(1)), FloatView.Type.DISPLAY_POSITION);
         }
         return Common.saveDisplayPosition(top, left, false, function() {
@@ -720,7 +720,7 @@ var WorktableCommon = (function() {
     static setMainContainerContext() {
       // コンテキストメニュー
       const menu = [];
-      if(window.copiedInstance != null) {
+      if(window.copiedInstance !== null) {
         menu.push({
           title: I18n.t('context_menu.paste'), cmd: "paste", uiIcon: "ui-icon-scissors", func(event, ui) {
             // 貼り付け
@@ -835,7 +835,7 @@ var WorktableCommon = (function() {
       EventConfig.removeAllConfig();
       PageValue.removeAllGeneralAndInstanceAndEventPageValue();
       Timeline.refreshAllTimeline();
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     }
@@ -849,7 +849,7 @@ var WorktableCommon = (function() {
       EventConfig.removeAllConfig();
       PageValue.removeAllInstanceAndEventPageValueOnPage();
       Timeline.refreshAllTimeline();
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     }
@@ -910,21 +910,21 @@ var WorktableCommon = (function() {
           const itemHideState = PageValue.getWorktableItemHide();
 
           const _cbk = function(i) {
-            if((itemHideState[i.id] != null) && itemHideState[i.id]) {
+            if((itemHideState[i.id] !== null) && itemHideState[i.id]) {
               // 非表示にする
               i.getJQueryElement().hide();
             }
             count += 1;
             if(count >= items.length) {
               // コールバック
-              if(callback != null) {
+              if(callback !== null) {
                 return callback();
               }
             }
           };
 
           return Array.from(items).map((item) =>
-            (item.drawAndMakeConfigs != null) ?
+            (item.drawAndMakeConfigs !== null) ?
               item.drawAndMakeConfigs(true, i => {
                 return _cbk.call(this, i);
               })
@@ -954,7 +954,7 @@ var WorktableCommon = (function() {
         for(let idx = 0; idx < tes.length; idx++) {
           const te = tes[idx];
           const changeForkNum = te[EventPageValueBase.PageValueKey.CHANGE_FORKNUM];
-          if((changeForkNum != null) && (changeForkNum !== forkNum)) {
+          if((changeForkNum !== null) && (changeForkNum !== forkNum)) {
             const ret = _trace.call(this, changeForkNum);
             ({result} = ret);
             if(result) {
@@ -1019,7 +1019,7 @@ var WorktableCommon = (function() {
       // アイテム再描画
       return this.stopPreviewAndRefreshAllItemsFromInstancePageValue(PageValue.getPageNum(), () => {
         FloatView.hideWithCloseButtonView();
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       });
@@ -1044,7 +1044,7 @@ var WorktableCommon = (function() {
           for(let idx = tes.length - 1; idx >= 0; idx--) {
             const te = tes[idx];
             const item = window.instanceMap[te.id];
-            if(item != null) {
+            if(item !== null) {
               item.initEvent(te, keepDispMag);
               result.push(item.updateEventBefore());
             } else {
@@ -1060,7 +1060,7 @@ var WorktableCommon = (function() {
     static stopAllEventPreview(callback = null) {
       if((window.previewRunning == null) || !window.previewRunning) {
         // プレビューが動作していない場合は処理無し
-        if(callback != null) {
+        if(callback !== null) {
           callback(true);
         }
         return;
@@ -1072,13 +1072,13 @@ var WorktableCommon = (function() {
         const {length} = Object.keys(window.instanceMap);
         let noRunningPreview = true;
         if(length === 0) {
-          if(callback != null) {
+          if(callback !== null) {
             return callback(noRunningPreview);
           }
         } else {
           for(let k in window.instanceMap) {
             const v = window.instanceMap[k];
-            if(v.stopPreview != null) {
+            if(v.stopPreview !== null) {
               v.stopPreview(function(wasRunningPreview) {
                 count += 1;
                 if(wasRunningPreview) {
@@ -1088,7 +1088,7 @@ var WorktableCommon = (function() {
                   window.previewRunning = false;
                   // ボタン変更「StopPreview」->「Preview」
                   EventConfig.switchPreviewButton(true);
-                  if(callback != null) {
+                  if(callback !== null) {
                     callback(noRunningPreview);
                   }
                   return;
@@ -1100,7 +1100,7 @@ var WorktableCommon = (function() {
                 window.previewRunning = false;
                 // ボタン変更「StopPreview」->「Preview」
                 EventConfig.switchPreviewButton(true);
-                if(callback != null) {
+                if(callback !== null) {
                   callback(noRunningPreview);
                 }
                 return;
@@ -1119,12 +1119,12 @@ var WorktableCommon = (function() {
           teNum,
           value: PageValue.getEventPageValue(PageValue.Key.eventNumber(teNum))
         };
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       };
 
-      if(window.stashedEventPageValueForPreview != null) {
+      if(window.stashedEventPageValueForPreview !== null) {
         // 既ににある場合は一度戻す
         return this.reverseStashEventPageValueForPreviewIfNeeded(() => {
           return _callback.call(this);
@@ -1137,7 +1137,7 @@ var WorktableCommon = (function() {
     static reverseStashEventPageValueForPreviewIfNeeded(callback = null) {
       if((window.stashedEventPageValueForPreview == null)) {
         // 無い場合は終了
-        if(callback != null) {
+        if(callback !== null) {
           callback();
         }
         return;
@@ -1149,7 +1149,7 @@ var WorktableCommon = (function() {
       const {value} = window.stashedEventPageValueForPreview;
       PageValue.setEventPageValue(PageValue.Key.eventNumber(teNum, forkNum, pageNum), value);
       window.stashedEventPageValueForPreview = null;
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     }

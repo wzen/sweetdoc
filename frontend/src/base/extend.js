@@ -17,7 +17,7 @@ class Extend {
         this[key] = value;
       }
     }
-    if(obj.extended != null) {
+    if(obj.extended !== null) {
       obj.extended.apply(this);
     } //callback
     return this;
@@ -32,7 +32,7 @@ class Extend {
         this.prototype[key] = value;
       }
     }
-    if(obj.included != null) {
+    if(obj.included !== null) {
       obj.included.apply(this);
     } //callback
     return this;

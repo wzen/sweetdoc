@@ -40,7 +40,7 @@ var Navbar = (function() {
         if((Object.keys(window.instanceMap).length > 0) || (PageValue.getPageCount() >= 2)) {
           let lastSaveTimeStr = '';
           const lastSaveTime = Common.displayLastUpdateDiffAlmostTime();
-          if(lastSaveTime != null) {
+          if(lastSaveTime !== null) {
             lastSaveTimeStr = `\n${I18n.t('message.dialog.last_savetime')}${lastSaveTime}`;
           }
           if(window.confirm(I18n.t('message.dialog.change_project') + lastSaveTimeStr)) {
@@ -58,7 +58,7 @@ var Navbar = (function() {
       menuSave.off('click').on('click', () => ServerStorage.save());
       menuSave.off('mouseenter').on('mouseenter', function(e) {
         const lastSaveTime = Common.displayLastUpdateDiffAlmostTime();
-        if(lastSaveTime != null) {
+        if(lastSaveTime !== null) {
           const li = this.closest('li');
           $(li).append($(`<div class='pop' style='display:none'><p>Last Save ${lastSaveTime}</p></div>`));
           $('.pop', li).css({top: $(li).height() + 30, left: $(li).width()});
@@ -77,7 +77,7 @@ var Navbar = (function() {
       $('.menu-item', itemsSelectMenuEmt).off('click').on('click', function(e) {
         if($(this).hasClass('href')) {
           const d = $(this).attr('disabled');
-          if(d != null) {
+          if(d !== null) {
             return false;
           }
           return;
@@ -189,7 +189,7 @@ var Navbar = (function() {
             if(radio.filter(':checked').val() === 'input') {
               const width = $('.display_size_input_width:first', modalEmt).val();
               const height = $('.display_size_input_height:first', modalEmt).val();
-              if((width != null) && (height != null) && (width > 0) && (height > 0)) {
+              if((width !== null) && (height !== null) && (width > 0) && (height > 0)) {
                 size = {
                   width,
                   height
@@ -210,19 +210,19 @@ var Navbar = (function() {
           $('.cancel_button', modalEmt).off('click').on('click', () => {
             return Common.hideModalView();
           });
-          if(callback != null) {
+          if(callback !== null) {
             return callback();
           }
         })
       );
       $('.menu-showguide', navEmt).off('click').on('click', () => RunSetting.toggleShowGuide());
       $('.menu-control-rewind-page', navEmt).off('click').on('click', function() {
-        if(window.eventAction != null) {
+        if(window.eventAction !== null) {
           return window.eventAction.thisPage().rewindAllChapters();
         }
       });
       $('.menu-control-rewind-chapter', navEmt).off('click').on('click', function() {
-        if(window.eventAction != null) {
+        if(window.eventAction !== null) {
           return window.eventAction.thisPage().rewindChapter();
         }
       });
@@ -279,7 +279,7 @@ var Navbar = (function() {
         title_name += '(Preview)';
       }
       $(`#${Navbar.NAVBAR_ROOT}`).find('.nav_title').html(title_name);
-      if((title_name != null) && (title_name.length > 0)) {
+      if((title_name !== null) && (title_name.length > 0)) {
         return document.title = title_name;
       } else {
         return document.title = window.appName;
@@ -292,7 +292,7 @@ var Navbar = (function() {
       const updateFlg = loadEmt.find(`.${ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}`).length > 0;
       if(updateFlg) {
         const loadedLocalTime = loadEmt.find(`.${ServerStorage.ElementAttribute.LOADED_LOCALTIME}`);
-        if(loadedLocalTime != null) {
+        if(loadedLocalTime !== null) {
           const diffTime = Common.calculateDiffTime($.now(), parseInt(loadedLocalTime.val()));
           const s = diffTime.seconds;
           if(window.debug) {

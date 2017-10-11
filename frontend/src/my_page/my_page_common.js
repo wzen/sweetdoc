@@ -39,7 +39,7 @@ class MyPageCommon {
       });
     });
     return $('#thumbnail_upload_form').on('ajax:complete', (event, data, status) => {
-      if(data.responseJSON != null) {
+      if(data.responseJSON !== null) {
         data = data.responseJSON;
       } else {
         data = JSON.parse(data.responseText);

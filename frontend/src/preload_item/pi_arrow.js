@@ -352,7 +352,7 @@ var PreloadItemArrow = (function() {
         let asc1, end;
         let asc2, end1;
         let drawingContext = null;
-        if(dc != null) {
+        if(dc !== null) {
           drawingContext = dc;
         } else {
           ({drawingContext} = window);
@@ -564,7 +564,7 @@ var PreloadItemArrow = (function() {
 
 Common.setClassToMap(PreloadItemArrow.CLASS_DIST_TOKEN, PreloadItemArrow);
 
-if((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemArrow.CLASS_DIST_TOKEN] == null)) {
+if((window.itemInitFuncList !== null) && (window.itemInitFuncList[PreloadItemArrow.CLASS_DIST_TOKEN] == null)) {
   if(window.debug) {
     console.log('arrow loaded');
   }
@@ -572,7 +572,7 @@ if((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemArro
     if(option == null) {
       option = {};
     }
-    if(window.isWorkTable && (PreloadItemArrow.jsLoaded != null)) {
+    if(window.isWorkTable && (PreloadItemArrow.jsLoaded !== null)) {
       PreloadItemArrow.jsLoaded(option);
     }
     //JS読み込み完了後の処理

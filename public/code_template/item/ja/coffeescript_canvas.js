@@ -11,7 +11,7 @@ ItemPreviewTemp = (function(superClass) {
 
   ItemPreviewTemp.NAME_PREFIX = "ItemPreviewTemp";
 
-  if (window.loadedClassDistToken != null) {
+  if (window.loadedClassDistToken !== null) {
     ItemPreviewTemp.CLASS_DIST_TOKEN = window.loadedClassDistToken;
   }
 
@@ -359,7 +359,7 @@ ItemPreviewTemp = (function(superClass) {
       dc = null;
     }
     drawingContext = null;
-    if (dc != null) {
+    if (dc !== null) {
       drawingContext = dc;
     } else {
       drawingContext = window.drawingContext;
@@ -479,12 +479,12 @@ ItemPreviewTemp = (function(superClass) {
 
 Common.setClassToMap(ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp);
 
-if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] == null)) {
+if ((window.itemInitFuncList !== null) && (window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] == null)) {
   window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] = function(option) {
     if (option == null) {
       option = {};
     }
-    if (window.isWorkTable && (ItemPreviewTemp.jsLoaded != null)) {
+    if (window.isWorkTable && (ItemPreviewTemp.jsLoaded !== null)) {
       return ItemPreviewTemp.jsLoaded(option);
     }
   };

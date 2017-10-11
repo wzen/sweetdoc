@@ -105,7 +105,7 @@ class ScreenEvent extends CommonEvent {
           _getInitScale = function() {
             if(window.isWorkTable && !window.previewRunning) {
               return WorktableCommon.getWorktableViewScale();
-            } else if(this.initConfigScale != null) {
+            } else if(this.initConfigScale !== null) {
               return this.initConfigScale;
             } else {
               return 1.0;
@@ -192,7 +192,7 @@ class ScreenEvent extends CommonEvent {
           // オーバーレイ削除
           $('#preview_position_overlay').remove();
           $('.keep_mag_base').remove();
-          if(callback != null) {
+          if(callback !== null) {
             return callback(this);
           }
         }
@@ -202,7 +202,7 @@ class ScreenEvent extends CommonEvent {
           super.updateEventBefore();
           const methodName = this.getEventMethodName();
           if(methodName === 'changeScreenPosition') {
-            if(!this._keepDispMag && (this.eventBaseScale != null)) {
+            if(!this._keepDispMag && (this.eventBaseScale !== null)) {
               _setScaleAndUpdateViewing.call(this, this.eventBaseScale);
               const size = Common.convertCenterCoodToSize(this.eventBaseX, this.eventBaseY, this.eventBaseScale);
               const scrollContentsSize = Common.scrollContentsSizeUnderViewScale();
@@ -310,7 +310,7 @@ class ScreenEvent extends CommonEvent {
         }
 
         hasInitConfig() {
-          return (this.initConfigX != null) && (this.initConfigY != null);
+          return (this.initConfigX !== null) && (this.initConfigY !== null);
         }
 
         setInitConfig(x, y, scale) {
@@ -337,7 +337,7 @@ class ScreenEvent extends CommonEvent {
         setEventBaseXAndY(x, y) {
           if(ScreenEvent.hasInstanceCache()) {
             const ins = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
-            if(ins != null) {
+            if(ins !== null) {
               ins.eventBaseX = x;
               ins.eventBaseY = y;
               PageValue.setInstancePageValue(PageValue.Key.instanceValue(this.id), ins);
@@ -382,7 +382,7 @@ class ScreenEvent extends CommonEvent {
           if(z.val().length > 0) {
             zVal = parseFloat(z.val());
           }
-          if((xVal != null) && (yVal != null) && (zVal != null)) {
+          if((xVal !== null) && (yVal !== null) && (zVal !== null)) {
             const screenSize = Common.getScreenSize();
             const w = screenSize.width / zVal;
             const h = screenSize.height / zVal;

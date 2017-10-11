@@ -7,7 +7,7 @@
 class ItemPreviewHandwrite extends Handwrite {
   // マウスアップ時の描画イベント
   static mouseUpDrawing() {
-    if(window.handwritingItem != null) {
+    if(window.handwritingItem !== null) {
       // 表示アイテムは一つのみ
       if(window.scrollInside.find('.item').length === 0) {
         window.handwritingItem.restoreAllDrawingSurface();

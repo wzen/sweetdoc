@@ -140,7 +140,7 @@ var RunCommon = (function() {
 
     // ウィンドウリサイズイベント
     static resizeEvent() {
-      if((window.skipResizeEvent != null) && window.skipResizeEvent) {
+      if((window.skipResizeEvent !== null) && window.skipResizeEvent) {
         return window.skipResizeEvent = false;
       } else {
         return RunCommon.resizeMainContainerEvent();
@@ -294,22 +294,22 @@ var RunCommon = (function() {
     static initOperationEvent() {
       const operationWrapper = $('.operation_wrapper');
       operationWrapper.find('.rewind_all_capter').off('click').on('click', e => {
-        if(window.eventAction != null) {
+        if(window.eventAction !== null) {
           e.preventDefault();
           e.stopPropagation();
           window.eventAction.thisPage().rewindAllChapters();
-          if($(e.target).closest('.info_contents') != null) {
+          if($(e.target).closest('.info_contents') !== null) {
             // ポップアップで実行の場合はポップアップ非表示
             return RunFullScreen.hidePopupInfo();
           }
         }
       });
       return operationWrapper.find('.rewind_capter').off('click').on('click', e => {
-        if(window.eventAction != null) {
+        if(window.eventAction !== null) {
           e.preventDefault();
           e.stopPropagation();
           window.eventAction.thisPage().rewindChapter();
-          if($(e.target).closest('.info_contents') != null) {
+          if($(e.target).closest('.info_contents') !== null) {
             // ポップアップで実行の場合はポップアップ非表示
             return RunFullScreen.hidePopupInfo();
           }
@@ -342,11 +342,11 @@ var RunCommon = (function() {
         const target = $(e.target);
         const x = target.scrollLeft();
         const y = target.scrollTop();
-        if(((window.scrollRunning != null) && window.scrollRunning) || !RunCommon.enabledScroll()) {
+        if(((window.scrollRunning !== null) && window.scrollRunning) || !RunCommon.enabledScroll()) {
           // 動作中はイベント無視
           return;
         }
-        if((window.skipScrollEvent != null) && window.skipScrollEvent) {
+        if((window.skipScrollEvent !== null) && window.skipScrollEvent) {
           window.skipScrollEvent = false;
           return;
         }
@@ -355,7 +355,7 @@ var RunCommon = (function() {
         const distY = y - window.lastTop;
         //console.log('distX:' + distX + ' distY:' + distY)
         window.scrollRunning = true;
-        if(window.scrollRunningTimer != null) {
+        if(window.scrollRunningTimer !== null) {
           clearTimeout(window.scrollRunningTimer);
           window.scrollRunningTimer = null;
         }
@@ -380,9 +380,9 @@ var RunCommon = (function() {
     // @return [Boolena] 判定結果
     static enabledScroll() {
       let ret = false;
-      if((window.eventAction != null) &&
-        (window.eventAction.thisPage() != null) &&
-        (window.eventAction.thisPage().finishedAllChapters || ((window.eventAction.thisPage().thisChapter() != null) && window.eventAction.thisPage().isScrollChapter()))) {
+      if((window.eventAction !== null) &&
+        (window.eventAction.thisPage() !== null) &&
+        (window.eventAction.thisPage().finishedAllChapters || ((window.eventAction.thisPage().thisChapter() !== null) && window.eventAction.thisPage().isScrollChapter()))) {
         ret = true;
       }
       return ret;
@@ -414,7 +414,7 @@ var RunCommon = (function() {
       }
 
       if(targetPages.length === 0) {
-        if(callback != null) {
+        if(callback !== null) {
           callback();
         }
         return;
@@ -442,23 +442,23 @@ var RunCommon = (function() {
             if(data.resultSuccess) {
               // JSを適用
               return Common.setupJsByList(data.itemJsList, function() {
-                if(data.pagevalues != null) {
-                  if(data.pagevalues.general_pagevalue != null) {
+                if(data.pagevalues !== null) {
+                  if(data.pagevalues.general_pagevalue !== null) {
                     PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, data.pagevalues.general_pagevalue, true);
                   }
-                  if(data.pagevalues.instance_pagevalue != null) {
+                  if(data.pagevalues.instance_pagevalue !== null) {
                     PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, data.pagevalues.instance_pagevalue, true);
                   }
-                  if(data.pagevalues.event_pagevalue != null) {
+                  if(data.pagevalues.event_pagevalue !== null) {
                     PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT, data.pagevalues.event_pagevalue, true);
                   }
-                  if(data.pagevalues.footprint != null) {
+                  if(data.pagevalues.footprint !== null) {
                     PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, data.pagevalues.footprint, true);
                   }
                 }
 
                 // コールバック
-                if(callback != null) {
+                if(callback !== null) {
                   return callback();
                 }
               });
@@ -498,7 +498,7 @@ var RunCommon = (function() {
     // @return [Boolean] 処理正常終了か
     static addForkNumToStack(forkNum, cIndex, pn) {
       const lastForkNum = this.getLastForkNumFromStack(pn);
-      if((lastForkNum != null) && (lastForkNum !== forkNum)) {
+      if((lastForkNum !== null) && (lastForkNum !== forkNum)) {
         // フォーク番号追加
         const stack = this.getForkStack(pn);
         stack.push(
@@ -519,7 +519,7 @@ var RunCommon = (function() {
     // @return [Integer] 取得値
     static getLastObjestFromStack(pn) {
       const stack = this.getForkStack(pn);
-      if((stack != null) && (stack.length > 0)) {
+      if((stack !== null) && (stack.length > 0)) {
         return stack[stack.length - 1];
       } else {
         return null;
@@ -530,7 +530,7 @@ var RunCommon = (function() {
     // @return [Integer] 取得値
     static getLastForkNumFromStack(pn) {
       const obj = this.getLastObjestFromStack(pn);
-      if(obj != null) {
+      if(obj !== null) {
         return obj.forkNum;
       } else {
         return null;
@@ -541,7 +541,7 @@ var RunCommon = (function() {
     // @return [Integer] 取得値
     static getOneBeforeObjestFromStack(pn) {
       const stack = this.getForkStack(pn);
-      if((stack != null) && (stack.length > 1)) {
+      if((stack !== null) && (stack.length > 1)) {
         return stack[stack.length - 2];
       } else {
         return null;
@@ -584,7 +584,7 @@ var RunCommon = (function() {
     // @param [Integer] value 設定値
     static setCreator(value) {
       const e = $(`.${this.AttributeName.CONTENTS_CREATOR_CLASSNAME}`);
-      if(e != null) {
+      if(e !== null) {
         return e.html(value);
       } else {
         return e.html('');
@@ -593,21 +593,21 @@ var RunCommon = (function() {
 
     // タイトルを設定
     static setTitle(title_name) {
-      if(title_name != null) {
+      if(title_name !== null) {
         const base = title_name;
         if(!window.isWorkTable) {
           title_name += '(Preview)';
         }
         $(`#${Navbar.NAVBAR_ROOT}`).find('.nav_title').html(title_name);
         let e = $(`.${this.AttributeName.CONTENTS_TITLE_CLASSNAME}`);
-        if((title_name != null) && (title_name.length > 0)) {
+        if((title_name !== null) && (title_name.length > 0)) {
           document.title = title_name;
         } else {
           document.title = window.appName;
         }
 
         e = $(`.${this.AttributeName.CONTENTS_TITLE_CLASSNAME}`);
-        if(e != null) {
+        if(e !== null) {
           return e.html(base);
         } else {
           return e.html('');
@@ -619,7 +619,7 @@ var RunCommon = (function() {
     // @param [Integer] value 設定値
     static setPageNum(value) {
       const e = $(`.${this.AttributeName.CONTENTS_PAGE_NUM_CLASSNAME}`);
-      if(e != null) {
+      if(e !== null) {
         return e.html(value);
       } else {
         return e.html('');
@@ -630,7 +630,7 @@ var RunCommon = (function() {
     // @param [Integer] value 設定値
     static setChapterNum(value) {
       const e = $(`.${this.AttributeName.CONTENTS_CHAPTER_NUM_CLASSNAME}`);
-      if(e != null) {
+      if(e !== null) {
         return e.html(value);
       } else {
         return e.html('');
@@ -641,7 +641,7 @@ var RunCommon = (function() {
     // @param [Integer] page_max 設定値
     static setPageMax(page_max) {
       const e = $(`.${this.AttributeName.CONTENTS_PAGE_MAX_CLASSNAME}`);
-      if(e != null) {
+      if(e !== null) {
         return e.html(page_max);
       } else {
         return e.html('');
@@ -652,7 +652,7 @@ var RunCommon = (function() {
     // @param [Integer] chapter_max 設定値
     static setChapterMax(chapter_max) {
       const e = $(`.${this.AttributeName.CONTENTS_CHAPTER_MAX_CLASSNAME}`);
-      if(e != null) {
+      if(e !== null) {
         return e.html(chapter_max);
       } else {
         return e.html('');
@@ -663,7 +663,7 @@ var RunCommon = (function() {
     // @param [Integer] num 設定値
     static setForkNum(num) {
       const e = $(`.${this.AttributeName.CONTENTS_FORK_NUM_CLASSNAME}`);
-      if(e != null) {
+      if(e !== null) {
         e.html(num);
         return e.closest('li').css('display', num > 0 ? 'block' : 'none');
       } else {
@@ -674,10 +674,10 @@ var RunCommon = (function() {
 
     // 操作履歴を保存
     static saveFootprint(callback = null) {
-      if((window.isMotionCheck != null) && window.isMotionCheck) {
+      if((window.isMotionCheck !== null) && window.isMotionCheck) {
         // LocalStorageに保存
         window.lStorage.saveFootprintPageValue();
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       } else {
@@ -693,7 +693,7 @@ var RunCommon = (function() {
             dataType: "json",
             success(data) {
               if(data.resultSuccess) {
-                if(callback != null) {
+                if(callback !== null) {
                   return callback();
                 }
               } else {
@@ -712,10 +712,10 @@ var RunCommon = (function() {
 
     // 操作履歴を読み込み
     static loadCommonFootprint(callback = null) {
-      if((window.isMotionCheck != null) && window.isMotionCheck) {
+      if((window.isMotionCheck !== null) && window.isMotionCheck) {
         // LocalStorageから読み込み
         window.lStorage.loadCommonFootprintPageValue();
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       } else {
@@ -731,7 +731,7 @@ var RunCommon = (function() {
             success(data) {
               if(data.resultSuccess) {
                 PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, data.pagevalue_data);
-                if(callback != null) {
+                if(callback !== null) {
                   return callback();
                 }
               } else {
@@ -767,7 +767,7 @@ var RunCommon = (function() {
       if(useLocalStorate) {
         // キャッシュ読み込み
         const is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD);
-        if(is_reload != null) {
+        if(is_reload !== null) {
           window.lStorage.loadAllPageValues();
         } else {
           // 1ページから開始
@@ -797,7 +797,7 @@ var RunCommon = (function() {
     }
 
     static shutdown() {
-      if(window.eventAction != null) {
+      if(window.eventAction !== null) {
         return window.eventAction.shutdown();
       }
     }

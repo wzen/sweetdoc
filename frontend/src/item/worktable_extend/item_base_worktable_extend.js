@@ -19,7 +19,7 @@ const itemBaseWorktableExtend = {
     this.saveDrawingSurface();
     WorktableCommon.changeMode(constant.Mode.DRAW);
     this.startDraw();
-    if(callback != null) {
+    if(callback !== null) {
       return callback();
     }
   },
@@ -33,7 +33,7 @@ const itemBaseWorktableExtend = {
       this.saveObj(true);
       // フォーカス設定
       this.firstFocus = Common.firstFocusItemObj() === null;
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     });
@@ -83,11 +83,11 @@ const itemBaseWorktableExtend = {
     this.itemSize.y += scrollContents.scrollTop();
     return this.createItemElement(createdElement => {
       this.itemDraw(show);
-      if(this.setupItemEvents != null) {
+      if(this.setupItemEvents !== null) {
         // アイテムのイベント設定
         this.setupItemEvents();
       }
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     });
@@ -109,7 +109,7 @@ const itemBaseWorktableExtend = {
     }
 
     return this.drawAndMakeConfigs(show, () => {
-      if(this.constructor.defaultMethodName() != null) {
+      if(this.constructor.defaultMethodName() !== null) {
         // デフォルトイベントがある場合はイベント作成
         // Blankのタイムラインを取得
         const blank = $('#timeline_events > .timeline_event.blank:first');
@@ -121,7 +121,7 @@ const itemBaseWorktableExtend = {
         Timeline.updateEvent(teNum);
         Timeline.addTimelineContainerWidth();
       }
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     });
@@ -139,7 +139,7 @@ const itemBaseWorktableExtend = {
     }
     // アイテム描画
     return this.refresh(show, () => {
-      if(callback != null) {
+      if(callback !== null) {
         return callback(this);
       }
     });
@@ -217,12 +217,12 @@ const itemBaseWorktableExtend = {
     this.getJQueryElement().draggable({
       containment: scrollInside,
       drag: (event, ui) => {
-        if(this.drag != null) {
+        if(this.drag !== null) {
           return this.drag(ui.position);
         }
       },
       stop: (event, ui) => {
-        if(this.dragComplete != null) {
+        if(this.dragComplete !== null) {
           return this.dragComplete();
         }
       }
@@ -230,12 +230,12 @@ const itemBaseWorktableExtend = {
     return this.getJQueryElement().resizable({
       containment: scrollInside,
       resize: (event, ui) => {
-        if(this.resize != null) {
+        if(this.resize !== null) {
           return this.resize(ui.size, ui.originalSize);
         }
       },
       stop: (event, ui) => {
-        if(this.resizeComplete != null) {
+        if(this.resizeComplete !== null) {
           return this.resizeComplete();
         }
       }
@@ -318,7 +318,7 @@ const itemBaseWorktableExtend = {
         const objs = Common.itemInstancesInPage();
         let focusExist = false;
         for(let obj of Array.from(objs)) {
-          if((obj.firstFocus != null) && obj.firstFocus) {
+          if((obj.firstFocus !== null) && obj.firstFocus) {
             focusExist = true;
           }
         }
@@ -389,14 +389,14 @@ const itemBaseWorktableExtend = {
       });
 
       // デザインコンフィグ
-      if((this.constructor.actionProperties.designConfig != null) && this.constructor.actionProperties.designConfig) {
+      if((this.constructor.actionProperties.designConfig !== null) && this.constructor.actionProperties.designConfig) {
         this.setupDesignToolOptionMenu();
       }
 
       // 変数編集コンフィグ
       this.settingModifiableChangeEvent();
 
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     });
@@ -556,7 +556,7 @@ const itemBaseWorktableExtend = {
 
   // デザイン更新処理
   saveDesign() {
-    if(this.saveDesignReflectTimer != null) {
+    if(this.saveDesignReflectTimer !== null) {
       clearTimeout(this.saveDesignReflectTimer);
       this.saveDesignReflectTimer = null;
     }
@@ -578,7 +578,7 @@ const itemBaseWorktableExtend = {
   // 変数編集イベント設定
   settingModifiableChangeEvent() {
     const designConfigRoot = $(`#${this.getDesignConfigId()}`);
-    if(this.constructor.actionPropertiesModifiableVars() != null) {
+    if(this.constructor.actionPropertiesModifiableVars() !== null) {
       return (() => {
         const result = [];
         const object = this.constructor.actionPropertiesModifiableVars();
@@ -692,7 +692,7 @@ const itemBaseWorktableExtend = {
       defaultValue,
       (a, b, d, e) => {
         let value = `#${b}`;
-        if((colorType != null) && (colorType === 'rgb')) {
+        if((colorType !== null) && (colorType === 'rgb')) {
           value = Common.colorFormatChangeHexToRgb(value);
         }
         this.changeInstanceVarByConfig(varName, value);
@@ -753,7 +753,7 @@ const itemBaseWorktableExtend = {
 
     const selectEmt = $(`.${varName}_select`, configRoot);
     const defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
-    if(defaultValue != null) {
+    if(defaultValue !== null) {
       selectEmt.val(_joinArray.call(this, defaultValue));
     }
     return selectEmt.off('change').on('change', e => {

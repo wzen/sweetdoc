@@ -56,7 +56,7 @@ var EventBase = (function() {
         let thisName = thisFn.slice(thisFn.indexOf('{') + 1, thisFn.indexOf(';')).trim();
         eval(`${thisName} = this;`);
       }
-      if((this.constructor.actionProperties != null) && (this.constructor.actionPropertiesModifiableVars() != null)) {
+      if((this.constructor.actionProperties !== null) && (this.constructor.actionPropertiesModifiableVars() !== null)) {
         const object = this.constructor.actionPropertiesModifiableVars();
         for(let varName in object) {
           const value = object[varName];
@@ -80,7 +80,7 @@ var EventBase = (function() {
       if(show == null) {
         show = true;
       }
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     }
@@ -147,9 +147,9 @@ var EventBase = (function() {
     // 設定されているイベントメソッド名を取得
     // @return [String] メソッド名
     getEventMethodName() {
-      if(this._event != null) {
+      if(this._event !== null) {
         const methodName = this._event[EventPageValueBase.PageValueKey.METHODNAME];
-        if(methodName != null) {
+        if(methodName !== null) {
           return methodName;
         } else {
           return EventPageValueBase.NO_METHOD;
@@ -162,7 +162,7 @@ var EventBase = (function() {
     // 設定されているイベントアクションタイプを取得
     // @return [Integer] アクションタイプ
     getEventActionType() {
-      if(this._event != null) {
+      if(this._event !== null) {
         return this._event[EventPageValueBase.PageValueKey.ACTIONTYPE];
       }
     }
@@ -170,9 +170,9 @@ var EventBase = (function() {
     // 変更設定されているフォーク番号を取得
     // @return [Integer] フォーク番号
     getChangeForkNum() {
-      if(this._event != null) {
+      if(this._event !== null) {
         const num = this._event[EventPageValueBase.PageValueKey.CHANGE_FORKNUM];
-        if(num != null) {
+        if(num !== null) {
           return parseInt(num);
         } else {
           // forkNumが無い場合はNULL
@@ -205,7 +205,7 @@ var EventBase = (function() {
           this._runningEvent = false;
           // FloatView表示
           FloatView.showWithCloseButton(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW, () => {
-              if(this.loopFinishCallback != null) {
+              if(this.loopFinishCallback !== null) {
                 return this.loopFinishCallback();
               }
             }
@@ -226,7 +226,7 @@ var EventBase = (function() {
         this._stepLoopCount = 0;
 
         if(this.getEventActionType() === constant.ActionType.SCROLL) {
-          if(this._previewTimer != null) {
+          if(this._previewTimer !== null) {
             clearTimeout(this._previewTimer);
             this._previewTimer = null;
           }
@@ -284,12 +284,12 @@ var EventBase = (function() {
       }
       if(this._loopCount >= loopMaxCount) {
         this.stopPreview();
-        if(this.loopFinishCallback != null) {
+        if(this.loopFinishCallback !== null) {
           this.loopFinishCallback();
           this.loopFinishCallback = null;
         }
       }
-      if(this._previewTimer != null) {
+      if(this._previewTimer !== null) {
         clearTimeout(this._previewTimer);
         this._previewTimer = null;
       }
@@ -316,23 +316,23 @@ var EventBase = (function() {
 
       if((this._runningPreview == null) || !this._runningPreview) {
         // 停止済み
-        if(callback != null) {
+        if(callback !== null) {
           callback(false);
         }
         return;
       }
       this._runningPreview = false;
 
-      if(this._previewTimer != null) {
+      if(this._previewTimer !== null) {
         clearTimeout(this._previewTimer);
         FloatView.hide();
         this._previewTimer = null;
       }
-      if(this._clickIntervalTimer != null) {
+      if(this._clickIntervalTimer !== null) {
         clearInterval(this._clickIntervalTimer);
         this._clickIntervalTimer = null;
       }
-      if(callback != null) {
+      if(callback !== null) {
         return callback(true);
       }
     }
@@ -370,7 +370,7 @@ var EventBase = (function() {
     }
 
     clearAllCache() {
-      if(this['__saveCache'] != null) {
+      if(this['__saveCache'] !== null) {
         return delete this['__saveCache'];
       }
     }
@@ -383,7 +383,7 @@ var EventBase = (function() {
       this.setModifyBeforeAndAfterVar();
       // ステータス値初期化
       this.resetProgress();
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     }
@@ -399,7 +399,7 @@ var EventBase = (function() {
       }
       // インスタンスの状態を保存
       this.saveToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     }
@@ -409,7 +409,7 @@ var EventBase = (function() {
       // メソッド共通処理
       // アイテム位置&サイズ更新
       this.updateInstanceParamByStep(opt.progress);
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     }
@@ -570,7 +570,7 @@ var EventBase = (function() {
       if(isPreview == null) {
         isPreview = false;
       }
-      if(e != null) {
+      if(e !== null) {
         e.preventDefault();
       }
 
@@ -583,7 +583,7 @@ var EventBase = (function() {
       this._runningEvent = true;
 
       // 動作済みフラグON
-      if(window.eventAction != null) {
+      if(window.eventAction !== null) {
         window.eventAction.thisPage().thisChapter().doMoveChapter = true;
       }
 
@@ -642,14 +642,14 @@ var EventBase = (function() {
         return;
       }
       this._isFinishedEvent = true;
-      if(this._clickIntervalTimer != null) {
+      if(this._clickIntervalTimer !== null) {
         clearInterval(this._clickIntervalTimer);
         this._clickIntervalTimer = null;
       }
       if(this._runningPreview) {
         return this.previewLoop();
       } else {
-        if(window.eventAction != null) {
+        if(window.eventAction !== null) {
           if(this._event[EventPageValueBase.PageValueKey.FINISH_PAGE]) {
             // このイベント終了時にページ遷移する場合
             if(this._event[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] !== EventPageValueBase.NO_JUMPPAGE) {
@@ -660,7 +660,7 @@ var EventBase = (function() {
               return window.eventAction.finishAllPages();
             }
           } else {
-            if(this._handlerFuncComplete != null) {
+            if(this._handlerFuncComplete !== null) {
               this._handlerFuncComplete();
               return this._handlerFuncComplete = null;
             }
@@ -742,10 +742,10 @@ var EventBase = (function() {
         const result = [];
         for(let varName in mod) {
           const value = mod[varName];
-          if((this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
+          if((this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] !== null) && (this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] !== null)) {
             const before = eventBeforeObj[varName];
             const after = this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
-            if((before != null) && (after != null)) {
+            if((before !== null) && (after !== null)) {
               if(immediate) {
                 result.push(this.changeInstanceVarByConfig(varName, after));
               } else {
@@ -799,9 +799,9 @@ var EventBase = (function() {
       if(immediate) {
         for(varName in mod) {
           value = mod[varName];
-          if((this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
+          if((this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] !== null) && (this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] !== null)) {
             after = this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
-            if(after != null) {
+            if(after !== null) {
               this.changeInstanceVarByConfig(varName, after);
             }
           }
@@ -814,10 +814,10 @@ var EventBase = (function() {
           const progressPercentage = (this.constructor.STEP_INTERVAL_DURATION * count) / ed;
           for(varName in mod) {
             value = mod[varName];
-            if((this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
+            if((this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] !== null) && (this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] !== null)) {
               const before = eventBeforeObj[varName];
               after = this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
-              if((before != null) && (after != null)) {
+              if((before !== null) && (after !== null)) {
                 if(value.varAutoChange) {
                   if(value.type === constant.ItemDesignOptionType.NUMBER) {
                     this.changeInstanceVarByConfig(varName, before + ((after - before) * progressPercentage));
@@ -843,9 +843,9 @@ var EventBase = (function() {
               const result = [];
               for(varName in mod) {
                 value = mod[varName];
-                if((this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
+                if((this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] !== null) && (this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] !== null)) {
                   after = this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
-                  if(after != null) {
+                  if(after !== null) {
                     result.push(this.changeInstanceVarByConfig(varName, after));
                   } else {
                     result.push(undefined);
@@ -873,12 +873,12 @@ var EventBase = (function() {
         const result = [];
         for(let varName in mod) {
           const value = mod[varName];
-          if(beforeObj != null) {
+          if(beforeObj !== null) {
             this[varName + this.constructor.BEFORE_MODIFY_VAR_SUFFIX] = beforeObj[varName];
           }
-          if(this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) {
+          if(this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] !== null) {
             const afterObj = this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
-            if(afterObj != null) {
+            if(afterObj !== null) {
               result.push(this[varName + this.constructor.AFTER_MODIFY_VAR_SUFFIX] = afterObj);
             } else {
               result.push(undefined);
@@ -932,7 +932,7 @@ var EventBase = (function() {
       const obj = {};
       for(let k in this) {
         const v = this[k];
-        if(v != null) {
+        if(v !== null) {
           if((k.indexOf('_') !== 0) &&
             ((v instanceof ImageData) === false) &&
             !Common.isElement(v) &&
@@ -951,7 +951,7 @@ var EventBase = (function() {
       delete window.instanceMap[this.id];
       for(let k in obj) {
         const v = obj[k];
-        if(v != null) {
+        if(v !== null) {
           if((k.indexOf('_') !== 0) &&
             ((v instanceof ImageData) === false) &&
             !Common.isElement(v) &&
@@ -974,15 +974,15 @@ var EventBase = (function() {
         isDefault = false;
       }
       var _actionPropertiesModifiableVars = function(modifiableRoot, ret) {
-        if(modifiableRoot != null) {
+        if(modifiableRoot !== null) {
           for(let k in modifiableRoot) {
             const v = modifiableRoot[k];
             ret[k] = v;
-            if(v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN] != null) {
+            if(v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN] !== null) {
               // Childrenを含める
               for(let ck in v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN]) {
                 const cv = v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN][ck];
-                if(cv != null) {
+                if(cv !== null) {
                   ret = $.extend(ret, _actionPropertiesModifiableVars.call(this, cv, ret));
                 }
               }
@@ -994,13 +994,13 @@ var EventBase = (function() {
 
       const ret = {};
       let modifiableRoot = {};
-      if(methodName != null) {
+      if(methodName !== null) {
         if(isDefault) {
-          if(this.actionProperties[methodName] != null) {
+          if(this.actionProperties[methodName] !== null) {
             modifiableRoot = this.actionProperties[methodName][this.ActionPropertiesKey.MODIFIABLE_VARS];
           }
         } else {
-          if((this.actionProperties.methods != null) && (this.actionProperties.methods[methodName] != null)) {
+          if((this.actionProperties.methods !== null) && (this.actionProperties.methods[methodName] !== null)) {
             modifiableRoot = this.actionProperties.methods[methodName][this.ActionPropertiesKey.MODIFIABLE_VARS];
           }
         }
@@ -1013,9 +1013,9 @@ var EventBase = (function() {
 
     isFinishedWithHand() {
       const methodName = this.getEventMethodName();
-      if((methodName != null) && (this.constructor.actionProperties.methods != null) && (this.constructor.actionProperties.methods[methodName] != null)) {
+      if((methodName !== null) && (this.constructor.actionProperties.methods !== null) && (this.constructor.actionProperties.methods[methodName] !== null)) {
         const m = this.constructor.actionProperties.methods[methodName];
-        return (m[this.constructor.ActionPropertiesKey.FINISH_WITH_HAND] != null) && m[this.constructor.ActionPropertiesKey.FINISH_WITH_HAND];
+        return (m[this.constructor.ActionPropertiesKey.FINISH_WITH_HAND] !== null) && m[this.constructor.ActionPropertiesKey.FINISH_WITH_HAND];
       }
       return false;
     }

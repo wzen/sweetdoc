@@ -33,7 +33,7 @@ const canvasItemBaseWorktableExtend = {
     return this.drawAndMakeConfigsAndWritePageValue(show, () => {
       // Canvas状態を保存
       this.saveNewDrawedSurface();
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     });

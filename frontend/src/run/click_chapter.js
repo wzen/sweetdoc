@@ -26,7 +26,7 @@ class ClickChapter extends Chapter {
         });
       });
       this.showGuide();
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     });
@@ -37,7 +37,7 @@ class ClickChapter extends Chapter {
     return super.didChapter(() => {
       this.enableScrollHandleViewEvent();
       this.hideGuide();
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     });
@@ -55,7 +55,7 @@ class ClickChapter extends Chapter {
         return event.clickEvent(e, () => {
           // クリックしたイベントのフォーク番号を保存
           this.changeForkNum = event.getChangeForkNum();
-          if(window.eventAction != null) {
+          if(window.eventAction !== null) {
             // 次のチャプターへ
             return window.eventAction.thisPage().nextChapter();
           }
@@ -72,7 +72,7 @@ class ClickChapter extends Chapter {
     this.hideGuide();
 
     let idleTime = ClickGuide.IDLE_TIMER;
-    if((window.isItemPreview != null) && window.isItemPreview) {
+    if((window.isItemPreview !== null) && window.isItemPreview) {
       // アイテムプレビュー時は即表示
       idleTime = 0;
     }
@@ -92,7 +92,7 @@ class ClickChapter extends Chapter {
 
   // ガイド非表示
   hideGuide() {
-    if(this.constructor.guideTimer != null) {
+    if(this.constructor.guideTimer !== null) {
       clearTimeout(this.constructor.guideTimer);
       this.constructor.guideTimer = null;
     }

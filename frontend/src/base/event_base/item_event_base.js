@@ -29,13 +29,13 @@ class ItemEventBase extends EventBase {
       const methodName = this.getEventMethodName();
       if(methodName !== EventPageValueBase.NO_METHOD) {
         (this.constructor.prototype[methodName]).call(this, opt);
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       } else {
         // アイテム状態の表示反映
         this.updatePositionAndItemSize(this.itemSize, false, false);
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       }

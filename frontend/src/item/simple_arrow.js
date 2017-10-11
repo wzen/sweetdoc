@@ -25,7 +25,7 @@ var SimpleArrowItem = (function() {
   SimpleArrowItem = class SimpleArrowItem extends ItemBase {
     static initClass() {
       this.NAME_PREFIX = "simplearrow";
-      if(window.loadedClassDistToken != null) {
+      if(window.loadedClassDistToken !== null) {
         this.CLASS_DIST_TOKEN = window.loadedClassDistToken;
       }
 
@@ -246,7 +246,7 @@ var SimpleArrowItem = (function() {
         show = true;
       }
       if(!super.endDraw(zindex)) {
-        if(callback != null) {
+        if(callback !== null) {
           callback();
         }
         return false;
@@ -263,7 +263,7 @@ var SimpleArrowItem = (function() {
       }
 
       this.drawAndMakeConfigs(show);
-      if(callback != null) {
+      if(callback !== null) {
         callback();
       }
       return true;

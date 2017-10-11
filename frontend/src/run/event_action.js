@@ -52,7 +52,7 @@ class EventAction {
     RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);
     return this.thisPage().willPage(() => {
       this.thisPage().start();
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     });
@@ -60,7 +60,7 @@ class EventAction {
 
   // 中断
   shutdown() {
-    if(this.thisPage() != null) {
+    if(this.thisPage() !== null) {
       return this.thisPage().shutdown();
     }
   }
@@ -82,11 +82,11 @@ class EventAction {
     if(this.pageList.length <= (this.pageIndex + 1)) {
       // 全ページ終了の場合
       this.finishAllPages();
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     } else {
-      if(this.nextPageIndex != null) {
+      if(this.nextPageIndex !== null) {
         this.pageIndex = this.nextPageIndex;
       } else {
         this.pageIndex += 1;
@@ -116,7 +116,7 @@ class EventAction {
       // ページ前処理
       return this.thisPage().willPage(() => {
         this.thisPage().start();
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       });
@@ -166,7 +166,7 @@ class EventAction {
         PageValue.adjustInstanceAndEventOnPage();
         const _after = function() {
           this.thisPage().start();
-          if(this.thisPage().thisChapter() != null) {
+          if(this.thisPage().thisChapter() !== null) {
             // イベント反応無効
             this.thisPage().thisChapter().disableEventHandle();
           }
@@ -186,14 +186,14 @@ class EventAction {
             Common.removeAllItem(beforePageNum, false);
             // CSS削除
             $(`#${RunCommon.RUN_CSS.replace('@pagenum', beforePageNum)}`).remove();
-            if(this.thisPage().thisChapter() != null) {
+            if(this.thisPage().thisChapter() !== null) {
               // イベント反応有効
               this.thisPage().thisChapter().enableEventHandle();
             }
             // モーダルを削除
             Common.hideModalView();
             // コールバック
-            if(callback != null) {
+            if(callback !== null) {
               return callback();
             }
           });

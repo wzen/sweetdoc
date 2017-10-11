@@ -31,7 +31,7 @@ $(function() {
 
     let count = 0;
     return timer = setInterval(() => {
-        if(window[constant.ITEM_CODING_TEMP_CLASS_NAME] != null) {
+        if(window[constant.ITEM_CODING_TEMP_CLASS_NAME] !== null) {
           clearInterval(timer);
           ItemPreviewCommon.initAfterLoadItem();
         }
@@ -54,7 +54,7 @@ $(function() {
     const itemClassName = $(`.${constant.ITEM_GALLERY_ITEM_CLASSNAME}:first`).val();
     let count = 0;
     return timer = setInterval(() => {
-        if(window[itemClassName] != null) {
+        if(window[itemClassName] !== null) {
           clearInterval(timer);
           ItemPreviewCommon.initAfterLoadItem();
         }

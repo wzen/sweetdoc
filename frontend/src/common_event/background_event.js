@@ -71,7 +71,7 @@ class BackgroundEvent extends CommonEvent {
           show = true;
         }
         window.scrollInside.css('backgroundColor', '');
-        if(callback != null) {
+        if(callback !== null) {
           return callback(this);
         }
       }

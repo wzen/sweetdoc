@@ -11,7 +11,7 @@
 class CssItemBase extends ItemBase {
   static initClass() {
 
-    if(window.loadedClassDistToken != null) {
+    if(window.loadedClassDistToken !== null) {
       // @property [String] CLASS_DIST_TOKEN アイテム種別
       this.CLASS_DIST_TOKEN = window.loadedClassDistToken;
     }
@@ -81,11 +81,11 @@ class CssItemBase extends ItemBase {
     const _applyCss = function(designs) {
       // CSS用のDiv作成
       let temp;
-      if(designs != null) {
+      if(designs !== null) {
         let k, v;
         temp = $('.cssdesign_tool_temp:first').clone(true).attr('class', '');
         temp.attr('id', this.getCssRootElementId());
-        if(designs.values != null) {
+        if(designs.values !== null) {
           for(k in designs.values) {
             //if window.debug
             //console.log("k: #{k}  v: #{v}")
@@ -93,7 +93,7 @@ class CssItemBase extends ItemBase {
             temp.find(`.${k}`).html(`${v}`);
           }
         }
-        if(designs.flags != null) {
+        if(designs.flags !== null) {
           for(k in designs.flags) {
             v = designs.flags[k];
             if(!v) {
@@ -111,7 +111,7 @@ class CssItemBase extends ItemBase {
     };
 
     const rootEmt = $(`${this.getCssRootElementId()}`);
-    if((rootEmt != null) && (rootEmt.length > 0)) {
+    if((rootEmt !== null) && (rootEmt.length > 0)) {
       if(forceUpdate) {
         // 上書きするため一旦削除
         $(`${this.getCssRootElementId()}`).remove();
@@ -120,7 +120,7 @@ class CssItemBase extends ItemBase {
       }
     }
 
-    if(this.designs != null) {
+    if(this.designs !== null) {
       // 保存しているデザインで初期化
       _applyCss.call(this, this.designs);
     } else {
@@ -151,7 +151,7 @@ class CssItemBase extends ItemBase {
       this.applyDesignChange(false, false);
     }
     return super.refresh(show, () => {
-      if(callback != null) {
+      if(callback !== null) {
         return callback(this);
       }
     });
@@ -171,7 +171,7 @@ class CssItemBase extends ItemBase {
     this._cssDesignToolStyle.text(this._cssDesignToolCode.text());
     const styleId = `css_style_${this.id}`;
     $(`#${styleId}`).remove();
-    if((addStyle = this.cssStyle()) != null) {
+    if((addStyle = this.cssStyle()) !== null) {
       this._cssRoot.append($(`<style id='${styleId}' type='text/css'>${addStyle}</style>`));
     }
     if(doStyleSave) {
@@ -196,7 +196,7 @@ class CssItemBase extends ItemBase {
   // アニメーションCSS追加処理
   appendAnimationCssIfNeeded() {
     const keyframe = this.cssAnimationKeyframe();
-    if(keyframe != null) {
+    if(keyframe !== null) {
       const methodName = this.getEventMethodName();
       // CSSが存在する場合は削除して入れ替え
       this.removeAnimationCss();

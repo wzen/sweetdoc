@@ -28,7 +28,7 @@ class ColorPickerUtil {
     element.ColorPickerSetColor(colorValue);
     element.ColorPickerResetOnChange(function(a, b, d, e) {
       element.css("backgroundColor", `#${b}`);
-      if(onChange != null) {
+      if(onChange !== null) {
         return onChange(a, b, d, e);
       }
     });

@@ -83,7 +83,7 @@ class CommonEvent {
     if(pn == null) {
       pn = PageValue.getPageNum();
     }
-    return (this.instance[pn] != null);
+    return (this.instance[pn] !== null);
   }
 
   static deleteInstance(objId) {

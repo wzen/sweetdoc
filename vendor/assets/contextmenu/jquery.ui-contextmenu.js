@@ -243,7 +243,7 @@
 				.unbind("mousedown" + this.eventNamespace)
 				.unbind("touchstart" + this.eventNamespace)
 				.unbind("keydown" + this.eventNamespace);
-            if (this.$menu != null) {
+            if (this.$menu !== null) {
                 this.$menu
                     .unbind("contextmenu" + this.eventNamespace);
                 self.currentTarget = null; // issue #44 after hide animation is too late

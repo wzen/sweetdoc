@@ -701,14 +701,14 @@ var zip_inflate_internal = function(buff, off, size) {
 	    break;
 
 	  case 1: // zip_STATIC_TREES
-	    if(zip_tl != null)
+	    if(zip_tl !== null)
 		i = zip_inflate_codes(buff, off + n, size - n);
 	    else
 		i = zip_inflate_fixed(buff, off + n, size - n);
 	    break;
 
 	  case 2: // zip_DYN_TREES
-	    if(zip_tl != null)
+	    if(zip_tl !== null)
 		i = zip_inflate_codes(buff, off + n, size - n);
 	    else
 		i = zip_inflate_dynamic(buff, off + n, size - n);

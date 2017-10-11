@@ -43,12 +43,12 @@ var WorktableSetting = (function() {
           // グリッド線表示
           const grid = $(`.${this.GRID_CLASS_NAME}`, root);
           let gridValue = PageValue.getSettingPageValue(this.PageValueKey.GRID);
-          gridValue = (gridValue != null) && (gridValue === 'true');
+          gridValue = (gridValue !== null) && (gridValue === 'true');
           const gridStepDiv = $(`.${this.GRID_STEP_DIV_CLASS_NAME}`, root);
           grid.prop('checked', gridValue ? 'checked' : false);
           grid.off('click').on('click', () => {
             gridValue = PageValue.getSettingPageValue(this.PageValueKey.GRID);
-            if(gridValue != null) {
+            if(gridValue !== null) {
               gridValue = gridValue === 'true';
             }
             // グリッド間隔の有効無効を切り替え
@@ -78,12 +78,12 @@ var WorktableSetting = (function() {
           gridStep.val(gridStepValue);
           gridStep.change(e => {
             let value = PageValue.getSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID);
-            if(value != null) {
+            if(value !== null) {
               value = value === 'true';
             }
             if(value) {
               let step = $(e.target).val();
-              if(step != null) {
+              if(step !== null) {
                 step = parseInt(step);
                 PageValue.setSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID_STEP, step);
                 return this.drawGrid(true);
@@ -111,10 +111,10 @@ var WorktableSetting = (function() {
           const page = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
           let canvas = $(`#pages .${page} .${this.SETTING_GRID_CANVAS_CLASS}:first`)[0];
           let context = null;
-          if(canvas != null) {
+          if(canvas !== null) {
             context = canvas.getContext('2d');
           }
-          if((context != null) && (doDraw === false)) {
+          if((context !== null) && (doDraw === false)) {
             // 削除
             $(`.${this.SETTING_GRID_ELEMENT_CLASS}`).remove();
             PageValue.setSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID, false);
@@ -222,12 +222,12 @@ var WorktableSetting = (function() {
             enableValue = 'true';
             PageValue.setSettingPageValue(this.PageValueKey.AUTOSAVE, enableValue);
           }
-          enableValue = (enableValue != null) && (enableValue === 'true');
+          enableValue = (enableValue !== null) && (enableValue === 'true');
           const autosaveTimeDiv = $(`.${this.AUTOSAVE_TIME_DIV_CLASS_NAME}`, root);
           enable.prop('checked', enableValue ? 'checked' : false);
           enable.off('click').on('click', () => {
             enableValue = PageValue.getSettingPageValue(this.PageValueKey.AUTOSAVE);
-            if(enableValue != null) {
+            if(enableValue !== null) {
               enableValue = enableValue === 'true';
             }
             // グリッド間隔の有効無効を切り替え
@@ -256,12 +256,12 @@ var WorktableSetting = (function() {
           autosaveTime.val(autosaveTimeValue);
           return autosaveTime.change(e => {
             let value = PageValue.getSettingPageValue(WorktableSetting.IdleSaveTimer.PageValueKey.AUTOSAVE);
-            if(value != null) {
+            if(value !== null) {
               value = value === 'true';
             }
             if(value) {
               let step = $(e.target).val();
-              if(step != null) {
+              if(step !== null) {
                 step = parseInt(step);
                 return PageValue.setSettingPageValue(WorktableSetting.IdleSaveTimer.PageValueKey.AUTOSAVE_TIME, step);
               }
@@ -280,7 +280,7 @@ var WorktableSetting = (function() {
 
         static isEnabled() {
           const enableValue = PageValue.getSettingPageValue(this.PageValueKey.AUTOSAVE);
-          if(enableValue != null) {
+          if(enableValue !== null) {
             return enableValue === 'true';
           } else {
             return false;
@@ -357,7 +357,7 @@ var WorktableSetting = (function() {
               v = parseInt(ui.value * 100) + '%';
               valueElement.val(v);
               valueElement.html(v);
-              if(window.scaleSliderTimer != null) {
+              if(window.scaleSliderTimer !== null) {
                 clearTimeout(window.scaleSliderTimer);
                 window.scaleSliderTimer = null;
               }
@@ -379,7 +379,7 @@ var WorktableSetting = (function() {
 
         static clear() {
           const scale = WorktableCommon.getWorktableViewScale();
-          if(scale != null) {
+          if(scale !== null) {
             WorktableCommon.setWorktableViewScale(scale);
           }
           WorktableCommon.initScrollContentsPosition();

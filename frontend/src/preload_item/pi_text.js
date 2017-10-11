@@ -392,7 +392,7 @@ var PreloadItemText = (function() {
           });
         } else {
           this._context.restore();
-          if(callback != null) {
+          if(callback !== null) {
             callback();
           }
           this.enableHandleResponse();
@@ -460,7 +460,7 @@ var PreloadItemText = (function() {
           });
         } else {
           this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
-          if(callback != null) {
+          if(callback !== null) {
             callback();
           }
           this.enableHandleResponse();
@@ -563,9 +563,9 @@ var PreloadItemText = (function() {
         }
 
         // キャッシュ参照
-        const fba = (this._fixedBalloonAlpha != null) ? this._fixedBalloonAlpha : 1;
+        const fba = (this._fixedBalloonAlpha !== null) ? this._fixedBalloonAlpha : 1;
         const cache = this.loadCache(['drawBalloonPathCacle', x, y, width, height, this.balloonType, fba]);
-        if(cache != null) {
+        if(cache !== null) {
           context.putImageData(cache, 0, 0);
           return;
         }
@@ -807,7 +807,7 @@ var PreloadItemText = (function() {
         };
 
         const _drawFreeHand = () => {
-          if(this.freeHandDrawPaths != null) {
+          if(this.freeHandDrawPaths !== null) {
             return _freeHandBalloonDraw.call(this, context, x, y, width, height, canvasWidth, canvasHeight, this.freeHandDrawPaths);
           }
         };
@@ -870,7 +870,7 @@ var PreloadItemText = (function() {
               }
             }
           }
-          if(m != null) {
+          if(m !== null) {
             let a = drawPaths[i].concat();
             if(it) {
               // 配列を反転させる
@@ -996,7 +996,7 @@ var PreloadItemText = (function() {
         //writingLength = parseInt(writingLength)
         const methodName = this.getEventMethodName();
         if(methodName === 'changeText') {
-          if(this._fixedTextAlpha != null) {
+          if(this._fixedTextAlpha !== null) {
             return context.globalAlpha = this._fixedTextAlpha;
           }
         } else if(methodName === 'writeText') {
@@ -1061,7 +1061,7 @@ var PreloadItemText = (function() {
         text = text.replace("{br}", "\n", "gm");
         for(let i = 0, end = text.length - 1, asc = 0 <= end; asc ? i <= end : i >= end; asc ? i++ : i--) {
           let char = text.charAt(i);
-          if(((this.rowWordLength != null) && (this.rowWordLength <= column[line].length)) || (char === "\n")) {
+          if(((this.rowWordLength !== null) && (this.rowWordLength <= column[line].length)) || (char === "\n")) {
             line += 1;
             column[line] = '';
             if(char === "\n") {
@@ -1170,7 +1170,7 @@ var PreloadItemText = (function() {
       _calcWordMeasure = function(char, fontSize, fontFamily) {
         const fontSizeKey = `${fontSize}`;
         const cache = this.loadCache(['fontMeatureCache', fontSizeKey, fontFamily.replace(' ', '_'), char]);
-        if(cache != null) {
+        if(cache !== null) {
           return cache;
         }
 
@@ -1266,7 +1266,7 @@ var PreloadItemText = (function() {
           const newLineCount = text.split('\n').length - 1;
           // キャッシュ確認
           const cache = this.loadCache(['calcFontSizeAboutCache', newLineCount, width, height, drawHorizontal, this.showBalloon]);
-          if(cache != null) {
+          if(cache !== null) {
             return cache;
           }
 
@@ -1300,7 +1300,7 @@ var PreloadItemText = (function() {
       _showInputModal = function() {
         return Common.showModalView(constant.ModalViewType.ITEM_TEXT_EDITING, false, (modalEmt, params, callback = null) => {
           _prepareEditModal.call(this, modalEmt);
-          if(callback != null) {
+          if(callback !== null) {
             return callback();
           }
         });
@@ -1316,7 +1316,7 @@ var PreloadItemText = (function() {
       };
 
       _prepareEditModal = function(modalEmt) {
-        if(this.inputText != null) {
+        if(this.inputText !== null) {
           $('.textarea:first', modalEmt).val(this.inputText);
         } else {
           $('.textarea:first', modalEmt).val('');
@@ -1387,7 +1387,7 @@ var PreloadItemText = (function() {
 
       _defaultWorkWidth = function(fontSize, fontFamily) {
         const fontSizeKey = `${fontSize}`;
-        if((this._defaultWorkWidth[fontSizeKey] != null) && (this._defaultWorkWidth[fontSizeKey][fontFamily] != null)) {
+        if((this._defaultWorkWidth[fontSizeKey] !== null) && (this._defaultWorkWidth[fontSizeKey][fontFamily] !== null)) {
           return this._defaultWorkWidth[fontSizeKey][fontFamily];
         }
 
@@ -1442,13 +1442,13 @@ var PreloadItemText = (function() {
       super.itemDraw(show);
       if(show) {
         // スタイル設定
-        if(this.inputText != null) {
+        if(this.inputText !== null) {
           _setTextStyle.call(this);
         } else {
           _setNoTextStyle.call(this);
         }
         // 文字配置 & フォント設定
-        if(this.inputText != null) {
+        if(this.inputText !== null) {
           return _drawTextAndBalloonToCanvas.call(this, this.inputText);
         } else {
           return _drawTextAndBalloonToCanvas.call(this, this.constructor.NO_TEXT);
@@ -1466,14 +1466,14 @@ var PreloadItemText = (function() {
             return (this.constructor.prototype[methodName]).call(this, opt, callback);
           } else {
             (this.constructor.prototype[methodName]).call(this, opt);
-            if(callback != null) {
+            if(callback !== null) {
               return callback();
             }
           }
         } else {
           // アイテム状態の表示反映
           this.updatePositionAndItemSize(this.itemSize, false, false);
-          if(callback != null) {
+          if(callback !== null) {
             return callback();
           }
         }
@@ -1489,7 +1489,7 @@ var PreloadItemText = (function() {
       }
       return super.refresh(show, () => {
         _settingTextDbclickEvent.call(this);
-        if(callback != null) {
+        if(callback !== null) {
           return callback(this);
         }
       });
@@ -1518,7 +1518,7 @@ var PreloadItemText = (function() {
         canvas = document.getElementById(this.canvasElementId());
         this[varName] = value;
         this.fontSize = _calcFontSizeAbout.call(this, this.inputText, canvas.width, canvas.height, this.isFixedFontSize, this.drawHorizontal);
-      } else if((varName === 'balloonType') && (this.balloonType != null) && (this.balloonType !== value)) {
+      } else if((varName === 'balloonType') && (this.balloonType !== null) && (this.balloonType !== value)) {
         if(value === this.constructor.BalloonType.FREE) {
           // パスを消去して新規作成する
           this.freeHandDrawPaths = null;
@@ -1579,7 +1579,7 @@ var PreloadItemText = (function() {
                 this.freeHandDrawPaths = drawPaths;
                 this.saveObj();
                 this.itemDraw(true);
-                if(this.setupItemEvents != null) {
+                if(this.setupItemEvents !== null) {
                   // アイテムのイベント設定
                   return this.setupItemEvents();
                 }
@@ -1591,12 +1591,12 @@ var PreloadItemText = (function() {
           EventDragPointingDraw.run(opt);
         } else {
           // アイテムのサイズを戻す
-          if(this.originalItemSize != null) {
+          if(this.originalItemSize !== null) {
             this.itemSize = $.extend({}, this.originalItemSize);
             this.getJQueryElement().remove();
             this.createItemElement(() => {
               this.saveObj();
-              if(this.setupItemEvents != null) {
+              if(this.setupItemEvents !== null) {
                 // アイテムのイベント設定
                 return this.setupItemEvents();
               }
@@ -1643,7 +1643,7 @@ var PreloadItemText = (function() {
         // 編集モード
         Navbar.setModeEdit();
         WorktableCommon.changeMode(constant.Mode.EDIT);
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       });
@@ -1667,13 +1667,13 @@ var PreloadItemText = (function() {
     execLastStep(callback = null) {
       // イベント終了を呼ぶだけ(開始と終了で表示が変わらないため)
       this.finishEvent();
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     }
 
     startOpenAnimation(callback = null) {
-      if((this._runningBallonAnimation != null) && this._runningBallonAnimation) {
+      if((this._runningBallonAnimation !== null) && this._runningBallonAnimation) {
         return;
       }
       this._runningBallonAnimation = true;
@@ -1686,7 +1686,7 @@ var PreloadItemText = (function() {
     }
 
     startCloseAnimation(callback = null) {
-      if((this._runningBallonAnimation != null) && this._runningBallonAnimation) {
+      if((this._runningBallonAnimation !== null) && this._runningBallonAnimation) {
         return;
       }
       this._runningBallonAnimation = true;
@@ -1729,7 +1729,7 @@ var PreloadItemText = (function() {
         _drawTextAndBalloonToCanvas.call(this, this.inputText__after);
       }
 
-      if((opt.progress === opt.progressMax) && this.showWithAnimation && (this._animationFlg['isOpen'] != null) && this._animationFlg['isOpen']) {
+      if((opt.progress === opt.progressMax) && this.showWithAnimation && (this._animationFlg['isOpen'] !== null) && this._animationFlg['isOpen']) {
         this.startCloseAnimation();
         return this._animationFlg['isOpen'] = false;
       }
@@ -1756,7 +1756,7 @@ var PreloadItemText = (function() {
           } else {
             _oCbk.call(this);
           }
-        } else if((opt.progress <= opt.progressMax) && (this.inputText != null) && (this.inputText.length > 0)) {
+        } else if((opt.progress <= opt.progressMax) && (this.inputText !== null) && (this.inputText.length > 0)) {
           if((this._writeTextRunning == null) || !this._writeTextRunning) {
             this._fixedTextAlpha = null;
             const adjustProgress = opt.progressMax / this.inputText.length;
@@ -1771,7 +1771,7 @@ var PreloadItemText = (function() {
               this._beforeWriteLength = writeLength;
               this._writeBlurLength = Math.abs(writeBlurLength);
               let cache = this.loadCache('writeTextBlurCache');
-              if(cache != null) {
+              if(cache !== null) {
                 this._context.putImageData(cache, 0, 0);
               } else {
                 this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
@@ -1797,7 +1797,7 @@ var PreloadItemText = (function() {
         }
       }
 
-      if((opt.progress >= opt.progressMax) && (this._finishedWrite != null) && this._finishedWrite && ((this._animationFlg['isOpen'] != null) && this._animationFlg['isOpen'])) {
+      if((opt.progress >= opt.progressMax) && (this._finishedWrite !== null) && this._finishedWrite && ((this._animationFlg['isOpen'] !== null) && this._animationFlg['isOpen'])) {
         this._writeTextRunning = false;
         if(this.showWithAnimation) {
           return this.startCloseAnimation(() => {
@@ -1807,7 +1807,7 @@ var PreloadItemText = (function() {
           return _closeCbk.call(this);
         }
       } else {
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       }
@@ -1819,7 +1819,7 @@ var PreloadItemText = (function() {
 
 Common.setClassToMap(PreloadItemText.CLASS_DIST_TOKEN, PreloadItemText);
 
-if((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemText.CLASS_DIST_TOKEN] == null)) {
+if((window.itemInitFuncList !== null) && (window.itemInitFuncList[PreloadItemText.CLASS_DIST_TOKEN] == null)) {
   if(window.debug) {
     console.log('PreloadItemText loaded');
   }
@@ -1827,7 +1827,7 @@ if((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemText
     if(option == null) {
       option = {};
     }
-    if(window.isWorkTable && (PreloadItemText.jsLoaded != null)) {
+    if(window.isWorkTable && (PreloadItemText.jsLoaded !== null)) {
       PreloadItemArrow.jsLoaded(option);
     }
     //JS読み込み完了後の処理

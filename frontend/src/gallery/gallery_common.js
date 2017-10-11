@@ -31,7 +31,7 @@ class GalleryCommon {
     const columnWidth = windowWidthType === 0 ? 100 : 180;
     //console.log('columnWidth:' + columnWidth)
     const $grid = $('#grid_wrapper');
-    if($grid.data('masonry') != null) {
+    if($grid.data('masonry') !== null) {
       $grid.masonry('destroy');
     }
     $grid.masonry({
@@ -97,9 +97,9 @@ class GalleryCommon {
           dataType: "html",
           data,
           success(data) {
-            if(data != null) {
+            if(data !== null) {
               const d = GalleryCommon.addGridContentsStyle($(data.trim()).filter('.grid_contents_wrapper'));
-              if((d != null) && (d.length > 0)) {
+              if((d !== null) && (d.length > 0)) {
                 const $grid = $('#grid_wrapper');
                 $grid.append(d).masonry('appended', d);
                 window.contentsTakeCount += d.length;
@@ -178,7 +178,7 @@ class GalleryCommon {
     // 実行確認ページを新規ウィンドウで表示
     const width = root.find(`.${constant.Gallery.Key.SCREEN_SIZE_WIDTH}`).val();
     const height = root.find(`.${constant.Gallery.Key.SCREEN_SIZE_HEIGHT}`).val();
-    if((width != null) && (height != null)) {
+    if((width !== null) && (height !== null)) {
       // スクリーンサイズが指定されている場合
       const size = {
         width,
@@ -208,13 +208,13 @@ class GalleryCommon {
         data,
         success(data) {
           if(data.resultSuccess) {
-            if(callback != null) {
+            if(callback !== null) {
               return callback(true);
             }
           } else {
             console.log('/gallery/add_bookmark server error');
             Common.ajaxError(data);
-            if(callback != null) {
+            if(callback !== null) {
               return callback(false);
             }
           }
@@ -222,7 +222,7 @@ class GalleryCommon {
         error(data) {
           console.log('/gallery/add_bookmark ajax error');
           Common.ajaxError(data);
-          if(callback != null) {
+          if(callback !== null) {
             return callback(false);
           }
         }
@@ -241,13 +241,13 @@ class GalleryCommon {
         data,
         success(data) {
           if(data.resultSuccess) {
-            if(callback != null) {
+            if(callback !== null) {
               return callback(true);
             }
           } else {
             console.log('/project/remove server error');
             Common.ajaxError(data);
-            if(callback != null) {
+            if(callback !== null) {
               return callback(false);
             }
           }
@@ -255,7 +255,7 @@ class GalleryCommon {
         error(data) {
           console.log('/project/remove ajax error');
           Common.ajaxError(data);
-          if(callback != null) {
+          if(callback !== null) {
             return callback(false);
           }
         }

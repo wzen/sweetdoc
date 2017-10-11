@@ -76,10 +76,10 @@ var EventPageValueBase = (function() {
     static initConfigValue(eventConfig) {
       const _scrollLength = function(eventConfig) {
         const writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
-        if(writeValue != null) {
+        if(writeValue !== null) {
           const start = writeValue[this.PageValueKey.SCROLL_POINT_START];
           const end = writeValue[this.PageValueKey.SCROLL_POINT_END];
-          if((start != null) && $.isNumeric(start) && (end != null) && $.isNumeric(end)) {
+          if((start !== null) && $.isNumeric(start) && (end !== null) && $.isNumeric(end)) {
             return parseInt(end) - parseInt(start);
           }
         }
@@ -107,7 +107,7 @@ var EventPageValueBase = (function() {
       } else if(eventConfig[this.PageValueKey.ACTIONTYPE] === constant.ActionType.CLICK) {
         const eventDuration = handlerDiv.find('.click_duration:first');
         const item = window.instanceMap[eventConfig[this.PageValueKey.ID]];
-        if(item != null) {
+        if(item !== null) {
           let duration = item.constructor.actionProperties.methods[eventConfig[this.PageValueKey.METHODNAME]][item.constructor.ActionPropertiesKey.EVENT_DURATION];
           if((duration == null)) {
             duration = 0;
@@ -125,7 +125,7 @@ var EventPageValueBase = (function() {
       const writeValue = {};
       for(let k in this.PageValueKey) {
         const v = this.PageValueKey[k];
-        if(eventConfig[v] != null) {
+        if(eventConfig[v] !== null) {
           writeValue[v] = eventConfig[v];
         }
       }
@@ -145,10 +145,10 @@ var EventPageValueBase = (function() {
     // @return [Boolean] 読み込み成功したか
     static readFromPageValue(eventConfig) {
       const writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
-      if(writeValue != null) {
+      if(writeValue !== null) {
         for(let k in this.PageValueKey) {
           const v = this.PageValueKey[k];
-          if(writeValue[v] != null) {
+          if(writeValue[v] !== null) {
             eventConfig[v] = writeValue[v];
           }
         }
@@ -171,12 +171,12 @@ var EventPageValueBase = (function() {
 
         // 共通情報
         // ページ終了フラグ & ページ遷移
-        if((eventConfig[this.PageValueKey.FINISH_PAGE] != null) && eventConfig[this.PageValueKey.FINISH_PAGE]) {
+        if((eventConfig[this.PageValueKey.FINISH_PAGE] !== null) && eventConfig[this.PageValueKey.FINISH_PAGE]) {
           $('.finish_page', eventConfig.emt).attr('checked', true);
         } else {
           $('.finish_page', eventConfig.emt).removeAttr('checked');
         }
-        if(eventConfig[this.PageValueKey.JUMPPAGE_NUM] != null) {
+        if(eventConfig[this.PageValueKey.JUMPPAGE_NUM] !== null) {
           $('.finish_page_select', eventConfig.emt).val(eventConfig[this.PageValueKey.JUMPPAGE_NUM]);
         } else {
           $('.finish_page_select', eventConfig.emt).val(EventPageValueBase.NO_JUMPPAGE);
@@ -210,17 +210,17 @@ var EventPageValueBase = (function() {
             showWillDuration = 0;
           }
           $('.show_will_chapter_duration', eventConfig.emt).val(showWillDuration);
-          const hideDidEnabled = (eventConfig[this.PageValueKey.HIDE_DID_CHAPTER] != null) && eventConfig[this.PageValueKey.HIDE_DID_CHAPTER];
+          const hideDidEnabled = (eventConfig[this.PageValueKey.HIDE_DID_CHAPTER] !== null) && eventConfig[this.PageValueKey.HIDE_DID_CHAPTER];
           $('.hide_did_chapter', eventConfig.emt).prop('checked', hideDidEnabled);
           const hideDidDuration = eventConfig[this.PageValueKey.HIDE_DID_CHAPTER_DURATION];
-          if(hideDidDuration != null) {
+          if(hideDidDuration !== null) {
             $('.hide_did_chapter_duration', eventConfig.emt).val(hideDidDuration);
           }
         }
 
         // Sync
         const parallel = $(".parallel_div .parallel", eventConfig.emt);
-        if((parallel != null) && eventConfig[this.PageValueKey.IS_SYNC]) {
+        if((parallel !== null) && eventConfig[this.PageValueKey.IS_SYNC]) {
           parallel.prop("checked", true);
         }
 
@@ -228,13 +228,13 @@ var EventPageValueBase = (function() {
         const handlerDiv = $(".handler_div", eventConfig.emt);
         if(eventConfig[this.PageValueKey.ACTIONTYPE] === constant.ActionType.SCROLL) {
           handlerDiv.find('input[type=radio][value=scroll]').prop('checked', true);
-          if((eventConfig[this.PageValueKey.SCROLL_POINT_START] != null) && (eventConfig[this.PageValueKey.SCROLL_POINT_END] != null)) {
+          if((eventConfig[this.PageValueKey.SCROLL_POINT_START] !== null) && (eventConfig[this.PageValueKey.SCROLL_POINT_END] !== null)) {
             handlerDiv.find('.scroll_point_start:first').val(eventConfig[this.PageValueKey.SCROLL_POINT_START]);
             handlerDiv.find('.scroll_point_end:first').val(eventConfig[this.PageValueKey.SCROLL_POINT_END]);
           }
 
           const topEmt = handlerDiv.find('.scroll_enabled_top:first');
-          if(topEmt != null) {
+          if(topEmt !== null) {
             topEmt.children('.scroll_enabled:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].top);
             if(eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].top) {
               topEmt.children('.scroll_forward:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS].top);
@@ -244,7 +244,7 @@ var EventPageValueBase = (function() {
             }
           }
           const bottomEmt = handlerDiv.find('scroll_enabled_bottom:first');
-          if(bottomEmt != null) {
+          if(bottomEmt !== null) {
             bottomEmt.children('.scroll_enabled:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].bottom);
             if(eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].bottom) {
               bottomEmt.children('.scroll_forward:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS].bottom);
@@ -254,7 +254,7 @@ var EventPageValueBase = (function() {
             }
           }
           const leftEmt = handlerDiv.find('scroll_enabled_left:first');
-          if(leftEmt != null) {
+          if(leftEmt !== null) {
             leftEmt.children('.scroll_enabled:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].left);
             if(eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].left) {
               leftEmt.children('.scroll_forward:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS].left);
@@ -264,7 +264,7 @@ var EventPageValueBase = (function() {
             }
           }
           const rightEmt = handlerDiv.find('scroll_enabled_right:first');
-          if(rightEmt != null) {
+          if(rightEmt !== null) {
             rightEmt.children('.scroll_enabled:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].right);
             if(eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].right) {
               rightEmt.children('.scroll_forward:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS].right);
@@ -277,11 +277,11 @@ var EventPageValueBase = (function() {
         } else if(eventConfig[this.PageValueKey.ACTIONTYPE] === constant.ActionType.CLICK) {
           handlerDiv.find('input[type=radio][value=click]').prop('checked', true);
           const eventDuration = handlerDiv.find('.click_duration:first');
-          if(eventConfig[this.PageValueKey.EVENT_DURATION] != null) {
+          if(eventConfig[this.PageValueKey.EVENT_DURATION] !== null) {
             eventDuration.val(eventConfig[this.PageValueKey.EVENT_DURATION]);
           } else {
             const item = window.instanceMap[eventConfig[this.PageValueKey.ID]];
-            if(item != null) {
+            if(item !== null) {
               //duration = item.constructor.actionProperties.methods[eventConfig[@PageValueKey.METHODNAME]][item.constructor.ActionPropertiesKey.EVENT_DURATION]
               let duration = eventConfig[this.PageValueKey.EVENT_DURATION];
               if((duration == null)) {
@@ -290,13 +290,13 @@ var EventPageValueBase = (function() {
               eventDuration.val(duration);
             }
           }
-          const enabled = (eventConfig[this.PageValueKey.CHANGE_FORKNUM] != null) && (eventConfig[this.PageValueKey.CHANGE_FORKNUM] > 0);
+          const enabled = (eventConfig[this.PageValueKey.CHANGE_FORKNUM] !== null) && (eventConfig[this.PageValueKey.CHANGE_FORKNUM] > 0);
           $('.enable_fork:first', handlerDiv).prop('checked', enabled);
         }
 
         const specificValues = eventConfig[this.PageValueKey.SPECIFIC_METHOD_VALUES];
         const specificRoot = $(eventConfig.emt).find(`.${eventConfig.methodClassName()} .${eventConfig.constructor.METHOD_VALUE_SPECIFIC_ROOT}`);
-        if(specificValues != null) {
+        if(specificValues !== null) {
           for(let className in specificValues) {
             const value = specificValues[className];
             specificRoot.find(`.${className}:first`).val(value);
@@ -319,7 +319,7 @@ var EventPageValueBase = (function() {
         if(teNum > maxTeNum) {
           const start = $(e).find(`.${this.PageValueKey.SCROLL_POINT_START}:first`).val();
           const end = $(e).find(`.${this.PageValueKey.SCROLL_POINT_END}:first`).val();
-          if((start != null) && (start !== "null") && (end != null) && (end !== "null")) {
+          if((start !== null) && (start !== "null") && (end !== null) && (end !== "null")) {
             maxTeNum = teNum;
             return ret = end;
           }

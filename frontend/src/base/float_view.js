@@ -55,7 +55,7 @@ class FloatView {
 
     if(showSeconds >= 0) {
       // 非表示タイマーセット
-      if(this.showTimer != null) {
+      if(this.showTimer !== null) {
         clearTimeout(this.showTimer);
         this.showTimer = null;
       }
@@ -106,7 +106,7 @@ class FloatView {
     root.find('.close_button').off('click').on('click', e => {
       e.preventDefault();
       e.stopPropagation();
-      if(closeFunc != null) {
+      if(closeFunc !== null) {
         closeFunc();
       }
       return FloatView.hideWithCloseButtonView();

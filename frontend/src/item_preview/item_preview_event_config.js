@@ -27,10 +27,10 @@ class ItemPreviewEventConfig extends EventConfig {
     };
 
     let checked = $('.show_will_chapter:first', this.emt).is(':checked');
-    this[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER] = (checked != null) && checked;
+    this[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER] = (checked !== null) && checked;
     this[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION] = $('.show_will_chapter_duration:first', this.emt).val();
     checked = $('.hide_did_chapter:first', this.emt).is(':checked');
-    this[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER] = (checked != null) && checked;
+    this[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER] = (checked !== null) && checked;
     this[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER_DURATION] = $('.hide_did_chapter_duration:first', this.emt).val();
 
     this[EventPageValueBase.PageValueKey.FINISH_PAGE] = $('.finish_page', this.emt).is(":checked");
@@ -38,7 +38,7 @@ class ItemPreviewEventConfig extends EventConfig {
     this[EventPageValueBase.PageValueKey.DO_FOCUS] = $('.do_focus', this.emt).prop('checked');
     this[EventPageValueBase.PageValueKey.IS_SYNC] = false;
     const parallel = $(".parallel_div .parallel", this.emt);
-    if(parallel != null) {
+    if(parallel !== null) {
       this[EventPageValueBase.PageValueKey.IS_SYNC] = parallel.is(":checked");
     }
     const handlerDiv = $(".handler_div", this.emt);
@@ -68,14 +68,14 @@ class ItemPreviewEventConfig extends EventConfig {
 
       this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = 0;
       checked = handlerDiv.find('.enable_fork:first').is(':checked');
-      if((checked != null) && checked) {
+      if((checked !== null) && checked) {
         const prefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '');
         this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''));
       }
     }
 
     const errorMes = EventPageValueBase.writeToPageValue(this);
-    if((errorMes != null) && (errorMes.length > 0)) {
+    if((errorMes !== null) && (errorMes.length > 0)) {
       // エラー発生時
       this.showError(errorMes);
       return;

@@ -41,7 +41,7 @@ var EventDragPointingDraw = (function() {
         applyDraw() {
           // アイテム削除
           drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
-          if(this.applyCallback != null) {
+          if(this.applyCallback !== null) {
             return this.applyCallback(this.drawPaths);
           }
         }
@@ -56,7 +56,7 @@ var EventDragPointingDraw = (function() {
         // @param [Array] loc Canvas座標
         mouseDownDrawing(callback = null) {
           //@saveDrawingSurface()
-          if(callback != null) {
+          if(callback !== null) {
             return callback();
           }
         }
@@ -68,7 +68,7 @@ var EventDragPointingDraw = (function() {
         }
 
         startCood(cood) {
-          if(cood != null) {
+          if(cood !== null) {
             this._moveLoc = {x: cood.x, y: cood.y};
           }
           if(this.multiDraw && (this.drawPaths.length > 0)) {
@@ -108,12 +108,12 @@ var EventDragPointingDraw = (function() {
           if(show == null) {
             show = true;
           }
-          if(this.endDrawCallback != null) {
+          if(this.endDrawCallback !== null) {
             this.endDrawCallback(this.drawPaths);
           }
           // コントローラ表示
           FloatView.showPointingController(this);
-          if(callback != null) {
+          if(callback !== null) {
             return callback();
           }
         }
@@ -176,7 +176,7 @@ var EventDragPointingDraw = (function() {
           Handwrite.initHandwrite();
           return WorktableCommon.changeEventPointingMode(constant.EventInputPointingMode.NOT_SELECT);
         };
-        if(applyDrawCallback != null) {
+        if(applyDrawCallback !== null) {
           if(applyDrawCallback(pointingPaths)) {
             return _cb.call(this);
           }
@@ -185,7 +185,7 @@ var EventDragPointingDraw = (function() {
         }
       });
       pointing.setEndDrawCallback(pointingPaths => {
-        if(endDrawCallback != null) {
+        if(endDrawCallback !== null) {
           return endDrawCallback(pointingPaths);
         }
       });

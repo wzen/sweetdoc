@@ -91,9 +91,9 @@ var ItemBase = (function() {
 
     // ScrollInsideに要素追加
     addContentsToScrollInside(contents, callback = null) {
-      if((this.getJQueryElement() != null) && (this.getJQueryElement().length > 0)) {
+      if((this.getJQueryElement() !== null) && (this.getJQueryElement().length > 0)) {
         // 既に存在する場合は追加しない
-        if(callback != null) {
+        if(callback !== null) {
           callback();
         }
         return;
@@ -101,7 +101,7 @@ var ItemBase = (function() {
 
       const createdElement = Common.wrapCreateItemElement(this, $(contents));
       $(createdElement).appendTo(window.scrollInside);
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     }
@@ -135,14 +135,14 @@ var ItemBase = (function() {
       if(immediate || (window.isWorkTable && window.previewRunning)) {
         // ※プレビュー実行時は即時変更
         this.getJQueryElement().css({'opacity': 1, 'z-index': Common.plusPagingZindex(this.zindex)});
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       } else {
         this._skipEvent = true;
         return this.getJQueryElement().css('z-index', Common.plusPagingZindex(this.zindex)).animate({'opacity': 1}, duration, function() {
           this._skipEvent = false;
-          if(callback != null) {
+          if(callback !== null) {
             return callback();
           }
         });
@@ -160,14 +160,14 @@ var ItemBase = (function() {
       if(immediate || (window.isWorkTable && window.previewRunning)) {
         // ※プレビュー実行時は即時変更
         this.getJQueryElement().css({'opacity': 0, 'z-index': Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM)});
-        if(callback != null) {
+        if(callback !== null) {
           return callback();
         }
       } else {
         this._skipEvent = true;
         return this.getJQueryElement().css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM)).animate({'opacity': 0}, duration, function() {
           this._skipEvent = false;
-          if(callback != null) {
+          if(callback !== null) {
             return callback();
           }
         });
@@ -207,7 +207,7 @@ var ItemBase = (function() {
 
     didChapter(callback = null) {
       return super.didChapter(() => {
-        if((this._event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER] != null) && this._event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER]) {
+        if((this._event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER] !== null) && this._event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER]) {
           // 非表示
           const d = this._event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER_DURATION];
           return this.hideItem(() => {
@@ -215,7 +215,7 @@ var ItemBase = (function() {
             }
             , d <= 0, d * 1000);
         } else {
-          if(callback != null) {
+          if(callback !== null) {
             return callback();
           }
         }
@@ -236,11 +236,11 @@ var ItemBase = (function() {
         this.removeItemElement();
         return this.createItemElement(() => {
           this.itemDraw(show);
-          if(this.setupItemEvents != null) {
+          if(this.setupItemEvents !== null) {
             // アイテムのイベント設定
             this.setupItemEvents();
           }
-          if(callback != null) {
+          if(callback !== null) {
             return callback(this);
           }
         });
@@ -260,7 +260,7 @@ var ItemBase = (function() {
       if(this.getJQueryElement().length === 0) {
         return this.refresh(show, callback);
       } else {
-        if(callback != null) {
+        if(callback !== null) {
           return callback(this);
         }
       }
@@ -354,8 +354,8 @@ var ItemBase = (function() {
 
     // アイテム作成時に設定されるデフォルトメソッド名
     static defaultMethodName() {
-      if((this.actionProperties != null) &&
-        (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] != null)) {
+      if((this.actionProperties !== null) &&
+        (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] !== null)) {
         return this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.METHOD];
       } else {
         return null;
@@ -369,10 +369,10 @@ var ItemBase = (function() {
 
     // 独自コンフィグのデフォルト
     static defaultSpecificMethodValue() {
-      if((this.actionProperties != null) &&
-        (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] != null)) {
+      if((this.actionProperties !== null) &&
+        (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] !== null)) {
         const ret = this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.SPECIFIC_METHOD_VALUES];
-        if(ret != null) {
+        if(ret !== null) {
           return ret;
         } else {
           return {};
@@ -384,10 +384,10 @@ var ItemBase = (function() {
 
     // 変数編集コンフィグのデフォルト
     static defaultModifiableVars() {
-      if((this.actionProperties != null) &&
-        (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] != null)) {
+      if((this.actionProperties !== null) &&
+        (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] !== null)) {
         const mod = this.actionPropertiesModifiableVars(this.ActionPropertiesKey.DEFAULT_EVENT, true);
-        if(mod != null) {
+        if(mod !== null) {
           return mod;
         } else {
           return {};
@@ -399,8 +399,8 @@ var ItemBase = (function() {
 
     // スクロールのデフォルト有効方向
     static defaultScrollEnabledDirection() {
-      if((this.actionProperties != null) &&
-        (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] != null)) {
+      if((this.actionProperties !== null) &&
+        (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] !== null)) {
         return this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.SCROLL_ENABLED_DIRECTION];
       } else {
         return null;
@@ -409,8 +409,8 @@ var ItemBase = (function() {
 
     // スクロールのデフォルト進行方向
     static defaultScrollForwardDirection() {
-      if((this.actionProperties != null) &&
-        (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] != null)) {
+      if((this.actionProperties !== null) &&
+        (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] !== null)) {
         return this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.SCROLL_FORWARD_DIRECTION];
       } else {
         return null;
@@ -419,8 +419,8 @@ var ItemBase = (function() {
 
     // クリックのデフォルト時間
     static defaultClickDuration() {
-      if((this.actionProperties != null) &&
-        (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] != null)) {
+      if((this.actionProperties !== null) &&
+        (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] !== null)) {
         return this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.EVENT_DURATION];
       } else {
         return null;
@@ -430,7 +430,7 @@ var ItemBase = (function() {
     // デフォルトデザインをPageValue & 変数に適用
     applyDefaultDesign() {
       // デザイン用のPageValue作成
-      if(this.constructor.actionProperties.designConfigDefaultValues != null) {
+      if(this.constructor.actionProperties.designConfigDefaultValues !== null) {
         PageValue.setInstancePageValue(PageValue.Key.instanceDesignRoot(this.id), this.constructor.actionProperties.designConfigDefaultValues);
       }
       return this.designs = PageValue.getInstancePageValue(PageValue.Key.instanceDesignRoot(this.id));

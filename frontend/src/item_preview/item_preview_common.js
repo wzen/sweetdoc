@@ -57,11 +57,11 @@ var ItemPreviewCommon = (function() {
       window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM + 1));
       // スクロールイベント設定
       window.scrollContents.off('scroll').on('scroll', function(e) {
-        if((window.skipScrollEvent != null) && window.skipScrollEvent) {
+        if((window.skipScrollEvent !== null) && window.skipScrollEvent) {
           window.skipScrollEvent = false;
           return;
         }
-        if((window.skipScrollEventByAnimation != null) && window.skipScrollEventByAnimation) {
+        if((window.skipScrollEventByAnimation !== null) && window.skipScrollEventByAnimation) {
           return;
         }
         e.preventDefault();
@@ -80,7 +80,7 @@ var ItemPreviewCommon = (function() {
       // ScrollHandler非表示
       $('.scroll_handle_wrapper').hide();
 
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     }
@@ -99,7 +99,7 @@ var ItemPreviewCommon = (function() {
       $('#project_wrapper').removeAttr('style');
       // ScrollHandler表示
       $('.scroll_handle_wrapper').show();
-      if(callback != null) {
+      if(callback !== null) {
         return callback();
       }
     }
@@ -146,7 +146,7 @@ var ItemPreviewCommon = (function() {
             WorktableCommon.changeMode(constant.Mode.EDIT);
             $('#run_btn_wrapper').show();
             $('#stop_btn_wrapper').hide();
-            if(callback != null) {
+            if(callback !== null) {
               return callback();
             }
           });
@@ -173,7 +173,7 @@ var ItemPreviewCommon = (function() {
           window.initDone = true;
           $('#run_btn_wrapper').hide();
           $('#stop_btn_wrapper').show();
-          if(callback != null) {
+          if(callback !== null) {
             return callback();
           }
         });
