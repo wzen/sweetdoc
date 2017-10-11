@@ -10,36 +10,15 @@
  */
 // アプリ内の共通メソッドクラス
 {
-  Common = class Common {
+  const Common = class Common {
     static initClass() {
       constant = gon.const;
       // @property [String] MAIN_TEMP_ID mainコンテンツテンプレート
       this.MAIN_TEMP_ID = constant.ElementAttribute.MAIN_TEMP_ID;
 
-      // 変数の型チェック
-      // @return [string] 型
-      this.typeOfValue = (function() {
-        const classToType = {};
-        for(let name of Array.from("Boolean Number String Function Array Date RegExp Undefined Null".split(" "))) {
-          classToType[`[object ${name}]`] = name.toLowerCase();
-        }
-        return function(obj) {
-          const strType = Object.prototype.toString.call(obj);
-          return classToType[strType] || "object";
-        };
-      })();
-      _showModalFlashMessage = function(message, isModalFlush, immediately, enableOverlayClose) {
-        if(isModalFlush == null) {
-          isModalFlush = false;
-        }
-        if(immediately == null) {
-          immediately = true;
-        }
-        if(enableOverlayClose == null) {
-          enableOverlayClose = false;
-        }
+      _showModalFlashMessage = function(message, isModalFlush = false, immediately = true, enableOverlayClose = false) {
         const type = constant.ModalViewType.FLASH_MESSAGE;
-        return _showModalView.call(this, type, null, isModalFlush, {}, function() {
+        _showModalView.call(this, type, null, isModalFlush, {}, function() {
           $("body").append('<div id="modal-overlay"></div>');
           $("#modal-overlay").show();
           // センタリング
@@ -54,9 +33,9 @@
           } else {
             emt.fadeIn('fast', () => window.modalRun = false);
           }
-          return $("#modal-overlay,#modal-close").unbind().click(function() {
+          $("#modal-overlay,#modal-close").unbind().click(function() {
             if(enableOverlayClose) {
-              return Common.hideModalView();
+              Common.hideModalView();
             }
           });
         });
@@ -66,7 +45,7 @@
       // @param [Integer] type モーダルビュータイプ
       // @param [Function] prepareShowFunc 表示前処理
       _showModalView = function(type, prepareShowFunc, prepareShowFuncParams, isModalFlush, showFunc = null) {
-        if(!isModalFlush && (window.modalRun != null) && window.modalRun) {
+        if(!isModalFlush && (window.modalRun !== null) && window.modalRun) {
           // 処理中は反応なし
           return;
         }

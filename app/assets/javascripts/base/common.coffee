@@ -23,16 +23,6 @@ class Common
 #      return false
     return true
 
-  # 変数の型チェック
-  # @return [string] 型
-  @typeOfValue = do ->
-    classToType = {}
-    for name in "Boolean Number String Function Array Date RegExp Undefined Null".split(" ")
-      classToType["[object " + name + "]"] = name.toLowerCase()
-    (obj) ->
-      strType = Object::toString.call(obj)
-      classToType[strType] or "object"
-
   # イベントのIDを作成
   # @return [Int] 生成したID
   @generateId = ->
