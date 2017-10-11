@@ -77,7 +77,7 @@ var EventBase = (function() {
     // 変更を戻して再表示
     // @abstract
     refresh(show, callback = null) {
-      if(show == null) {
+      if(show === null) {
         show = true;
       }
       if(callback !== null) {
@@ -98,7 +98,7 @@ var EventBase = (function() {
     // データから読み込んで描画する処理に使用
     // @param [Boolean] show 要素作成後に表示するか
     refreshFromInstancePageValue(show, callback = null) {
-      if(show == null) {
+      if(show === null) {
         show = true;
       }
       if(window.runDebug) {
@@ -130,7 +130,7 @@ var EventBase = (function() {
 
     // スクロールイベント
     scrollEvent(x, y, complete = null) {
-      if((this._handlerFuncComplete == null)) {
+      if((this._handlerFuncComplete === null)) {
         this._handlerFuncComplete = complete;
       }
       return this.scrollHandlerFunc(false, x, y);
@@ -138,7 +138,7 @@ var EventBase = (function() {
 
     // クリックイベント
     clickEvent(e, complete = null) {
-      if((this._handlerFuncComplete == null)) {
+      if((this._handlerFuncComplete === null)) {
         this._handlerFuncComplete = complete;
       }
       return this.clickHandlerFunc(false, e);
@@ -255,8 +255,8 @@ var EventBase = (function() {
           this.clickHandlerFunc(true);
           return this._doPreviewLoop = false;
         }
-      } else if(!this._isFinishedEvent && ((this._stepLoopCount == null) || (this._stepLoopCount < 20))) {
-        if((this._stepLoopCount == null)) {
+      } else if(!this._isFinishedEvent && ((this._stepLoopCount === null) || (this._stepLoopCount < 20))) {
+        if((this._stepLoopCount === null)) {
           this._stepLoopCount = 0;
         }
         return setTimeout(() => {
@@ -314,7 +314,7 @@ var EventBase = (function() {
         console.log(`EventBase stopPreview id:${this.id}`);
       }
 
-      if((this._runningPreview == null) || !this._runningPreview) {
+      if((this._runningPreview === null) || !this._runningPreview) {
         // 停止済み
         if(callback !== null) {
           callback(false);
@@ -349,7 +349,7 @@ var EventBase = (function() {
     }
 
     saveCache(key, value) {
-      if((this['__saveCache'] == null)) {
+      if((this['__saveCache'] === null)) {
         this['__saveCache'] = {};
       }
       if($.isArray(key)) {
@@ -360,7 +360,7 @@ var EventBase = (function() {
     }
 
     loadCache(key) {
-      if((this['__saveCache'] == null)) {
+      if((this['__saveCache'] === null)) {
         return null;
       }
       if($.isArray(key)) {
@@ -418,13 +418,13 @@ var EventBase = (function() {
     // @param [Integer] x スクロール横座標
     // @param [Integer] y スクロール縦座標
     scrollHandlerFunc(isPreview, x, y) {
-      if(isPreview == null) {
+      if(isPreview === null) {
         isPreview = false;
       }
-      if(x == null) {
+      if(x === null) {
         x = 0;
       }
-      if(y == null) {
+      if(y === null) {
         y = 0;
       }
       if(this._skipEvent || (!isPreview && window.eventAction.thisPage().thisChapter().isFinishedAllEvent(true))) {
@@ -567,7 +567,7 @@ var EventBase = (function() {
     // クリック基底メソッド
     // @param [Object] e クリックオブジェクト
     clickHandlerFunc(isPreview, e = null) {
-      if(isPreview == null) {
+      if(isPreview === null) {
         isPreview = false;
       }
       if(e !== null) {
@@ -614,7 +614,7 @@ var EventBase = (function() {
 
     // Step値を戻す
     resetProgress(withResetFinishedEventFlg) {
-      if(withResetFinishedEventFlg == null) {
+      if(withResetFinishedEventFlg === null) {
         withResetFinishedEventFlg = true;
       }
       this.stepValue = 0;
@@ -676,7 +676,7 @@ var EventBase = (function() {
 
     // イベント前の表示状態にする
     updateEventBefore() {
-      if((this._event == null)) {
+      if((this._event === null)) {
         // イベントが初期化されていない場合は無視
         return;
       }
@@ -694,7 +694,7 @@ var EventBase = (function() {
 
     // イベント後の表示状態にする
     updateEventAfter() {
-      if((this._event == null)) {
+      if((this._event === null)) {
         // イベントが初期化されていない場合は無視
         return;
       }
@@ -723,7 +723,7 @@ var EventBase = (function() {
 
     // ステップ実行によるアイテム状態更新
     updateInstanceParamByStep(progressValue, immediate) {
-      if(immediate == null) {
+      if(immediate === null) {
         immediate = false;
       }
       if(this.getEventMethodName() === EventPageValueBase.NO_METHOD) {
@@ -731,7 +731,7 @@ var EventBase = (function() {
       }
 
       let progressMax = this.progressMax();
-      if((progressMax == null)) {
+      if((progressMax === null)) {
         progressMax = 1;
       }
       // NOTICE: varAutoChange=falseの場合は(変数)_xxxの形で変更前、変更後、進捗を渡してdraw側で処理させる
@@ -755,9 +755,9 @@ var EventBase = (function() {
                     result.push(this.changeInstanceVarByConfig(varName, before + ((after - before) * progressPercentage)));
                   } else if(value.type === constant.ItemDesignOptionType.COLOR) {
                     const colorCacheVarName = `${varName}ColorChange__Cache`;
-                    if((this[colorCacheVarName] == null)) {
+                    if((this[colorCacheVarName] === null)) {
                       let {colorType} = this.constructor.actionPropertiesModifiableVars()[varName];
-                      if((colorType == null)) {
+                      if((colorType === null)) {
                         colorType = 'hex';
                       }
                       this[colorCacheVarName] = Common.colorChangeCacheData(before, after, progressMax, colorType);
@@ -784,7 +784,7 @@ var EventBase = (function() {
     // アニメーションによるアイテム状態更新
     updateInstanceParamByAnimation(immediate) {
       let after, timer, value, varName;
-      if(immediate == null) {
+      if(immediate === null) {
         immediate = false;
       }
       if(this.getEventMethodName() === EventPageValueBase.NO_METHOD) {
@@ -823,9 +823,9 @@ var EventBase = (function() {
                     this.changeInstanceVarByConfig(varName, before + ((after - before) * progressPercentage));
                   } else if(value.type === constant.ItemDesignOptionType.COLOR) {
                     const colorCacheVarName = `${varName}ColorChange__Cache`;
-                    if((this[colorCacheVarName] == null)) {
+                    if((this[colorCacheVarName] === null)) {
                       let {colorType} = this.constructor.actionPropertiesModifiableVars()[varName];
-                      if((colorType == null)) {
+                      if((colorType === null)) {
                         colorType = 'hex';
                       }
                       this[colorCacheVarName] = Common.colorChangeCacheData(before, after, progressMax, colorType);
@@ -863,7 +863,7 @@ var EventBase = (function() {
 
     // イベント前後の変数を設定 [xxx__before] & [xxx__after]
     setModifyBeforeAndAfterVar() {
-      if((this._event == null)) {
+      if((this._event === null)) {
         return;
       }
 
@@ -894,7 +894,7 @@ var EventBase = (function() {
     // アイテムの情報をページ値に保存
     // @property [Boolean] isCache キャッシュとして保存するか
     setItemAllPropToPageValue(isCache) {
-      if(isCache == null) {
+      if(isCache === null) {
         isCache = false;
       }
       const prefix_key = isCache ? PageValue.Key.instanceValueCache(this.id) : PageValue.Key.instanceValue(this.id);
@@ -970,7 +970,7 @@ var EventBase = (function() {
 
     // 編集可能変数プロパティを取得(childrenを含む)
     static actionPropertiesModifiableVars(methodName = null, isDefault) {
-      if(isDefault == null) {
+      if(isDefault === null) {
         isDefault = false;
       }
       var _actionPropertiesModifiableVars = function(modifiableRoot, ret) {
@@ -1021,7 +1021,7 @@ var EventBase = (function() {
     }
 
     saveToFootprint(targetObjId, isChangeBefore, eventDistNum, pageNum) {
-      if(pageNum == null) {
+      if(pageNum === null) {
         pageNum = PageValue.getPageNum();
       }
       return PageValue.saveToFootprint(targetObjId, isChangeBefore, eventDistNum);

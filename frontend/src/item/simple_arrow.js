@@ -53,7 +53,7 @@ var SimpleArrowItem = (function() {
       // @private
       calDrection = function(beforeLoc, cood) {
         let x, y;
-        if((beforeLoc == null) || (cood == null)) {
+        if((beforeLoc === null) || (cood === null)) {
           return;
         }
 
@@ -242,7 +242,7 @@ var SimpleArrowItem = (function() {
     // @param [Int] zindex z-index
     // @param [boolean] show 要素作成後に描画を表示するか
     endDraw(zindex, show, callback = null) {
-      if(show == null) {
+      if(show === null) {
         show = true;
       }
       if(!super.endDraw(zindex)) {
@@ -272,7 +272,7 @@ var SimpleArrowItem = (function() {
     // 再描画処理
     // @param [boolean] show 要素作成後に描画を表示するか
     refresh(show) {
-      if(show == null) {
+      if(show === null) {
         show = true;
       }
       return this.drawAndMakeConfigs(show);
@@ -286,7 +286,7 @@ var SimpleArrowItem = (function() {
 
       // Canvasを作成
       //$(ElementCode.get().createItemElement(@)).appendTo(window.scrollInside)
-      if(show == null) {
+      if(show === null) {
         show = true;
       }
       $(`#${this.canvasElementId()}`).attr('width', $(`#${this.id}`).width());

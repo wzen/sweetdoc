@@ -27,7 +27,7 @@ var ItemPreviewCommon = (function() {
       const container = $(`.${markClass}`, root);
       const sectionClass = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', 1);
       const pageSection = $(`.${sectionClass}`, root);
-      if((container == null) || (container.length === 0)) {
+      if((container === null) || (container.length === 0)) {
         // 現在のContainerを削除
         let temp;
         root.children('.section').remove();

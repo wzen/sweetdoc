@@ -570,7 +570,7 @@ var zip_fill_window = function() {
  * matches. It is used only for the fast compression options.
  */
 var zip_deflate_fast = function() {
-    while(zip_lookahead != 0 && zip_qhead == null) {
+    while(zip_lookahead != 0 && zip_qhead === null) {
 	var flush; // set if current block must be flushed
 
 	/* Insert the string window[strstart .. strstart+2] in the
@@ -649,7 +649,7 @@ var zip_deflate_fast = function() {
 
 var zip_deflate_better = function() {
     /* Process the input block. */
-    while(zip_lookahead != 0 && zip_qhead == null) {
+    while(zip_lookahead != 0 && zip_qhead === null) {
 	/* Insert the string window[strstart .. strstart+2] in the
 	 * dictionary, and set hash_head to the head of the hash chain:
 	 */
@@ -1635,7 +1635,7 @@ var zip_qoutbuf = function() {
     if(zip_outcnt != 0) {
 	var q, i;
 	q = zip_new_queue();
-	if(zip_qhead == null)
+	if(zip_qhead === null)
 	    zip_qhead = zip_qtail = q;
 	else
 	    zip_qtail = zip_qtail.next = q;

@@ -83,7 +83,7 @@ class Chapter {
   // @param [Boolean] isImmediate 即時反映するか
   // @param [String] フォーカスタイプ
   focusToActorIfNeed(isImmediate, type) {
-    if(type == null) {
+    if(type === null) {
       type = "center";
     }
     window.disabledEventHandler = true;
@@ -191,7 +191,7 @@ class Chapter {
   // ガイド表示
   // @param [Boolean] calledByWillChapter チャプター開始時に呼ばれたか
   showGuide(calledByWillChapter) {
-    if(calledByWillChapter == null) {
+    if(calledByWillChapter === null) {
       calledByWillChapter = false;
     }
     return RunSetting.isShowGuide();

@@ -228,7 +228,7 @@ class Page {
     window.runningOperation = true;
     // 全ガイド非表示
     this.hideAllGuide();
-    if((this.thisChapter() == null)) {
+    if((this.thisChapter() === null)) {
       // チャプターが無い場合はページを戻す
       window.eventAction.rewindPage(() => {
         FloatView.show('Rewind previous page', FloatView.Type.REWIND_CHAPTER, 1.0);
@@ -318,7 +318,7 @@ class Page {
 
   // チャプターの内容をリセット
   resetChapter(chapterIndex, callback = null) {
-    if(chapterIndex == null) {
+    if(chapterIndex === null) {
       chapterIndex = this.getChapterIndex();
     }
     if(window.runDebug) {
@@ -338,7 +338,7 @@ class Page {
 
   // 全てのチャプターを戻す
   rewindAllChapters(rewindPageIfNeed, callback = null) {
-    if(rewindPageIfNeed == null) {
+    if(rewindPageIfNeed === null) {
       rewindPageIfNeed = true;
     }
     if(window.runDebug) {
@@ -352,7 +352,7 @@ class Page {
     // 全ガイド非表示
     this.hideAllGuide();
     const chapter = this.thisChapter();
-    if((chapter == null) || (!chapter.doMoveChapter && rewindPageIfNeed)) {
+    if((chapter === null) || (!chapter.doMoveChapter && rewindPageIfNeed)) {
       // 前ページを先頭チャプターに戻す
       const beforePage = window.eventAction.beforePage();
       if(beforePage !== null) {
@@ -531,7 +531,7 @@ class Page {
   // チャプターのフォーカス初期化
   initFocus(focusToFirst) {
     let chapter, event;
-    if(focusToFirst == null) {
+    if(focusToFirst === null) {
       focusToFirst = true;
     }
     let flg = false;

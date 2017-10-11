@@ -114,7 +114,7 @@ ItemPreviewTemp = (function(superClass) {
   };
 
   function ItemPreviewTemp(cood) {
-    if (cood == null) {
+    if (cood === null) {
       cood = null;
     }
     this.changeColor = bind(this.changeColor, this);
@@ -134,7 +134,7 @@ ItemPreviewTemp = (function(superClass) {
 
   ItemPreviewTemp.prototype.itemDraw = function(show) {
     var j, len, r, ref;
-    if (show == null) {
+    if (show === null) {
       show = true;
     }
     ItemPreviewTemp.__super__.itemDraw.call(this, show);
@@ -188,7 +188,7 @@ ItemPreviewTemp = (function(superClass) {
 
   _calDrection = function(beforeLoc, cood) {
     var x, y;
-    if ((beforeLoc == null) || (cood == null)) {
+    if ((beforeLoc === null) || (cood === null)) {
       return;
     }
     x = null;
@@ -215,7 +215,7 @@ ItemPreviewTemp = (function(superClass) {
 
   _calTrianglePath = function(leftCood, rightCood) {
     var leftTop, mid, r, rightTop, sita, sitaRight, sitaTop, top;
-    if ((leftCood == null) || (rightCood == null)) {
+    if ((leftCood === null) || (rightCood === null)) {
       return null;
     }
     r = {
@@ -355,7 +355,7 @@ ItemPreviewTemp = (function(superClass) {
 
   _drawCoodToCanvas = function(dc) {
     var drawingContext, i, j, k, m, ref, ref1, ref2;
-    if (dc == null) {
+    if (dc === null) {
       dc = null;
     }
     drawingContext = null;
@@ -479,9 +479,9 @@ ItemPreviewTemp = (function(superClass) {
 
 Common.setClassToMap(ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp);
 
-if ((window.itemInitFuncList !== null) && (window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] == null)) {
+if ((window.itemInitFuncList !== null) && (window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] === null)) {
   window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] = function(option) {
-    if (option == null) {
+    if (option === null) {
       option = {};
     }
     if (window.isWorkTable && (ItemPreviewTemp.jsLoaded !== null)) {

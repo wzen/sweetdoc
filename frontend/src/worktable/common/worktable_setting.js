@@ -71,7 +71,7 @@ var WorktableSetting = (function() {
 
           // グリッド間隔
           let gridStepValue = PageValue.getSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID_STEP);
-          if((gridStepValue == null)) {
+          if((gridStepValue === null)) {
             gridStepValue = this.STEP_DEFAULT_VALUE;
           }
           const gridStep = $(`.${this.GRID_STEP_CLASS_NAME}`, root);
@@ -126,7 +126,7 @@ var WorktableSetting = (function() {
             const root = $(`#${WorktableSetting.ROOT_ID_NAME}`);
             const stepInput = $(`.${this.GRID_STEP_CLASS_NAME}`, root);
             let step = stepInput.val();
-            if((step == null) || (step.length === 0)) {
+            if((step === null) || (step.length === 0)) {
               stepInput.val(this.STEP_DEFAULT_VALUE);
               step = this.STEP_DEFAULT_VALUE;
             }
@@ -148,7 +148,7 @@ var WorktableSetting = (function() {
             if(left < 0) {
               left = 0;
             }
-            if((context == null)) {
+            if((context === null)) {
               // キャンパスを作成
               $(this.createGridElement(top, left)).appendTo(window.scrollInside);
               canvas = $(`#pages .${page} .${this.SETTING_GRID_CANVAS_CLASS}:first`)[0];
@@ -218,7 +218,7 @@ var WorktableSetting = (function() {
           // Autosave表示
           const enable = $(`.${this.AUTOSAVE_CLASS_NAME}`, root);
           let enableValue = PageValue.getSettingPageValue(this.PageValueKey.AUTOSAVE);
-          if((enableValue == null)) {
+          if((enableValue === null)) {
             enableValue = 'true';
             PageValue.setSettingPageValue(this.PageValueKey.AUTOSAVE, enableValue);
           }
@@ -248,7 +248,7 @@ var WorktableSetting = (function() {
 
           // Autosave間隔
           let autosaveTimeValue = PageValue.getSettingPageValue(this.PageValueKey.AUTOSAVE_TIME);
-          if((autosaveTimeValue == null)) {
+          if((autosaveTimeValue === null)) {
             autosaveTimeValue = this.AUTOSAVE_TIME_DEFAULT;
             PageValue.setSettingPageValue(this.PageValueKey.AUTOSAVE_TIME, autosaveTimeValue);
           }
@@ -296,7 +296,7 @@ var WorktableSetting = (function() {
       this.PositionAndScale = class PositionAndScale {
         // コンフィグ初期化
         static initConfig() {
-          if((Common.getScreenSize() == null)) {
+          if((Common.getScreenSize() === null)) {
             return;
           }
 

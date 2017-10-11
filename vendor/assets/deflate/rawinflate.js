@@ -247,7 +247,7 @@ var zip_HuftBuild = function(b,	// code lengths in bits (all assumed <= BMAX)
 			q[o] = new zip_HuftNode();
 		    }
 
-		    if(tail == null)
+		    if(tail === null)
 			tail = this.root = new zip_HuftList();
 		    else
 			tail = tail.next = new zip_HuftList();
@@ -459,7 +459,7 @@ var zip_inflate_fixed = function(buff, off, size) {
        Huffman tables. */
 
     // if first time, set up tables for fixed blocks
-    if(zip_fixed_tl == null) {
+    if(zip_fixed_tl === null) {
 	var i;			// temporary variable
 	var l = new Array(288);	// length list for huft_build
 	var h;	// zip_HuftBuild
@@ -632,7 +632,7 @@ var zip_inflate_dynamic = function(buff, off, size) {
 var zip_inflate_start = function() {
     var i;
 
-    if(zip_slide == null)
+    if(zip_slide === null)
 	zip_slide = new Array(2 * zip_WSIZE);
     zip_wp = 0;
     zip_bit_buf = 0;

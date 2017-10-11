@@ -84,10 +84,10 @@ var bindTwitterEventHandlers = function() {
 var renderTweetButtons = function() {
   $('.twitter-share-button').each(function() {
     const button = $(this);
-    if(button.data('url') == null) {
+    if(button.data('url') === null) {
       button.attr('data-url', document.location.href);
     }
-    if(button.data('text') == null) {
+    if(button.data('text') === null) {
       return button.attr('data-text', document.title);
     }
   });

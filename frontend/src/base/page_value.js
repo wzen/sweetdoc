@@ -100,7 +100,7 @@ var PageValue = (function() {
 
         // @property [return] 現在のページのページ番号ルート
         static pageRoot(pn) {
-          if(pn == null) {
+          if(pn === null) {
             pn = PageValue.getPageNum();
           }
           return this.P_PREFIX + pn;
@@ -108,7 +108,7 @@ var PageValue = (function() {
 
         // @property [return] インスタンスページプレフィックスを取得
         static instancePagePrefix(pn) {
-          if(pn == null) {
+          if(pn === null) {
             pn = PageValue.getPageNum();
           }
           return this.INSTANCE_PREFIX + this.PAGE_VALUES_SEPERATOR + this.pageRoot(pn);
@@ -145,7 +145,7 @@ var PageValue = (function() {
 
         // @property [return] イベントページルート
         static eventPageRoot(pn) {
-          if(pn == null) {
+          if(pn === null) {
             pn = PageValue.getPageNum();
           }
           return `${this.E_SUB_ROOT}${this.PAGE_VALUES_SEPERATOR}${this.pageRoot(pn)}`;
@@ -153,10 +153,10 @@ var PageValue = (function() {
 
         // @property [return] イベントページプレフィックス
         static eventPageMainRoot(fn, pn) {
-          if(fn == null) {
+          if(fn === null) {
             fn = PageValue.getForkNum();
           }
-          if(pn == null) {
+          if(pn === null) {
             pn = PageValue.getPageNum();
           }
           let root = '';
@@ -170,10 +170,10 @@ var PageValue = (function() {
 
         // @property [return] イベントページプレフィックス
         static eventNumber(num, fn, pn) {
-          if(fn == null) {
+          if(fn === null) {
             fn = PageValue.getForkNum();
           }
-          if(pn == null) {
+          if(pn === null) {
             pn = PageValue.getPageNum();
           }
           return `${this.eventPageMainRoot(fn, pn)}${this.PAGE_VALUES_SEPERATOR}${this.E_NUM_PREFIX}${num}`;
@@ -181,10 +181,10 @@ var PageValue = (function() {
 
         // @property [return] イベント数
         static eventCount(fn, pn) {
-          if(fn == null) {
+          if(fn === null) {
             fn = PageValue.getForkNum();
           }
-          if(pn == null) {
+          if(pn === null) {
             pn = PageValue.getPageNum();
           }
           return `${this.eventPageMainRoot(fn, pn)}${this.PAGE_VALUES_SEPERATOR}count`;
@@ -192,7 +192,7 @@ var PageValue = (function() {
 
         // @property [return] 設定値ページプレフィックスを取得
         static generalPagePrefix(pn) {
-          if(pn == null) {
+          if(pn === null) {
             pn = PageValue.getPageNum();
           }
           return this.G_PREFIX + this.PAGE_VALUES_SEPERATOR + this.pageRoot(pn);
@@ -200,7 +200,7 @@ var PageValue = (function() {
 
         // @property [return] Worktableプロジェクト表示位置
         static worktableDisplayPosition(pn) {
-          if(pn == null) {
+          if(pn === null) {
             pn = PageValue.getPageNum();
           }
           return `${this.generalPagePrefix(pn)}${this.PAGE_VALUES_SEPERATOR}ws_display_position`;
@@ -208,7 +208,7 @@ var PageValue = (function() {
 
         // @property [return] Zoom
         static worktableScale(pn) {
-          if(pn == null) {
+          if(pn === null) {
             pn = PageValue.getPageNum();
           }
           return `${this.generalPagePrefix(pn)}${this.PAGE_VALUES_SEPERATOR}ws_scale`;
@@ -216,7 +216,7 @@ var PageValue = (function() {
 
         // @property [return] アイテム表示状態
         static itemVisible(pn) {
-          if(pn == null) {
+          if(pn === null) {
             pn = PageValue.getPageNum();
           }
           return `${this.generalPagePrefix(pn)}${this.PAGE_VALUES_SEPERATOR}item_visible`;
@@ -224,7 +224,7 @@ var PageValue = (function() {
 
         // @property [return] 履歴ページルート
         static footprintPageRoot(pn) {
-          if(pn == null) {
+          if(pn === null) {
             pn = PageValue.getPageNum();
           }
           return `${this.F_PREFIX}${this.PAGE_VALUES_SEPERATOR}${this.pageRoot(pn)}`;
@@ -232,7 +232,7 @@ var PageValue = (function() {
 
         // @property [return] インスタンス履歴(変更前)
         static footprintInstanceBefore(eventDistNum, objId, pn) {
-          if(pn == null) {
+          if(pn === null) {
             pn = PageValue.getPageNum();
           }
           return `${this.footprintPageRoot(pn)}${this.PAGE_VALUES_SEPERATOR}${this.FED_PREFIX}${this.PAGE_VALUES_SEPERATOR}${eventDistNum}${this.PAGE_VALUES_SEPERATOR}${objId}${this.PAGE_VALUES_SEPERATOR}instanceBefore`;
@@ -240,7 +240,7 @@ var PageValue = (function() {
 
         // @property [return] インスタンス履歴(変更後)
         static footprintInstanceAfter(eventDistNum, objId, pn) {
-          if(pn == null) {
+          if(pn === null) {
             pn = PageValue.getPageNum();
           }
           return `${this.footprintPageRoot(pn)}${this.PAGE_VALUES_SEPERATOR}${this.FED_PREFIX}${this.PAGE_VALUES_SEPERATOR}${eventDistNum}${this.PAGE_VALUES_SEPERATOR}${objId}${this.PAGE_VALUES_SEPERATOR}instanceAfter`;
@@ -248,7 +248,7 @@ var PageValue = (function() {
 
         // @property [return] 共通インスタンス履歴(変更前)
         static footprintCommonBefore(eventDistNum, pn) {
-          if(pn == null) {
+          if(pn === null) {
             pn = PageValue.getPageNum();
           }
           return `${this.footprintPageRoot(pn)}${this.PAGE_VALUES_SEPERATOR}${this.FED_PREFIX}${this.PAGE_VALUES_SEPERATOR}${eventDistNum}${this.PAGE_VALUES_SEPERATOR}commonInstanceBefore`;
@@ -256,7 +256,7 @@ var PageValue = (function() {
 
         // @property [return] 共通インスタンス履歴(変更後)
         static footprintCommonAfter(eventDistNum, pn) {
-          if(pn == null) {
+          if(pn === null) {
             pn = PageValue.getPageNum();
           }
           return `${this.footprintPageRoot(pn)}${this.PAGE_VALUES_SEPERATOR}${this.FED_PREFIX}${this.PAGE_VALUES_SEPERATOR}${eventDistNum}${this.PAGE_VALUES_SEPERATOR}commonInstanceAfter`;
@@ -264,7 +264,7 @@ var PageValue = (function() {
 
         // @property [return] フォーク番号スタック
         static forkStack(pn) {
-          if(pn == null) {
+          if(pn === null) {
             pn = PageValue.getPageNum();
           }
           return `${this.footprintPageRoot(pn)}${this.PAGE_VALUES_SEPERATOR}fork_stack`;
@@ -302,7 +302,7 @@ var PageValue = (function() {
               }
               let k = cList[0];
 
-              if((ret == null)) {
+              if((ret === null)) {
                 if(jQuery.isNumeric(k)) {
                   ret = [];
                 } else {
@@ -350,7 +350,7 @@ var PageValue = (function() {
         const keys = key.split(this.Key.PAGE_VALUES_SEPERATOR);
         keys.forEach(function(k, index) {
           root = $(`.${k}`, root);
-          if((root == null) || (root.length === 0)) {
+          if((root === null) || (root.length === 0)) {
             value = null;
             return;
           }
@@ -387,7 +387,7 @@ var PageValue = (function() {
               }
               let k = cList[0];
 
-              if((ret == null)) {
+              if((ret === null)) {
                 if(jQuery.isNumeric(k)) {
                   ret = [];
                 } else {
@@ -435,7 +435,7 @@ var PageValue = (function() {
         const keys = key.split(this.Key.PAGE_VALUES_SEPERATOR);
         keys.forEach(function(k, index) {
           root = $(`.${k}`, root);
-          if((root == null) || (root.length === 0)) {
+          if((root === null) || (root.length === 0)) {
             value = null;
             return;
           }
@@ -535,7 +535,7 @@ var PageValue = (function() {
           }
           root = $(`${element}.${k}`, parent);
           if((keys.length - 1) > index) {
-            if((root == null) || (root.length === 0)) {
+            if((root === null) || (root.length === 0)) {
               // 親要素のdiv作成
               root = jQuery(`<div class=${k}></div>`).appendTo(parent);
             }
@@ -624,7 +624,7 @@ var PageValue = (function() {
           }
           root = $(`${element}.${k}`, parent);
           if((keys.length - 1) > index) {
-            if((root == null) || (root.length === 0)) {
+            if((root === null) || (root.length === 0)) {
               // 親要素のdiv作成
               root = jQuery(`<div class=${k}></div>`).appendTo(parent);
             }
@@ -694,7 +694,7 @@ var PageValue = (function() {
     // @param [Object] value 設定値(ハッシュ配列または値)
     // @param [Boolean] doAdded 上書きでなく追加する
     static setGeneralPageValue(key, value, doAdd) {
-      if(doAdd == null) {
+      if(doAdd === null) {
         doAdd = false;
       }
       return _setPageValue.call(this, key, value, false, this.Key.G_ROOT, true, doAdd);
@@ -705,7 +705,7 @@ var PageValue = (function() {
     // @param [Object] value 設定値(ハッシュ配列または値)
     // @param [Boolean] doAdded 上書きでなく追加する
     static setInstancePageValue(key, value, doAdd) {
-      if(doAdd == null) {
+      if(doAdd === null) {
         doAdd = false;
       }
       return _setPageValue.call(this, key, value, false, this.Key.IS_ROOT, true, doAdd);
@@ -716,7 +716,7 @@ var PageValue = (function() {
     // @param [Object] value 設定値(ハッシュ配列または値)
     // @param [Boolean] doAdded 上書きでなく追加する
     static setEventPageValue(key, value, doAdd) {
-      if(doAdd == null) {
+      if(doAdd === null) {
         doAdd = false;
       }
       return _setPageValue.call(this, key, value, false, this.Key.E_ROOT, true, doAdd);
@@ -728,10 +728,10 @@ var PageValue = (function() {
     // @param [Integer] pn ページ番号
     static setEventPageValueByPageRootHash(value, fn, pn) {
       // 内容を一旦消去
-      if(fn == null) {
+      if(fn === null) {
         fn = this.getForkNum();
       }
-      if(pn == null) {
+      if(pn === null) {
         pn = this.getPageNum();
       }
       const contensRoot = fn > 0 ? this.Key.EF_PREFIX + fn : this.Key.E_MASTER_ROOT;
@@ -744,7 +744,7 @@ var PageValue = (function() {
     // @param [Object] value 設定値(ハッシュ配列または値)
     // @param [Boolean] doAdded 上書きでなく追加する
     static setSettingPageValue(key, value, doAdd) {
-      if(doAdd == null) {
+      if(doAdd === null) {
         doAdd = false;
       }
       return _setPageValue.call(this, key, value, false, this.Key.ST_ROOT, true, doAdd);
@@ -755,7 +755,7 @@ var PageValue = (function() {
     // @param [Object] value 設定値(ハッシュ配列または値)
     // @param [Boolean] doAdded 上書きでなく追加する
     static setFootprintPageValue(key, value, doAdd) {
-      if(doAdd == null) {
+      if(doAdd === null) {
         doAdd = false;
       }
       return _setPageValue.call(this, key, value, false, this.Key.F_ROOT, true, doAdd);
@@ -814,14 +814,14 @@ var PageValue = (function() {
     // @param [Integer] fn フォーク番号
     // @param [Integer] pn ページ番号
     static getEventPageValueSortedListByNum(fn, pn) {
-      if(fn == null) {
+      if(fn === null) {
         fn = PageValue.getForkNum();
       }
-      if(pn == null) {
+      if(pn === null) {
         pn = PageValue.getPageNum();
       }
       const eventPageValues = PageValue.getEventPageValue(this.Key.eventPageMainRoot(fn, pn));
-      if((eventPageValues == null)) {
+      if((eventPageValues === null)) {
         return [];
       }
 
@@ -882,7 +882,7 @@ var PageValue = (function() {
           // IDが存在する & 重複してない
           instanceObjIds.push(v.value.id);
         } else {
-          if((v.value == null) || (v.value.id == null)) {
+          if((v.value === null) || (v.value.id === null)) {
             // IDがNULLのものはInstanceから削除
             killKeyList.push(k);
           }
@@ -976,7 +976,7 @@ var PageValue = (function() {
     // Worktable設定による非表示状態の設定
     static setWorktableItemHide(itemObjId, showState) {
       let state = this.getGeneralPageValue(`${this.Key.G_PREFIX}${this.Key.PAGE_VALUES_SEPERATOR}${this.Key.WORKTABLE_ITEM_HIDE_BY_SETTING}`);
-      if((state == null)) {
+      if((state === null)) {
         state = {};
       }
       if(showState) {
@@ -991,7 +991,7 @@ var PageValue = (function() {
     static updateForkCount(pn) {
       // EventPageValueの「ef_」を参照してカウント
 
-      if(pn == null) {
+      if(pn === null) {
         pn = PageValue.getPageNum();
       }
       let fork_count = 0;
@@ -1053,7 +1053,7 @@ var PageValue = (function() {
 
     // 現在のフォーク番号を取得
     static getForkNum(pn) {
-      if(pn == null) {
+      if(pn === null) {
         pn = this.getPageNum();
       }
       const ret = PageValue.getEventPageValue(`${this.Key.eventPageRoot(pn)}${this.Key.PAGE_VALUES_SEPERATOR}${this.Key.FORK_NUM}`);
@@ -1073,7 +1073,7 @@ var PageValue = (function() {
     // フォーク総数を取得
     // @return [Integer] フォーク総数
     static getForkCount(pn) {
-      if(pn == null) {
+      if(pn === null) {
         pn = this.getPageNum();
       }
       const ret = PageValue.getEventPageValue(`${this.Key.eventPageRoot(pn)}${this.Key.PAGE_VALUES_SEPERATOR}${this.Key.FORK_COUNT}`);
@@ -1148,7 +1148,7 @@ var PageValue = (function() {
       if(window.scrollContents !== null) {
         const key = this.Key.worktableDisplayPosition();
         let position = this.getGeneralPageValue(key);
-        if((position == null)) {
+        if((position === null)) {
           position = {top: 0, left: 0};
         }
         const screenSize = Common.getScreenSize();
@@ -1229,7 +1229,7 @@ var PageValue = (function() {
 
     // Footprintに保存
     static saveToFootprint(targetObjId, isChangeBefore, eventDistNum, pageNum) {
-      if(pageNum == null) {
+      if(pageNum === null) {
         pageNum = PageValue.getPageNum();
       }
       return this.saveInstanceObjectToFootprint(targetObjId, isChangeBefore, eventDistNum, pageNum);
@@ -1238,7 +1238,7 @@ var PageValue = (function() {
     // インスタンスの変数値を保存
     static saveInstanceObjectToFootprint(targetObjId, isChangeBefore, eventDistNum, pageNum) {
       // オブジェクト
-      if(pageNum == null) {
+      if(pageNum === null) {
         pageNum = PageValue.getPageNum();
       }
       const obj = window.instanceMap[targetObjId];
@@ -1250,7 +1250,7 @@ var PageValue = (function() {
     // FIXME: 未使用
     static saveCommonStateToFootprint(isChangeBefore, eventDistNum, pageNum) {
       // 画面State
-      if(pageNum == null) {
+      if(pageNum === null) {
         pageNum = PageValue.getPageNum();
       }
       const se = new ScreenEvent();

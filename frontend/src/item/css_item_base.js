@@ -75,7 +75,7 @@ class CssItemBase extends ItemBase {
 
   //CSSを設定
   makeDesignConfigCss(forceUpdate) {
-    if(forceUpdate == null) {
+    if(forceUpdate === null) {
       forceUpdate = false;
     }
     const _applyCss = function(designs) {
@@ -140,10 +140,10 @@ class CssItemBase extends ItemBase {
   // @param [boolean] show 要素作成後に描画を表示するか
   // @param [Function] callback コールバック
   refresh(show, callback = null, doApplyDesignChange) {
-    if(show == null) {
+    if(show === null) {
       show = true;
     }
-    if(doApplyDesignChange == null) {
+    if(doApplyDesignChange === null) {
       doApplyDesignChange = true;
     }
     if(doApplyDesignChange) {
@@ -161,10 +161,10 @@ class CssItemBase extends ItemBase {
   applyDesignChange(doStyleSave, doRefresh) {
     // デザインコンフィグのCSS作成
     let addStyle;
-    if(doStyleSave == null) {
+    if(doStyleSave === null) {
       doStyleSave = true;
     }
-    if(doRefresh == null) {
+    if(doRefresh === null) {
       doRefresh = true;
     }
     this.makeDesignConfigCss();

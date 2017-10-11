@@ -119,7 +119,7 @@ var Project = (function() {
 
         // プロジェクト新規作成
         const projectName = $('.project_name').val();
-        if((projectName == null) || (projectName.length === 0)) {
+        if((projectName === null) || (projectName.length === 0)) {
           // エラー
           Project.showError(modalEmt, I18n.t('message.project.error.project_name'));
           return;

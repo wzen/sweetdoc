@@ -27,7 +27,7 @@ var Sidebar = (function() {
     // @param [Array] target フォーカス対象オブジェクト
     // @param [String] selectedBorderType 選択枠タイプ
     static openConfigSidebar(target = null, selectedBorderType) {
-      if(selectedBorderType == null) {
+      if(selectedBorderType === null) {
         selectedBorderType = "edit";
       }
       if(window.isWorkTable) {
@@ -215,7 +215,7 @@ var Sidebar = (function() {
 
     // イベントコンフィグ初期化
     static initEventConfig(distId, teNum) {
-      if(teNum == null) {
+      if(teNum === null) {
         teNum = 1;
       }
       const eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId);

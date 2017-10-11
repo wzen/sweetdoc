@@ -142,7 +142,7 @@ var PreloadItemArrow = (function() {
       // 進行方向を設定
       // @private
       _calDrection = function(beforeLoc, cood) {
-        if((beforeLoc == null) || (cood == null)) {
+        if((beforeLoc === null) || (cood === null)) {
           return;
         }
 
@@ -171,7 +171,7 @@ var PreloadItemArrow = (function() {
       // 矢印の頭を作成
       // @private
       _calTrianglePath = function(leftCood, rightCood) {
-        if((leftCood == null) || (rightCood == null)) {
+        if((leftCood === null) || (rightCood === null)) {
           return null;
         }
 
@@ -511,7 +511,7 @@ var PreloadItemArrow = (function() {
     // アイテム描画
     // @param [Boolean] show 要素作成後に表示するか
     itemDraw(show) {
-      if(show == null) {
+      if(show === null) {
         show = true;
       }
       super.itemDraw(show);
@@ -564,12 +564,12 @@ var PreloadItemArrow = (function() {
 
 Common.setClassToMap(PreloadItemArrow.CLASS_DIST_TOKEN, PreloadItemArrow);
 
-if((window.itemInitFuncList !== null) && (window.itemInitFuncList[PreloadItemArrow.CLASS_DIST_TOKEN] == null)) {
+if((window.itemInitFuncList !== null) && (window.itemInitFuncList[PreloadItemArrow.CLASS_DIST_TOKEN] === null)) {
   if(window.debug) {
     console.log('arrow loaded');
   }
   window.itemInitFuncList[PreloadItemArrow.CLASS_DIST_TOKEN] = function(option) {
-    if(option == null) {
+    if(option === null) {
       option = {};
     }
     if(window.isWorkTable && (PreloadItemArrow.jsLoaded !== null)) {

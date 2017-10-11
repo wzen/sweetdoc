@@ -30,7 +30,7 @@ var ConfigMenu = (function() {
     // デザインコンフィグ
     static getDesignConfig(obj, successCallback = null, errorCallback = null) {
       let designConfigRoot = $(`#${obj.getDesignConfigId()}`);
-      if((designConfigRoot == null) || (designConfigRoot.length === 0)) {
+      if((designConfigRoot === null) || (designConfigRoot.length === 0)) {
         let itemType = null;
         if(obj instanceof CanvasItemBase) {
           itemType = 'canvas';
@@ -53,7 +53,7 @@ var ConfigMenu = (function() {
             success(data) {
               if(data.resultSuccess) {
                 designConfigRoot = $(`#${obj.getDesignConfigId()}`);
-                if((designConfigRoot == null) || (designConfigRoot.length === 0)) {
+                if((designConfigRoot === null) || (designConfigRoot.length === 0)) {
                   const html = $(data.html).attr('id', obj.getDesignConfigId());
                   $('#design-config').append(html);
                   designConfigRoot = $(`#${obj.getDesignConfigId()}`);
@@ -88,7 +88,7 @@ var ConfigMenu = (function() {
 
     // メソッド変数コンフィグ読み込み
     static loadEventMethodValueConfig(eventConfigObj, itemObjClass, successCallback = null, errorCallback = null) {
-      if((itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]] == null)) {
+      if((itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]] === null)) {
         // メソッド無し
         if(successCallback !== null) {
           successCallback();

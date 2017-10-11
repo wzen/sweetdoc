@@ -328,7 +328,7 @@ var PreloadItemText = (function() {
         };
       _startOpenAnimation = function(callback = null) {
         let progressPercent, step1, timemax;
-        if((this._canvas == null)) {
+        if((this._canvas === null)) {
           this._canvas = document.getElementById(this.canvasElementId());
           this._context = this._canvas.getContext('2d');
           this._context.save();
@@ -469,7 +469,7 @@ var PreloadItemText = (function() {
       };
 
       _openCbk = function() {
-        if((this._canvas == null)) {
+        if((this._canvas === null)) {
           this._canvas = document.getElementById(this.canvasElementId());
           this._context = this._canvas.getContext('2d');
         }
@@ -516,17 +516,17 @@ var PreloadItemText = (function() {
       };
 
       _drawTextAndBalloonToCanvas = function(text, writingLength) {
-        if(writingLength == null) {
+        if(writingLength === null) {
           writingLength = text.length;
         }
-        if((text == null)) {
+        if((text === null)) {
           return;
         }
         const canvas = document.getElementById(this.canvasElementId());
         const context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
         _drawBalloon.call(this, context, 0, 0, canvas.width, canvas.height);
-        if((this.fontSize == null)) {
+        if((this.fontSize === null)) {
           this.fontSize = _calcFontSizeAbout.call(this, text, canvas.width, canvas.height, this.isFixedFontSize, this.drawHorizontal);
         }
         return _drawText.call(this, context, text, 0, 0, canvas.width, canvas.height, this.fontSize, writingLength);
@@ -548,10 +548,10 @@ var PreloadItemText = (function() {
       _drawBalloon = function(context, x, y, width, height, canvasWidth, canvasHeight) {
         let addDeg, asc, beginX, beginY, bex, bey, c1x, c1y, c2x, c2y, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, end, endX,
           endY, ex, ey, i, num, punkLineMax, punkLineMin, radiusX, radiusY, random, s;
-        if(canvasWidth == null) {
+        if(canvasWidth === null) {
           canvasWidth = width;
         }
-        if(canvasHeight == null) {
+        if(canvasHeight === null) {
           canvasHeight = height;
         }
         if(!this.showBalloon) {
@@ -711,7 +711,7 @@ var PreloadItemText = (function() {
           context.beginPath();
           context.lineJoin = 'round';
           context.lineCap = 'round';
-          if((this.balloonRandomIntValue == null)) {
+          if((this.balloonRandomIntValue === null)) {
             this.balloonRandomIntValue = _getRandomInt.call(this, punkLineMax, punkLineMin);
           }
           for(i = 0, end = num - 1, asc = 0 <= end; asc ? i <= end : i >= end; asc ? i++ : i--) {
@@ -769,7 +769,7 @@ var PreloadItemText = (function() {
           context.beginPath();
           context.lineJoin = 'round';
           context.lineCap = 'round';
-          if((this.balloonRandomIntValue == null)) {
+          if((this.balloonRandomIntValue === null)) {
             this.balloonRandomIntValue = _getRandomInt.call(this, punkLineMax, punkLineMin);
           }
           for(i = 0, end = num - 1, asc = 0 <= end; asc ? i <= end : i >= end; asc ? i++ : i--) {
@@ -1050,7 +1050,7 @@ var PreloadItemText = (function() {
 
       _drawText = function(context, text, x, y, width, height, fontSize, writingLength) {
         let c, idx, j;
-        if(writingLength == null) {
+        if(writingLength === null) {
           writingLength = text.length;
         }
         context.save();
@@ -1251,7 +1251,7 @@ var PreloadItemText = (function() {
           return;
         }
 
-        if((this.inputText == null)) {
+        if((this.inputText === null)) {
           // Blankの場合は小さめのフォントで表示
           return 12;
         }
@@ -1397,7 +1397,7 @@ var PreloadItemText = (function() {
         const context = nCanvas.getContext('2d');
         context.font = `${fontSize}px ${fontFamily}`;
         const wordWidth = context.measureText('あ').width;
-        if((this._defaultWorkWidth[fontSizeKey] == null)) {
+        if((this._defaultWorkWidth[fontSizeKey] === null)) {
           this._defaultWorkWidth[fontSizeKey] = {};
         }
         return this._defaultWorkWidth[fontSizeKey][fontFamily] = wordWidth;
@@ -1436,7 +1436,7 @@ var PreloadItemText = (function() {
     // アイテム描画
     // @param [Boolean] show 要素作成後に表示するか
     itemDraw(show) {
-      if(show == null) {
+      if(show === null) {
         show = true;
       }
       super.itemDraw(show);
@@ -1484,7 +1484,7 @@ var PreloadItemText = (function() {
     // @param [boolean] show 要素作成後に描画を表示するか
     // @param [Function] callback コールバック
     refresh(show, callback = null) {
-      if(show == null) {
+      if(show === null) {
         show = true;
       }
       return super.refresh(show, () => {
@@ -1528,7 +1528,7 @@ var PreloadItemText = (function() {
               // 配列調整
               let d;
               drawPaths = _adjustFreeHandPath.call(this, drawPaths);
-              if((drawPaths == null)) {
+              if((drawPaths === null)) {
                 // 調整失敗
                 return false;
               }
@@ -1712,7 +1712,7 @@ var PreloadItemText = (function() {
       this.showWithAnimation = this.showWithAnimation__after;
       this.showAnimationType = this.showAnimationType__after;
       this.showAnimationType;
-      if(this.showWithAnimation && (this._animationFlg['isOpen'] == null)) {
+      if(this.showWithAnimation && (this._animationFlg['isOpen'] === null)) {
         this.startOpenAnimation(() => {
           return this.changeText(opt);
         });
@@ -1739,7 +1739,7 @@ var PreloadItemText = (function() {
       this.showWithAnimation = this.showWithAnimation__after;
       this.showAnimationType = this.showAnimationType__after;
       this._forward = opt.forward;
-      if(this._forward && ((this._animationFlg['isOpen'] == null) || !this._animationFlg['isOpen'])) {
+      if(this._forward && ((this._animationFlg['isOpen'] === null) || !this._animationFlg['isOpen'])) {
         if(this.showWithAnimation) {
           this.startOpenAnimation(() => {
             return _openCbk.call(this);
@@ -1757,7 +1757,7 @@ var PreloadItemText = (function() {
             _oCbk.call(this);
           }
         } else if((opt.progress <= opt.progressMax) && (this.inputText !== null) && (this.inputText.length > 0)) {
-          if((this._writeTextRunning == null) || !this._writeTextRunning) {
+          if((this._writeTextRunning === null) || !this._writeTextRunning) {
             this._fixedTextAlpha = null;
             const adjustProgress = opt.progressMax / this.inputText.length;
             const writeLength = (this.inputText.length * (opt.progress + (adjustProgress * 0.5))) / opt.progressMax;
@@ -1819,12 +1819,12 @@ var PreloadItemText = (function() {
 
 Common.setClassToMap(PreloadItemText.CLASS_DIST_TOKEN, PreloadItemText);
 
-if((window.itemInitFuncList !== null) && (window.itemInitFuncList[PreloadItemText.CLASS_DIST_TOKEN] == null)) {
+if((window.itemInitFuncList !== null) && (window.itemInitFuncList[PreloadItemText.CLASS_DIST_TOKEN] === null)) {
   if(window.debug) {
     console.log('PreloadItemText loaded');
   }
   window.itemInitFuncList[PreloadItemText.CLASS_DIST_TOKEN] = function(option) {
-    if(option == null) {
+    if(option === null) {
       option = {};
     }
     if(window.isWorkTable && (PreloadItemText.jsLoaded !== null)) {

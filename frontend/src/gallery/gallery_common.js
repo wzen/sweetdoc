@@ -78,12 +78,12 @@ class GalleryCommon {
 
   static initLoadMoreButtonEvent() {
     return $(".footer_button > button").click(() => {
-      if((window.contentsTakeCount == null) || (window.contentsTotalCount == null)) {
+      if((window.contentsTakeCount === null) || (window.contentsTotalCount === null)) {
         $('#footer_button_wrapper').hide();
         Common.hideModalView(true);
         return false;
       }
-      if((window.gridPage == null)) {
+      if((window.gridPage === null)) {
         window.gridPage = 1;
       }
       Common.showModalFlashMessage('Loading...');

@@ -179,7 +179,7 @@ class Paging {
   // @param [Integer] selectedNum 選択ページ番号
   // @param [Integer] selectedNum 選択フォーク番号
   static selectPage(selectedPageNum, selectedForkNum, callback = null) {
-    if(selectedForkNum == null) {
+    if(selectedForkNum === null) {
       selectedForkNum = PageValue.Key.EF_MASTER_FORKNUM;
     }
     if(selectedPageNum === PageValue.getPageNum()) {
@@ -295,7 +295,7 @@ class Paging {
   // @param [Integer] selectedForkNum 選択フォーク番号
   // @param [Function] コールバック
   static selectFork(selectedForkNum, callback = null) {
-    if((selectedForkNum == null) || (selectedForkNum === PageValue.getForkNum())) {
+    if((selectedForkNum === null) || (selectedForkNum === PageValue.getForkNum())) {
       // フォーク番号が同じ場合は処理なし
       if(callback !== null) {
         callback();

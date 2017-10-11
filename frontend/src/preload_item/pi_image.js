@@ -39,7 +39,7 @@ var PreloadItemImage = (function() {
           return;
         }
 
-        if((this.imagePath == null)) {
+        if((this.imagePath === null)) {
           // 作成不可
           callback(show);
           return;
@@ -119,7 +119,7 @@ var PreloadItemImage = (function() {
     // @param [boolean] show 要素作成後に描画を表示するか
     // @param [Function] callback コールバック
     refresh(show, callback = null) {
-      if(show == null) {
+      if(show === null) {
         show = true;
       }
       this.removeItemElement();
@@ -147,7 +147,7 @@ var PreloadItemImage = (function() {
     // アイテム用のテンプレートHTMLを読み込み
     // @return [String] HTML
     createItemElement(callback, show, showModal) {
-      if(showModal == null) {
+      if(showModal === null) {
         showModal = true;
       }
       return _makeImageObjectIfNeed.call(this, show => {
@@ -223,12 +223,12 @@ var PreloadItemImage = (function() {
 
 Common.setClassToMap(PreloadItemImage.CLASS_DIST_TOKEN, PreloadItemImage);
 
-if((window.itemInitFuncList !== null) && (window.itemInitFuncList[PreloadItemImage.CLASS_DIST_TOKEN] == null)) {
+if((window.itemInitFuncList !== null) && (window.itemInitFuncList[PreloadItemImage.CLASS_DIST_TOKEN] === null)) {
   if(window.debug) {
     console.log('PreloadImage loaded');
   }
   window.itemInitFuncList[PreloadItemImage.CLASS_DIST_TOKEN] = function(option) {
-    if(option == null) {
+    if(option === null) {
       option = {};
     }
     if(window.isWorkTable && (PreloadItemImage.jsLoaded !== null)) {

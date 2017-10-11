@@ -85,7 +85,7 @@ class LocalStorage {
 
     if(key !== this.userToken) {
       const saveTime = localStorage.getItem(key);
-      if((saveTime == null)) {
+      if((saveTime === null)) {
         return true;
       }
       const diffTime = Common.calculateDiffTime($.now(), saveTime);

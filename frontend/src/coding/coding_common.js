@@ -112,7 +112,7 @@ var CodingCommon = (function() {
       _userCodingClassNameByNodePath = nodePath => nodePath.replace(/\//g, '_').replace('.', '_');
 
       _countSameFilename = function(node, name, ext) {
-        if(ext == null) {
+        if(ext === null) {
           ext = '';
         }
         const childrenText = $(node).next('.jstree-children').find('.jstree-node > .jstree-anchor').map(function() {
@@ -211,7 +211,7 @@ var CodingCommon = (function() {
 
       editor.getSession().off('change');
       editor.getSession().on('change', function(e) {
-        if((window.editing[editorId] == null) || !window.editing[editorId]) {
+        if((window.editing[editorId] === null) || !window.editing[editorId]) {
           // 編集フラグ
           window.editing[editorId] = true;
           const tab = $('#my_tab').find(`a[href=#${editorId}_wrapper]`);
@@ -845,7 +845,7 @@ var CodingCommon = (function() {
 
     static activeTabEditor(user_coding_id) {
       let tab = $('#my_tab');
-      if((tab == null) || (tab.length === 0)) {
+      if((tab === null) || (tab.length === 0)) {
         // タブビュー作成
         $('#editor_tab_wrapper').append('<div id="editor_header_menu"><div><div><a><div class="editor_btn preview">Preview</div></a></div></div></div><div id="editor_contents_wrapper"><div><ul id="my_tab" class="nav nav-tabs" role="tablist"></ul><div id="my_tab_content" class="tab-content"></div></div></div>');
         tab = $('#my_tab');
@@ -861,7 +861,7 @@ var CodingCommon = (function() {
 
       const editorWrapperId = `uc_${user_coding_id}_wrapper`;
       const editorWrapper = $(`#${editorWrapperId}`);
-      if((editorWrapper == null) || (editorWrapper.length === 0)) {
+      if((editorWrapper === null) || (editorWrapper.length === 0)) {
         // エディタ作成
         return CodingCommon.loadCodeData(user_coding_id, function(data) {
           const loaded = data.load_data[0];
@@ -898,7 +898,7 @@ var CodingCommon = (function() {
 
     static saveEditorState(immediate) {
       let saveEditorStateTimer;
-      if(immediate == null) {
+      if(immediate === null) {
         immediate = false;
       }
       if((window.saveEditorStateNowSaving !== null) && window.saveEditorStateNowSaving) {

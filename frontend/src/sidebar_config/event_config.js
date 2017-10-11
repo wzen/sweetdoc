@@ -218,7 +218,7 @@ var EventConfig = (function() {
     // イベントコンフィグ表示前初期化
     static initEventConfig(distId, teNum) {
       // 選択枠削除
-      if(teNum == null) {
+      if(teNum === null) {
         teNum = 1;
       }
       WorktableCommon.clearTimelineSelectedBorderInMainWrapper();
@@ -337,7 +337,7 @@ var EventConfig = (function() {
 
     // 入力値を適用する
     writeToEventPageValue() {
-      if((this[EventPageValueBase.PageValueKey.ACTIONTYPE] == null)) {
+      if((this[EventPageValueBase.PageValueKey.ACTIONTYPE] === null)) {
         if(window.debug) {
           console.log('validation error');
         }
@@ -345,7 +345,7 @@ var EventConfig = (function() {
       }
 
       // 入力値を保存
-      if((this[EventPageValueBase.PageValueKey.DIST_ID] == null)) {
+      if((this[EventPageValueBase.PageValueKey.DIST_ID] === null)) {
         this[EventPageValueBase.PageValueKey.DIST_ID] = Common.generateId();
       }
 
@@ -525,7 +525,7 @@ var EventConfig = (function() {
           let methodClone;
           const actionParent = $(`<div class='${className}' style='display:none'></div>`);
           const props = itemClass.actionProperties;
-          if((props == null)) {
+          if((props === null)) {
             if(window.debug) {
               console.log('Not declaration actionProperties');
             }
@@ -561,8 +561,8 @@ var EventConfig = (function() {
 
     // 変数編集コンフィグの初期化
     initEventVarModifyConfig(objClass) {
-      if((objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]] == null) ||
-        (objClass.actionPropertiesModifiableVars(this[EventPageValueBase.PageValueKey.METHODNAME]) == null)) {
+      if((objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]] === null) ||
+        (objClass.actionPropertiesModifiableVars(this[EventPageValueBase.PageValueKey.METHODNAME]) === null)) {
         // メソッド or 変数編集無し
         return;
       }
@@ -608,8 +608,8 @@ var EventConfig = (function() {
     // 独自変数コンフィグの初期化
     initEventSpecificConfig(objClass) {
       let v;
-      if((objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]] == null) ||
-        (objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.SPECIFIC_METHOD_VALUES] == null)) {
+      if((objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]] === null) ||
+        (objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.SPECIFIC_METHOD_VALUES] === null)) {
         // メソッド or 独自コンフィグ無し
         return;
       }
@@ -665,13 +665,13 @@ var EventConfig = (function() {
     // @param [Int] max 最大値
     // @param [Int] stepValue 進捗数
     settingModifiableVarSlider(varName, defaultValue, openChildrenValue, min, max, stepValue) {
-      if(min == null) {
+      if(min === null) {
         min = 0;
       }
-      if(max == null) {
+      if(max === null) {
         max = 100;
       }
-      if(stepValue == null) {
+      if(stepValue === null) {
         stepValue = 1;
       }
       const meterClassName = `${varName}_meter`;
@@ -903,7 +903,7 @@ var EventConfig = (function() {
     static switchChildrenConfig(e, varName, openValue, targetValue) {
       for(let cKey in openValue) {
         let cValue = openValue[cKey];
-        if((cValue == null)) {
+        if((cValue === null)) {
           // 判定値無し
           return;
         }

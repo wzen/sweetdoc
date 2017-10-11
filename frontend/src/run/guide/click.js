@@ -110,7 +110,7 @@ ${anim}\
     // カラーコード検索 rgb形式
     const re = /((2[0-4]\d|25[0-5]|1\d{1,2}|[1-9]\d|\d)( ?, ?)){2}(2[0-4]\d|25[0-5]|1\d{1,2}|[1-9]\d|\d)/g;
     const colors = background.match(re);
-    if((colors == null)) {
+    if((colors === null)) {
       // 見つからない場合は黒とする
       return 'black';
     }

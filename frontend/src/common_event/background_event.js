@@ -67,7 +67,7 @@ class BackgroundEvent extends CommonEvent {
 
       // 変更を戻して再表示
       refresh(show, callback = null) {
-        if(show == null) {
+        if(show === null) {
           show = true;
         }
         window.scrollInside.css('backgroundColor', '');

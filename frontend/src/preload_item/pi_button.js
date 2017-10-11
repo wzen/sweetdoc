@@ -299,12 +299,12 @@ PreloadItemButton.initClass();
 Common.setClassToMap(PreloadItemButton.CLASS_DIST_TOKEN, PreloadItemButton);
 
 // 初期化
-if((window.itemInitFuncList !== null) && (window.itemInitFuncList[PreloadItemButton.CLASS_DIST_TOKEN] == null)) {
+if((window.itemInitFuncList !== null) && (window.itemInitFuncList[PreloadItemButton.CLASS_DIST_TOKEN] === null)) {
   if(window.debug) {
     console.log('button loaded');
   }
   window.itemInitFuncList[PreloadItemButton.CLASS_DIST_TOKEN] = function(option) {
-    if(option == null) {
+    if(option === null) {
       option = {};
     }
     if(window.isWorkTable && (PreloadItemButton.jsLoaded !== null)) {

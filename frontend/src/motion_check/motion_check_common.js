@@ -11,7 +11,7 @@ class MotionCheckCommon {
     //h = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT)
 //      if h? && Object.keys(h).length > 0
     // Runのキャッシュを削除
-    if(newWindow == null) {
+    if(newWindow === null) {
       newWindow = false;
     }
     window.lStorage.clearRun();

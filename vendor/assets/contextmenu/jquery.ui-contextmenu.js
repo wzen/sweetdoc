@@ -323,7 +323,7 @@
 		/** Convert a nested array of command objects into a <ul> structure. */
 		createMenuMarkup: function(options, $parentUl){
 			var i, menu, $ul, $li;
-			if( $parentUl == null ){
+			if( $parentUl === null ){
 				$parentUl = $("<ul class='ui-helper-hidden' />").appendTo("body");
 			}
 			for(i = 0; i < options.length; i++){

@@ -73,14 +73,14 @@ class CommonEvent {
   }
 
   static getInstance() {
-    if((this.instance[PageValue.getPageNum()] == null)) {
+    if((this.instance[PageValue.getPageNum()] === null)) {
       this.instance[PageValue.getPageNum()] = new this.PrivateClass();
     }
     return this.instance[PageValue.getPageNum()];
   }
 
   static hasInstanceCache(pn) {
-    if(pn == null) {
+    if(pn === null) {
       pn = PageValue.getPageNum();
     }
     return (this.instance[pn] !== null);

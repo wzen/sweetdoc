@@ -320,7 +320,7 @@ var RunCommon = (function() {
     // Handleスクロールビューの初期化
     static initHandleScrollView(withSetupScrollEvent) {
       // スクロール位置初期化
-      if(withSetupScrollEvent == null) {
+      if(withSetupScrollEvent === null) {
         withSetupScrollEvent = true;
       }
       window.skipScrollEvent = true;
@@ -393,10 +393,10 @@ var RunCommon = (function() {
     // @param [Function] callback コールバック
     // @param [Boolean] forceUpdate 既存データを上書きするか
     static loadPagingPageValue(loadPageNum, doLoadFootprint, callback = null, forceUpdate) {
-      if(doLoadFootprint == null) {
+      if(doLoadFootprint === null) {
         doLoadFootprint = false;
       }
-      if(forceUpdate == null) {
+      if(forceUpdate === null) {
         forceUpdate = false;
       }
       const lastPageNum = loadPageNum + Constant.Paging.PRELOAD_PAGEVALUE_NUM;
@@ -407,7 +407,7 @@ var RunCommon = (function() {
         } else {
           const className = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', i);
           const section = $(`#${constant.Paging.ROOT_ID}`).find(`.${className}:first`);
-          if((section == null) || (section.length === 0)) {
+          if((section === null) || (section.length === 0)) {
             targetPages.push(i);
           }
         }
@@ -749,7 +749,7 @@ var RunCommon = (function() {
     }
 
     static start(useLocalStorate) {
-      if(useLocalStorate == null) {
+      if(useLocalStorate === null) {
         useLocalStorate = false;
       }
       window.eventAction = null;

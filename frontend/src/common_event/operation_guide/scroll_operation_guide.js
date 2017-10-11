@@ -25,7 +25,7 @@ class ScrollOperationGuide {
 
   constructor(type, direction) {
     this.type = type;
-    if(direction == null) {
+    if(direction === null) {
       direction = this.constructor.Direction.FORWORD;
     }
     this.direction = direction;

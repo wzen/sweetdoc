@@ -84,7 +84,7 @@ var EventDragPointingRect = (function() {
         }
 
         endDraw(zindex, show, callback = null) {
-          if(show == null) {
+          if(show === null) {
             show = true;
           }
           this.itemSize.x += scrollContents.scrollLeft();
@@ -104,19 +104,19 @@ var EventDragPointingRect = (function() {
 
         // 以下の処理はなし
         saveObj(newCreated) {
-          if(newCreated == null) {
+          if(newCreated === null) {
             newCreated = false;
           }
         }
 
         getItemPropFromPageValue(prop, isCache) {
-          if(isCache == null) {
+          if(isCache === null) {
             isCache = false;
           }
         }
 
         setItemPropToPageValue(prop, value, isCache) {
-          if(isCache == null) {
+          if(isCache === null) {
             isCache = false;
           }
         }
@@ -125,7 +125,7 @@ var EventDragPointingRect = (function() {
         }
 
         makeCss(forceUpdate) {
-          if(forceUpdate == null) {
+          if(forceUpdate === null) {
             forceUpdate = false;
           }
         }
@@ -138,7 +138,7 @@ var EventDragPointingRect = (function() {
     }
 
     static getInstance(cood = null) {
-      if((instance == null)) {
+      if((instance === null)) {
         instance = new this.PrivateClass();
       }
       instance.startCood(cood);
@@ -193,7 +193,7 @@ var EventDragPointingRect = (function() {
 })();
 
 $.fn.eventDragPointingRect = function(opt, eventType) {
-  if(eventType == null) {
+  if(eventType === null) {
     eventType = 'click';
   }
   if(eventType === 'click') {

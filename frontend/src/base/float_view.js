@@ -31,7 +31,7 @@ class FloatView {
   }
 
   static show(message, type, showSeconds) {
-    if(showSeconds == null) {
+    if(showSeconds === null) {
       showSeconds = -1;
     }
     if(window.isWorkTable && !window.initDone) {
@@ -73,7 +73,7 @@ class FloatView {
   }
 
   static showWithCloseButton(message, type, closeFunc = null, withDisableOperation) {
-    if(withDisableOperation == null) {
+    if(withDisableOperation === null) {
       withDisableOperation = false;
     }
     if(window.isWorkTable && !window.initDone) {

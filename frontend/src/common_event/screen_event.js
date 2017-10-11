@@ -79,7 +79,7 @@ class ScreenEvent extends CommonEvent {
 
             if(this._keepDispMag && (scale > WorktableCommon.getWorktableViewScale())) {
               let overlay = $('#preview_position_overlay');
-              if((overlay == null) || (overlay.length === 0)) {
+              if((overlay === null) || (overlay.length === 0)) {
                 // オーバーレイを被せる
                 const w = $(window.drawingCanvas).attr('width');
                 const h = $(window.drawingCanvas).attr('height');
@@ -146,7 +146,7 @@ class ScreenEvent extends CommonEvent {
         // イベントの初期化
         // @param [Object] event 設定イベント
         initEvent(event, _keepDispMag) {
-          if(_keepDispMag == null) {
+          if(_keepDispMag === null) {
             _keepDispMag = false;
           }
           this._keepDispMag = _keepDispMag;
@@ -171,7 +171,7 @@ class ScreenEvent extends CommonEvent {
 
         // 変更を戻して再表示
         refresh(show, callback = null) {
-          if(show == null) {
+          if(show === null) {
             show = true;
           }
           const s = null;
@@ -302,7 +302,7 @@ class ScreenEvent extends CommonEvent {
         }
 
         getNowScreenEventScale() {
-          if((this._nowScreenEventScale == null)) {
+          if((this._nowScreenEventScale === null)) {
             // 設定されていない場合は初期値を返す
             this._nowScreenEventScale = _getInitScale.call(this);
           }

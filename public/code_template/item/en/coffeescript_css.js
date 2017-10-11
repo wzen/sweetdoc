@@ -205,9 +205,9 @@ ItemPreviewTemp = (function(superClass) {
 
 Common.setClassToMap(ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp);
 
-if ((window.itemInitFuncList !== null) && (window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] == null)) {
+if ((window.itemInitFuncList !== null) && (window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] === null)) {
   window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] = function(option) {
-    if (option == null) {
+    if (option === null) {
       option = {};
     }
     if (window.isWorkTable && (ItemPreviewTemp.jsLoaded !== null)) {

@@ -76,7 +76,7 @@
         };
 
         // 表示内容読み込み済みの場合はサーバアクセスなし
-        if((emt == null) || (emt.length === 0)) {
+        if((emt === null) || (emt.length === 0)) {
           // サーバから表示内容読み込み
           // ローディング表示
           _showModalFlashMessage.call(this, 'Please Wait', true);
@@ -210,7 +210,7 @@
 
       if(window.webkitRequestAnimationFrame) {
         wrapper = time => {
-          if((time == null)) {
+          if((time === null)) {
             time = +new Date();
           }
           return this.callback(time);
@@ -286,7 +286,7 @@
 
     // プロジェクト表示サイズ設定
     static initScreenSize(reset) {
-      if(reset == null) {
+      if(reset === null) {
         reset = false;
       }
       if(reset) {
@@ -502,7 +502,7 @@
     // @param [Object] obj 複製対象オブジェクト
     // @return [Object] 複製後オブジェクト
     static makeClone(obj) {
-      if((obj == null) || (typeof obj !== 'object')) {
+      if((obj === null) || (typeof obj !== 'object')) {
         return obj;
       }
       if(obj instanceof Date) {
@@ -536,13 +536,13 @@
     // @param [Boolean] collapsed 初期表示でページを閉じた状態にするか
     // @return [Boolean] ページを作成したか
     static createdMainContainerIfNeeded(pageNum, collapsed) {
-      if(collapsed == null) {
+      if(collapsed === null) {
         collapsed = false;
       }
       const root = $(`#${constant.Paging.ROOT_ID}`);
       const sectionClass = constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
       const pageSection = $(`.${sectionClass}`, root);
-      if((pageSection == null) || (pageSection.length === 0)) {
+      if((pageSection === null) || (pageSection.length === 0)) {
         // Tempからコピー
         let temp = $(`#${Common.MAIN_TEMP_ID}`).children(':first').clone(true);
         let style = '';
@@ -568,13 +568,13 @@
 
     // ページ内のインスタンスを取得
     static instancesInPage(pn, withCreateInstance, withInitFromPageValue) {
-      if(pn == null) {
+      if(pn === null) {
         pn = PageValue.getPageNum();
       }
-      if(withCreateInstance == null) {
+      if(withCreateInstance === null) {
         withCreateInstance = false;
       }
-      if(withInitFromPageValue == null) {
+      if(withInitFromPageValue === null) {
         withInitFromPageValue = false;
       }
       const ret = [];
@@ -595,13 +595,13 @@
 
     // ページ内のアイテムインスタンスを取得
     static itemInstancesInPage(pn, withCreateInstance, withInitFromPageValue) {
-      if(pn == null) {
+      if(pn === null) {
         pn = PageValue.getPageNum();
       }
-      if(withCreateInstance == null) {
+      if(withCreateInstance === null) {
         withCreateInstance = false;
       }
-      if(withInitFromPageValue == null) {
+      if(withInitFromPageValue === null) {
         withInitFromPageValue = false;
       }
       return $.grep(this.instancesInPage(pn, withCreateInstance, withInitFromPageValue), n => n instanceof ItemBase);
@@ -610,7 +610,7 @@
     // 最初にフォーカスするアイテムオブジェクトを取得
     static firstFocusItemObj(pn) {
       // 暫定でアイテムはデフォルトでフォーカスしない
-      if(pn == null) {
+      if(pn === null) {
         pn = PageValue.getPageNum();
       }
       return true;
@@ -637,10 +637,10 @@
     // @param [Object] target 対象アイテム
     // @param [Fucntion] callback コールバック
     static focusToTarget(target, callback = null, immediate) {
-      if(immediate == null) {
+      if(immediate === null) {
         immediate = false;
       }
-      if((target == null) || (target.length === 0)) {
+      if((target === null) || (target.length === 0)) {
         // ターゲット無し
         return;
       }
@@ -693,10 +693,10 @@
     // @param [Float] top Y中央値
     // @param [Float] left X中央値
     static updateScrollContentsPosition(top, left, immediate, withUpdateScreenEventVar, callback = null) {
-      if(immediate == null) {
+      if(immediate === null) {
         immediate = true;
       }
-      if(withUpdateScreenEventVar == null) {
+      if(withUpdateScreenEventVar === null) {
         withUpdateScreenEventVar = true;
       }
       if(isNaN(top) || isNaN(left)) {
@@ -765,7 +765,7 @@
 
     // スクロール位置を中心に初期化
     static resetScrollContentsPositionToCenter(withUpdateScreenEventVar) {
-      if(withUpdateScreenEventVar == null) {
+      if(withUpdateScreenEventVar === null) {
         withUpdateScreenEventVar = true;
       }
       const scrollContentsSize = this.scrollContentsSizeUnderViewScale();
@@ -776,11 +776,11 @@
 
     // ワークテーブルの画面倍率を取得
     static getWorktableViewScale(pn) {
-      if(pn == null) {
+      if(pn === null) {
         pn = PageValue.getPageNum();
       }
       let scale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale(pn));
-      if((scale == null)) {
+      if((scale === null)) {
         scale = 1.0;
         if(window.isWorkTable) {
           WorktableCommon.setWorktableViewScale(scale);
@@ -790,7 +790,7 @@
     }
 
     static saveDisplayPosition(top, left, immediate, callback = null) {
-      if(immediate == null) {
+      if(immediate === null) {
         immediate = true;
       }
       const _save = function() {
@@ -860,7 +860,7 @@
     // @param [Integer] dist ClassDistToken
     // @return [Object] 対象クラス
     static getClassFromMap(dist) {
-      if((window.classMap == null)) {
+      if((window.classMap === null)) {
         window.classMap = {};
       }
       let d = dist;
@@ -879,7 +879,7 @@
         d = String(dist);
       }
 
-      if((window.classMap == null)) {
+      if((window.classMap === null)) {
         window.classMap = {};
       }
       return window.classMap[d] = value;
@@ -900,7 +900,7 @@
     // @param [Integer] classDistToken
     // @return [Object] インスタンス
     static getInstanceFromMap(id, classDistToken, withInitFromPagevalue) {
-      if(withInitFromPagevalue == null) {
+      if(withInitFromPagevalue === null) {
         withInitFromPagevalue = true;
       }
       if(typeof id !== "string") {
@@ -914,17 +914,17 @@
     // @param [Integer] id イベントID
     // @param [Integer] classDistToken
     static setInstanceFromMap(id, classDistToken, withInitFromPagevalue) {
-      if(withInitFromPagevalue == null) {
+      if(withInitFromPagevalue === null) {
         withInitFromPagevalue = true;
       }
       if(typeof id !== "string") {
         id = String(id);
       }
 
-      if((window.instanceMap == null)) {
+      if((window.instanceMap === null)) {
         window.instanceMap = {};
       }
-      if((window.instanceMap[id] == null)) {
+      if((window.instanceMap[id] === null)) {
         // インスタンスを保存する
         const instance = new (Common.getClassFromMap(classDistToken))();
         instance.id = id;
@@ -981,7 +981,7 @@
     // @param [String] format 変換フォーマット
     // @return [String] フォーマット後日付
     static formatDate(date, format) {
-      if(format == null) {
+      if(format === null) {
         format = 'YYYY-MM-DD hh:mm:ss';
       }
       format = format.replace(/YYYY/g, date.getFullYear());
@@ -1060,7 +1060,7 @@
         span = year === 1 ? 'year' : 'years';
         ret = `${year} ${span} ago`;
       }
-      if((ret == null)) {
+      if((ret === null)) {
         ret = '';
       }
       return ret;
@@ -1095,10 +1095,10 @@
     // @param [Integer] type モーダルビュータイプ
     // @param [Function] prepareShowFunc 表示前処理
     static showModalView(type, enableOverlayClose, prepareShowFunc = null, prepareShowFuncParams) {
-      if(enableOverlayClose == null) {
+      if(enableOverlayClose === null) {
         enableOverlayClose = true;
       }
-      if(prepareShowFuncParams == null) {
+      if(prepareShowFuncParams === null) {
         prepareShowFuncParams = {};
       }
       return _showModalView.call(this, type, prepareShowFunc, prepareShowFuncParams, false, function() {
@@ -1120,10 +1120,10 @@
 
     // メッセージモーダル表示
     static showModalWithMessage(message, enableOverlayClose, immediately) {
-      if(enableOverlayClose == null) {
+      if(enableOverlayClose === null) {
         enableOverlayClose = true;
       }
-      if(immediately == null) {
+      if(immediately === null) {
         immediately = true;
       }
       const type = constant.ModalViewType.MESSAGE;
@@ -1159,10 +1159,10 @@
     // 中央センタリング
     static modalCentering(type = null, animation, b = null, c = null) {
       let emt;
-      if(animation == null) {
+      if(animation === null) {
         animation = false;
       }
-      if((type == null)) {
+      if((type === null)) {
         // 表示しているモーダルを対象にする
         emt = $('body').children(".modal-content:visible");
       } else {
@@ -1211,7 +1211,7 @@
 
     // モーダル非表示
     static hideModalView(immediately) {
-      if(immediately == null) {
+      if(immediately === null) {
         immediately = false;
       }
       if(immediately) {
@@ -1227,7 +1227,7 @@
     // @param [Integer] pn ページ番号
     // @return [Integer] 計算後zidnex
     static plusPagingZindex(zindex, pn) {
-      if(pn == null) {
+      if(pn === null) {
         pn = PageValue.getPageNum();
       }
       return ((window.pageNumMax - pn) * (constant.Zindex.EVENTFLOAT + 1)) + zindex;
@@ -1238,7 +1238,7 @@
     // @param [Integer] pn ページ番号
     // @return [Integer] 計算後zidnex
     static minusPagingZindex(zindex, pn) {
-      if(pn == null) {
+      if(pn === null) {
         pn = PageValue.getPageNum();
       }
       return zindex - ((window.pageNumMax - pn) * (constant.Zindex.EVENTFLOAT + 1));
@@ -1248,7 +1248,7 @@
     // @param [Integer] pageNum ページ番号
     static removeAllItem(pageNum = null, withDeleteInstanceMap) {
       let cls, clsToken;
-      if(withDeleteInstanceMap == null) {
+      if(withDeleteInstanceMap === null) {
         withDeleteInstanceMap = true;
       }
       if(pageNum !== null) {
@@ -1320,7 +1320,7 @@
 
       classDistTokens = $.grep(classDistTokens, n =>
         // 読み込み済みのものは除外
-        window.itemInitFuncList[n] == null
+        window.itemInitFuncList[n] === null
       );
       // 読み込むIDがない場合はコールバック実行して終了
       if(classDistTokens.length === 0) {
@@ -1365,7 +1365,7 @@
           data,
           success(data) {
             if(data.resultSuccess) {
-              if((data.indexes == null) || (data.indexes.length === 0)) {
+              if((data.indexes === null) || (data.indexes.length === 0)) {
                 if(callback !== null) {
                   return callback();
                 }
@@ -1404,7 +1404,7 @@
 
     // インスタンスPageValueから全てのJSを取得
     static loadJsFromInstancePageValue(callback = null, pageNum) {
-      if(pageNum == null) {
+      if(pageNum === null) {
         pageNum = PageValue.getPageNum();
       }
       const pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum));
@@ -1433,7 +1433,7 @@
     // @param [Function] callback 設定後のコールバック
     static availJs(classDistToken, jsSrc, option, callback = null) {
       let t;
-      if(option == null) {
+      if(option === null) {
         option = {};
       }
       window.loadedClassDistToken = classDistToken;
@@ -1572,7 +1572,7 @@
     // 色変更差分のキャッシュを取得
     static colorChangeCacheData(beforeColor, afterColor, length, colorType) {
       let i, index, val;
-      if(colorType == null) {
+      if(colorType === null) {
         colorType = 'hex';
       }
       const ret = [];

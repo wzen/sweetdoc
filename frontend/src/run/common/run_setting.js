@@ -23,7 +23,7 @@ var RunSetting = (function() {
     // ガイド表示
     static isShowGuide() {
       let ret = PageValue.getSettingPageValue(this.PageValueKey.SHOW_GUIDE);
-      ret = (ret == null) || (ret === 'true');
+      ret = (ret === null) || (ret === 'true');
       return ret;
     }
 

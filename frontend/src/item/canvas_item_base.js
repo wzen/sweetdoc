@@ -71,7 +71,7 @@ class CanvasItemBase extends ItemBase {
   // アイテム描画
   // @param [Boolean] show 要素作成後に表示するか
   itemDraw(show) {
-    if(show == null) {
+    if(show === null) {
       show = true;
     }
     super.itemDraw(show);

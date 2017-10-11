@@ -74,7 +74,7 @@ const itemBaseWorktableExtend = {
   // @param [Int] zindex z-index
   // @param [boolean] show 要素作成後に描画を表示するか
   endDraw(zindex, show, callback = null) {
-    if(show == null) {
+    if(show === null) {
       show = true;
     }
     this.zindex = zindex;
@@ -101,7 +101,7 @@ const itemBaseWorktableExtend = {
   // 描画&コンフィグ作成
   // @param [Boolean] show 要素作成後に描画を表示するか
   drawAndMakeConfigsAndWritePageValue(show, callback = null) {
-    if(show == null) {
+    if(show === null) {
       show = true;
     }
     if(window.runDebug) {
@@ -131,7 +131,7 @@ const itemBaseWorktableExtend = {
   // @param [boolean] show 要素作成後に描画を表示するか
   // @return [Boolean] 処理結果
   drawAndMakeConfigs(show, callback = null) {
-    if(show == null) {
+    if(show === null) {
       show = true;
     }
     if(window.runDebug) {
@@ -408,7 +408,7 @@ const itemBaseWorktableExtend = {
   // @param [Int] max 最大値
   // @param [Int] stepValue 進捗数
   settingDesignSlider(className, min, max, stepValue) {
-    if(stepValue == null) {
+    if(stepValue === null) {
       stepValue = 1;
     }
     const designConfigRoot = $(`#${this.getDesignConfigId()}`);
@@ -481,7 +481,7 @@ const itemBaseWorktableExtend = {
   // @param [Int] min 最小値
   // @param [Int] max 最大値
   settingGradientDegSlider(className, min, max, each45Degrees) {
-    if(each45Degrees == null) {
+    if(each45Degrees === null) {
       each45Degrees = true;
     }
     const designConfigRoot = $(`#${this.getDesignConfigId()}`);
@@ -614,13 +614,13 @@ const itemBaseWorktableExtend = {
   // @param [Int] max 最大値
   // @param [Int] stepValue 進捗数
   settingModifiableVarSlider(configRoot, varName, openChildrenValue, min, max, stepValue) {
-    if(min == null) {
+    if(min === null) {
       min = 0;
     }
-    if(max == null) {
+    if(max === null) {
       max = 100;
     }
-    if(stepValue == null) {
+    if(stepValue === null) {
       stepValue = 1;
     }
     const meterElement = $(`.${varName}_meter`, configRoot);

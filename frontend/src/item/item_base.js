@@ -126,10 +126,10 @@ var ItemBase = (function() {
 
     // アイテム表示
     showItem(callback = null, immediate, duration) {
-      if(immediate == null) {
+      if(immediate === null) {
         immediate = true;
       }
-      if(duration == null) {
+      if(duration === null) {
         duration = 0;
       }
       if(immediate || (window.isWorkTable && window.previewRunning)) {
@@ -151,10 +151,10 @@ var ItemBase = (function() {
 
     // アイテム非表示
     hideItem(callback = null, immediate, duration) {
-      if(immediate == null) {
+      if(immediate === null) {
         immediate = true;
       }
-      if(duration == null) {
+      if(duration === null) {
         duration = 0;
       }
       if(immediate || (window.isWorkTable && window.previewRunning)) {
@@ -178,7 +178,7 @@ var ItemBase = (function() {
     // @abstract
     // @param [Boolean] show 要素作成後に表示するか
     itemDraw(show) {
-      if(show == null) {
+      if(show === null) {
         show = true;
       }
       if(show) {
@@ -190,10 +190,10 @@ var ItemBase = (function() {
 
     willChapter(callback = null) {
       // nullの場合もデフォルトで表示
-      if((this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER] == null) || this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER]) {
+      if((this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER] === null) || this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER]) {
         // 表示
         let d = this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION];
-        if((d == null)) {
+        if((d === null)) {
           d = 0;
         }
         return this.showItem(() => {
@@ -226,7 +226,7 @@ var ItemBase = (function() {
     // @param [boolean] show 要素作成後に描画を表示するか
     // @param [Function] callback コールバック
     refresh(show, callback = null) {
-      if(show == null) {
+      if(show === null) {
         show = true;
       }
       return requestAnimationFrame(() => {
@@ -251,7 +251,7 @@ var ItemBase = (function() {
     // @param [boolean] show 要素作成後に描画を表示するか
     // @param [Function] callback コールバック
     refreshIfItemNotExist(show, callback = null) {
-      if(show == null) {
+      if(show === null) {
         show = true;
       }
       if(window.runDebug) {
@@ -268,7 +268,7 @@ var ItemBase = (function() {
 
     // CSSに反映
     applyDesignChange(doStyleSave) {
-      if(doStyleSave == null) {
+      if(doStyleSave === null) {
         doStyleSave = true;
       }
       this.refresh();
@@ -280,7 +280,7 @@ var ItemBase = (function() {
     // アイテムの情報をアイテムリストと操作履歴に保存
     // @param [Boolean] newCreated 新規作成か
     saveObj(newCreated) {
-      if(newCreated == null) {
+      if(newCreated === null) {
         newCreated = false;
       }
       if(newCreated) {
@@ -315,7 +315,7 @@ var ItemBase = (function() {
     // @property [String] prop 変数名
     // @property [Boolean] isCache キャッシュとして保存するか
     getItemPropFromPageValue(prop, isCache) {
-      if(isCache == null) {
+      if(isCache === null) {
         isCache = false;
       }
       const prefix_key = isCache ? PageValue.Key.instanceValueCache(this.id) : PageValue.Key.instanceValue(this.id);
@@ -327,7 +327,7 @@ var ItemBase = (function() {
     // @property [Object] value 値
     // @property [Boolean] isCache キャッシュとして保存するか
     setItemPropToPageValue(prop, value, isCache) {
-      if(isCache == null) {
+      if(isCache === null) {
         isCache = false;
       }
       const prefix_key = isCache ? PageValue.Key.instanceValueCache(this.id) : PageValue.Key.instanceValue(this.id);
@@ -438,10 +438,10 @@ var ItemBase = (function() {
 
     // アイテム位置&サイズを更新
     updatePositionAndItemSize(itemSize, withSaveObj, withRefresh) {
-      if(withSaveObj == null) {
+      if(withSaveObj === null) {
         withSaveObj = true;
       }
-      if(withRefresh == null) {
+      if(withRefresh === null) {
         withRefresh = false;
       }
       this.updateItemPosition(itemSize.x, itemSize.y);
@@ -462,7 +462,7 @@ var ItemBase = (function() {
 
     // スクロールによるアイテム状態更新
     updateInstanceParamByStep(stepValue, immediate) {
-      if(immediate == null) {
+      if(immediate === null) {
         immediate = false;
       }
       super.updateInstanceParamByStep(stepValue, immediate);
@@ -471,7 +471,7 @@ var ItemBase = (function() {
 
     // クリックによるアイテム状態更新
     updateInstanceParamByAnimation(immediate) {
-      if(immediate == null) {
+      if(immediate === null) {
         immediate = false;
       }
       super.updateInstanceParamByAnimation(immediate);
@@ -481,11 +481,11 @@ var ItemBase = (function() {
     // スクロールイベントでアイテム位置&サイズ更新
     updateItemSizeByStep(scrollValue, immediate) {
       let itemSize;
-      if(immediate == null) {
+      if(immediate === null) {
         immediate = false;
       }
       const itemDiff = this._event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
-      if((itemDiff == null) || (itemDiff === 'undefined')) {
+      if((itemDiff === null) || (itemDiff === 'undefined')) {
         // 変更なしの場合
         return;
       }
@@ -521,11 +521,11 @@ var ItemBase = (function() {
     // クリックイベントでアイテム位置&サイズ更新
     updateItemSizeByAnimation(immediate) {
       let itemSize, timer;
-      if(immediate == null) {
+      if(immediate === null) {
         immediate = false;
       }
       const itemDiff = this._event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
-      if((itemDiff == null) || (itemDiff === 'undefined')) {
+      if((itemDiff === null) || (itemDiff === 'undefined')) {
         // 変更なしの場合
         return;
       }
@@ -580,7 +580,7 @@ var ItemBase = (function() {
     static switchChildrenConfig(e, varName, openValue, targetValue) {
       for(let cKey in openValue) {
         let cValue = openValue[cKey];
-        if((cValue == null)) {
+        if((cValue === null)) {
           // 判定値無し
           return;
         }

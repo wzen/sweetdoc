@@ -10,7 +10,7 @@ const cssItemBaseWorktableExtend = {
   // @param [Int] zindex z-index
   // @param [boolean] show 要素作成後に描画を表示するか
   endDraw(zindex, show, callback = null) {
-    if(show == null) {
+    if(show === null) {
       show = true;
     }
     this.zindex = zindex;
@@ -109,7 +109,7 @@ const cssItemBaseWorktableExtend = {
 
   // デザイン変更を反映
   applyDesignStyleChange(designKeyName, value, doStyleSave) {
-    if(doStyleSave == null) {
+    if(doStyleSave === null) {
       doStyleSave = true;
     }
     const cssCodeElement = $(`.${designKeyName}_value`, this._cssDesignToolCode);
@@ -119,7 +119,7 @@ const cssItemBaseWorktableExtend = {
 
   // グラデーションデザイン変更を反映
   applyGradientStyleChange(index, designKeyName, value, doStyleSave) {
-    if(doStyleSave == null) {
+    if(doStyleSave === null) {
       doStyleSave = true;
     }
     const position = $(`.design_bg_color${index + 2}_position_value`, this._cssDesignToolCode);
@@ -129,7 +129,7 @@ const cssItemBaseWorktableExtend = {
 
   // グラデーション方向変更を反映
   applyGradientDegChange(designKeyName, value, doStyleSave) {
-    if(doStyleSave == null) {
+    if(doStyleSave === null) {
       doStyleSave = true;
     }
     const webkitDeg = {
@@ -149,7 +149,7 @@ const cssItemBaseWorktableExtend = {
   },
 
   applyGradientStepChange(target, doStyleSave) {
-    if(doStyleSave == null) {
+    if(doStyleSave === null) {
       doStyleSave = true;
     }
     this.changeGradientShow(target);
@@ -180,7 +180,7 @@ const cssItemBaseWorktableExtend = {
   },
 
   applyColorChangeByPicker(designKeyName, value, doStyleSave) {
-    if(doStyleSave == null) {
+    if(doStyleSave === null) {
       doStyleSave = true;
     }
     const codeEmt = $(`.${designKeyName}_value`, this._cssDesignToolCode);

@@ -41,7 +41,7 @@ var OperationHistory = (function() {
       // 操作履歴を取り出し
       // @return [Boolean] 処理したか
       _pop = function() {
-        if((window.operationHistoryIndexes[this.operationHistoryIndex()] == null)) {
+        if((window.operationHistoryIndexes[this.operationHistoryIndex()] === null)) {
           return false;
         }
 
@@ -80,7 +80,7 @@ var OperationHistory = (function() {
       // 操作履歴を取り出してIndexを進める(redo処理)
       // @return [Boolean] 処理したか
       _popRedo = function() {
-        if((window.operationHistoryIndexes[this.operationHistoryIndex()] == null)) {
+        if((window.operationHistoryIndexes[this.operationHistoryIndex()] === null)) {
           return false;
         }
 
@@ -121,7 +121,7 @@ var OperationHistory = (function() {
     // 操作履歴を追加
     // @param [Boolean] isInit 初期化処理か
     static add(isInit) {
-      if(isInit == null) {
+      if(isInit === null) {
         isInit = false;
       }
     }

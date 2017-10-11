@@ -56,7 +56,7 @@ class ScrollChapter extends Chapter {
   // ガイド表示
   // @param [Boolean] calledByWillChapter チャプター開始時に呼ばれたか
   showGuide(calledByWillChapter) {
-    if(calledByWillChapter == null) {
+    if(calledByWillChapter === null) {
       calledByWillChapter = false;
     }
     if(!super.showGuide(calledByWillChapter)) {
@@ -142,7 +142,7 @@ class ScrollChapter extends Chapter {
   // 全てのイベントアイテムのスクロールが終了しているか
   // @return [Boolean] 判定結果
   isFinishedAllEvent(cached) {
-    if(cached == null) {
+    if(cached === null) {
       cached = false;
     }
     if(cached && (this._isFinishedAllEventCache !== null)) {

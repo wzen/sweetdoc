@@ -109,7 +109,7 @@ var EventPageValueBase = (function() {
         const item = window.instanceMap[eventConfig[this.PageValueKey.ID]];
         if(item !== null) {
           let duration = item.constructor.actionProperties.methods[eventConfig[this.PageValueKey.METHODNAME]][item.constructor.ActionPropertiesKey.EVENT_DURATION];
-          if((duration == null)) {
+          if((duration === null)) {
             duration = 0;
           }
           return eventDuration.val(duration);
@@ -203,10 +203,10 @@ var EventPageValueBase = (function() {
           }
 
           // 画面表示
-          const showWillEnabled = (eventConfig[this.PageValueKey.SHOW_WILL_CHAPTER] == null) || eventConfig[this.PageValueKey.SHOW_WILL_CHAPTER];
+          const showWillEnabled = (eventConfig[this.PageValueKey.SHOW_WILL_CHAPTER] === null) || eventConfig[this.PageValueKey.SHOW_WILL_CHAPTER];
           $('.show_will_chapter', eventConfig.emt).prop('checked', showWillEnabled);
           let showWillDuration = eventConfig[this.PageValueKey.SHOW_WILL_CHAPTER_DURATION];
-          if((showWillDuration == null)) {
+          if((showWillDuration === null)) {
             showWillDuration = 0;
           }
           $('.show_will_chapter_duration', eventConfig.emt).val(showWillDuration);
@@ -284,7 +284,7 @@ var EventPageValueBase = (function() {
             if(item !== null) {
               //duration = item.constructor.actionProperties.methods[eventConfig[@PageValueKey.METHODNAME]][item.constructor.ActionPropertiesKey.EVENT_DURATION]
               let duration = eventConfig[this.PageValueKey.EVENT_DURATION];
-              if((duration == null)) {
+              if((duration === null)) {
                 duration = 0;
               }
               eventDuration.val(duration);
@@ -325,7 +325,7 @@ var EventPageValueBase = (function() {
           }
         }
       });
-      if((ret == null)) {
+      if((ret === null)) {
         return 0;
       }
 

@@ -105,7 +105,7 @@ var EventDragPointingDraw = (function() {
         }
 
         endDraw(zindex, show, callback = null) {
-          if(show == null) {
+          if(show === null) {
             show = true;
           }
           if(this.endDrawCallback !== null) {
@@ -120,19 +120,19 @@ var EventDragPointingDraw = (function() {
 
         // 以下の処理はなし
         saveObj(newCreated) {
-          if(newCreated == null) {
+          if(newCreated === null) {
             newCreated = false;
           }
         }
 
         getItemPropFromPageValue(prop, isCache) {
-          if(isCache == null) {
+          if(isCache === null) {
             isCache = false;
           }
         }
 
         setItemPropToPageValue(prop, value, isCache) {
-          if(isCache == null) {
+          if(isCache === null) {
             isCache = false;
           }
         }
@@ -141,7 +141,7 @@ var EventDragPointingDraw = (function() {
         }
 
         makeCss(forceUpdate) {
-          if(forceUpdate == null) {
+          if(forceUpdate === null) {
             forceUpdate = false;
           }
         }
@@ -154,7 +154,7 @@ var EventDragPointingDraw = (function() {
     }
 
     static getInstance(cood = null) {
-      if((instance == null)) {
+      if((instance === null)) {
         instance = new this.PrivateClass();
       }
       instance.startCood(cood);
@@ -165,7 +165,7 @@ var EventDragPointingDraw = (function() {
       const {endDrawCallback} = opt;
       const {applyDrawCallback} = opt;
       let {multiDraw} = opt;
-      if((multiDraw == null)) {
+      if((multiDraw === null)) {
         multiDraw = false;
       }
       let pointing = new (this)();
@@ -206,7 +206,7 @@ var EventDragPointingDraw = (function() {
 })();
 
 $.fn.eventDragPointingDraw = function(opt, eventType) {
-  if(eventType == null) {
+  if(eventType === null) {
     eventType = 'click';
   }
   if(eventType === 'click') {

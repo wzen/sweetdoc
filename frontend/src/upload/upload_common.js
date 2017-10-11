@@ -127,7 +127,7 @@ class UploadCommon {
         return upload.prepareUploadTagEvent(root);
       };
 
-      if((window.galleryDataList == null)) {
+      if((window.galleryDataList === null)) {
         window.galleryDataList = {};
       }
       if(window.galleryDataList[token] !== null) {

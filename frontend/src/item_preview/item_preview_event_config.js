@@ -7,7 +7,7 @@
 class ItemPreviewEventConfig extends EventConfig {
   // 入力値を適用する
   applyAction() {
-    if((this[EventPageValueBase.PageValueKey.ACTIONTYPE] == null)) {
+    if((this[EventPageValueBase.PageValueKey.ACTIONTYPE] === null)) {
       if(window.debug) {
         console.log('ItemPreviewEventConfig validation error');
       }
@@ -15,7 +15,7 @@ class ItemPreviewEventConfig extends EventConfig {
     }
 
     // 入力値を保存
-    if((this[EventPageValueBase.PageValueKey.DIST_ID] == null)) {
+    if((this[EventPageValueBase.PageValueKey.DIST_ID] === null)) {
       this[EventPageValueBase.PageValueKey.DIST_ID] = Common.generateId();
     }
 

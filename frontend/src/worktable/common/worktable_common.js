@@ -73,7 +73,7 @@ var WorktableCommon = (function() {
     // @param [Object] target 対象のオブジェクト
     // @param [String] selectedBorderType 選択タイプ
     static setSelectedBorder(target, selectedBorderType) {
-      if(selectedBorderType == null) {
+      if(selectedBorderType === null) {
         selectedBorderType = "edit";
       }
       if(selectedBorderType === 'edit') {
@@ -103,7 +103,7 @@ var WorktableCommon = (function() {
       // 選択枠を取る
       window.scrollInside.find(`.${className}`).remove();
       let targetZindex = parseInt($(target).css('z-index'));
-      if((targetZindex == null)) {
+      if((targetZindex === null)) {
         targetZindex = 0;
       }
       targetZindex += 99;
@@ -158,7 +158,7 @@ var WorktableCommon = (function() {
         return false;
       }
       const generals = window.lStorage.loadGeneralValue();
-      if((generals[constant.Project.Key.PROJECT_ID] == null)) {
+      if((generals[constant.Project.Key.PROJECT_ID] === null)) {
         // プロジェクトが存在しない場合
         return false;
       }
@@ -170,10 +170,10 @@ var WorktableCommon = (function() {
     // @param [Integer] objId コピーするアイテムのオブジェクトID
     // @param [Boolean] isCopyOperation コピー = true, 切り取り = false
     static copyItem(objId, isCopyOperation) {
-      if(objId == null) {
+      if(objId === null) {
         objId = window.selectedObjId;
       }
-      if(isCopyOperation == null) {
+      if(isCopyOperation === null) {
         isCopyOperation = true;
       }
       if(objId !== null) {
@@ -193,7 +193,7 @@ var WorktableCommon = (function() {
     // 選択アイテムの切り取り (Ctrl + x)
     // @param [Integer] objId コピーするアイテムのオブジェクトID
     static cutItem(objId) {
-      if(objId == null) {
+      if(objId === null) {
         objId = window.selectedObjId;
       }
       this.copyItem(objId, false);
@@ -317,7 +317,7 @@ var WorktableCommon = (function() {
     // @param [Mode] afterMode 変更後画面モード
     static changeMode(afterMode, pn) {
       // 画面Zindex変更
-      if(pn == null) {
+      if(pn === null) {
         pn = PageValue.getPageNum();
       }
       if(afterMode === constant.Mode.NOT_SELECT) {
@@ -423,7 +423,7 @@ var WorktableCommon = (function() {
     // @param [Integer] pn ページ番号
     static stopPreviewAndRefreshAllItemsFromInstancePageValue(pn, callback = null) {
       // イベント停止
-      if(pn == null) {
+      if(pn === null) {
         pn = PageValue.getPageNum();
       }
       return this.stopAllEventPreview(function(noRunningPreview) {
@@ -485,10 +485,10 @@ var WorktableCommon = (function() {
     // @param [String] selectedBorderType 選択枠タイプ
     static focusToTargetWhenSidebarOpen(target, selectedBorderType, immediate) {
       // 選択枠設定
-      if(selectedBorderType == null) {
+      if(selectedBorderType === null) {
         selectedBorderType = "edit";
       }
-      if(immediate == null) {
+      if(immediate === null) {
         immediate = false;
       }
       this.setSelectedBorder(target, selectedBorderType);
@@ -773,7 +773,7 @@ var WorktableCommon = (function() {
 
     // ワークテーブルの画面倍率を取得
     static getWorktableViewScale(pn) {
-      if(pn == null) {
+      if(pn === null) {
         pn = PageValue.getPageNum();
       }
       return Common.getWorktableViewScale(pn);
@@ -781,7 +781,7 @@ var WorktableCommon = (function() {
 
     // ワークテーブルの画面倍率を設定
     static setWorktableViewScale(scale, withViewStateUpdate) {
-      if(withViewStateUpdate == null) {
+      if(withViewStateUpdate === null) {
         withViewStateUpdate = false;
       }
       PageValue.setGeneralPageValue(PageValue.Key.worktableScale(), scale);
@@ -862,7 +862,7 @@ var WorktableCommon = (function() {
           const cls = window.classMap[clsToken];
           if(cls.prototype instanceof CommonEvent) {
             const instance = new (Common.getClassFromMap(cls.CLASS_DIST_TOKEN))();
-            if((window.instanceMap[instance.id] == null)) {
+            if((window.instanceMap[instance.id] === null)) {
               Common.setInstanceFromMap(instance.id, instance.constructor.CLASS_DIST_TOKEN);
               result.push(instance.setItemAllPropToPageValue());
             } else {
@@ -878,7 +878,7 @@ var WorktableCommon = (function() {
 
     // 共通イベントのページインスタンス削除
     static removeCommonEventInstances(pn) {
-      if(pn == null) {
+      if(pn === null) {
         pn = PageValue.getPageNum();
       }
       return (() => {
@@ -899,7 +899,7 @@ var WorktableCommon = (function() {
     // @param [Function] callback コールバック
     // @param [Integer] pageNum 描画するPageValueのページ番号
     static createAllInstanceAndDrawFromInstancePageValue(callback = null, pageNum) {
-      if(pageNum == null) {
+      if(pageNum === null) {
         pageNum = PageValue.getPageNum();
       }
       let count = 0;
@@ -939,7 +939,7 @@ var WorktableCommon = (function() {
     // @param [Integer] finishFn 終了フォーク番号
     // @return [Array] EventPageValue配列 無い場合は空配列
     static eventProgressRoute(finishTeNum, finishFn) {
-      if(finishFn == null) {
+      if(finishFn === null) {
         finishFn = PageValue.getForkNum();
       }
       finishTeNum = parseInt(finishTeNum);
@@ -983,7 +983,7 @@ var WorktableCommon = (function() {
 
     // イベント進行ルートが繋がっているか
     static isConnectedEventProgressRoute(finishTeNum, finishFn) {
-      if(finishFn == null) {
+      if(finishFn === null) {
         finishFn = PageValue.getForkNum();
       }
       const ret = this.eventProgressRoute(finishTeNum, finishFn);
@@ -992,10 +992,10 @@ var WorktableCommon = (function() {
 
     // 指定イベント以前をイベント適用後の状態に変更
     static updatePrevEventsToAfter(teNum, keepDispMag, fromBlankEventConfig, callback = null) {
-      if(keepDispMag == null) {
+      if(keepDispMag === null) {
         keepDispMag = false;
       }
-      if(fromBlankEventConfig == null) {
+      if(fromBlankEventConfig === null) {
         fromBlankEventConfig = false;
       }
       return _updatePrevEventsToAfterAndRunPreview.call(this, teNum, keepDispMag, fromBlankEventConfig, false, callback);
@@ -1004,7 +1004,7 @@ var WorktableCommon = (function() {
     // プレビュー実行
     // @param [Integer] te_num 実行するイベント番号
     static runPreview(teNum, keepDispMag, callback = null) {
-      if(keepDispMag == null) {
+      if(keepDispMag === null) {
         keepDispMag = false;
       }
       return _updatePrevEventsToAfterAndRunPreview.call(this, teNum, keepDispMag, false, true, callback);
@@ -1058,7 +1058,7 @@ var WorktableCommon = (function() {
     // 全イベントのプレビューを停止
     // @param [Function] callback コールバック
     static stopAllEventPreview(callback = null) {
-      if((window.previewRunning == null) || !window.previewRunning) {
+      if((window.previewRunning === null) || !window.previewRunning) {
         // プレビューが動作していない場合は処理無し
         if(callback !== null) {
           callback(true);
@@ -1135,7 +1135,7 @@ var WorktableCommon = (function() {
     }
 
     static reverseStashEventPageValueForPreviewIfNeeded(callback = null) {
-      if((window.stashedEventPageValueForPreview == null)) {
+      if((window.stashedEventPageValueForPreview === null)) {
         // 無い場合は終了
         if(callback !== null) {
           callback();

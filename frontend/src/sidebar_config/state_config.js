@@ -95,7 +95,7 @@ var StateConfig = (function() {
     }
 
     static clearScreenConfig(withInitParams) {
-      if(withInitParams == null) {
+      if(withInitParams === null) {
         withInitParams = false;
       }
       const emt = $(`#${this.ROOT_ID_NAME} .configBox.screen_event`);
