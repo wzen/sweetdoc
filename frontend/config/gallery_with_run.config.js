@@ -6,14 +6,10 @@ const vendors = [
   path.join(railsRootPath, '/vendor/assets/javascripts/jquery.transit.min.js'),
   'i18n-js', 'markdown',
   path.join(railsRootPath, '/vendor/assets/bootstrap/bootstrap.js'),
-  path.join(railsRootPath, '/vendor/assets/contextmenu/jquery.ui-contextmenu.js'),
-  ...glob.sync(path.join(railsRootPath, '/vendor/assets/colorpicker/js/*.js')),
-  ...glob.sync(path.join(railsRootPath, '/vendor/assets/deflate/*.js')),
   path.join(railsRootPath, '/vendor/assets/jquery_readyselector/jquery.readyselector.js'),
   ...glob.sync(path.join(railsRootPath, '/app/assets/javascripts/i18n/*.js'))
 ];
 const jsFiles = [
-  path.join(railsRootPath, '/frontend/src/item/generator.jquery.color.js'),
   path.join(railsRootPath, '/frontend/src/base/constant.js'),
   path.join(railsRootPath, '/frontend/src/base/common.js'),
   path.join(railsRootPath, '/frontend/src/base/common_var.js'),
@@ -23,21 +19,14 @@ const jsFiles = [
   path.join(railsRootPath, '/frontend/src/base/event_base/common_event_base.js'),
   path.join(railsRootPath, '/frontend/src/base/event_base/item_event_base.js'),
   path.join(railsRootPath, '/frontend/src/base/local_storage.js'),
-  path.join(railsRootPath, '/frontend/src/base/indicator.js'),
-  path.join(railsRootPath, '/frontend/src/base/project.js'),
   path.join(railsRootPath, '/frontend/src/base/float_view.js'),
   path.join(railsRootPath, '/frontend/src/base/config_menu.js'),
+  path.join(railsRootPath, '/frontend/src/base/social_button/social_button.js'),
   path.join(railsRootPath, '/frontend/src/util/color/color_change.js'),
-  path.join(railsRootPath, '/frontend/src/sidebar_config/event_config.js'),
-  path.join(railsRootPath, '/frontend/src/sidebar_config/sidebar_ui.js'),
-  path.join(railsRootPath, '/frontend/src/sidebar_config/state_config.js'),
-  path.join(railsRootPath, '/frontend/src/sidebar_config/item_state_config.js'),
   path.join(railsRootPath, '/frontend/src/common_event/common_event.js'),
   path.join(railsRootPath, '/frontend/src/common_event/background_event.js'),
   path.join(railsRootPath, '/frontend/src/common_event/screen_event.js'),
-  path.join(railsRootPath, '/frontend/src/item/worktable_extend/item_base_worktable_extend.js'),
-  path.join(railsRootPath, '/frontend/src/item/worktable_extend/canvas_item_base_worktable_extend.js'),
-  path.join(railsRootPath, '/frontend/src/item/worktable_extend/css_item_base_worktable_extend.js'),
+  path.join(railsRootPath, '/frontend/src/common_event/operation_guide/scroll_operation_guide.js'),
   path.join(railsRootPath, '/frontend/src/item/item_base.js'),
   path.join(railsRootPath, '/frontend/src/item/css_item_base.js'),
   path.join(railsRootPath, '/frontend/src/item/canvas_item_base.js'),
@@ -49,22 +38,21 @@ const jsFiles = [
   path.join(railsRootPath, '/frontend/src/event_page_value/item/item.js'),
   path.join(railsRootPath, '/frontend/src/navbar/navbar.js'),
   path.join(railsRootPath, '/frontend/src/paging_animation/pageflip.js'),
-  path.join(railsRootPath, '/frontend/src/motion_check/motion_check_common.js'),
-  path.join(railsRootPath, '/frontend/src/coding/coding_common.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/common/worktable_common.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/common/message.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/common/history.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/common/server_storage.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/common/paging.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/common/worktable_setting.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/util/colorpicker.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/event/timeline.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/event/pointing/event_drag_pointing_rect.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/event/pointing/event_drag_pointing_draw.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/event/pointing/event_item_touch_pointing.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/handwrite/handwrite.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/handwrite/pointing_handwrite.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/worktable.js')
+  path.join(railsRootPath, '/frontend/src/run/common/run_setting.js'),
+  path.join(railsRootPath, '/frontend/src/run/common/run_common.js'),
+  path.join(railsRootPath, '/frontend/src/run/common/run_fullscreen.js'),
+  path.join(railsRootPath, '/frontend/src/run/chapter.js'),
+  path.join(railsRootPath, '/frontend/src/run/scroll_chapter.js'),
+  path.join(railsRootPath, '/frontend/src/run/click_chapter.js'),
+  path.join(railsRootPath, '/frontend/src/run/page.js'),
+  path.join(railsRootPath, '/frontend/src/run/event_action.js'),
+  path.join(railsRootPath, '/frontend/src/run/guide/base.js'),
+  path.join(railsRootPath, '/frontend/src/run/guide/scroll.js'),
+  path.join(railsRootPath, '/frontend/src/run/guide/click.js'),
+  path.join(railsRootPath, '/frontend/src/gallery/gallery_common.js'),
+  path.join(railsRootPath, '/frontend/src/gallery/gallery_sidebar.js'),
+  path.join(railsRootPath, '/frontend/src/gallery/gallery.js'),
+
 ];
 module.exports = {
   entry: {
@@ -72,7 +60,7 @@ module.exports = {
   },
   output: {
     path: path.join(railsRootPath, '/app/assets/javascripts/webpack'),
-    filename: 'worktable.js'
+    filename: 'gallery_with_run.js'
   },
   externals: {
     // require("jquery") is external and available

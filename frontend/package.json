@@ -4,9 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build_worktable": "webpack --config config/worktable.config.js",
-    "watch_worktable": "webpack --watch --config config/worktable.config.js"
+    "build_coding": "webpack --config config/coding.config.js",
+    "build_gallery": "webpack --config config/gallery.config.js",
+    "build_gallery_with_run": "webpack --config config/gallery_with_run.config.js",
+    "build_item_gallery": "webpack --config config/item_gallery.config.js",
+    "build_item_preview": "webpack --config config/item_preview.config.js",
+    "build_motion_check": "webpack --config config/motion_check.config.js",
+    "build_my_page": "webpack --config config/my_page.config.js",
+    "build_upload": "webpack --config config/upload.config.js",
+    "build_user": "webpack --config config/user.config.js",
+    "build_worktable": "webpack --config config/worktable.config.js"
   },
   "author": "",
   "license": "ISC",

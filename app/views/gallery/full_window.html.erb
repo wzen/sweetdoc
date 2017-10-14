@@ -2,7 +2,7 @@
 <%if @pagevalues.nil? %>
     <%= render 'base/deleted_page' %>
 <% else %>
-  <%= javascript_include_tag 'pipeline/gallery_with_run', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'webpack/gallery_with_run', 'data-turbolinks-track' => true %>
   <div id="main_gallery_wrapper">
       <div id="gallery_contents_wrapper">
           <div class="wrapper">

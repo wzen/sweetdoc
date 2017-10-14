@@ -2,7 +2,7 @@
 <%if !@is_exist_gallery %>
     <%= render 'base/deleted_page', new_tab_link: true %>
 <% else %>
-  <%= javascript_include_tag 'pipeline/gallery', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'webpack/gallery', 'data-turbolinks-track' => true %>
   <div id="main_wrapper">
     <div id="thumbnail_wrapper">
       <div>

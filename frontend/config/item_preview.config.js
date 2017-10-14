@@ -31,26 +31,33 @@ const jsFiles = [
   path.join(railsRootPath, '/frontend/src/sidebar_config/event_config.js'),
   path.join(railsRootPath, '/frontend/src/sidebar_config/sidebar_ui.js'),
   path.join(railsRootPath, '/frontend/src/sidebar_config/state_config.js'),
-  path.join(railsRootPath, '/frontend/src/sidebar_config/item_state_config.js'),
   path.join(railsRootPath, '/frontend/src/common_event/common_event.js'),
   path.join(railsRootPath, '/frontend/src/common_event/background_event.js'),
   path.join(railsRootPath, '/frontend/src/common_event/screen_event.js'),
+  path.join(railsRootPath, '/frontend/src/common_event/operation_guide/scroll_operation_guide.js'),
   path.join(railsRootPath, '/frontend/src/item/worktable_extend/item_base_worktable_extend.js'),
   path.join(railsRootPath, '/frontend/src/item/worktable_extend/canvas_item_base_worktable_extend.js'),
   path.join(railsRootPath, '/frontend/src/item/worktable_extend/css_item_base_worktable_extend.js'),
   path.join(railsRootPath, '/frontend/src/item/item_base.js'),
   path.join(railsRootPath, '/frontend/src/item/css_item_base.js'),
   path.join(railsRootPath, '/frontend/src/item/canvas_item_base.js'),
-  path.join(railsRootPath, '/frontend/src/preload_item/pi_arrow.js'),
-  path.join(railsRootPath, '/frontend/src/preload_item/pi_button.js'),
-  path.join(railsRootPath, '/frontend/src/preload_item/pi_image.js'),
-  path.join(railsRootPath, '/frontend/src/preload_item/pi_text.js'),
   path.join(railsRootPath, '/frontend/src/event_page_value/base/base.js'),
   path.join(railsRootPath, '/frontend/src/event_page_value/item/item.js'),
   path.join(railsRootPath, '/frontend/src/navbar/navbar.js'),
   path.join(railsRootPath, '/frontend/src/paging_animation/pageflip.js'),
   path.join(railsRootPath, '/frontend/src/motion_check/motion_check_common.js'),
   path.join(railsRootPath, '/frontend/src/coding/coding_common.js'),
+  path.join(railsRootPath, '/frontend/src/run/common/run_setting.js'),
+  path.join(railsRootPath, '/frontend/src/run/common/run_common.js'),
+  path.join(railsRootPath, '/frontend/src/run/common/run_fullscreen.js'),
+  path.join(railsRootPath, '/frontend/src/run/chapter.js'),
+  path.join(railsRootPath, '/frontend/src/run/scroll_chapter.js'),
+  path.join(railsRootPath, '/frontend/src/run/click_chapter.js'),
+  path.join(railsRootPath, '/frontend/src/run/page.js'),
+  path.join(railsRootPath, '/frontend/src/run/event_action.js'),
+  path.join(railsRootPath, '/frontend/src/run/guide/base.js'),
+  path.join(railsRootPath, '/frontend/src/run/guide/scroll.js'),
+  path.join(railsRootPath, '/frontend/src/run/guide/click.js'),
   path.join(railsRootPath, '/frontend/src/worktable/common/worktable_common.js'),
   path.join(railsRootPath, '/frontend/src/worktable/common/message.js'),
   path.join(railsRootPath, '/frontend/src/worktable/common/history.js'),
@@ -59,12 +66,11 @@ const jsFiles = [
   path.join(railsRootPath, '/frontend/src/worktable/common/worktable_setting.js'),
   path.join(railsRootPath, '/frontend/src/worktable/util/colorpicker.js'),
   path.join(railsRootPath, '/frontend/src/worktable/event/timeline.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/event/pointing/event_drag_pointing_rect.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/event/pointing/event_drag_pointing_draw.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/event/pointing/event_item_touch_pointing.js'),
   path.join(railsRootPath, '/frontend/src/worktable/handwrite/handwrite.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/handwrite/pointing_handwrite.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/worktable.js')
+  path.join(railsRootPath, '/frontend/src/item_preview/item_preview_common.js'),
+  path.join(railsRootPath, '/frontend/src/item_preview/item_preview_handwrite.js'),
+  path.join(railsRootPath, '/frontend/src/item_preview/item_preview_event_config.js'),
+  path.join(railsRootPath, '/frontend/src/item_preview/item_preview.js')
 ];
 module.exports = {
   entry: {
@@ -72,7 +78,7 @@ module.exports = {
   },
   output: {
     path: path.join(railsRootPath, '/app/assets/javascripts/webpack'),
-    filename: 'worktable.js'
+    filename: 'item_preview.js'
   },
   externals: {
     // require("jquery") is external and available
