@@ -80,7 +80,7 @@
           // サーバから表示内容読み込み
           // ローディング表示
           _showModalFlashMessage.call(this, 'Please Wait', true);
-          return $.ajax(
+          $.ajax(
             {
               url: "/modal_view/show",
               type: "GET",
