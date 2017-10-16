@@ -1,11 +1,9 @@
-/*
- * decaffeinate suggestions:
- * DS206: Consider reworking classes to avoid initClass
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+import Common from '../../base/common';
+import PageValue from '../../base/page_value';
+import EventPageValueBase from '../base/base';
 
 // EventPageValue アイテム
-class EPVItem extends EventPageValueBase {
+export default class EPVItem extends EventPageValueBase {
   static initClass() {
     this.itemSize = 'item_size';
   }

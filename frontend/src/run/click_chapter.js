@@ -1,12 +1,10 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+import Chapter from './chapter';
+import ClickGuide from './guide/click';
+import ScrollGuide from './guide/scroll';
+import ItemBase from '../item/item_base';
 
 // クリックチャプター
-class ClickChapter extends Chapter {
+export default class ClickChapter extends Chapter {
 
   // コンストラクタ
   // @param [Array] list イベント情報

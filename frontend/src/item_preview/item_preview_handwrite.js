@@ -1,10 +1,10 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-class ItemPreviewHandwrite extends Handwrite {
+import Common from '../base/common';
+import Handwrite from '../worktable/handwrite/handwrite';
+import Sidebar from '../sidebar_config/sidebar_ui'
+import ItemPreviewEventConfig from './item_preview_event_config';
+import WorktableCommon from '../worktable/common/worktable_common';
+
+export default class ItemPreviewHandwrite extends Handwrite {
   // マウスアップ時の描画イベント
   static mouseUpDrawing() {
     if(window.handwritingItem !== null) {

@@ -1,12 +1,10 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+import Chapter from './chapter';
+import ClickGuide from './guide/click';
+import ScrollGuide from './guide/scroll';
+import RunCommon from './common/run_common';
 
 // スクロール用Chapterクラス
-class ScrollChapter extends Chapter {
+export default class ScrollChapter extends Chapter {
   // チャプターの前処理
   willChapter(callback = null) {
     return super.willChapter(() => {

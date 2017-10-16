@@ -1,14 +1,11 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS202: Simplify dynamic range loops
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+import PageValue from '../base/page_value';
+import Common from '../base/common';
+import ScrollOperationGuide from '../common_event/operation_guide/scroll_operation_guide';
+import Page from './page';
+import RunCommon from './common/run_common';
 
 // イベント実行クラス
-class EventAction {
+export default class EventAction {
   // コンストラクタ
   // @param [Array] @pageList ページオブジェクト
   // @param [Integer] @pageIndex ページ番号

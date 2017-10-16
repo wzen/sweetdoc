@@ -1,10 +1,8 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-class UploadContents extends UploadBase {
+import Common from '../base/common';
+import FloatView from '../base/float_view';
+import UploadBase from './upload_base';
+
+export default class UploadContents extends UploadBase {
   // アップロード
   upload(root, callback = null) {
     // 入力値バリデーションチェック

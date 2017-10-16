@@ -1,9 +1,6 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-class GalleryGrid {
+import GalleryCommon from './gallery_common';
+
+export default class GalleryGrid {
 
   static initEvent() {
     GalleryCommon.initContentsHover();

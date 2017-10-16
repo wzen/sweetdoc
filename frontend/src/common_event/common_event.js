@@ -1,15 +1,8 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS202: Simplify dynamic range loops
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS206: Consider reworking classes to avoid initClass
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+import PageValue from '../base/page_value';
+import CommonEventBase from '../base/event_base/common_event_base';
 
 // 共通イベント基底クラス
-class CommonEvent {
+export default class CommonEvent {
   static initClass() {
 
     // インスタンスはページ毎持つ

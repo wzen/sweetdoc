@@ -1,11 +1,6 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-class UploadCommon {
+import Common from '../base/common';
+
+export default class UploadCommon {
 
   // ギャラリーアップロードビュー表示前処理
   static initEvent(upload) {

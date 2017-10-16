@@ -1,13 +1,12 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS202: Simplify dynamic range loops
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-class Page {
+import Common from '../base/common';
+import PageValue from '../base/page_value';
+import FloatView from '../base/float_view';
+import ClickChapter from './click_chapter';
+import ScrollChapter from './scroll_chapter';
+import EventPageValueBase from '../event_page_value/base/base';
+import RunCommon from './common/run_common';
+
+export default class Page {
   // コンストラクタ
   // @param [Object] eventPageValeuList イベントPageValue
   constructor(eventPageValueArray) {

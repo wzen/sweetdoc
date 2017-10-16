@@ -1,8 +1,6 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+import RunCommon from '../run/common/run_common';
+import RunFullScreen from '../run/common/run_fullscreen';
+
 $(function() {
   window.isMotionCheck = true;
   window.isItemPreview = false;

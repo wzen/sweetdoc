@@ -1,11 +1,5 @@
-/*
- * decaffeinate suggestions:
- * DS206: Consider reworking classes to avoid initClass
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-
 // チャプターガイド基底
-class GuideBase {
+export default class GuideBase {
   static initClass() {
     // ガイドのZindex
     this.GUIDE_ZINDEX = 199999999;

@@ -1,13 +1,7 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS206: Consider reworking classes to avoid initClass
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-
+import Common from '../base/common';
+import CommonEvent from './common_event';
 // 背景イベント
-class BackgroundEvent extends CommonEvent {
+export default class BackgroundEvent extends CommonEvent {
   static initClass() {
     this.instance = {};
 

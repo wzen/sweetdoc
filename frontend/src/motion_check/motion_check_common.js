@@ -1,10 +1,9 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-class MotionCheckCommon {
+import Common from '../base/common';
+import Navbar from '../navbar/navbar';
+import PageValue from '../base/page_value';
+import ServerStorage from '../worktable/common/server_storage';
+
+export default class MotionCheckCommon {
   // 新タブで閲覧を実行する
   static run(newWindow) {
     // イベント存在チェック

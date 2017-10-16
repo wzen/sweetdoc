@@ -1,14 +1,9 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS206: Consider reworking classes to avoid initClass
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+import ItemBase from './item_base';
+
 // CSSアイテム
 // @abstract
 // @extend ItemBase
-class CssItemBase extends ItemBase {
+export default class CssItemBase extends ItemBase {
   static initClass() {
 
     if(window.loadedClassDistToken !== null) {

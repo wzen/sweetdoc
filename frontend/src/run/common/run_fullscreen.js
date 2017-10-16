@@ -1,9 +1,6 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-class RunFullScreen {
+import Common from '../../base/common';
+
+export default class RunFullScreen {
   static showCreatorInfo() {
     // Markdownを設定
     return Common.markdownToHtml();

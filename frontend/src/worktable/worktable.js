@@ -1,8 +1,12 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+import Common from '../base/common';
+import CommonVar from '../base/common_var';
+import Navbar from '../navbar/navbar';
+import PageValue from '../base/page_value';
+import Project from '../base/project';
+import Timeline from './event/timeline';
+import OperationHistory from './common/history';
+import WorktableCommon from './common/worktable_common';
+
 $(() =>
   $('.worktable.index').ready(function() {
     window.isItemPreview = false;

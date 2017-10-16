@@ -1,13 +1,9 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS206: Consider reworking classes to avoid initClass
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+import Common from '../base/common';
+import CssItemBase from '../item/css_item_base';
+
 // ボタンアイテム
 // @extend CssItemBase
-class PreloadItemButton extends CssItemBase {
+export default class PreloadItemButton extends CssItemBase {
   static initClass() {
     // @property [String] NAME_PREFIX アイテム識別名
     this.NAME_PREFIX = "Button";

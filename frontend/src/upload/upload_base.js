@@ -1,9 +1,4 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-class UploadBase {
+export default class UploadBase {
   // タグクリックイベント
   prepareUploadTagEvent(root) {
     const tags = $('.popular_tag a, .recommend_tag a', root);

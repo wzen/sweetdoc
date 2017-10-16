@@ -1,8 +1,7 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+import UploadCommon from './upload_common';
+import UploadContents from './upload_contents';
+import UploadItem from './upload_item';
+
 $(function() {
   $('.upload.index').ready(function() {
     const u = new UploadContents();

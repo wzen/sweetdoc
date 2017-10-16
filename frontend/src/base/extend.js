@@ -8,7 +8,7 @@
 // Mix-in関数
 const moduleKeywords = ['extended', 'included'];
 
-class Extend {
+export default class Extend {
   // クラスメソッド拡張
   static extend(obj) {
     for(let key in obj) {

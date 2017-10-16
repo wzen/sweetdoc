@@ -1,11 +1,8 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-class GalleryCommon {
+import Common from '../base/common';
+
+let constant = gon.const;
+
+export default class GalleryCommon {
   // ビュー初期化
   static initView() {
     // 変数初期化

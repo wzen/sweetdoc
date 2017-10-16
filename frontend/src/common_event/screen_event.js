@@ -1,14 +1,8 @@
-/*
- * decaffeinate suggestions:
- * DS001: Remove Babel/TypeScript constructor workaround
- * DS102: Remove unnecessary code created because of implicit returns
- * DS206: Consider reworking classes to avoid initClass
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+import Common from '../base/common';
+import CommonEvent from './common_event';
 
 // 画面表示イベント
-class ScreenEvent extends CommonEvent {
+export default class ScreenEvent extends CommonEvent {
   static initClass() {
     this.instance = {};
 

@@ -1,14 +1,10 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS206: Consider reworking classes to avoid initClass
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+import ItemBase from './item_base';
+import PageValue from '../base/page_value';
+
 // Canvasアイテム
 // @abstract
 // @extend ItemBase
-class CanvasItemBase extends ItemBase {
+export default class CanvasItemBase extends ItemBase {
   static initClass() {
 
     if(window.isWorkTable) {

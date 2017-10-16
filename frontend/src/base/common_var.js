@@ -1,11 +1,5 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-
 // アプリ内共通変数
-class CommonVar {
+export default class CommonVar {
 
   // 変数初期化(トップ画面読み込み時に一度だけ実行)
   static initVarWhenLoadedView() {

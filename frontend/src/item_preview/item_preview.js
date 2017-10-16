@@ -1,9 +1,7 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+import Common from '../base/common';
+import CommonVar from '../base/common_var';
+import ItemPreviewCommon from './item_preview_common';
+
 $(function() {
   window.isItemPreview = true;
   // 初期タイプはWS

@@ -1,10 +1,9 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-class ItemPreviewEventConfig extends EventConfig {
+import Common from '../base/common';
+import EventPageValueBase from '../event_page_value/base/base';
+import EventConfig from '../sidebar_config/event_config';
+import ItemPreviewCommon from '../item_preview/item_preview_common';
+
+export default class ItemPreviewEventConfig extends EventConfig {
   // 入力値を適用する
   applyAction() {
     if((this[EventPageValueBase.PageValueKey.ACTIONTYPE] === null)) {

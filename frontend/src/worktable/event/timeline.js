@@ -1,11 +1,10 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS202: Simplify dynamic range loops
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-class Timeline {
+import Common from '../../base/common';
+import PageValue from '../../base/page_value';
+import Sidebar from '../../sidebar_config/sidebar_ui';
+import WorktableCommon from '../common/worktable_common';
+import Indicator from '../../base/indicator';
+
+export default class Timeline {
   // タイムラインを作成
   // @param [Integer] teNum 作成するイベント番号
   static createTimelineEvent(teNum) {

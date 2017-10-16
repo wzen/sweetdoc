@@ -1,15 +1,9 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS206: Consider reworking classes to avoid initClass
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+import Common from '../base/common';
+import EventPageValueBase from '../event_page_value/base/base';
+import RunSetting from './common/run_setting';
 
 // チャプター(イベントの区切り)
-class Chapter {
+export default class Chapter {
   static initClass() {
     // ガイド表示用タイマー
     this.guideTimer = null;
