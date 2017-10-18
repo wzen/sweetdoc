@@ -12,6 +12,8 @@ import Timeline from '../event/timeline';
 import Handwrite from '../handwrite/handwrite';
 import OperationHistory from './history';
 import WorktableSetting from './worktable_setting';
+import EventDragPointingRect from '../event/pointing/event_drag_pointing_rect';
+import EventDragPointingDraw from '../event/pointing/event_drag_pointing_draw';
 
 let _updatePrevEventsToAfterAndRunPreview = undefined;
 export default class WorktableCommon {

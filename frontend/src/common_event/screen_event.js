@@ -1,12 +1,18 @@
 import Common from '../base/common';
 import CommonEvent from './common_event';
+import PageValue from '../base/page_value';
+import EventPageValueBase from '../event_page_value/base/base';
+
+if(window.isWorkTable && window.WorktableCommon === undefined) {
+  import('../worktable/common/worktable_common').then(loaded => { window.WorktableCommon = loaded.default })
+}
 
 // 画面表示イベント
 export default class ScreenEvent extends CommonEvent {
   static initClass() {
     this.instance = {};
 
-    (function() {
+    (()=> {
       let _clearSpecificValue = undefined;
       let _overlay = undefined;
       let _setScaleAndUpdateViewing = undefined;
@@ -41,7 +47,10 @@ export default class ScreenEvent extends CommonEvent {
             emt.find('.afterY:first').val('');
             emt.find('.afterZ:first').val('');
             $('.clear_pointing:first', emt).hide();
-            return EventDragPointingRect.clear();
+            import('../worktable/event/pointing/event_drag_pointing_rect').then(loaded => {
+              const EventDragPointingRect = loaded.default;
+              EventDragPointingRect.clear();
+            });
           };
 
           _overlay = function(x, y, scale) {
@@ -284,7 +293,10 @@ export default class ScreenEvent extends CommonEvent {
               Common.initScrollContentsPosition();
               _setScaleAndUpdateViewing.call(this, _getInitScale.call(this));
               this.eventBaseScale = _getInitScale.call(this);
-              RunCommon.updateMainViewSize();
+              import('../run/common/run_common').then(loaded => {
+                const RunCommon = loaded.default;
+                RunCommon.updateMainViewSize();
+              });
             } else {
               // スクロール位置更新
               WorktableCommon.initScrollContentsPosition();
@@ -343,66 +355,70 @@ export default class ScreenEvent extends CommonEvent {
 
         // 独自コンフィグのイベント初期化
         static initSpecificConfig(specificRoot) {
-          const _updateConfigInput = function(emt, pointingSize) {
-            const x = pointingSize.x + (pointingSize.w * 0.5);
-            const y = pointingSize.y + (pointingSize.h * 0.5);
-            let z = null;
-            const screenSize = Common.getScreenSize();
-            if(pointingSize.w > pointingSize.h) {
-              z = screenSize.width / pointingSize.w;
-            } else {
-              z = screenSize.height / pointingSize.h;
-            }
-            emt.find('.afterX:first').val(x);
-            emt.find('.afterY:first').val(y);
-            emt.find('.afterZ:first').val(z);
-            return $('.clear_pointing:first', emt).show();
-          };
+          import('../worktable/event/pointing/event_drag_pointing_rect').then(loaded => {
+            const EventDragPointingRect = loaded.default;
 
-          const emt = specificRoot['changeScreenPosition'];
-          const x = emt.find('.afterX:first');
-          let xVal = null;
-          let yVal = null;
-          let zVal = null;
-          let size = null;
-          if(x.val().length > 0) {
-            xVal = parseFloat(x.val());
-          }
-          const y = emt.find('.afterY:first');
-          if(y.val().length > 0) {
-            yVal = parseFloat(y.val());
-          }
-          const z = emt.find('.afterZ:first');
-          if(z.val().length > 0) {
-            zVal = parseFloat(z.val());
-          }
-          if((xVal !== null) && (yVal !== null) && (zVal !== null)) {
-            const screenSize = Common.getScreenSize();
-            const w = screenSize.width / zVal;
-            const h = screenSize.height / zVal;
-            size = {
-              x: xVal - (w * 0.5),
-              y: yVal - (h * 0.5),
-              w,
-              h
+            const _updateConfigInput = function(emt, pointingSize) {
+              const x = pointingSize.x + (pointingSize.w * 0.5);
+              const y = pointingSize.y + (pointingSize.h * 0.5);
+              let z = null;
+              const screenSize = Common.getScreenSize();
+              if(pointingSize.w > pointingSize.h) {
+                z = screenSize.width / pointingSize.w;
+              } else {
+                z = screenSize.height / pointingSize.h;
+              }
+              emt.find('.afterX:first').val(x);
+              emt.find('.afterY:first').val(y);
+              emt.find('.afterZ:first').val(z);
+              return $('.clear_pointing:first', emt).show();
             };
-            EventDragPointingRect.draw(size);
-            $('.clear_pointing:first', emt).show();
-          } else {
-            EventDragPointingRect.clear();
-            $('.clear_pointing:first', emt).hide();
-          }
-          emt.find('.event_pointing:first').eventDragPointingRect({
-            applyDrawCallback: pointingSize => {
-              return _updateConfigInput.call(this, emt, pointingSize);
-            },
-            closeCallback: () => {
-              return EventDragPointingRect.draw(size);
+
+            const emt = specificRoot['changeScreenPosition'];
+            const x = emt.find('.afterX:first');
+            let xVal = null;
+            let yVal = null;
+            let zVal = null;
+            let size = null;
+            if(x.val().length > 0) {
+              xVal = parseFloat(x.val());
             }
-          });
-          return emt.find('clear_pointing:first').off('click').on('click', e => {
-            e.preventDefault();
-            return _clearSpecificValue.call(this, emt);
+            const y = emt.find('.afterY:first');
+            if(y.val().length > 0) {
+              yVal = parseFloat(y.val());
+            }
+            const z = emt.find('.afterZ:first');
+            if(z.val().length > 0) {
+              zVal = parseFloat(z.val());
+            }
+            if((xVal !== null) && (yVal !== null) && (zVal !== null)) {
+              const screenSize = Common.getScreenSize();
+              const w = screenSize.width / zVal;
+              const h = screenSize.height / zVal;
+              size = {
+                x: xVal - (w * 0.5),
+                y: yVal - (h * 0.5),
+                w,
+                h
+              };
+              EventDragPointingRect.draw(size);
+              $('.clear_pointing:first', emt).show();
+            } else {
+              EventDragPointingRect.clear();
+              $('.clear_pointing:first', emt).hide();
+            }
+            emt.find('.event_pointing:first').eventDragPointingRect({
+              applyDrawCallback: pointingSize => {
+                return _updateConfigInput.call(this, emt, pointingSize);
+              },
+              closeCallback: () => {
+                return EventDragPointingRect.draw(size);
+              }
+            });
+            emt.find('clear_pointing:first').off('click').on('click', e => {
+              e.preventDefault();
+              return _clearSpecificValue.call(this, emt);
+            });
           });
         }
       });

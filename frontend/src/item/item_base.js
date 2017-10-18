@@ -4,7 +4,6 @@ import ItemEventBase from '../base/event_base/item_event_base';
 import EventPageValueBase from '../event_page_value/base/base';
 import ConfigMenu from '../base/config_menu';
 import OperationHistory from '../worktable/common/history';
-import EventConfig from '../sidebar_config/event_config';
 
 let constant = gon.const;
 // アイテム基底
@@ -307,7 +306,10 @@ export default class ItemBase extends ItemEventBase {
 
     // イベントの選択項目更新
     // fixme: 実行場所について再考
-    return EventConfig.updateSelectItemMenu();
+    import('../sidebar_config/event_config').then(loaded => {
+      const EventConfig = loaded.default;
+      EventConfig.updateSelectItemMenu();
+    });
   }
 
   // アイテムの情報をページ値から取得

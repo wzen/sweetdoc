@@ -26,6 +26,6 @@ export default class ItemPreviewHandwrite extends Handwrite {
       }
     }
 
-    return WorktableCommon.changeMode(constant.Mode.EDIT);
+    WorktableCommon.changeMode(constant.Mode.EDIT);
   }
 }

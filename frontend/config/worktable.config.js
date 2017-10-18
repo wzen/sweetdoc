@@ -1,6 +1,7 @@
 const path = require('path');
 const glob = require("glob");
 const railsRootPath = __dirname.split('/').slice(0, -2).join('/');
+const webpack = require('webpack');
 const vendors = [
   path.join(railsRootPath, '/vendor/assets/javascripts/jquery-1.9.1.min.js'),
   path.join(railsRootPath, '/vendor/assets/javascripts/jquery.transit.min.js'),
@@ -90,5 +91,10 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      isWorkTable: true
+    })
+  ]
 };

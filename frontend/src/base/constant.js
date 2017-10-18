@@ -1,10 +1,13 @@
-const constant = gon.const;
-const {serverenv} = gon;
-const {locale} = gon;
-const userLogined = gon.user_logined;
-const isMobileAccess = gon.is_mobile_access;
-const isIosAccess = gon.is_ios_access;
-const utoken = gon.u_token;
+window.constant = gon.const;
+window.serverenv = gon.serverenv;
+window.locale = gon.locale;
+window.userLogined = gon.user_logined;
+window.isMobileAccess = gon.is_mobile_access;
+window.isIosAccess = gon.is_ios_access;
+window.utoken = gon.u_token;
+if (window.isWorkTable === undefined) {
+  window.isWorkTable = false;
+}
 
 // アプリ共通定数
 const Constant = {

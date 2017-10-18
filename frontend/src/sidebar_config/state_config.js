@@ -2,7 +2,7 @@ import Common from '../base/common';
 import ColorPickerUtil from '../worktable/util/colorpicker';
 import BackgroundEvent from '../common_event/background_event';
 import ScreenEvent from '../common_event/screen_event';
-import EventDragPointingRect from '../worktable/event/pointing/event_drag_pointing_rect';
+// import EventDragPointingRect from '../worktable/event/pointing/event_drag_pointing_rect';
 
 let constant = undefined;
 export default class StateConfig {

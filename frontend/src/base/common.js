@@ -1,3 +1,5 @@
+import PageValue from './page_value';
+
 // アプリ内の共通メソッドクラス
 let constant = gon.const;
 export default class Common {
@@ -251,10 +253,22 @@ export default class Common {
   // タイトルを設定
   static setTitle(title_name) {
     if (title_name !== null) {
-      Navbar.setTitle(title_name);
-      if (!window.isWorkTable) {
-        return RunCommon.setTitle(title_name);
-      }
+      Promise.all([
+        import('../navbar/navbar'),
+        import('../run/common/run_common')
+      ]).then(([loaded, loaded2])=> {
+
+      });
+      import('../navbar/navbar').then(loaded => {
+        const Navbar = loaded.default;
+        Navbar.setTitle(title_name);
+        if (!window.isWorkTable) {
+          import('../run/common/run_common').then(loaded => {
+            const RunCommon = loaded.default;
+            return RunCommon.setTitle(title_name);
+          });
+        }
+      });
     }
   }
 

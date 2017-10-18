@@ -1,4 +1,3 @@
-import Common from '../../base/common';
 import PageValue from '../../base/page_value';
 import WorktableSetting from './worktable_setting';
 
@@ -87,6 +86,7 @@ export default class ServerStorage {
           dataType: "json",
           success(data) {
             if(data.resultSuccess) {
+              Promise.all()
               // 「Load」マウスオーバーで取得させるためupdateフラグを消去
               $(`#${Navbar.NAVBAR_ROOT}`).find(`.${ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}`).remove();
               // 最終保存時刻更新
@@ -105,7 +105,10 @@ export default class ServerStorage {
               if(callback !== null) {
                 callback(data);
               }
-              return Common.ajaxError(data);
+              import('../../base/common').then(loaded => {
+                const Common = loaded.default;
+                return Common.ajaxError(data);
+              });
             }
           },
           error(data) {
@@ -114,7 +117,10 @@ export default class ServerStorage {
             if(callback !== null) {
               callback(data);
             }
-            return Common.ajaxError(data);
+            import('../../base/common').then(loaded => {
+              const Common = loaded.default;
+              return Common.ajaxError(data);
+            });
           }
         }
       );

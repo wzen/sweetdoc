@@ -1,3 +1,5 @@
+import PageValue from './page_value';
+
 // WebStorage
 export default class LocalStorage {
   static initClass() {

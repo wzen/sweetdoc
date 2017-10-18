@@ -1,5 +1,6 @@
 import Common from '../base/common';
 import CommonEvent from './common_event';
+
 // 背景イベント
 export default class BackgroundEvent extends CommonEvent {
   static initClass() {

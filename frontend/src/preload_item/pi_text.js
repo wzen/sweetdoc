@@ -5,6 +5,7 @@ import WorktableCommon from '../worktable/common/worktable_common';
 import CanvasItemBase from '../item/canvas_item_base';
 import EventBase from '../base/event_base/event_base';
 import EventPageValueBase from '../event_page_value/base/base';
+import EventDragPointingDraw from '../worktable/event/pointing/event_drag_pointing_draw';
 
 let constant = undefined;
 let _startOpenAnimation = undefined;
@@ -1343,14 +1344,14 @@ export default class PreloadItemText extends CanvasItemBase {
         // データ保存
         this.saveObj();
         // モードを描画モードに
-        return Navbar.setModeDraw(this.classDistToken, () => {
+        Navbar.setModeDraw(this.classDistToken, () => {
           WorktableCommon.changeMode(constant.Mode.DRAW);
-          return this.refresh(true, () => {
-            return Common.hideModalView();
+          this.refresh(true, () => {
+            Common.hideModalView();
           });
         });
       });
-      return $('.back_button', modalEmt).off('click').on('click', e => {
+      $('.back_button', modalEmt).off('click').on('click', e => {
         return Common.hideModalView();
       });
     };

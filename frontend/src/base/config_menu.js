@@ -1,6 +1,4 @@
 import Common from './common';
-import CanvasItemBase from '../item/canvas_item_base';
-import CssItemBase from '../item/css_item_base';
 import EventPageValueBase from '../event_page_value/base/base';
 
 // メニューをサーバから読み込み
@@ -28,54 +26,60 @@ export default class ConfigMenu {
   static getDesignConfig(obj, successCallback = null, errorCallback = null) {
     let designConfigRoot = $(`#${obj.getDesignConfigId()}`);
     if((designConfigRoot === null) || (designConfigRoot.length === 0)) {
-      let itemType = null;
-      if(obj instanceof CanvasItemBase) {
-        itemType = 'canvas';
-      } else if(obj instanceof CssItemBase) {
-        itemType = 'css';
-      } else {
-        itemType = 'other';
-      }
+      Promise.all([
+        import('../item/canvas_item_base'),
+        import('../item/css_item_base')
+      ]).then(([loaded, loaded2]) => {
+        const CanvasItemBase = loaded.default;
+        const CssItemBase = loaded2.default;
+        let itemType = null;
+        if(obj instanceof CanvasItemBase) {
+          itemType = 'canvas';
+        } else if(obj instanceof CssItemBase) {
+          itemType = 'css';
+        } else {
+          itemType = 'other';
+        }
 
-      return $.ajax(
-        {
-          url: "/config_menu/design_config",
-          type: "POST",
-          data: {
-            designConfig: obj.constructor.actionProperties.designConfig,
-            itemType,
-            modifiables: JSON.stringify(obj.constructor.actionProperties[obj.constructor.ActionPropertiesKey.MODIFIABLE_VARS])
-          },
-          dataType: "json",
-          success(data) {
-            if(data.resultSuccess) {
-              designConfigRoot = $(`#${obj.getDesignConfigId()}`);
-              if((designConfigRoot === null) || (designConfigRoot.length === 0)) {
-                const html = $(data.html).attr('id', obj.getDesignConfigId());
-                $('#design-config').append(html);
+        return $.ajax(
+          {
+            url: "/config_menu/design_config",
+            type: "POST",
+            data: {
+              designConfig: obj.constructor.actionProperties.designConfig,
+              itemType,
+              modifiables: JSON.stringify(obj.constructor.actionProperties[obj.constructor.ActionPropertiesKey.MODIFIABLE_VARS])
+            },
+            dataType: "json",
+            success(data) {
+              if(data.resultSuccess) {
                 designConfigRoot = $(`#${obj.getDesignConfigId()}`);
+                if((designConfigRoot === null) || (designConfigRoot.length === 0)) {
+                  const html = $(data.html).attr('id', obj.getDesignConfigId());
+                  $('#design-config').append(html);
+                  designConfigRoot = $(`#${obj.getDesignConfigId()}`);
+                }
+                if(successCallback !== null) {
+                  return successCallback(designConfigRoot);
+                }
+              } else {
+                if(errorCallback !== null) {
+                  errorCallback(data);
+                }
+                console.log('/config_menu/design_config server error');
+                return Common.ajaxError(data);
               }
-              if(successCallback !== null) {
-                return successCallback(designConfigRoot);
-              }
-            } else {
+            },
+            error(data) {
               if(errorCallback !== null) {
                 errorCallback(data);
               }
-              console.log('/config_menu/design_config server error');
+              console.log('/config_menu/design_config ajax error');
               return Common.ajaxError(data);
             }
-          },
-          error(data) {
-            if(errorCallback !== null) {
-              errorCallback(data);
-            }
-            console.log('/config_menu/design_config ajax error');
-            return Common.ajaxError(data);
           }
-        }
-      );
-
+        );
+      });
     } else {
       if(successCallback !== null) {
         return successCallback(designConfigRoot);

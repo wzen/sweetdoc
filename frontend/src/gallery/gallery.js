@@ -1,7 +1,6 @@
 import GalleryCommon from './gallery_common';
 
 export default class GalleryGrid {
-
   static initEvent() {
     GalleryCommon.initContentsHover();
     return GalleryCommon.initLoadMoreButtonEvent();
@@ -22,45 +21,62 @@ $(function() {
     // グリッドビュー初期化
     GalleryCommon.initGridView();
     // イベント設定
-    return GalleryGrid.initEvent();
+    GalleryGrid.initEvent();
   });
 
   $('.gallery.detail').ready(function() {
-    // 作成者情報を表示
-    RunCommon.showCreatorInfo();
-    return RunCommon.start();
+    import('../run/common/run_common').then(loaded => {
+      const RunCommon = loaded.default;
+      // 作成者情報を表示
+      RunCommon.showCreatorInfo();
+      RunCommon.start();
+    });
   });
 
   $('.gallery.full_window').ready(function() {
-    // 作成者情報を表示
-    RunFullScreen.showCreatorInfo();
-    //if window.isMobileAccess
+    Promise.all([
+      import('../run/common/run_common'),
+      import('../run/common/run_fullscreen')
+    ]).then(([loaded, loaded2]) => {
+      const RunCommon = loaded.default;
+      const RunFullScreen = loaded2.default;
+      // 作成者情報を表示
+      RunFullScreen.showCreatorInfo();
+      //if window.isMobileAccess
 //      $('body').css({width: window.screen.width + 'px', height: window.screen.height + 'px'})
-    return RunCommon.start();
+      RunCommon.start();
+    });
   });
 
   $('.gallery.embed').ready(function() {
     let accessToken;
     $('.powered_thumbnail:first').off('click').on('click', e => {
       e.preventDefault();
-      return window.open("/", "_newwindow");
+      window.open("/", "_newwindow");
     });
     $('.play_in_embed:first').off('click').on('click', e => {
       e.preventDefault();
       accessToken = $(`#main_wrapper .${constant.Gallery.Key.GALLERY_ACCESS_TOKEN}:first`).val();
-      return window.location.href = `/gallery/embed_with_run?${constant.Gallery.Key.GALLERY_ACCESS_TOKEN}=${accessToken}`;
+      window.location.href = `/gallery/embed_with_run?${constant.Gallery.Key.GALLERY_ACCESS_TOKEN}=${accessToken}`;
     });
-    return $('.play_in_site_link:first').off('click').on('click', e => {
+    $('.play_in_site_link:first').off('click').on('click', e => {
       e.preventDefault();
       accessToken = $(`#main_wrapper .${constant.Gallery.Key.GALLERY_ACCESS_TOKEN}:first`).val();
-      return window.open(`/gallery/detail/${accessToken}`, "_newwindow");
+      window.open(`/gallery/detail/${accessToken}`, "_newwindow");
     });
   });
 
-  return $('.gallery.embed_with_run').ready(function() {
-    // 作成者情報を表示
-    RunFullScreen.showCreatorInfo();
-    return RunCommon.start();
+  $('.gallery.embed_with_run').ready(function() {
+    Promise.all([
+      import('../run/common/run_common'),
+      import('../run/common/run_fullscreen')
+    ]).then(([loaded, loaded2]) => {
+      const RunCommon = loaded.default;
+      const RunFullScreen = loaded2.default;
+      // 作成者情報を表示
+      RunFullScreen.showCreatorInfo();
+      RunCommon.start();
+    });
   });
 });
 

@@ -12,6 +12,7 @@ $(() =>
     window.isItemPreview = false;
     window.initDone = false;
 
+
     // ブラウザ対応チェック
     if(!Common.checkBlowserEnvironment()) {
       Common.showModalView(constant.ModalViewType.ENVIRONMENT_NOT_SUPPORT, false);
