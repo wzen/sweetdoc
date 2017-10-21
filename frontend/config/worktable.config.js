@@ -7,7 +7,6 @@ const vendors = [
   path.join(railsRootPath, '/vendor/assets/javascripts/jquery.transit.min.js'),
   'i18n-js', 'markdown',
   path.join(railsRootPath, '/vendor/assets/bootstrap/bootstrap.js'),
-  path.join(railsRootPath, '/vendor/assets/contextmenu/jquery.ui-contextmenu.js'),
   ...glob.sync(path.join(railsRootPath, '/vendor/assets/colorpicker/js/*.js')),
   ...glob.sync(path.join(railsRootPath, '/vendor/assets/deflate/*.js')),
   path.join(railsRootPath, '/vendor/assets/jquery_readyselector/jquery.readyselector.js'),

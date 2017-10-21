@@ -1,5 +1,4 @@
 import PageValue from '../../base/page_value';
-import WorktableSetting from './worktable_setting';
 
 let constant = undefined;
 export default class ServerStorage {
@@ -239,14 +238,17 @@ export default class ServerStorage {
       return;
     }
 
-    if(window.saveIdleTimer !== null) {
-      clearTimeout(window.saveIdleTimer);
-    }
-    if(WorktableSetting.IdleSaveTimer.isEnabled()) {
-      const time = parseFloat(WorktableSetting.IdleSaveTimer.idleTime()) * 1000;
-      return window.saveIdleTimer = setTimeout(() => ServerStorage.save()
-        , time);
-    }
+    import('./worktable_setting').then(loaded => {
+      const WorktableSetting = loaded.default;
+      if(window.saveIdleTimer !== null) {
+        clearTimeout(window.saveIdleTimer);
+      }
+      if(WorktableSetting.IdleSaveTimer.isEnabled()) {
+        const time = parseFloat(WorktableSetting.IdleSaveTimer.idleTime()) * 1000;
+        return window.saveIdleTimer = setTimeout(() => ServerStorage.save()
+          , time);
+      }
+    });
   }
 };
 ServerStorage.initClass();

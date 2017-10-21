@@ -28,9 +28,9 @@ export default class GalleryCommon {
     const columnWidth = windowWidthType === 0 ? 100 : 180;
     //console.log('columnWidth:' + columnWidth)
     const $grid = $('#grid_wrapper');
-    if($grid.data('masonry') !== null) {
-      $grid.masonry('destroy');
-    }
+    // if($grid.data('masonry') !== null) {
+    //   $grid.masonry('destroy');
+    // }
     $grid.masonry({
       itemSelector: '.grid_contents_wrapper',
       columnWidth,

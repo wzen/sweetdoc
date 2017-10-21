@@ -1,3 +1,5 @@
+import Common from '../base/common';
+
 let constant = undefined;
 let _nodePath = undefined;
 let _treeState = undefined;
@@ -56,7 +58,7 @@ export default class CodingCommon {
           user_coding_id = parseInt(user_coding_id);
         }
         const is_opened = jt.is_open(this);
-        return ret.push({
+        ret.push({
           node_path,
           user_coding_id,
           is_opened
@@ -310,7 +312,7 @@ export default class CodingCommon {
   static getContextMenuArray(type) {
     const makeFile = {
       title: I18n.t('context_menu.new_file'), cmd: "new_file", func(event, ui) {
-        return Common.showModalView(constant.ModalViewType.CREATE_USER_CODE, false, CodingCommon.initAddNewFileModal, {target: event.target});
+        Common.showModalView(constant.ModalViewType.CREATE_USER_CODE, false, CodingCommon.initAddNewFileModal, {target: event.target});
       }
     };
 
@@ -320,7 +322,7 @@ export default class CodingCommon {
         const num = sameNameCount <= 1 ? '' : sameNameCount;
         // フォルダ作成
         const folderName = CodingCommon.DEFAULT_FILENAME + num;
-        return CodingCommon.addNewFolder(event.target, folderName);
+        CodingCommon.addNewFolder(event.target, folderName);
       }
     };
 
@@ -341,7 +343,7 @@ export default class CodingCommon {
             // コンテキストメニュー再設定
             CodingCommon.setupContextMenu();
             // 状態保存
-            return CodingCommon.saveEditorState(true);
+            CodingCommon.saveEditorState(true);
           });
         }
       }
@@ -899,12 +901,12 @@ export default class CodingCommon {
     if(saveEditorStateTimer !== null) {
       clearTimeout(saveEditorStateTimer);
     }
-    return saveEditorStateTimer = setTimeout(function() {
+    saveEditorStateTimer = setTimeout(function() {
         window.saveEditorStateNowSaving = true;
         const data = {};
         data[CodingCommon.Key.CODES] = _codes();
         data[CodingCommon.Key.TREE_DATA] = _treeState();
-        return $.ajax(
+        $.ajax(
           {
             url: "/coding/save_state",
             type: "POST",
@@ -912,16 +914,16 @@ export default class CodingCommon {
             data,
             success(data) {
               if(data.resultSuccess) {
-                return window.saveEditorStateNowSaving = false;
+                window.saveEditorStateNowSaving = false;
               } else {
                 console.log('/coding/save_state server error');
-                return Common.ajaxError(data);
+                Common.ajaxError(data);
               }
             },
             error(data) {
               console.log('/coding/save_state ajax error');
               Common.ajaxError(data);
-              return window.saveEditorStateNowSaving = false;
+              window.saveEditorStateNowSaving = false;
             }
           }
         );
