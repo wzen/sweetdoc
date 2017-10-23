@@ -6,16 +6,15 @@ Rails.application.config.assets.version = '1.0'
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
-precompile_target = lambda do |filename, path|
-  puts filename
-  # Mapファイルは除外
-  path =~ /app\/assets/ && !%w(.map .map.js).include?(File.extname(filename))
-end
-Rails.application.config.assets.precompile = [
-    precompile_target,
-    /(?:\/|\\|\A)application\.(css|js)$/
-]
+# precompile_target = lambda do |filename, path|
+#   puts filename
+#   # Mapファイルは除外
+#   path =~ /app\/assets/ && !%w(.map .map.js).include?(File.extname(filename))
+# end
+# Rails.application.config.assets.precompile = [
+#     precompile_target,
+#     /(?:\/|\\|\A)application\.(css|js)$/
+# ]
 Rails.application.config.assets.paths << "#{Rails.root}/vendor/assets/fonts"
-Rails.application.config.assets.precompile += %w(*.eot *.svg *.ttf *.woff)
-Rails.application.config.assets.precompile += %w(*.js)
-#Rails.application.config.assets.prefix = '/assets'
+Rails.application.config.assets.precompile = %w(*.js *.eot *.svg *.ttf *.woff)
+# Rails.application.config.assets.prefix = '/assets'
