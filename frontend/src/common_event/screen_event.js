@@ -4,7 +4,7 @@ import PageValue from '../base/page_value';
 import EventPageValueBase from '../event_page_value/base/base';
 
 if(window.isWorkTable && window.WorktableCommon === undefined) {
-  import('../worktable/common/worktable_common').then(loaded => { window.WorktableCommon = loaded.default })
+  System.import('../worktable/common/worktable_common').then(loaded => { window.WorktableCommon = loaded.default })
 }
 
 // 画面表示イベント
@@ -47,7 +47,7 @@ export default class ScreenEvent extends CommonEvent {
             emt.find('.afterY:first').val('');
             emt.find('.afterZ:first').val('');
             $('.clear_pointing:first', emt).hide();
-            import('../worktable/event/pointing/event_drag_pointing_rect').then(loaded => {
+            System.import('../worktable/event/pointing/event_drag_pointing_rect').then(loaded => {
               const EventDragPointingRect = loaded.default;
               EventDragPointingRect.clear();
             });
@@ -293,7 +293,7 @@ export default class ScreenEvent extends CommonEvent {
               Common.initScrollContentsPosition();
               _setScaleAndUpdateViewing.call(this, _getInitScale.call(this));
               this.eventBaseScale = _getInitScale.call(this);
-              import('../run/common/run_common').then(loaded => {
+              System.import('../run/common/run_common').then(loaded => {
                 const RunCommon = loaded.default;
                 RunCommon.updateMainViewSize();
               });
@@ -355,7 +355,7 @@ export default class ScreenEvent extends CommonEvent {
 
         // 独自コンフィグのイベント初期化
         static initSpecificConfig(specificRoot) {
-          import('../worktable/event/pointing/event_drag_pointing_rect').then(loaded => {
+          System.import('../worktable/event/pointing/event_drag_pointing_rect').then(loaded => {
             const EventDragPointingRect = loaded.default;
 
             const _updateConfigInput = function(emt, pointingSize) {

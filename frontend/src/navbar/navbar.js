@@ -20,9 +20,9 @@ export default class Navbar {
   // Worktableナビバー初期化
   static initWorktableNavbar() {
     Promise.all([
-      import('../worktable/common/worktable_common'),
-      import('../sidebar_config/sidebar_ui'),
-      import('../base/project')
+      System.import('../worktable/common/worktable_common'),
+      System.import('../sidebar_config/sidebar_ui'),
+      System.import('../base/project')
     ]).then(([loaded, loaded2, loaded3]) => {
       const WorktableCommon = loaded.default;
       const Sidebar = loaded2.default;
@@ -112,11 +112,11 @@ export default class Navbar {
           // コンフィグ初期化
           let activeConfig = navTab.find('li.active');
           if(activeConfig.hasClass('beginning_event_state')) {
-            import('../sidebar_config/state_config').then(l => {l.default.initConfig();})
+            System.import('../sidebar_config/state_config').then(l => {l.default.initConfig();})
           } else if(activeConfig.hasClass('worktable_setting')) {
-            import('../worktable/common/worktable_setting').then(l => {l.default.initConfig();})
+            System.import('../worktable/common/worktable_setting').then(l => {l.default.initConfig();})
           } else if(activeConfig.hasClass('item_state')) {
-            import('../sidebar_config/item_state_config').then(l => {l.default.initConfig();})
+            System.import('../sidebar_config/item_state_config').then(l => {l.default.initConfig();})
           }
           // タブ選択時イベントの設定
           navTab.find('li > a').off('click.init').on('click.init', e => {
@@ -126,11 +126,11 @@ export default class Navbar {
             WorktableCommon.clearEventPointer();
             activeConfig = $(e.target).closest('li');
             if(activeConfig.hasClass('beginning_event_state')) {
-              import('../sidebar_config/state_config').then(l => {l.default.initConfig();})
+              System.import('../sidebar_config/state_config').then(l => {l.default.initConfig();})
             } else if(activeConfig.hasClass('worktable_setting')) {
-              import('../worktable/common/worktable_setting').then(l => {l.default.initConfig();})
+              System.import('../worktable/common/worktable_setting').then(l => {l.default.initConfig();})
             } else if(activeConfig.hasClass('item_state')) {
-              import('../sidebar_config/item_state_config').then(l => {l.default.initConfig();})
+              System.import('../sidebar_config/item_state_config').then(l => {l.default.initConfig();})
             }
           });
           Sidebar.openStateConfig();
@@ -142,7 +142,7 @@ export default class Navbar {
   static switchWorktableNavbarWhenProjectCreated(flg) {
     let root;
     if(flg) {
-      import('../base/project').then(loaded => {
+      System.import('../base/project').then(loaded => {
         const Project = loaded.default;
         root = $('#header_items_file_menu');
         // プロジェクト作成後のナビバーに表示変更
@@ -178,8 +178,8 @@ export default class Navbar {
   // Runナビバー初期化
   static initRunNavbar() {
     Promise.all([
-      import('../run/common/run_common'),
-      import('../run/common/run_setting')
+      System.import('../run/common/run_common'),
+      System.import('../run/common/run_setting')
     ]).then(([loaded, loaded2]) => {
       const RunCommon = loaded.default;
       const RunSetting = loaded2.default;
@@ -251,7 +251,7 @@ export default class Navbar {
 
   // Codingナビバー初期化
   static initCodingNavbar() {
-    import('../coding/coding_common').then(loaded => {
+    System.import('../coding/coding_common').then(loaded => {
       const CodingCommon = loaded.default;
       let fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li');
       let menuSave = $('.menu-save', fileMenuEmt);
@@ -264,7 +264,7 @@ export default class Navbar {
 
   // アイテムプレビューナビバー初期化
   static initItemPreviewNavbar() {
-    import('../item_preview/item_preview_common').then(loaded => {
+    System.import('../item_preview/item_preview_common').then(loaded => {
       const ItemPreviewCommon = loaded.default;
       const navEmt = $('#nav');
       $('.menu-upload-item', navEmt).off('click').on('click', () => ItemPreviewCommon.showUploadItemConfirm());
@@ -344,7 +344,7 @@ export default class Navbar {
           loadEmt.find('li').off('click');
           loadEmt.find('li').on('click', function(e) {
             const user_pagevalue_id = $(this).find('.user_pagevalue_id:first').val();
-            import('../base/project').then(loaded => {loaded.default.load(user_pagevalue_id);})
+            System.import('../base/project').then(loaded => {loaded.default.load(user_pagevalue_id);})
           });
 
           // ロード済みに変更 & 現在時間を記録

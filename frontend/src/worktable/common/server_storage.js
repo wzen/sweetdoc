@@ -104,7 +104,7 @@ export default class ServerStorage {
               if(callback !== null) {
                 callback(data);
               }
-              import('../../base/common').then(loaded => {
+              System.import('../../base/common').then(loaded => {
                 const Common = loaded.default;
                 return Common.ajaxError(data);
               });
@@ -116,7 +116,7 @@ export default class ServerStorage {
             if(callback !== null) {
               callback(data);
             }
-            import('../../base/common').then(loaded => {
+            System.import('../../base/common').then(loaded => {
               const Common = loaded.default;
               return Common.ajaxError(data);
             });
@@ -238,7 +238,7 @@ export default class ServerStorage {
       return;
     }
 
-    import('./worktable_setting').then(loaded => {
+    System.import('./worktable_setting').then(loaded => {
       const WorktableSetting = loaded.default;
       if(window.saveIdleTimer !== null) {
         clearTimeout(window.saveIdleTimer);

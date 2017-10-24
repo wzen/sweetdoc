@@ -1,10 +1,17 @@
+import React, { Component } from 'react';
 import Common from '../../base/common';
 import PageValue from '../../base/page_value';
 import Sidebar from '../../sidebar_config/sidebar_ui';
+import EventPageValueBase from '../../event_page_value/base/base';
 import WorktableCommon from '../common/worktable_common';
 import Indicator from '../../base/indicator';
 
-export default class Timeline {
+export default class Timeline extends Component {
+
+  constructor(props) {
+    super(props);
+  }
+
   // タイムラインを作成
   // @param [Integer] teNum 作成するイベント番号
   static createTimelineEvent(teNum) {
@@ -289,5 +296,14 @@ export default class Timeline {
     const timelineEvents = $('#timeline_events');
     const width = parseInt(timelineEvents.css('width')) + eachTimeEventWidth;
     return timelineEvents.css('width', width + 'px');
+  }
+
+  render() {
+    return (
+      <div className="timeline_event sortable blank">
+        <input className="te_num" type="hidden" value="" />
+        <input className="dist_id" type="hidden" value="" />
+      </div>
+    )
   }
 }

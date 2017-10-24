@@ -306,7 +306,7 @@ export default class ItemBase extends ItemEventBase {
 
     // イベントの選択項目更新
     // fixme: 実行場所について再考
-    import('../sidebar_config/event_config').then(loaded => {
+    System.import('../sidebar_config/event_config').then(loaded => {
       const EventConfig = loaded.default;
       EventConfig.updateSelectItemMenu();
     });

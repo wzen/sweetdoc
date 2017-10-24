@@ -1,5 +1,5 @@
 import PageValue from '../../base/page_value';
-import Timeline from '../event/timeline';
+import Timeline from '../event/timeline.jsx';
 import WorktableCommon from './worktable_common';
 
 let _pop = undefined;

@@ -14,19 +14,7 @@ const vendors = [
 ];
 const jsFiles = [
   path.join(railsRootPath, '/frontend/src/item/generator.jquery.color.js'),
-  path.join(railsRootPath, '/frontend/src/base/constant.js'),
-  path.join(railsRootPath, '/frontend/src/base/common.js'),
-  path.join(railsRootPath, '/frontend/src/base/common_var.js'),
-  path.join(railsRootPath, '/frontend/src/base/page_value.js'),
-  path.join(railsRootPath, '/frontend/src/base/extend.js'),
-  path.join(railsRootPath, '/frontend/src/base/event_base/event_base.js'),
-  path.join(railsRootPath, '/frontend/src/base/event_base/common_event_base.js'),
-  path.join(railsRootPath, '/frontend/src/base/event_base/item_event_base.js'),
-  path.join(railsRootPath, '/frontend/src/base/local_storage.js'),
-  path.join(railsRootPath, '/frontend/src/base/indicator.js'),
-  path.join(railsRootPath, '/frontend/src/base/project.js'),
-  path.join(railsRootPath, '/frontend/src/base/float_view.js'),
-  path.join(railsRootPath, '/frontend/src/base/config_menu.js'),
+  ...glob.sync(path.join(railsRootPath, '/frontend/src/base/**/*.js')),
   path.join(railsRootPath, '/frontend/src/util/color/color_change.js'),
   path.join(railsRootPath, '/frontend/src/sidebar_config/event_config.js'),
   path.join(railsRootPath, '/frontend/src/sidebar_config/sidebar_ui.js'),
@@ -35,9 +23,7 @@ const jsFiles = [
   path.join(railsRootPath, '/frontend/src/common_event/common_event.js'),
   path.join(railsRootPath, '/frontend/src/common_event/background_event.js'),
   path.join(railsRootPath, '/frontend/src/common_event/screen_event.js'),
-  path.join(railsRootPath, '/frontend/src/item/worktable_extend/item_base_worktable_extend.js'),
-  path.join(railsRootPath, '/frontend/src/item/worktable_extend/canvas_item_base_worktable_extend.js'),
-  path.join(railsRootPath, '/frontend/src/item/worktable_extend/css_item_base_worktable_extend.js'),
+  ...glob.sync(path.join(railsRootPath, '/frontend/src/item/worktable_extend/**/*.js')),
   path.join(railsRootPath, '/frontend/src/item/item_base.js'),
   path.join(railsRootPath, '/frontend/src/item/css_item_base.js'),
   path.join(railsRootPath, '/frontend/src/item/canvas_item_base.js'),
@@ -51,20 +37,7 @@ const jsFiles = [
   path.join(railsRootPath, '/frontend/src/paging_animation/pageflip.js'),
   path.join(railsRootPath, '/frontend/src/motion_check/motion_check_common.js'),
   path.join(railsRootPath, '/frontend/src/coding/coding_common.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/common/worktable_common.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/common/message.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/common/history.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/common/server_storage.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/common/paging.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/common/worktable_setting.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/util/colorpicker.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/event/timeline.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/event/pointing/event_drag_pointing_rect.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/event/pointing/event_drag_pointing_draw.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/event/pointing/event_item_touch_pointing.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/handwrite/handwrite.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/handwrite/pointing_handwrite.js'),
-  path.join(railsRootPath, '/frontend/src/worktable/worktable.js')
+  ...glob.sync(path.join(railsRootPath, '/frontend/src/worktable/**/*.js'))
 ];
 module.exports = {
   entry: {
@@ -79,10 +52,13 @@ module.exports = {
     //  on the global var jQuery
     "jquery": "jQuery"
   },
+  resolve: {
+    extensions: ['.js', '.jsx']
+  },
   module: {
     loaders: [
       {
-        test: /.jsx$/,
+        test: /\.jsx$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
         query: {

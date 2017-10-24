@@ -4,7 +4,7 @@
  * DS207: Consider shorter variations of null checks
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
-const canvasItemBaseWorktableExtend = {
+window.canvasItemBaseWorktableExtend = {
   // 描画終了
   // @param [Int] zindex z-index
   // @param [boolean] show 要素作成後に描画を表示するか

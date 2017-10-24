@@ -8,7 +8,7 @@ import EventConfig from '../../sidebar_config/event_config';
 import Sidebar from '../../sidebar_config/sidebar_ui';
 import FloatView from '../../base/float_view';
 import StateConfig from '../../sidebar_config/state_config';
-import Timeline from '../event/timeline';
+import Timeline from '../event/timeline.jsx';
 import Handwrite from '../handwrite/handwrite';
 import OperationHistory from './history';
 import WorktableSetting from './worktable_setting';

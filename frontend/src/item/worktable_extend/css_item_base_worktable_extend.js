@@ -4,7 +4,7 @@
  * DS207: Consider shorter variations of null checks
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
-const cssItemBaseWorktableExtend = {
+window.cssItemBaseWorktableExtend = {
 
   // 描画終了
   // @param [Int] zindex z-index

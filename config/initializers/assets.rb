@@ -16,5 +16,5 @@ Rails.application.config.assets.version = '1.0'
 #     /(?:\/|\\|\A)application\.(css|js)$/
 # ]
 Rails.application.config.assets.paths << "#{Rails.root}/vendor/assets/fonts"
-Rails.application.config.assets.precompile = %w(*.js *.eot *.svg *.ttf *.woff)
+Rails.application.config.assets.precompile += %w(*.js *.css *.eot *.svg *.ttf *.woff)
 # Rails.application.config.assets.prefix = '/assets'

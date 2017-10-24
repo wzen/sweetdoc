@@ -27,8 +27,8 @@ export default class ConfigMenu {
     let designConfigRoot = $(`#${obj.getDesignConfigId()}`);
     if((designConfigRoot === null) || (designConfigRoot.length === 0)) {
       Promise.all([
-        import('../item/canvas_item_base'),
-        import('../item/css_item_base')
+        System.import('../item/canvas_item_base'),
+        System.import('../item/css_item_base')
       ]).then(([loaded, loaded2]) => {
         const CanvasItemBase = loaded.default;
         const CssItemBase = loaded2.default;

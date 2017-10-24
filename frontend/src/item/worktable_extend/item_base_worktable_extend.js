@@ -1,4 +1,4 @@
-const itemBaseWorktableExtend = {
+window.itemBaseWorktableExtend = {
   // デザインコンフィグメニューの要素IDを取得
   // @return [String] HTML要素ID
   getDesignConfigId() {
