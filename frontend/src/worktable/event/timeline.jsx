@@ -5,6 +5,25 @@ import Sidebar from '../../sidebar_config/sidebar_ui';
 import EventPageValueBase from '../../event_page_value/base/base';
 import WorktableCommon from '../common/worktable_common';
 import Indicator from '../../base/indicator';
+import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
+
+const SortableItem = SortableElement(({value}) =>
+  <div className={`timeline_event ${value.type}`} />
+);
+
+const SortableList = SortableContainer(({items}) => {
+  return (
+    <div id="timeline_container" className="border">
+      <div id="timeline_events_container" className="scroll_x_content">
+        <div id="timeline_events">
+          {items.map((value, index) => (
+            <SortableItem key={`item-${index}`} index={index} value={value} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+});
 
 export default class Timeline extends Component {
 
@@ -14,13 +33,13 @@ export default class Timeline extends Component {
 
   // タイムラインを作成
   // @param [Integer] teNum 作成するイベント番号
-  static createTimelineEvent(teNum) {
+  createTimelineEvent(teNum) {
     // 存在チェック
     const emts = $('#timeline_events .timeline_event .te_num');
     let exist = false;
     emts.each(function(e) {
       if(parseInt($(this).val()) === teNum) {
-        return exist = true;
+        exist = true;
       }
     });
     if(exist) {
@@ -36,7 +55,7 @@ export default class Timeline extends Component {
   }
 
   // タイムラインのイベント設定
-  static setupTimelineEventConfig(teNum = null) {
+  setupTimelineEventConfig(teNum = null) {
     const te = null;
     // 設定開始
     const _setupTimelineEvent = function() {
@@ -139,7 +158,7 @@ export default class Timeline extends Component {
     };
 
     // イベント作成
-    var _createEvent = function(pageValue, idx) {
+    var _createEvent = (pageValue, idx) => {
       let timelineEvents = $('#timeline_events').children('.timeline_event');
       teNum = idx + 1;
       let emt = timelineEvents.eq(idx);
@@ -152,7 +171,7 @@ export default class Timeline extends Component {
       $('.te_num', emt).val(teNum);
       $('.dist_id', emt).val(pageValue[EventPageValueBase.PageValueKey.DIST_ID]);
       const actionType = pageValue[EventPageValueBase.PageValueKey.ACTIONTYPE];
-      Timeline.changeTimelineColor(teNum, actionType);
+      this.changeTimelineColor(teNum, actionType);
       // 同期線
       if(pageValue[EventPageValueBase.PageValueKey.IS_SYNC]) {
         // 線表示
@@ -165,7 +184,7 @@ export default class Timeline extends Component {
 
     // クリックイベント内容
     // @param [Object] e イベントオブジェクト
-    var _clickTimelineEvent = function(e) {
+    var _clickTimelineEvent = (e) => {
       if($(e).is('.ui-sortable-helper')) {
         // ドラッグの場合はクリック反応なし
         return;
@@ -178,19 +197,19 @@ export default class Timeline extends Component {
     };
 
     // タイムライン削除
-    var _deleteTimeline = function(target) {
+    var _deleteTimeline = (target) => {
       const eNum = parseInt($(target).find('.te_num:first').val());
       // EventPageValueを削除
       PageValue.removeEventPageValue(eNum);
       // キャッシュ更新
       window.lStorage.saveAllPageValues();
       // タイムライン表示更新
-      return Timeline.refreshAllTimeline();
+      this.refreshAllTimeline();
     };
 
     // コンフィグメニュー初期化&表示
     // @param [Object] e 対象オブジェクト
-    var _initEventConfig = function(e) {
+    var _initEventConfig = (e) => {
       // サイドメニューをタイムラインに切り替え
       Sidebar.switchSidebarConfig(Sidebar.Type.EVENT);
       teNum = $(e).find('input.te_num').val();
@@ -201,16 +220,16 @@ export default class Timeline extends Component {
       const eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId);
       $(`#${eId}`).show();
       // サイドバー表示
-      return Sidebar.openConfigSidebar();
+      Sidebar.openConfigSidebar();
     };
 
-    return _setupTimelineEvent.call(this);
+    _setupTimelineEvent.call(this);
   }
 
   // タイムラインイベントの色を変更
   // @param [Integer] teNum イベント番号
   // @param [Integer] actionType アクションタイプ
-  static changeTimelineColor(teNum, actionType = null) {
+  changeTimelineColor(teNum, actionType = null) {
     // イベントの色を変更
     let teEmt = null;
     $('#timeline_events').children('.timeline_event').each(function(e) {
@@ -232,11 +251,11 @@ export default class Timeline extends Component {
   }
 
   // EventPageValueを参照してタイムラインを更新
-  static refreshAllTimeline() {
+  refreshAllTimeline() {
     Indicator.showIndicator(Indicator.Type.TIMELINE);
 
     // 非同期で実行
-    return setTimeout(() => {
+    setTimeout(() => {
         // 全消去
         const pEmt = $('#timeline_events');
         pEmt.children().each(function(e) {
@@ -254,22 +273,22 @@ export default class Timeline extends Component {
   }
 
   // イベントを追加or更新
-  static updateEvent(teNum) {
-    return this.setupTimelineEventConfig(teNum);
+  updateEvent(teNum) {
+    this.setupTimelineEventConfig(teNum);
   }
 
   // タイムラインソートイベント
-  static changeSortTimeline(beforeNum, afterNum) {
+  changeSortTimeline(beforeNum, afterNum) {
     if(beforeNum !== afterNum) {
       // PageValueのタイムライン番号を入れ替え
       PageValue.sortEventPageValue(beforeNum, afterNum);
     }
     // タイムライン再作成
-    return this.refreshAllTimeline();
+    this.refreshAllTimeline();
   }
 
   // 操作不可にする
-  static disabledOperation(flg) {
+  disabledOperation(flg) {
     if(flg) {
       if($('#timeline_container .cover_touch_overlay').length === 0) {
         $('#timeline_container').append("<div class='cover_touch_overlay'></div>");
@@ -282,7 +301,7 @@ export default class Timeline extends Component {
     }
   }
 
-  static updateTimelineContainerWidth() {
+  updateTimelineContainerWidth() {
     const paddingLeft = 10;
     const eachTimeEventWidth = 30 + 10;
     const timelineEvents = $('#timeline_events');
@@ -291,7 +310,7 @@ export default class Timeline extends Component {
     return timelineEvents.css('width', width + 'px');
   }
 
-  static addTimelineContainerWidth() {
+  addTimelineContainerWidth() {
     const eachTimeEventWidth = 30 + 10;
     const timelineEvents = $('#timeline_events');
     const width = parseInt(timelineEvents.css('width')) + eachTimeEventWidth;
@@ -300,10 +319,7 @@ export default class Timeline extends Component {
 
   render() {
     return (
-      <div className="timeline_event sortable blank">
-        <input className="te_num" type="hidden" value="" />
-        <input className="dist_id" type="hidden" value="" />
-      </div>
+      <SortableList items={this.state.items} onSortEnd={this.onSortEnd} />
     )
   }
 }

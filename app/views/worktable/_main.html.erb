@@ -1,13 +1,13 @@
 <div id="main" class="col-xs-12">
-    <div id="screen_wrapper">
-        <div id="project_wrapper" class="border" style="display: none">
-            <div id="project_contents">
-                <div id="<%= Const::Paging::ROOT_ID %>"></div>
-            </div>
-        </div>
-        <%= render 'base/floatview' %>
-    </div>
-    <%= render 'worktable/timeline/timeline' %>
+  <div id="screen_wrapper">
+      <div id="project_wrapper" class="border" style="display: none">
+          <div id="project_contents">
+              <div id="<%= Const::Paging::ROOT_ID %>"></div>
+          </div>
+      </div>
+      <%= render 'base/floatview' %>
+  </div>
+  <div id="timeline" style="display: none"></div>
 </div>
 
 <div id="<%= Const::ElementAttribute::MAIN_TEMP_ID %>">

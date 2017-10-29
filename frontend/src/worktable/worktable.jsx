@@ -6,12 +6,17 @@ import Project from '../base/project';
 import Timeline from './event/timeline';
 import OperationHistory from './common/history';
 import WorktableCommon from './common/worktable_common';
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+
+ReactDOM.render(<App />, document.getElementById('root'));
+
 
 $(() =>
   $('.worktable.index').ready(function() {
     window.isItemPreview = false;
     window.initDone = false;
-
 
     // ブラウザ対応チェック
     if(!Common.checkBlowserEnvironment()) {
@@ -37,6 +42,8 @@ $(() =>
     CommonVar.initCommonVar();
     // ナビバーイベント
     Navbar.initWorktableNavbar();
+
+    window.TIMELINE = ReactDOM.render(<Timeline />, document.getElementById('timeline'));
     if(loadWorktableFromCache) {
       // メッセージ表示
       Common.showModalFlashMessage('Loading cache');
@@ -60,20 +67,23 @@ $(() =>
         // モーダルを削除
         Common.hideModalView();
         // 初期化終了
-        return window.initDone = true;
+        window.initDone = true;
       });
       // タイムライン更新
-      return Timeline.refreshAllTimeline();
+      TIMELINE.refreshAllTimeline();
     } else {
       window.lStorage.clearWorktable();
       // タイムライン更新
-      Timeline.refreshAllTimeline();
+      TIMELINE.refreshAllTimeline();
       // 履歴に画面初期時を状態を保存
       OperationHistory.add(true);
       // プロジェクトモーダル表示
       Common.showModalView(constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);
       // モーダル用にリサイズイベントを設定
-      return Common.initResize();
+      Common.initResize();
     }
+
+
+
   })
 );
