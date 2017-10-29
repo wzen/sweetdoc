@@ -1,4 +1,4 @@
-import Common from '../base/common';
+import Common from '../../base/common';
 
 let constant = undefined;
 let _nodePath = undefined;

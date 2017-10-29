@@ -1,4 +1,4 @@
-import Common from '../base/common';
+import Common from '../../base/common';
 import UploadBase from './upload_base';
 
 export default class UploadItem extends UploadBase {

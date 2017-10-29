@@ -1,4 +1,4 @@
-import Common from '../../base/common';
+import Common from '../../../base/common';
 import WorktableCommon from '../common/worktable_common';
 
 export default class Handwrite {

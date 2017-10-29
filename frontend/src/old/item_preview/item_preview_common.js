@@ -1,6 +1,6 @@
-import Common from '../base/common';
-import CommonVar from '../base/common_var';
-import FloatView from '../base/float_view';
+import Common from '../../base/common';
+import CommonVar from '../../base/common_var';
+import FloatView from '../../base/float_view';
 import Navbar from '../navbar/navbar';
 import ItemPreviewHandwrite from './item_preview_handwrite';
 

@@ -1,4 +1,4 @@
-import Common from '../base/common';
+import Common from '../../base/common';
 import CommonEvent from './common_event';
 
 // 背景イベント

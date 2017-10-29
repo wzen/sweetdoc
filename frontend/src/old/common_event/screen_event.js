@@ -1,6 +1,6 @@
-import Common from '../base/common';
+import Common from '../../base/common';
 import CommonEvent from './common_event';
-import PageValue from '../base/page_value';
+import PageValue from '../../base/page_value';
 import EventPageValueBase from '../event_page_value/base/base';
 
 if(window.isWorkTable && window.WorktableCommon === undefined) {

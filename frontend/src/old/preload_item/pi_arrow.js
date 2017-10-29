@@ -1,4 +1,4 @@
-import Common from '../base/common';
+import Common from '../../base/common';
 import CanvasItemBase from '../item/canvas_item_base';
 
 // 矢印アイテム

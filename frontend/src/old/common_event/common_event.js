@@ -1,5 +1,5 @@
-import PageValue from '../base/page_value';
-import CommonEventBase from '../base/event_base/common_event_base';
+import PageValue from '../../base/page_value';
+import CommonEventBase from '../../base/event_base/common_event_base';
 
 // 共通イベント基底クラス
 export default class CommonEvent {

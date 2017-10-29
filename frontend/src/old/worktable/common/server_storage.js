@@ -1,4 +1,4 @@
-import PageValue from '../../base/page_value';
+import PageValue from '../../../base/page_value';
 
 let constant = undefined;
 export default class ServerStorage {
@@ -104,7 +104,7 @@ export default class ServerStorage {
               if(callback !== null) {
                 callback(data);
               }
-              System.import('../../base/common').then(loaded => {
+              System.import('../../../base/common').then(loaded => {
                 const Common = loaded.default;
                 return Common.ajaxError(data);
               });
@@ -116,7 +116,7 @@ export default class ServerStorage {
             if(callback !== null) {
               callback(data);
             }
-            System.import('../../base/common').then(loaded => {
+            System.import('../../../base/common').then(loaded => {
               const Common = loaded.default;
               return Common.ajaxError(data);
             });

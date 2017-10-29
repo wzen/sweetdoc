@@ -1,7 +1,7 @@
-import Common from '../base/common';
+import Common from '../../base/common';
 import ItemBase from '../item/item_base';
 import WorktableCommon from '../worktable/common/worktable_common';
-import FloatView from '../base/float_view';
+import FloatView from '../../base/float_view';
 
 let UPLOAD_FORM_WIDTH = undefined;
 let UPLOAD_FORM_HEIGHT = undefined;

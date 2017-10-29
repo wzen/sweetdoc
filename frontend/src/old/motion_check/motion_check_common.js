@@ -1,6 +1,6 @@
-import Common from '../base/common';
+import Common from '../../base/common';
 import Navbar from '../navbar/navbar';
-import PageValue from '../base/page_value';
+import PageValue from '../../base/page_value';
 import ServerStorage from '../worktable/common/server_storage';
 
 export default class MotionCheckCommon {

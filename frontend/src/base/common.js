@@ -254,16 +254,16 @@ export default class Common {
   static setTitle(title_name) {
     if (title_name !== null) {
       Promise.all([
-        System.import('../navbar/navbar'),
-        System.import('../run/common/run_common')
+        System.import('../old/navbar/navbar'),
+        System.import('../old/run/common/run_common')
       ]).then(([loaded, loaded2])=> {
 
       });
-      System.import('../navbar/navbar').then(loaded => {
+      System.import('../old/navbar/navbar').then(loaded => {
         const Navbar = loaded.default;
         Navbar.setTitle(title_name);
         if (!window.isWorkTable) {
-          System.import('../run/common/run_common').then(loaded => {
+          System.import('../old/run/common/run_common').then(loaded => {
             const RunCommon = loaded.default;
             return RunCommon.setTitle(title_name);
           });

@@ -1,4 +1,4 @@
-import Common from '../base/common';
+import Common from '../../base/common';
 import Handwrite from '../worktable/handwrite/handwrite';
 import Sidebar from '../sidebar_config/sidebar_ui'
 import ItemPreviewEventConfig from './item_preview_event_config';

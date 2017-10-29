@@ -1,4 +1,4 @@
-import Common from '../base/common';
+import Common from '../../base/common';
 import EventPageValueBase from '../event_page_value/base/base';
 import RunSetting from './common/run_setting';
 

@@ -1,5 +1,5 @@
-import PageValue from '../base/page_value';
-import Common from '../base/common';
+import PageValue from '../../base/page_value';
+import Common from '../../base/common';
 import ScrollOperationGuide from '../common_event/operation_guide/scroll_operation_guide';
 import Page from './page';
 import RunCommon from './common/run_common';

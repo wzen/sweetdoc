@@ -1,4 +1,4 @@
-import Common from '../../base/common';
+import Common from '../../../base/common';
 
 export default class RunFullScreen {
   static showCreatorInfo() {

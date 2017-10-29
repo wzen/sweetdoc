@@ -1,5 +1,5 @@
-import Common from '../base/common';
-import CommonVar from '../base/common_var';
+import Common from '../../base/common';
+import CommonVar from '../../base/common_var';
 import ItemPreviewCommon from './item_preview_common';
 
 $(function() {

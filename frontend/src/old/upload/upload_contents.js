@@ -1,5 +1,5 @@
-import Common from '../base/common';
-import FloatView from '../base/float_view';
+import Common from '../../base/common';
+import FloatView from '../../base/float_view';
 import UploadBase from './upload_base';
 
 export default class UploadContents extends UploadBase {

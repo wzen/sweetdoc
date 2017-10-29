@@ -1,5 +1,5 @@
 import EventBase from './event_base';
-import EventPageValueBase from '../../event_page_value/base/base';
+import EventPageValueBase from '../../old/event_page_value/base/base';
 
 export default class ItemEventBase extends EventBase {
 

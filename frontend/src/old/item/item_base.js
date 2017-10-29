@@ -1,8 +1,8 @@
-import Common from '../base/common';
-import PageValue from '../base/page_value';
-import ItemEventBase from '../base/event_base/item_event_base';
+import Common from '../../base/common';
+import PageValue from '../../base/page_value';
+import ItemEventBase from '../../base/event_base/item_event_base';
 import EventPageValueBase from '../event_page_value/base/base';
-import ConfigMenu from '../base/config_menu';
+import ConfigMenu from '../../base/config_menu';
 import OperationHistory from '../worktable/common/history';
 
 let constant = gon.const;
@@ -434,7 +434,7 @@ export default class ItemBase extends ItemEventBase {
     if (this.constructor.actionProperties.designConfigDefaultValues !== null) {
       PageValue.setInstancePageValue(PageValue.Key.instanceDesignRoot(this.id), this.constructor.actionProperties.designConfigDefaultValues);
     }
-    return this.designs = PageValue.getInstancePageValue(PageValue.Key.instanceDesignRoot(this.id));
+    this.designs = PageValue.getInstancePageValue(PageValue.Key.instanceDesignRoot(this.id));
   }
 
   // アイテム位置&サイズを更新

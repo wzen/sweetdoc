@@ -25,7 +25,7 @@ $(function() {
   });
 
   $('.gallery.detail').ready(function() {
-    System.import('../run/common/run_common').then(loaded => {
+    System.import('../old/run/common/run_common').then(loaded => {
       const RunCommon = loaded.default;
       // 作成者情報を表示
       RunCommon.showCreatorInfo();
@@ -35,8 +35,8 @@ $(function() {
 
   $('.gallery.full_window').ready(function() {
     Promise.all([
-      System.import('../run/common/run_common'),
-      System.import('../run/common/run_fullscreen')
+      System.import('../old/run/common/run_common'),
+      System.import('../old/run/common/run_fullscreen')
     ]).then(([loaded, loaded2]) => {
       const RunCommon = loaded.default;
       const RunFullScreen = loaded2.default;
@@ -68,8 +68,8 @@ $(function() {
 
   $('.gallery.embed_with_run').ready(function() {
     Promise.all([
-      System.import('../run/common/run_common'),
-      System.import('../run/common/run_fullscreen')
+      System.import('../old/run/common/run_common'),
+      System.import('../old/run/common/run_fullscreen')
     ]).then(([loaded, loaded2]) => {
       const RunCommon = loaded.default;
       const RunFullScreen = loaded2.default;

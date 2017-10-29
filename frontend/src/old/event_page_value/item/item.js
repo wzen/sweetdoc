@@ -1,5 +1,5 @@
-import Common from '../../base/common';
-import PageValue from '../../base/page_value';
+import Common from '../../../base/common';
+import PageValue from '../../../base/page_value';
 import EventPageValueBase from '../base/base';
 
 // EventPageValue アイテム

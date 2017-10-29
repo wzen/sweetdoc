@@ -1,8 +1,8 @@
-import Common from '../../base/common';
-import CommonVar from '../../base/common_var';
+import Common from '../../../base/common';
+import CommonVar from '../../../base/common_var';
 import Navbar from '../../navbar/navbar';
-import PageValue from '../../base/page_value';
-import GalleryCommon from '../../gallery/gallery_common';
+import PageValue from '../../../base/page_value';
+import GalleryCommon from '../../../gallery/gallery_common';
 import EventAction from '../event_action';
 
 let constant = undefined;

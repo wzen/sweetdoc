@@ -1,5 +1,5 @@
 import Common from './common';
-import EventPageValueBase from '../event_page_value/base/base';
+import EventPageValueBase from '../old/event_page_value/base/base';
 
 // メニューをサーバから読み込み
 let constant = undefined;
@@ -27,8 +27,8 @@ export default class ConfigMenu {
     let designConfigRoot = $(`#${obj.getDesignConfigId()}`);
     if((designConfigRoot === null) || (designConfigRoot.length === 0)) {
       Promise.all([
-        System.import('../item/canvas_item_base'),
-        System.import('../item/css_item_base')
+        System.import('../old/item/canvas_item_base'),
+        System.import('../old/item/css_item_base')
       ]).then(([loaded, loaded2]) => {
         const CanvasItemBase = loaded.default;
         const CssItemBase = loaded2.default;

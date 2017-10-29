@@ -1,5 +1,5 @@
-import Common from '../../../base/common';
-import FloatView from '../../../base/float_view';
+import Common from '../../../../base/common';
+import FloatView from '../../../../base/float_view';
 import CssItemBase from '../../../item/css_item_base';
 import Handwrite from '../../handwrite/handwrite';
 import PointingHandwrite from '../../handwrite/pointing_handwrite';

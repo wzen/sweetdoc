@@ -1,4 +1,4 @@
-import Common from '../base/common';
+import Common from '../../base/common';
 import WorktableCommon from '../worktable/common/worktable_common';
 import ColorPickerUtil from '../worktable/util/colorpicker';
 import EventConfig from './event_config';

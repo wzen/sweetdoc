@@ -1,5 +1,5 @@
 import ItemBase from './item_base';
-import PageValue from '../base/page_value';
+import PageValue from '../../base/page_value';
 
 // Canvasアイテム
 // @abstract

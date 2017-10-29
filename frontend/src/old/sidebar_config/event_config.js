@@ -1,5 +1,5 @@
-import PageValue from '../base/page_value';
-import ConfigMenu from '../base/config_menu';
+import PageValue from '../../base/page_value';
+import ConfigMenu from '../../base/config_menu';
 import EventPageValueBase from '../event_page_value/base/base';
 import WorktableCommon from '../worktable/common/worktable_common';
 

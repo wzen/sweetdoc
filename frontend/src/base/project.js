@@ -1,9 +1,9 @@
 import Common from './common';
 import PageValue from './page_value';
-import WorktableCommon from '../worktable/common/worktable_common';
+import WorktableCommon from '../old/worktable/common/worktable_common';
 import FloatView from './float_view';
-import Navbar from '../navbar/navbar';
-import ServerStorage from '../worktable/common/server_storage';
+import Navbar from '../old/navbar/navbar';
+import ServerStorage from '../old/worktable/common/server_storage';
 
 let _project_select_options = undefined;
 export default class Project {

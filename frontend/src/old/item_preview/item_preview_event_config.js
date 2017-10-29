@@ -1,4 +1,4 @@
-import Common from '../base/common';
+import Common from '../../base/common';
 import EventPageValueBase from '../event_page_value/base/base';
 import EventConfig from '../sidebar_config/event_config';
 import ItemPreviewCommon from '../item_preview/item_preview_common';

@@ -1,4 +1,4 @@
-import PageValue from '../../base/page_value';
+import PageValue from '../../../base/page_value';
 import Timeline from '../event/timeline.jsx';
 import WorktableCommon from './worktable_common';
 

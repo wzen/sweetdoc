@@ -1,9 +1,9 @@
-import Common from '../base/common';
+import Common from '../../base/common';
 import Navbar from '../navbar/navbar';
-import PageValue from '../base/page_value';
+import PageValue from '../../base/page_value';
 import WorktableCommon from '../worktable/common/worktable_common';
 import CanvasItemBase from '../item/canvas_item_base';
-import EventBase from '../base/event_base/event_base';
+import EventBase from '../../base/event_base/event_base';
 import EventPageValueBase from '../event_page_value/base/base';
 import EventDragPointingDraw from '../worktable/event/pointing/event_drag_pointing_draw';
 

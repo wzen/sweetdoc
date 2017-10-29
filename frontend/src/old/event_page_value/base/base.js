@@ -1,4 +1,4 @@
-import PageValue from '../../base/page_value';
+import PageValue from '../../../base/page_value';
 let constant = undefined;
 export default class EventPageValueBase {
   static initClass() {

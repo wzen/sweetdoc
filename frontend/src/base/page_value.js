@@ -448,7 +448,7 @@ export default class PageValue {
       //    else
       //      _setPageValueProduction.call(@, key, value, isCache, rootId, giveName, doAdded)
       if (window.isWorkTable && !Project.isSampleProject()) {
-        System.import('../worktable/common/server_storage').then(loaded => {
+        System.import('../old/worktable/common/server_storage').then(loaded => {
           const ServerStorage = loaded.default;
           // 自動保存実行
           return ServerStorage.startSaveIdleTimer();

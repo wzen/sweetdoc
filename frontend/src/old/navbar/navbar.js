@@ -1,6 +1,6 @@
-import Common from '../base/common';
-import PageValue from '../base/page_value';
-import FloatView from '../base/float_view';
+import Common from '../../base/common';
+import PageValue from '../../base/page_value';
+import FloatView from '../../base/float_view';
 import ServerStorage from '../worktable/common/server_storage';
 
 let constant = gon.const;
@@ -22,7 +22,7 @@ export default class Navbar {
     Promise.all([
       System.import('../worktable/common/worktable_common'),
       System.import('../sidebar_config/sidebar_ui'),
-      System.import('../base/project')
+      System.import('../../base/project')
     ]).then(([loaded, loaded2, loaded3]) => {
       const WorktableCommon = loaded.default;
       const Sidebar = loaded2.default;
@@ -142,7 +142,7 @@ export default class Navbar {
   static switchWorktableNavbarWhenProjectCreated(flg) {
     let root;
     if(flg) {
-      System.import('../base/project').then(loaded => {
+      System.import('../../base/project').then(loaded => {
         const Project = loaded.default;
         root = $('#header_items_file_menu');
         // プロジェクト作成後のナビバーに表示変更
@@ -344,7 +344,7 @@ export default class Navbar {
           loadEmt.find('li').off('click');
           loadEmt.find('li').on('click', function(e) {
             const user_pagevalue_id = $(this).find('.user_pagevalue_id:first').val();
-            System.import('../base/project').then(loaded => {loaded.default.load(user_pagevalue_id);})
+            System.import('../../base/project').then(loaded => {loaded.default.load(user_pagevalue_id);})
           });
 
           // ロード済みに変更 & 現在時間を記録

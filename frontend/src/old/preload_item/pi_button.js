@@ -1,4 +1,4 @@
-import Common from '../base/common';
+import Common from '../../base/common';
 import CssItemBase from '../item/css_item_base';
 
 // ボタンアイテム

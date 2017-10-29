@@ -1,7 +1,7 @@
 import Extend from '../extend';
 import Common from '../common';
 import PageValue from '../page_value';
-import EventPageValueBase from '../../event_page_value/base/base';
+import EventPageValueBase from '../../old/event_page_value/base/base';
 
 // イベントリスナー Extend
 export default class EventBase extends Extend {
