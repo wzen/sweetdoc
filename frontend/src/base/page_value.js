@@ -1217,7 +1217,7 @@ export default class PageValue {
     if (pageNum === null) {
       pageNum = PageValue.getPageNum();
     }
-    return this.saveInstanceObjectToFootprint(targetObjId, isChangeBefore, eventDistNum, pageNum);
+    this.saveInstanceObjectToFootprint(targetObjId, isChangeBefore, eventDistNum, pageNum);
   }
 
   // インスタンスの変数値を保存
@@ -1228,7 +1228,7 @@ export default class PageValue {
     }
     const obj = window.instanceMap[targetObjId];
     const key = isChangeBefore ? this.Key.footprintInstanceBefore(eventDistNum, targetObjId, pageNum) : this.Key.footprintInstanceAfter(eventDistNum, targetObjId, pageNum);
-    return this.setFootprintPageValue(key, obj.getMinimumObject());
+    this.setFootprintPageValue(key, obj.getMinimumObject());
   }
 
   // 共通インスタンスの変数値を保存
@@ -1242,12 +1242,12 @@ export default class PageValue {
     const footprint = {};
     footprint[se.id] = se.getMinimumObject();
     const key = isChangeBefore ? this.Key.footprintCommonBefore(eventDistNum, pageNum) : this.Key.footprintCommonAfter(eventDistNum, pageNum);
-    return this.setFootprintPageValue(key, footprint);
+    this.setFootprintPageValue(key, footprint);
   }
 
   // 全ての操作履歴を削除
   static removeAllFootprint() {
-    return this.setFootprintPageValue(this.Key.F_PREFIX, {});
+    this.setFootprintPageValue(this.Key.F_PREFIX, {});
   }
 };
 PageValue.initClass();

@@ -1,0 +1,8 @@
+const settingPagevalue = (state, action) => {
+  switch(action.type) {
+    default:
+      return state;
+  }
+};
+
+export default settingPagevalue;

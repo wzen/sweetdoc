@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-const timelineItems = (state, action) => {
+const timeline = (state, action) => {
   switch(action.type) {
     case 'CREATE_ITEM':
       return state;
@@ -9,7 +9,4 @@ const timelineItems = (state, action) => {
   }
 };
 
-const timeline = combineReducers({
-  timelineItems
-});
 export default timeline;
