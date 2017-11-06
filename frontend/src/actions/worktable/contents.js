@@ -1,7 +1,9 @@
-export const createItem = (itemType) => {
+export const createItem = (itemType, itemRect, params) => {
   return {
     type: 'CREATE_ITEM',
-    mode
+    itemType,
+    itemRect,
+    params
   }
 };
 
@@ -70,7 +72,7 @@ export const changeItemPosition = (item_id, x, y) => {
   }
 };
 
-export const changeItemSize = (item_id, width, height) => {
+export const changeitemRect = (item_id, width, height) => {
   return {
     type: 'CHANGE_POSITION',
     item_id,

@@ -13,19 +13,19 @@ export const changeModeSelectFirstFocus = (itemId) => {
   }
 };
 
-export const selectFirstFocus = (itemId, rect) => {
+export const selectFirstFocus = (itemId, itemRect) => {
   return {
     type: 'SELECT_FIRST_FOCUS',
     itemId,
-    rect
+    itemRect
   }
 };
 
-export const applySelectedFirstFocus = (itemId, rect) => {
+export const applySelectedFirstFocus = (itemId, itemRect) => {
   return {
     type: 'APPLY_SELECTED_FIRST_FOCUS',
     itemId,
-    rect
+    itemRect
   }
 };
 
