@@ -1,6 +1,7 @@
-export const createItem = (itemType, itemRect, params) => {
+export const createItem = (page, itemType, itemRect, params) => {
   return {
     type: 'CREATE_ITEM',
+    page,
     itemType,
     itemRect,
     params
