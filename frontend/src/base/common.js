@@ -140,6 +140,19 @@ export default class Common {
     return true;
   }
 
+  static async dynamicLoadClass(classes) {
+    let params = Array.isArray(classes) ? classes : [classes];
+    let unloaded = {};
+    try {
+      classes.forEach()
+      if (window.loadedClasses) {
+
+      }
+    } catch {
+
+    }
+  }
+
   // イベントのIDを作成
   // @return [Int] 生成したID
   static generateId() {

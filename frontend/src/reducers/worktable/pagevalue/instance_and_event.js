@@ -29,20 +29,51 @@ const currentForkNum = (state, action) => {
   }
 };
 
-const _defaultEvent = (action, itemInstanceId) => {
+// スクロールの合計の長さを取得
+// @return [Integer] 取得値
+const getAllScrollLength = (state) => {
+  let maxTeNum = 0;
+  let ret = null;
+  $(`#${PageValue.Key.E_ROOT} .${PageValue.Key.E_SUB_ROOT} .${PageValue.Key.pageRoot()}`).children('div').each((i, e) => {
+    const teNum = parseInt($(e).attr('class'));
+    if(teNum > maxTeNum) {
+      const start = $(e).find(`.${this.PageValueKey.SCROLL_POINT_START}:first`).val();
+      const end = $(e).find(`.${this.PageValueKey.SCROLL_POINT_END}:first`).val();
+      if((start !== null) && (start !== "null") && (end !== null) && (end !== "null")) {
+        maxTeNum = teNum;
+        return ret = end;
+      }
+    }
+  });
+  if((ret === null)) {
+    return 0;
+  }
+
+  return parseInt(ret);
+};
+
+const _defaultEvent = (state, action, itemInstanceId) => {
+  let start = getAllScrollLength(state);
+  // FIXME: スクロールの長さは要調整
+  const adjust = 4.0;
+  let end = start + (item.registCoord.length * adjust);
+  if(start > end) {
+    start = null;
+    end = null;
+  }
   return {
     dist_id: Common.generateId(),
     id: itemInstanceId,
-    item_class_name: action.item_class_name,
+    item_class_name: action.item_class.name,
     item_size_diff: {x: 0, y: 0, w: 0, h: 0},
     do_focus: true,
     is_common_event: false,
     finish_page: false,
-    method_name: '',
-    action_type: '',
-    scroll_point_start: '',
-    scroll_point_end: '',
-    is_sync: '',
+    method_name: action.item_class.DEFAULT_METHOD_NAME,
+    action_type: action.item_class.DEFAULT_ACTION_TYPE,
+    scroll_point_start: start,
+    scroll_point_end: end,
+    is_sync: false,
     scroll_enabled_directions: '',
     scroll_forward_directions: '',
     eventDuration: '',
@@ -66,7 +97,7 @@ const createInstance = (state, action) => {
       [pageKey(action.page)]: {
         [forkKey(state, action)]: {
           [eventKey(parseInt(currentEventCount(state, action)) + 1)]: {
-            ..._defaultEvent(action, instanceId)
+            ..._defaultEvent(state, action, instanceId)
           }
         }
       }
