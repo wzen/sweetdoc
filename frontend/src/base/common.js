@@ -1,5 +1,5 @@
 import PageValue from './page_value';
-const glob = require("globby");
+const globby = require("globby");
 
 // アプリ内の共通メソッドクラス
 let constant = gon.const;
@@ -141,9 +141,11 @@ export default class Common {
     return true;
   }
 
-  static async dynamicLoadClass(classes) {
+  // クラス名からコンポーネントを動的にロードする
+  // @return [Object(Class)] ロードしたコンポーネントクラス
+  static async dynamicLoadClass(classes, type = 'all') {
     let params = Array.isArray(classes) ? classes : [classes];
-    params = params.map((p) => {
+    params = params.map(p => {
       if (typeof p !== 'string') { return p.name; }
       else { return p; }
     });
@@ -151,7 +153,22 @@ export default class Common {
     let unloaded = Object.assign({}, window.loadedClasses);
     params.forEach((p) => { delete unloaded[e] });
     let searchDirs = [];
-    let searchPatterns = [];
+    if (type !== 'offical') {
+      // searchDirs.push('***'); // TODO: ここにプラグインが格納されているリモートサーバを追加すること
+    }
+    if (type !== 'personal') {
+      searchDirs.push('../../components');
+    }
+    let searchPatterns = [].concat(...searchDirs.map(s => { return unloaded.map(u => {return `${s}/**/${u}.js`})}));
+    let paths = await globby(searchPatterns);
+    let loadClasses = await Promise.all(paths.map(p => {return import(p)}));
+    let classNames = paths.map(p => { return p.match(/([^/]+?)?\.js$/)[1] });
+    classNames.forEach((name, idx) => {
+      if(name) {
+        window.loadedClasses[name] = loadClasses[idx].default();
+      }
+    });
+    return Array.isArray(classes) ? classes.map(c => { return window.loadedClasses[c] }) : window.loadedClasses[classes];
   }
 
   // イベントのIDを作成
