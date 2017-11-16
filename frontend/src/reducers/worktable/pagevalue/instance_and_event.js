@@ -23,7 +23,7 @@ const currentForkNum = (state, action) => {
 
 // スクロールの合計の長さを取得
 // @return [Integer] 取得値
-const _getAllScrollLength = (state, action) => {
+const getAllScrollLength = (state, action) => {
   try {
     let ret = 0;
     let timelines = state.events[action.page][forkKey(state, action)];
@@ -38,47 +38,47 @@ const _getAllScrollLength = (state, action) => {
   }
 };
 
-const _getScrollPointRange = (state, action) => {
-  let scroll_point_start = null;
-  let scroll_point_end = null;
-  if (action.canvasRegistCoord) {
-    scroll_point_start = _getAllScrollLength(state, action);
+const getScrollPointRange = (state, action) => {
+  let scrollPointStart = null;
+  let scrollPointEnd = null;
+  if (action.instanceParams.canvasRegistCoord) {
+    scrollPointStart = getAllScrollLength(state, action);
     // FIXME: スクロールの長さは要調整
     const adjust = 4.0;
-    scroll_point_end = scroll_point_start + (action.canvasRegistCoord.length * adjust);
-    if(scroll_point_start > scroll_point_end) {
-      scroll_point_start = null;
-      scroll_point_end = null;
+    scrollPointEnd = scrollPointStart + (action.instanceParams.canvasRegistCoord.length * adjust);
+    if(scrollPointStart > scrollPointEnd) {
+      scrollPointStart = null;
+      scrollPointEnd = null;
     }
   }
-  return {scroll_point_start, scroll_point_end};
+  return {scrollPointStart: scrollPointStart, scrollPointEnd: scrollPointEnd};
 };
 
-const _defaultEvent = (state, action, itemInstanceId) => {
-  if (!action.item_class.defaultMethodName()) {
+const defaultEvent = (state, action, itemInstanceId) => {
+  if (!action.itemClass.defaultMethodName()) {
     return {};
   }
 
-  let {scroll_point_start,scroll_point_end} = _getScrollPointRange(state, action);
+  let {scrollPointStart, scrollPointEnd} = getScrollPointRange(state, action);
 
   return {
     dist_id: Common.generateId(),
     id: itemInstanceId,
-    item_class_name: action.item_class.name,
-    item_size_diff: {x: 0, y: 0, w: 0, h: 0},
-    do_focus: true,
-    is_common_event: false,
-    finish_page: false,
-    method_name: action.item_class.defaultMethodName(),
-    action_type: action.item_class.defaultActionType(),
-    scroll_point_start: scroll_point_start,
-    scroll_point_end: scroll_point_end,
-    is_sync: false,
-    scroll_enabled_directions: action.item_class.defaultScrollEnabledDirection(),
-    scroll_forward_directions: action.item_class.defaultScrollForwardDirection(),
-    eventDuration: action.item_class.defaultClickDuration(),
-    specificMethodValues: action.item_class.defaultSpecificMethodValue(),
-    modifiable_vars: action.item_class.defaultModifiableVars()
+    itemClassName: action.itemClass.name,
+    itemSizeDiff: {x: 0, y: 0, w: 0, h: 0},
+    doFocus: true,
+    isCommonEvent: false,
+    finishPage: false,
+    methodName: action.itemClass.defaultMethodName(),
+    actionType: action.itemClass.defaultActionType(),
+    scrollPointStart: scrollPointStart,
+    scrollPointEnd: scrollPointEnd,
+    isSync: false,
+    scrollEnabledDirections: action.itemClass.defaultScrollEnabledDirection(),
+    scrollForwardDirections: action.itemClass.defaultScrollForwardDirection(),
+    eventDuration: action.itemClass.defaultClickDuration(),
+    specificMethodValues: action.itemClass.defaultSpecificMethodValue(),
+    modifiableVars: action.itemClass.defaultModifiableVars()
   };
 };
 
@@ -88,8 +88,7 @@ const createInstance = (state, action) => {
     instances: {
       [action.page]: {
         [instanceId]: {
-
-          ...action.params
+          ...action.instanceParams
         }
       }
     },
@@ -97,7 +96,7 @@ const createInstance = (state, action) => {
       [action.page]: {
         [forkKey(state, action)]: {
           [parseInt(currentEventCount(state, action)) + 1]: {
-            ..._defaultEvent(state, action, instanceId)
+            ...defaultEvent(state, action, instanceId)
           }
         }
       }

@@ -150,25 +150,26 @@ export default class Common {
       else { return p; }
     });
     if (!window.loadedClasses) { window.loadedClasses = {} }
-    let unloaded = Object.assign({}, window.loadedClasses);
-    params.forEach((p) => { delete unloaded[e] });
-    let searchDirs = [];
-    if (type !== 'offical') {
-      // searchDirs.push('***'); // TODO: ここにプラグインが格納されているリモートサーバを追加すること
-    }
-    if (type !== 'personal') {
-      searchDirs.push('../../components');
-    }
-    let searchPatterns = [].concat(...searchDirs.map(s => { return unloaded.map(u => {return `${s}/**/${u}.js`})}));
-    let paths = await globby(searchPatterns);
-    let loadClasses = await Promise.all(paths.map(p => {return import(p)}));
-    let classNames = paths.map(p => { return p.match(/([^/]+?)?\.js$/)[1] });
-    classNames.forEach((name, idx) => {
-      if(name) {
-        window.loadedClasses[name] = loadClasses[idx].default();
+    let unloadedClassNames = params.filter(item => !window.loadedClasses.includes(item));
+    if (unloadedClassNames.length > 0) {
+      let searchDirs = [];
+      if (type !== 'offical') {
+        // searchDirs.push('***'); // TODO: ここにプラグインが格納されているリモートサーバを追加すること
       }
-    });
-    return Array.isArray(classes) ? classes.map(c => { return window.loadedClasses[c] }) : window.loadedClasses[classes];
+      if (type !== 'personal') {
+        searchDirs.push('../../components');
+      }
+      let searchPatterns = [].concat(...searchDirs.map(s => unloadedClassNames.map(u => `${s}/**/${u}.js`)));
+      let paths = await globby(searchPatterns);
+      let loadClasses = await Promise.all(paths.map(p => import(p)));
+      let classNames = paths.map(p => p.match(/([^/]+?)?\.js$/)[1]);
+      classNames.forEach((name, idx) => {
+        if(name) {
+          window.loadedClasses[name] = loadClasses[idx].default();
+        }
+      });
+    }
+    return Array.isArray(classes) ? classes.map(c => window.loadedClasses[c]) : window.loadedClasses[classes];
   }
 
   // イベントのIDを作成
