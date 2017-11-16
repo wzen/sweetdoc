@@ -1,4 +1,5 @@
 import PageValue from './page_value';
+const glob = require("globby");
 
 // アプリ内の共通メソッドクラス
 let constant = gon.const;
@@ -142,15 +143,15 @@ export default class Common {
 
   static async dynamicLoadClass(classes) {
     let params = Array.isArray(classes) ? classes : [classes];
-    let unloaded = {};
-    try {
-      classes.forEach()
-      if (window.loadedClasses) {
-
-      }
-    } catch {
-
-    }
+    params = params.map((p) => {
+      if (typeof p !== 'string') { return p.name; }
+      else { return p; }
+    });
+    if (!window.loadedClasses) { window.loadedClasses = {} }
+    let unloaded = Object.assign({}, window.loadedClasses);
+    params.forEach((p) => { delete unloaded[e] });
+    let searchDirs = [];
+    let searchPatterns = [];
   }
 
   // イベントのIDを作成

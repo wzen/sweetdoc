@@ -1,21 +1,13 @@
 import Common from '../../../base/common';
 
-const pageKey = (page) => {
-  return `p_${page}`;
-};
-
-const eventKey = (eventNum) => {
-  return `te_${eventNum}`;
-};
-
 const forkKey = (state, action) => {
   let forkNum = currentForkNum(state, action);
-  return forkNum ? `ef_${forkNum}` : 'master';
+  return forkNum ? forkNum : 0;
 };
 
 const currentEventCount = (state, action) => {
   try {
-    return state.events[pageKey(action.page)][forkKey(state, action)];
+    return Object.keys(state.events[action.page][forkKey(state, action)]).length;
   } catch (e) {
     return 0;
   }
@@ -23,7 +15,7 @@ const currentEventCount = (state, action) => {
 
 const currentForkNum = (state, action) => {
   try {
-    return state.events[pageKey(action.page)].fork_num;
+    return parseInt(state.events[action.page].fork_num);
   } catch (e) {
     return null;
   }
@@ -31,36 +23,44 @@ const currentForkNum = (state, action) => {
 
 // スクロールの合計の長さを取得
 // @return [Integer] 取得値
-const getAllScrollLength = (state) => {
-  let maxTeNum = 0;
-  let ret = null;
-  $(`#${PageValue.Key.E_ROOT} .${PageValue.Key.E_SUB_ROOT} .${PageValue.Key.pageRoot()}`).children('div').each((i, e) => {
-    const teNum = parseInt($(e).attr('class'));
-    if(teNum > maxTeNum) {
-      const start = $(e).find(`.${this.PageValueKey.SCROLL_POINT_START}:first`).val();
-      const end = $(e).find(`.${this.PageValueKey.SCROLL_POINT_END}:first`).val();
-      if((start !== null) && (start !== "null") && (end !== null) && (end !== "null")) {
-        maxTeNum = teNum;
-        return ret = end;
-      }
-    }
-  });
-  if((ret === null)) {
+const _getAllScrollLength = (state, action) => {
+  try {
+    let ret = 0;
+    let timelines = state.events[action.page][forkKey(state, action)];
+    Object.keys(timelines).reverse().forEach((key) => {
+      if(!timelines[key]['scroll_point_end']) { return false }
+      ret = timelines[key]['scroll_point_end'];
+      return true;
+    });
+    return parseInt(ret);
+  } catch {
     return 0;
   }
+};
 
-  return parseInt(ret);
+const _getScrollPointRange = (state, action) => {
+  let scroll_point_start = null;
+  let scroll_point_end = null;
+  if (action.canvasRegistCoord) {
+    scroll_point_start = _getAllScrollLength(state, action);
+    // FIXME: スクロールの長さは要調整
+    const adjust = 4.0;
+    scroll_point_end = scroll_point_start + (action.canvasRegistCoord.length * adjust);
+    if(scroll_point_start > scroll_point_end) {
+      scroll_point_start = null;
+      scroll_point_end = null;
+    }
+  }
+  return {scroll_point_start, scroll_point_end};
 };
 
 const _defaultEvent = (state, action, itemInstanceId) => {
-  let start = getAllScrollLength(state);
-  // FIXME: スクロールの長さは要調整
-  const adjust = 4.0;
-  let end = start + (item.registCoord.length * adjust);
-  if(start > end) {
-    start = null;
-    end = null;
+  if (!action.item_class.defaultMethodName()) {
+    return {};
   }
+
+  let {scroll_point_start,scroll_point_end} = _getScrollPointRange(state, action);
+
   return {
     dist_id: Common.generateId(),
     id: itemInstanceId,
@@ -69,16 +69,16 @@ const _defaultEvent = (state, action, itemInstanceId) => {
     do_focus: true,
     is_common_event: false,
     finish_page: false,
-    method_name: action.item_class.DEFAULT_METHOD_NAME,
-    action_type: action.item_class.DEFAULT_ACTION_TYPE,
-    scroll_point_start: start,
-    scroll_point_end: end,
+    method_name: action.item_class.defaultMethodName(),
+    action_type: action.item_class.defaultActionType(),
+    scroll_point_start: scroll_point_start,
+    scroll_point_end: scroll_point_end,
     is_sync: false,
-    scroll_enabled_directions: '',
-    scroll_forward_directions: '',
-    eventDuration: '',
-    specificMethodValues: null,
-    modifiable_vars: null
+    scroll_enabled_directions: action.item_class.defaultScrollEnabledDirection(),
+    scroll_forward_directions: action.item_class.defaultScrollForwardDirection(),
+    eventDuration: action.item_class.defaultClickDuration(),
+    specificMethodValues: action.item_class.defaultSpecificMethodValue(),
+    modifiable_vars: action.item_class.defaultModifiableVars()
   };
 };
 
@@ -86,7 +86,7 @@ const createInstance = (state, action) => {
   let instanceId = `i_${action.itemType}_${Common.generateId()}`;
   Object.assign(state, {
     instances: {
-      [pageKey(action.page)]: {
+      [action.page]: {
         [instanceId]: {
 
           ...action.params
@@ -94,9 +94,9 @@ const createInstance = (state, action) => {
       }
     },
     events: {
-      [pageKey(action.page)]: {
+      [action.page]: {
         [forkKey(state, action)]: {
-          [eventKey(parseInt(currentEventCount(state, action)) + 1)]: {
+          [parseInt(currentEventCount(state, action)) + 1]: {
             ..._defaultEvent(state, action, instanceId)
           }
         }
