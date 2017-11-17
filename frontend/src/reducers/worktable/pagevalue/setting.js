@@ -1,10 +1,16 @@
 const settingPagevalue = (state, action) => {
   switch(action.type) {
     case 'UPDATE_GRID_ENABLE':
-      state['grid_enable'] = action.gridEnable;
+      state['gridEnable'] = action.gridEnable;
       break;
     case 'UPDATE_GRID_STEP':
-      state['grid_step'] = action.gridStep;
+      state['gridStep'] = action.gridStep;
+      break;
+    case 'AUTOSAVE_ENABLE':
+      state['autosaveEnable'] = action.autosaveEnable;
+      break;
+    case 'AUTOSAVE_TIME':
+      state['autosaveTime'] = action.autosaveTime;
       break;
     default:
       break;

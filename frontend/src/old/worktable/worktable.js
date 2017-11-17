@@ -9,10 +9,6 @@ import WorktableCommon from './common/worktable_common';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-
-ReactDOM.render(<App />, document.getElementById('root'));
-
-
 $(() =>
   $('.worktable.index').ready(function() {
     window.isItemPreview = false;
