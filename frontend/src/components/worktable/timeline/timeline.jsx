@@ -6,10 +6,10 @@ import EventPageValueBase from '../../event_page_value/base/base';
 import WorktableCommon from '../common/worktable_common';
 import Indicator from '../../../base/indicator';
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
-import TimelineItem from '../../../containers/worktable/timeline/timeline_item';
+import TimelineItemCmp from './timeline_item';
 
 const Item = SortableElement(({value}) =>
-  <TimelineItem />
+  <TimelineItemCmp />
 );
 
 const TimelineList = SortableContainer(({items}) => {
@@ -26,30 +26,8 @@ const TimelineList = SortableContainer(({items}) => {
   );
 });
 
-export default class TimelineContainer extends Component {
+export default class TimelineCmp extends Component {
 
-  // タイムラインを作成
-  // @param [Integer] teNum 作成するイベント番号
-  createTimelineEvent(teNum) {
-    // 存在チェック
-    const emts = $('#timeline_events .timeline_event .te_num');
-    let exist = false;
-    emts.each(function(e) {
-      if(parseInt($(this).val()) === teNum) {
-        exist = true;
-      }
-    });
-    if(exist) {
-      return;
-    }
-    // tempをクローンしてtimeline_eventsに追加
-    const pEmt = $('#timeline_events');
-    const newEmt = $('.timeline_event_temp', pEmt).children(':first').clone(true);
-    newEmt.find('.te_num').val(teNum);
-    const distIdPrefix = `d${PageValue.getPageNum()}`;
-    newEmt.find('.dist_id').val(distIdPrefix + Common.generateId());
-    return pEmt.append(newEmt);
-  }
 
   // タイムラインのイベント設定
   setupTimelineEventConfig(teNum = null) {

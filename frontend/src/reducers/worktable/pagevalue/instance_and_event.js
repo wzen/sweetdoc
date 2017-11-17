@@ -62,7 +62,7 @@ const defaultEvent = (state, action, itemInstanceId) => {
   let {scrollPointStart, scrollPointEnd} = getScrollPointRange(state, action);
 
   return {
-    dist_id: Common.generateId(),
+    distId: Common.generateId(),
     id: itemInstanceId,
     itemClassName: action.itemClass.name,
     itemSizeDiff: {x: 0, y: 0, w: 0, h: 0},

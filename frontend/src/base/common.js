@@ -987,18 +987,6 @@ export default class Common {
     return ret;
   }
 
-  // アクションタイプからアクションタイプクラス名を取得
-  // @param [Integer] actionType アクションタイプID
-  // @return [String] アクションタイプクラス名
-  static getActionTypeClassNameByActionType(actionType) {
-    if (parseInt(actionType) === constant.ActionType.CLICK) {
-      return constant.TimelineActionTypeClassName.CLICK;
-    } else if (parseInt(actionType) === constant.ActionType.SCROLL) {
-      return constant.TimelineActionTypeClassName.SCROLL;
-    }
-    return null;
-  }
-
   // コードのアクションタイプからアクションタイプを取得
   // @param [Integer] actionType アクションタイプID
   // @return [String] アクションタイプクラス名
