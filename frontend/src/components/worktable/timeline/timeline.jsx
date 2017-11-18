@@ -6,20 +6,24 @@ import EventPageValueBase from '../../event_page_value/base/base';
 import WorktableCommon from '../common/worktable_common';
 import Indicator from '../../../base/indicator';
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
-import TimelineItemCmp from './timeline_item';
+import TimelineItem from '../../../containers/worktable/TimelineItem';
+import {StyleSheet, css} from 'aphrodite';
 
 const Item = SortableElement(({value}) =>
-  <TimelineItemCmp />
+  <TimelineItem {...value} />
 );
 
 const TimelineList = SortableContainer(({items}) => {
+  let list = [];
+  items.forEach((value, index) => {
+    if(i.isSync) { list.push(<div className={css(styles.syncLine, styles[this.props.actionType])} />) }
+    list.push(<Item key={`item-${index}`} index={index} value={value} />)
+  });
   return (
-    <div id="timeline_container" className="border">
-      <div id="timeline_events_container" className="scroll_x_content">
-        <div id="timeline_events">
-          {items.map((value, index) => (
-            <Item key={`item-${index}`} index={index} value={value} />
-          ))}
+    <div id="timeline_container" className={css(styles.timelineContainer, 'border')}>
+      <div id="timeline_events_container" className={css(styles.timelineEventsContainer, 'scroll_x_content')}>
+        <div id="timeline_events" className={css(styles.timelineEvents)}>
+          {list}
         </div>
       </div>
     </div>
@@ -294,7 +298,41 @@ export default class TimelineCmp extends Component {
 
   render() {
     return (
-      <TimelineList items={this.props.timeline_items} />
+      <TimelineList items={this.props.items} />
     )
   }
 }
+
+const styles = StyleSheet.create({
+  // これは後で移動
+  timeline: {
+    height: '70px'
+  },
+
+  timelineContainer: {
+    backgroundColor: '#fcf6ff'
+  },
+  timelineEventsContainer: {
+    margin: '5px 0',
+    padding: '0 3px',
+    height: '40px'
+  },
+  timelineEvents: {
+    paddingLeft: '10px',
+    height: '100%'
+  },
+  syncLine: {
+    position: 'relative',
+    width: '10px',
+    height: '20px',
+    marginTop: '10px',
+    marginLeft: '-10px',
+    float: 'left'
+  },
+  click: {
+    backgroundColor: '#7d0000'
+  },
+  scroll: {
+    backgroundColor: '#00007d'
+  }
+});

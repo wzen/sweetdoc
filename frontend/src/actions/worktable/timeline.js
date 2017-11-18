@@ -1,6 +1,6 @@
-export const selectTimeline = (timeline_type) => {
+export const selectTimeline = (distId) => {
   return {
     type: 'SELECT_TIMELINE',
-    timeline_type
+    distId
   }
 };

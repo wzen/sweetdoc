@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import TimelineCmp from '../../components/worktable/timeline/timeline';
+import TimelineCmp from '../../components/worktable/timeline/Timeline';
 
 const timelineEvents = (state) => {
   let pageNum = state.generalPagevalue.currentPageNum;
@@ -15,8 +15,9 @@ const actionType = (state) => {
 const items = (state) => {
   return timelineEvents(state).map(e => {
     return {
+      distId: e.distId,
       actionType: actionType(e),
-      isSync: e.isSync
+      isSync: e.isSync ? 'sync' : ''
     }
   });
 };
@@ -27,17 +28,8 @@ const mapStateToProps = (state) => {
   }
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onClick: (type) => {
-      dispatch();
-    }
-  }
-};
-
 const Timeline = connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(TimelineCmp);
 
 export default Timeline;
