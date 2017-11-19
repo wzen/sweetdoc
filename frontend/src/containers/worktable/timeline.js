@@ -17,7 +17,7 @@ const items = (state) => {
     return {
       distId: e.distId,
       actionType: actionType(e),
-      isSync: e.isSync ? 'sync' : ''
+      isSync: e.isSync
     }
   });
 };

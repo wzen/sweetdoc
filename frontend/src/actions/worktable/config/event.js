@@ -71,20 +71,18 @@ export const inputEventValue = (eventNum, itemId, values) => {
   }
 };
 
-export const runEventPreview = (eventNum, itemId, keepDisplayMag) => {
+export const runEventPreview = ({keepDisplayMag = false, distId = null, eventConfig = {}}) => {
   return {
     type: 'RUN_EVENT_PREVIEW',
-    eventNum,
-    itemId,
-    keepDisplayMag
+    distId,
+    keepDisplayMag,
+    ...eventConfig
   }
 };
 
-export const stopEventPreview = (eventNum, itemId) => {
+export const stopEventPreview = () => {
   return {
-    type: 'STOP_EVENT_PREVIEW',
-    eventNum,
-    itemId
+    type: 'STOP_EVENT_PREVIEW'
   }
 };
 

@@ -6,10 +6,10 @@ import EventPageValueBase from '../../event_page_value/base/base';
 import WorktableCommon from '../common/worktable_common';
 import Indicator from '../../../base/indicator';
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
-import TimelineItem from '../../../containers/worktable/TimelineItem';
+import TimelineItem from './TimelineItem';
 import {StyleSheet, css} from 'aphrodite';
 
-const Item = SortableElement(({value}) =>
+const SortableItem = SortableElement(({value}) =>
   <TimelineItem {...value} />
 );
 
@@ -17,8 +17,9 @@ const TimelineList = SortableContainer(({items}) => {
   let list = [];
   items.forEach((value, index) => {
     if(i.isSync) { list.push(<div className={css(styles.syncLine, styles[this.props.actionType])} />) }
-    list.push(<Item key={`item-${index}`} index={index} value={value} />)
+    list.push(<SortableItem key={`item-${index}`} index={index} value={value} />)
   });
+  list.push(<TimelineItem value={{actionType: 'blank'}}/>);
   return (
     <div id="timeline_container" className={css(styles.timelineContainer, 'border')}>
       <div id="timeline_events_container" className={css(styles.timelineEventsContainer, 'scroll_x_content')}>
@@ -35,131 +36,7 @@ export default class TimelineCmp extends Component {
 
   // タイムラインのイベント設定
   setupTimelineEventConfig(teNum = null) {
-    const te = null;
-    // 設定開始
-    const _setupTimelineEvent = function() {
-      let timelineEvents;
-      const ePageValues = PageValue.getEventPageValueSortedListByNum();
-      let emt = null;
-      if(ePageValues.length > 0) {
-        let idx;
-        if(teNum) {
-          idx = teNum - 1;
-          _createEvent.call(this, ePageValues[idx], idx);
-        } else {
-          // 色、数値、Sync線を更新
-          for(idx = 0; idx < ePageValues.length; idx++) {
-            const pageValue = ePageValues[idx];
-            _createEvent.call(this, pageValue, idx);
-          }
-          timelineEvents = $('#timeline_events').children('.timeline_event');
-          // 不要なタイムラインイベントを削除
-          if(ePageValues.length < (timelineEvents.length - 1)) {
-            for(let i = ePageValues.length, end = timelineEvents.length - 1, asc = ePageValues.length <= end; asc ? i <= end : i >= end; asc ? i++ : i--) {
-              emt = timelineEvents.get(i);
-              emt.remove();
-            }
-          }
-        }
-      } else {
-        this.createTimelineEvent(1);
-      }
 
-      // blankイベントを新規作成
-      this.createTimelineEvent(ePageValues.length + 1);
-
-      // 再取得
-      timelineEvents = $('#timeline_events').children('.timeline_event');
-
-      // イベントのクリック
-      timelineEvents.off('click').on('click', e => {
-        return _clickTimelineEvent.call(this, $(e.target));
-      });
-      // イベントのD&D
-      $('#timeline_events').sortable({
-        revert: true,
-        axis: 'x',
-        containment: $('#timeline_events_container'),
-        items: '.sortable:not(.blank)',
-        start(event, ui) {
-          // 同期線消去
-          $('#timeline_events .sync_line').remove();
-          // コンフィグ非表示
-          return Sidebar.closeSidebar();
-        },
-        update(event, ui) {
-          // イベントのソート番号を更新
-          const target = $(ui.item);
-          const beforeNum = parseInt(target.find('.te_num:first').val());
-          let afterNum = null;
-          const tes = $('#timeline_events').children('.timeline_event');
-          tes.each(function(idx) {
-            if(parseInt($(this).find('.te_num:first').val()) === beforeNum) {
-              return afterNum = idx + 1;
-            }
-          });
-          if(afterNum !== null) {
-            return Timeline.changeSortTimeline(beforeNum, afterNum);
-          }
-        }
-      });
-      // イベントの右クリック
-      const menu = [{title: I18n.t('context_menu.preview'), cmd: "preview", uiIcon: "ui-icon-scissors"}];
-      menu.push({
-        title: I18n.t('context_menu.delete'),
-        cmd: "delete",
-        uiIcon: "ui-icon-scissors"
-      });
-      return timelineEvents.filter(function(idx) {
-        return !$(this).hasClass('temp') && !$(this).hasClass('blank');
-      }).contextmenu(
-        {
-          preventContextMenuForPopup: true,
-          preventSelect: true,
-          menu,
-          select: (event, ui) => {
-            const {target} = event;
-            switch(ui.cmd) {
-              case "preview":
-                var te_num = $(target).find('input.te_num').val();
-                return WorktableCommon.runPreview(te_num);
-              case "delete":
-                if(window.confirm(I18n.t('message.dialog.delete_event'))) {
-                  return _deleteTimeline.call(this, target);
-                }
-                break;
-              default:
-                return;
-            }
-          }
-        }
-      );
-    };
-
-    // イベント作成
-    var _createEvent = (pageValue, idx) => {
-      let timelineEvents = $('#timeline_events').children('.timeline_event');
-      teNum = idx + 1;
-      let emt = timelineEvents.eq(idx);
-      if(emt.length === 0) {
-        // 無い場合は新規作成
-        this.createTimelineEvent(teNum);
-        timelineEvents = $('#timeline_events').children('.timeline_event');
-        emt = timelineEvents.eq(idx);
-      }
-      $('.te_num', emt).val(teNum);
-      $('.dist_id', emt).val(pageValue[EventPageValueBase.PageValueKey.DIST_ID]);
-      const actionType = pageValue[EventPageValueBase.PageValueKey.ACTIONTYPE];
-      this.changeTimelineColor(teNum, actionType);
-      // 同期線
-      if(pageValue[EventPageValueBase.PageValueKey.IS_SYNC]) {
-        // 線表示
-        return emt.before(`<div class='sync_line ${Common.getActionTypeClassNameByActionType(actionType)}'></div>`);
-      } else {
-        // 線消去
-        return emt.prev('.sync_line').remove();
-      }
-    };
 
     // クリックイベント内容
     // @param [Object] e イベントオブジェクト

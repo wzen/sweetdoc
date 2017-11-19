@@ -1,13 +1,44 @@
 import React, {Component} from 'react';
 import {StyleSheet, css} from 'aphrodite';
+import { selectTimeline, removeTimeline } from "../../../actions/worktable/timeline";
+import { runEventPreview } from "../../../actions/worktable/config/event";
+import PropTypes from 'prop-types';
+import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
-export default class TimelineItemCmp extends Component {
+export default class TimelineItem extends Component {
   render() {
-    return (
-      <div className={css(styles.item, styles[this.props.actionType], styles[this.props.isSync])}/>
-    )
+    if(this.props.actionType === 'blank') {
+      return (
+        <div className={css(styles.item, styles.blank)}
+             onClick={this.props.dispatch(selectTimeline())}/>
+      )
+    } else {
+      let sync = this.props.isSync ? 'sync' : '';
+      return (
+        <div>
+          <ContextMenuTrigger id={`context-${this.props.distId}`}>
+            <div className={css(styles.item, styles[this.props.actionType], styles[sync])}
+                 onClick={() => this.props.dispatch(selectTimeline(this.props.distId))}/>
+          </ContextMenuTrigger>
+          <ContextMenu id={`context-${this.props.distId}`}>
+            <MenuItem data={"preview"} onClick={() => this.props.dispatch(runEventPreview({distId: this.props.distId}))}>
+              Preview Action
+            </MenuItem>
+            <MenuItem data={"remove"} onClick={() => this.props.dispatch(removeTimeline(this.props.distId))}>
+              Remove
+            </MenuItem>
+          </ContextMenu>
+        </div>
+      )
+    }
   }
 }
+
+TimelineItem.PropTypes = {
+  distId: PropTypes.string,
+  actionType: PropTypes.string.isRequired,
+  isSync: PropTypes.string
+};
 
 const styles = StyleSheet.create({
   item: {
@@ -41,3 +72,5 @@ const styles = StyleSheet.create({
     backgroundImage: 'linear-gradient(top, #0000bb 0%, #0000a8 39%, #000087)'
   }
 });
+
+export default connect()(TimelineItem);
