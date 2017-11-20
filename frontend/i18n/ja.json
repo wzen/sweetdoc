@@ -1,0 +1,317 @@
+{
+  "errors": {
+    "messages": {
+      "wrong_size": "is the wrong size (should be {{file_size}})",
+      "size_too_small": "is too small (should be at least {{file_size}})",
+      "size_too_big": "is too big (should be at most {{file_size}})"
+    }
+  },
+  "hello": "こんにちは",
+  "header_menu": {
+    "file": {
+      "changeproject": "プロジェクト作成・読み込み",
+      "adminproject": "プロジェクト管理",
+      "file": "ファイル",
+      "open": "開く",
+      "save": "保存",
+      "load": "読み込み",
+      "setting": "設定",
+      "new_file": "新規ファイル",
+      "all_save": "全保存"
+    },
+    "action": {
+      "action": "アクション",
+      "select_action": "(アクションを選択)",
+      "draw": {
+        "draw": "描画",
+        "arrow": "矢印",
+        "button": "ボタン"
+      },
+      "preload_item": "標準アイテム",
+      "added_item": "追加アイテム",
+      "edit": "編集",
+      "item_gallery": "アイテムギャラリー",
+      "item_coding": "アイテム作成(開発者向け)"
+    },
+    "motion_check": {
+      "title": "動作確認",
+      "newtab": "新タブで実行",
+      "newwindow": "新ウィンドウで実行"
+    },
+    "page": {
+      "page": "ページ",
+      "add_page": "ページ追加",
+      "delete_page": "ページ削除",
+      "fork": "フォーク",
+      "add_fork": "フォーク追加",
+      "delete_fork": "フォーク削除",
+      "master": "マスター"
+    },
+    "etc": {
+      "etc": "その他",
+      "language": "言語",
+      "introduction": "自己紹介",
+      "about": "このサイトについて",
+      "back_to_gallery": "ギャラリーに戻る",
+      "last_update_date": "最新更新時間"
+    },
+    "setting": {
+      "view_setting": "表示設定",
+      "show_guide": "モーションガイド表示/非表示",
+      "screen_size": "スクリーンサイズ変更"
+    }
+  },
+  "context_menu": {
+    "new_file": "新規ファイル",
+    "new_folder": "新規フォルダ",
+    "copy": "コピー",
+    "cut": "切り取り",
+    "paste": "貼り付け",
+    "float": "最前面に移動",
+    "rear": "再背面に移動",
+    "delete": "削除",
+    "edit": "編集",
+    "preview": "プレビュー"
+  },
+  "config": {
+    "tab": {
+      "beginning_event_state": "イベント開始状態",
+      "worktable_setting": "Worktable設定",
+      "item_state": "アイテム状態"
+    },
+    "state": {
+      "page_num": "ページ番号",
+      "page_select_option": "ページ",
+      "page_select_option_none": "遷移なし(終了)",
+      "finish_page": "ページ終了",
+      "jump_to": "ページ遷移",
+      "background": "背景",
+      "screen_state": "画面初期表示状態",
+      "screen_state_warn": "アイテムのフォーカスが設定されている場合、画面初期位置はフォーカスが優先されます。"
+    },
+    "worktable_setting": {
+      "display_position": "表示位置",
+      "zoom": "表示倍率"
+    },
+    "select_opt_group": {
+      "common": "共通イベント",
+      "item": "アイテム"
+    },
+    "item_state": {
+      "created_item_list": "作成アイテム一覧"
+    },
+    "event": {
+      "action": {
+        "action": "アクション",
+        "preview": "プレビュー",
+        "stop_preview": "プレビュー停止",
+        "keep_mag": "画面の表示倍率を保持",
+        "apply": "適用",
+        "common_state": "共通状態変更"
+      },
+      "kick": {
+        "kick_type": "実行タイプ",
+        "scroll": "スクロール",
+        "click": "クリック",
+        "scroll_point": "スクロール値",
+        "scroll_direction": "スクロール方向",
+        "click_duration": "イベント実行時間",
+        "fork": "イベント分岐"
+      },
+      "item_common": {
+        "item_common": "アイテム状態変更",
+        "position": "表示位置",
+        "show": "表示状態",
+        "show_will_chapter": "チャプター開始時に表示",
+        "show_will_chapter_duration": "実行時間",
+        "hide_did_chapter": "チャプター終了時に非表示",
+        "hide_did_chapter_duration": "実行時間",
+        "size": "アイテムサイズ"
+      },
+      "item_state": {
+        "item_state": "アイテム状態",
+        "focus": "フォーカス"
+      },
+      "sync_before": "イベント同時実行",
+      "target_select": {
+        "target_select": "イベント対象",
+        "default": "(未選択)"
+      },
+      "display_state": {
+        "display_state": "表示状態",
+        "applied_state": "画面をイベント適用後に変更"
+      }
+    }
+  },
+  "gallery": {
+    "bookmark_button": "ブックマークする",
+    "input_note": "コメントを入力",
+    "filter": {
+      "label": "表示フィルター",
+      "all": "無し",
+      "new": "新着",
+      "view_count": "閲覧数",
+      "bookmark_count": "ブックマーク数",
+      "recommend": "リコメンド"
+    }
+  },
+  "upload_confirm": {
+    "title": "タイトル名",
+    "caption": "説明",
+    "tags": "タグ",
+    "popular_tags": "人気のタグ",
+    "recommend_tags": "おすすめのタグ",
+    "version": "バージョン",
+    "show_guide": "モーションガイドを表示",
+    "show_page_num": "ページ番号を表示",
+    "show_chapter_num": "チャプター番号を表示",
+    "existed_upload_contents": "このプロジェクトで作成された投稿済みドキュメントがあります",
+    "overwrite_contents": "{{contents}} の更新",
+    "posting_new": "新規のドキュメントとして投稿",
+    "thumbnail": "サムネイル",
+    "thumbnail_warn": "設定可能なファイルサイズは{{size}}KB以下です",
+    "thumbnail_size_error": "ファイルサイズが{{size}}KBを超過しています",
+    "title_input_error": "タイトルを入力してください",
+    "tag_place_holder": "タグを入力",
+    "tag_add": "クリックで追加",
+    "tag_remove": "クリックで削除"
+  },
+  "mypage": {
+    "header_title": {
+      "bookmarks": "ブックマーク一覧",
+      "created_contents": "作成したドキュメント一覧",
+      "created_items": "作成したアイテム一覧",
+      "using_items": "使用中アイテム一覧"
+    },
+    "empty": {
+      "bookmarks_description": "ブックマークがありません",
+      "created_contents_description": "作成したドキュメントはありません",
+      "created_items_description": "作成したアイテムはありません",
+      "using_items_description": "使用中のアイテムはありません",
+      "bookmarks_link_description": "ギャラリーに移動する",
+      "created_contents_link_description": "ドキュメントを作成する",
+      "created_items_link_description": "アイテムを作成する",
+      "using_items_link_description": "アイテムを使用する"
+    },
+    "message": {
+      "default_delete_message": "削除してよろしいですか？"
+    }
+  },
+  "item_gallery": {
+    "description": "アップロードされたアイテムはありません",
+    "link_description": "アイテムを作成する"
+  },
+  "embed": {
+    "caption": {
+      "play_in_site": "元サイトで閲覧"
+    }
+  },
+  "message": {
+    "dialog": {
+      "change_project": "作成中のコンテンツは削除されます。",
+      "last_savetime": "最終保存時間:",
+      "delete_item": "アイテムを削除します。",
+      "update_gallery": "アップロードします。",
+      "delete_node": "ノードを削除します。 ノード以下のサブツリーも同時に削除されます。",
+      "delete_project": "プロジェクトを削除します。",
+      "delete_event": "イベントを削除します。",
+      "delete_page": "ページを削除します。",
+      "sample_project_upload": "このプロジェクトはサンプルのため\nアップロードは使用できません。\n"
+    },
+    "database": {
+      "item_state": {
+        "save": {
+          "success": "アイテムの状態を保存しました。",
+          "error": "アイテムの保存に失敗しました。"
+        },
+        "load": {
+          "success": "アイテムの状態を読み込みました。",
+          "error": "アイテムの読み込みに失敗しました。"
+        }
+      }
+    },
+    "gallery": {
+      "upload": {
+        "save": {
+          "success": "",
+          "error": ""
+        }
+      }
+    },
+    "project": {
+      "error": {
+        "project_name": "プロジェクト名が入力されていません。",
+        "display_size": "画面サイズが入力されていません。",
+        "not_exist": "作成済みのプロジェクトは存在しません。",
+        "get_error": "情報取得エラー"
+      }
+    }
+  },
+  "common_action": {
+    "background": "背景",
+    "screen": "画面表示"
+  },
+  "activerecord": {
+    "attributes": {
+      "user": {
+        "name": "名前",
+        "password": "パスワード",
+        "password_confirmation": "パスワード確認",
+        "email": "メールアドレス",
+        "remember_me": "セッションを保持"
+      }
+    }
+  },
+  "account": {
+    "in_use_as_guest": "ゲストとして使用中",
+    "login_or_create_account": "ログインまたは新規作成",
+    "edit": "アカウント編集",
+    "logout": "ログアウト",
+    "continue_as_guest": "ゲストのまま継続"
+  },
+  "modal": {
+    "project_name": "プロジェクト名",
+    "display_size": "サイズ",
+    "width": "幅",
+    "height": "高さ",
+    "project_create": "プロジェクト作成",
+    "project_select": "プロジェクト選択",
+    "not_fix_screen_size": "画面サイズ指定しない",
+    "fix_screen_size": "画面サイズ指定",
+    "select_project": "プロジェクト",
+    "button": {
+      "create": "作成",
+      "open": "選択",
+      "back": "ギャラリーに戻る"
+    },
+    "environment_not_support": "お使いのブラウザは未対応です。",
+    "not_sample_project": "あなたのプロジェクト",
+    "sample_project": "サンプルプロジェクト"
+  },
+  "contents_info": {
+    "page": "ページ",
+    "fork": "フォーク",
+    "chapter": "チャプター"
+  },
+  "user": {
+    "sign_in": "SweetDocにログイン",
+    "do_sign_in": "ログイン",
+    "sign_in_with_social": "ソーシャルボタンでログイン",
+    "sign_up": "新規アカウントを作成",
+    "do_sign_up": "アカウント作成",
+    "forgot_your_password": "Forgot your password?",
+    "edit_account": "アカウント編集",
+    "cancel_account": "アカウント削除",
+    "update": "更新",
+    "send_me_reset_password_instructions": "パスワードリセットをリクエスト",
+    "resend_confirmation_instructions": "アカウント確認メールを再送信する",
+    "do_resend_confirmation_instructions": "再送信"
+  },
+  "tag": {
+    "contents_recommend": "プレゼンテーション,漫画,メモ",
+    "item_recommend": "ボタン,矢印,テキスト"
+  },
+  "search": {
+    "placeholder": "o((･_･彡 ･_･))o"
+  }
+}

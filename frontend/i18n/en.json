@@ -1,0 +1,319 @@
+{
+  "errors": {
+    "messages": {
+      "wrong_size": "is the wrong size (should be {{file_size}})",
+      "size_too_small": "is too small (should be at least {{file_size}})",
+      "size_too_big": "is too big (should be at most {{file_size}})"
+    }
+  },
+  "hello": "Hello world",
+  "header_menu": {
+    "file": {
+      "changeproject": "Create Project",
+      "adminproject": "Project Manager",
+      "file": "File",
+      "open": "Open",
+      "save": "Save",
+      "load": "Load",
+      "setting": "Setting",
+      "new_file": "New File",
+      "all_save": "Save all code"
+    },
+    "action": {
+      "action": "Action",
+      "select_action": "(Select Action)",
+      "draw": {
+        "draw": "Draw",
+        "arrow": "Arrow",
+        "button": "Button"
+      },
+      "preload_item": "Default items",
+      "added_item": "Added items",
+      "edit": "Edit",
+      "item_gallery": "Item gallery",
+      "item_coding": "Create item(for dev)"
+    },
+    "motion_check": {
+      "title": "Motion Check",
+      "newtab": "New Tab",
+      "newwindow": "Run with Window"
+    },
+    "page": {
+      "page": "Page",
+      "add_page": "Add page",
+      "delete_page": "Remove page",
+      "fork": "Fork",
+      "add_fork": "Add fork",
+      "delete_fork": "Remove fork",
+      "master": "Upstream"
+    },
+    "etc": {
+      "etc": "Etc",
+      "language": "Language",
+      "introduction": "introduction",
+      "about": "About",
+      "back_to_gallery": "Back to gallery",
+      "last_update_date": "Last update"
+    },
+    "setting": {
+      "view_setting": "View setting",
+      "show_guide": "Toggle Guide",
+      "screen_size": "Change screen size"
+    }
+  },
+  "context_menu": {
+    "new_file": "New File",
+    "new_folder": "New Folder",
+    "js": "JavaScript",
+    "coffee": "CoffeeScript",
+    "copy": "Copy",
+    "cut": "Cut",
+    "paste": "Paste",
+    "float": "Float",
+    "rear": "Rear",
+    "delete": "Delete",
+    "edit": "Edit",
+    "preview": "Preview"
+  },
+  "config": {
+    "tab": {
+      "beginning_event_state": "Beginning State",
+      "worktable_setting": "Worktable Setting",
+      "item_state": "Item State"
+    },
+    "state": {
+      "page_num": "Page number",
+      "page_select_option": "Page",
+      "page_select_option_none": "None(Finish)",
+      "finish_page": "Finish page",
+      "jump_to": "Jump to",
+      "background": "Background",
+      "screen_state": "First Screen State",
+      "screen_state_warn": "A point to notice that item's focus takes position priority."
+    },
+    "worktable_setting": {
+      "display_position": "Display Position",
+      "zoom": "Zoom rate"
+    },
+    "select_opt_group": {
+      "common": "Common Event",
+      "item": "Item"
+    },
+    "item_state": {
+      "created_item_list": "Created item's list"
+    },
+    "event": {
+      "action": {
+        "action": "Action",
+        "preview": "Preview",
+        "stop_preview": "Stop previewing",
+        "keep_mag": "Keep display's magnification",
+        "apply": "Apply",
+        "common_state": "Change common state"
+      },
+      "kick": {
+        "kick_type": "Action kick type",
+        "scroll": "Scroll",
+        "click": "Click",
+        "scroll_point": "Scroll value",
+        "scroll_direction": "Scroll direction",
+        "click_duration": "Click duration",
+        "fork": "Event fork"
+      },
+      "item_common": {
+        "item_common": "Change item state",
+        "position": "Display position",
+        "show": "Display state",
+        "show_will_chapter": "Show as launched",
+        "show_will_chapter_duration": "Duration time",
+        "hide_did_chapter": "Hide as finished",
+        "hide_did_chapter_duration": "Duration time",
+        "size": "Item Size"
+      },
+      "item_state": {
+        "item_state": "Item state",
+        "focus": "Focus"
+      },
+      "sync_before": "Sync with before",
+      "target_select": {
+        "target_select": "Select event target",
+        "default": "(Select)"
+      },
+      "display_state": {
+        "display_state": "Display state",
+        "applied_state": "Update display into events applied"
+      }
+    }
+  },
+  "gallery": {
+    "bookmark_button": "Bookmark",
+    "input_note": "Comment...",
+    "filter": {
+      "label": "Filter",
+      "all": "None",
+      "new": "New post",
+      "view_count": "Most views",
+      "bookmark_count": "Most bookmarks",
+      "recommend": "Recommend"
+    }
+  },
+  "upload_confirm": {
+    "title": "Title name",
+    "caption": "Caption",
+    "tags": "Tags",
+    "popular_tags": "Popular tags",
+    "recommend_tags": "Recommend tags",
+    "version": "Version",
+    "show_guide": "Show Motion Guide",
+    "show_page_num": "Show Page Number",
+    "show_chapter_num": "Show Chapter Number",
+    "existed_upload_contents": "The project document which has been posted exists.",
+    "overwrite_contents": "Overwrite : {{contents}}",
+    "posting_new": "Posting new document",
+    "thumbnail": "Thumbnail",
+    "thumbnail_warn": "Maximum thumbnail size is {{size}}KB.",
+    "thumbnail_size_error": "This thumbnail size exceed {{size}}KB.",
+    "title_input_error": "Required",
+    "tag_place_holder": "Input tag",
+    "tag_add": "Add by click",
+    "tag_remove": "Remove by click"
+  },
+  "mypage": {
+    "header_title": {
+      "bookmarks": "Your Bookmarks",
+      "created_contents": "Your written documents",
+      "created_items": "Your making items",
+      "using_items": "Now using items"
+    },
+    "empty": {
+      "bookmarks_description": "There is no bookmarks",
+      "created_contents_description": "There is no written documents",
+      "created_items_description": "There is no made items",
+      "using_items_description": "There is no using items",
+      "bookmarks_link_description": "Don't want to check documents in gallery?",
+      "created_contents_link_description": "Don't want to write a document?",
+      "created_items_link_description": "Don't want to make a item?",
+      "using_items_link_description": "Don't want to use a made item?"
+    },
+    "message": {
+      "default_delete_message": "This operation can't undo"
+    }
+  },
+  "item_gallery": {
+    "description": "There is no updated items",
+    "link_description": "Don't want to make a item?"
+  },
+  "embed": {
+    "caption": {
+      "play_in_site": "Read in Sweetdoc"
+    }
+  },
+  "message": {
+    "dialog": {
+      "change_project": "Your making contents will delete.",
+      "last_savetime": "Last saved time:",
+      "delete_item": "This item will delete.",
+      "update_gallery": "Upload",
+      "delete_node": "This contents (w/subtree) will delete.",
+      "delete_project": "This project will delete.",
+      "delete_event": "This event will delete.",
+      "delete_page": "This page will delete.",
+      "sample_project_upload": "Sample project can't upload to gallery.\nPlease write your own project.\n"
+    },
+    "database": {
+      "item_state": {
+        "save": {
+          "success": "",
+          "error": ""
+        },
+        "load": {
+          "error": ""
+        }
+      }
+    },
+    "gallery": {
+      "upload": {
+        "save": {
+          "success": "",
+          "error": ""
+        }
+      }
+    },
+    "project": {
+      "error": {
+        "project_name": "Project name not inputed.",
+        "display_size": "Display size not inputed.",
+        "not_exist": "Created project is nothing.",
+        "get_error": "Error"
+      }
+    }
+  },
+  "common_action": {
+    "background": "Background",
+    "screen": "Screen"
+  },
+  "activerecord": {
+    "attributes": {
+      "user": {
+        "name": "Name",
+        "password": "Password",
+        "password_confirmation": "Password Confirm",
+        "email": "Mail Address",
+        "remember_me": "Remember me"
+      }
+    }
+  },
+  "test": "testok",
+  "account": {
+    "in_use_as_guest": "In use as guest",
+    "login_or_create_account": "Login or Create account",
+    "edit": "Edit account",
+    "logout": "Logout",
+    "continue_as_guest": "Continue as guest"
+  },
+  "modal": {
+    "project_name": "Project name",
+    "display_size": "Display size",
+    "width": "Width",
+    "height": "Height",
+    "project_create": "Create",
+    "project_select": "Select",
+    "not_fix_screen_size": "Not fix screen size",
+    "fix_screen_size": "Fix screen size",
+    "select_project": "Select project",
+    "button": {
+      "create": "Create",
+      "open": "Open",
+      "back": "Back to gallery"
+    },
+    "environment_not_support": "This browser is not under support.",
+    "not_sample_project": "Your projects",
+    "sample_project": "Sample projects"
+  },
+  "contents_info": {
+    "page": "Page",
+    "fork": "Fork",
+    "chapter": "Chapter"
+  },
+  "user": {
+    "sign_in": "Sign in to Sweetdoc",
+    "do_sign_in": "Sign in",
+    "sign_in_with_social": "Sign In with a Social Network",
+    "sign_up": "Create an account",
+    "do_sign_up": "Create",
+    "forgot_your_password": "Forgot your password?",
+    "edit_account": "Edit an account",
+    "cancel_account": "Cancel my account",
+    "update": "Update",
+    "send_me_reset_password_instructions": "Send me reset password instructions",
+    "resend_confirmation_instructions": "Resend confirmation instructions",
+    "do_resend_confirmation_instructions": "Resend"
+  },
+  "tag": {
+    "contents_recommend": "Presentation,Comic,Memo",
+    "item_recommend": "Button,Arrow,Text"
+  },
+  "search": {
+    "placeholder": "Search..."
+  }
+}
