@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import TimelineCmp from '../../components/worktable/timeline/Timeline';
+import Timeline from '../../components/worktable/timeline/Timeline';
 
 const timelineEvents = (state) => {
   let pageNum = state.generalPagevalue.currentPageNum;
@@ -28,8 +28,6 @@ const mapStateToProps = (state) => {
   }
 };
 
-const Timeline = connect(
+export default connect(
   mapStateToProps
-)(TimelineCmp);
-
-export default Timeline;
+)(Timeline);

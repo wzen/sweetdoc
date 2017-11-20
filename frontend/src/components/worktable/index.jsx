@@ -11,7 +11,7 @@ import '../../css/common.css';
 
 let store = createStore(worktableReducers);
 
-class WorktableCmp extends Component {
+class Worktable extends Component {
   render() {
     return (
       <div>
@@ -26,7 +26,7 @@ class WorktableCmp extends Component {
 
 render(
   <Provider store={store}>
-    <WorktableCmp/>
+    <Worktable/>
   </Provider>,
   document.getElementById('root')
 );
