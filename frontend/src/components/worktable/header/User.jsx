@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import BaseComponent from '../../common/BaseComponent';
 import {StyleSheet, css} from 'aphrodite';
 import { translate } from 'react-i18next';
 
-class User extends Component {
+class User extends BaseComponent {
   render() {
     const {t} = this.props;
     return (

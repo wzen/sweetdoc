@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import BaseComponent from '../common/BaseComponent';
 import { render } from 'react-dom'
 import { createStore } from 'redux';
 import { Provider } from 'react-redux'
@@ -13,7 +13,7 @@ import '../../css/common.css';
 
 let store = createStore(worktableReducers);
 
-class Worktable extends Component {
+class Worktable extends BaseComponent {
   render() {
     return (
       <div>

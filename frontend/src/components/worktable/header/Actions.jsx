@@ -1,8 +1,9 @@
+import BaseComponent from '../../common/BaseComponent';
 import React, {Component} from 'react';
 import {StyleSheet, css} from 'aphrodite';
 import { translate } from 'react-i18next';
 
-class Actions extends Component {
+class Actions extends BaseComponent {
   render() {
     const {t} = this.props;
     let preloadItemList = [];

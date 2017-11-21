@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import BaseComponent from '../../common/BaseComponent';
 import {StyleSheet, css} from 'aphrodite';
 import { selectTimeline, removeTimeline } from "../../../actions/worktable/timeline";
 import { runEventPreview } from "../../../actions/worktable/config/event";
 import PropTypes from 'prop-types';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
-export default class TimelineItem extends Component {
+export default class TimelineItem extends BaseComponent {
   render() {
     if(this.props.actionType === 'blank') {
       return (

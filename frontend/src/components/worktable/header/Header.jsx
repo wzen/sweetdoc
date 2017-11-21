@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import BaseComponent from '../../common/BaseComponent';
 import {StyleSheet, css} from 'aphrodite';
 import Actions from './Actions';
 import File from './File';
@@ -9,7 +9,7 @@ import Others from './Others';
 import Page from './Page';
 import User from './User';
 
-export default class Header extends Component {
+export default class Header extends BaseComponent {
   render() {
     return (
       <div className="navbar navbar-default navbar-fixed-top" role="navigation">

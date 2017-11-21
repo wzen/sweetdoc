@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import BaseComponent from '../../common/BaseComponent';
 import Common from '../../../base/common';
 import PageValue from '../../../base/page_value';
 import Sidebar from '../../sidebar_config/sidebar_ui';
@@ -30,7 +30,7 @@ const TimelineList = SortableContainer(({items}) => {
   );
 });
 
-export default class Timeline extends Component {
+export default class Timeline extends BaseComponent {
 
 
   // タイムラインのイベント設定

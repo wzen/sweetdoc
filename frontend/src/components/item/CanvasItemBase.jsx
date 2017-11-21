@@ -1,4 +1,4 @@
-import ItemBase from './item_base';
+import ItemBase from './ItemBase';
 import PageValue from '../../base/page_value';
 
 // Canvasアイテム
