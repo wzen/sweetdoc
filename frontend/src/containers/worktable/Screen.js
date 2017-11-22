@@ -1,6 +1,5 @@
 import {connect} from 'react-redux';
+import Screen from '../../components/common/Screen';
 
-const Config = connect(
-)();
-
-export default Config;
+export default connect(
+)(Screen);

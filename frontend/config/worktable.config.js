@@ -39,37 +39,42 @@ const jsFiles = [
   path.join(railsRootPath, '/frontend/src/coding/coding_common.js'),
   ...glob.sync(path.join(railsRootPath, '/frontend/src/worktable/**/*.js'))
 ];
-module.exports = {
-  entry: {
-    application: [...vendors, ...jsFiles]
-  },
-  output: {
-    path: path.join(railsRootPath, '/app/assets/javascripts/webpack'),
-    filename: 'worktable.js'
-  },
-  externals: {
-    // require("jquery") is external and available
-    //  on the global var jQuery
-    "jquery": "jQuery"
-  },
-  resolve: {
-    extensions: ['.js', '.jsx']
-  },
-  module: {
-    loaders: [
-      {
-        test: /\.jsx$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          "presets": ["react"]
+
+// 環境変数の動作について未検証
+module.exports = (env) => {
+  return {
+    entry: {
+      application: [...vendors, ...jsFiles]
+    },
+    output: {
+      path: path.join(railsRootPath, '/app/assets/javascripts/webpack'),
+      filename: 'worktable.js'
+    },
+    externals: {
+      // require("jquery") is external and available
+      //  on the global var jQuery
+      "jquery": "jQuery"
+    },
+    resolve: {
+      extensions: ['.js', '.jsx']
+    },
+    module: {
+      loaders: [
+        {
+          test: /\.jsx$/,
+          exclude: /node_modules/,
+          loader: 'babel-loader',
+          query: {
+            "presets": ["react"]
+          }
         }
-      }
+      ]
+    },
+    plugins: [
+      new webpack.DefinePlugin({
+        isWorkTable: true,
+        frontendImageUrlRoot: process.env.NODE_ENV === 'production' ? `http://${process.env.FRONTEND_IMAGE_URL_ROOT}` : 'http://localhost:3000'
+      })
     ]
-  },
-  plugins: [
-    new webpack.DefinePlugin({
-      isWorkTable: true
-    })
-  ]
+  }
 };

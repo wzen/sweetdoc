@@ -1,3 +1,4 @@
+import React from 'react';
 import BaseComponent from '../common/BaseComponent';
 import { render } from 'react-dom'
 import { createStore } from 'redux';
@@ -8,7 +9,6 @@ import worktableReducers from '../../reducers/worktable/index';
 import Header from '../../containers/worktable/Header';
 import Screen from '../../containers/worktable/Screen';
 import Config from '../../containers/worktable/Config';
-import Timeline from '../../containers/worktable/Timeline';
 import '../../css/common.css';
 
 let store = createStore(worktableReducers);
@@ -18,9 +18,10 @@ class Worktable extends BaseComponent {
     return (
       <div>
         <Header/>
-        <Screen/>
+        <Screen>
+          <Timeline key="timeline"/>
+        </Screen>
         <Config/>
-        <Timeline/>
       </div>
     )
   }

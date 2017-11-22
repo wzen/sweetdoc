@@ -1,5 +1,5 @@
+import React from 'react';
 import BaseComponent from '../../common/BaseComponent';
-import React, {Component} from 'react';
 import {StyleSheet, css} from 'aphrodite';
 import { translate } from 'react-i18next';
 

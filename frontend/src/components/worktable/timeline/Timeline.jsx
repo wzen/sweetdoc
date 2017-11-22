@@ -1,3 +1,4 @@
+import React from 'react';
 import BaseComponent from '../../common/BaseComponent';
 import Common from '../../../base/common';
 import PageValue from '../../../base/page_value';

@@ -1,3 +1,4 @@
+import React from 'react';
 import BaseComponent from '../../common/BaseComponent';
 import {StyleSheet, css} from 'aphrodite';
 import { selectTimeline, removeTimeline } from "../../../actions/worktable/timeline";
