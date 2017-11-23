@@ -9,7 +9,18 @@ class Actions extends BaseComponent {
     let preloadItemList = [];
     if(this.props.preloadItems.length > 0) {
       this.props.preloadItems.forEach(item => {
-        preloadItemList.push(<li><a onClick={this.props.selectItem(item.distToken)} className="menu-item">{item.title}</a></li>)
+        preloadItemList.push(
+          <li>
+            <a
+              onClick={e => {
+                e.preventDefault();
+                this.props.selectItem(item.distToken);
+              }}
+              className="menu-item">
+              {item.title}
+            </a>
+          </li>
+        );
       })
     } else {
       preloadItemList = <li><a className="menu-item">No item</a></li>
@@ -17,7 +28,18 @@ class Actions extends BaseComponent {
     let usingItemList = [];
     if(this.props.usingItems.length > 0) {
       this.props.usingItems.forEach(item => {
-        usingItemList.push(<li><a onClick={this.props.selectItem(item.galleryAccessToken)} className="menu-item">{item.title}</a></li>)
+        usingItemList.push(
+          <li>
+            <a
+              onClick={e => {
+                e.preventDefault();
+                this.props.selectItem(item.galleryAccessToken);
+              }}
+               className="menu-item">
+              {item.title}
+            </a>
+          </li>
+        )
       })
     } else {
       usingItemList = <li><a className="menu-item">No item</a></li>
@@ -45,10 +67,20 @@ class Actions extends BaseComponent {
             </ul>
           </li>
           <li className="divider"/>
-          <li><a onClick={this.props.changeModeEdit()} className="menu-item">{t('header_menu.action.edit')}</a></li>
+          <li>
+            <a onClick={e => {
+              e.preventDefault();
+              this.props.changeModeEdit()}}
+               className="menu-item">
+              {t('header_menu.action.edit')}
+            </a>
+          </li>
           <li className="divider"/>
           <li>
-            <a onClick={this.props.showItemGalleryPage()} className="menu-item href" href="/app/assets/stylesheets/item_gallery">
+            <a onClick={e => {
+              e.preventDefault();
+              this.props.showItemGalleryPage()}}
+               className="menu-item href" href="/app/assets/stylesheets/item_gallery">
               <div className="icon">
               </div>
               <div>
@@ -57,7 +89,10 @@ class Actions extends BaseComponent {
             </a>
           </li>
           <li className={this.props.userSignin ? '' : 'disabled'}>
-            <a onClick={this.props.showCodingPage()} className="menu-item href" {...codingMenuParams}>
+            <a onClick={e => {
+              e.preventDefault();
+              this.props.showCodingPage()}}
+               className="menu-item href" {...codingMenuParams}>
               <div className="icon">
               </div>
               <div>

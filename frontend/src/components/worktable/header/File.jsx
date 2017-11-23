@@ -13,9 +13,9 @@ class File extends BaseComponent {
           <b className="caret"/>
         </a>
         <ul className="dropdown-menu" role="menu">
-          <li><a onClick={this.props.showCreateProjectModal()} className="menu-changeproject">{t('header_menu.file.changeproject')}</a></li>
-          <li><a onClick={this.props.showManegeProjectModal()} className="menu-adminproject">{t('header_menu.file.adminproject')}</a></li>
-          <li className="menu-save-li"><a onClick={this.props.saveProject()} className="menu-save">{t('header_menu.file.save')}</a></li>
+          <li><a onClick={e => {e.preventDefault(); this.props.showCreateProjectModal()}} className="menu-changeproject">{t('header_menu.file.changeproject')}</a></li>
+          <li><a onClick={e => {e.preventDefault(); this.props.showManegeProjectModal()}} className="menu-adminproject">{t('header_menu.file.adminproject')}</a></li>
+          <li className="menu-save-li"><a onClick={e => {e.preventDefault(); this.props.saveProject()}} className="menu-save">{t('header_menu.file.save')}</a></li>
         </ul>
       </li>
     )

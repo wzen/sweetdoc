@@ -8,7 +8,7 @@ class MotionCheck extends BaseComponent {
     const {t} = this.props;
     return (
       <li id="header_items_motion_check">
-        <a onClick={MotionCheckCommon.run()}>{MotionCheck.imageTag({src: "nav/motion_check.png", size:'36x36'})}</a>
+        <a onClick={e => {e.preventDefault(); MotionCheckCommon.run()}}>{MotionCheck.imageTag({src: "nav/motion_check.png", size:'36x36'})}</a>
       </li>
     )
   }

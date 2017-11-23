@@ -9,7 +9,7 @@ export default class TimelineItem extends BaseComponent {
     if(this.props.actionType === 'blank') {
       return (
         <div className={css(styles.item, styles.blank)}
-             onClick={this.props.selectTimeline()}/>
+             onClick={e => {e.preventDefault(); this.props.selectTimeline()}}/>
       )
     } else {
       let sync = this.props.isSync ? 'sync' : '';
@@ -17,13 +17,13 @@ export default class TimelineItem extends BaseComponent {
         <div>
           <ContextMenuTrigger id={`context-${this.props.distId}`}>
             <div className={css(styles.item, styles[this.props.actionType], styles[sync])}
-                 onClick={() => this.props.selectTimeline()}/>
+                 onClick={e => {e.preventDefault(); this.props.selectTimeline()}}/>
           </ContextMenuTrigger>
           <ContextMenu id={`context-${this.props.distId}`}>
-            <MenuItem data={"preview"} onClick={() => this.props.runEventPreview()}>
+            <MenuItem data={"preview"} onClick={e => {e.preventDefault(); this.props.runEventPreview()}}>
               Preview Action
             </MenuItem>
-            <MenuItem data={"remove"} onClick={() => this.props.removeTimeline()}>
+            <MenuItem data={"remove"} onClick={e => {e.preventDefault(); this.props.removeTimeline()}}>
               Remove
             </MenuItem>
           </ContextMenu>

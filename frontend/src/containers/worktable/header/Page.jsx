@@ -11,22 +11,22 @@ const mapStateToProps = (state) => {
   }
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     addPage: () => {
       dispatch(addWorktablePage());
     },
-    addFork: () => {
-      dispatch(addWorktablePageFork(ownProps.pageNum));
+    addFork: (pageNum) => {
+      dispatch(addWorktablePageFork(pageNum));
     },
-    changePage: () => {
-      dispatch(changeWorktablePage(ownProps.pageNum, ownProps.forkNum));
+    changePage: (pageNum, forkNum) => {
+      dispatch(changeWorktablePage(pageNum, forkNum));
     },
-    removePage: () => {
-      dispatch(removeWorktablePage(ownProps.pageNum));
+    removePage: (pageNum) => {
+      dispatch(removeWorktablePage(pageNum));
     },
-    removeFork: () => {
-      dispatch(removeWorktablePageFork(ownProps.pageNum, ownProps.forkNum));
+    removeFork: (pageNum, forkNum) => {
+      dispatch(removeWorktablePageFork(pageNum, forkNum));
     }
   }
 };

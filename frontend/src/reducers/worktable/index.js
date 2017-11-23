@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import user from '../common/user';
 import modal from '../common/modal';
 import indicator from '../common/indicator';
 import header from './header';
@@ -10,6 +11,7 @@ import setting from './setting';
 import footprint from './footprint';
 
 const worktableReducers = combineReducers({
+  user,
   modal,
   indicator,
   header,

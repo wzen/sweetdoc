@@ -9,7 +9,13 @@ class Others extends BaseComponent {
     let langList = [];
     if(this.props.langs && this.props.langs.length > 0) {
       this.props.langs.forEach(lang => {
-        langList.push(<li className={lang.locale === window.locale ? 'active':'' }><a onClick={this.props.switchLang(lang.locale)} className="menu-item" href="#">{lang.locale_name}</a></li>)
+        langList.push(
+          <li className={lang.locale === window.locale ? 'active':'' }>
+            <a onClick={e => {e.preventDefault(); this.props.switchLang(lang.locale)}} className="menu-item" href="#">
+              {lang.locale_name}
+            </a>
+          </li>
+        )
       })
     }
     return (
@@ -26,9 +32,9 @@ class Others extends BaseComponent {
             </ul>
           </li>
           <li className="divider" />
-          <li><a onClick={this.props.showAboutModal()} className="menu-about">{t('header_menu.etc.about')}</a></li>
+          <li><a onClick={e => {e.preventDefault(); this.props.showAboutModal()}} className="menu-about">{t('header_menu.etc.about')}</a></li>
           <li className="divider" />
-          <li><a onClick={this.props.showGalleryPage()} className="menu-backtomainpage">{t('header_menu.etc.back_to_gallery')}</a></li>
+          <li><a onClick={e => {e.preventDefault(); this.props.showGalleryPage()}} className="menu-backtomainpage">{t('header_menu.etc.back_to_gallery')}</a></li>
         </ul>
       </li>
     )
