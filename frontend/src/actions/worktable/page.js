@@ -4,32 +4,32 @@ export const addWorktablePage = () => {
   }
 };
 
-export const changeWorktablePage = (page_num) => {
+export const addWorktablePageFork = (pageNum) => {
+  return {
+    type: 'ADD_WORKTABLE_PAGE_FORK',
+    pageNum
+  }
+};
+
+export const changeWorktablePage = (pageNum, forkNum) => {
   return {
     type: 'CHANGE_WORKTABLE_PAGE',
-    page_num
+    page_num: pageNum,
+    forkNum
   }
 };
 
-export const changeWorktablePageFork = (page_num, fork_num) => {
-  return {
-    type: 'CHANGE_WORKTABLE_PAGE_FORK',
-    page_num,
-    fork_num
-  }
-};
-
-export const removeWorktablePage = (page_num) => {
+export const removeWorktablePage = (pageNum) => {
   return {
     type: 'REMOVE_WORKTABLE_PAGE',
-    page_num
+    pageNum
   }
 };
 
-export const removeWorktablePageFork = (page_num, fork_num) => {
+export const removeWorktablePageFork = (pageNum, forkNum) => {
   return {
     type: 'REMOVE_WORKTABLE_PAGE_FORK',
-    page_num,
-    fork_num
+    pageNum,
+    forkNum
   }
 };

@@ -1,11 +1,8 @@
 import {connect} from 'react-redux';
-import Timeline from '../../components/worktable/timeline/Timeline';
+import {currentPageNum, currentForknum} from "../../../util/state_util";
+import Timeline from '../../../components/worktable/timeline/Timeline';
 
-const timelineEvents = (state) => {
-  let pageNum = state.generalPagevalue.currentPageNum;
-  let formNum = state.instanceAndEventPagevalue.events[pageNum]['fork_num'];
-  return Object.values(state.instanceAndEventPagevalue.events[pageNum][formNum]);
-};
+const timelineEvents = (state) => Object.values(state.instanceAndEvent.events[currentPageNum(state)][currentForknum(state)]);
 
 const actionType = (state) => {
   if(state.actionType !== 'click' && state.actionType !== 'scroll') return 'blank';

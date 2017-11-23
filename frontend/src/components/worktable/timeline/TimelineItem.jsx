@@ -1,8 +1,6 @@
 import React from 'react';
 import BaseComponent from '../../common/BaseComponent';
 import {StyleSheet, css} from 'aphrodite';
-import { selectTimeline, removeTimeline } from "../../../actions/worktable/timeline";
-import { runEventPreview } from "../../../actions/worktable/config/event";
 import PropTypes from 'prop-types';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
@@ -11,7 +9,7 @@ export default class TimelineItem extends BaseComponent {
     if(this.props.actionType === 'blank') {
       return (
         <div className={css(styles.item, styles.blank)}
-             onClick={this.props.dispatch(selectTimeline())}/>
+             onClick={this.props.selectTimeline()}/>
       )
     } else {
       let sync = this.props.isSync ? 'sync' : '';
@@ -19,13 +17,13 @@ export default class TimelineItem extends BaseComponent {
         <div>
           <ContextMenuTrigger id={`context-${this.props.distId}`}>
             <div className={css(styles.item, styles[this.props.actionType], styles[sync])}
-                 onClick={() => this.props.dispatch(selectTimeline(this.props.distId))}/>
+                 onClick={() => this.props.selectTimeline()}/>
           </ContextMenuTrigger>
           <ContextMenu id={`context-${this.props.distId}`}>
-            <MenuItem data={"preview"} onClick={() => this.props.dispatch(runEventPreview({distId: this.props.distId}))}>
+            <MenuItem data={"preview"} onClick={() => this.props.runEventPreview()}>
               Preview Action
             </MenuItem>
-            <MenuItem data={"remove"} onClick={() => this.props.dispatch(removeTimeline(this.props.distId))}>
+            <MenuItem data={"remove"} onClick={() => this.props.removeTimeline()}>
               Remove
             </MenuItem>
           </ContextMenu>

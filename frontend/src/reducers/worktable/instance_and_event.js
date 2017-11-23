@@ -1,35 +1,15 @@
 import Common from '../../../base/common';
-
-const forkKey = (state, action) => {
-  let forkNum = currentForkNum(state, action);
-  return forkNum ? forkNum : 0;
-};
-
-const currentEventCount = (state, action) => {
-  try {
-    return Object.keys(state.events[action.page][forkKey(state, action)]).length;
-  } catch (e) {
-    return 0;
-  }
-};
-
-const currentForkNum = (state, action) => {
-  try {
-    return parseInt(state.events[action.page].fork_num);
-  } catch (e) {
-    return null;
-  }
-};
+import {currentForknum, currentPageNum, currentEvents, currentEventCount} from "../../../util/state_util";
 
 // スクロールの合計の長さを取得
 // @return [Integer] 取得値
-const getAllScrollLength = (state, action) => {
+const getAllScrollLength = (state) => {
   try {
     let ret = 0;
-    let timelines = state.events[action.page][forkKey(state, action)];
+    let timelines = currentEvents(state);
     Object.keys(timelines).reverse().forEach((key) => {
-      if(!timelines[key]['scroll_point_end']) { return false }
-      ret = timelines[key]['scroll_point_end'];
+      if(!timelines[key].scrollPointEnd) { return false }
+      ret = timelines[key].scrollPointEnd;
       return true;
     });
     return parseInt(ret);
@@ -42,7 +22,7 @@ const getScrollPointRange = (state, action) => {
   let scrollPointStart = null;
   let scrollPointEnd = null;
   if (action.instanceParams.canvasRegistCoord) {
-    scrollPointStart = getAllScrollLength(state, action);
+    scrollPointStart = getAllScrollLength(state);
     // FIXME: スクロールの長さは要調整
     const adjust = 4.0;
     scrollPointEnd = scrollPointStart + (action.instanceParams.canvasRegistCoord.length * adjust);
@@ -84,28 +64,12 @@ const defaultEvent = (state, action, itemInstanceId) => {
 
 const createInstance = (state, action) => {
   let instanceId = `i_${action.itemType}_${Common.generateId()}`;
-  Object.assign(state, {
-    instances: {
-      [action.page]: {
-        [instanceId]: {
-          ...action.instanceParams
-        }
-      }
-    },
-    events: {
-      [action.page]: {
-        [forkKey(state, action)]: {
-          [parseInt(currentEventCount(state, action)) + 1]: {
-            ...defaultEvent(state, action, instanceId)
-          }
-        }
-      }
-    }
-  });
+  state.instances[currentPageNum(state)][instanceId] = action.instanceParams;
+  state.events[currentPageNum(state)][currentForknum(state)][parseInt(currentEventCount(state)) + 1] = defaultEvent(state, action, instanceId);
   return state
 };
 
-const instanceAndEventPagevalue = (state = {}, action) => {
+const instanceAndEvent = (state = {}, action) => {
   switch(action.type) {
     case 'CREATE_ITEM':
       return createInstance(state, action);
@@ -114,4 +78,4 @@ const instanceAndEventPagevalue = (state = {}, action) => {
   }
 };
 
-export default instanceAndEventPagevalue;
+export default instanceAndEvent;

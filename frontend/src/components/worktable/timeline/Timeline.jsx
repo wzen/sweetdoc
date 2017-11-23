@@ -6,7 +6,7 @@ import Sidebar from '../../sidebar_config/sidebar_ui';
 import WorktableCommon from '../common/worktable_common';
 import Indicator from '../../../base/indicator';
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
-import TimelineItem from './TimelineItem';
+import TimelineItem from '../../../containers/worktable/timeline/TimelineItem';
 import {StyleSheet, css} from 'aphrodite';
 
 const SortableItem = SortableElement(({value}) =>

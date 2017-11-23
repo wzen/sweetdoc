@@ -1,22 +1,24 @@
 import { combineReducers } from 'redux';
-import modal from './common/modal';
+import modal from '../common/modal';
+import indicator from '../common/indicator';
 import header from './header';
 import contents from './contents';
 import config from './config';
-import generalPagevalue from './pagevalue/general';
-import instanceAndEventPagevalue from './pagevalue/instance_and_event';
-import settingPagevalue from './pagevalue/setting';
-import footprintPagevalue from './pagevalue/footprint';
+import general from './general';
+import instanceAndEvent from './instance_and_event';
+import setting from './setting';
+import footprint from './footprint';
 
 const worktableReducers = combineReducers({
   modal,
+  indicator,
   header,
   contents,
   config,
-  generalPagevalue,
-  instanceAndEventPagevalue,
-  settingPagevalue,
-  footprintPagevalue
+  general,
+  instanceAndEvent,
+  setting,
+  footprint
 });
 
 export default worktableReducers;

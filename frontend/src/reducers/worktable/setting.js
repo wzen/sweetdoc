@@ -1,4 +1,4 @@
-const settingPagevalue = (state, action) => {
+const setting = (state, action) => {
   switch(action.type) {
     case 'UPDATE_GRID_ENABLE':
       state['gridEnable'] = action.gridEnable;
@@ -18,4 +18,4 @@ const settingPagevalue = (state, action) => {
   return state;
 };
 
-export default settingPagevalue;
+export default setting;

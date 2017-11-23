@@ -19,7 +19,7 @@ const createProject = (action) => {
   };
 };
 
-const generalPagevalue = (state, action) => {
+const general = (state, action) => {
   switch(action.type) {
     case 'CREATE_PROJECT':
       return createProject(action);
@@ -28,4 +28,4 @@ const generalPagevalue = (state, action) => {
   }
 };
 
-export default generalPagevalue;
+export default general;

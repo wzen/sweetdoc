@@ -4,9 +4,12 @@ import {StyleSheet, css} from 'aphrodite';
 import { translate } from 'react-i18next';
 
 class Page extends BaseComponent {
+  static divider() {
+    return <li className='divider'/>;
+  }
   pageMenu() {
       let forkNum, pageNum, pagePrefix;
-      const pageCount = PageValue.getPageCount();
+      const pageCount = this.props.pageCount;
       const root = $(`#${constant.Paging.NAV_ROOT_ID}`);
       const selectRoot = $(`.${constant.Paging.NAV_SELECT_ROOT_CLASS}`, root);
 
