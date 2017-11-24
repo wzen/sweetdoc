@@ -1,0 +1,27 @@
+import React from 'react';
+import BaseComponent from '../BaseComponent';
+import { translate } from 'react-i18next';
+
+class WithApplyButton extends BaseComponent {
+  render() {
+    const {t} = this.props;
+    return (
+      <div className="float_view_pointing_controller_temp">
+        <div className='wrapper clearfix'>
+          <div className="contents">
+            <div className="button_wrapper clearfix">
+              <div className="clear_button_wrapper">
+                <div className="clear_button"/>
+              </div>
+              <div className="apply_button_wrapper">
+                <div className="apply_button"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>      
+    )
+  }
+}
+
+export default translate()(WithApplyButton);

@@ -8,3 +8,4 @@ const modal = (state, action) => {
       return {};
   }
 };
+export default modal;

@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {hideModal} from "../../actions/modal";
+import {hideModal} from "../../actions/common/modal";
 import Overlay from '../../components/common/Overlay';
 
 const mapStateToProps = (state) => {

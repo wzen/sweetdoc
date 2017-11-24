@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import { isLogin, userThumbnailImage } from "../../util/state_util";
-import { showModal } from "../../actions/modal";
+import { showModal } from "../../actions/common/modal";
 import UserIcon from '../../components/common/UserIcon';
 
 const mapStateToProps = (state, ownProps) => {

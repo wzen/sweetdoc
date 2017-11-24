@@ -1,6 +1,7 @@
 import React from 'react';
 import BaseComponent from './BaseComponent';
 import Modal from '../../containers/common/Modal';
+import ScreenFooter from '../../containers/common'
 
 export default class Screen extends BaseComponent {
   render() {

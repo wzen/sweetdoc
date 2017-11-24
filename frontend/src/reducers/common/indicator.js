@@ -8,3 +8,5 @@ const indicator = (state, action) => {
       return {};
   }
 };
+
+export default indicator;
