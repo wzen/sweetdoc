@@ -1,3 +1,5 @@
+export const isLogin = (state) => state.user && state.user.sessionId;
+export const userThumbnailImage = (state) => state.user && state.user.thumbnailImage;
 export const currentPageNum = (state) => {
   try {
     return state.general.currentPageNum;

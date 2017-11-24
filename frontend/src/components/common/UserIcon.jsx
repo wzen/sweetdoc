@@ -1,41 +1,45 @@
 import React from 'react';
 import BaseComponent from './BaseComponent';
+import { Link } from 'react-router-dom'
 
 export default class UserIcon extends BaseComponent {
   render() {
-
-
-
-    return(
-      <div style={this.props.isGallery ? {padding: '5px'} : {}}>
-        <% if user_signed_in? %>
-        <%= link_to '/my_page' do %>
-
-        <% unless current_user.thumbnail_img? %>
-        <div class="circle <%= sp_class %> <%= Const::Gallery::Sidebar::USER %>">
-          <%= image_tag 'gallery/sidebar/default_user.png' ,size:"#{size}x#{size}" %>
+    let sp = this.props.isSmartphone ? 'sp' : '';
+    let size = this.props.isGallery ? 50 : 40;
+    size = this.props.isSmartphone ? 50 : size;
+    if(this.props.isLogin) {
+      let userpageLink = <Link to='/user'/>;
+      let circle = (
+        <div className={`circle ${sp}`}>
+        {UserIcon.image_tag({
+          src: this.props.userThumbnailImage ? this.props.userThumbnailImage : 'gallery/sidebar/default_user.png',
+          size: `${size}x${size}`
+        })}
         </div>
-        <% else %>
-        <div class="circle <%= sp_class %> <%= Const::Gallery::Sidebar::USER %>">
-          <img src="<%= current_user.thumbnail_img %>" width="<%= size %>" height="<%= size %>" />
+      );
+      return (
+        <div style={this.props.isGallery ? {padding: '5px'} : {}}>
+          {userpageLink}
+          {circle}
         </div>
-        <% end %>
-        <% end %>
-        <% else %>
-
-        <% if show_login_modal %>
-        <div class="circle <%= sp_class %> <%= Const::Gallery::Sidebar::USER %> guest" onclick="Common.showModalView(constant.ModalViewType.NOTICE_LOGIN); return false;">
-          <%= image_tag 'gallery/sidebar/guest_user.png', size:"#{size}x#{size}" %>
+      )
+    } else {
+      let loginLink = <Link to='/user/login'/>;
+      let circle = (
+        <div className={`circle ${sp}`}
+                        onClick={ this.props.showLoginModal ? e => {e.preventDefault(); this.props.showModal()} : null }>
+        { this.props.showLoginModal ? null : loginLink }
+        {UserIcon.image_tag({
+          src: 'gallery/sidebar/guest_user.png',
+          size: `${size}x${size}`
+        })}
         </div>
-        <% else %>
-        <div class="circle <%= sp_class %> <%= Const::Gallery::Sidebar::USER %> guest">
-          <%= link_to '/user/sign_in' do %>
-          <%= image_tag 'gallery/sidebar/guest_user.png', size:"#{size}x#{size}" %>
-          <% end %>
+      );
+      return (
+        <div style={this.props.isGallery ? {padding: '5px'} : {}}>
+          {circle}
         </div>
-        <% end %>
-        <% end %>
-      </div>
-    )
+      )
+    }
   }
 }
