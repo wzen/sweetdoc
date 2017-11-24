@@ -13,6 +13,6 @@ export default class BaseComponent extends Component {
   }
 
   render() {
-    return <div/>
+    return null
   }
 }
