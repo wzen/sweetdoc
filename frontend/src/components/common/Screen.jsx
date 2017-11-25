@@ -1,7 +1,7 @@
 import React from 'react';
 import BaseComponent from './BaseComponent';
 import Modal from '../../containers/common/Modal';
-import ScreenFooter from '../../containers/common'
+import ScreenFooter from '../../containers/common/ScreenFooter';
 
 export default class Screen extends BaseComponent {
   render() {
@@ -13,7 +13,7 @@ export default class Screen extends BaseComponent {
               <div id="pages"/>
             </div>
           </div>
-          <Modal/>
+          <ScreenFooter/>
         </div>
         {Screen.getChildrenComponent('timeline')}
       </div>

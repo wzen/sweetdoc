@@ -11,10 +11,10 @@ class WithApplyButton extends BaseComponent {
           <div className="contents">
             <div className="button_wrapper clearfix">
               <div className="clear_button_wrapper">
-                <div className="clear_button"/>
+                <div className="clear_button" onClick={e => {e.preventDefault(); this.props.hideScreenFooter()}}/>
               </div>
               <div className="apply_button_wrapper">
-                <div className="apply_button"/>
+                <div className="apply_button" onClick={e => {e.preventDefault(); this.props.applyScreenFooter(this.props.applyParams)}}/>
               </div>
             </div>
           </div>

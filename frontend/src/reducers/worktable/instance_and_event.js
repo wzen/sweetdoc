@@ -69,10 +69,16 @@ const createInstance = (state, action) => {
   return state
 };
 
+const applyScreenFooter = (state, action) => {
+
+};
+
 const instanceAndEvent = (state = {}, action) => {
   switch(action.type) {
     case 'CREATE_ITEM':
       return createInstance(state, action);
+    case 'APPLY_SCREEN_FOOTER':
+      return applyScreenFooter(state, action);
     default:
       return state;
   }

@@ -18,7 +18,7 @@ class WithCloseButton extends BaseComponent {
           </div>
           <div className="close_button_wrapper">
             <div className="table_wrapper">
-              <div className="close_button put_center"/>
+              <div className="close_button put_center" onClick={e => {e.preventDefault(); this.props.hideScreenFooter()}}/>
             </div>
           </div>
         </div>
