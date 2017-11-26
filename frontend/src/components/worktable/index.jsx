@@ -8,7 +8,6 @@ import worktableReducers from '../../reducers/worktable/index';
 import Header from '../../containers/worktable/Header';
 import Screen from '../../containers/worktable/Screen';
 import Config from '../../containers/worktable/Config';
-import Timeline from '../../containers/worktable/timeline/Timeline';
 import '../../css/common.css';
 
 let store = createStore(worktableReducers);
@@ -20,9 +19,7 @@ export default class Worktable extends BaseComponent {
         <I18nextProvider i18n={ i18n }>
           <div>
             <Header/>
-            <Screen>
-              <Timeline key="timeline"/>
-            </Screen>
+            <Screen/>
             <Config/>
           </div>
         </I18nextProvider>

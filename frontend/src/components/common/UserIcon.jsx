@@ -11,7 +11,7 @@ export default class UserIcon extends BaseComponent {
       let userpageLink = <Link to='/user'/>;
       let circle = (
         <div className={`circle ${sp}`}>
-        {UserIcon.image_tag({
+        {UserIcon.imageTag({
           src: this.props.userThumbnailImage ? this.props.userThumbnailImage : 'gallery/sidebar/default_user.png',
           size: `${size}x${size}`
         })}
@@ -29,7 +29,7 @@ export default class UserIcon extends BaseComponent {
         <div className={`circle ${sp}`}
                         onClick={ this.props.showLoginModal ? e => {e.preventDefault(); this.props.showModal()} : null }>
         { this.props.showLoginModal ? null : loginLink }
-        {UserIcon.image_tag({
+        {UserIcon.imageTag({
           src: 'gallery/sidebar/guest_user.png',
           size: `${size}x${size}`
         })}

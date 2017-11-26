@@ -7,7 +7,7 @@ export default class Overlay extends BaseComponent {
     if(this.props.show) {
       return null;
     } else {
-      return <div className={css(styles.overlay)} onClick={e => {e.preventDefault(); this.props.hideModal()}} />
+      return <div className={css(styles.overlay)} onClick={e => {e.preventDefault(); this.props.hide()}} />
     }
   }
 }
