@@ -3,7 +3,7 @@ import BaseComponent from '../../common/BaseComponent';
 import {StyleSheet, css} from 'aphrodite';
 import { translate } from 'react-i18next';
 
-class Page extends BaseComponent {
+export default translate()(class Page extends BaseComponent {
   static divider = () => <li className='divider'/>;
 
   pageMenu() {
@@ -113,6 +113,4 @@ class Page extends BaseComponent {
       </li>
     )
   }
-}
-
-export default translate()(Page);
+})

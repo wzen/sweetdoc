@@ -1,0 +1,48 @@
+import React from 'react';
+import BaseComponent from '../BaseComponent';
+import { translate } from 'react-i18next';
+
+export default translate()(class About extends BaseComponent {
+  render() {
+    const {t} = this.props;
+    return (
+      <div className="modal-content <%= Const::ModalViewType::ABOUT %>">
+        <div className="content">
+
+          <div style="font-size: 15px">
+            <span className="title">Sweetdoc</span> is active document maker
+          </div>
+          <div style="overflow-y: scroll;width:100%;height: 100px;margin-top: 20px">
+            <div>Icons made by</div>
+            <div><a href="http://www.freepik.com" title="Freepik">Freepik</a></div>
+            <div><a href="http://www.flaticon.com/authors/simpleicon" title="SimpleIcon">SimpleIcon</a></div>
+            <div><a href="http://www.flaticon.com/authors/victor-erixon" title="Victor Erixon">Victor Erixon</a></div>
+            <div><a href="http://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a></div>
+            <div><a href="http://www.flaticon.com/authors/zurb" title="Zurb">Zurb</a></div>
+            <div><a href="http://www.flaticon.com/authors/yannick" title="Yannick">Yannick</a></div>
+            <div><a href="http://www.flaticon.com/authors/appzgear" title="Appzgear">Appzgear</a></div>
+            <div><a href="http://www.flaticon.com/authors/ocha" title="OCHA">OCHA</a></div>
+            <div><a href="http://www.flaticon.com/authors/puppets" title="Puppets">Puppets</a></div>
+            <div>from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
+          </div>
+        </div>
+        <div style="margin-top: 20px">
+          <div>
+            {/* render 'base/myinfo'*/}
+          </div>
+          <div>
+            {/*render 'base/copyright'*/}
+          </div>
+        </div>
+
+        {/*
+        <script type="text/javascript">
+          var twitterTitle = $(".modal-context.<%= Const::ModalViewType::ABOUT %>");
+          if (twitterTitle.length > 0) {
+          twitterTitle.attr('data-text', $('title').text())
+        }
+        </script>*/}
+      </div>
+    )
+  }
+})

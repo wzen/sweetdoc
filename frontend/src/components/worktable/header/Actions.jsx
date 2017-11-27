@@ -3,7 +3,7 @@ import BaseComponent from '../../common/BaseComponent';
 import {StyleSheet, css} from 'aphrodite';
 import { translate } from 'react-i18next';
 
-class Actions extends BaseComponent {
+export default translate()(class Actions extends BaseComponent {
   render() {
     const {t} = this.props;
     let preloadItemList = [];
@@ -104,6 +104,4 @@ class Actions extends BaseComponent {
       </li>
     )
   }
-}
-
-export default translate()(Actions);
+})

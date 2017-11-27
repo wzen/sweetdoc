@@ -4,7 +4,7 @@ import {StyleSheet, css} from 'aphrodite';
 import { translate } from 'react-i18next';
 import UserIcon from '../../../containers/common/UserIcon';
 
-class User extends BaseComponent {
+export default translate()(class User extends BaseComponent {
   render() {
     const {t} = this.props;
     return (
@@ -13,6 +13,4 @@ class User extends BaseComponent {
       </li>
     )
   }
-}
-
-export default translate()(User);
+})

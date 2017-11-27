@@ -1,6 +1,7 @@
 import React from 'react';
 import BaseComponent from '../common/BaseComponent';
 import ScreenFooter from '../../containers/common/ScreenFooter';
+import { translate } from 'react-i18next';
 
 const contents = (items) => {
   let ret = [];
@@ -36,10 +37,10 @@ class PopupInfoButton extends BaseComponent {
   }
 }
 
-class PopupInfo extends BaseComponent {
+let PopupInfo = translate()(class PopupInfo extends BaseComponent {
   render() {
+    const {t} = this.props;
     return (
-
       <div id="popup_info_wrapper">
         <div className="wrapper">
           <div className="info_contents">
@@ -96,11 +97,34 @@ class PopupInfo extends BaseComponent {
       </div>
     )
   }
-}
+});
+
+let Container = translate()(class Container extends BaseComponent {
+  render() {
+    return (
+      <div className="main-wrapper">
+        <div className="scroll_wrapper">
+          <div className="scroll_contents">
+            <div className="scroll_inside_wrapper">
+              <div className="scroll_background">
+                <div className="scroll_inside">
+                  <div className="scroll_inside_cover"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="canvas_wrapper">
+          <canvas className="canvas_container canvas"/>
+        </div>
+      </div>
+    )
+  }
+});
 
 export default class Screen extends BaseComponent {
   render() {
-    if(window.isFullscreen) {
+    if(!window.isFullscreen) {
       return (
         <div id="main">
           <div id="screen_wrapper">
@@ -109,6 +133,9 @@ export default class Screen extends BaseComponent {
                 <div id="pages">
                   {/* render 'run/guide/guide'*/}
                   <ScrollHandler/>
+                  <Container type="float" {...this.props}/>
+                  <Container type="main" {...this.props}/>
+                  <Container type="sink" {...this.props}/>
                 </div>
               </div>
             </div>
@@ -126,23 +153,9 @@ export default class Screen extends BaseComponent {
               <div id="project_contents">
                 <div id="pages">
                   {/* render 'run/guide/guide'*/}
-                  <div className="main-wrapper">
-                    <div className="scroll_wrapper">
-                      <div className="scroll_contents">
-                        <div className="scroll_inside_wrapper">
-                          <div className="scroll_background">
-                            <div className="scroll_inside">
-                              <div className="scroll_inside_cover"/>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="canvas_wrapper">
-                      <canvas className="canvas_container canvas"/>
-                    </div>
-                  </div>
-
+                  <Container type="float" {...this.props}/>
+                  <Container type="main" {...this.props}/>
+                  <Container type="sink" {...this.props}/>
                 </div>
               </div>
             </div>

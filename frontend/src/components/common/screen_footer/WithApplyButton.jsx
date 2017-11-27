@@ -2,7 +2,7 @@ import React from 'react';
 import BaseComponent from '../BaseComponent';
 import { translate } from 'react-i18next';
 
-class WithApplyButton extends BaseComponent {
+export default translate()(class WithApplyButton extends BaseComponent {
   render() {
     const {t} = this.props;
     return (
@@ -22,6 +22,4 @@ class WithApplyButton extends BaseComponent {
       </div>      
     )
   }
-}
-
-export default translate()(WithApplyButton);
+})

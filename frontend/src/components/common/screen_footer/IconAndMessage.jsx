@@ -2,7 +2,7 @@ import React from 'react';
 import BaseComponent from '../BaseComponent';
 import { translate } from 'react-i18next';
 
-class IconAndMessage extends BaseComponent {
+export default translate()(class IconAndMessage extends BaseComponent {
   render() {
     const {t} = this.props;
     return (
@@ -20,6 +20,4 @@ class IconAndMessage extends BaseComponent {
       </div>      
     )
   }
-}
-
-export default translate()(IconAndMessage);
+})

@@ -3,7 +3,7 @@ import BaseComponent from '../../common/BaseComponent';
 import {StyleSheet, css} from 'aphrodite';
 import { translate } from 'react-i18next';
 
-class File extends BaseComponent {
+export default translate()(class File extends BaseComponent {
   render() {
     const {t} = this.props;
     return (
@@ -20,6 +20,4 @@ class File extends BaseComponent {
       </li>
     )
   }
-}
-
-export default translate()(File);
+})
