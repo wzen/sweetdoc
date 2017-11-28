@@ -168,7 +168,7 @@ export default class PreloadItemButton extends CssItemBase {
   }
 
   // HTML要素
-  cssItemHtml() {
+  ItemRender() {
     return `\
 <div class='content_table'><div class='content_table_cell'>${this.text}</div></div>\
 `;

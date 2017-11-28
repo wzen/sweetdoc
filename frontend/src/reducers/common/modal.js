@@ -1,4 +1,4 @@
-const modal = (state, action) => {
+const modal = (state = {}, action) => {
   switch (action.type) {
     case 'SHOW_MODAL':
       return {modalType: action.modalType};

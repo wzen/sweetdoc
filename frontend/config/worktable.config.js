@@ -1,7 +1,7 @@
+const webpack = require('webpack');
 const path = require('path');
 const glob = require("glob");
 const railsRootPath = __dirname.split('/').slice(0, -2).join('/');
-const webpack = require('webpack');
 const vendors = [
   path.join(railsRootPath, '/vendor/assets/javascripts/jquery-1.9.1.min.js'),
   path.join(railsRootPath, '/vendor/assets/javascripts/jquery.transit.min.js'),
@@ -72,8 +72,10 @@ module.exports = (env) => {
     },
     plugins: [
       new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
         isWorkTable: true,
-        frontendImageUrlRoot: process.env.NODE_ENV === 'production' ? `http://${process.env.FRONTEND_IMAGE_URL_ROOT}` : 'http://localhost:3000'
+        frontendImageUrlRoot: process.env.NODE_ENV === 'production' ? process.env.FRONTEND_IMAGE_URL : 'http://localhost:3000',
+        apiUrl: process.env.NODE_ENV === 'production' ? process.env.API_URL : 'http://localhost:3000'
       })
     ]
   }

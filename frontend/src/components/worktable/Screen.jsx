@@ -1,18 +1,11 @@
 import React from 'react';
 import BaseComponent from '../common/BaseComponent';
+import BaseScreenContainer from '../common/BaseScreenContainer'
 import ScreenFooter from '../../containers/common/ScreenFooter';
 import Timeline from '../../containers/worktable/timeline/Timeline';
 import {translate} from 'react-i18next';
 
-let Container = translate()(class Container extends BaseComponent {
-  contents(items) {
-    let ret = [];
-    this.props.items.forEach(item => {
-
-    });
-    return ret;
-  }
-
+let Container = translate()(class Container extends BaseScreenContainer {
   render() {
     return (
       <div className="main-wrapper">
@@ -20,7 +13,9 @@ let Container = translate()(class Container extends BaseComponent {
           <div className="scroll_contents">
             <div className="scroll_inside_wrapper">
               <div className="scroll_background">
-                <div className="scroll_inside"/>
+                <div className="scroll_inside">
+                  {this.contents()}
+                </div>
               </div>
             </div>
           </div>

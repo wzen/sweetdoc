@@ -39,14 +39,14 @@ export default class CssItemBase extends ItemBase {
 
   // HTML要素
   // @abstract
-  cssItemHtml() {
+  ItemRender() {
     return '';
   }
 
   // アイテム用のテンプレートHTMLを読み込み
   // @return [String] HTML
   createItemElement(callback) {
-    const element = `<div class='css_item_base context_base put_center'>${this.cssItemHtml()}</div>`;
+    const element = `<div class='css_item_base context_base put_center'>${this.ItemRender()}</div>`;
     return this.addContentsToScrollInside(element, callback);
   }
 

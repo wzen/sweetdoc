@@ -19,7 +19,7 @@ const createProject = (action) => {
   };
 };
 
-const general = (state, action) => {
+const general = (state = {}, action) => {
   switch(action.type) {
     case 'CREATE_PROJECT':
       return createProject(action);

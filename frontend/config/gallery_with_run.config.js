@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require('path');
 const glob = require("glob");
 const railsRootPath = __dirname.split('/').slice(0, -2).join('/');
@@ -78,5 +79,10 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    })
+  ]
 };

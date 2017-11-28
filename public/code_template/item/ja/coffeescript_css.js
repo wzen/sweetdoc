@@ -174,7 +174,7 @@ ItemPreviewTemp = (function(superClass) {
     }
   };
 
-  ItemPreviewTemp.prototype.cssItemHtml = function() {
+  ItemPreviewTemp.prototype.ItemRender = function() {
     return "<div class='content_table'><div class='content_table_cell'>" + this.text + "</div></div>";
   };
 

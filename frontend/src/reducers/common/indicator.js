@@ -1,4 +1,4 @@
-const indicator = (state, action) => {
+const indicator = (state = {}, action) => {
   switch (action.type) {
     case 'SHOW_INDICATOR':
       return { message: action.message };

@@ -1,4 +1,4 @@
-const footprint = (state, action) => {
+const footprint = (state = {}, action) => {
   switch(action.type) {
     default:
       return state;

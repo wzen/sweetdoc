@@ -44,7 +44,6 @@ const defaultEvent = (state, action, itemInstanceId) => {
   return {
     distId: Common.generateId(),
     id: itemInstanceId,
-    itemClassName: action.itemClass.name,
     itemSizeDiff: {x: 0, y: 0, w: 0, h: 0},
     doFocus: true,
     isCommonEvent: false,

@@ -164,7 +164,7 @@ class ItemPreviewTemp extends CssItemBase
   }
 
   # HTML要素
-  cssItemHtml: ->
+  ItemRender: ->
     return """
       <div class='content_table'><div class='content_table_cell'>#{@text}</div></div>
     """

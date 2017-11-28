@@ -1,4 +1,4 @@
-const setting = (state, action) => {
+const setting = (state = {}, action) => {
   switch(action.type) {
     case 'UPDATE_GRID_ENABLE':
       state['gridEnable'] = action.gridEnable;

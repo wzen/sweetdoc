@@ -1,4 +1,4 @@
-const screenFooter = (state, action) => {
+const screenFooter = (state = {}, action) => {
   switch (action.type) {
     case 'SHOW_SCREEN_FOOTER':
       return {
