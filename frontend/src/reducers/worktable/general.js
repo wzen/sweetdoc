@@ -5,7 +5,7 @@ const createProject = (action) => {
     isSampleProject: false,
     currentPageNum: 1,
     pageMax: 1,
-    updatedUserPagevalueId: null,
+    userPagevalueId: null,
     lastSaveTime: action.lastSaveTime,
     pageInfo: {
       1: {

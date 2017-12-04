@@ -27,6 +27,11 @@ let Container = translate()(class Container extends BaseScreenContainer {
 });
 
 export default class Screen extends BaseComponent {
+
+  async componentDidMount() {
+    this.props.loadItemsFromServer();
+  }
+
   render() {
     return (
       <div id="main" className="col-xs-12">

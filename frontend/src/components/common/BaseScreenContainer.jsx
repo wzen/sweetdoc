@@ -9,11 +9,13 @@ export default class BaseScreenContainer extends BaseComponent {
 
   contents() {
     let ret = [];
-    this.props.items.forEach(item => {
+    let obj = this.props.items;
+    Object.keys(obj).forEach(key => {
+      let item = this[key];
       let Cls = window.classes[item.itemClassName];
       if(!Cls) return;
-      ret.push(<Cls {...item}/>);
-    });
+      ret.push(<Cls id={key} {...item}/>);
+    }, obj);
     return ret;
   }
 }

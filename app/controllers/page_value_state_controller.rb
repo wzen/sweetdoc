@@ -20,9 +20,8 @@ class PageValueStateController < ApplicationController
 
   def load_state
     user_id = current_or_guest_user.id
-    user_pagevalue_id = params['user_pagevalue_id'].to_i
-    loaded_class_dist_tokens = JSON.parse(params['loaded_class_dist_tokens'])
-    @result_success, @item_js_list, @general_pagevalue_data, @instance_pagevalue_data, @event_pagevalue_data, @setting_pagevalue_data, @message, @updated_at = load_page_value_state(user_id, user_pagevalue_id, loaded_class_dist_tokens)
+    user_pagevalue_id = params['userPagevalueId'].to_i
+    @result_success, @general_pagevalue_data, @instance_pagevalue_data, @event_pagevalue_data, @setting_pagevalue_data, @message, @updated_at = load_page_value_state(user_id, user_pagevalue_id)
   end
 
   def load_created_projects

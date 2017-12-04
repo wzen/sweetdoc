@@ -11,7 +11,6 @@ export default class CssItemBase extends ItemBase {
       this.CLASS_DIST_TOKEN = window.loadedClassDistToken;
     }
 
-
     if(window.isWorkTable) {
       this.include(cssItemBaseWorktableExtend);
     }

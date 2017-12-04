@@ -6,11 +6,13 @@ export const saveState = (data) => (dispatch) =>
     error => console.log('An error occurred in saveState.', error)
   ).then(json => dispatch({type: 'SAVE_STATE', json}));
 
-export const loadState = (data) => (dispatch) =>
-  fetch(`${window.apiUrl}/page_value_state/load_state`, {method: 'POST', body: data}).then(
+export const loadState = () => (dispatch, getState) => {
+  if(!getState().general.userPagevalueId) return;
+  return fetch(`${window.apiUrl}/page_value_state/load_state`, {method: 'POST', body: {userPagevalueId: getState().general.userPagevalueId}}).then(
     response => response.json(),
     error => console.log('An error occurred in loadState.', error)
-  ).then(json => dispatch({type: 'LOAD_STATE', json}));
+  ).then(json => dispatch({type: 'LOAD_STATE', json}))
+};
 
 export const loadCreatedProjects = () => (dispatch) =>
   fetch(`${window.apiUrl}/page_value_state/load_created_projects`).then(

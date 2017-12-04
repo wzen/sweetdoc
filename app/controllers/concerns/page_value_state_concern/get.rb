@@ -50,7 +50,7 @@ module PageValueStateConcern
     # ユーザの保存データを読み込む
     # @param [String] user_id ユーザID
     # @param [Array] loaded_class_dist_tokens 読み込み済みのアイテムID一覧
-    def load_page_value_state(user_id, user_pagevalue_id, loaded_class_dist_tokens)
+    def load_page_value_state(user_id, user_pagevalue_id)
       sql = <<-"SQL"
       SELECT p.id as project_id, p.title as project_title, p.is_sample as is_sample_project,
              ip.data as instance_pagevalue_data,
@@ -107,7 +107,6 @@ module PageValueStateConcern
 
         ipd = {}
         epd = {}
-        class_dist_tokens = []
         pagevalues.each do |pagevalue|
           key = Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s
           if pagevalue['general_pagevalue_data'].present?
@@ -118,15 +117,10 @@ module PageValueStateConcern
           end
           if pagevalue['event_pagevalue_data'].present?
             epd[key] = JSON.parse(pagevalue['event_pagevalue_data'])
-
-            # 必要なClassDistTokenを調査
-            class_dist_tokens = extract_need_load_itemclassdisttokens(epd[key])
-            class_dist_tokens -= loaded_class_dist_tokens
           end
         end
 
-        item_js_list = get_item_gallery(class_dist_tokens)
-        return true, item_js_list, gpd, ipd, epd, spd, message, pagevalues.first['user_pagevalues_updated_at']
+        return true, gpd, ipd, epd, spd, message, pagevalues.first['user_pagevalues_updated_at']
       end
     end
 
