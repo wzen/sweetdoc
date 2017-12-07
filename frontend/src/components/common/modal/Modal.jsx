@@ -1,15 +1,15 @@
 import React from 'react';
 import BaseComponent from '../BaseComponent';
-import CreateProject from './CreateProject';
-import ManageProject from './ManageProject';
-import Login from './Login';
+import CreateProject from '../../../containers/common/modal/CreateProject';
+import ManageProject from '../../../containers/common/modal/ManageProject';
+import Login from '../../../containers/common/modal/Login';
 import About from './About';
-import ChangeScreenSize from './ChangeScreenSize';
-import CreateUserCode from './CreateUserCode';
+import ChangeScreenSize from '../../../containers/common/modal/ChangeScreenSize';
+import CreateUserCode from '../../../containers/common/modal/CreateUserCode';
 import EnvironmentNotSupport from './EnvironmentNotSupport';
-import ItemImageUpload from './ItemImageUpload';
-import ItemTextEdit from './ItemTextEdit';
-import Message from './Message';
+import ItemImageUpload from '../../../containers/common/modal/ItemImageUpload';
+import ItemTextEdit from '../../../containers/common/modal/ItemTextEdit';
+import Message from '../../../containers/common/modal/Message';
 
 export default class Modal extends BaseComponent {
   render() {
@@ -18,25 +18,25 @@ export default class Modal extends BaseComponent {
     }
     switch (this.props.modalType) {
       case 'CreateProject':
-        return <CreateProject {...this.props}/>;
+        return <CreateProject/>;
       case 'ManageProject':
-        return <ManageProject {...this.props}/>;
+        return <ManageProject/>;
       case 'Login':
-        return <Login {...this.props}/>;
+        return <Login/>;
       case 'About':
-        return <About {...this.props}/>;
+        return <About/>;
       case 'ChangeScreenSize':
-        return <ChangeScreenSize {...this.props}/>;
+        return <ChangeScreenSize/>;
       case 'CreateUserCode':
-        return <CreateUserCode {...this.props}/>;
+        return <CreateUserCode/>;
       case 'EnvironmentNotSupport':
-        return <EnvironmentNotSupport {...this.props}/>;
+        return <EnvironmentNotSupport/>;
       case 'ItemImageUpload':
-        return <ItemImageUpload {...this.props}/>;
+        return <ItemImageUpload/>;
       case 'ItemTextEdit':
-        return <ItemTextEdit {...this.props}/>;
+        return <ItemTextEdit/>;
       case 'Message':
-        return <Message {...this.props}/>;
+        return <Message/>;
       default:
         return null;
     }
