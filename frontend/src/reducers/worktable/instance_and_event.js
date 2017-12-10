@@ -1,6 +1,10 @@
 import Common from '../../../base/common';
 import {currentForknum, currentPageNum, currentEvents, currentEventCount} from "../../../util/state_util";
 
+const loadState = (action) => {
+
+};
+
 // スクロールの合計の長さを取得
 // @return [Integer] 取得値
 const getAllScrollLength = (state) => {
@@ -74,6 +78,8 @@ const applyScreenFooter = (state, action) => {
 
 const instanceAndEvent = (state = {}, action) => {
   switch(action.type) {
+    case 'LOAD_STATE':
+      return loadState(action);
     case 'CREATE_ITEM':
       return createInstance(state, action);
     case 'APPLY_SCREEN_FOOTER':

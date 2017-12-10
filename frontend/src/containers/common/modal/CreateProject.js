@@ -3,6 +3,15 @@ import CreateProject from '../../../components/common/modal/CreateProject';
 import {createProject, getProject} from "../../../actions/api/project";
 import {loadCreatedProjects} from "../../../actions/api/state";
 
+const mapStateToProps = (state) => {
+  return {
+    projects: {
+      userProjects: state.project.createdProjectList.userProjects,
+      sampleProjects: state.project.createdProjectList.sampleProjects
+    }
+  }
+};
+
 const mapDispatchToProps = (dispatch) => {
   return {
     loadProjectList: () => {
@@ -20,6 +29,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(CreateProject);

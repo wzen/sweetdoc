@@ -1,5 +1,11 @@
+const loadState = (action) => {
+
+};
+
 const setting = (state = {}, action) => {
   switch(action.type) {
+    case 'LOAD_STATE':
+      return loadState(action);
     case 'UPDATE_GRID_ENABLE':
       state['gridEnable'] = action.gridEnable;
       break;

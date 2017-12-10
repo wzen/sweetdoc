@@ -61,11 +61,11 @@ class Const
     # @property [Int] SELECT 選択
     SELECT = 'select'
     # @property [Int] SELECT_FILE ファイル選択
-    SELECT_FILE = 'select_file'
+    SELECT_FILE = 'selectFile'
     # @property [Int] SELECT_IMAGE_FILE 画像ファイル選択
-    SELECT_IMAGE_FILE = 'select_image_file'
+    SELECT_IMAGE_FILE = 'selectImageFile'
     # @property [Int] CSS_DESIGN_TOOL CSSデザインツール
-    DESIGN_TOOL = 'design_tool'
+    DESIGN_TOOL = 'designTool'
   end
 
   # アイテムオプションテンプレート種別
@@ -122,14 +122,14 @@ class Const
   end
 
   class ElementAttribute
-    MAIN_TEMP_ID = 'main_temp'
-    MAIN_TEMP_WORKTABLE_CLASS = 'main_temp_ws'
-    MAIN_TEMP_RUN_CLASS = 'main_temp_run'
+    MAIN_TEMP_ID = 'mainTemp'
+    MAIN_TEMP_WORKTABLE_CLASS = 'mainTempWs'
+    MAIN_TEMP_RUN_CLASS = 'mainTempRun'
     NAVBAR_ROOT = 'nav'
-    SIDEBAR_TAB_ROOT = 'tab-config'
-    RUN_CSS = 'run_css_@pagenum'
-    FILE_LOAD_CLASS = 'file_load'
-    LAST_UPDATE_TIME_CLASS = 'last_update_time'
+    SIDEBAR_TAB_ROOT = 'tabConfig'
+    RUN_CSS = 'runCss-@pagenum'
+    FILE_LOAD_CLASS = 'fileLoad'
+    LAST_UPDATE_TIME_CLASS = 'lastUpdateTime'
   end
 
   class ConfigType
@@ -145,28 +145,28 @@ class Const
     # @property EVENT_COMMON_PREFIX 共通イベント クラス名プレフィックス
     EVENT_COMMON_PREFIX = 'c_'
     # @property [String] ITEM_ACTION_CLASS イベントアイテムアクションクラス名
-    ITEM_ACTION_CLASS = 'item_event_action_@classdisttoken'
+    ITEM_ACTION_CLASS = 'itemEventAction-@classdisttoken'
     # @property [String] ITEM_VALUES_CLASS アイテムイベントクラス名
-    ITEM_VALUES_CLASS = 'item_event_value_@classdisttoken_@methodname'
+    ITEM_VALUES_CLASS = 'itemEventValue-@classdisttoken-@methodname'
   end
 
   class PageValueKey
     # @property [String] U_ROOT ユーザ情報ルート
-    G_ROOT = 'general_page_values'
+    G_ROOT = 'generalPageValues'
     # @property [String] G_ROOT 汎用情報プレフィックス
     G_PREFIX = 'generals'
     # @property [String] IS_ROOT ページ値ルート
-    IS_ROOT = 'instance_page_values'
+    IS_ROOT = 'instancePageValues'
     # @property [String] INSTANCE_PREFIX インスタンスプレフィックス
     INSTANCE_PREFIX = 'instance'
     # @property [String] INSTANCE_VALUE_ROOT インスタンスROOT
     INSTANCE_VALUE_ROOT = 'value'
     # @property [String] ST_ROOT 共通設定値ルート
-    ST_ROOT = 'setting_page_values'
+    ST_ROOT = 'settingPageValues'
     # @property [String] ST_PREFIX 共通設定プレフィックス
     ST_PREFIX = 'settings'
     # @property [String] E_ROOT イベントルート
-    E_ROOT = 'event_page_values'
+    E_ROOT = 'eventPageValues'
     # @property [String] E_SUB_ROOT イベントサブルート
     E_SUB_ROOT = 'events'
     # @property [String] E_MASTER_ROOT イベントメインルート
@@ -182,49 +182,49 @@ class Const
     # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
     PAGE_VALUES_SEPERATOR = ':'
     # @property [String] IS_RUNWINDOW_RELOAD Runビューをリロードしたか
-    IS_RUNWINDOW_RELOAD = 'is_runwindow_reload'
+    IS_RUNWINDOW_RELOAD = 'isRunwindowReload'
     # @property [String] PAGE_COUNT ページ総数
-    PAGE_COUNT = 'page_count'
+    PAGE_COUNT = 'pageCount'
     # @property [String] PAGE_NUM 現在のページ番号
-    PAGE_NUM = 'page_num'
+    PAGE_NUM = 'pageNum'
     # @property [String] FORK_COUNT フォーク総数
-    FORK_COUNT = 'fork_count'
+    FORK_COUNT = 'forkCount'
     # @property [String] FORK_NUM 現在のフォーク番号
-    FORK_NUM = 'fork_num'
+    FORK_NUM = 'forkNum'
     # @property [String] EF_MASTER_FORKNUM Masterのフォーク番号
     EF_MASTER_FORKNUM = 0
     # @property [String] H_ROOT 履歴情報ルート
-    F_ROOT = 'footprint_page_values'
+    F_ROOT = 'footprintPageValues'
     # @property [String] H_ROOT 履歴情報ルート
     F_PREFIX = 'footprints'
     # @property [String] F_PREFIX 履歴情報イベント一意IDプレフィックス
-    FED_PREFIX = 'event_dists'
+    FED_PREFIX = 'eventDists'
     # @property [String] WORKTABLE_ITEM_HIDE_BY_SETTING Worktable設定によるアイテム非表示
-    WORKTABLE_ITEM_HIDE_BY_SETTING = 'worktable_item_hide_by_setting'
+    WORKTABLE_ITEM_HIDE_BY_SETTING = 'worktableItemHideBySetting'
   end
 
   class StateConfig
-    ROOT_ID_NAME = 'state-config'
+    ROOT_ID_NAME = 'stateConfig'
   end
 
   class ItemStateConfig
-    ROOT_ID_NAME = 'item-state-config'
-    ITEM_TEMP_CLASS_NAME = 'item_temp'
+    ROOT_ID_NAME = 'itemStateConfig'
+    ITEM_TEMP_CLASS_NAME = 'itemTemp'
   end
 
   class Setting
     ROOT_ID_NAME = 'setting-config'
     GRID_CLASS_NAME = 'grid'
-    GRID_STEP_CLASS_NAME = 'grid_step'
-    GRID_STEP_DIV_CLASS_NAME = 'grid_div_step'
+    GRID_STEP_CLASS_NAME = 'gridStep'
+    GRID_STEP_DIV_CLASS_NAME = 'gridDivStep'
     AUTOSAVE_CLASS_NAME = 'autosave'
-    AUTOSAVE_TIME_CLASS_NAME = 'autosave_time'
-    AUTOSAVE_TIME_DIV_CLASS_NAME = 'autosave_time_div'
+    AUTOSAVE_TIME_CLASS_NAME = 'autosaveTime'
+    AUTOSAVE_TIME_DIV_CLASS_NAME = 'autosaveTimeDiv'
     class Key
-      GRID_ENABLE = 'grid_enable'
-      GRID_STEP = 'grid_step'
+      GRID_ENABLE = 'gridEnable'
+      GRID_STEP = 'gridStep'
       AUTOSAVE = 'autosave'
-      AUTOSAVE_TIME = 'autosave_time'
+      AUTOSAVE_TIME = 'autosaveTime'
     end
   end
 
@@ -233,8 +233,8 @@ class Const
     DIVIDE_INTERVAL_MINUTES = 15
 
     class Key
-      PROJECT_ID = 'project_id'
-      PAGE_COUNT = 'page_count'
+      PROJECT_ID = 'projectId'
+      PAGE_COUNT = 'pageCount'
       GENERAL_COMMON_PAGE_VALUE = 'cg'
       GENERAL_PAGE_VALUE = 'g'
       INSTANCE_PAGE_VALUE = 'i'
@@ -249,13 +249,13 @@ class Const
     USER_CREATE_MAX = 50
 
     class Key
-      PROJECT_ID = 'project_id'
+      PROJECT_ID = 'projectId'
       TITLE = 'title'
-      IS_SAMPLE_PROJECT = 'is_sample_project'
-      SCREEN_SIZE = 'screen_size'
-      FIXED_SCREEN_SIZE = 'fixed_screen_size'
-      USER_PAGEVALUE_ID = 'user_pagevalue_id'
-      USER_PAGEVALUE_UPDATED_AT = 'user_pagevalue_updated_at'
+      IS_SAMPLE_PROJECT = 'isSampleProject'
+      SCREEN_SIZE = 'screenSize'
+      FIXED_SCREEN_SIZE = 'fixedScreenSize'
+      USER_PAGEVALUE_ID = 'userPagevalueId'
+      USER_PAGEVALUE_UPDATED_AT = 'userPagevalueUpdatedAt'
     end
   end
 
@@ -265,57 +265,57 @@ class Const
     class Key
       MESSAGE = 'message'
       GALLERY_ID = 'gid'
-      GALLERY_ACCESS_TOKEN = 'g_at'
+      GALLERY_ACCESS_TOKEN = 'gAt'
       PROJECT_ID = 'pid'
-      SCREEN_SIZE = 'screen_size'
-      SCREEN_SIZE_WIDTH = 'scrren_size_w'
-      SCREEN_SIZE_HEIGHT = 'scrren_size_h'
+      SCREEN_SIZE = 'screenSize'
+      SCREEN_SIZE_WIDTH = 'scrrenSizeW'
+      SCREEN_SIZE_HEIGHT = 'scrrenSizeH'
       TAGS = 'tags'
       INSTANCE_PAGE_VALUE = 'i'
       EVENT_PAGE_VALUE = 'e'
       THUMBNAIL_IMG = 'tbimg'
       THUMBNAIL_URL = 'tburl'
-      THUMBNAIL_IMG_WIDTH = 'tbimg_w'
-      THUMBNAIL_IMG_HEIGHT = 'tbimg_h'
+      THUMBNAIL_IMG_WIDTH = 'tbimgW'
+      THUMBNAIL_IMG_HEIGHT = 'tbimgH'
       THUMBNAIL = 'thumbnail'
       PAGE_MAX = 'pagemax'
       TITLE = 'title'
       CAPTION = 'caption'
-      MARKDOWN_CAPTION = 'markdown_caption'
-      ITEM_JS_LIST = 'item_js_list'
-      RECOMMEND_SOURCE_WORD = 'recommend_source_word'
+      MARKDOWN_CAPTION = 'markdownCaption'
+      ITEM_JS_LIST = 'itemJsList'
+      RECOMMEND_SOURCE_WORD = 'recommendSourceWord'
       NOTE = 'note'
-      SHOW_GUIDE = 'show_guide'
-      SHOW_PAGE_NUM = 'show_page_num'
-      SHOW_CHAPTER_NUM = 'show_chapter_num'
+      SHOW_GUIDE = 'showGuide'
+      SHOW_PAGE_NUM = 'showPageNum'
+      SHOW_CHAPTER_NUM = 'showChapterNum'
       PAGE_NUM = 'p_n'
-      SEARCH_TYPE = 'search_type'
-      USER_CODING_ID = 'user_coding_id'
-      USER_ID = 'user_id'
-      USER_NAME = 'user_name'
-      USER_THUMBNAIL_IMG = 'user_thumbnail_img'
-      BOOKMARK_COUNT = 'bookmark_count'
-      VIEW_COUNT = 'view_count'
-      TAG_ID = 'tag_id'
-      TAG_NAME = 'tag_name'
-      GENERAL_PAGEVALUE_DATA = 'general_pagevalue_data'
-      INSTANCE_PAGEVALUE_DATA = 'instance_pagevalue_data'
-      EVENT_PAGEVALUE_DATA = 'event_pagevalue_data'
-      FOOTPRINT_PAGE_NUM = 'footprint_page_num'
-      BOOKMARK_ID = 'bookmark_id'
-      UPLOAD_OVERWRITE_GALLERY_TOKEN = 'upload_overwrite_gallery_token'
+      SEARCH_TYPE = 'searchType'
+      USER_CODING_ID = 'userCodingId'
+      USER_ID = 'userId'
+      USER_NAME = 'userName'
+      USER_THUMBNAIL_IMG = 'userThumbnailImg'
+      BOOKMARK_COUNT = 'bookmarkCount'
+      VIEW_COUNT = 'viewCount'
+      TAG_ID = 'tagId'
+      TAG_NAME = 'tagName'
+      GENERAL_PAGEVALUE_DATA = 'generalPagevalueData'
+      INSTANCE_PAGEVALUE_DATA = 'instancePagevalueData'
+      EVENT_PAGEVALUE_DATA = 'eventPagevalueData'
+      FOOTPRINT_PAGE_NUM = 'footprintPageNum'
+      BOOKMARK_ID = 'bookmarkId'
+      UPLOAD_OVERWRITE_GALLERY_TOKEN = 'uploadOverwriteGalleryToken'
       FILTER_TYPE = 'ft'
       FILTER_DATE = 'fd'
       FILTER_TAGS = 'ftg'
-      OVERWRITE_CONTENTS_SELECT =  'overwrite_contents_contents_select'
+      OVERWRITE_CONTENTS_SELECT =  'overwriteContentsContentsSelect'
       WORD = 'word'
     end
 
     class SearchKey
-      SHOW_HEAD = 'show_head'
-      SHOW_LIMIT = 'show_limit'
-      SEARCH_TYPE = 'search_type'
-      TAG_ID = 'tag_id'
+      SHOW_HEAD = 'showHead'
+      SHOW_LIMIT = 'showLimit'
+      SEARCH_TYPE = 'searchType'
+      TAG_ID = 'tagId'
       DATE = 'date'
     end
 
@@ -345,16 +345,16 @@ class Const
     class Key
       MESSAGE = 'message'
       ITEM_GALLERY_ID = 'igid'
-      ITEM_GALLERY_ACCESS_TOKEN = 'ig_at'
+      ITEM_GALLERY_ACCESS_TOKEN = 'igAt'
       TAGS = 'tags'
       TITLE = 'title'
       CAPTION = 'caption'
-      SEARCH_TYPE = 'search_type'
-      USER_CODING_ID = 'user_coding_id'
-      TAG_ID = 'tag_id'
-      TAG_NAME = 'tag_name'
-      ITEM_GALLERY_COUNT = 'item_gallery_count'
-      USER_ITEM_GALLERY_ID = 'user_item_gallery_id'
+      SEARCH_TYPE = 'searchType'
+      USER_CODING_ID = 'userCodingId'
+      TAG_ID = 'tagId'
+      TAG_NAME = 'tagName'
+      ITEM_GALLERY_COUNT = 'itemGalleryCount'
+      USER_ITEM_GALLERY_ID = 'userItemGalleryId'
     end
 
     class PublicType
@@ -371,29 +371,29 @@ class Const
   end
 
   class EventPageValueKey
-    DIST_ID = 'dist_id'
+    DIST_ID = 'distId'
     ID = 'id'
-    CLASS_DIST_TOKEN = 'class_dist_token'
-    ITEM_SIZE_DIFF = 'item_size_diff'
-    DO_FOCUS = 'do_focus'
-    SHOW_WILL_CHAPTER = 'show_will_chapter'
-    SHOW_WILL_CHAPTER_DURATION = 'show_will_chapter_duration'
-    HIDE_DID_CHAPTER = 'hide_will_chapter'
-    HIDE_DID_CHAPTER_DURATION = 'hide_will_chapter_duration'
-    COMMON_EVENT_ID = 'common_event_id'
+    CLASS_DIST_TOKEN = 'classDistToken'
+    ITEM_SIZE_DIFF = 'itemSizeDiff'
+    DO_FOCUS = 'doFocus'
+    SHOW_WILL_CHAPTER = 'showWillChapter'
+    SHOW_WILL_CHAPTER_DURATION = 'showWillChapterDuration'
+    HIDE_DID_CHAPTER = 'hideWillChapter'
+    HIDE_DID_CHAPTER_DURATION = 'hideWillChapterDuration'
+    COMMON_EVENT_ID = 'commonEventId'
     VALUE = 'value'
-    IS_COMMON_EVENT = 'is_common_event'
+    IS_COMMON_EVENT = 'isCommonEvent'
     ORDER = 'order'
     FINISH_PAGE = 'finishpage'
     JUMPPAGE_NUM = 'jumppage_num'
     METHODNAME = 'methodname'
     ACTIONTYPE = 'actiontype'
     IS_SYNC = 'is_sync'
-    SCROLL_POINT_START = 'scroll_point_start'
-    SCROLL_POINT_END = 'scroll_point_end'
-    SCROLL_ENABLED_DIRECTIONS = 'scroll_enabled_directions'
-    SCROLL_FORWARD_DIRECTIONS = 'scroll_forward_directions'
-    CHANGE_FORKNUM = 'change_forknum'
+    SCROLL_POINT_START = 'scrollPointStart'
+    SCROLL_POINT_END = 'scrollPointEnd'
+    SCROLL_ENABLED_DIRECTIONS = 'scrollEnabledDirections'
+    SCROLL_FORWARD_DIRECTIONS = 'scrollForwardDirections'
+    CHANGE_FORKNUM = 'changeForknum'
     MODIFIABLE_VARS = 'modifiable_vars'
     EVENT_DURATION = 'eventDuration'
     SPECIFIC_METHOD_VALUES = 'specificMethodValues'
@@ -405,32 +405,32 @@ class Const
   end
 
   class ModalViewType
-    INIT_PROJECT = 'init_project'
-    ADMIN_PROJECTS = 'admin_projects'
-    CREATE_USER_CODE = 'create_user_code'
-    ITEM_IMAGE_UPLOAD = 'item_image_upload'
-    ITEM_TEXT_EDITING = 'item_text_editing'
-    NOTICE_LOGIN = 'notice_login'
+    INIT_PROJECT = 'initProject'
+    ADMIN_PROJECTS = 'adminProjects'
+    CREATE_USER_CODE = 'createUserCode'
+    ITEM_IMAGE_UPLOAD = 'itemImageUpload'
+    ITEM_TEXT_EDITING = 'itemTextEditing'
+    NOTICE_LOGIN = 'noticeLogin'
     ABOUT = 'about'
     MESSAGE = 'message'
-    FLASH_MESSAGE = 'flash_message'
-    ENVIRONMENT_NOT_SUPPORT = 'environment_not_support'
-    CHANGE_SCREEN_SIZE = 'change_screen_size'
+    FLASH_MESSAGE = 'flashMessage'
+    ENVIRONMENT_NOT_SUPPORT = 'environmentNotSupport'
+    CHANGE_SCREEN_SIZE = 'changeScreenSize'
   end
 
   class Paging
     ROOT_ID = 'pages'
     MAIN_PAGING_SECTION_CLASS = 'pagesection-@pagenum'
-    NAV_ROOT_ID = 'header-pageing-menu'
-    NAV_SELECTED_CLASS = 'header-pageing-menu-selected'
-    NAV_SELECT_ROOT_CLASS = 'header-pageing-menu-root'
+    NAV_ROOT_ID = 'headerPageingMenu'
+    NAV_SELECTED_CLASS = 'headerPageingMenuSelected'
+    NAV_SELECT_ROOT_CLASS = 'headerPageingMenuRoot'
   end
 
   class RunGuide
-    TOP_ROOT_ID = 'guide_top'
-    BOTTOM_ROOT_ID = 'guide_bottom'
-    LEFT_ROOT_ID = 'guide_left'
-    RIGHT_ROOT_ID = 'guide_right'
+    TOP_ROOT_ID = 'guideTop'
+    BOTTOM_ROOT_ID = 'guideBottom'
+    LEFT_ROOT_ID = 'guideLeft'
+    RIGHT_ROOT_ID = 'guideRight'
   end
 
   class ItemActionPropertiesKey
@@ -455,15 +455,15 @@ class Const
 
   class Run
     class AttributeName
-      CONTENTS_CREATOR_CLASSNAME = 'con_creator_cn'
-      CONTENTS_TITLE_CLASSNAME = 'con_title_cn'
-      CONTENTS_CAPTION_CLASSNAME = 'con_caption_cn'
-      CONTENTS_PAGE_NUM_CLASSNAME = 'con_page_num_cn'
-      CONTENTS_PAGE_MAX_CLASSNAME = 'con_page_max_cn'
-      CONTENTS_CHAPTER_NUM_CLASSNAME = 'con_chapter_num_cn'
-      CONTENTS_CHAPTER_MAX_CLASSNAME = 'con_chapter_max_cn'
-      CONTENTS_FORK_NUM_CLASSNAME = 'con_fork_num_cn'
-      CONTENTS_TAGS_CLASSNAME = 'con_tag_cn'
+      CONTENTS_CREATOR_CLASSNAME = 'conCreatorCn'
+      CONTENTS_TITLE_CLASSNAME = 'conTitleCn'
+      CONTENTS_CAPTION_CLASSNAME = 'conCaptionCn'
+      CONTENTS_PAGE_NUM_CLASSNAME = 'conPageNumCn'
+      CONTENTS_PAGE_MAX_CLASSNAME = 'conPageMaxCn'
+      CONTENTS_CHAPTER_NUM_CLASSNAME = 'conChapterNumCn'
+      CONTENTS_CHAPTER_MAX_CLASSNAME = 'conChapterMaxCn'
+      CONTENTS_FORK_NUM_CLASSNAME = 'conForkNumCn'
+      CONTENTS_TAGS_CLASSNAME = 'conTagCn'
     end
 
     class Key
@@ -480,18 +480,18 @@ class Const
   class Coding
     DEFAULT_FILENAME = 'untitled'
     class Key
-      LANG = 'lang_type'
+      LANG = 'langType'
       PUBLIC = 'public'
       CODE = 'code'
       CODES = 'codes'
-      USER_CODING_ID = 'user_coding_id'
-      TREE_DATA = 'tree_data'
-      SUB_TREE = 'sub_tree'
-      NODE_PATH = 'node_path'
-      DRAW_TYPE = 'draw_type'
-      IS_OPENED = 'is_opened'
-      IS_ACTIVE = 'is_active'
-      PARENT_NODE_PATH = 'parent_node_path'
+      USER_CODING_ID = 'userCodingId'
+      TREE_DATA = 'treeData'
+      SUB_TREE = 'subTree'
+      NODE_PATH = 'nodePath'
+      DRAW_TYPE = 'drawType'
+      IS_OPENED = 'isOpened'
+      IS_ACTIVE = 'isActive'
+      PARENT_NODE_PATH = 'parentNodePath'
     end
     class Lang
       JAVASCRIPT = 'js'
@@ -520,12 +520,12 @@ class Const
   end
 
   class ConfigMenu
-    ROOT_ID = 'config_menu_temps'
+    ROOT_ID = 'configMenuTemps'
     class Action
-      PRELOAD_IMAGE_PATH_SELECT = 'preload_image_path_select_config'
+      PRELOAD_IMAGE_PATH_SELECT = 'preloadImagePathSelectConfig'
     end
     class Modifiable
-      CHILDREN_WRAPPER_CLASS = 'modifiable_children_wrapper_@parentvarname_@childrenkey'
+      CHILDREN_WRAPPER_CLASS = 'modifiableChildrenWrapper-@parentvarname-@childrenkey'
     end
   end
 
@@ -536,7 +536,7 @@ class Const
       GALLERY_ID = 'glid'
       EVENT_DIST_ID = 'edistid'
       SELECT_FILE = 'sef'
-      SELECT_FILE_DELETE = 'sef_del'
+      SELECT_FILE_DELETE = 'sefDel'
       URL = 'url'
     end
   end

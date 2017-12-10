@@ -1,5 +1,6 @@
 import React from 'react';
 import BaseComponent from '../BaseComponent';
+import Common from '../../../base/common';
 import {translate} from 'react-i18next';
 
 export default translate()(class CreateProject extends BaseComponent {
@@ -17,10 +18,25 @@ export default translate()(class CreateProject extends BaseComponent {
   }
 
   projectSelectOptions() {
+    const {t} = this.props;
+    const n = (new Date).getTime();
     let projectSelects = [];
-    this.props.temp.loadCreatedProjects.forEach(l => {
-      projectSelects.push(<option value={l.userPagevalueId}>{l.name}</option>)
-    });
+    if (this.props.projects.userProjects.length > 0) {
+      projectSelects.push(`<optgroup label='${t('modal.not_sample_project')}'>`);
+      this.props.projects.userProjects.forEach(p => {
+        let d = new Date(p['up_updated_at']);
+        projectSelects.push(`<option value=${p['up_id']}>${p['p_title']} - ${Common.displayDiffAlmostTime(n, d.getTime())}</option>`);
+      });
+      projectSelects.push("</optgroup>");
+    }
+    if (this.props.projects.sampleProjects.length > 0) {
+      projectSelects.push(`<optgroup label='${t('modal.sample_project')}'>`);
+      this.props.projects.sampleProjects.forEach(p => {
+        let d = new Date(p['up_updated_at']);
+        projectSelects.push(`<option value=${p['up_id']}>${p['p_title']}</option>`);
+      });
+      projectSelects.push("</optgroup>");
+    }
     return projectSelects;
   }
 
