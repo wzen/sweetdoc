@@ -104,13 +104,14 @@ module PageValueStateConcern
           # プロジェクト要素以外のGeneralを設定
           gpd.reverse_merge!(JSON.parse(pagevalues.first['general_common_pagevalue_data']))
         end
+        gpd['pageInfo'] = {}
 
         ipd = {}
         epd = {}
         pagevalues.each do |pagevalue|
-          key = Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s
+          key = pagevalue['page_num'].to_s
           if pagevalue['general_pagevalue_data'].present?
-            gpd[key] = JSON.parse(pagevalue['general_pagevalue_data'])
+            gpd['pageInfo'][key] = JSON.parse(pagevalue['general_pagevalue_data'])
           end
           if pagevalue['instance_pagevalue_data'].present?
             ipd[key] = JSON.parse(pagevalue['instance_pagevalue_data'])

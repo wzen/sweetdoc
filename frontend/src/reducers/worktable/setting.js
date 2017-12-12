@@ -1,5 +1,5 @@
 const loadState = (action) => {
-
+  return action.json.settingPagevalueData;
 };
 
 const setting = (state = {}, action) => {

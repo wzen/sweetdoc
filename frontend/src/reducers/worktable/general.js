@@ -20,24 +20,10 @@ const createProject = (action) => {
 };
 
 const loadState = (action) => {
-  let generalPagevalueData = action.json.generalPagevalueData;
   return {
-    projectId: generalPagevalueData.product_id,
-    title: generalPagevalueData.title,
-    isSampleProject: generalPagevalueData.is_sample_project,
+    ...action.json.generalPagevalueData,
     currentPageNum: 1,
-    pageMax: 1,
-    userPagevalueId: null,
-    lastSaveTime: action.lastSaveTime,
-    pageInfo: {
-      1: {
-        wsScale: 1.0,
-        wsDisplayPosition: {
-          top: 0.0,
-          left: 0.0
-        }
-      }
-    }
+    pageMax: Object.keys(action.json.generalPagevalueData.pageInfo).length
   }
 };
 

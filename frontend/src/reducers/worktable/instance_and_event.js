@@ -2,7 +2,10 @@ import Common from '../../../base/common';
 import {currentForknum, currentPageNum, currentEvents, currentEventCount} from "../../../util/state_util";
 
 const loadState = (action) => {
-
+  return {
+    instances: action.json.instancePagevalueData,
+    events: action.json.eventPagevalueData
+  };
 };
 
 // スクロールの合計の長さを取得
@@ -76,7 +79,7 @@ const applyScreenFooter = (state, action) => {
 
 };
 
-const instanceAndEvent = (state = {}, action) => {
+const instanceAndEvent = (state = {instances: {}, events: {}}, action) => {
   switch(action.type) {
     case 'LOAD_STATE':
       return loadState(action);
