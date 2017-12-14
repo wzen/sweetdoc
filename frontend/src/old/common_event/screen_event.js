@@ -219,10 +219,10 @@ export default class ScreenEvent extends CommonEvent {
           super.updateEventAfter();
           const methodName = this.getEventMethodName();
           if(methodName === 'changeScreenPosition') {
-            const p = Common.calcScrollTopLeftPosition(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY, this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX);
+            const p = Common.calcScrollTopLeftPosition(this._event['specificMethodValues'].afterY, this._event['specificMethodValues'].afterX);
             this._progressX = parseFloat(p.left);
             this._progressY = parseFloat(p.top);
-            this._progressScale = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ);
+            this._progressScale = parseFloat(this._event['specificMethodValues'].afterZ);
             if(this._keepDispMag) {
               _setScaleAndUpdateViewing.call(this, WorktableCommon.getWorktableViewScale());
               return _overlay.call(this, this._progressX, this._progressY, this._progressScale);

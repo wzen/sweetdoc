@@ -24,7 +24,7 @@ export default class ItemEventBase extends EventBase {
   execMethod(opt, callback = null) {
     return super.execMethod(opt, () => {
       const methodName = this.getEventMethodName();
-      if(methodName !== EventPageValueBase.NO_METHOD) {
+      if(methodName !== '__noMethod') {
         (this.constructor.prototype[methodName]).call(this, opt);
         if(callback !== null) {
           return callback();

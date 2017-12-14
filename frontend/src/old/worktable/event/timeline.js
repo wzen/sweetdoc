@@ -169,11 +169,11 @@ export default class Timeline extends Component {
         emt = timelineEvents.eq(idx);
       }
       $('.te_num', emt).val(teNum);
-      $('.dist_id', emt).val(pageValue[EventPageValueBase.PageValueKey.DIST_ID]);
-      const actionType = pageValue[EventPageValueBase.PageValueKey.ACTIONTYPE];
+      $('.dist_id', emt).val(pageValue['distId']);
+      const actionType = pageValue['actionType'];
       this.changeTimelineColor(teNum, actionType);
       // 同期線
-      if(pageValue[EventPageValueBase.PageValueKey.IS_SYNC]) {
+      if(pageValue['isSync']) {
         // 線表示
         return emt.before(`<div class='sync_line ${Common.getActionTypeClassNameByActionType(actionType)}'></div>`);
       } else {

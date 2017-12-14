@@ -36,7 +36,7 @@ export default class CommonEvent {
       }
 
       willChapter(callback = null) {
-        if(this._event[EventPageValueBase.PageValueKey.ACTIONTYPE] === constant.ActionType.CLICK) {
+        if(this._event['actionType'] === constant.ActionType.CLICK) {
           // クリック用オーバーレイを追加
           const z_index = Common.plusPagingZindex(constant.Zindex.EVENTFLOAT);
           if($('#common_event_click_overlay').length === 0) {
@@ -47,7 +47,7 @@ export default class CommonEvent {
       }
 
       didChapter(callback = null) {
-        if(this._event[EventPageValueBase.PageValueKey.ACTIONTYPE] === constant.ActionType.CLICK) {
+        if(this._event['actionType'] === constant.ActionType.CLICK) {
           // クリック用オーバーレイを削除
           $('#common_event_click_overlay').remove();
         }

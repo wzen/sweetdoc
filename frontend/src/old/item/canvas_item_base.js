@@ -150,7 +150,7 @@ export default class CanvasItemBase extends ItemBase {
 
   // アニメーション変更前のアイテムサイズ
   originalItemElementSize() {
-    const obj = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
+    const obj = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(this._event['distId'], this.id));
     const {itemSize} = obj;
     const originalScale = obj.scale;
     return {

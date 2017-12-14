@@ -1,7 +1,6 @@
 import Common from '../../base/common';
 import PageValue from '../../base/page_value';
 import ItemEventBase from '../../base/event_base/item_event_base';
-import EventPageValueBase from '../event_page_value/base/base';
 import ConfigMenu from '../../base/config_menu';
 import OperationHistory from '../worktable/common/history';
 
@@ -9,34 +8,6 @@ let constant = gon.const;
 // アイテム基底
 // @abstract
 export default class ItemBase extends ItemEventBase {
-  static initClass() {
-    // @property [String] ID_PREFIX IDプレフィックス
-    this.ID_PREFIX = "i";
-    // @abstract
-    // @property [String] NAME_PREFIX 名前プレフィックス
-    this.NAME_PREFIX = "";
-    // @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
-    this.DESIGN_CONFIG_ROOT_ID = 'design_config_@id';
-    // @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
-    this.DESIGN_PAGEVALUE_ROOT = 'designs';
-
-    const Cls = (this.ImageKey = class ImageKey {
-      static initClass() {
-        this.PROJECT_ID = constant.PreloadItemImage.Key.PROJECT_ID;
-        this.ITEM_OBJ_ID = constant.PreloadItemImage.Key.ITEM_OBJ_ID;
-        this.EVENT_DIST_ID = constant.PreloadItemImage.Key.EVENT_DIST_ID;
-        this.SELECT_FILE = constant.PreloadItemImage.Key.SELECT_FILE;
-        this.URL = constant.PreloadItemImage.Key.URL;
-        this.SELECT_FILE_DELETE = constant.PreloadItemImage.Key.SELECT_FILE_DELETE;
-      }
-    });
-    Cls.initClass();
-
-    if (window.isWorkTable) {
-      this.include(itemBaseWorktableExtend);
-    }
-  }
-
   // コンストラクタ
   // @param [Array] cood 座標
   constructor(cood = null) {
@@ -188,9 +159,9 @@ export default class ItemBase extends ItemEventBase {
 
   willChapter(callback = null) {
     // nullの場合もデフォルトで表示
-    if ((this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER] === null) || this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER]) {
+    if ((this._event['showWillChapter'] === null) || this._event['showWillChapter']) {
       // 表示
-      let d = this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION];
+      let d = this._event['showWillChapterDuration'];
       if ((d === null)) {
         d = 0;
       }
@@ -205,9 +176,9 @@ export default class ItemBase extends ItemEventBase {
 
   didChapter(callback = null) {
     return super.didChapter(() => {
-      if ((this._event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER] !== null) && this._event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER]) {
+      if ((this._event['hideDidChapter'] !== null) && this._event['hideDidChapter']) {
         // 非表示
-        const d = this._event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER_DURATION];
+        const d = this._event['hideDidChapterDuration'];
         return this.hideItem(() => {
             return ItemBase.prototype.__proto__.didChapter.call(this, callback);
           }
@@ -338,7 +309,7 @@ export default class ItemBase extends ItemEventBase {
 
   // アニメーション変更前のアイテムサイズ
   originalItemElementSize() {
-    const obj = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
+    const obj = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(this._event['distId'], this.id));
     return obj.itemSize;
   }
 
@@ -485,7 +456,7 @@ export default class ItemBase extends ItemEventBase {
     if (immediate === null) {
       immediate = false;
     }
-    const itemDiff = this._event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
+    const itemDiff = this._event['itemSizeDiff'];
     if ((itemDiff === null) || (itemDiff === 'undefined')) {
       // 変更なしの場合
       return;
@@ -507,8 +478,8 @@ export default class ItemBase extends ItemEventBase {
       return;
     }
 
-    const scrollEnd = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
-    const scrollStart = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
+    const scrollEnd = parseInt(this._event['scrollPointEnd']);
+    const scrollStart = parseInt(this._event['scrollPointStart']);
     const progressPercentage = scrollValue / (scrollEnd - scrollStart);
     itemSize = {
       x: originalItemElementSize.x + (itemDiff.x * progressPercentage),
@@ -525,7 +496,7 @@ export default class ItemBase extends ItemEventBase {
     if (immediate === null) {
       immediate = false;
     }
-    const itemDiff = this._event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
+    const itemDiff = this._event['itemSizeDiff'];
     if ((itemDiff === null) || (itemDiff === 'undefined')) {
       // 変更なしの場合
       return;
@@ -547,7 +518,7 @@ export default class ItemBase extends ItemEventBase {
       return;
     }
 
-    const eventDuration = this._event[EventPageValueBase.PageValueKey.EVENT_DURATION];
+    const eventDuration = this._event['eventDuration'];
     const duration = 0.01;
     const perX = itemDiff.x * (duration / eventDuration);
     const perY = itemDiff.y * (duration / eventDuration);
@@ -607,4 +578,3 @@ export default class ItemBase extends ItemEventBase {
     }
   }
 };
-ItemBase.initClass();

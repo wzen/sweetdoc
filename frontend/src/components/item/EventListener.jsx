@@ -117,9 +117,9 @@ export default class EventBase extends Extend {
     this._isScrollHeader = true;
     this._doPreviewLoop = false;
     this._handlerFuncComplete = null;
-    this._enabledDirections = this._event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS];
-    this._forwardDirections = this._event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS];
-    return this._specificMethodValues = this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES];
+    this._enabledDirections = this._event['scrollEnabledDirections'];
+    this._forwardDirections = this._event['scrollForwardDirections'];
+    return this._specificMethodValues = this._event['specificMethodValues'];
   }
 
   // スクロールイベント
@@ -142,14 +142,14 @@ export default class EventBase extends Extend {
   // @return [String] メソッド名
   getEventMethodName() {
     if (this._event !== null) {
-      const methodName = this._event[EventPageValueBase.PageValueKey.METHODNAME];
+      const methodName = this._event['methodName'];
       if (methodName !== null) {
         return methodName;
       } else {
-        return EventPageValueBase.NO_METHOD;
+        return '__noMethod';
       }
     } else {
-      return EventPageValueBase.NO_METHOD;
+      return '__noMethod';
     }
   }
 
@@ -157,7 +157,7 @@ export default class EventBase extends Extend {
   // @return [Integer] アクションタイプ
   getEventActionType() {
     if (this._event !== null) {
-      return this._event[EventPageValueBase.PageValueKey.ACTIONTYPE];
+      return this._event['actionType'];
     }
   }
 
@@ -165,7 +165,7 @@ export default class EventBase extends Extend {
   // @return [Integer] フォーク番号
   getChangeForkNum() {
     if (this._event !== null) {
-      const num = this._event[EventPageValueBase.PageValueKey.CHANGE_FORKNUM];
+      const num = this._event['changeForknum'];
       if (num !== null) {
         return parseInt(num);
       } else {
@@ -372,7 +372,7 @@ export default class EventBase extends Extend {
   // チャプター開始前イベント
   willChapter(callback = null) {
     // インスタンスの状態を保存
-    this.saveToFootprint(this.id, true, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
+    this.saveToFootprint(this.id, true, this._event['distId']);
     // イベント前後の変数の設定
     this.setModifyBeforeAndAfterVar();
     // ステータス値初期化
@@ -392,7 +392,7 @@ export default class EventBase extends Extend {
       }
     }
     // インスタンスの状態を保存
-    this.saveToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
+    this.saveToFootprint(this.id, false, this._event['distId']);
     if (callback !== null) {
       return callback();
     }
@@ -479,8 +479,8 @@ export default class EventBase extends Extend {
       }
     }
 
-    const sPoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
-    const ePoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) + 1;
+    const sPoint = parseInt(this._event['scrollPointStart']);
+    const ePoint = parseInt(this._event['scrollPointEnd']) + 1;
     // スクロール指定範囲外なら反応させない
     if ((this.stepValue < sPoint) && !isPreview) {
       if (this.stepValue < 0) {
@@ -555,7 +555,7 @@ export default class EventBase extends Extend {
   // スクロールの長さを取得
   // @return [Integer] スクロール長さ
   scrollLength() {
-    return parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) - parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
+    return parseInt(this._event['scrollPointEnd']) - parseInt(this._event['scrollPointStart']);
   }
 
   // クリック基底メソッド
@@ -644,11 +644,11 @@ export default class EventBase extends Extend {
       return this.previewLoop();
     } else {
       if (window.eventAction !== null) {
-        if (this._event[EventPageValueBase.PageValueKey.FINISH_PAGE]) {
+        if (this._event['finishPage']) {
           // このイベント終了時にページ遷移する場合
-          if (this._event[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] !== EventPageValueBase.NO_JUMPPAGE) {
+          if (this._event['jumppageNum'] !== EventPageValueBase.NO_JUMPPAGE) {
             // 指定ページに遷移
-            return window.eventAction.thisPage().finishAllChapters(this._event[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] - 1);
+            return window.eventAction.thisPage().finishAllChapters(this._event['jumppageNum'] - 1);
           } else {
             // 全ページ終了
             return window.eventAction.finishAllPages();
@@ -665,7 +665,7 @@ export default class EventBase extends Extend {
 
   // イベント前のインスタンスオブジェクトを取得
   getMinimumObjectEventBefore() {
-    return PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
+    return PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(this._event['distId'], this.id));
   }
 
   // イベント前の表示状態にする
@@ -679,7 +679,7 @@ export default class EventBase extends Extend {
     }
     // インスタンスを戻す
     this.setMiniumObject(this.getMinimumObjectEventBefore());
-    if (this._event[EventPageValueBase.PageValueKey.DO_FOCUS] && (this instanceof ScreenEvent.PrivateClass === false)) {
+    if (this._event['doFocus'] && (this instanceof ScreenEvent.PrivateClass === false)) {
       // フォーカスを戻す
       Common.focusToTarget(this.getJQueryElement(), null, true);
     }
@@ -701,7 +701,7 @@ export default class EventBase extends Extend {
     }
     this.updateInstanceParamByStep(null, true);
     // インスタンスの状態を保存
-    return this.saveToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
+    return this.saveToFootprint(this.id, false, this._event['distId']);
   }
 
   // 最終ステップでメソッドを実行
@@ -720,7 +720,7 @@ export default class EventBase extends Extend {
     if (immediate === null) {
       immediate = false;
     }
-    if (this.getEventMethodName() === EventPageValueBase.NO_METHOD) {
+    if (this.getEventMethodName() === '__noMethod') {
       return;
     }
 
@@ -736,9 +736,9 @@ export default class EventBase extends Extend {
       const result = [];
       for (let varName in mod) {
         const value = mod[varName];
-        if ((this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] !== null) && (this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] !== null)) {
+        if ((this._event['modifiableVars'] !== null) && (this._event['modifiableVars'][varName] !== null)) {
           const before = eventBeforeObj[varName];
-          const after = this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
+          const after = this._event['modifiableVars'][varName];
           if ((before !== null) && (after !== null)) {
             if (immediate) {
               result.push(this.changeInstanceVarByConfig(varName, after));
@@ -781,7 +781,7 @@ export default class EventBase extends Extend {
     if (immediate === null) {
       immediate = false;
     }
-    if (this.getEventMethodName() === EventPageValueBase.NO_METHOD) {
+    if (this.getEventMethodName() === '__noMethod') {
       return;
     }
 
@@ -793,8 +793,8 @@ export default class EventBase extends Extend {
     if (immediate) {
       for (varName in mod) {
         value = mod[varName];
-        if ((this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] !== null) && (this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] !== null)) {
-          after = this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
+        if ((this._event['modifiableVars'] !== null) && (this._event['modifiableVars'][varName] !== null)) {
+          after = this._event['modifiableVars'][varName];
           if (after !== null) {
             this.changeInstanceVarByConfig(varName, after);
           }
@@ -808,9 +808,9 @@ export default class EventBase extends Extend {
         const progressPercentage = (this.constructor.STEP_INTERVAL_DURATION * count) / ed;
         for (varName in mod) {
           value = mod[varName];
-          if ((this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] !== null) && (this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] !== null)) {
+          if ((this._event['modifiableVars'] !== null) && (this._event['modifiableVars'][varName] !== null)) {
             const before = eventBeforeObj[varName];
-            after = this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
+            after = this._event['modifiableVars'][varName];
             if ((before !== null) && (after !== null)) {
               if (value.varAutoChange) {
                 if (value.type === constant.ItemDesignOptionType.NUMBER) {
@@ -837,8 +837,8 @@ export default class EventBase extends Extend {
             const result = [];
             for (varName in mod) {
               value = mod[varName];
-              if ((this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] !== null) && (this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] !== null)) {
-                after = this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
+              if ((this._event['modifiableVars'] !== null) && (this._event['modifiableVars'][varName] !== null)) {
+                after = this._event['modifiableVars'][varName];
                 if (after !== null) {
                   result.push(this.changeInstanceVarByConfig(varName, after));
                 } else {
@@ -870,8 +870,8 @@ export default class EventBase extends Extend {
         if (beforeObj !== null) {
           this[varName + this.constructor.BEFORE_MODIFY_VAR_SUFFIX] = beforeObj[varName];
         }
-        if (this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] !== null) {
-          const afterObj = this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
+        if (this._event['modifiableVars'] !== null) {
+          const afterObj = this._event['modifiableVars'][varName];
           if (afterObj !== null) {
             result.push(this[varName + this.constructor.AFTER_MODIFY_VAR_SUFFIX] = afterObj);
           } else {
@@ -898,7 +898,7 @@ export default class EventBase extends Extend {
 
   // ステップ数最大値
   progressMax() {
-    if (this._event[EventPageValueBase.PageValueKey.ACTIONTYPE] === constant.ActionType.SCROLL) {
+    if (this._event['actionType'] === constant.ActionType.SCROLL) {
       return this.scrollLength();
     } else {
       return this.clickDurationStepMax();
@@ -913,7 +913,7 @@ export default class EventBase extends Extend {
 
   // クリック実行時間
   eventDuration() {
-    let d = this._event[EventPageValueBase.PageValueKey.EVENT_DURATION];
+    let d = this._event['eventDuration'];
     if (d === 'undefined') {
       d = null;
     }

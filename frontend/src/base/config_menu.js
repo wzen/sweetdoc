@@ -89,7 +89,7 @@ export default class ConfigMenu {
 
   // メソッド変数コンフィグ読み込み
   static loadEventMethodValueConfig(eventConfigObj, itemObjClass, successCallback = null, errorCallback = null) {
-    if((itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]] === null)) {
+    if((itemObjClass.actionProperties.methods[eventConfigObj['methodName']] === null)) {
       // メソッド無し
       if(successCallback !== null) {
         successCallback();
@@ -116,8 +116,8 @@ export default class ConfigMenu {
         type: "POST",
         data: {
           classDistToken: itemObjClass.CLASS_DIST_TOKEN,
-          methodName: eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME],
-          modifiables: JSON.stringify(itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]][itemObjClass.ActionPropertiesKey.MODIFIABLE_VARS])
+          methodName: eventConfigObj['methodName'],
+          modifiables: JSON.stringify(itemObjClass.actionProperties.methods[eventConfigObj['methodName']][itemObjClass.ActionPropertiesKey.MODIFIABLE_VARS])
         },
         dataType: "json",
         success(data) {

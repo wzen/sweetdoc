@@ -10,25 +10,9 @@ export default class EventPageValueBase {
 
     const Cls = (this.PageValueKey = class PageValueKey {
       static initClass() {
-        // @property [String] DIST_ID 一意のイベント識別ID
-        this.DIST_ID = constant.EventPageValueKey.DIST_ID;
-        // @property [String] ID オブジェクトID
-        this.ID = constant.EventPageValueKey.ID;
-        // @property [String] CLASS_DIST_TOKEN クラス識別TOKEN
-        this.CLASS_DIST_TOKEN = constant.EventPageValueKey.CLASS_DIST_TOKEN;
-        // @property [String] ITEM_SIZE_DIFF アイテムサイズ
-        this.ITEM_SIZE_DIFF = constant.EventPageValueKey.ITEM_SIZE_DIFF;
         // @property [String] DO_FOCUS フォーカス
         this.DO_FOCUS = constant.EventPageValueKey.DO_FOCUS;
         // @property [String] DO_FOCUS チャプター開始時に表示
-        this.SHOW_WILL_CHAPTER = constant.EventPageValueKey.SHOW_WILL_CHAPTER;
-        // @property [String] DO_FOCUS チャプター開始時の表示実行時間
-        this.SHOW_WILL_CHAPTER_DURATION = constant.EventPageValueKey.SHOW_WILL_CHAPTER_DURATION;
-        // @property [String] DO_FOCUS チャプター終了時に非表示
-        this.HIDE_DID_CHAPTER = constant.EventPageValueKey.HIDE_DID_CHAPTER;
-        // @property [String] DO_FOCUS チャプター終了時に非表示実行時間
-        this.HIDE_DID_CHAPTER_DURATION = constant.EventPageValueKey.HIDE_DID_CHAPTER_DURATION;
-        // @property [String] SPECIFIC_METHOD_VALUES メソッド固有値
         this.SPECIFIC_METHOD_VALUES = constant.EventPageValueKey.SPECIFIC_METHOD_VALUES;
         // @property [String] IS_COMMON_EVENT 共通イベント判定
         this.IS_COMMON_EVENT = constant.EventPageValueKey.IS_COMMON_EVENT;
@@ -69,8 +53,8 @@ export default class EventPageValueBase {
     const _scrollLength = function(eventConfig) {
       const writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
       if(writeValue !== null) {
-        const start = writeValue[this.PageValueKey.SCROLL_POINT_START];
-        const end = writeValue[this.PageValueKey.SCROLL_POINT_END];
+        const start = writeValue['scrollPointStart'];
+        const end = writeValue['scrollPointEnd'];
         if((start !== null) && $.isNumeric(start) && (end !== null) && $.isNumeric(end)) {
           return parseInt(end) - parseInt(start);
         }
@@ -80,7 +64,7 @@ export default class EventPageValueBase {
     };
 
     const handlerDiv = $(".handler_div", eventConfig.emt);
-    if(eventConfig[this.PageValueKey.ACTIONTYPE] === constant.ActionType.SCROLL) {
+    if(eventConfig['actionType'] === constant.ActionType.SCROLL) {
       const startDiv = handlerDiv.find('.scroll_point_start:first');
       const start = startDiv.val();
       let s = null;
@@ -96,9 +80,9 @@ export default class EventPageValueBase {
       if(end.length === 0) {
         return endDiv.val(parseInt(s) + _scrollLength.call(this, eventConfig));
       }
-    } else if(eventConfig[this.PageValueKey.ACTIONTYPE] === constant.ActionType.CLICK) {
+    } else if(eventConfig['actionType'] === constant.ActionType.CLICK) {
       const eventDuration = handlerDiv.find('.click_duration:first');
-      const item = window.instanceMap[eventConfig[this.PageValueKey.ID]];
+      const item = window.instanceMap[eventConfig['id']];
       if(item !== null) {
         let duration = item.constructor.actionProperties.methods[eventConfig[this.PageValueKey.METHODNAME]][item.constructor.ActionPropertiesKey.EVENT_DURATION];
         if((duration === null)) {
@@ -146,17 +130,17 @@ export default class EventPageValueBase {
       }
 
       // コンフィグ作成
-      eventConfig.constructor.addEventConfigContents(eventConfig[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
+      eventConfig.constructor.addEventConfigContents(eventConfig['classDistToken']);
 
       // 選択イベントタイプ
-      const selectItemValue = `${eventConfig[this.PageValueKey.ID]}${EventConfig.EVENT_ITEM_SEPERATOR}${eventConfig[this.PageValueKey.CLASS_DIST_TOKEN]}`;
+      const selectItemValue = `${eventConfig['id']}${EventConfig.EVENT_ITEM_SEPERATOR}${eventConfig[this.PageValueKey.CLASS_DIST_TOKEN]}`;
       eventConfig.constructor.setSelectItemValue($('.dropdown:first', eventConfig.emt), selectItemValue);
 
       // 選択メソッドタイプ
       const actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@classdisttoken', eventConfig[this.PageValueKey.CLASS_DIST_TOKEN]);
       $(`.${actionFormName} .radio`, eventConfig.emt).each(function(e) {
         const methodName = $(this).find('input.method_name').val();
-        if(methodName === eventConfig[EventPageValueBase.PageValueKey.METHODNAME]) {
+        if(methodName === eventConfig['methodName']) {
           return $(this).find('input[type=radio]').prop('checked', true);
         }
       });
@@ -218,11 +202,11 @@ export default class EventPageValueBase {
 
       // 操作
       const handlerDiv = $(".handler_div", eventConfig.emt);
-      if(eventConfig[this.PageValueKey.ACTIONTYPE] === constant.ActionType.SCROLL) {
+      if(eventConfig['actionType'] === constant.ActionType.SCROLL) {
         handlerDiv.find('input[type=radio][value=scroll]').prop('checked', true);
-        if((eventConfig[this.PageValueKey.SCROLL_POINT_START] !== null) && (eventConfig[this.PageValueKey.SCROLL_POINT_END] !== null)) {
-          handlerDiv.find('.scroll_point_start:first').val(eventConfig[this.PageValueKey.SCROLL_POINT_START]);
-          handlerDiv.find('.scroll_point_end:first').val(eventConfig[this.PageValueKey.SCROLL_POINT_END]);
+        if((eventConfig['scrollPointStart'] !== null) && (eventConfig['scrollPointEnd'] !== null)) {
+          handlerDiv.find('.scroll_point_start:first').val(eventConfig['scrollPointStart']);
+          handlerDiv.find('.scroll_point_end:first').val(eventConfig['scrollPointEnd']);
         }
 
         const topEmt = handlerDiv.find('.scroll_enabled_top:first');
@@ -266,13 +250,13 @@ export default class EventPageValueBase {
           }
         }
 
-      } else if(eventConfig[this.PageValueKey.ACTIONTYPE] === constant.ActionType.CLICK) {
+      } else if(eventConfig['actionType'] === constant.ActionType.CLICK) {
         handlerDiv.find('input[type=radio][value=click]').prop('checked', true);
         const eventDuration = handlerDiv.find('.click_duration:first');
         if(eventConfig[this.PageValueKey.EVENT_DURATION] !== null) {
           eventDuration.val(eventConfig[this.PageValueKey.EVENT_DURATION]);
         } else {
-          const item = window.instanceMap[eventConfig[this.PageValueKey.ID]];
+          const item = window.instanceMap[eventConfig['id']];
           if(item !== null) {
             //duration = item.constructor.actionProperties.methods[eventConfig[@PageValueKey.METHODNAME]][item.constructor.ActionPropertiesKey.EVENT_DURATION]
             let duration = eventConfig[this.PageValueKey.EVENT_DURATION];
@@ -309,8 +293,8 @@ export default class EventPageValueBase {
     $(`#${PageValue.Key.E_ROOT} .${PageValue.Key.E_SUB_ROOT} .${PageValue.Key.pageRoot()}`).children('div').each((i, e) => {
       const teNum = parseInt($(e).attr('class'));
       if(teNum > maxTeNum) {
-        const start = $(e).find(`.${this.PageValueKey.SCROLL_POINT_START}:first`).val();
-        const end = $(e).find(`.${this.PageValueKey.SCROLL_POINT_END}:first`).val();
+        const start = $(e).find(`.${'scrollPointStart'}:first`).val();
+        const end = $(e).find(`.${'scrollPointEnd'}:first`).val();
         if((start !== null) && (start !== "null") && (end !== null) && (end !== "null")) {
           maxTeNum = teNum;
           return ret = end;

@@ -910,7 +910,7 @@ export default class PageValue {
             for (let i = min, end = max, asc = min <= end; asc ? i <= end : i >= end; asc ? i++ : i--) {
               const obj = ePageValues[this.Key.E_NUM_PREFIX + i];
               if ((obj !== null) &&
-                ($.inArray(obj[EventPageValueBase.PageValueKey.ID], instanceObjIds) >= 0)) {
+                ($.inArray(obj['id'], instanceObjIds) >= 0)) {
                 teCount += 1;
                 // 番号を連番に振り直し
                 adjust[this.Key.E_NUM_PREFIX + teCount] = obj;
@@ -1094,7 +1094,7 @@ export default class PageValue {
     const eventPageValues = PageValue.getEventPageValueSortedListByNum();
     const w = eventPageValues[beforeNum - 1];
     // Syncを解除する
-    w[EventPageValueBase.PageValueKey.IS_SYNC] = false;
+    w['isSync'] = false;
     if (beforeNum < afterNum) {
       let asc, end;
       for (num = beforeNum, end = afterNum - 1, asc = beforeNum <= end; asc ? num <= end : num >= end; asc ? num++ : num--) {
@@ -1198,8 +1198,8 @@ export default class PageValue {
           dFlg = true;
           result.push(type = te.actiontype);
         } else {
-          if (dFlg && (type === te[EventPageValueBase.PageValueKey.ACTIONTYPE])) {
-            te[EventPageValueBase.PageValueKey.IS_SYNC] = false;
+          if (dFlg && (type === te['actionType'])) {
+            te['isSync'] = false;
             this.setEventPageValue(this.Key.eventNumber(idx + 1), te);
             dFlg = false;
             result.push(type = null);

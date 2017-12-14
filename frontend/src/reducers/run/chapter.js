@@ -16,8 +16,8 @@ export default class Chapter {
     this.num = list.num;
     this.eventObjList = [];
     for(let obj of Array.from(this.eventList)) {
-      const id = obj[EventPageValueBase.PageValueKey.ID];
-      const distId = obj[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN];
+      const id = obj['id'];
+      const distId = obj['classDistToken'];
       // インスタンス作成
       const event = Common.getInstanceFromMap(id, distId);
       this.eventObjList.push(event);
@@ -83,8 +83,8 @@ export default class Chapter {
     window.disabledEventHandler = true;
     let item = null;
     this.eventObjList.forEach((e, idx) => {
-      if((this.eventList[idx][EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) &&
-        this.eventList[idx][EventPageValueBase.PageValueKey.DO_FOCUS]) {
+      if((this.eventList[idx]['isCommonEvent'] === false) &&
+        this.eventList[idx]['doFocus']) {
         item = e;
         return false;
       }

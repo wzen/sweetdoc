@@ -45,7 +45,7 @@ export default class WorktableCommon {
         var item = window.instanceMap[te.id];
         if(item !== null) {
           item.initEvent(te, keepDispMag);
-          if(item instanceof ItemBase && te[EventPageValueBase.PageValueKey.DO_FOCUS]) {
+          if(item instanceof ItemBase && te['doFocus']) {
             // アイテムにフォーカス
             Common.focusToTarget(item.getJQueryElement(), null, true);
           }
@@ -959,7 +959,7 @@ export default class WorktableCommon {
       }
       for(let idx = 0; idx < tes.length; idx++) {
         const te = tes[idx];
-        const changeForkNum = te[EventPageValueBase.PageValueKey.CHANGE_FORKNUM];
+        const changeForkNum = te['changeForknum'];
         if((changeForkNum !== null) && (changeForkNum !== forkNum)) {
           const ret = _trace.call(this, changeForkNum);
           ({result} = ret);

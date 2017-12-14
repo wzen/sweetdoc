@@ -46,9 +46,9 @@ export default class EventConfig {
       em.off('click').on('click', e => {
         this.clearError();
         const parent = $(e.target).closest('.radio');
-        this[EventPageValueBase.PageValueKey.METHODNAME] = parent.find('input.method_name:first').val();
+        this['methodName'] = parent.find('input.method_name:first').val();
         this.clickMethod(e.target);
-        if(this[EventPageValueBase.PageValueKey.ACTIONTYPE] !== null) {
+        if(this['actionType'] !== null) {
           // Buttonフォーム表示
           return $('.button_div', this.emt).show();
         }
@@ -88,16 +88,16 @@ export default class EventConfig {
 
         $('.handler_form', this.emt).hide();
         if($(e.target).val() === 'scroll') {
-          this[EventPageValueBase.PageValueKey.ACTIONTYPE] = constant.ActionType.SCROLL;
+          this['actionType'] = constant.ActionType.SCROLL;
           $('.scroll_form', this.emt).show();
         } else if($(e.target).val() === 'click') {
-          this[EventPageValueBase.PageValueKey.ACTIONTYPE] = constant.ActionType.CLICK;
+          this['actionType'] = constant.ActionType.CLICK;
           $('.click_form', this.emt).show();
         }
 
         if(this.teNum > 1) {
-          const beforeActionType = PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE];
-          if(this[EventPageValueBase.PageValueKey.ACTIONTYPE] === beforeActionType) {
+          const beforeActionType = PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum - 1))['actionType'];
+          if(this['actionType'] === beforeActionType) {
             // 前のイベントと同じアクションタイプの場合は同時実行を表示
             return $(".config.parallel_div", this.emt).show();
           } else {
@@ -145,8 +145,8 @@ export default class EventConfig {
           const select = $('.fork_select', handler);
           select.children().remove();
           select.append($(selectOptions));
-          const enabled = (this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] !== null) && (this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] > 0);
-          const fn = enabled ? this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] : 1;
+          const enabled = (this['changeForknum'] !== null) && (this['changeForknum'] > 0);
+          const fn = enabled ? this['changeForknum'] : 1;
           select.val(Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', fn));
           select.parent('div').css('display', enabled ? 'block' : 'none');
           // Fork表示
@@ -242,11 +242,11 @@ export default class EventConfig {
       EventConfig.setSelectItemValue(dropdown, value);
       const splitValues = value.split(EventConfig.EVENT_ITEM_SEPERATOR);
       const objId = splitValues[0];
-      this[EventPageValueBase.PageValueKey.ID] = objId;
-      this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] = splitValues[1];
-      this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] = window.instanceMap[objId] instanceof CommonEventBase;
+      this['id'] = objId;
+      this['classDistToken'] = splitValues[1];
+      this['isCommonEvent'] = window.instanceMap[objId] instanceof CommonEventBase;
       // コンフィグ作成
-      this.constructor.addEventConfigContents(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
+      this.constructor.addEventConfigContents(this['classDistToken']);
     }
 
     if(window.isWorkTable) {
@@ -254,8 +254,8 @@ export default class EventConfig {
       WorktableCommon.clearTimelineSelectedBorderInMainWrapper();
     }
 
-    if(!this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
-      const vEmt = $(`#${this[EventPageValueBase.PageValueKey.ID]}`);
+    if(!this['isCommonEvent']) {
+      const vEmt = $(`#${this['id']}`);
       if(window.isWorkTable) {
         // 選択枠設定
         WorktableCommon.setSelectedBorder(vEmt, 'timeline');
@@ -269,7 +269,7 @@ export default class EventConfig {
 
     // 共通情報表示
     $('.common_state_div', this.emt).show();
-    if(!this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
+    if(!this['isCommonEvent']) {
       // アイテム共通情報表示
       $('.item_common_div, .item_state_div', this.emt).show();
     }
@@ -296,7 +296,7 @@ export default class EventConfig {
   clickMethod(e = null) {
     const _callback = function() {
       $(".value_forms", this.emt).children("div").hide();
-      if(this[EventPageValueBase.PageValueKey.METHODNAME] !== null) {
+      if(this['methodName'] !== null) {
         // 変更値表示
         const valueClassName = this.methodClassName();
         $(`.value_forms .${valueClassName}`, this.emt).show();
@@ -306,10 +306,10 @@ export default class EventConfig {
       return _setApplyClickEvent.call(this);
     };
 
-    if(!this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
+    if(!this['isCommonEvent']) {
       // アイテム選択時
-      const item = window.instanceMap[this[EventPageValueBase.PageValueKey.ID]];
-      if((item !== null) && (this[EventPageValueBase.PageValueKey.METHODNAME] !== null)) {
+      const item = window.instanceMap[this['id']];
+      if((item !== null) && (this['methodName'] !== null)) {
         // 変数変更コンフィグ読み込み
         return ConfigMenu.loadEventMethodValueConfig(this, item.constructor, () => {
           return _callback.call(this);
@@ -319,7 +319,7 @@ export default class EventConfig {
       }
     } else {
       // 共通イベント選択時
-      const objClass = Common.getContentClass(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
+      const objClass = Common.getContentClass(this['classDistToken']);
       if(objClass) {
         return ConfigMenu.loadEventMethodValueConfig(this, objClass, () => {
           return _callback.call(this);
@@ -332,7 +332,7 @@ export default class EventConfig {
 
   // 入力値を適用する
   writeToEventPageValue() {
-    if((this[EventPageValueBase.PageValueKey.ACTIONTYPE] === null)) {
+    if((this['actionType'] === null)) {
       if(window.debug) {
         console.log('validation error');
       }
@@ -340,11 +340,11 @@ export default class EventConfig {
     }
 
     // 入力値を保存
-    if((this[EventPageValueBase.PageValueKey.DIST_ID] === null)) {
-      this[EventPageValueBase.PageValueKey.DIST_ID] = Common.generateId();
+    if((this['distId'] === null)) {
+      this['distId'] = Common.generateId();
     }
 
-    this[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF] = {
+    this['itemSizeDiff'] = {
       x: parseInt($('.item_position_diff_x:first', this.emt).val()),
       y: parseInt($('.item_position_diff_y:first', this.emt).val()),
       w: parseInt($('.item_diff_width:first', this.emt).val()),
@@ -352,52 +352,52 @@ export default class EventConfig {
     };
 
     let checked = $('.show_will_chapter:first', this.emt).is(':checked');
-    this[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER] = (checked !== null) && checked;
-    this[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION] = $('.show_will_chapter_duration:first', this.emt).val();
+    this['showWillChapter'] = (checked !== null) && checked;
+    this['showWillChapterDuration'] = $('.show_will_chapter_duration:first', this.emt).val();
     checked = $('.hide_did_chapter:first', this.emt).is(':checked');
-    this[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER] = (checked !== null) && checked;
-    this[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER_DURATION] = $('.hide_did_chapter_duration:first', this.emt).val();
+    this['hideDidChapter'] = (checked !== null) && checked;
+    this['hideDidChapterDuration'] = $('.hide_did_chapter_duration:first', this.emt).val();
 
-    this[EventPageValueBase.PageValueKey.FINISH_PAGE] = $('.finish_page', this.emt).is(":checked");
-    this[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] = $('.finish_page_select', this.emt).val();
-    this[EventPageValueBase.PageValueKey.DO_FOCUS] = $('.do_focus', this.emt).prop('checked');
-    this[EventPageValueBase.PageValueKey.IS_SYNC] = false;
+    this['finishPage'] = $('.finish_page', this.emt).is(":checked");
+    this['jumppageNum'] = $('.finish_page_select', this.emt).val();
+    this['doFocus'] = $('.do_focus', this.emt).prop('checked');
+    this['isSync'] = false;
     const parallel = $(".parallel_div .parallel", this.emt);
     if(parallel !== null) {
-      this[EventPageValueBase.PageValueKey.IS_SYNC] = parallel.is(":checked");
+      this['isSync'] = parallel.is(":checked");
     }
 
     const handlerDiv = $(".handler_div", this.emt);
-    if(this[EventPageValueBase.PageValueKey.ACTIONTYPE] === constant.ActionType.SCROLL) {
-      this[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = '';
-      this[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = "";
-      this[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = handlerDiv.find('.scroll_point_start:first').val();
-      this[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = handlerDiv.find('.scroll_point_end:first').val();
+    if(this['actionType'] === constant.ActionType.SCROLL) {
+      this['scrollPointStart'] = '';
+      this['scrollPointEnd'] = "";
+      this['scrollPointStart'] = handlerDiv.find('.scroll_point_start:first').val();
+      this['scrollPointEnd'] = handlerDiv.find('.scroll_point_end:first').val();
 
       const topEmt = handlerDiv.find('.scroll_enabled_top:first');
       const bottomEmt = handlerDiv.find('.scroll_enabled_bottom:first');
       const leftEmt = handlerDiv.find('.scroll_enabled_left:first');
       const rightEmt = handlerDiv.find('.scroll_enabled_right:first');
-      this[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = {
+      this['scrollEnabledDirections'] = {
         top: topEmt.find('.scroll_enabled:first').is(":checked"),
         bottom: bottomEmt.find('.scroll_enabled:first').is(":checked"),
         left: leftEmt.find('.scroll_enabled:first').is(":checked"),
         right: rightEmt.find('.scroll_enabled:first').is(":checked")
       };
-      this[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = {
+      this['scrollForwardDirections'] = {
         top: topEmt.find('.scroll_forward:first').is(":checked"),
         bottom: bottomEmt.find('.scroll_forward:first').is(":checked"),
         left: leftEmt.find('.scroll_forward:first').is(":checked"),
         right: rightEmt.find('.scroll_forward:first').is(":checked")
       };
 
-    } else if(this[EventPageValueBase.PageValueKey.ACTIONTYPE] === constant.ActionType.CLICK) {
-      this[EventPageValueBase.PageValueKey.EVENT_DURATION] = handlerDiv.find('.click_duration:first').val();
-      this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = 0;
+    } else if(this['actionType'] === constant.ActionType.CLICK) {
+      this['eventDuration'] = handlerDiv.find('.click_duration:first').val();
+      this['changeForknum'] = 0;
       checked = handlerDiv.find('.enable_fork:first').is(':checked');
       if((checked !== null) && checked) {
         const prefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '');
-        this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''));
+        this['changeForknum'] = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''));
       }
     }
 
@@ -410,7 +410,7 @@ export default class EventConfig {
         return specificValues[className] = $(this).val();
       }
     });
-    this[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES] = specificValues;
+    this['specificMethodValues'] = specificValues;
 
     const errorMes = EventPageValueBase.writeToPageValue(this);
     if((errorMes !== null) && (errorMes.length > 0)) {
@@ -428,7 +428,7 @@ export default class EventConfig {
     // 入力値書き込み
     if(this.writeToEventPageValue()) {
       // イベントの色を変更
-      //Timeline.changeTimelineColor(@teNum, @[EventPageValueBase.PageValueKey.ACTIONTYPE])
+      //Timeline.changeTimelineColor(@teNum, @['actionType'])
       // キャッシュに保存
       window.lStorage.saveAllPageValues();
       // 通知
@@ -468,12 +468,12 @@ export default class EventConfig {
 
   // アクションメソッドクラス名を取得
   actionClassName() {
-    return this.constructor.ITEM_ACTION_CLASS.replace('@classdisttoken', this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
+    return this.constructor.ITEM_ACTION_CLASS.replace('@classdisttoken', this['classDistToken']);
   }
 
   // アクションメソッド & メソッド毎の値のクラス名を取得
   methodClassName() {
-    return this.constructor.ITEM_VALUES_CLASS.replace('@classdisttoken', this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]).replace('@methodname', this[EventPageValueBase.PageValueKey.METHODNAME]);
+    return this.constructor.ITEM_VALUES_CLASS.replace('@classdisttoken', this['classDistToken']).replace('@methodname', this['methodName']);
   }
 
   // エラー表示
@@ -556,13 +556,13 @@ export default class EventConfig {
 
   // 変数編集コンフィグの初期化
   initEventVarModifyConfig(objClass) {
-    if((objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]] === null) ||
-      (objClass.actionPropertiesModifiableVars(this[EventPageValueBase.PageValueKey.METHODNAME]) === null)) {
+    if((objClass.actionProperties.methods[this['methodName']] === null) ||
+      (objClass.actionPropertiesModifiableVars(this['methodName']) === null)) {
       // メソッド or 変数編集無し
       return;
     }
 
-    const mod = objClass.actionPropertiesModifiableVars(this[EventPageValueBase.PageValueKey.METHODNAME]);
+    const mod = objClass.actionPropertiesModifiableVars(this['methodName']);
     if(mod !== null) {
       return (() => {
         const result = [];
@@ -570,11 +570,11 @@ export default class EventConfig {
           const v = mod[varName];
           let defaultValue = null;
           if(this.hasModifiableVar(varName)) {
-            defaultValue = this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
+            defaultValue = this['modifiableVars'][varName];
           } else {
             objClass = null;
-            if(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] !== null) {
-              objClass = Common.getContentClass(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
+            if(this['classDistToken'] !== null) {
+              objClass = Common.getContentClass(this['classDistToken']);
             }
             if(objClass.actionPropertiesModifiableVars()[varName] !== null) {
               defaultValue = objClass.actionPropertiesModifiableVars()[varName].default;
@@ -603,13 +603,13 @@ export default class EventConfig {
   // 独自変数コンフィグの初期化
   initEventSpecificConfig(objClass) {
     let v;
-    if((objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]] === null) ||
-      (objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.SPECIFIC_METHOD_VALUES] === null)) {
+    if((objClass.actionProperties.methods[this['methodName']] === null) ||
+      (objClass.actionProperties.methods[this['methodName']][objClass.ActionPropertiesKey.SPECIFIC_METHOD_VALUES] === null)) {
       // メソッド or 独自コンフィグ無し
       return;
     }
 
-    const sp = objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.SPECIFIC_METHOD_VALUES];
+    const sp = objClass.actionProperties.methods[this['methodName']][objClass.ActionPropertiesKey.SPECIFIC_METHOD_VALUES];
     // 変数と同じクラス名のInputに設定(現状textのみ)
     // 'fixed_value'は除外
     for(let varName in sp) {
@@ -617,7 +617,7 @@ export default class EventConfig {
       const e = this.emt.find(`.${this.methodClassName()} .${EventConfig.METHOD_VALUE_SPECIFIC_ROOT} .${varName}:not('.fixed_value')`);
       if(e.length > 0) {
         if(this.hasSpecificVar(varName)) {
-          e.val(this[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES][varName]);
+          e.val(this['specificMethodValues'][varName]);
         } else {
           e.val(v);
         }
@@ -628,7 +628,7 @@ export default class EventConfig {
     const initSpecificConfigParam = {};
     for(let methodName in objClass.actionProperties.methods) {
       v = objClass.actionProperties.methods[methodName];
-      const methodClassName = this.constructor.ITEM_VALUES_CLASS.replace('@classdisttoken', this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]).replace('@methodname', methodName);
+      const methodClassName = this.constructor.ITEM_VALUES_CLASS.replace('@classdisttoken', this['classDistToken']).replace('@methodname', methodName);
       initSpecificConfigParam[methodName] = this.emt.find(`.${methodClassName} .${EventConfig.METHOD_VALUE_SPECIFIC_ROOT}:first`);
     }
     return objClass.initSpecificConfig(initSpecificConfigParam);
@@ -636,9 +636,9 @@ export default class EventConfig {
 
   // 変数変更値が存在するか
   hasModifiableVar(varName = null) {
-    const ret = (this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] !== null) && ((this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] !== null) !== 'undefined');
+    const ret = (this['modifiableVars'] !== null) && ((this['modifiableVars'] !== null) !== 'undefined');
     if(varName !== null) {
-      return ret && (this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] !== null);
+      return ret && (this['modifiableVars'][varName] !== null);
     } else {
       return ret;
     }
@@ -646,9 +646,9 @@ export default class EventConfig {
 
   // 変数変更値が存在するか
   hasSpecificVar(varName = null) {
-    const ret = (this[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES] !== null) && ((this[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES] !== null) !== 'undefined');
+    const ret = (this['specificMethodValues'] !== null) && ((this['specificMethodValues'] !== null) !== 'undefined');
     if(varName !== null) {
-      return ret && (this[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES][varName] !== null);
+      return ret && (this['specificMethodValues'][varName] !== null);
     } else {
       return ret;
     }
@@ -687,10 +687,10 @@ export default class EventConfig {
         valueElement.val(ui.value);
         valueElement.html(ui.value);
         if(!this.hasModifiableVar()) {
-          this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
+          this['modifiableVars'] = {};
         }
         const {value} = ui;
-        this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value;
+        this['modifiableVars'][varName] = value;
         return this.constructor.switchChildrenConfig(event.target, varName, openChildrenValue, value);
       }
     }).trigger('slide');
@@ -702,10 +702,10 @@ export default class EventConfig {
     $(`.${this.methodClassName()} .${EventConfig.METHOD_VALUE_MODIFY_ROOT} .${varName}_text`, this.emt).val(defaultValue);
     return $(`.${this.methodClassName()} .${EventConfig.METHOD_VALUE_MODIFY_ROOT} .${varName}_text`, this.emt).off('change').on('change', e => {
       if(!this.hasModifiableVar()) {
-        this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
+        this['modifiableVars'] = {};
       }
       const value = $(e.target).val();
-      this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value;
+      this['modifiableVars'][varName] = value;
       return this.constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value);
     }).trigger('change');
   }
@@ -720,10 +720,10 @@ export default class EventConfig {
     }
     return $(`.${this.methodClassName()} .${EventConfig.METHOD_VALUE_MODIFY_ROOT} .${varName}_checkbox`, this.emt).off('change').on('change', e => {
       if(!this.hasModifiableVar()) {
-        this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
+        this['modifiableVars'] = {};
       }
       const value = $(e.target).is(':checked');
-      this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value;
+      this['modifiableVars'][varName] = value;
       return this.constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value);
     }).trigger('change');
   }
@@ -738,13 +738,13 @@ export default class EventConfig {
       defaultValue,
       (a, b, d, e) => {
         if(!this.hasModifiableVar()) {
-          this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
+          this['modifiableVars'] = {};
         }
         let value = `#${b}`;
         if((colorType !== null) && (colorType === 'rgb')) {
           value = Common.colorFormatChangeHexToRgb(value);
         }
-        this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value;
+        this['modifiableVars'][varName] = value;
         return this.constructor.switchChildrenConfig(emt, varName, openChildrenValue, value);
       });
     return this.constructor.switchChildrenConfig(emt, varName, openChildrenValue, defaultValue);
@@ -772,7 +772,7 @@ export default class EventConfig {
     selectEmt.val(_joinArray.call(this, defaultValue));
     return selectEmt.off('change').on('change', e => {
       if(!this.hasModifiableVar()) {
-        this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
+        this['modifiableVars'] = {};
       }
       let value = _splitArray.call(this, $(e.target).val());
       if(value.match(/^-?[0-9]+\.[0-9]+$/)) {
@@ -782,7 +782,7 @@ export default class EventConfig {
         // 整数
         value = parseInt(value);
       }
-      this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value;
+      this['modifiableVars'][varName] = value;
       return this.constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value);
     }).trigger('change');
   }

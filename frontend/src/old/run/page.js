@@ -20,14 +20,14 @@ export default class Page {
           let sync = false;
           if(idx < (eventPageValueList.length - 1)) {
             const beforeEvent = eventPageValueList[idx + 1];
-            if(beforeEvent[EventPageValueBase.PageValueKey.IS_SYNC]) {
+            if(beforeEvent['isSync']) {
               sync = true;
             }
           }
 
           if(!sync) {
             let chapter = null;
-            if(obj[EventPageValueBase.PageValueKey.ACTIONTYPE] === constant.ActionType.CLICK) {
+            if(obj['actionType'] === constant.ActionType.CLICK) {
               chapter = new ClickChapter({eventList, num: idx});
             } else {
               chapter = new ScrollChapter({eventList, num: idx});
@@ -543,7 +543,7 @@ export default class Page {
           if(flg) {
             return false;
           }
-          if(!event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
+          if(!event['isCommonEvent']) {
             chapter.focusToActorIfNeed(true);
             flg = true;
           }
@@ -559,7 +559,7 @@ export default class Page {
           if(flg) {
             return false;
           }
-          if(!event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
+          if(!event['isCommonEvent']) {
             chapter.focusToActorIfNeed(true);
             flg = true;
           }

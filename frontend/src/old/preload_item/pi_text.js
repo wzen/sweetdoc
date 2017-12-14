@@ -1459,7 +1459,7 @@ export default class PreloadItemText extends CanvasItemBase {
   execMethod(opt, callback = null) {
     return EventBase.prototype.execMethod.call(this, opt, () => {
       const methodName = this.getEventMethodName();
-      if(methodName !== EventPageValueBase.NO_METHOD) {
+      if(methodName !== '__noMethod') {
         if(methodName === 'writeText') {
           return (this.constructor.prototype[methodName]).call(this, opt, callback);
         } else {
@@ -1623,7 +1623,7 @@ export default class PreloadItemText extends CanvasItemBase {
   // アニメーション変更前のアイテムサイズ
   // テキストはCanvasの伸縮をさせないため、メソッド上書き
   originalItemElementSize() {
-    const obj = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
+    const obj = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(this._event['distId'], this.id));
     return obj.itemSize;
   }
 

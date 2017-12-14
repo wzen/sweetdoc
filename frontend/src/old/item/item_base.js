@@ -188,9 +188,9 @@ export default class ItemBase extends ItemEventBase {
 
   willChapter(callback = null) {
     // nullの場合もデフォルトで表示
-    if ((this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER] === null) || this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER]) {
+    if ((this._event['showWillChapter'] === null) || this._event['showWillChapter']) {
       // 表示
-      let d = this._event[EventPageValueBase.PageValueKey.SHOW_WILL_CHAPTER_DURATION];
+      let d = this._event['showWillChapterDuration'];
       if ((d === null)) {
         d = 0;
       }
@@ -205,9 +205,9 @@ export default class ItemBase extends ItemEventBase {
 
   didChapter(callback = null) {
     return super.didChapter(() => {
-      if ((this._event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER] !== null) && this._event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER]) {
+      if ((this._event['hideDidChapter'] !== null) && this._event['hideDidChapter']) {
         // 非表示
-        const d = this._event[EventPageValueBase.PageValueKey.HIDE_DID_CHAPTER_DURATION];
+        const d = this._event['hideDidChapterDuration'];
         return this.hideItem(() => {
             return ItemBase.prototype.__proto__.didChapter.call(this, callback);
           }
@@ -338,7 +338,7 @@ export default class ItemBase extends ItemEventBase {
 
   // アニメーション変更前のアイテムサイズ
   originalItemElementSize() {
-    const obj = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
+    const obj = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(this._event['distId'], this.id));
     return obj.itemSize;
   }
 
@@ -485,7 +485,7 @@ export default class ItemBase extends ItemEventBase {
     if (immediate === null) {
       immediate = false;
     }
-    const itemDiff = this._event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
+    const itemDiff = this._event['itemSizeDiff'];
     if ((itemDiff === null) || (itemDiff === 'undefined')) {
       // 変更なしの場合
       return;
@@ -507,8 +507,8 @@ export default class ItemBase extends ItemEventBase {
       return;
     }
 
-    const scrollEnd = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
-    const scrollStart = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
+    const scrollEnd = parseInt(this._event['scrollPointEnd']);
+    const scrollStart = parseInt(this._event['scrollPointStart']);
     const progressPercentage = scrollValue / (scrollEnd - scrollStart);
     itemSize = {
       x: originalItemElementSize.x + (itemDiff.x * progressPercentage),
@@ -525,7 +525,7 @@ export default class ItemBase extends ItemEventBase {
     if (immediate === null) {
       immediate = false;
     }
-    const itemDiff = this._event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
+    const itemDiff = this._event['itemSizeDiff'];
     if ((itemDiff === null) || (itemDiff === 'undefined')) {
       // 変更なしの場合
       return;
@@ -547,7 +547,7 @@ export default class ItemBase extends ItemEventBase {
       return;
     }
 
-    const eventDuration = this._event[EventPageValueBase.PageValueKey.EVENT_DURATION];
+    const eventDuration = this._event['eventDuration'];
     const duration = 0.01;
     const perX = itemDiff.x * (duration / eventDuration);
     const perY = itemDiff.y * (duration / eventDuration);

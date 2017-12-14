@@ -21,7 +21,7 @@ export default class EPVItem extends EventPageValueBase {
     const errorMes = "";
     const writeValue = {};
     writeValue[this.PageValueKey.DIST_ID] = distId;
-    writeValue[this.PageValueKey.ID] = item.id;
+    writeValue['id'] = item.id;
     writeValue[this.PageValueKey.CLASS_DIST_TOKEN] = item.constructor.CLASS_DIST_TOKEN;
     writeValue[this.PageValueKey.ITEM_SIZE_DIFF] = {x: 0, y: 0, w: 0, h: 0};
     writeValue[this.PageValueKey.DO_FOCUS] = true;
@@ -29,7 +29,7 @@ export default class EPVItem extends EventPageValueBase {
     writeValue[this.PageValueKey.FINISH_PAGE] = false;
     writeValue[this.PageValueKey.METHODNAME] = item.constructor.defaultMethodName();
     const actionType = item.constructor.defaultActionType();
-    writeValue[this.PageValueKey.ACTIONTYPE] = actionType;
+    writeValue['actionType'] = actionType;
     let start = this.getAllScrollLength();
     // FIXME: スクロールの長さは要調整
     const adjust = 4.0;
@@ -38,8 +38,8 @@ export default class EPVItem extends EventPageValueBase {
       start = null;
       end = null;
     }
-    writeValue[this.PageValueKey.SCROLL_POINT_START] = start;
-    writeValue[this.PageValueKey.SCROLL_POINT_END] = end;
+    writeValue['scrollPointStart'] = start;
+    writeValue['scrollPointEnd'] = end;
     writeValue[this.PageValueKey.IS_SYNC] = false;
     writeValue[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = item.constructor.defaultScrollEnabledDirection();
     writeValue[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = item.constructor.defaultScrollForwardDirection();
