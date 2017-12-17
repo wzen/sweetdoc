@@ -307,7 +307,7 @@ class Const
       FILTER_TYPE = 'ft'
       FILTER_DATE = 'fd'
       FILTER_TAGS = 'ftg'
-      OVERWRITE_CONTENTS_SELECT =  'overwriteContentsContentsSelect'
+      OVERWRITE_CONTENTS_SELECT = 'overwriteContentsContentsSelect'
       WORD = 'word'
     end
 

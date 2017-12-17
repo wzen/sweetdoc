@@ -75,7 +75,8 @@ module.exports = (env) => {
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
         isWorkTable: true,
         frontendImageUrlRoot: process.env.NODE_ENV === 'production' ? process.env.FRONTEND_IMAGE_URL : 'http://localhost:3000',
-        apiUrl: process.env.NODE_ENV === 'production' ? process.env.API_URL : 'http://localhost:3000'
+        apiUrl: process.env.NODE_ENV === 'production' ? process.env.API_URL : 'http://localhost:3000',
+        debug: process.env.NODE_ENV !== 'production'
       })
     ]
   }

@@ -12,10 +12,10 @@ export default class ItemBase extends ItemEventBase {
   // @param [Array] cood 座標
   constructor(cood = null) {
     super();
-    // @property [Int] id ID
-    this.id = this.constructor.ID_PREFIX + '_' + this.constructor.NAME_PREFIX + '_' + Common.generateId();
     // @property [ItemType] CLASS_DIST_TOKEN アイテム種別
     this.classDistToken = this.constructor.CLASS_DIST_TOKEN;
+    // @property [Int] id ID
+    this.id = this.classDistToken + '_' + Common.generateId();
     // @property [String] name 名前
     this.name = null;
     // @property [String] visible 表示状態

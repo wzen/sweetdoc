@@ -4,7 +4,7 @@ import CssItemBase from '../CssItemBase';
 // ボタンアイテム
 // @extend CssItemBase
 export default class PreloadItemButton extends CssItemBase {
-
+  static get CLASS_DIST_TOKEN() { return 'PreloadItemButton';}
   static get PROPERTIES() {
     return   {
       defaultEvent: {
