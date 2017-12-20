@@ -401,6 +401,3 @@ export default class CssItemBase extends ItemBase {
     return this.applyDesignChange(doStyleSave);
   }
 }
-
-CssItemBase.initClass();
-

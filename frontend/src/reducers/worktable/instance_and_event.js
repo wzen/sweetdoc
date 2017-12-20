@@ -79,6 +79,11 @@ const applyScreenFooter = (state, action) => {
 
 };
 
+const updateCssDesign = (state, action) => {
+  Object.assign(state.instances[currentPageNum(state)][action.instanceId], action.instanceParams);
+  return state
+};
+
 const instanceAndEvent = (state = {instances: {}, events: {}}, action) => {
   switch(action.type) {
     case 'LOAD_STATE':
@@ -87,6 +92,8 @@ const instanceAndEvent = (state = {instances: {}, events: {}}, action) => {
       return createInstance(state, action);
     case 'APPLY_SCREEN_FOOTER':
       return applyScreenFooter(state, action);
+    case 'UPDATE_CSS_DESIGN':
+      return updateCssDesign(state, action);
     default:
       return state;
   }

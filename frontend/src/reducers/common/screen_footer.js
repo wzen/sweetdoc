@@ -6,7 +6,7 @@ const screenFooter = (state = {}, action) => {
         message: action.message
       };
     case 'SET_SCREEN_FOOTER_PARAMS':
-      return Object.assign({}, state, {
+      return Object.assign(state, {
         params: action.params
       });
     case 'APPLY_SCREEN_FOOTER':

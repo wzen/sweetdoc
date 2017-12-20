@@ -1,16 +1,5 @@
-window.constant = gon.const;
-window.serverenv = gon.serverenv;
-window.locale = gon.locale;
-window.userLogined = gon.user_logined;
-window.isMobileAccess = gon.is_mobile_access;
-window.isIosAccess = gon.is_ios_access;
-window.utoken = gon.u_token;
-if (window.isWorkTable === undefined) {
-  window.isWorkTable = false;
-}
-
 // アプリ共通定数
-const Constant = {
+export const Constant = {
   ITEM_PREVIEW_CLASS_DIST_TOKEN: 'dummy',
   CANVAS_ITEM_COORDINATE_VAR_SURFIX: 'Coord',
   DEFAULT_BACKGROUNDCOLOR: '#FAFAFA',
