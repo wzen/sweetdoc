@@ -308,17 +308,17 @@ export default class Navbar {
 
   // 保存されているデータ一覧を取得してNavbarに一覧で表示
   static get_load_list() {
-    const loadEmt = $(`#${Navbar.NAVBAR_ROOT}`).find(`.${ServerStorage.ElementAttribute.FILE_LOAD_CLASS}`);
-    const updateFlg = loadEmt.find(`.${ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}`).length > 0;
+    const loadEmt = $(`#${Navbar.NAVBAR_ROOT}`).find(`.${ServerStorage.ELEMENT_ATTRIBUTE.FILE_LOAD_CLASS}`);
+    const updateFlg = loadEmt.find(`.${ServerStorage.ELEMENT_ATTRIBUTE.LOAD_LIST_UPDATED_FLG}`).length > 0;
     if(updateFlg) {
-      const loadedLocalTime = loadEmt.find(`.${ServerStorage.ElementAttribute.LOADED_LOCALTIME}`);
+      const loadedLocalTime = loadEmt.find(`.${ServerStorage.ELEMENT_ATTRIBUTE.LOADED_LOCALTIME}`);
       if(loadedLocalTime !== null) {
         const diffTime = Common.calculateDiffTime($.now(), parseInt(loadedLocalTime.val()));
         const s = diffTime.seconds;
         if(window.debug) {
           console.log(`loadedLocalTime diff ${s}`);
         }
-        if(parseInt(s) <= ServerStorage.ElementAttribute.LOAD_LIST_INTERVAL_SECONDS) {
+        if(parseInt(s) <= ServerStorage.ELEMENT_ATTRIBUTE.LOAD_LIST_INTERVAL_SECONDS) {
           // 読み込んでX秒以内ならロードしない
           return;
         }
@@ -348,10 +348,10 @@ export default class Navbar {
           });
 
           // ロード済みに変更 & 現在時間を記録
-          loadEmt.find(`.${ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}`).remove();
-          loadEmt.find(`.${ServerStorage.ElementAttribute.LOADED_LOCALTIME}`).remove();
-          $(`<input type='hidden' class=${ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG} value='1'>`).appendTo(loadEmt);
-          return $(`<input type='hidden' class=${ServerStorage.ElementAttribute.LOADED_LOCALTIME} value=${$.now()}>`).appendTo(loadEmt);
+          loadEmt.find(`.${ServerStorage.ELEMENT_ATTRIBUTE.LOAD_LIST_UPDATED_FLG}`).remove();
+          loadEmt.find(`.${ServerStorage.ELEMENT_ATTRIBUTE.LOADED_LOCALTIME}`).remove();
+          $(`<input type='hidden' class=${ServerStorage.ELEMENT_ATTRIBUTE.LOAD_LIST_UPDATED_FLG} value='1'>`).appendTo(loadEmt);
+          return $(`<input type='hidden' class=${ServerStorage.ELEMENT_ATTRIBUTE.LOADED_LOCALTIME} value=${$.now()}>`).appendTo(loadEmt);
 
         } else {
           loadEmt.children().remove();

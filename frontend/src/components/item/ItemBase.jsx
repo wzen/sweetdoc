@@ -3,8 +3,8 @@ import PageValue from '../../base/page_value';
 import ItemEventBase from '../../base/event_base/item_event_base';
 import ConfigMenu from '../../base/config_menu';
 import OperationHistory from '../worktable/common/history';
+import {Constant} from "../../base/constant";
 
-let constant = gon.const;
 // アイテム基底
 // @abstract
 export default class ItemBase extends ItemEventBase {
@@ -31,7 +31,7 @@ export default class ItemBase extends ItemEventBase {
     // @property [Array] itemSize サイズ
     this.itemSize = null;
     // @property [Int] zIndex z-index
-    this.zindex = constant.Zindex.EVENTBOTTOM + 1;
+    this.zindex = Constant.ZINDEX.EVENTBOTTOM + 1;
     // @property [Array] _ohiRegist 操作履歴Index保存配列
     this._ohiRegist = [];
     // @property [Int] _ohiRegistIndex 操作履歴Index保存配列のインデックス
@@ -128,13 +128,13 @@ export default class ItemBase extends ItemEventBase {
     }
     if (immediate || (window.isWorkTable && window.previewRunning)) {
       // ※プレビュー実行時は即時変更
-      this.getJQueryElement().css({'opacity': 0, 'z-index': Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM)});
+      this.getJQueryElement().css({'opacity': 0, 'z-index': Common.plusPagingZindex(Constant.ZINDEX.EVENTBOTTOM)});
       if (callback !== null) {
         return callback();
       }
     } else {
       this._skipEvent = true;
-      return this.getJQueryElement().css('z-index', Common.plusPagingZindex(constant.Zindex.EVENTBOTTOM)).animate({'opacity': 0}, duration, function () {
+      return this.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.ZINDEX.EVENTBOTTOM)).animate({'opacity': 0}, duration, function () {
         this._skipEvent = false;
         if (callback !== null) {
           return callback();
@@ -568,7 +568,7 @@ export default class ItemBase extends ItemEventBase {
         targetValue = targetValue === 'true';
       }
 
-      const root = e.closest(`.${constant.DesignConfig.ROOT_CLASSNAME}`);
+      const root = e.closest(`.${Constant.DESIGN_CONFIG.ROOT_CLASSNAME}`);
       const openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName).replace('@childrenkey', cKey);
       if (cValue === targetValue) {
         $(root).find(`.${openClassName}`).show();

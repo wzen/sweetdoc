@@ -357,9 +357,3 @@ class Paging {
   }
 }
 
-// TODO: 実装する
-//    _removeFork = ->
-//
-//    if forkNum == PageValue.getForkNum()
-//      @selectFork(selectedForkNum, callback = null) ->
-

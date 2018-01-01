@@ -17,63 +17,61 @@ import EventDragPointingDraw from '../event/pointing/event_drag_pointing_draw';
 
 let _updatePrevEventsToAfterAndRunPreview = undefined;
 export default class WorktableCommon {
-  static initClass() {
 
-    _updatePrevEventsToAfterAndRunPreview = function(teNum, keepDispMag, fromBlankEventConfig, doRunPreview, callback = null) {
-      if(doRunPreview && (window.previewRunning !== null) && window.previewRunning) {
-        // プレビュー二重実行は無視
-        return;
-      }
-      const epr = this.eventProgressRoute(teNum);
-      if(!epr.result) {
-        // 設定が繋がっていない場合は無視
-        return;
-      }
-      const tes = epr.routes;
-      // 状態変更フラグON
-      window.worktableItemsChangedState = true;
-      // 操作履歴削除
-      PageValue.removeAllFootprint();
-      teNum = parseInt(teNum);
-      const focusTargetItem = null;
-      // プレビュー実行フラグON
-      if(doRunPreview) {
-        window.previewRunning = true;
-      }
-      for(let idx = 0; idx < tes.length; idx++) {
-        const te = tes[idx];
-        var item = window.instanceMap[te.id];
-        if(item !== null) {
-          item.initEvent(te, keepDispMag);
-          if(item instanceof ItemBase && te['doFocus']) {
-            // アイテムにフォーカス
-            Common.focusToTarget(item.getJQueryElement(), null, true);
-          }
-          if((idx < (tes.length - 1)) || fromBlankEventConfig) {
-            item.willChapter(function() {
-              // イベント後の状態に変更
-              item.updateEventAfter();
-              // 最終ステップでメソッドを実行
-              item.execLastStep();
-              return item.didChapter();
-            });
-          } else if(doRunPreview) {
-            // プレビュー実行
-            item.preview(() => {
-              return this.stopPreview(keepDispMag);
-            });
-            // 状態変更フラグON
-            window.worktableItemsChangedState = true;
-            // ボタン変更「Preview」->「StopPreview」
-            EventConfig.switchPreviewButton(false);
-          }
+  _updatePrevEventsToAfterAndRunPreview = function(teNum, keepDispMag, fromBlankEventConfig, doRunPreview, callback = null) {
+    if(doRunPreview && (window.previewRunning !== null) && window.previewRunning) {
+      // プレビュー二重実行は無視
+      return;
+    }
+    const epr = this.eventProgressRoute(teNum);
+    if(!epr.result) {
+      // 設定が繋がっていない場合は無視
+      return;
+    }
+    const tes = epr.routes;
+    // 状態変更フラグON
+    window.worktableItemsChangedState = true;
+    // 操作履歴削除
+    PageValue.removeAllFootprint();
+    teNum = parseInt(teNum);
+    const focusTargetItem = null;
+    // プレビュー実行フラグON
+    if(doRunPreview) {
+      window.previewRunning = true;
+    }
+    for(let idx = 0; idx < tes.length; idx++) {
+      const te = tes[idx];
+      var item = window.instanceMap[te.id];
+      if(item !== null) {
+        item.initEvent(te, keepDispMag);
+        if(item instanceof ItemBase && te['doFocus']) {
+          // アイテムにフォーカス
+          Common.focusToTarget(item.getJQueryElement(), null, true);
+        }
+        if((idx < (tes.length - 1)) || fromBlankEventConfig) {
+          item.willChapter(function() {
+            // イベント後の状態に変更
+            item.updateEventAfter();
+            // 最終ステップでメソッドを実行
+            item.execLastStep();
+            return item.didChapter();
+          });
+        } else if(doRunPreview) {
+          // プレビュー実行
+          item.preview(() => {
+            return this.stopPreview(keepDispMag);
+          });
+          // 状態変更フラグON
+          window.worktableItemsChangedState = true;
+          // ボタン変更「Preview」->「StopPreview」
+          EventConfig.switchPreviewButton(false);
         }
       }
-      if(callback !== null) {
-        return callback();
-      }
-    };
-  }
+    }
+    if(callback !== null) {
+      return callback();
+    }
+  };
 
   // 選択枠を付ける
   // @param [Object] target 対象のオブジェクト
@@ -1160,5 +1158,4 @@ export default class WorktableCommon {
     }
   }
 };
-WorktableCommon.initClass();
 

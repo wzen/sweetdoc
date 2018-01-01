@@ -1,34 +1,29 @@
 import Common from '../../../base/common';
 import PageValue from '../../../base/page_value';
 import WorktableCommon from './worktable_common';
+import {Constant} from "../../../base/constant";
 
 let constant = undefined;
 export default class WorktableSetting {
-  static initClass() {
-    // 定数
-    constant = gon.const;
-    this.ROOT_ID_NAME = constant.Setting.ROOT_ID_NAME;
 
-    // グリッド線
-    var Cls = (this.Grid = class Grid {
-      static initClass() {
-        this.GRID_CLASS_NAME = constant.Setting.GRID_CLASS_NAME;
-        this.GRID_STEP_CLASS_NAME = constant.Setting.GRID_STEP_CLASS_NAME;
-        this.GRID_STEP_DIV_CLASS_NAME = constant.Setting.GRID_STEP_DIV_CLASS_NAME;
-        this.SETTING_GRID_ELEMENT_CLASS = 'setting_grid_element';
-        this.SETTING_GRID_CANVAS_CLASS = 'setting_grid';
-        this.GRIDVIEW_SIZE = 10000;
-        this.STEP_DEFAULT_VALUE = 12;
+  static get ROOT_ID_NAME() {
+    return Constant.SETTING.ROOT_ID_NAME;
+  }
 
-        Cls = (this.PageValueKey = class PageValueKey {
-          static initClass() {
-            // @property [String] GRID グリッド線表示
-            this.GRID = `${PageValue.Key.ST_PREFIX}${PageValue.Key.PAGE_VALUES_SEPERATOR}${constant.Setting.Key.GRID_ENABLE}`;
-            // @property [String] GRID グリッド線間隔
-            this.GRID_STEP = `${PageValue.Key.ST_PREFIX}${PageValue.Key.PAGE_VALUES_SEPERATOR}${constant.Setting.Key.GRID_STEP}`;
-          }
-        });
-        Cls.initClass();
+  static get GRID() {
+    return class {
+      static get GRID_CLASS_NAME() { return  Constant.SETTING.GRID_CLASS_NAME }
+      static get GRID_STEP_CLASS_NAME() { return Constant.SETTING.GRID_STEP_CLASS_NAME }
+      static get GRID_STEP_DIV_CLASS_NAME() { return Constant.SETTING.GRID_STEP_DIV_CLASS_NAME }
+      static get SETTING_GRID_ELEMENT_CLASS() { return  'setting_grid_element' }
+      static get SETTING_GRID_CANVAS_CLASS() { return 'setting_grid' }
+      static get GRIDVIEW_SIZE() { return  10000 }
+      static get STEP_DEFAULT_VALUE() { return 12 }
+      static get PAGE_VALUE_KEY() {
+        return {
+          GRID: `${PageValue.Key.ST_PREFIX}${PageValue.Key.PAGE_VALUES_SEPERATOR}${constant.Setting.Key.GRID_ENABLE}`,
+          GRID_STEP: `${PageValue.Key.ST_PREFIX}${PageValue.Key.PAGE_VALUES_SEPERATOR}${constant.Setting.Key.GRID_STEP}`
+        }
       }
 
       // グリッド初期化
@@ -184,28 +179,22 @@ export default class WorktableSetting {
 <div class="${this.SETTING_GRID_ELEMENT_CLASS}" style="position: absolute;top:${top}px;left:${left}px;width:${this.GRIDVIEW_SIZE}px;height:${this.GRIDVIEW_SIZE}px;z-index:${Common.plusPagingZindex(Constant.Zindex.GRID)}"><canvas class="${this.SETTING_GRID_CANVAS_CLASS}" class="canvas" width="${this.GRIDVIEW_SIZE}" height="${this.GRIDVIEW_SIZE}"></canvas></div>\
 `;
       }
-    });
-    Cls.initClass();
+    }
+  }
 
-    // 自動保存
-    Cls = (this.IdleSaveTimer = class IdleSaveTimer {
-      static initClass() {
-        this.AUTOSAVE_CLASS_NAME = constant.Setting.AUTOSAVE_CLASS_NAME;
-        this.AUTOSAVE_TIME_CLASS_NAME = constant.Setting.AUTOSAVE_TIME_CLASS_NAME;
-        this.AUTOSAVE_TIME_DIV_CLASS_NAME = constant.Setting.AUTOSAVE_TIME_DIV_CLASS_NAME;
-        this.AUTOSAVE_TIME_DEFAULT = 10; // 10秒
+  static get IDLE_SAVE_TIMER() {
+    return class {
 
-        Cls = (this.PageValueKey = class PageValueKey {
-          static initClass() {
-            // @property [String] AUTOSAVE AutoSave
-            this.AUTOSAVE = `${PageValue.Key.ST_PREFIX}${PageValue.Key.PAGE_VALUES_SEPERATOR}${constant.Setting.Key.AUTOSAVE}`;
-            // @property [String] AUTOSAVE_TIME AutoSave間隔
-            this.AUTOSAVE_TIME = `${PageValue.Key.ST_PREFIX}${PageValue.Key.PAGE_VALUES_SEPERATOR}${constant.Setting.Key.AUTOSAVE_TIME}`;
-          }
-        });
-        Cls.initClass();
+      static get AUTOSAVE_CLASS_NAME() { return Constant.SETTING.AUTOSAVE_CLASS_NAME; }
+      static get AUTOSAVE_TIME_CLASS_NAME() { return Constant.SETTING.AUTOSAVE_TIME_CLASS_NAME }
+      static get AUTOSAVE_TIME_DIV_CLASS_NAME() { return Constant.SETTING.AUTOSAVE_TIME_DIV_CLASS_NAME }
+      static get AUTOSAVE_TIME_DEFAULT() { return 10 }
+      static get PAGE_VALUE_KEY() {
+        return {
+          AUTOSAVE: `${PageValue.Key.ST_PREFIX}${PageValue.Key.PAGE_VALUES_SEPERATOR}${constant.Setting.Key.AUTOSAVE}`,
+          AUTOSAVE_TIME: `${PageValue.Key.ST_PREFIX}${PageValue.Key.PAGE_VALUES_SEPERATOR}${constant.Setting.Key.AUTOSAVE_TIME}`
+        }
       }
-
 
       static initConfig() {
         const root = $(`#${WorktableSetting.ROOT_ID_NAME}`);
@@ -284,10 +273,11 @@ export default class WorktableSetting {
       static idleTime() {
         return PageValue.getSettingPageValue(this.PageValueKey.AUTOSAVE_TIME);
       }
-    });
-    Cls.initClass();
+    }
+  }
 
-    this.PositionAndScale = class PositionAndScale {
+  static get POSITION_AND_SCALE() {
+    return class {
       // コンフィグ初期化
       static initConfig() {
         if((Common.getScreenSize() === null)) {
@@ -379,7 +369,7 @@ export default class WorktableSetting {
         WorktableCommon.initScrollContentsPosition();
         return window.lStorage.saveGeneralPageValue();
       }
-    };
+    }
   }
 
   // 設定値初期化
@@ -395,4 +385,3 @@ export default class WorktableSetting {
     return this.PositionAndScale.clear();
   }
 };
-WorktableSetting.initClass();

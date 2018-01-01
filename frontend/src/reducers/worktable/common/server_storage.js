@@ -1,36 +1,29 @@
 import PageValue from '../../../base/page_value';
+import Constant from '../../../base/constant';
 
 let constant = undefined;
 export default class ServerStorage {
-  static initClass() {
-    // 定数
-    constant = gon.const;
-    // ページ内値保存キー
-    let Cls = (this.Key = class Key {
-      static initClass() {
-        this.PROJECT_ID = constant.ServerStorage.Key.PROJECT_ID;
-        this.PAGE_COUNT = constant.ServerStorage.Key.PAGE_COUNT;
-        this.GENERAL_COMMON_PAGE_VALUE = constant.ServerStorage.Key.GENERAL_COMMON_PAGE_VALUE;
-        this.GENERAL_PAGE_VALUE = constant.ServerStorage.Key.GENERAL_PAGE_VALUE;
-        this.INSTANCE_PAGE_VALUE = constant.ServerStorage.Key.INSTANCE_PAGE_VALUE;
-        this.EVENT_PAGE_VALUE = constant.ServerStorage.Key.EVENT_PAGE_VALUE;
-        this.SETTING_PAGE_VALUE = constant.ServerStorage.Key.SETTING_PAGE_VALUE;
-      }
-    });
-    Cls.initClass();
-
-    Cls = (this.ElementAttribute = class ElementAttribute {
-      static initClass() {
-        this.FILE_LOAD_CLASS = constant.ElementAttribute.FILE_LOAD_CLASS;
-        this.LOAD_LIST_UPDATED_FLG = 'load_list_updated';
-        this.LOADED_LOCALTIME = 'loaded_localtime';
-        this.LOAD_LIST_INTERVAL_SECONDS = 60;
-      }
-    });
-    Cls.initClass();
-
-    // 60秒が過ぎたらLoadリスト一覧を取得可にする
-    this.LOAD_LIST_INTERVAL_SECONDS = 60;
+  static get KEYS() {
+    return {
+      PROJECT_ID: Constant.SERVER_STORAGE.PROJECT_ID,
+      PAGE_COUNT: Constant.SERVER_STORAGE.PAGE_COUNT,
+      GENERAL_COMMON_PAGE_VALUE: Constant.SERVER_STORAGE.GENERAL_COMMON_PAGE_VALUE,
+      GENERAL_PAGE_VALUE: Constant.SERVER_STORAGE.GENERAL_PAGE_VALUE,
+      INSTANCE_PAGE_VALUE: Constant.SERVER_STORAGE.INSTANCE_PAGE_VALUE,
+      EVENT_PAGE_VALUE: Constant.SERVER_STORAGE.EVENT_PAGE_VALUE,
+      SETTING_PAGE_VALUE: Constant.SERVER_STORAGE.SETTING_PAGE_VALUE
+    }
+  }
+  static get ELEMENT_ATTRIBUTE() {
+    return {
+      FILE_LOAD_CLASS: 'fileLoad',
+      LOAD_LIST_UPDATED_FLG: 'load_list_updated',
+      LOADED_LOCALTIME: 'loaded_localtime',
+      LOAD_LIST_INTERVAL_SECONDS: 60
+    }
+  }
+  static get LOAD_LIST_INTERVAL_SECONDS() {
+    return 60;
   }
 
   // サーバにアイテムの情報を保存
@@ -53,12 +46,9 @@ export default class ServerStorage {
 
     window.workingAutoSave = true;
     const data = {};
-    data[this.Key.PAGE_COUNT] = parseInt(PageValue.getPageCount());
-    data[this.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
-    const generalPagevalues = {};
-    const generalCommonPagevalues = {};
-    const general = PageValue.getGeneralPageValue(PageValue.Key.G_PREFIX);
-    data[this.Key.GENERAL_PAGE_VALUE] = general;
+    data[ServerStorage.KEYS.PAGE_COUNT] = parseInt(PageValue.getPageCount());
+    data[ServerStorage.KEYS.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
+    data[ServerStorage.KEYS.GENERAL_PAGE_VALUE] =  PageValue.getGeneralPageValue(PageValue.Key.G_PREFIX);
     const instancePagevalues = {};
     const instance = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX);
     for(var k in instance) {
@@ -66,7 +56,7 @@ export default class ServerStorage {
       pageNum = parseInt(k.replace(PageValue.Key.P_PREFIX, ''));
       instancePagevalues[pageNum] = JSON.stringify(v);
     }
-    data[this.Key.INSTANCE_PAGE_VALUE] = Object.keys(instancePagevalues).length > 0 ? instancePagevalues : null;
+    data[ServerStorage.KEYS.INSTANCE_PAGE_VALUE] = Object.keys(instancePagevalues).length > 0 ? instancePagevalues : null;
     const eventPagevalues = {};
     const event = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT);
     for(k in event) {
@@ -74,9 +64,9 @@ export default class ServerStorage {
       pageNum = parseInt(k.replace(PageValue.Key.P_PREFIX, ''));
       eventPagevalues[pageNum] = JSON.stringify(v);
     }
-    data[this.Key.EVENT_PAGE_VALUE] = Object.keys(eventPagevalues).length > 0 ? eventPagevalues : null;
-    data[this.Key.SETTING_PAGE_VALUE] = PageValue.getSettingPageValue(PageValue.Key.ST_PREFIX);
-    if((data[this.Key.INSTANCE_PAGE_VALUE] !== null) || (data[this.Key.EVENT_PAGE_VALUE] !== null) || (data[this.Key.SETTING_PAGE_VALUE] !== null)) {
+    data[ServerStorage.KEYS.EVENT_PAGE_VALUE] = Object.keys(eventPagevalues).length > 0 ? eventPagevalues : null;
+    data[ServerStorage.KEYS.SETTING_PAGE_VALUE] = PageValue.getSettingPageValue(PageValue.Key.ST_PREFIX);
+    if((data[ServerStorage.KEYS.INSTANCE_PAGE_VALUE] !== null) || (data[ServerStorage.KEYS.EVENT_PAGE_VALUE] !== null) || (data[ServerStorage.KEYS.SETTING_PAGE_VALUE] !== null)) {
       return $.ajax(
         {
           url: "/page_value_state/save_state",
@@ -87,7 +77,7 @@ export default class ServerStorage {
             if(data.resultSuccess) {
               Promise.all()
               // 「Load」マウスオーバーで取得させるためupdateフラグを消去
-              $(`#${Navbar.NAVBAR_ROOT}`).find(`.${ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}`).remove();
+              $(`#${Navbar.NAVBAR_ROOT}`).find(`.${ServerStorage.ELEMENT_ATTRIBUTE.LOAD_LIST_UPDATED_FLG}`).remove();
               // 最終保存時刻更新
               Navbar.setLastUpdateTime(data.last_save_time);
               PageValue.setGeneralPageValue(PageValue.Key.LAST_SAVE_TIME, data.last_save_time);
@@ -196,7 +186,7 @@ export default class ServerStorage {
     }
 
     const data = {};
-    data[this.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
+    data[ServerStorage.KEYS.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
     return $.ajax(
       {
         url: "/page_value_state/user_pagevalue_list_sorted_update",
@@ -251,4 +241,3 @@ export default class ServerStorage {
     });
   }
 };
-ServerStorage.initClass();

@@ -87,7 +87,7 @@ export default class ServerStorage {
             if(data.resultSuccess) {
               Promise.all()
               // 「Load」マウスオーバーで取得させるためupdateフラグを消去
-              $(`#${Navbar.NAVBAR_ROOT}`).find(`.${ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}`).remove();
+              $(`#${Navbar.NAVBAR_ROOT}`).find(`.${ServerStorage.ELEMENT_ATTRIBUTE.LOAD_LIST_UPDATED_FLG}`).remove();
               // 最終保存時刻更新
               Navbar.setLastUpdateTime(data.last_save_time);
               PageValue.setGeneralPageValue(PageValue.Key.LAST_SAVE_TIME, data.last_save_time);
