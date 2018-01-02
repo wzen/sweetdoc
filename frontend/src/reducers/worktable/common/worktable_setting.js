@@ -31,12 +31,12 @@ export default class WorktableSetting {
         const root = $(`#${WorktableSetting.ROOT_ID_NAME}`);
         // グリッド線表示
         const grid = $(`.${this.GRID_CLASS_NAME}`, root);
-        let gridValue = PageValue.getSettingPageValue(this.PageValueKey.GRID);
+        let gridValue = PageValue.getSettingPageValue(this.PAGE_VALUE_KEY.GRID);
         gridValue = (gridValue !== null) && (gridValue === 'true');
         const gridStepDiv = $(`.${this.GRID_STEP_DIV_CLASS_NAME}`, root);
         grid.prop('checked', gridValue ? 'checked' : false);
         grid.off('click').on('click', () => {
-          gridValue = PageValue.getSettingPageValue(this.PageValueKey.GRID);
+          gridValue = PageValue.getSettingPageValue(this.PAGE_VALUE_KEY.GRID);
           if(gridValue !== null) {
             gridValue = gridValue === 'true';
           }
@@ -47,7 +47,7 @@ export default class WorktableSetting {
             gridStepDiv.hide();
           }
           this.drawGrid(!gridValue);
-          gridValue = PageValue.getSettingPageValue(this.PageValueKey.GRID);
+          gridValue = PageValue.getSettingPageValue(this.PAGE_VALUE_KEY.GRID);
           return grid.prop("checked", gridValue === 'true');
         });
 
@@ -59,14 +59,14 @@ export default class WorktableSetting {
         }
 
         // グリッド間隔
-        let gridStepValue = PageValue.getSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID_STEP);
+        let gridStepValue = PageValue.getSettingPageValue(WorktableSetting.GRID.PAGE_VALUE_KEY.GRID_STEP);
         if((gridStepValue === null)) {
           gridStepValue = this.STEP_DEFAULT_VALUE;
         }
         const gridStep = $(`.${this.GRID_STEP_CLASS_NAME}`, root);
         gridStep.val(gridStepValue);
         gridStep.change(e => {
-          let value = PageValue.getSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID);
+          let value = PageValue.getSettingPageValue(WorktableSetting.GRID.PAGE_VALUE_KEY.GRID);
           if(value !== null) {
             value = value === 'true';
           }
@@ -74,7 +74,7 @@ export default class WorktableSetting {
             let step = $(e.target).val();
             if(step !== null) {
               step = parseInt(step);
-              PageValue.setSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID_STEP, step);
+              PageValue.setSettingPageValue(WorktableSetting.GRID.PAGE_VALUE_KEY.GRID_STEP, step);
               return this.drawGrid(true);
             }
           }
@@ -106,7 +106,7 @@ export default class WorktableSetting {
         if((context !== null) && (doDraw === false)) {
           // 削除
           $(`.${this.SETTING_GRID_ELEMENT_CLASS}`).remove();
-          PageValue.setSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID, false);
+          PageValue.setSettingPageValue(WorktableSetting.GRID.PAGE_VALUE_KEY.GRID, false);
           return window.lStorage.saveSettingPageValue();
         } else if(doDraw) {
           let i;
@@ -165,7 +165,7 @@ export default class WorktableSetting {
             context.stroke();
           }
 
-          PageValue.setSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID, true);
+          PageValue.setSettingPageValue(WorktableSetting.GRID.PAGE_VALUE_KEY.GRID, true);
           return window.lStorage.saveSettingPageValue();
         }
       }
@@ -200,16 +200,16 @@ export default class WorktableSetting {
         const root = $(`#${WorktableSetting.ROOT_ID_NAME}`);
         // Autosave表示
         const enable = $(`.${this.AUTOSAVE_CLASS_NAME}`, root);
-        let enableValue = PageValue.getSettingPageValue(this.PageValueKey.AUTOSAVE);
+        let enableValue = PageValue.getSettingPageValue(this.PAGE_VALUE_KEY.AUTOSAVE);
         if((enableValue === null)) {
           enableValue = 'true';
-          PageValue.setSettingPageValue(this.PageValueKey.AUTOSAVE, enableValue);
+          PageValue.setSettingPageValue(this.PAGE_VALUE_KEY.AUTOSAVE, enableValue);
         }
         enableValue = (enableValue !== null) && (enableValue === 'true');
         const autosaveTimeDiv = $(`.${this.AUTOSAVE_TIME_DIV_CLASS_NAME}`, root);
         enable.prop('checked', enableValue ? 'checked' : false);
         enable.off('click').on('click', () => {
-          enableValue = PageValue.getSettingPageValue(this.PageValueKey.AUTOSAVE);
+          enableValue = PageValue.getSettingPageValue(this.PAGE_VALUE_KEY.AUTOSAVE);
           if(enableValue !== null) {
             enableValue = enableValue === 'true';
           }
@@ -219,7 +219,7 @@ export default class WorktableSetting {
           } else {
             autosaveTimeDiv.hide();
           }
-          return PageValue.setSettingPageValue(this.PageValueKey.AUTOSAVE, !enableValue);
+          return PageValue.setSettingPageValue(this.PAGE_VALUE_KEY.AUTOSAVE, !enableValue);
         });
 
         // Autosaveの有効無効を切り替え
@@ -230,15 +230,15 @@ export default class WorktableSetting {
         }
 
         // Autosave間隔
-        let autosaveTimeValue = PageValue.getSettingPageValue(this.PageValueKey.AUTOSAVE_TIME);
+        let autosaveTimeValue = PageValue.getSettingPageValue(this.PAGE_VALUE_KEY.AUTOSAVE_TIME);
         if((autosaveTimeValue === null)) {
           autosaveTimeValue = this.AUTOSAVE_TIME_DEFAULT;
-          PageValue.setSettingPageValue(this.PageValueKey.AUTOSAVE_TIME, autosaveTimeValue);
+          PageValue.setSettingPageValue(this.PAGE_VALUE_KEY.AUTOSAVE_TIME, autosaveTimeValue);
         }
         const autosaveTime = $(`.${this.AUTOSAVE_TIME_CLASS_NAME}`, root);
         autosaveTime.val(autosaveTimeValue);
         return autosaveTime.change(e => {
-          let value = PageValue.getSettingPageValue(WorktableSetting.IdleSaveTimer.PageValueKey.AUTOSAVE);
+          let value = PageValue.getSettingPageValue(WorktableSetting.IDLE_SAVE_TIMER.PAGE_VALUE_KEY.AUTOSAVE);
           if(value !== null) {
             value = value === 'true';
           }
@@ -246,7 +246,7 @@ export default class WorktableSetting {
             let step = $(e.target).val();
             if(step !== null) {
               step = parseInt(step);
-              return PageValue.setSettingPageValue(WorktableSetting.IdleSaveTimer.PageValueKey.AUTOSAVE_TIME, step);
+              return PageValue.setSettingPageValue(WorktableSetting.IDLE_SAVE_TIMER.PAGE_VALUE_KEY.AUTOSAVE_TIME, step);
             }
           }
         });
@@ -258,11 +258,11 @@ export default class WorktableSetting {
         // Autosave表示
         const enable = $(`.${this.AUTOSAVE_CLASS_NAME}`, root);
         enable.prop('checked', true);
-        return PageValue.setSettingPageValue(this.PageValueKey.AUTOSAVE, true);
+        return PageValue.setSettingPageValue(this.PAGE_VALUE_KEY.AUTOSAVE, true);
       }
 
       static isEnabled() {
-        const enableValue = PageValue.getSettingPageValue(this.PageValueKey.AUTOSAVE);
+        const enableValue = PageValue.getSettingPageValue(this.PAGE_VALUE_KEY.AUTOSAVE);
         if(enableValue !== null) {
           return enableValue === 'true';
         } else {
@@ -271,7 +271,7 @@ export default class WorktableSetting {
       }
 
       static idleTime() {
-        return PageValue.getSettingPageValue(this.PageValueKey.AUTOSAVE_TIME);
+        return PageValue.getSettingPageValue(this.PAGE_VALUE_KEY.AUTOSAVE_TIME);
       }
     }
   }

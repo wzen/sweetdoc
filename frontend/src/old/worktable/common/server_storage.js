@@ -243,8 +243,8 @@ export default class ServerStorage {
       if(window.saveIdleTimer !== null) {
         clearTimeout(window.saveIdleTimer);
       }
-      if(WorktableSetting.IdleSaveTimer.isEnabled()) {
-        const time = parseFloat(WorktableSetting.IdleSaveTimer.idleTime()) * 1000;
+      if(WorktableSetting.IDLE_SAVE_TIMER.isEnabled()) {
+        const time = parseFloat(WorktableSetting.IDLE_SAVE_TIMER.idleTime()) * 1000;
         return window.saveIdleTimer = setTimeout(() => ServerStorage.save()
           , time);
       }
