@@ -26,3 +26,4 @@
 /doc
 /node_modules
 /app/assets/javascripts/webpack/*
+/frontend/node_modules
